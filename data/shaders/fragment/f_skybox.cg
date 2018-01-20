@@ -1,0 +1,20 @@
+#version 330 core
+
+in vec3 textureCoords;
+out vec4 color;
+ 
+uniform samplerCube cubeMap;
+uniform vec3 fogColor;
+
+const float lowerLimit = 0.0f;
+const float upperLimit = 0.3f;
+
+void main()
+{
+    color = texture(cubeMap, textureCoords);
+
+	//making between lower and upper limit mix the fog color.
+	float factor = (textureCoords.y - lowerLimit) / (upperLimit - lowerLimit);
+	factor = clamp(factor, 0.0f, 1.0f);
+	color = mix( vec4(fogColor, 1.0f), color, factor);
+}

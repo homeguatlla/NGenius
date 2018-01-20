@@ -1,0 +1,56 @@
+#version 330 core
+
+in vec2 textureCoords;
+in vec3 eyeDirection;
+in vec3 lightDirection;
+in vec3 positionWorldspace;
+in float fogVisibility;
+//in vec3 lightPosition;
+
+in vec3 normal;
+
+uniform sampler2D texture;
+uniform vec3 fogColor;
+out vec4 color;
+
+vec4 ApplyLight(vec3 ambient, vec3 materialDiffuse, vec3 materialSpecular)
+{
+	float specularStrength = 0.01;
+	
+	//n = normalize(cross(dFdx(positionWorldspace), dFdy(positionWorldspace)));
+	
+	vec3 l = lightDirection;
+	vec3 diffuse = materialDiffuse * clamp(dot( normal, l ), 0.0f, 1.0f);
+	
+	vec3 reflectDir = reflect(-l, normal);	
+	vec3 specular = materialSpecular * specularStrength * pow(max(dot(reflectDir, normalize(eyeDirection)), 0.0), 32);
+	
+	//float attenuation = length(lightPosition - positionWorldspace);
+
+	color.rgb = ambient + diffuse + specular;// * (1.0f / attenuation);
+	color.a = 1.0f;
+	
+	return color;
+}
+
+vec4 ApplyFog(vec4 color)
+{
+	return mix(vec4(fogColor, 1.0f), color, fogVisibility);
+}
+
+void main()
+{
+	// Material properties
+	vec4 MaterialDiffuseColor = texture2D(texture, textureCoords);
+
+	if(MaterialDiffuseColor.a < 0.5)
+	{
+		discard;
+	}
+
+	vec3 MaterialAmbientColor = vec3(0.01f, 0.01f, 0.01f);
+	vec3 MaterialSpecularColor = vec3(1.0f, 1.0f, 1.0f);
+	color = ApplyLight(MaterialAmbientColor, MaterialDiffuseColor.rgb, MaterialSpecularColor);
+	color = ApplyFog(color);
+}
+

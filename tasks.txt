@@ -1,0 +1,32 @@
+
+1 - implementar skybox reflexión y skybox refracción?
+2 - mejorar el thirdpersoncamera para permitir mover el pitch yaw
+3 - intentar mejorar el tema del tiling del terreno. Dos opciones, o una mezcla de ambos. O, meter más texturas de cada tipo y calcular cuál se pone. O, rotar las texturas con 1-textcoord.x, etc.
+4 - a ver como podemos visualizar la posicion del player en el mapa
+5 - ahora estamos pasando información de clipping al render pass, pero solo acepta un clip plane. Podríamos necesitar más de uno. Habría que crear una clase ClipPlane o algo 
+parecido para tenerlo todo recogido en una clase y reemplazar el código actual con un clipplane.
+6 - hay que mejorar que elementos pasan por el clipping del agua, por ejemplo los cubos, pero no sé si tu personaje también tiene que pasar...
+7 - hay que decidir que meter cuando tu personaje está debajo el agua. Ahora mismo se ve normal, habría que meter algún filtro.
+8 - skybox no se ve afectado por la luz, entonces el agua siempre refleja claridad. Hay que ver que se puede hacer aquí. Probablemente hay que oscurecer el skybox?
+9 - añadir atlas de partículas y sprite animation de partículas
+10 - refactorizar player para que use la velocidad del physicsComponent si no lo está haciendo ya.
+11 - implementar sombras
+12 - implementar normal mapping
+13 - visitor para stadisticas y saber cuantos triángulos, objetos, objetos updateando física hay
+14 - Los quad no se ven afectados por la niebla y los efectos tampoco.
+15 - para los lod añadir como una histéresis, que para salir sea a otra distancia (probarlo con modelos bien y ver antes que sucede)
+
+
+Preguntas:
+- 
+
+
+
+optimizaciones para el sistema de partículas
+
+http://realtimecollisiondetection.net/blog/?p=91
+
+1 - no updatear las particulas en cada frame, sino cada N frames.
+2 - una vez ordenado el vector de renderers, cambiar el algoritmo de ordenación por uno que sea más rápido cuando más ordenado esté el vector aunque no sea preciso. Bubble sort (hacer algun tipo de test sobre un vector de enteros por ejemplo)
+4 - si estamos en el pass de las particulas igual podemos quitar el sort o poner un bubble sort y ordenar normal una vez cada x frames.
+5 - poner quad en lugar de triangle

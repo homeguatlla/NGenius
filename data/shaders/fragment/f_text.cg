@@ -1,0 +1,36 @@
+#version 330 core
+
+//https://www.youtube.com/watch?v=d8cfgcJR9Tk&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP&index=33
+
+in vec2 textureCoords;
+
+uniform sampler2D texture;
+uniform vec4 fontColor;
+uniform vec4 outlineColor;
+uniform float width;
+uniform float edge;
+uniform float borderWidth;
+uniform float borderEdge;
+uniform vec2 shadowOffset;
+out vec4 color;
+
+/*
+float width = 0.5;
+float edge = 0.1;
+float borderWidth = 0.0;
+float borderEdge = 0.4;
+vec2 shadowOffset = vec2(0.002, 0.002);
+vec4 outlineColor = vec4(0.0, 0.0, 0.0, 1.0);*/
+
+void main()
+{	
+	float distance = 1.0 - texture2D(texture, textureCoords).a;
+	float alpha = 1.0 - smoothstep(width, width + edge, distance);
+	
+	float distance2 = 1.0 - texture2D(texture, textureCoords + shadowOffset).a;
+	float outlineAlpha = 1.0 - smoothstep(borderWidth, borderWidth + borderEdge, distance2);
+
+	float overallAlpha = alpha + (1.0 - alpha) * outlineAlpha;
+	vec4 overallColor = mix(outlineColor, fontColor, alpha / overallAlpha);
+	color = vec4(overallColor.rgb, overallColor.a * overallAlpha);
+}

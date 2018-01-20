@@ -1025,7 +1025,7 @@ void SetupConfiguration()
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
 		mIsTextVisible = true;
-		mIsStatisticsVisible = false;
+		mIsStatisticsVisible = true;
 		mEngine.SetFullScreen(true);
 		break;
 	}

@@ -1,0 +1,198 @@
+#version 330 core
+
+in vec2 textureCoords;
+in vec3 eyeDirection;
+in vec3 lightDirection;
+in vec3 normalDirection;
+in vec3 positionWorldspace;
+in float fogVisibility;
+//in float distance;
+//in vec3 cameraPos;
+
+//in vec3 lightPosition;
+
+uniform sampler2D blendMap;
+uniform sampler2DArray textureArray;
+uniform vec3 lightColor;
+uniform float tile;
+uniform vec3 fogColor;
+
+out vec4 color;
+
+vec4 hash4( vec2 p ) 
+{
+ return fract(sin(vec4( 1.0+dot(p,vec2(37.0,17.0)), 
+                                              2.0+dot(p,vec2(11.0,47.0)),
+                                              3.0+dot(p,vec2(41.0,29.0)),
+                                              4.0+dot(p,vec2(23.0,31.0))))*103.0); 
+}
+float sum( vec3 v ) { return v.x+v.y+v.z; }
+
+vec4 textureNoTile(sampler2DArray samp, in vec3 uv )
+{
+    ivec2 iuv = ivec2( floor( uv.xy ) );
+     vec2 fuv = fract( uv.xy );
+
+    // generate per-tile transform
+    vec4 ofa = hash4( iuv + ivec2(0,0) );
+    vec4 ofb = hash4( iuv + ivec2(1,0) );
+    vec4 ofc = hash4( iuv + ivec2(0,1) );
+    vec4 ofd = hash4( iuv + ivec2(1,1) );
+    
+    vec2 ddx = dFdx( uv.xy );
+    vec2 ddy = dFdy( uv.xy );
+
+    // transform per-tile uvs
+    ofa.zw = sign( ofa.zw-0.5 );
+    ofb.zw = sign( ofb.zw-0.5 );
+    ofc.zw = sign( ofc.zw-0.5 );
+    ofd.zw = sign( ofd.zw-0.5 );
+    
+    // uv's, and derivatives (for correct mipmapping)
+    vec2 uva = uv.xy*ofa.zw + ofa.xy, ddxa = ddx*ofa.zw, ddya = ddy*ofa.zw;
+    vec2 uvb = uv.xy*ofb.zw + ofb.xy, ddxb = ddx*ofb.zw, ddyb = ddy*ofb.zw;
+    vec2 uvc = uv.xy*ofc.zw + ofc.xy, ddxc = ddx*ofc.zw, ddyc = ddy*ofc.zw;
+    vec2 uvd = uv.xy*ofd.zw + ofd.xy, ddxd = ddx*ofd.zw, ddyd = ddy*ofd.zw;
+        
+    // fetch and blend
+    vec2 b = smoothstep( 0.25,0.75, fuv );
+    
+	vec3 uva3 = vec3(uva.x, uva.y, uv.z);
+    vec3 uvb3 = vec3(uvb.x, uvb.y, uv.z);
+    vec3 uvc3 = vec3(uvc.x, uvc.y, uv.z);
+    vec3 uvd3 = vec3(uvd.x, uvd.y, uv.z);
+
+    return mix( mix( textureGrad( samp, uva3, ddxa, ddya ), 
+                     textureGrad( samp, uvb3, ddxb, ddyb ), b.x ), 
+                mix( textureGrad( samp, uvc3, ddxc, ddyc ),
+                     textureGrad( samp, uvd3, ddxd, ddyd ), b.x), b.y );
+}
+
+vec4 textureNoTile2( sampler2DArray samp, in vec3 uv )
+{
+    vec2 p = floor( uv.xy );
+    vec2 f = fract( uv.xy );
+	
+    // derivatives (for correct mipmapping)
+    vec2 ddx = dFdx( uv.xy );
+    vec2 ddy = dFdy( uv.xy );
+    
+    // voronoi contribution
+    vec4 va = vec4( 0.0 );
+    float wt = 0.0;
+    for( int j=-1; j<=1; j++ )
+    for( int i=-1; i<=1; i++ )
+    {
+        vec2 g = vec2( float(i), float(j) );
+        vec4 o = hash4( p + g );
+        vec2 r = g - f + o.xy;
+        float d = dot(r,r);
+        float w = exp(-5.0*d );
+		vec3 uv3 = vec3(uv.x + o.z, uv.y + o.w, uv.z);
+        vec4 c = textureGrad( samp, uv3, ddx, ddy );
+        va += w*c;
+        wt += w;
+    }
+	
+    // normalization
+    return va/wt;
+}
+
+vec4 textureNoTile3( sampler2DArray samp, in vec3 uv )
+{
+    // sample variation pattern    
+    float k = texture( samp, 0.005*uv ).x; // cheap (cache friendly) lookup    
+    
+    // compute index    
+    float index = k*8.0;
+    float i = floor( index );
+    float f = fract( index );
+
+    // offsets for the different virtual patterns    
+    vec2 offa = sin(vec2(3.0,7.0)*(i+0.0)); // can replace with any other hash    
+    vec2 offb = sin(vec2(3.0,7.0)*(i+1.0)); // can replace with any other hash    
+
+    // compute derivatives for mip-mapping    
+    vec2 dx = dFdx(uv.xy), dy = dFdy(uv.xy);
+    
+    // sample the two closest virtual patterns 
+	vec3 offa3 = vec3(uv.x + offa.x, uv.y + offa.y, uv.z);
+	vec3 offb3 = vec3(uv.x + offb.x, uv.y + offb.y, uv.z);   
+    vec3 cola = textureGrad( samp, offa3, dx, dy ).xxx;
+    vec3 colb = textureGrad( samp, offb3, dx, dy ).xxx;
+
+    
+
+    // interpolate between the two virtual patterns    
+    vec3 color = mix( cola, colb, smoothstep(0.2,0.8,f-0.1*sum(cola-colb)) );
+	return vec4(color.rgb, 1.0f);
+}
+
+vec4 ApplyLight(vec4 color, vec3 ambient, vec3 materialDiffuse, vec3 materialSpecular)
+{
+	float specularStrength = 0.2f;
+	vec3 n = normalDirection;
+
+	//n = normalize(cross(dFdx(positionWorldspace), dFdy(positionWorldspace)));
+	
+	vec3 l = lightDirection;
+	float cosTheta = clamp(max( dot( n, l ), 0.0f), 0.0f, 1.0f);
+	vec3 diffuse = materialDiffuse * cosTheta;
+	
+	vec3 reflectDir = reflect(-l, n);	
+	float spec = pow(max(dot(eyeDirection, reflectDir), 0.0), 32);
+	vec3 specular = specularStrength * spec * materialSpecular; 
+
+	//float attenuation = length(lightPosition - positionWorldspace);
+
+	color.rgb = ambient + (diffuse + specular);// * (1.0f / attenuation);
+	color.a = 1.0f;
+
+	return color;
+}
+
+/*
+vec3 ApplyFog( in vec3  rgb,      // original color of the pixel
+               in float distance, // camera to point distance
+               in vec3  rayOri,   // camera position
+               in vec3  rayDir )  // camera to point vector
+{
+float c = 0.05;
+float b = 0.08; //density
+    float fogAmount = c * exp(-rayOri.y*b) * (1.0-exp( -distance*rayDir.y*b ))/rayDir.y;
+    return mix( rgb, fogColor, fogAmount );
+}*/
+
+
+vec4 ApplyFog(vec4 color)
+{
+	return mix(vec4(fogColor, 1.0f), color, fogVisibility);
+}
+
+void main() {
+	vec4 blendmapColor = texture(blendMap, textureCoords.xy);
+	vec2 tiledTextureCoords = textureCoords * tile;
+	
+	vec4 rTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 0)) * blendmapColor.r;
+	vec4 gTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 1)) * blendmapColor.g;
+	vec4 bTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 2)) * blendmapColor.b;
+	vec4 aTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 3)) * max(0.0f, (1.0f -  (blendmapColor.r +  blendmapColor.g +  blendmapColor.b)));
+	
+	/*
+	vec4 rTextureColor = texture(textureArray, vec3(tiledTextureCoords, 0)) * blendmapColor.r;
+	vec4 gTextureColor = texture(textureArray, vec3(tiledTextureCoords, 1)) * blendmapColor.g;
+	vec4 bTextureColor = texture(textureArray, vec3(tiledTextureCoords, 2)) * blendmapColor.b;
+	vec4 aTextureColor = texture(textureArray, vec3(tiledTextureCoords, 3)) * max(0.0f, (1.0f -  (blendmapColor.r +  blendmapColor.g +  blendmapColor.b)));
+	*/
+
+
+	// Material properties
+	vec3 MaterialDiffuseColor = vec3(1.0, 1.0, 1.0) * (rTextureColor.rgb + gTextureColor.rgb + bTextureColor.rgb + aTextureColor.rgb) * lightColor;
+	vec3 MaterialAmbientColor = vec3(0.01f, 0.01f, 0.01f);
+	vec3 MaterialSpecularColor = vec3(0.0f, 0.0f, 0.0f);
+
+	color = ApplyLight(color, MaterialAmbientColor, MaterialDiffuseColor, MaterialSpecularColor);
+	color = ApplyFog(color);
+	//color.rgb = ApplyFog(color.rgb, distance, cameraPos, eyeDirection).rgb;
+}
+

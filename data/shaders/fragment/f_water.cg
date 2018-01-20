@@ -1,0 +1,84 @@
+#version 330 core
+
+in vec2 textureCoords;
+in vec4 clipSpace;
+in vec3 cameraVector;
+in vec3 fromLightVector;
+
+uniform sampler2D reflectionTexture;
+uniform sampler2D refractionTexture;
+uniform sampler2D distorsionTexture;
+uniform sampler2D normalTexture;
+uniform sampler2D depthTexture;
+
+uniform float waterSpeed;
+uniform vec4 waterColor;
+uniform vec3 lightColor;
+in float fogVisibility;
+uniform vec3 fogColor;
+
+out vec4 color;
+
+const float waveStrengh = 0.015;
+const float shiness = 20.0;
+const float reflectivity = 0.1;
+
+vec3 CalculateSpecularColor(vec2 distorsionCoords, vec3 cameraVector)
+{
+	vec3 normalColor = texture2D(normalTexture, distorsionCoords).rgb;
+	vec3 normal = vec3(normalColor.r * 2.0 - 1.0, normalColor.b, normalColor.g * 2.0 - 1.0);
+	normal = normalize(normal);
+	vec3 reflectedLight = reflect(normalize(fromLightVector), normal);
+	float specular = max( dot(reflectedLight, cameraVector), 0.0 );
+	specular = pow(specular, shiness);
+	vec3 specularLight = lightColor * specular * reflectivity;
+	
+	return specularLight;
+}
+
+vec4 ApplyFog(vec4 color)
+{
+	return mix(vec4(fogColor, 1.0f), color, fogVisibility);
+}
+
+void main()
+{	
+	vec2 ndc = (clipSpace.xy / clipSpace.w) / 2.0 + 0.5;
+	vec2 reflectTexCoords = vec2(ndc.x, 1.0 - ndc.y);
+	vec2 refractTexCoords = vec2(ndc.x, ndc.y);
+
+	float near = 0.1;
+	float far = 1000.0f;	
+	float depth = texture2D(depthTexture, refractTexCoords).r;
+	float floorDistance = 2.0 * near * far /( far + near - (2.0 * depth - 1.0) * (far - near));
+	
+	depth = gl_FragCoord.z;
+	float waterDistance = 2.0 * near * far /( far + near - (2.0 * depth - 1.0) * (far - near));
+	float waterDepth = (floorDistance - waterDistance)/20.0;
+
+	vec2 distorsionCoords = texture2D(distorsionTexture, vec2(textureCoords.x + waterSpeed, textureCoords.y)).rg * 0.1;
+	distorsionCoords = textureCoords + vec2(distorsionCoords.x , distorsionCoords.y + waterSpeed);
+	vec2 distorsion = (texture2D(distorsionTexture, distorsionCoords).rg * 2.0 - 1.0) * waveStrengh ;
+
+	reflectTexCoords += distorsion;
+	reflectTexCoords = clamp(reflectTexCoords, 0.001, 0.999);
+	
+	refractTexCoords += distorsion;
+	refractTexCoords = clamp(refractTexCoords, 0.001, 0.999);
+
+	vec4 reflectionColor = texture2D(reflectionTexture, reflectTexCoords);
+	vec4 refractionColor = texture2D(refractionTexture, refractTexCoords);
+
+	vec3 cameraVectorNormalized = normalize(cameraVector);
+
+	float reflectionFresnelFactor = dot(cameraVectorNormalized, vec3(0.0f, 1.0f, 0.0f));
+	float depthFactor = clamp(waterDepth * 10, 0.0, 1.0);
+
+	vec3 specularColor = CalculateSpecularColor(distorsionCoords, cameraVectorNormalized) * depthFactor;	
+		
+	color = mix(reflectionColor, refractionColor, reflectionFresnelFactor);
+	color = mix(refractionColor,  color, depthFactor);
+	color = mix(color, waterColor, 0.2) + vec4(specularColor, 1.0);
+	//color = vec4(clamp(waterDepth * 10, 0.0, 1.0));
+	//color = ApplyFog(color);
+}

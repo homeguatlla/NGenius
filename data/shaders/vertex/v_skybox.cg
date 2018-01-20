@@ -1,0 +1,14 @@
+#version 330 core
+
+in vec3 vertexModelspace;
+out vec3 textureCoords;
+uniform mat4 P;
+uniform mat4 V;
+uniform mat4 M;
+
+void main(void)
+{
+    vec4 pos =  P * V * M * vec4(vertexModelspace,1);
+	textureCoords = vertexModelspace;
+	gl_Position = pos.xyww;
+}

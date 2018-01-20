@@ -1,0 +1,25 @@
+#version 330 core
+
+in vec3 vertexModelspace;
+in vec2 textureCoordsModelspace;
+in mat4 M;
+
+uniform mat4 V;
+uniform mat4 P;
+out vec2 textureCoords;
+//out float fogVisibility;
+
+void main()
+{
+	textureCoords = textureCoordsModelspace;
+	gl_Position =  P * V * M * vec4(vertexModelspace.xyz, 1.0f);
+
+/*
+	vec4 vertex = vec4(vertexModelspace, 1.0);
+	
+	vec4 positionRelativeToCamera = V * M * vertex;	
+	gl_Position =  P * positionRelativeToCamera;
+	
+	float distance = length(positionRelativeToCamera);
+	fogVisibility = clamp(exp(-pow(distance * 0.02, 1.5)), 0.0, 1.0);*/
+}

@@ -1,0 +1,53 @@
+#version 330 core
+
+in vec2 textureCoords;
+in vec3 positionWorldspace;
+in vec3 contactPoint_;
+
+in vec3 normal;
+
+uniform sampler2D texture;
+uniform sampler2D depthTexture;
+uniform float time;
+uniform float tile;
+uniform vec3 contactPosition;
+
+out vec4 color;
+
+float circle(in vec2 _st, in float _radius, float tile){
+    vec2 dist = _st*tile-vec2(0.5 * tile);
+	return 1.-smoothstep(_radius-(_radius*0.4),
+                         _radius+(_radius*0.4),
+                         dot(dist,dist)*4.0);
+}
+
+void main()
+{
+	float newTime = time;
+	vec2 newTextureCoords = vec2( textureCoords.x + newTime * 0.005, textureCoords.y) * tile;
+	color = texture2D(texture, newTextureCoords);
+	
+	float near = 0.1;
+	float far = 1000.0f;
+	
+	//calculate the depth texture value from the pixel we are rendering (the depth texture is a texture of 1024 x 768)	
+	float depth = texture2D(depthTexture, vec2(gl_FragCoord.x / 1024.0f, gl_FragCoord.y / 768.0f)).r;
+	float floorDistance = 2.0 * near * far /( far + near - (2.0 * depth - 1.0) * (far - near));
+	
+	depth = gl_FragCoord.z;
+	float particleDistance = 2.0 * near * far /( far + near - (2.0 * depth - 1.0) * (far - near));
+	float particleDepth = clamp((floorDistance - particleDistance)/20.0, 0.0, 1.0);
+	
+	float surfaceLimit1 = 0.002;
+	if(particleDepth < surfaceLimit1)
+	{
+		color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+	
+	float radius = 4.0;
+	float distance = length(contactPoint_ - positionWorldspace);
+	float value = step(radius, distance);
+
+	color.a = color.a * (1.0 - value) * clamp(newTime, 0.0, 1.0);
+}
+

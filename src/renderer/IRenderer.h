@@ -1,0 +1,110 @@
+#pragma once
+#include <vector>
+#include <glm/glm.hpp>
+#include "../BitNumber.h"
+#include "../AABB.h"
+#include "../VertexBuffersManager.h"
+
+class IShaderProgram;
+class ICamera;
+class GameEntity;
+
+class IRenderer
+{
+public:
+	enum RENDER_LAYER
+	{
+		LAYER_GUI = 1,
+		LAYER_OTHER = 2,
+		LAYER_PARTICLES = 4,
+		LAYER_WATER = 8,
+		LAYER_DEBUG = 32
+	};
+
+protected:
+	GameEntity* mParent;
+	std::vector<glm::vec3> mVertexs;
+	std::vector<unsigned int> mIndexes;
+	std::vector<IRenderer*> mInstances;
+	IShaderProgram* mShaderProgram;
+
+	bool mIsPrerendered;
+	bool mIsInstancingEnabled;
+
+	char mLayer;
+
+	unsigned int mVAO;
+	unsigned int mVertexVBO;
+	unsigned int mIndexVBO;
+	BitNumber mBitRenderInformation;
+	AABB mBoundingBox;
+
+	float mFogDensity;
+	float mFogGradient;
+	glm::vec3 mFogColor;
+	bool mIsFogEnabled;
+	bool mIsVisible;
+
+	float mTile;
+
+	virtual void PreRender(VertexBuffersManager& vertexBufferManager) = 0;
+	virtual void Draw() = 0;
+	virtual void LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager) = 0;
+
+	void CheckError();
+
+public:
+	explicit IRenderer(IShaderProgram* shader);
+	virtual ~IRenderer();
+
+	virtual const std::string GetName() const = 0;
+
+	void SetParent(GameEntity* parent);
+	GameEntity* GetParent();
+	virtual void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager) = 0;
+	
+	void SetVertexs(const std::vector<glm::vec3>& vertexs);
+	void SetIndexes(const std::vector<unsigned int>& indexes);
+	const BitNumber& GetBitRendererInformation() const;
+
+	bool IsPrerendered() const;
+
+	IShaderProgram* GetShaderProgram() const;
+
+	void SetLayer(char layer);
+	char IRenderer::GetLayer() const;
+
+	void SetTransparency(bool transparent);
+	void SetDistance(unsigned int distance);
+
+	bool IsVisible() const;
+	void SetVisibility(bool visible);
+
+	virtual bool HasFog() const = 0;
+	virtual void EnableFog(bool enable) {};
+
+	virtual bool HasClippingPlane() const = 0;
+	virtual void SetClippingPlane(const glm::vec4& plane) {};
+
+	void SetTile(float tile);
+
+	virtual bool IsInstancingAllowed() const = 0;
+	void EnableInstancing(bool enable);
+	void SetInstances(std::vector<IRenderer*> instances);
+
+	const AABB& GetBoundingBox() const;
+
+	void SetFogParameters(const glm::vec3& color, float density, float gradient);
+
+	//TODO esto no mola, se usa en el instancing
+	glm::mat4 GetModelMatrix();
+
+	virtual IRenderer* Clone() const;
+
+protected:
+	virtual IRenderer* DoClone() const = 0;
+
+private:
+	void CalculateBoundingBox();
+};
+

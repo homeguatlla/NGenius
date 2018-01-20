@@ -1,0 +1,53 @@
+#version 330 core
+
+in vec3 vertexModelspace;
+in vec2 textureCoordsModelspace;
+
+out vec2 textureCoords;
+out vec3 eyeDirection;
+out vec3 lightDirection;
+out vec3 normalDirection;
+out vec3 positionWorldspace;
+out float fogVisibility;
+//out vec3 cameraPos;
+//out float distance;
+
+uniform sampler2D heightMap;
+
+uniform mat4 M;
+uniform mat4 MVP;
+uniform vec3 lightPositionWorldspace;
+uniform vec3 cameraPosition;
+uniform float scale;
+uniform float fogDensity;
+uniform float fogGradient;
+uniform vec4 clippingPlane;
+
+void main()
+{
+	//cameraPos = cameraPosition;
+	vec3 vertex = vertexModelspace;
+	textureCoords = textureCoordsModelspace;
+
+	vec4 color = texture(heightMap, textureCoordsModelspace);
+	vertex.y = color.a * scale;
+	
+	gl_Position =  MVP * vec4(vertex.xyz, 1.0f);
+
+	positionWorldspace = vec3(M * vec4(vertex, 1.0f));
+
+	gl_ClipDistance[0] = dot(vec4(positionWorldspace, 1.0f), clippingPlane);
+
+	vec3 positionRelativeToCamera = cameraPosition - positionWorldspace;
+		
+	lightDirection = normalize(lightPositionWorldspace - positionWorldspace);
+	//lightPosition = lightPositionWorldspace;
+
+	eyeDirection = normalize(cameraPosition - positionWorldspace);
+
+	normalDirection = (color.rgb * 2.0f - 1.0f); 
+	normalDirection = vec3( M * vec4(normalDirection, 0.0f) );	
+	
+	float distance = length(positionRelativeToCamera);
+	fogVisibility = clamp(exp(-pow(distance * fogDensity, fogGradient)), 0.0f, 1.0f);
+}

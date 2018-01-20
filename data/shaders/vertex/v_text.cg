@@ -1,0 +1,15 @@
+#version 330 core
+
+in vec3 vertexModelspace;
+in vec2 textureCoordsModelspace;
+
+uniform mat4 M;
+uniform mat4 V;
+uniform mat4 P;
+out vec2 textureCoords;
+
+void main(void)
+{
+	textureCoords = textureCoordsModelspace;
+	gl_Position =  P * V * M * vec4(vertexModelspace.xyz, 1.0f);
+}

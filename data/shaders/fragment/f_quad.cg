@@ -1,0 +1,19 @@
+#version 330 core
+
+in vec2 textureCoords;
+//in float fogVisibility;
+
+uniform sampler2D texture;
+out vec4 color;
+
+void main()
+{	
+	vec4 textureColor = texture2D(texture, textureCoords);
+	if(textureColor.a < 0.5)
+	{
+		discard;
+	}
+	color = textureColor;
+	//color = vec4(fogVisibility, 0.0, 0.0, 1.0);	
+}
+
