@@ -1,0 +1,674 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\resources">
+      <UniqueIdentifier>{b4237323-482a-470c-b289-bda9c22400b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources">
+      <UniqueIdentifier>{8f064e0d-477c-48eb-a3d8-a120b99034f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\shaders">
+      <UniqueIdentifier>{26be7ddc-d2f3-4973-a0d9-10302f3b413e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\renderer">
+      <UniqueIdentifier>{e33ad438-9275-477c-8aaf-1775ce6d162a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\renderer">
+      <UniqueIdentifier>{ffcb6274-7aa0-4cb8-8844-71b433084b58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\textures">
+      <UniqueIdentifier>{d6ef87a0-030d-4426-a4a4-ce929df009b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\textures">
+      <UniqueIdentifier>{e8136aac-1cb9-43dc-8afc-d706c6180138}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\shaders">
+      <UniqueIdentifier>{860f7496-3c02-4442-8ebb-4d21ac88d4c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\components">
+      <UniqueIdentifier>{5c8f0797-5d65-4b3b-9a03-61106f08c2b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\components">
+      <UniqueIdentifier>{f0cbb809-51c1-4a81-b72b-a05202fd995d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\loader">
+      <UniqueIdentifier>{c646efbc-5f5f-430b-8be4-4f00a4ae2281}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\loader">
+      <UniqueIdentifier>{79dca0b8-d3a1-4d15-99e5-99b12c6bd309}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\models">
+      <UniqueIdentifier>{e6afdb71-2ff7-445e-a425-8bb69f305090}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\models">
+      <UniqueIdentifier>{759b76d5-d9fb-423a-ba80-e40d479907f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\systems">
+      <UniqueIdentifier>{0936ca6e-4759-4f29-aea2-4ef5d34f4863}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\systems">
+      <UniqueIdentifier>{b295b8c6-ae60-4631-bb3c-025b19126e72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\entities">
+      <UniqueIdentifier>{678470d0-5106-4b40-b502-4c87aacf54b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\entities">
+      <UniqueIdentifier>{7038986d-99e2-485f-bc2a-95bd0c8f66e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\camera">
+      <UniqueIdentifier>{6aed71e4-3a3a-49da-92c2-e198c73d94a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\camera">
+      <UniqueIdentifier>{31fffe66-6072-40fe-b893-ca64a738613e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shaders">
+      <UniqueIdentifier>{9d69fb03-7fdf-4536-9843-625ae864df7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shaders\fragment">
+      <UniqueIdentifier>{34b4f19d-c6bd-4764-a01e-8fa81f28a3d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shaders\vertex">
+      <UniqueIdentifier>{c47d17ed-42b4-4729-967d-f7b5555c404e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\font">
+      <UniqueIdentifier>{6af4eaa7-a9dc-4886-b2cf-abf0a32f1045}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\font">
+      <UniqueIdentifier>{4e737ab3-91b3-4abc-93f8-3b16f3890205}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BasicTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TerrainGrid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\ShadersLibrary.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\TerrainShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\DefaultShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\CubeRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\IRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\NormalRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\TerrainRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\IShaderProgram.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\textures\Texture.h">
+      <Filter>Header Files\resources\textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\textures\TexturesLibrary.h">
+      <Filter>Header Files\resources\textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PNGLoader.h">
+      <Filter>Header Files\resources\textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureGenerator.h">
+      <Filter>Header Files\resources\textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NoiseGenerator.h">
+      <Filter>Header Files\resources\textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\Transformation.h">
+      <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\IComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\VerticalInputComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\IInputComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\DebugInputComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\OBJLoader.h">
+      <Filter>Header Files\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\BaseLibrary.h">
+      <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\ModelRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\ModelShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\models\Model.h">
+      <Filter>Header Files\resources\models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\models\ModelsLibrary.h">
+      <Filter>Header Files\resources\models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\RenderSystem.h">
+      <Filter>Header Files\resources\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\textures\TextureArray.h">
+      <Filter>Header Files\resources\textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\GameEntity.h">
+      <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Player.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Light.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Terrain.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\PlayerInputComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\CollisionComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\PhysicsSystem.h">
+      <Filter>Header Files\resources\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\CameraComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\ThirdPersonCameraComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\textures\TextureCubemap.h">
+      <Filter>Header Files\resources\textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\SkyBoxShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\SkyBoxRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\textures\ITexture.h">
+      <Filter>Header Files\resources\textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\QuadShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\QuadRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\camera\OrthogonalCamera.h">
+      <Filter>Header Files\resources\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\camera\ICamera.h">
+      <Filter>Header Files\resources\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\camera\PerspectiveCamera.h">
+      <Filter>Header Files\resources\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\RenderPass.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AABB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\RotationComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\WaterShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\WaterRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BitNumber.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\IFrameBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\PhysicsComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\ParticlesSystem.h">
+      <Filter>Header Files\resources\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Particle.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\ParticlesEmitter.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\ParticleShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\ParticleRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\EntitiesSystem.h">
+      <Filter>Header Files\resources\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\BillboardComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\LODComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\GUIShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\GUIRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\ModelNormalMapRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\NormalMapShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\EnergyWallCollisionComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\EnergyWallRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NGenius.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\EnergyWallShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\EnergyWall.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VertexBuffersManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\FontLoader.h">
+      <Filter>Header Files\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\TextRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\TextShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\font\FontType.h">
+      <Filter>Header Files\resources\font</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\font\FontsLibrary.h">
+      <Filter>Header Files\resources\font</Filter>
+    </ClInclude>
+    <ClInclude Include="FileReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\GUITextRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Text.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\ShadowShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\ShadowRenderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TerrainGrid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\ShadersLibrary.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\DefaultShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\TerrainShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\TerrainRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\NormalRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\IRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\CubeRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\IShaderProgram.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\textures\Texture.cpp">
+      <Filter>Source Files\resources\textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\textures\TexturesLibrary.cpp">
+      <Filter>Source Files\resources\textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\textures\NoiseGenerator.cpp">
+      <Filter>Source Files\resources\textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\textures\PNGLoader.cpp">
+      <Filter>Source Files\resources\textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\textures\TextureGenerator.cpp">
+      <Filter>Source Files\resources\textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\Transformation.cpp">
+      <Filter>Source Files\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\GameEntity.cpp">
+      <Filter>Source Files\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\IComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\VerticalInputComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\IInputComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\DebugInputComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\OBJLoader.cpp">
+      <Filter>Source Files\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\BaseLibrary.cpp">
+      <Filter>Source Files\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\ModelRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\ModelShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\Model.cpp">
+      <Filter>Source Files\resources\models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\ModelsLibrary.cpp">
+      <Filter>Source Files\resources\models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\RenderSystem.cpp">
+      <Filter>Source Files\resources\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\textures\TextureArray.cpp">
+      <Filter>Source Files\resources\textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Player.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Light.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Terrain.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\PlayerInputComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\CollisionComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\PhysicsSystem.cpp">
+      <Filter>Source Files\resources\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\CameraComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\ThirdPersonCameraComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\textures\TextureCubemap.cpp">
+      <Filter>Source Files\resources\textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\SkyBoxShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\SkyBoxRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\textures\ITexture.cpp">
+      <Filter>Source Files\resources\textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\QuadShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\QuadRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\camera\ICamera.cpp">
+      <Filter>Source Files\resources\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\camera\OrthogonalCamera.cpp">
+      <Filter>Source Files\resources\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\camera\PerspectiveCamera.cpp">
+      <Filter>Source Files\resources\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\RenderPass.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AABB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\RotationComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\WaterShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\WaterRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BitNumber.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\IFrameBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Particle.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\ParticlesSystem.cpp">
+      <Filter>Source Files\resources\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\PhysicsComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\ParticlesEmitter.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\ParticleShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\ParticleRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\EntitiesSystem.cpp">
+      <Filter>Source Files\resources\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\BillboardComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\LODComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\GUIShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\GUIRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\ModelNormalMapRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\NormalMapShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\EnergyWallCollisionComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\EnergyWallRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NGenius.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\EnergyWallShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\EnergyWall.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VertexBuffersManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\FontLoader.cpp">
+      <Filter>Source Files\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\TextShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\TextRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\font\FontType.cpp">
+      <Filter>Source Files\resources\font</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\font\FontsLibrary.cpp">
+      <Filter>Source Files\resources\font</Filter>
+    </ClCompile>
+    <ClCompile Include="FileReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\GUITextRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Text.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\ShadowShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\ShadowRenderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\shaders\fragment\f_default.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_model.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_quad.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_skybox.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_test_terrain_1.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_default.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_model.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_quad.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_skybox.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_test_terrain_1.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_water.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_water.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_particle.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_particle.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_gui_quad.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_gui_quad.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_model_normalmap.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_model_normalmap.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_energy_wall.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_energy_wall.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_text.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_text.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_shadow.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_shadow.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+  </ItemGroup>
+</Project>

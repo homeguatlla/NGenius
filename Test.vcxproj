@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D1C89538-D443-4B49-BC3D-81A2105D625D}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Test</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)\zlib-1.2.11;$(SolutionDir)\lpng1634\projects\vstudio\libpng;$(SolutionDir)\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)\glm;$(SolutionDir)\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)\glew-2.1.0\bin\Release\Win32;$(SolutionDir)\glew-2.1.0\lib\Release\Win32;$(SolutionDir)\glfw-3.2.1.bin.WIN32\lib-vc2015;$(SolutionDir)/lpng1634\projects\vstudio\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;OPENGL32.lib;libpng16.lib;zlib.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\david\codi\trunk\OpenGL\include;$(SolutionDir)\glm;$(SolutionDir)\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\david\codi\TerrainBase\glew-2.1.0\lib\Release\Win32;D:\david\codi\TerrainBase\lpng1634\projects\vstudio\Debug;..\trunk\OpenGL\lib-vc2013;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;OPENGL32.lib;libpng16.lib;zlib.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)\zlib-1.2.11;$(SolutionDir)\lpng1634\projects\vstudio\libpng;$(SolutionDir)\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)\glm;$(SolutionDir)\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)\glew-2.1.0\bin\Release\Win32;$(SolutionDir)\glew-2.1.0\lib\Release\Win32;$(SolutionDir)\glfw-3.2.1.bin.WIN32\lib-vc2015;$(SolutionDir)/lpng1634\projects\vstudio\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;OPENGL32.lib;libpng16.lib;zlib.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\Warrior\Desktop\David\Codi\Meus\Engine\WoC\woc\trunk\core\math\glm\core;C:\Users\Warrior\Desktop\David\Codi\Meus\Engine\WoC\woc\trunk\OpenGL\include;C:\Users\Warrior\Desktop\David\Codi\Meus\Engine\WoC\woc\trunk\OpenGL\GLTools\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Users\Warrior\Desktop\David\Codi\Meus\Engine\WoC\woc\Test\lib;C:\Users\Warrior\Desktop\David\Codi\Meus\Engine\lib;C:\Users\Warrior\Desktop\David\Codi\Meus\Engine\WoC\woc\trunk\OpenGL\lib-vc2013;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;OPENGL32.lib;libpng.lib;zlib.lib;libpng.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FileReader.h" />
+    <ClInclude Include="src\AABB.h" />
+    <ClInclude Include="src\BasicTypes.h" />
+    <ClInclude Include="src\BitNumber.h" />
+    <ClInclude Include="src\loader\FontLoader.h" />
+    <ClInclude Include="src\loader\OBJLoader.h" />
+    <ClInclude Include="src\NGenius.h" />
+    <ClInclude Include="src\NoiseGenerator.h" />
+    <ClInclude Include="src\PNGLoader.h" />
+    <ClInclude Include="src\renderer\CubeRenderer.h" />
+    <ClInclude Include="src\renderer\EnergyWallRenderer.h" />
+    <ClInclude Include="src\renderer\GUIRenderer.h" />
+    <ClInclude Include="src\renderer\GUITextRenderer.h" />
+    <ClInclude Include="src\renderer\IFrameBuffer.h" />
+    <ClInclude Include="src\renderer\IRenderer.h" />
+    <ClInclude Include="src\renderer\ModelNormalMapRenderer.h" />
+    <ClInclude Include="src\renderer\ModelRenderer.h" />
+    <ClInclude Include="src\renderer\NormalRenderer.h" />
+    <ClInclude Include="src\renderer\ParticleRenderer.h" />
+    <ClInclude Include="src\renderer\QuadRenderer.h" />
+    <ClInclude Include="src\renderer\RenderPass.h" />
+    <ClInclude Include="src\renderer\ShadowRenderer.h" />
+    <ClInclude Include="src\renderer\SkyBoxRenderer.h" />
+    <ClInclude Include="src\renderer\TerrainRenderer.h" />
+    <ClInclude Include="src\renderer\TextRenderer.h" />
+    <ClInclude Include="src\renderer\WaterRenderer.h" />
+    <ClInclude Include="src\resources\BaseLibrary.h" />
+    <ClInclude Include="src\resources\camera\ICamera.h" />
+    <ClInclude Include="src\resources\camera\OrthogonalCamera.h" />
+    <ClInclude Include="src\resources\camera\PerspectiveCamera.h" />
+    <ClInclude Include="src\resources\components\BillboardComponent.h" />
+    <ClInclude Include="src\resources\components\CameraComponent.h" />
+    <ClInclude Include="src\resources\components\DebugInputComponent.h" />
+    <ClInclude Include="src\resources\components\EnergyWallCollisionComponent.h" />
+    <ClInclude Include="src\resources\components\IComponent.h" />
+    <ClInclude Include="src\resources\components\IInputComponent.h" />
+    <ClInclude Include="src\resources\components\LODComponent.h" />
+    <ClInclude Include="src\resources\components\PhysicsComponent.h" />
+    <ClInclude Include="src\resources\components\PlayerInputComponent.h" />
+    <ClInclude Include="src\resources\components\CollisionComponent.h" />
+    <ClInclude Include="src\resources\components\RotationComponent.h" />
+    <ClInclude Include="src\resources\components\ThirdPersonCameraComponent.h" />
+    <ClInclude Include="src\resources\components\VerticalInputComponent.h" />
+    <ClInclude Include="src\resources\entities\EnergyWall.h" />
+    <ClInclude Include="src\resources\entities\Light.h" />
+    <ClInclude Include="src\resources\entities\Particle.h" />
+    <ClInclude Include="src\resources\entities\ParticlesEmitter.h" />
+    <ClInclude Include="src\resources\entities\Player.h" />
+    <ClInclude Include="src\resources\entities\Terrain.h" />
+    <ClInclude Include="src\resources\entities\Text.h" />
+    <ClInclude Include="src\resources\font\FontsLibrary.h" />
+    <ClInclude Include="src\resources\font\FontType.h" />
+    <ClInclude Include="src\resources\GameEntity.h" />
+    <ClInclude Include="src\resources\models\Model.h" />
+    <ClInclude Include="src\resources\models\ModelsLibrary.h" />
+    <ClInclude Include="src\resources\shaders\DefaultShader.h" />
+    <ClInclude Include="src\resources\shaders\EnergyWallShader.h" />
+    <ClInclude Include="src\resources\shaders\GUIShader.h" />
+    <ClInclude Include="src\resources\shaders\IShaderProgram.h" />
+    <ClInclude Include="src\resources\shaders\ModelShader.h" />
+    <ClInclude Include="src\resources\shaders\NormalMapShader.h" />
+    <ClInclude Include="src\resources\shaders\ParticleShader.h" />
+    <ClInclude Include="src\resources\shaders\QuadShader.h" />
+    <ClInclude Include="src\resources\shaders\ShadersLibrary.h" />
+    <ClInclude Include="src\resources\shaders\ShadowShader.h" />
+    <ClInclude Include="src\resources\shaders\SkyBoxShader.h" />
+    <ClInclude Include="src\resources\shaders\TerrainShader.h" />
+    <ClInclude Include="src\resources\shaders\TextShader.h" />
+    <ClInclude Include="src\resources\shaders\WaterShader.h" />
+    <ClInclude Include="src\resources\systems\EntitiesSystem.h" />
+    <ClInclude Include="src\resources\systems\ParticlesSystem.h" />
+    <ClInclude Include="src\resources\systems\PhysicsSystem.h" />
+    <ClInclude Include="src\resources\systems\RenderSystem.h" />
+    <ClInclude Include="src\resources\textures\ITexture.h" />
+    <ClInclude Include="src\resources\textures\Texture.h" />
+    <ClInclude Include="src\resources\textures\TextureArray.h" />
+    <ClInclude Include="src\resources\textures\TextureCubemap.h" />
+    <ClInclude Include="src\resources\textures\TexturesLibrary.h" />
+    <ClInclude Include="src\resources\Transformation.h" />
+    <ClInclude Include="src\TerrainGrid.h" />
+    <ClInclude Include="src\TextureGenerator.h" />
+    <ClInclude Include="src\VertexBuffersManager.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="FileReader.cpp" />
+    <ClCompile Include="src\AABB.cpp" />
+    <ClCompile Include="src\BitNumber.cpp" />
+    <ClCompile Include="src\loader\FontLoader.cpp" />
+    <ClCompile Include="src\loader\OBJLoader.cpp" />
+    <ClCompile Include="src\NGenius.cpp" />
+    <ClCompile Include="src\renderer\CubeRenderer.cpp" />
+    <ClCompile Include="src\renderer\EnergyWallRenderer.cpp" />
+    <ClCompile Include="src\renderer\GUIRenderer.cpp" />
+    <ClCompile Include="src\renderer\GUITextRenderer.cpp" />
+    <ClCompile Include="src\renderer\IFrameBuffer.cpp" />
+    <ClCompile Include="src\renderer\IRenderer.cpp" />
+    <ClCompile Include="src\renderer\ModelNormalMapRenderer.cpp" />
+    <ClCompile Include="src\renderer\ModelRenderer.cpp" />
+    <ClCompile Include="src\renderer\NormalRenderer.cpp" />
+    <ClCompile Include="src\renderer\ParticleRenderer.cpp" />
+    <ClCompile Include="src\renderer\QuadRenderer.cpp" />
+    <ClCompile Include="src\renderer\RenderPass.cpp" />
+    <ClCompile Include="src\renderer\ShadowRenderer.cpp" />
+    <ClCompile Include="src\renderer\SkyBoxRenderer.cpp" />
+    <ClCompile Include="src\renderer\TerrainRenderer.cpp" />
+    <ClCompile Include="src\renderer\TextRenderer.cpp" />
+    <ClCompile Include="src\renderer\WaterRenderer.cpp" />
+    <ClCompile Include="src\resources\BaseLibrary.cpp" />
+    <ClCompile Include="src\resources\camera\ICamera.cpp" />
+    <ClCompile Include="src\resources\camera\OrthogonalCamera.cpp" />
+    <ClCompile Include="src\resources\camera\PerspectiveCamera.cpp" />
+    <ClCompile Include="src\resources\components\BillboardComponent.cpp" />
+    <ClCompile Include="src\resources\components\CameraComponent.cpp" />
+    <ClCompile Include="src\resources\components\DebugInputComponent.cpp" />
+    <ClCompile Include="src\resources\components\EnergyWallCollisionComponent.cpp" />
+    <ClCompile Include="src\resources\components\IComponent.cpp" />
+    <ClCompile Include="src\resources\components\IInputComponent.cpp" />
+    <ClCompile Include="src\resources\components\LODComponent.cpp" />
+    <ClCompile Include="src\resources\components\PhysicsComponent.cpp" />
+    <ClCompile Include="src\resources\components\PlayerInputComponent.cpp" />
+    <ClCompile Include="src\resources\components\CollisionComponent.cpp" />
+    <ClCompile Include="src\resources\components\RotationComponent.cpp" />
+    <ClCompile Include="src\resources\components\ThirdPersonCameraComponent.cpp" />
+    <ClCompile Include="src\resources\components\VerticalInputComponent.cpp" />
+    <ClCompile Include="src\resources\entities\EnergyWall.cpp" />
+    <ClCompile Include="src\resources\entities\Light.cpp" />
+    <ClCompile Include="src\resources\entities\Particle.cpp" />
+    <ClCompile Include="src\resources\entities\ParticlesEmitter.cpp" />
+    <ClCompile Include="src\resources\entities\Player.cpp" />
+    <ClCompile Include="src\resources\entities\Terrain.cpp" />
+    <ClCompile Include="src\resources\entities\Text.cpp" />
+    <ClCompile Include="src\resources\font\FontsLibrary.cpp" />
+    <ClCompile Include="src\resources\font\FontType.cpp" />
+    <ClCompile Include="src\resources\GameEntity.cpp" />
+    <ClCompile Include="src\resources\models\Model.cpp" />
+    <ClCompile Include="src\resources\models\ModelsLibrary.cpp" />
+    <ClCompile Include="src\resources\shaders\DefaultShader.cpp" />
+    <ClCompile Include="src\resources\shaders\EnergyWallShader.cpp" />
+    <ClCompile Include="src\resources\shaders\GUIShader.cpp" />
+    <ClCompile Include="src\resources\shaders\IShaderProgram.cpp" />
+    <ClCompile Include="src\resources\shaders\ModelShader.cpp" />
+    <ClCompile Include="src\resources\shaders\NormalMapShader.cpp" />
+    <ClCompile Include="src\resources\shaders\ParticleShader.cpp" />
+    <ClCompile Include="src\resources\shaders\QuadShader.cpp" />
+    <ClCompile Include="src\resources\shaders\ShadersLibrary.cpp" />
+    <ClCompile Include="src\resources\shaders\ShadowShader.cpp" />
+    <ClCompile Include="src\resources\shaders\SkyBoxShader.cpp" />
+    <ClCompile Include="src\resources\shaders\TerrainShader.cpp" />
+    <ClCompile Include="src\resources\shaders\TextShader.cpp" />
+    <ClCompile Include="src\resources\shaders\WaterShader.cpp" />
+    <ClCompile Include="src\resources\systems\EntitiesSystem.cpp" />
+    <ClCompile Include="src\resources\systems\ParticlesSystem.cpp" />
+    <ClCompile Include="src\resources\systems\PhysicsSystem.cpp" />
+    <ClCompile Include="src\resources\systems\RenderSystem.cpp" />
+    <ClCompile Include="src\resources\textures\ITexture.cpp" />
+    <ClCompile Include="src\resources\textures\NoiseGenerator.cpp" />
+    <ClCompile Include="src\resources\textures\PNGLoader.cpp" />
+    <ClCompile Include="src\resources\textures\Texture.cpp" />
+    <ClCompile Include="src\resources\textures\TextureArray.cpp" />
+    <ClCompile Include="src\resources\textures\TextureCubemap.cpp" />
+    <ClCompile Include="src\resources\textures\TextureGenerator.cpp" />
+    <ClCompile Include="src\resources\textures\TexturesLibrary.cpp" />
+    <ClCompile Include="src\resources\Transformation.cpp" />
+    <ClCompile Include="src\TerrainGrid.cpp" />
+    <ClCompile Include="src\VertexBuffersManager.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\shaders\fragment\f_default.cg" />
+    <None Include="data\shaders\fragment\f_gui_quad.cg" />
+    <None Include="data\shaders\fragment\f_model.cg" />
+    <None Include="data\shaders\fragment\f_model_normalmap.cg" />
+    <None Include="data\shaders\fragment\f_particle.cg" />
+    <None Include="data\shaders\fragment\f_quad.cg" />
+    <None Include="data\shaders\fragment\f_shadow.cg" />
+    <None Include="data\shaders\fragment\f_skybox.cg" />
+    <None Include="data\shaders\fragment\f_test_terrain_1.cg" />
+    <None Include="data\shaders\fragment\f_text.cg" />
+    <None Include="data\shaders\fragment\f_water.cg" />
+    <None Include="data\shaders\fragment\f_energy_wall.cg" />
+    <None Include="data\shaders\vertex\v_default.cg" />
+    <None Include="data\shaders\vertex\v_gui_quad.cg" />
+    <None Include="data\shaders\vertex\v_model.cg" />
+    <None Include="data\shaders\vertex\v_model_normalmap.cg" />
+    <None Include="data\shaders\vertex\v_particle.cg" />
+    <None Include="data\shaders\vertex\v_quad.cg" />
+    <None Include="data\shaders\vertex\v_shadow.cg" />
+    <None Include="data\shaders\vertex\v_skybox.cg" />
+    <None Include="data\shaders\vertex\v_test_terrain_1.cg" />
+    <None Include="data\shaders\vertex\v_text.cg" />
+    <None Include="data\shaders\vertex\v_water.cg" />
+    <None Include="data\shaders\vertex\v_energy_wall.cg" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
