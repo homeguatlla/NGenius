@@ -22,7 +22,9 @@ mTextureBlendmap(textureBlendmap),
 mTextureArray(textureArray),
 mLight(light),
 mScale(scale),
-mClippingPlane(0.0f, 1.0f, 0.0f, 1000.0f)
+mClippingPlane(0.0f, 1.0f, 0.0f, 1000.0f),
+mShadowSpaceMatrix(),
+mTextureShadowmap(nullptr)
 {
 	assert(mTextureHeightmap != nullptr);
 	assert(mTextureBlendmap != nullptr);
@@ -122,7 +124,12 @@ void TerrainRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vert
 	shader->LoadTile(50.0f);
 	shader->LoadFogParameters(mFogColor, mIsFogEnabled ? mFogDensity : 0.0f, mFogGradient);
 	shader->LoadClippingPlane(mClippingPlane);
-	
+	if (mTextureShadowmap != nullptr)
+	{
+		shader->LoadShadowSpaceMatrix(mShadowSpaceMatrix);
+		shader->LoadShadowMapTexture(mTextureShadowmap->GetUnit());
+	}
+
 	glm::mat4 MVP = camera->GetProjectionMatrix() * const_cast<ICamera*>(camera)->GetViewMatrix() * mParent->GetTransformation()->GetModelMatrix();
 
 	glUniformMatrix4fv(mMatrixID, 1, GL_FALSE, &MVP[0][0]);
@@ -142,4 +149,14 @@ bool TerrainRenderer::HasFog() const
 void TerrainRenderer::EnableFog(bool enable)
 {
 	mIsFogEnabled = enable;
+}
+
+void TerrainRenderer::SetTextureShadowMap(const Texture* shadowMap)
+{
+	mTextureShadowmap = shadowMap;
+}
+
+void TerrainRenderer::SetShadowMapMatrix(const glm::mat4& matrix)
+{
+	mShadowSpaceMatrix = matrix;
 }

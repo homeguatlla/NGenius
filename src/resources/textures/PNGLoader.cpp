@@ -19,7 +19,8 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 {
 	bool hasAlpha = false;
 
-	std::cout << file_name;
+	std::cout << file_name << "\n";
+	
 	/* open file and test for it being a png */
 	FILE *fp = fopen(file_name, "rb");
 	if (!fp) {
@@ -59,8 +60,7 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 		fclose(fp);
 		return false;
 	}
-	std::cout << "traza 2";
-
+	
 	png_init_io(mPngPtr, fp);
 	png_set_sig_bytes(mPngPtr, 8);
 
@@ -71,8 +71,7 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 	mColorType = png_get_color_type(mPngPtr, mInfoPtr);
 	mBitDepth = png_get_bit_depth(mPngPtr, mInfoPtr);
 	
-	std::cout << "traza 3";
-
+	
 	switch (mInfoPtr->color_type) {
 	case PNG_COLOR_TYPE_RGBA:
 		hasAlpha = true;
@@ -89,7 +88,6 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 	mNumberOfPasses = png_set_interlace_handling(mPngPtr);
 	png_read_update_info(mPngPtr, mInfoPtr);
 
-	std::cout << "traza 4  width: "  << mWidth << " height: "  << mHeight;
 	/* read file */
 	if (setjmp(png_jmpbuf(mPngPtr))){
 		fclose(fp);
@@ -100,11 +98,8 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 	for (mY = 0; mY < mHeight; mY++)
 		mRowPointers[mY] = (png_byte*)malloc(png_get_rowbytes(mPngPtr, mInfoPtr));
 
-	std::cout << "traza 5";
-
 	png_read_image(mPngPtr, mRowPointers);
-	std::cout << "traza 6";
-
+	
 	long	imageSize;		// size of PNG image
 	int colorMode = 3;			// 4 for RGBA, 3 for RGB
 	unsigned char *imageData;	// the PNG data
@@ -117,8 +112,7 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 	// allocate memory for image data
 
 	//allocate memory
-	std::cout << "traza 7";
-
+	
 	std::cout << colorMode;
 	std::cout << mBitDepth;
 	int bits = (colorMode * mBitDepth / 8);

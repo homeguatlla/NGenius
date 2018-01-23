@@ -19,6 +19,8 @@ void ModelsLibrary::Load()
 	LoadModel("enano", "data/models/enano/enano.obj");
 	LoadModel("mazo", "data/models/mazo/mazo.obj");
 
+	LoadModel("stall", "data/models/stall/stall.obj");
+
 	//model = OBJLoader::LoadModel("data/models/hermes/hermes.obj");
 	//AddElement("hermes", model);
 

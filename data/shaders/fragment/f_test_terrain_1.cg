@@ -6,6 +6,8 @@ in vec3 lightDirection;
 in vec3 normalDirection;
 in vec3 positionWorldspace;
 in float fogVisibility;
+in vec4 shadowCoords;
+
 //in float distance;
 //in vec3 cameraPos;
 
@@ -16,6 +18,7 @@ uniform sampler2DArray textureArray;
 uniform vec3 lightColor;
 uniform float tile;
 uniform vec3 fogColor;
+uniform sampler2D shadowMap;
 
 out vec4 color;
 
@@ -170,6 +173,14 @@ vec4 ApplyFog(vec4 color)
 }
 
 void main() {
+	float objectNearestLight = texture(shadowMap, shadowCoords.xy).r;
+	float bias = 0.005;
+	float shadowFactor = 1.0;
+	if ( objectNearestLight  <  shadowCoords.z - bias)
+	{
+		shadowFactor = 0.5;
+	}
+
 	vec4 blendmapColor = texture(blendMap, textureCoords.xy);
 	vec2 tiledTextureCoords = textureCoords * tile;
 	
@@ -187,7 +198,7 @@ void main() {
 
 
 	// Material properties
-	vec3 MaterialDiffuseColor = vec3(1.0, 1.0, 1.0) * (rTextureColor.rgb + gTextureColor.rgb + bTextureColor.rgb + aTextureColor.rgb) * lightColor;
+	vec3 MaterialDiffuseColor = shadowFactor * vec3(1.0, 1.0, 1.0) ;//* (rTextureColor.rgb + gTextureColor.rgb + bTextureColor.rgb + aTextureColor.rgb) * lightColor;
 	vec3 MaterialAmbientColor = vec3(0.01f, 0.01f, 0.01f);
 	vec3 MaterialSpecularColor = vec3(0.0f, 0.0f, 0.0f);
 

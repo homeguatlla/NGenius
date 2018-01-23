@@ -45,6 +45,10 @@ void IFrameBuffer::BindBuffer() const
 		{
 			glDrawBuffers(mNumDrawBuffers, mDrawBuffersList);
 		}
+		else
+		{
+			glDrawBuffer(GL_NONE);
+		}
 
 		if (mType & FRAME_BUFFER_COLOR_TEXTURE & FRAME_BUFFER_DEPTH_TEXTURE)
 		{

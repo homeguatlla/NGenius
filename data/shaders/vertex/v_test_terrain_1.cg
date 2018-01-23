@@ -9,6 +9,7 @@ out vec3 lightDirection;
 out vec3 normalDirection;
 out vec3 positionWorldspace;
 out float fogVisibility;
+out vec4 shadowCoords;
 //out vec3 cameraPos;
 //out float distance;
 
@@ -22,6 +23,7 @@ uniform float scale;
 uniform float fogDensity;
 uniform float fogGradient;
 uniform vec4 clippingPlane;
+uniform mat4 toShadowMapSpace;
 
 void main()
 {
@@ -35,6 +37,8 @@ void main()
 	gl_Position =  MVP * vec4(vertex.xyz, 1.0f);
 
 	positionWorldspace = vec3(M * vec4(vertex, 1.0f));
+
+	shadowCoords = toShadowMapSpace * vec4(positionWorldspace, 1.0f);
 
 	gl_ClipDistance[0] = dot(vec4(positionWorldspace, 1.0f), clippingPlane);
 

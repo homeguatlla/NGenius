@@ -228,6 +228,20 @@ void AddBoundingBoxesFrom(GameEntity* gameEntity)
 	}
 }
 
+void CreateShadowPlane()
+{
+	//QUAD
+	IRenderer* guiShadowRenderer = new GUIRenderer(	mEngine.GetShader("gui"),
+														static_cast<const Texture*>(mEngine.GetTexture("shadow_texture")),
+														128.0f,
+														128.0f
+													);
+	GameEntity* quadShadow = new GameEntity(	new Transformation(glm::vec3(0.0f, -300.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
+												guiShadowRenderer
+											);
+	mEngine.AddGameEntity(quadShadow);
+}
+
 void CreateWaterHudPlanes()
 {
 	//QUAD
@@ -551,19 +565,29 @@ void CreateTextTest()
 void CreateEntities()
 {
 	//LIGHT GAME ENTITY
-	mSunLight = new Light(glm::vec3(10000000.0f, 10000000.0f, 10000000.0f), glm::vec3(1, 1, 1), new CubeRenderer(mEngine.GetShader("default")));
+	mSunLight = new Light(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1, 1, 1), new CubeRenderer(mEngine.GetShader("default")));
 	mSunLight->AddComponent(new VerticalInputComponent(mEngine.GetGLWindow()));
 	mSunLight->GetTransformation()->SetScale(glm::vec3(0.05f));
 
 	mEngine.AddGameEntity(mSunLight);
 
 	//TERRAIN GAME ENTITY
+	mSunCamera = new OrthogonalCamera(mEngine.GetScreenWidth() * 0.01f, mEngine.GetScreenHeight() * 0.01f, -10.0f, 20.0f);
+	//mSunCamera = new OrthogonalCamera(20.0f, 20.0f, -10.0f, 20.0f);
+	//glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
+	//glm::vec3 direction = glm::vec3(camera->GetTarget() - glm::vec3(100000.0f, 100000.0f, 100000.0f));
+	//glm::mat4 depthViewMatrix = glm::lookAt(direction, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	//glm::mat4 depthModelMatrix = glm::mat4(1.0);
+	//glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
+
 	terrainHeightScale = mIsTerrainFlat ? 0.0f : terrainHeightScale;
 	mTerrain = new Terrain(new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 								  mEngine.GetShader("terrain"),
 								  static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")),
 								  static_cast<Texture*>(mEngine.GetTexture("terrain_blendmap")),
 								  static_cast<TextureArray*>(mEngine.GetTexture("terrain_array")),
+								  static_cast<Texture*>(mEngine.GetTexture("shadow_texture")),
+								  mSunCamera,
 								  mSunLight,
 								  terrainHeightScale);
 
@@ -632,7 +656,6 @@ void CreateEntities()
 	mEagleEyeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	mGameplayCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	//mGameplayCamera = new OrthogonalCamera(glm::vec3(0.0f, 20.0f, 40.0f), glm::vec3(0.0f, 4.0f, 4.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	mGameplayCamera->SetPosition(glm::vec3(0.0f, 4.9f, 3.0f));
 	mGameplayCamera->SetTarget(glm::vec3(0.0f, 4.9f, 0.0f));
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -670,6 +693,21 @@ void CreateEntities()
 	{
 		CreateEnergyWall();
 	}
+
+	if (mIsShadowEnabled)
+	{
+		CreateShadowPlane();
+	}
+
+	GameEntity* stallEntity = new GameEntity(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
+												new ModelRenderer(	mEngine.GetModel("stall"), 
+																	mEngine.GetShader("model"), 
+																	static_cast<Texture*>(mEngine.GetTexture("stall")),
+																	mSunLight
+												)
+							);
+
+	mEngine.AddGameEntity(stallEntity);
 
 	//SKYBOX the last
 	if (mIsSkyboxEnabled)
@@ -718,6 +756,18 @@ void ApplyRefractionCameras(ICamera* camera, ICamera* cameraRefracted)
 	cameraRefracted->SetUp(camera->GetUp());
 }
 
+void ApplyShadowCamera(ICamera* camera, ICamera* shadowCamera)
+{
+	glm::vec3 playerPosition = mPlayer->GetTransformation()->GetPosition();
+	//posicion luz
+	glm::vec3 position = glm::normalize(glm::vec3(5.5f, 5.0f, 5.5f));// *FAR_PLANE * 0.01f;
+	shadowCamera->SetPosition(position);
+	//shadowCamera->SetTarget(playerPosition);
+	shadowCamera->SetTarget(glm::vec3(0.0f));
+	shadowCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	mTerrain->SetShadowCamera(shadowCamera);
+}
+
 void CreateHudMapRenderPass()
 {
 	//HUD MAP RENDER PASS
@@ -737,13 +787,11 @@ void CreateHudMapRenderPass()
 
 void CreateShadowRenderPass()
 {
-	//SHADOW RENDER PASS	
-	mSunCamera = new OrthogonalCamera(mEngine.GetScreenWidth(), mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-
+	//SHADOW RENDER PASS
 	//SHADOW
 	IFrameBuffer* frameShadowBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
 	const Texture* shadowTexture = static_cast<const Texture*>(mEngine.GetTexture("shadow_texture"));
-	frameShadowBuffer->SetDepthAttachment(shadowTexture->GetWidth(), shadowTexture->GetHeight());
+	frameShadowBuffer->SetDepthTextureAttachment(shadowTexture);
 	frameShadowBuffer->Init();
 
 	RenderPass* shadowPass = new RenderPass(static_cast<ICamera*>(mSunCamera), IRenderer::LAYER_OTHER);
@@ -826,11 +874,11 @@ void CreateGameplayRenderPass()
 	//RENDER PASS GAMEPLAY
 	RenderPass *gameplayPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
 	
-	IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
+	/*IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
 	const Texture* depthTexture = static_cast<const Texture*>(mEngine.GetTexture("depth_texture"));
 	frameBuffer->SetCopyDepthBufferToTexture(depthTexture, 0, 0, static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
 	gameplayPass->SetFrameBufferOutput(frameBuffer);
-
+	*/
 	mEngine.AddRenderPass(gameplayPass);
 }
 
@@ -845,6 +893,7 @@ void CreateParticlesRenderPass()
 void CreateRenderPasses()
 {
 	//CreateHudMapRenderPass();
+	
 	if (mIsShadowEnabled)
 	{
 		CreateShadowRenderPass();
@@ -959,6 +1008,10 @@ void Update(float elapsedTime)
 	{
 		UpdateStatitstics();
 	}
+	if (mIsShadowEnabled)
+	{
+		ApplyShadowCamera(mGameplayCamera, mSunCamera);
+	}
 }
 
 void SetupConfiguration()
@@ -981,8 +1034,8 @@ void SetupConfiguration()
 		mIsDebugModeEnabled = true;
 		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = true;
-		mIsVegetationEnabled = true;
+		mIsFogEnabled = false;
+		mIsVegetationEnabled = false;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = true;

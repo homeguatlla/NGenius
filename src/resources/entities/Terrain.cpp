@@ -6,11 +6,16 @@
 #include "../textures/TextureGenerator.h"
 #include "../textures/Texture.h"
 #include "../textures/TextureArray.h"
+#include "../camera/ICamera.h"
 #include <ctime>
 
-Terrain::Terrain(Transformation* transformation, IShaderProgram* shader, const Texture* heightmap, const Texture* blendmap, const TextureArray* textureArray, const Light* light, float scale) : 
+#include <glm/gtc/matrix_transform.hpp>
+
+Terrain::Terrain(Transformation* transformation, IShaderProgram* shader, const Texture* heightmap, const Texture* blendmap, const TextureArray* textureArray, const Texture* shadowmap, const ICamera* shadowCamera, const Light* light, float scale) :
 GameEntity(transformation),
 mHeightmap(heightmap),
+mShadowmap(shadowmap),
+mShadowCamera(shadowCamera),
 mScale(scale),
 mIsFlat(false)
 {
@@ -45,6 +50,10 @@ mIsFlat(false)
 	GetRenderer()->SetVertexs(vertexs);
 	static_cast<TerrainRenderer*>(GetRenderer())->SetTextureCoords(uv);
 	GetRenderer()->SetIndexes(indices);
+
+	//shadow stuff
+	static_cast<TerrainRenderer*>(GetRenderer())->SetTextureShadowMap(mShadowmap);
+	SetShadowCamera(shadowCamera);
 }
 
 
@@ -57,6 +66,22 @@ Terrain::~Terrain()
 void Terrain::SetFlat(bool isFlat)
 {
 	mIsFlat = isFlat;
+}
+
+void Terrain::SetShadowCamera(const ICamera* camera)
+{
+	mShadowCamera = camera;
+
+	Transformation transformation(mShadowCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(1.0f));
+	glm::mat4& matrix = mShadowCamera->GetProjectionMatrix() * const_cast<ICamera*>(mShadowCamera)->GetViewMatrix();// *transformation.GetModelMatrix();
+
+	glm::mat4 biasMatrix(
+		0.5, 0.0, 0.0, 0.0,
+		0.0, 0.5, 0.0, 0.0,
+		0.0, 0.0, 0.5, 0.0,
+		0.5, 0.5, 0.5, 1.0
+	);
+	static_cast<TerrainRenderer*>(GetRenderer())->SetShadowMapMatrix(biasMatrix * matrix);
 }
 
 bool Terrain::IsPointInside(glm::vec2 point) const

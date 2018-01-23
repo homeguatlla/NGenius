@@ -100,12 +100,12 @@ void TexturesLibrary::Load()
 	AddElement("depth_texture", texture);
 
 	texture = new Texture();
-	texture->Load("data/models/tree3/leaves_01.png", ++mCurrentTextureUnit, false, false);
-	AddElement("leaves", texture);
-
-	texture = new Texture();
 	texture->CreateDepthTexture(++mCurrentTextureUnit, 1024, 768);
 	AddElement("shadow_texture", texture);
+
+	texture = new Texture();
+	texture->Load("data/models/stall/stall.png", ++mCurrentTextureUnit, false, false);
+	AddElement("stall", texture);
 
 	LoadTexturesPendingToLoad();
 }

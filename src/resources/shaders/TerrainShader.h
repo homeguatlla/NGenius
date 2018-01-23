@@ -24,7 +24,9 @@ public:
 	void LoadBlendMapTexture(int unit);
 	void LoadTile(float tile);
 	void LoadFogParameters(const glm::vec3& color, float density, float gradient);
-	void LoadClippingPlane(const glm::vec4 plane);
+	void LoadClippingPlane(const glm::vec4& plane);
+	void LoadShadowSpaceMatrix(const glm::mat4& matrix);
+	void LoadShadowMapTexture(int unit);
 
 private:
 	int mLocationMVPMatrix;
@@ -42,5 +44,7 @@ private:
 	int	mLocationFogGradient;
 	int mLocationFogColor;
 	int mLocationClippingPlane;
+	int mLocationShadowSpaceMatrix;
+	int mLocationShadowMapTexture;
 };
 
