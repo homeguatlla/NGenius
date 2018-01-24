@@ -140,6 +140,7 @@ bool mIsTerrainFlat = false;
 bool mIsTextVisible = false;
 bool mIsStatisticsVisible = false;
 bool mIsShadowEnabled = false;
+bool mIsParticlesEnabled = false;
 
 NGenius mEngine("Demo", SCREEN_WIDTH, SCREEN_HEIGHT);
 ICamera* mGameplayCamera;
@@ -376,7 +377,7 @@ void CreateTrees()
 	std::vector<glm::vec3> sizes;
 
 	int areaSize = 50;
-	for (int i = 0; i < 200; i++)
+	for (int i = 0; i < 50; i++)
 	{
 		float x = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
 		float z = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
@@ -428,9 +429,9 @@ Particle* CreateParticle(bool canCollide, Texture* texture, glm::vec3& gravity)
 	renderer->SetBillboard(true);
 	renderer->SetFogParameters(mFogColor, mFogDensity, mFogGradient);
 
-	Particle* particle = new Particle(new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
-		renderer,
-		6.0f);
+	Particle* particle = new Particle(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
+										renderer,
+										6.0f);
 	PhysicsComponent* physicsComponent = new PhysicsComponent(false, gravity);
 	particle->AddComponent(physicsComponent);
 
@@ -448,7 +449,7 @@ void CreateParticlesFire()
 	particle->SetLiveTime(2.0f);
 
 	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(particle,
-		new Transformation(glm::vec3(0.0f, 4.6f, 0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
+		new Transformation(glm::vec3(2.0f, 0.0f, 2.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
 		nullptr,
 		100);
 	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 1.0f, 0.25f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
@@ -483,7 +484,7 @@ void CreateParticlesTest()
 	particle->SetLiveTime(4.0f);
 
 	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(	particle,
-																new Transformation(glm::vec3(3.5f, 4.0f, 3.3f), glm::vec3(0.0f), glm::vec3(0.1f)), 
+																new Transformation(glm::vec3(3.5f, 0.0f, 3.3f), glm::vec3(0.0f), glm::vec3(0.1f)), 
 																nullptr,
 																20);
 	particlesEmitter->SetColorGradientValues(glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec4(0.6f, 0.0f, 0.6f, 0.0f));
@@ -491,16 +492,17 @@ void CreateParticlesTest()
 	particlesEmitter->SetScaleValues(0.03f, 0.03f);
 	mEngine.AddGameEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);	
-	
+	/*
 	particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), PhysicsSystem::GRAVITY_VALUE * 0.004f);
 	particlesEmitter = new ParticlesEmitter(	particle,
-												new Transformation(glm::vec3(4.0f, 3.8f, 3.3f), glm::vec3(0.0f), glm::vec3(0.1f)),
+												new Transformation(glm::vec3(4.0f, 0.8f, 3.3f), glm::vec3(0.0f), glm::vec3(0.1f)),
 												nullptr,
 												20);
 	particlesEmitter->SetColorGradientValues(glm::vec4(0.0f, 0.8f, 0.0f, 1.0f), glm::vec4(0.0f, 0.8f, 0.6f, 0.0f));
 	particlesEmitter->SetScaleValues(0.03f, 0.5f + (rand() % 4) / 10.0f);
 	mEngine.AddGameEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);
+	*/
 	/*
 	ParticleRenderer* renderer = new ParticleRenderer(	mEngine.GetShader("particle"),
 														static_cast<Texture*>(mEngine.GetTexture("smoke")), 
@@ -673,11 +675,14 @@ void CreateEntities()
 
 	//CreateWaterHudPlanes();
 	
-	//CreateParticlesTest();
-
-	//CreateParticlesFire();
-
-	//CreateParticlesSparkles();
+	
+	if (mIsParticlesEnabled)
+	{
+		CreateParticlesTest();
+		//CreateParticlesFire();
+		//CreateParticlesSparkles();
+	}
+	
 
 	if (mIsTextVisible)
 	{
@@ -760,10 +765,9 @@ void ApplyShadowCamera(ICamera* camera, ICamera* shadowCamera)
 {
 	glm::vec3 playerPosition = mPlayer->GetTransformation()->GetPosition();
 	//posicion luz
-	glm::vec3 position = glm::normalize(glm::vec3(5.5f, 5.0f, 5.5f));// *FAR_PLANE * 0.01f;
+	glm::vec3 position = glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f)) + playerPosition;
 	shadowCamera->SetPosition(position);
-	//shadowCamera->SetTarget(playerPosition);
-	shadowCamera->SetTarget(glm::vec3(0.0f));
+	shadowCamera->SetTarget(playerPosition);
 	shadowCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 	mTerrain->SetShadowCamera(shadowCamera);
 }
@@ -1029,19 +1033,21 @@ void SetupConfiguration()
 		mIsTerrainFlat = true;
 		mIsTextVisible = true;
 		mIsStatisticsVisible = true;
+		mIsParticlesEnabled = true;
 		break;
 	case SHADOWS:
 		mIsDebugModeEnabled = true;
 		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
-		mIsVegetationEnabled = false;
+		mIsVegetationEnabled = true;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = true;
 		mIsTextVisible = true;
 		mIsStatisticsVisible = true;
 		mIsShadowEnabled = true;
+		mIsParticlesEnabled = true;
 		break;
 	case ENERGY_WALL:
 		mIsDebugModeEnabled = true;
@@ -1055,6 +1061,7 @@ void SetupConfiguration()
 		mIsTextVisible = true;
 		mIsStatisticsVisible = true;
 		mEnergyWallRadius = 22.0f;
+		mIsParticlesEnabled = false;
 		break;
 	case TEXT:
 		mIsDebugModeEnabled = true;
@@ -1067,6 +1074,7 @@ void SetupConfiguration()
 		mIsTerrainFlat = true;
 		mIsTextVisible = true;
 		mIsStatisticsVisible = true;
+		mIsParticlesEnabled = false;
 		break;
 	case RELEASE:
 		mIsDebugModeEnabled = false;
@@ -1079,6 +1087,7 @@ void SetupConfiguration()
 		mIsTerrainFlat = false;
 		mIsTextVisible = true;
 		mIsStatisticsVisible = true;
+		mIsParticlesEnabled = true;
 		mEngine.SetFullScreen(true);
 		break;
 	}

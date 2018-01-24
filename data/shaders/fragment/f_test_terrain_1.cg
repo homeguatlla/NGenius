@@ -20,6 +20,8 @@ uniform float tile;
 uniform vec3 fogColor;
 uniform sampler2D shadowMap;
 
+
+
 out vec4 color;
 
 vec4 hash4( vec2 p ) 
@@ -174,11 +176,11 @@ vec4 ApplyFog(vec4 color)
 
 void main() {
 	float objectNearestLight = texture(shadowMap, shadowCoords.xy).r;
-	float bias = 0.005;
+	float bias = 0.001;
 	float shadowFactor = 1.0;
-	if ( objectNearestLight  <  shadowCoords.z - bias)
+	if (objectNearestLight < shadowCoords.z - bias)
 	{
-		shadowFactor = 0.5;
+		shadowFactor = 1.0 - (shadowCoords.w * 0.4);
 	}
 
 	vec4 blendmapColor = texture(blendMap, textureCoords.xy);
@@ -198,7 +200,7 @@ void main() {
 
 
 	// Material properties
-	vec3 MaterialDiffuseColor = shadowFactor * vec3(1.0, 1.0, 1.0) ;//* (rTextureColor.rgb + gTextureColor.rgb + bTextureColor.rgb + aTextureColor.rgb) * lightColor;
+	vec3 MaterialDiffuseColor = shadowFactor * (rTextureColor.rgb + gTextureColor.rgb + bTextureColor.rgb + aTextureColor.rgb) * lightColor;
 	vec3 MaterialAmbientColor = vec3(0.01f, 0.01f, 0.01f);
 	vec3 MaterialSpecularColor = vec3(0.0f, 0.0f, 0.0f);
 

@@ -25,6 +25,9 @@ uniform float fogGradient;
 uniform vec4 clippingPlane;
 uniform mat4 toShadowMapSpace;
 
+const float shadowDistance = 10.0;
+const float transitionDistance = 20.0;
+
 void main()
 {
 	//cameraPos = cameraPosition;
@@ -54,4 +57,9 @@ void main()
 	
 	float distance = length(positionRelativeToCamera);
 	fogVisibility = clamp(exp(-pow(distance * fogDensity, fogGradient)), 0.0f, 1.0f);
+
+	//shadow
+	distance = distance - (shadowDistance - transitionDistance);
+	distance = distance / transitionDistance;
+	shadowCoords.w = clamp(1.0 - distance, 0.0, 1.0);
 }
