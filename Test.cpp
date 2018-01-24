@@ -137,7 +137,7 @@ bool mIsVegetationEnabled = true;
 bool mIsEnergyWallEnabled = true;
 bool mIsSkyboxEnabled = true;
 bool mIsTerrainFlat = false;
-bool mIsTextVisible = false;
+bool mIsTextEnabled = false;
 bool mIsStatisticsVisible = false;
 bool mIsShadowEnabled = false;
 bool mIsParticlesEnabled = false;
@@ -481,7 +481,7 @@ void CreateParticlesTest()
 {
 	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), PhysicsSystem::GRAVITY_VALUE * 0.1f);
 	particle->AddComponent(new CollisionComponent());
-	particle->SetLiveTime(4.0f);
+	particle->SetLiveTime(1.0f);
 
 	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(	particle,
 																new Transformation(glm::vec3(3.5f, 0.0f, 3.3f), glm::vec3(0.0f), glm::vec3(0.1f)), 
@@ -489,20 +489,22 @@ void CreateParticlesTest()
 																20);
 	particlesEmitter->SetColorGradientValues(glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec4(0.6f, 0.0f, 0.6f, 0.0f));
 	particlesEmitter->SetScaleValues(0.03f, 0.4f + (rand() % 10) / 100.0f);
-	particlesEmitter->SetScaleValues(0.03f, 0.03f);
+	particlesEmitter->SetVelocity(glm::vec3(0.2f), glm::vec3(0.5f));
 	mEngine.AddGameEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);	
-	/*
-	particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), PhysicsSystem::GRAVITY_VALUE * 0.004f);
+
+	particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
+	particle->SetLiveTime(2.0f);
 	particlesEmitter = new ParticlesEmitter(	particle,
-												new Transformation(glm::vec3(4.0f, 0.8f, 3.3f), glm::vec3(0.0f), glm::vec3(0.1f)),
+												new Transformation(glm::vec3(4.0f, 0.0f, 3.3f), glm::vec3(0.0f), glm::vec3(0.1f)),
 												nullptr,
 												20);
 	particlesEmitter->SetColorGradientValues(glm::vec4(0.0f, 0.8f, 0.0f, 1.0f), glm::vec4(0.0f, 0.8f, 0.6f, 0.0f));
-	particlesEmitter->SetScaleValues(0.03f, 0.5f + (rand() % 4) / 10.0f);
+	particlesEmitter->SetScaleValues(0.3f, 0.5f + (rand() % 4) / 10.0f);
+	particlesEmitter->SetVelocity(glm::vec3(0.2f), glm::vec3(0.5f));
 	mEngine.AddGameEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);
-	*/
+
 	/*
 	ParticleRenderer* renderer = new ParticleRenderer(	mEngine.GetShader("particle"),
 														static_cast<Texture*>(mEngine.GetTexture("smoke")), 
@@ -679,12 +681,12 @@ void CreateEntities()
 	if (mIsParticlesEnabled)
 	{
 		CreateParticlesTest();
-		//CreateParticlesFire();
+		CreateParticlesFire();
 		//CreateParticlesSparkles();
 	}
 	
 
-	if (mIsTextVisible)
+	if (mIsTextEnabled)
 	{
 		CreateTextTest();
 	}
@@ -1008,7 +1010,7 @@ void Update(float elapsedTime)
 	{
 		UpdateEnergyWallCollisions(elapsedTime);
 	}
-	if (mIsStatisticsVisible && mIsTextVisible)
+	if (mIsStatisticsVisible && mIsTextEnabled)
 	{
 		UpdateStatitstics();
 	}
@@ -1031,7 +1033,7 @@ void SetupConfiguration()
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
-		mIsTextVisible = true;
+		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = true;
 		break;
@@ -1040,11 +1042,11 @@ void SetupConfiguration()
 		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
-		mIsVegetationEnabled = true;
+		mIsVegetationEnabled = false;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = true;
-		mIsTextVisible = true;
+		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsShadowEnabled = true;
 		mIsParticlesEnabled = true;
@@ -1058,7 +1060,7 @@ void SetupConfiguration()
 		mIsEnergyWallEnabled = true;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
-		mIsTextVisible = true;
+		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mEnergyWallRadius = 22.0f;
 		mIsParticlesEnabled = false;
@@ -1072,7 +1074,7 @@ void SetupConfiguration()
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
-		mIsTextVisible = true;
+		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
 		break;
@@ -1085,7 +1087,7 @@ void SetupConfiguration()
 		mIsEnergyWallEnabled = true;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
-		mIsTextVisible = true;
+		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = true;
 		mEngine.SetFullScreen(true);

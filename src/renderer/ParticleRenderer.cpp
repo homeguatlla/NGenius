@@ -44,7 +44,7 @@ const std::string ParticleRenderer::GetName() const
 void ParticleRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
 	glDisable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_DEPTH_TEST);
 	glDepthMask(false);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -52,7 +52,7 @@ void ParticleRenderer::Render(const ICamera* camera, VertexBuffersManager& verte
 	IRenderer::Render(camera, vertexBufferManager);
 
 	glDisable(GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 	glDepthMask(true);
 	glEnable(GL_CULL_FACE);
 }
@@ -69,13 +69,13 @@ void ParticleRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 	int textureID = mShaderProgram->GetAttributeLocation("textureCoordsModelspace");
 	glEnableVertexAttribArray(textureID);
 	glVertexAttribPointer(
-		textureID,  // The attribute we want to configure
-		2,                            // size
-		GL_FLOAT,                     // type
-		GL_FALSE,                     // normalized?
-		0,                            // stride
-		(void*)0                      // array buffer offset
-		);
+							textureID,  // The attribute we want to configure
+							2,                            // size
+							GL_FLOAT,                     // type
+							GL_FALSE,                     // normalized?
+							0,                            // stride
+							(void*)0                      // array buffer offset
+	);
 	glActiveTexture(GL_TEXTURE0 + mTexture->GetUnit());
 	glBindTexture(GL_TEXTURE_2D, mTexture->GetID());
 

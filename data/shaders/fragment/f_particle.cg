@@ -34,7 +34,7 @@ void main()
 	
 	vec4 textureColor = texture2D(texture, textureCoords * tile);
 	
-	color = (textureColor * vec4(luminiscence.r, luminiscence.g, luminiscence.b, textureColor.a) )* luminiscence.a;
+	color = (textureColor + vec4(luminiscence.r, luminiscence.g, luminiscence.b, textureColor.a) )* luminiscence.a;
 
 	//we want the alpha goes to 0.0 when the particledepth is lower than 0.01 and then we apply a alpha decrease from current color.a to 0.0
 	float limit = 0.01;
