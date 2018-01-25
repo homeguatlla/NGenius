@@ -98,8 +98,7 @@ void RenderSystem::Render(const RenderPass* renderPass)
 				}
 				++i;
 			}
-
-			RenderInstances(renderPass, mInstances);
+			RenderInstances(renderPass, mInstances[0], mInstances);
 		}
 		else
 		{
@@ -133,13 +132,13 @@ void RenderSystem::AddToRender(IRenderer* renderer)
 	}
 }
 
-void RenderSystem::RenderInstances(const RenderPass* renderPass, std::vector<IRenderer*>& instances)
+void RenderSystem::RenderInstances(const RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances)
 {
 	//std::cout << instances.front()->GetBitRendererInformation().GetValue() << " : " << instances.size() << "\n";
 	//Apply fog
-	if (mInstances[0]->HasFog())
+	if (renderer->HasFog())
 	{
-		mInstances[0]->EnableFog(renderPass->IsFogEnabled());
+		renderer->EnableFog(renderPass->IsFogEnabled());
 	}
 
 	//Apply clipping planes
@@ -147,9 +146,9 @@ void RenderSystem::RenderInstances(const RenderPass* renderPass, std::vector<IRe
 	{
 		mLastClipPlaneNumberUsed = renderPass->GetClippingPlaneNumber();
 		glEnable(mLastClipPlaneNumberUsed);
-		if (mInstances[0]->HasClippingPlane())
+		if (renderer->HasClippingPlane())
 		{
-			mInstances[0]->SetClippingPlane(renderPass->GetClippingPlane());
+			renderer->SetClippingPlane(renderPass->GetClippingPlane());
 		}
 	}
 	else
@@ -159,11 +158,11 @@ void RenderSystem::RenderInstances(const RenderPass* renderPass, std::vector<IRe
 
 	if (instances.size() > 1)
 	{
-		instances.front()->SetInstances(instances);
-		instances.front()->EnableInstancing(true);
+		renderer->SetInstances(instances);
+		renderer->EnableInstancing(true);
 	}
 
-	instances.front()->Render(renderPass->GetCamera(), mVertexsBuffersManager);
+	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, renderPass->GetShader());
 }
 
 void RenderSystem::UpdateDistancesToCamera(const ICamera* camera, RenderersList* renderers)

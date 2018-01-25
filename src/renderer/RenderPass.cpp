@@ -11,7 +11,8 @@ mIsFogEnabled(true),
 mIsClippingEnabled(false),
 mHasToCalculateDistanceToCamera(false),
 mClippingPlaneNumber(0),
-mClippingPlane(0.0f, 0.0f, 0.0f, 0.0f)
+mClippingPlane(0.0f, 0.0f, 0.0f, 0.0f),
+mShader(nullptr)
 {
 }
 
@@ -77,6 +78,16 @@ bool RenderPass::IsFogEnabled() const
 void RenderPass::EnableFog(bool enable)
 {
 	mIsFogEnabled = enable;
+}
+
+void RenderPass::SetShader(IShaderProgram* shader)
+{
+	mShader = shader;
+}
+
+IShaderProgram* RenderPass::GetShader() const
+{
+	return mShader;
 }
 
 void RenderPass::SetCalculateDistanceToCamera(bool calculate)

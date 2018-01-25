@@ -61,15 +61,15 @@ public:
 
 	void SetParent(GameEntity* parent);
 	GameEntity* GetParent();
+
 	virtual void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager) = 0;
+	void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager, IShaderProgram* shaderRenderPass);
 	
 	void SetVertexs(const std::vector<glm::vec3>& vertexs);
 	void SetIndexes(const std::vector<unsigned int>& indexes);
 	const BitNumber& GetBitRendererInformation() const;
 
 	bool IsPrerendered() const;
-
-	IShaderProgram* GetShaderProgram() const;
 
 	void SetLayer(char layer);
 	char IRenderer::GetLayer() const;

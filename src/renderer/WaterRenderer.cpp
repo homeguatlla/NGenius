@@ -85,20 +85,23 @@ void WaterRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 	IRenderer::PreRender(vertexBufferManager);
 
 	// 2nd attribute buffer : texture coords
-	glGenBuffers(1, &mTextureCoordsVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, mTextureCoordsVBO);
-	glBufferData(GL_ARRAY_BUFFER, mTextureCoords.size() * sizeof(glm::vec2), &mTextureCoords[0], GL_STATIC_DRAW);
+	GLint textureID = mShaderProgram->GetAttributeLocation("textureCoordsModelspace");
+	if (textureID != -1)
+	{
+		glGenBuffers(1, &mTextureCoordsVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, mTextureCoordsVBO);
+		glBufferData(GL_ARRAY_BUFFER, mTextureCoords.size() * sizeof(glm::vec2), &mTextureCoords[0], GL_STATIC_DRAW);
 
-	int textureID = mShaderProgram->GetAttributeLocation("textureCoordsModelspace");
-	glEnableVertexAttribArray(textureID);
-	glVertexAttribPointer(
-		textureID,  // The attribute we want to configure
-		2,                            // size
-		GL_FLOAT,                     // type
-		GL_FALSE,                     // normalized?
-		0,                            // stride
-		(void*)0                      // array buffer offset
+		glEnableVertexAttribArray(textureID);
+		glVertexAttribPointer(
+			textureID,  // The attribute we want to configure
+			2,                            // size
+			GL_FLOAT,                     // type
+			GL_FALSE,                     // normalized?
+			0,                            // stride
+			(void*)0                      // array buffer offset
 		);
+	}
 	glActiveTexture(GL_TEXTURE0 + mReflectionTexture->GetUnit());
 	glBindTexture(GL_TEXTURE_2D, mReflectionTexture->GetID());
 
@@ -117,40 +120,43 @@ void WaterRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	//matrices instanced
-	mMatrixVBO = vertexBufferManager.CreateVBO("Matrix_" + GetName());
-
-	glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);
-	std::vector<glm::mat4> matrices;
-	int instances = 1;
-
-	if (mIsInstancingEnabled)
+	GLint matrixLocationID = mShaderProgram->GetAttributeLocation("M");
+	if (matrixLocationID != -1)
 	{
-		for (IRenderer* renderer : mInstances)
+		mMatrixVBO = vertexBufferManager.CreateVBO("Matrix_" + GetName());
+
+		glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);
+		std::vector<glm::mat4> matrices;
+		int instances = 1;
+
+		if (mIsInstancingEnabled)
 		{
-			glm::mat4 modelMatrix = renderer->GetModelMatrix();
+			for (IRenderer* renderer : mInstances)
+			{
+				glm::mat4 modelMatrix = renderer->GetModelMatrix();
+				matrices.push_back(modelMatrix);
+			}
+			instances = mInstances.size();
+		}
+		else
+		{
+			glm::mat4 modelMatrix = mParent->GetTransformation()->GetModelMatrix();
 			matrices.push_back(modelMatrix);
 		}
-		instances = mInstances.size();
-	}
-	else
-	{
-		glm::mat4 modelMatrix = mParent->GetTransformation()->GetModelMatrix();
-		matrices.push_back(modelMatrix);
-	}
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * instances, &matrices[0], GL_DYNAMIC_DRAW);
-	unsigned int matrixLocation = mShaderProgram->GetAttributeLocation("M");
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * instances, &matrices[0], GL_DYNAMIC_DRAW);
 
-	for (unsigned int i = 0; i < 4; ++i)
-	{
-		glEnableVertexAttribArray(matrixLocation + i);
-		glVertexAttribPointer(matrixLocation + i,
-			4, GL_FLOAT, GL_FALSE,
-			sizeof(glm::mat4),
-			(void*)(sizeof(glm::vec4) * i));
-		glVertexAttribDivisorARB(matrixLocation + i, 1);
-		//glDisableVertexAttribArray(matrixLocation + i);
+		for (unsigned int i = 0; i < 4; ++i)
+		{
+			glEnableVertexAttribArray(matrixLocationID + i);
+			glVertexAttribPointer(matrixLocationID + i,
+				4, GL_FLOAT, GL_FALSE,
+				sizeof(glm::mat4),
+				(void*)(sizeof(glm::vec4) * i));
+			glVertexAttribDivisorARB(matrixLocationID + i, 1);
+			//glDisableVertexAttribArray(matrixLocation + i);
+		}
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void WaterRenderer::Draw()

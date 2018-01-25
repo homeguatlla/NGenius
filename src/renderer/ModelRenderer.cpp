@@ -54,81 +54,93 @@ void ModelRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
 	if (mVertexs.size() > 0)
 	{
 		// 1rst attribute buffer : vertices
-		glGenBuffers(1, &mVertexVBO);
-		glBindBuffer(GL_ARRAY_BUFFER, mVertexVBO);
-		glBufferData(GL_ARRAY_BUFFER, mVertexs.size() * sizeof(glm::vec3), &mVertexs[0], GL_STATIC_DRAW);
-
-		GLuint vertexModelspaceID = mShaderProgram->GetAttributePosition();
-		glEnableVertexAttribArray(vertexModelspaceID);
-		glVertexAttribPointer(
-			vertexModelspaceID,  // The attribute we want to configure
-			3,                            // size
-			GL_FLOAT,                     // type
-			GL_FALSE,                     // normalized?
-			0,                            // stride
-			(void*)0                      // array buffer offset
-			);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-		// 2nd attribute buffer : texture coords
-		if (mTexture != nullptr)
+		GLint vertexModelspaceID = mShaderProgram->GetAttributePosition();
+		if (vertexModelspaceID != -1)
 		{
-			glGenBuffers(1, &mTextureCoordsVBO);
-			glBindBuffer(GL_ARRAY_BUFFER, mTextureCoordsVBO);
-			glBufferData(GL_ARRAY_BUFFER, mTextureCoords.size() * sizeof(glm::vec2), &mTextureCoords[0], GL_STATIC_DRAW);
+			glGenBuffers(1, &mVertexVBO);
+			glBindBuffer(GL_ARRAY_BUFFER, mVertexVBO);
+			glBufferData(GL_ARRAY_BUFFER, mVertexs.size() * sizeof(glm::vec3), &mVertexs[0], GL_STATIC_DRAW);
 
-			int textureID = mShaderProgram->GetAttributeLocation("textureCoordsModelspace");
-			glEnableVertexAttribArray(textureID);
+			glEnableVertexAttribArray(vertexModelspaceID);
 			glVertexAttribPointer(
-				textureID,  // The attribute we want to configure
-				2,                            // size
-				GL_FLOAT,                     // type
-				GL_FALSE,                     // normalized?
-				0,                            // stride
-				(void*)0                      // array buffer offset
-				);
-
-			glActiveTexture(GL_TEXTURE0 + mTexture->GetUnit());
-			glBindTexture(GL_TEXTURE_2D, mTexture->GetID());
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-		}
-		//3rd normals
-		if (mNormals.size() > 0)
-		{
-			glGenBuffers(1, &mNormalVBO);
-			glBindBuffer(GL_ARRAY_BUFFER, mNormalVBO);
-			glBufferData(GL_ARRAY_BUFFER, mNormals.size() * sizeof(glm::vec3), &mNormals[0], GL_STATIC_DRAW);
-
-			GLuint normalsModelspaceID = mShaderProgram->GetAttributeLocation("normalModelspace");
-			glEnableVertexAttribArray(normalsModelspaceID);
-			glVertexAttribPointer(
-				normalsModelspaceID,  // The attribute we want to configure
+				vertexModelspaceID,  // The attribute we want to configure
 				3,                            // size
 				GL_FLOAT,                     // type
 				GL_FALSE,                     // normalized?
 				0,                            // stride
 				(void*)0                      // array buffer offset
-				);
+			);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 
-		//matrices instanced
-		mMatrixVBO = vertexBuffersManager.CreateVBO("Matrix_" + GetName());
-		glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);
-		
-		unsigned int matrixLocation = mShaderProgram->GetAttributeLocation("M");
-
-		for (unsigned int i = 0; i < 4; ++i)
+		// 2nd attribute buffer : texture coords
+		if (mTexture != nullptr)
 		{
-			glEnableVertexAttribArray(matrixLocation + i);
-			glVertexAttribPointer(matrixLocation + i,
-				4, GL_FLOAT, GL_FALSE,
-				sizeof(glm::mat4),
-				(void*)(sizeof(glm::vec4) * i));
-			glVertexAttribDivisorARB(matrixLocation + i, 1);
-			//glDisableVertexAttribArray(matrixLocation + i);
+			GLint textureID = mShaderProgram->GetAttributeLocation("textureCoordsModelspace");
+			if (textureID != -1)
+			{
+				glGenBuffers(1, &mTextureCoordsVBO);
+				glBindBuffer(GL_ARRAY_BUFFER, mTextureCoordsVBO);
+				glBufferData(GL_ARRAY_BUFFER, mTextureCoords.size() * sizeof(glm::vec2), &mTextureCoords[0], GL_STATIC_DRAW);
+
+				glEnableVertexAttribArray(textureID);
+				glVertexAttribPointer(
+					textureID,  // The attribute we want to configure
+					2,                            // size
+					GL_FLOAT,                     // type
+					GL_FALSE,                     // normalized?
+					0,                            // stride
+					(void*)0                      // array buffer offset
+				);
+
+				glActiveTexture(GL_TEXTURE0 + mTexture->GetUnit());
+				glBindTexture(GL_TEXTURE_2D, mTexture->GetID());
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+			}
 		}
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		//3rd normals
+		if (mNormals.size() > 0)
+		{
+			GLint normalsModelspaceID = mShaderProgram->GetAttributeLocation("normalModelspace");
+			if (normalsModelspaceID != -1)
+			{
+				glGenBuffers(1, &mNormalVBO);
+				glBindBuffer(GL_ARRAY_BUFFER, mNormalVBO);
+				glBufferData(GL_ARRAY_BUFFER, mNormals.size() * sizeof(glm::vec3), &mNormals[0], GL_STATIC_DRAW);
+
+				glEnableVertexAttribArray(normalsModelspaceID);
+				glVertexAttribPointer(
+					normalsModelspaceID,  // The attribute we want to configure
+					3,                            // size
+					GL_FLOAT,                     // type
+					GL_FALSE,                     // normalized?
+					0,                            // stride
+					(void*)0                      // array buffer offset
+				);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+			}
+		}
+
+		//matrices instanced
+		GLint matrixLocationID = mShaderProgram->GetAttributeLocation("M");
+		if (matrixLocationID != -1)
+		{
+			mMatrixVBO = vertexBuffersManager.CreateVBO("Matrix_" + GetName());
+			glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);
+
+
+			for (unsigned int i = 0; i < 4; ++i)
+			{
+				glEnableVertexAttribArray(matrixLocationID + i);
+				glVertexAttribPointer(matrixLocationID + i,
+					4, GL_FLOAT, GL_FALSE,
+					sizeof(glm::mat4),
+					(void*)(sizeof(glm::vec4) * i));
+				glVertexAttribDivisorARB(matrixLocationID + i, 1);
+				//glDisableVertexAttribArray(matrixLocation + i);
+			}
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
 	}
 }
 

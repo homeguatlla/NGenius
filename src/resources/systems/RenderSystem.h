@@ -27,6 +27,6 @@ public:
 private:
 	void Render(const RenderPass* renderPass);
 	void UpdateDistancesToCamera(const ICamera* camera, RenderersList* renderers);
-	void RenderInstances(const RenderPass* renderPass, std::vector<IRenderer*>& instances);
+	void RenderInstances(const RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances);
 };
 

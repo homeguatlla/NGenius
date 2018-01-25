@@ -802,7 +802,7 @@ void CreateShadowRenderPass()
 
 	RenderPass* shadowPass = new RenderPass(static_cast<ICamera*>(mSunCamera), IRenderer::LAYER_OTHER);
 	shadowPass->SetFrameBufferOutput(frameShadowBuffer);
-
+	//shadowPass->SetShader(mEngine.GetShader("quad"));
 	mEngine.AddRenderPass(shadowPass);
 }
 

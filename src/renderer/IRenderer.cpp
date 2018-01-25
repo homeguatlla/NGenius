@@ -104,6 +104,22 @@ GameEntity* IRenderer::GetParent()
 	return mParent;
 }
 
+void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager, IShaderProgram* shaderRenderPass)
+{
+	if (shaderRenderPass != nullptr)
+	{
+		std::swap(mShaderProgram, shaderRenderPass);
+		mIsPrerendered = false;
+	}
+
+	Render(camera, vertexBufferManager);
+
+	if (shaderRenderPass != nullptr)
+	{
+		std::swap(mShaderProgram, shaderRenderPass);
+	}
+}
+
 void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
 	if (mVertexs.size() > 0 && mIndexes.size() > 0)
@@ -148,11 +164,6 @@ void IRenderer::Draw()
 const BitNumber& IRenderer::GetBitRendererInformation() const
 {
 	return mBitRenderInformation;
-}
-
-IShaderProgram* IRenderer::GetShaderProgram() const
-{
-	return mShaderProgram;
 }
 
 void IRenderer::SetLayer(char layer)

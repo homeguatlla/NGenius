@@ -166,23 +166,26 @@ void TextRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 	IRenderer::PreRender(vertexBufferManager);
 
 	// 2nd attribute buffer : texture coords
-	mTextureCoordsVBO = vertexBufferManager.CreateVBO("texture_" + GetName());
-	glBindBuffer(GL_ARRAY_BUFFER, mTextureCoordsVBO);
-	glBufferData(GL_ARRAY_BUFFER, mTextureCoords.size() * sizeof(glm::vec2), &mTextureCoords[0], GL_STATIC_DRAW);
+	GLint textureID = mShaderProgram->GetAttributeLocation("textureCoordsModelspace");
+	if (textureID != -1)
+	{
+		mTextureCoordsVBO = vertexBufferManager.CreateVBO("texture_" + GetName());
+		glBindBuffer(GL_ARRAY_BUFFER, mTextureCoordsVBO);
+		glBufferData(GL_ARRAY_BUFFER, mTextureCoords.size() * sizeof(glm::vec2), &mTextureCoords[0], GL_STATIC_DRAW);
 
-	int textureID = mShaderProgram->GetAttributeLocation("textureCoordsModelspace");
-	glEnableVertexAttribArray(textureID);
-	glVertexAttribPointer(
-		textureID,  // The attribute we want to configure
-		2,                            // size
-		GL_FLOAT,                     // type
-		GL_FALSE,                     // normalized?
-		0,                            // stride
-		(void*)0                      // array buffer offset
+		glEnableVertexAttribArray(textureID);
+		glVertexAttribPointer(
+			textureID,  // The attribute we want to configure
+			2,                            // size
+			GL_FLOAT,                     // type
+			GL_FALSE,                     // normalized?
+			0,                            // stride
+			(void*)0                      // array buffer offset
 		);
-	glActiveTexture(GL_TEXTURE0 + mFontType->GetTexture()->GetUnit());
-	glBindTexture(GL_TEXTURE_2D, mFontType->GetTexture()->GetID());
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glActiveTexture(GL_TEXTURE0 + mFontType->GetTexture()->GetUnit());
+		glBindTexture(GL_TEXTURE_2D, mFontType->GetTexture()->GetID());
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 }
 
 void TextRenderer::Draw()

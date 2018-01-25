@@ -88,10 +88,6 @@ void TexturesLibrary::Load()
 	AddElement("smoke", texture);
 
 	texture = new Texture();
-	texture->Load("data/textures/sparkle_64.png", ++mCurrentTextureUnit, false, false);
-	AddElement("sparkle", texture);
-
-	texture = new Texture();
 	texture->Load("data/textures/grid_64.png", ++mCurrentTextureUnit, false, true);
 	AddElement("yellow_grid", texture);
 

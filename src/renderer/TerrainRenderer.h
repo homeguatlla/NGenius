@@ -18,7 +18,7 @@ class TerrainRenderer : public IRenderer
 	unsigned int mVertexVBO;
 	unsigned int mTextureCoordsVBO;
 	unsigned int mIndexVBO;
-	unsigned int mMatrixID;
+	GLint mMatrixID;
 	const Texture* mTextureHeightmap;
 	const Texture* mTextureBlendmap;
 	const Texture* mTextureShadowmap;

@@ -34,21 +34,24 @@ void ModelNormalMapRenderer::PreRender(VertexBuffersManager& vertexBufferManager
 	//4rd tangents
 	if (mTangents.size() > 0)
 	{
-		glGenBuffers(1, &mTangentVBO);
-		glBindBuffer(GL_ARRAY_BUFFER, mTangentVBO);
-		glBufferData(GL_ARRAY_BUFFER, mTangents.size() * sizeof(glm::vec3), &mTangents[0], GL_STATIC_DRAW);
+		GLint tangentsModelspaceID = mShaderProgram->GetAttributeLocation("tangentModelspace");
+		if (tangentsModelspaceID != -1)
+		{
+			glGenBuffers(1, &mTangentVBO);
+			glBindBuffer(GL_ARRAY_BUFFER, mTangentVBO);
+			glBufferData(GL_ARRAY_BUFFER, mTangents.size() * sizeof(glm::vec3), &mTangents[0], GL_STATIC_DRAW);
 
-		GLuint tangentsModelspaceID = mShaderProgram->GetAttributeLocation("tangentModelspace");
-		glEnableVertexAttribArray(tangentsModelspaceID);
-		glVertexAttribPointer(
-			tangentsModelspaceID,  // The attribute we want to configure
-			3,                            // size
-			GL_FLOAT,                     // type
-			GL_FALSE,                     // normalized?
-			0,                            // stride
-			(void*)0                      // array buffer offset
+			glEnableVertexAttribArray(tangentsModelspaceID);
+			glVertexAttribPointer(
+				tangentsModelspaceID,  // The attribute we want to configure
+				3,                            // size
+				GL_FLOAT,                     // type
+				GL_FALSE,                     // normalized?
+				0,                            // stride
+				(void*)0                      // array buffer offset
 			);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
 	}
 
 	if (mNormalmapTexture != nullptr)
