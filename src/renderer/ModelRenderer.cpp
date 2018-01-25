@@ -186,6 +186,11 @@ void ModelRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertex
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+int ModelRenderer::GetRenderShaderPassTextureUnit() const
+{
+	return mTexture->GetUnit();
+}
+
 void ModelRenderer::Draw()
 {
 	if (mIsInstancingEnabled)

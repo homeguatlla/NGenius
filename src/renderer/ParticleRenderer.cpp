@@ -193,3 +193,8 @@ void ParticleRenderer::LoadData(const ICamera* camera, VertexBuffersManager& ver
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * instances, &colors[0], GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+
+int ParticleRenderer::GetRenderShaderPassTextureUnit() const
+{
+	return mTexture->GetUnit();
+}

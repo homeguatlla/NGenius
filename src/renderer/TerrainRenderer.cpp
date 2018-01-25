@@ -137,6 +137,10 @@ void TerrainRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vert
 	glUniformMatrix4fv(mMatrixID, 1, GL_FALSE, &MVP[0][0]);
 }
 
+int TerrainRenderer::GetRenderShaderPassTextureUnit() const
+{
+	return mTextureBlendmap->GetUnit();
+}
 
 void TerrainRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {	

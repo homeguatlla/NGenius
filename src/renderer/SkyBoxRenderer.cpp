@@ -133,6 +133,11 @@ void SkyBoxRenderer::LoadData(const ICamera* camera, VertexBuffersManager& verte
 	shader->LoadFogColor(mFogColor);
 }
 
+int SkyBoxRenderer::GetRenderShaderPassTextureUnit() const
+{
+	return mTextureCubemap->GetUnit();
+}
+
 void SkyBoxRenderer::Draw()
 {
 	//draw the skybox last

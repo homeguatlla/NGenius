@@ -201,6 +201,11 @@ void QuadRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexB
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+int QuadRenderer::GetRenderShaderPassTextureUnit() const
+{
+	return mTexture->GetUnit();
+}
+
 void QuadRenderer::ModifyModelMatrixToAvoidRotations(const glm::mat4& viewMatrix, const glm::vec3& scale, float angleZ, glm::mat4& modelMatrix)
 {
 	modelMatrix[0][0] = viewMatrix[0][0];

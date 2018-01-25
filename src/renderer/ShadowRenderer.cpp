@@ -114,3 +114,8 @@ void ShadowRenderer::LoadData(const ICamera* camera, VertexBuffersManager& verte
 
 	glUniformMatrix4fv(mMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);
 }
+
+int ShadowRenderer::GetRenderShaderPassTextureUnit() const
+{
+	return -1;
+}

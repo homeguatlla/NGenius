@@ -206,3 +206,8 @@ void TextRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexB
 	shader->LoadBorderParameters(mWidth, mEdge, mBorderWidth, mBorderEdge);
 	shader->LoadShadow(mShadowOffset);
 }
+
+int TextRenderer::GetRenderShaderPassTextureUnit() const
+{
+	return mFontType->GetTexture()->GetUnit();
+}

@@ -203,6 +203,11 @@ void GUIRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexBu
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+int GUIRenderer::GetRenderShaderPassTextureUnit() const
+{
+	return mTexture->GetUnit();
+}
+
 void GUIRenderer::ModifyModelMatrixToAvoidRotations(const glm::mat4& viewMatrix, const glm::vec3& scale, float angleZ, glm::mat4& modelMatrix)
 {
 	modelMatrix[0][0] = viewMatrix[0][0];

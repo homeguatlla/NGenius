@@ -174,14 +174,33 @@ vec4 ApplyFog(vec4 color)
 	return mix(vec4(fogColor, 1.0f), color, fogVisibility);
 }
 
-void main() {
-	float objectNearestLight = texture(shadowMap, shadowCoords.xy).r;
+const int pfcCount = 6;
+const float totalTexelsShadow = (pfcCount * 2.0 + 1.0) * (pfcCount * 2.0 + 1.0);
+ 
+float ApplyShadow(int pfcCount, float totalTexels)
+{
+	float mapSize = 1024.0f;
+	float texelSize = 1.0 / mapSize;
+	float total = 0.0f;
 	float bias = 0.001;
-	float shadowFactor = 1.0;
-	if (objectNearestLight < shadowCoords.z - bias)
-	{
-		shadowFactor = 1.0 - (shadowCoords.w * 0.4);
+
+	for(int x = -pfcCount; x <= pfcCount; x++) {
+		for(int y = -pfcCount; y <= pfcCount; y++) {
+			float objectNearestLight = texture(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
+			if(objectNearestLight < shadowCoords.z - bias)
+			{
+				total += 1.0;
+			}
+		}
 	}
+	total /= totalTexelsShadow;
+	float shadowFactor = 1.0 - (total * shadowCoords.w);
+
+	return shadowFactor;
+}
+
+void main() {
+	float shadowFactor = ApplyShadow(pfcCount, totalTexelsShadow);
 
 	vec4 blendmapColor = texture(blendMap, textureCoords.xy);
 	vec2 tiledTextureCoords = textureCoords * tile;

@@ -67,6 +67,11 @@ void NormalRenderer::LoadData(const ICamera* camera, VertexBuffersManager& verte
 	glUniformMatrix4fv(mMatrixID, 1, GL_FALSE, &MVP[0][0]);
 }
 
+int NormalRenderer::GetRenderShaderPassTextureUnit() const
+{
+	return -1;
+}
+
 bool NormalRenderer::IsInstancingAllowed() const
 {
 	return false;

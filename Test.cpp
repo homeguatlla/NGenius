@@ -382,7 +382,7 @@ void CreateTrees()
 		float x = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
 		float z = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
 		float height = mTerrain->GetHeight(glm::vec2(x, z));
-		//if (height > mWaterHeight + 0.2f)
+		if (height > mWaterHeight + 0.2f)
 		{
 			positions.push_back(glm::vec3(x, height, z));
 			float scale = .5f;// (rand() % 5) / 200.0f + 0.02f;
@@ -826,7 +826,7 @@ void CreateWaterRenderPass()
 
 	frameReflectionBuffer->Init();
 	
-	RenderPass* reflectionWaterPass = new RenderPass(static_cast<ICamera*>(mReflectionWaterCamera), IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES);
+	RenderPass* reflectionWaterPass = new RenderPass(static_cast<ICamera*>(mReflectionWaterCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES);
 	reflectionWaterPass->SetFrameBufferOutput(frameReflectionBuffer);
 	reflectionWaterPass->EnableClipping(true);
 	reflectionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);
@@ -850,7 +850,7 @@ void CreateWaterRenderPass()
 	frameRefractionBuffer->SetDepthTextureAttachment(refractionDepthTexture);
 	frameRefractionBuffer->Init();
 
-	RenderPass* refractionWaterPass = new RenderPass(static_cast<ICamera*>(mRefractionWaterCamera), IRenderer::LAYER_OTHER);
+	RenderPass* refractionWaterPass = new RenderPass(static_cast<ICamera*>(mRefractionWaterCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER);
 	refractionWaterPass->SetFrameBufferOutput(frameRefractionBuffer);
 	refractionWaterPass->EnableClipping(true);
 	refractionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);
@@ -888,6 +888,19 @@ void CreateGameplayRenderPass()
 	mEngine.AddRenderPass(gameplayPass);
 }
 
+void CreateTerrainRenderPass()
+{
+	//RENDER PASS GAMEPLAY
+	RenderPass *terrainPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TERRAIN);
+
+	/*IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
+	const Texture* depthTexture = static_cast<const Texture*>(mEngine.GetTexture("depth_texture"));
+	frameBuffer->SetCopyDepthBufferToTexture(depthTexture, 0, 0, static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
+	gameplayPass->SetFrameBufferOutput(frameBuffer);
+	*/
+	mEngine.AddRenderPass(terrainPass);
+}
+
 void CreateParticlesRenderPass()
 {
 	//RENDER PASS PARTICLES
@@ -909,6 +922,8 @@ void CreateRenderPasses()
 	{
 		CreateWaterRenderPass();
 	}
+
+	CreateTerrainRenderPass();
 
 	CreateGameplayRenderPass();
 

@@ -187,6 +187,11 @@ void EnergyWallRenderer::LoadData(const ICamera* camera, VertexBuffersManager& v
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+int EnergyWallRenderer::GetRenderShaderPassTextureUnit() const
+{
+	return mTexture->GetUnit();
+}
+
 void EnergyWallRenderer::Draw()
 {
 	if (mIsInstancingEnabled)

@@ -214,6 +214,11 @@ void WaterRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertex
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+int WaterRenderer::GetRenderShaderPassTextureUnit() const
+{
+	return mNormalTexture->GetUnit();
+}
+
 bool WaterRenderer::HasClippingPlane() const
 {
 	return false;

@@ -23,5 +23,6 @@ public:
 private:
 	void PreRender(VertexBuffersManager& vertexBufferManager) override;
 	void LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager) override;
+	int GetRenderShaderPassTextureUnit() const override;
 };
 

@@ -5,12 +5,14 @@
 #include "../resources/shaders/IShaderProgram.h"
 #include "../resources/camera/ICamera.h"
 #include "../resources/GameEntity.h"
+#include "../resources/shaders/QuadShader.h"
 #include <GL/glew.h>
 #include <iostream>
 
 IRenderer::IRenderer(IShaderProgram* shader) :
 mIsPrerendered(false),
 mIsInstancingEnabled(false),
+mIsUsingShaderRenderPass(false),
 mLayer(LAYER_OTHER),
 mShaderProgram(shader),
 mVAO(-1),
@@ -106,18 +108,22 @@ GameEntity* IRenderer::GetParent()
 
 void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager, IShaderProgram* shaderRenderPass)
 {
+	/*
 	if (shaderRenderPass != nullptr)
 	{
 		std::swap(mShaderProgram, shaderRenderPass);
 		mIsPrerendered = false;
-	}
+		mIsUsingShaderRenderPass = true;
+	}*/
 
 	Render(camera, vertexBufferManager);
 
-	if (shaderRenderPass != nullptr)
+	/*if (mIsUsingShaderRenderPass)
 	{
 		std::swap(mShaderProgram, shaderRenderPass);
-	}
+		mIsUsingShaderRenderPass = false;
+		mIsPrerendered = false;
+	}*/
 }
 
 void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
@@ -147,8 +153,14 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 			glBindVertexArray(mVAO);
 		}
 		
-		LoadData(camera, vertexBufferManager);
-		
+		if (mIsUsingShaderRenderPass)
+		{
+			LoadDataQuadShader(camera, vertexBufferManager, GetRenderShaderPassTextureUnit());
+		}
+		else
+		{
+			LoadData(camera, vertexBufferManager);
+		}
 		Draw();
 		mShaderProgram->UnUse();
 
@@ -159,6 +171,38 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 void IRenderer::Draw()
 {
 	glDrawElements(GL_TRIANGLES, mIndexes.size(), GL_UNSIGNED_INT, 0);
+}
+
+void IRenderer::LoadDataQuadShader(const ICamera* camera, VertexBuffersManager& vertexBufferManager, int textureUnit)
+{
+	const glm::mat4 viewMatrix = const_cast<ICamera*>(camera)->GetViewMatrix();
+	QuadShader* shader = static_cast<QuadShader*>(mShaderProgram);
+	shader->LoadQuadTexture(textureUnit);
+	shader->LoadViewMatrix(viewMatrix);
+	shader->LoadProjectionMatrix(camera->GetProjectionMatrix());
+
+	std::vector<glm::mat4> matrices;
+	int instances = 1;
+
+	if (mIsInstancingEnabled)
+	{
+		for (IRenderer* renderer : mInstances)
+		{
+			glm::mat4 modelMatrix = renderer->GetModelMatrix();
+			matrices.push_back(modelMatrix);
+		}
+		instances = mInstances.size();
+	}
+	else
+	{
+		glm::mat4 modelMatrix = mParent->GetTransformation()->GetModelMatrix();
+		matrices.push_back(modelMatrix);
+	}
+
+	unsigned int matrixVBO = vertexBufferManager.GetVBO("Matrix_QuadRenderer");
+	glBindBuffer(GL_ARRAY_BUFFER, matrixVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * instances, &matrices[0], GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 const BitNumber& IRenderer::GetBitRendererInformation() const

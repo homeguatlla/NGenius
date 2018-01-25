@@ -12,6 +12,7 @@ class NormalRenderer : public IRenderer
 	void PreRender(VertexBuffersManager& vertexBufferManager) override;
 	void Draw() override;
 	void LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager) override;
+	int GetRenderShaderPassTextureUnit() const override;
 	bool IsInstancingAllowed() const override;
 	bool HasFog() const override;
 	bool HasClippingPlane() const override;

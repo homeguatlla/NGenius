@@ -114,3 +114,8 @@ void CubeRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexB
 
 	glUniformMatrix4fv(mMatrixID, 1, GL_FALSE, &MVP[0][0]);
 }
+
+int CubeRenderer::GetRenderShaderPassTextureUnit() const
+{
+	return -1;
+}
