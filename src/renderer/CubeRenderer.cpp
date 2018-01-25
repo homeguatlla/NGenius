@@ -119,3 +119,8 @@ int CubeRenderer::GetRenderShaderPassTextureUnit() const
 {
 	return -1;
 }
+
+bool CubeRenderer::IsCastingShadows() const
+{
+	return false;
+}

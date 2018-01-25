@@ -14,12 +14,11 @@ class Terrain :	public GameEntity
 	float mGridSize;
 	const Texture* mHeightmap;
 	const Texture* mShadowmap;
-	const ICamera* mShadowCamera;
 	float mScale;
 	bool mIsFlat;
 
 public:
-	explicit Terrain(Transformation* transformation, IShaderProgram* shader, const Texture* heightmap, const Texture* blendmap, const TextureArray* textureArray, const Texture* shadowmap, const ICamera* shadowCamera, const Light* light, float scale);
+	explicit Terrain(Transformation* transformation, IShaderProgram* shader, const Texture* heightmap, const Texture* blendmap, const TextureArray* textureArray, const Texture* shadowmap, const Light* light, float scale);
 	~Terrain();
 
 	Terrain* DoClone() const override { return nullptr; }
@@ -28,7 +27,7 @@ public:
 	float GetHeight(glm::vec2 point) const;
 
 	void SetFlat(bool isFlat);
-	void SetShadowCamera(const ICamera* camera);
+	void SetShadowMapMatrix(const glm::mat4& shadowMatrix);
 
 private:
 	float CalculateBarryCenter(glm::vec3& p1, glm::vec3& p2, glm::vec3& p3, glm::vec2& point) const;

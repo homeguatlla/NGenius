@@ -21,6 +21,7 @@ public:
 	void SetFogColor(const glm::vec3& fogColor);
 	bool HasFog() const override;
 	bool HasClippingPlane() const override;
+	bool IsCastingShadows() const override;
 
 private:
 	void Create();

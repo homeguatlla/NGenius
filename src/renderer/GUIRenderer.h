@@ -26,6 +26,7 @@ public:
 	bool HasFog() const override;
 	bool HasClippingPlane() const override;
 	void SetBillboard(bool isBillboard);
+	bool IsCastingShadows() const override;
 
 private:
 	void Create();

@@ -103,6 +103,11 @@ bool ShadowRenderer::HasClippingPlane() const
 	return false;
 }
 
+bool ShadowRenderer::IsCastingShadows() const
+{
+	return false;
+}
+
 void ShadowRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffersManager)
 {
 	IRenderer::Render(camera, vertexBuffersManager);

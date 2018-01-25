@@ -92,11 +92,11 @@ void TexturesLibrary::Load()
 	AddElement("yellow_grid", texture);
 
 	texture = new Texture();
-	texture->CreateDepthTexture(++mCurrentTextureUnit, 1024, 768);
+	texture->CreateDepthTexture(++mCurrentTextureUnit, 1024, 1024);
 	AddElement("depth_texture", texture);
 
 	texture = new Texture();
-	texture->CreateDepthTexture(++mCurrentTextureUnit, 1024, 768);
+	texture->CreateDepthTexture(++mCurrentTextureUnit, 2048, 2048);
 	AddElement("shadow_texture", texture);
 
 	texture = new Texture();

@@ -70,6 +70,11 @@ void GUIRenderer::SetBillboard(bool isBillboard)
 	mIsBillboard = isBillboard;
 }
 
+bool GUIRenderer::IsCastingShadows() const
+{
+	return false;
+}
+
 void GUIRenderer::Create()
 {
 	std::vector<glm::vec3> vertexs;

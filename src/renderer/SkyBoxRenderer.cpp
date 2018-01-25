@@ -116,6 +116,11 @@ bool SkyBoxRenderer::HasClippingPlane() const
 	return false;
 }
 
+bool SkyBoxRenderer::IsCastingShadows() const
+{
+	return false;
+}
+
 void SkyBoxRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
 	IRenderer::Render(camera, vertexBufferManager);

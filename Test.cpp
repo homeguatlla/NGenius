@@ -113,7 +113,7 @@ enum Configuration
 	SHADOWS,
 	RELEASE
 };
-Configuration mConfiguration = SHADOWS;
+Configuration mConfiguration = RELEASE;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -162,13 +162,13 @@ GameEntity* mWaterRefractionCameraEntity;
 GameEntity* mShadowCameraEntity;
 EnergyWall* mEnergyWall;
 Text* mFPSText;
-Text* mTestText;
 
 float mFogDensity = 0.04f;
 const float mFogGradient = 1.5f;
 glm::vec3 mFogColor = vec3(89.0f, 120.0f, 143.0f) / 255.0f;
 //red glm::vec3 mFogColor = vec3(218.0f, 74.0f, 43.0f) / 255.0f; 
 float mEnergyWallRadius = 22.0f;
+glm::mat4 mShadowMapMatrix;
 
 double aleatori()
 {
@@ -234,8 +234,8 @@ void CreateShadowPlane()
 	//QUAD
 	IRenderer* guiShadowRenderer = new GUIRenderer(	mEngine.GetShader("gui"),
 														static_cast<const Texture*>(mEngine.GetTexture("shadow_texture")),
-														128.0f,
-														128.0f
+														1.0f,
+														1.0f
 													);
 	GameEntity* quadShadow = new GameEntity(	new Transformation(glm::vec3(0.0f, -300.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 												guiShadowRenderer
@@ -377,7 +377,8 @@ void CreateTrees()
 	std::vector<glm::vec3> sizes;
 
 	int areaSize = 50;
-	for (int i = 0; i < 50; i++)
+	int numTrees = 200;
+	for (int i = 0; i < numTrees; i++)
 	{
 		float x = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
 		float z = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
@@ -448,8 +449,12 @@ void CreateParticlesFire()
 	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
 	particle->SetLiveTime(2.0f);
 
+	float x = 0.0f;
+	float z = 0.0f;
+	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 0.01f;
+
 	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(particle,
-		new Transformation(glm::vec3(2.0f, 0.0f, 2.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
+		new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.1f)),
 		nullptr,
 		100);
 	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 1.0f, 0.25f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
@@ -484,7 +489,7 @@ void CreateParticlesTest()
 	particle->SetLiveTime(1.0f);
 
 	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(	particle,
-																new Transformation(glm::vec3(3.5f, 0.0f, 3.3f), glm::vec3(0.0f), glm::vec3(0.1f)), 
+																new Transformation(glm::vec3(3.5f, 4.5f, 3.3f), glm::vec3(0.0f), glm::vec3(0.1f)), 
 																nullptr,
 																20);
 	particlesEmitter->SetColorGradientValues(glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec4(0.6f, 0.0f, 0.6f, 0.0f));
@@ -496,7 +501,7 @@ void CreateParticlesTest()
 	particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
 	particle->SetLiveTime(2.0f);
 	particlesEmitter = new ParticlesEmitter(	particle,
-												new Transformation(glm::vec3(4.0f, 0.0f, 3.3f), glm::vec3(0.0f), glm::vec3(0.1f)),
+												new Transformation(glm::vec3(4.0f, 4.5f, 3.3f), glm::vec3(0.0f), glm::vec3(0.1f)),
 												nullptr,
 												20);
 	particlesEmitter->SetColorGradientValues(glm::vec4(0.0f, 0.8f, 0.0f, 1.0f), glm::vec4(0.0f, 0.8f, 0.6f, 0.0f));
@@ -537,17 +542,37 @@ void CreateEnergyWall()
 
 void CreateTextTest()
 {
-	mFPSText = new Text(	new Transformation(glm::vec3(-512.0f, 380.0f, 0.0f), glm::vec3(0.0f), glm::vec3(0.60f)),
+	mFPSText = new Text(	new Transformation(
+												glm::vec3(-mEngine.GetScreenWidth() * 0.5f, mEngine.GetScreenHeight() * 0.5f, 0.0f), 
+												glm::vec3(0.0f), 
+												glm::vec3(0.60f)
+							),
 							mEngine.GetShader("text"), mEngine.GetFont("OCR A Extended"),
 							"FPS:", false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
 	mEngine.AddGameEntity(mFPSText);
 
-	
-	mTestText = new Text(new Transformation(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f), glm::vec3(.01f)),
+	float x = 0.0f;
+	float z = 0.0f;
+	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
+
+
+	Text* mTestText = new Text(new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(.01f)),
 		mEngine.GetShader("text"), mEngine.GetFont("OCR A Extended"),
 		"Origin", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
 	mTestText->SetOutlineColor(glm::vec4(0.0f, 1.0f, 1.0f, 0.8f));
 	mTestText->SetBorderParameters(0.4f, 0.1f, 0.3f, 0.7f);
+	mEngine.AddGameEntity(mTestText);
+
+	x = 10.0f;
+	z = 10.0f;
+	height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
+
+	mTestText = new Text(new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(.01f)),
+		mEngine.GetShader("text"), mEngine.GetFont("OCR A Extended"),
+		"Market", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
+	mTestText->SetOutlineColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.8f));
+	mTestText->SetBorderParameters(0.5f, 0.1f, 0.5f, 0.4f);
+	mTestText->SetShadow(glm::vec2(0.002f, 0.002f));
 	mEngine.AddGameEntity(mTestText);
 
 	/*
@@ -591,7 +616,6 @@ void CreateEntities()
 								  static_cast<Texture*>(mEngine.GetTexture("terrain_blendmap")),
 								  static_cast<TextureArray*>(mEngine.GetTexture("terrain_array")),
 								  static_cast<Texture*>(mEngine.GetTexture("shadow_texture")),
-								  mSunCamera,
 								  mSunLight,
 								  terrainHeightScale);
 
@@ -705,8 +729,10 @@ void CreateEntities()
 	{
 		CreateShadowPlane();
 	}
-
-	GameEntity* stallEntity = new GameEntity(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
+	float x = 10.0f;
+	float z = 10.0f;
+	float height = mTerrain->GetHeight(glm::vec2(x, z));
+	GameEntity* stallEntity = new GameEntity(	new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.1f)),
 												new ModelRenderer(	mEngine.GetModel("stall"), 
 																	mEngine.GetShader("model"), 
 																	static_cast<Texture*>(mEngine.GetTexture("stall")),
@@ -771,7 +797,8 @@ void ApplyShadowCamera(ICamera* camera, ICamera* shadowCamera)
 	shadowCamera->SetPosition(position);
 	shadowCamera->SetTarget(playerPosition);
 	shadowCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
-	mTerrain->SetShadowCamera(shadowCamera);
+
+	mEngine.SetCameraCastingShadows(shadowCamera);
 }
 
 void CreateHudMapRenderPass()
@@ -1051,16 +1078,17 @@ void SetupConfiguration()
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = true;
+		mIsShadowEnabled = true;
 		break;
 	case SHADOWS:
 		mIsDebugModeEnabled = true;
 		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
-		mIsVegetationEnabled = false;
+		mIsVegetationEnabled = true;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = true;
-		mIsTerrainFlat = true;
+		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsShadowEnabled = true;
@@ -1079,6 +1107,7 @@ void SetupConfiguration()
 		mIsStatisticsVisible = true;
 		mEnergyWallRadius = 22.0f;
 		mIsParticlesEnabled = false;
+		mIsShadowEnabled = false;
 		break;
 	case TEXT:
 		mIsDebugModeEnabled = true;
@@ -1092,6 +1121,7 @@ void SetupConfiguration()
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
+		mIsShadowEnabled = false;
 		break;
 	case RELEASE:
 		mIsDebugModeEnabled = false;
@@ -1105,6 +1135,7 @@ void SetupConfiguration()
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = true;
+		mIsShadowEnabled = true;
 		mEngine.SetFullScreen(true);
 		break;
 	}

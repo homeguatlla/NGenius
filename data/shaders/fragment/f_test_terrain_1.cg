@@ -19,7 +19,8 @@ uniform vec3 lightColor;
 uniform float tile;
 uniform vec3 fogColor;
 uniform sampler2D shadowMap;
-
+uniform int shadowMapSize;
+	
 
 
 out vec4 color;
@@ -174,13 +175,12 @@ vec4 ApplyFog(vec4 color)
 	return mix(vec4(fogColor, 1.0f), color, fogVisibility);
 }
 
-const int pfcCount = 6;
+const int pfcCount = 3;
 const float totalTexelsShadow = (pfcCount * 2.0 + 1.0) * (pfcCount * 2.0 + 1.0);
  
 float ApplyShadow(int pfcCount, float totalTexels)
 {
-	float mapSize = 1024.0f;
-	float texelSize = 1.0 / mapSize;
+	float texelSize = 1.0 / shadowMapSize;
 	float total = 0.0f;
 	float bias = 0.001;
 

@@ -23,6 +23,8 @@ public:
 	void LoadFogParameters(const glm::vec3& color, float density, float gradient);
 	void LoadTile(float tile);
 	void LoadTime(float time);
+	void LoadShadowSpaceMatrix(const glm::mat4& matrix);
+	void LoadShadowMapTexture(int unit, int width);
 
 private:
 	int mLocationModelMatrix;
@@ -39,5 +41,8 @@ private:
 	int mLocationFogColor;
 	int mLocationTile;
 	int mLocationTime;
+	int mLocationShadowSpaceMatrix;
+	int mLocationShadowMapTexture;
+	int mLocationShadowMapTextureWidth;
 };
 

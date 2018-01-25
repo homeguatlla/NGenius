@@ -109,6 +109,11 @@ void IShaderProgram::LoadTexture(int location, int unit)
 	glUniform1i(location, unit);
 }
 
+void IShaderProgram::LoadInteger(int location, int value)
+{
+	glUniform1i(location, value);
+}
+
 void IShaderProgram::LoadVector2(int location, const glm::vec2& value)
 {
 	glUniform2f(location, value.x, value.y);

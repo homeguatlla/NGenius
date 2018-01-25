@@ -141,6 +141,11 @@ void RenderSystem::RenderInstances(const RenderPass* renderPass, IRenderer* rend
 		renderer->EnableFog(renderPass->IsFogEnabled());
 	}
 
+	if (renderer->IsCastingShadows())
+	{
+		renderer->SetShadowMapMatrix(mShadowMapMatrix);
+		renderer->SetTextureShadowMap(mShadowMapTexture);
+	}
 	//Apply clipping planes
 	if (renderPass->IsClippingEnabled())
 	{
@@ -175,4 +180,29 @@ void RenderSystem::UpdateDistancesToCamera(const ICamera* camera, RenderersList*
 		distanceToCamera = glm::min<unsigned int>(glm::max<unsigned int>(0, distanceToCamera), UINT_MAX);
 		renderer->SetDistance(distanceToCamera);
 	}
+}
+
+glm::mat4 RenderSystem::CalculateShadowMapMatrix(const ICamera* camera)
+{
+	Transformation transformation(camera->GetPosition(), glm::vec3(0.0f), glm::vec3(1.0f));
+	glm::mat4& matrix = camera->GetProjectionMatrix() * const_cast<ICamera*>(camera)->GetViewMatrix();
+
+	glm::mat4 biasMatrix(
+		0.5, 0.0, 0.0, 0.0,
+		0.0, 0.5, 0.0, 0.0,
+		0.0, 0.0, 0.5, 0.0,
+		0.5, 0.5, 0.5, 1.0
+	);
+
+	return biasMatrix * matrix;
+}
+
+void RenderSystem::SetCameraCastingShadows(const ICamera* camera)
+{
+	mShadowMapMatrix = CalculateShadowMapMatrix(camera);
+}
+
+void RenderSystem::SetTextureShadowMap(const Texture* texture)
+{
+	mShadowMapTexture = texture;
 }

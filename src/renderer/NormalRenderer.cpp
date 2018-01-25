@@ -87,6 +87,11 @@ bool NormalRenderer::HasClippingPlane() const
 	return false;
 }
 
+bool NormalRenderer::IsCastingShadows() const
+{
+	return false;
+}
+
 void NormalRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
 	IRenderer::Render(camera, vertexBufferManager);

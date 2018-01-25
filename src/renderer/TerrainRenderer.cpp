@@ -129,7 +129,7 @@ void TerrainRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vert
 	if (mTextureShadowmap != nullptr)
 	{
 		shader->LoadShadowSpaceMatrix(mShadowSpaceMatrix);
-		shader->LoadShadowMapTexture(mTextureShadowmap->GetUnit());
+		shader->LoadShadowMapTexture(mTextureShadowmap->GetUnit(), mTextureShadowmap->GetWidth());
 	}
 
 	glm::mat4 MVP = camera->GetProjectionMatrix() * const_cast<ICamera*>(camera)->GetViewMatrix() * mParent->GetTransformation()->GetModelMatrix();
@@ -155,6 +155,11 @@ bool TerrainRenderer::HasFog() const
 void TerrainRenderer::EnableFog(bool enable)
 {
 	mIsFogEnabled = enable;
+}
+
+bool TerrainRenderer::IsCastingShadows() const
+{
+	return true;
 }
 
 void TerrainRenderer::SetTextureShadowMap(const Texture* shadowMap)

@@ -43,6 +43,7 @@ public:
 	bool IsInstancingAllowed() const override;
 	bool HasFog() const override;
 	void EnableFog(bool enable) override;
+	bool IsCastingShadows() const override;
 
 private:
 

@@ -15,7 +15,9 @@ mTexture(texture),
 mLight(light),
 mTextureCoordsVBO(-1),
 mNormalVBO(-1),
-mMatrixVBO(-1)
+mMatrixVBO(-1),
+mShadowSpaceMatrix(),
+mTextureShadowmap(nullptr)
 {
 	assert(model != nullptr);
 	assert(texture != nullptr);
@@ -158,7 +160,11 @@ void ModelRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertex
 	shader->LoadFogParameters(mFogColor, mIsFogEnabled ? mFogDensity : 0.0f, mFogGradient);
 	shader->LoadTile(mTile);
 	shader->LoadCameraPosition(camera->GetPosition());
-
+	if (mTextureShadowmap != nullptr)
+	{
+		shader->LoadShadowSpaceMatrix(mShadowSpaceMatrix);
+		shader->LoadShadowMapTexture(mTextureShadowmap->GetUnit(), mTextureShadowmap->GetWidth());
+	}
 	std::vector<glm::mat4> matrices;
 	int instances = 1;
 
@@ -260,4 +266,19 @@ void ModelRenderer::EnableFog(bool enable)
 bool ModelRenderer::HasClippingPlane() const
 {
 	return false;
+}
+
+void ModelRenderer::SetTextureShadowMap(const Texture* shadowMap)
+{
+	mTextureShadowmap = shadowMap;
+}
+
+bool ModelRenderer::IsCastingShadows() const
+{
+	return true;
+}
+
+void ModelRenderer::SetShadowMapMatrix(const glm::mat4& matrix)
+{
+	mShadowSpaceMatrix = matrix;
 }

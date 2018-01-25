@@ -70,6 +70,11 @@ void QuadRenderer::SetBillboard(bool isBillboard)
 	mIsBillboard = isBillboard;
 }
 
+bool QuadRenderer::IsCastingShadows() const
+{
+	return false;
+}
+
 void QuadRenderer::Create()
 {
 	std::vector<glm::vec3> vertexs;

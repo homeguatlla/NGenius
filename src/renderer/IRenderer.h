@@ -8,6 +8,7 @@
 class IShaderProgram;
 class ICamera;
 class GameEntity;
+class Texture;
 
 class IRenderer
 {
@@ -99,6 +100,10 @@ public:
 	const AABB& GetBoundingBox() const;
 
 	void SetFogParameters(const glm::vec3& color, float density, float gradient);
+
+	virtual bool IsCastingShadows() const = 0;
+	virtual void SetShadowMapMatrix(const glm::mat4& shadowMatrix) {};
+	virtual void SetTextureShadowMap(const Texture* shadowMap) {};
 
 	//TODO esto no mola, se usa en el instancing
 	glm::mat4 GetModelMatrix();

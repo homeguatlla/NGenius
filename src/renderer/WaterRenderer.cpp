@@ -233,3 +233,8 @@ void WaterRenderer::EnableFog(bool enable)
 {
 	mIsFogEnabled = enable;
 }
+
+bool WaterRenderer::IsCastingShadows() const
+{
+	return false;
+}

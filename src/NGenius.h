@@ -22,6 +22,7 @@ class GameEntity;
 class ParticlesEmitter;
 class RenderPass;
 class Terrain;
+class ICamera;
 
 struct GLFWwindow;
 struct GLFWmonitor;
@@ -75,7 +76,8 @@ public:
 	void SetFullScreen(bool isFullScreen);
 	void SetTerrain(const Terrain* terrain);
 	void SetEnergyWallRadius(float radius);
-
+	void SetCameraCastingShadows(const ICamera* camera);
+	
 private:
 	bool InitializeWindowAndOpenGL();
 	void DisableVSync(bool enable);

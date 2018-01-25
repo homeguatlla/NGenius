@@ -24,6 +24,7 @@ public:
 	void LoadBool(int location, bool value);
 	void LoadMatrix4(int location, const glm::mat4& value);
 	void LoadTexture(int location, int unit);
+	void LoadInteger(int location, int value);
 
 	virtual void BindAttributes() = 0;
 	virtual void GetAllUniformLocations() = 0;

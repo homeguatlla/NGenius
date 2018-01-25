@@ -115,6 +115,11 @@ bool TextRenderer::HasClippingPlane() const
 	return false;
 }
 
+bool TextRenderer::IsCastingShadows() const
+{
+	return false;
+}
+
 void TextRenderer::Create(const std::string& text, unsigned int width, unsigned int height, bool isCentered)
 {
 	std::vector<glm::vec3> vertexs;

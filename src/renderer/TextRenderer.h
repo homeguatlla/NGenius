@@ -33,6 +33,7 @@ public:
 	bool IsInstancingAllowed() const override;
 	bool HasFog() const override;
 	bool HasClippingPlane() const override;
+	bool IsCastingShadows() const override;
 
 	void SetColor(const glm::vec4& color);
 	void SetOutlineColor(const glm::vec4& color);

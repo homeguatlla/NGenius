@@ -34,6 +34,7 @@ public:
 	bool HasFog() const override;
 	void EnableFog(bool enable) override;
 	bool HasClippingPlane() const override;
+	bool IsCastingShadows() const override;
 
 private:
 	void Draw() override;

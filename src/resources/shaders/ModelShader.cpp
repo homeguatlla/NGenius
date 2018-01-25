@@ -18,6 +18,9 @@ const std::string ATTRIBUTE_FOG_GRADIENT("fogGradient");
 const std::string ATTRIBUTE_FOG_COLOR("fogColor");
 const std::string ATTRIBUTE_TILE("tile");
 const std::string ATTRIBUTE_TIME("time");
+const std::string ATTRIBUTE_SHADOW_SPACE_MATRIX("toShadowMapSpace");
+const std::string ATTRIBUTE_SHADOW_TEXTURE("shadowMap");
+const std::string ATTRIBUTE_SHADOW_TEXTURE_WIDTH("shadowMapSize");
 
 ModelShader::ModelShader() :
 ModelShader(VERTEX_FILE, FRAGMENT_FILE)
@@ -37,7 +40,10 @@ mLocationFogDensity(-1),
 mLocationFogGradient(-1),
 mLocationFogColor(-1),
 mLocationTile(-1),
-mLocationTime(-1)
+mLocationTime(-1),
+mLocationShadowSpaceMatrix(-1),
+mLocationShadowMapTexture(-1),
+mLocationShadowMapTextureWidth(-1)
 {
 }
 
@@ -70,6 +76,9 @@ void ModelShader::GetAllUniformLocations()
 	mLocationFogColor = GetUniformLocation(ATTRIBUTE_FOG_COLOR);
 	mLocationTile = GetUniformLocation(ATTRIBUTE_TILE);
 	mLocationTime = GetUniformLocation(ATTRIBUTE_TIME);
+	mLocationShadowSpaceMatrix = GetUniformLocation(ATTRIBUTE_SHADOW_SPACE_MATRIX);
+	mLocationShadowMapTexture = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE);
+	mLocationShadowMapTextureWidth = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE_WIDTH);
 }
 
 void ModelShader::LoadLight(const Light& light)
@@ -113,4 +122,15 @@ void ModelShader::LoadTile(float tile)
 void ModelShader::LoadTime(float time)
 {
 	LoadFloat(mLocationTime, time);
+}
+
+void ModelShader::LoadShadowSpaceMatrix(const glm::mat4& matrix)
+{
+	LoadMatrix4(mLocationShadowSpaceMatrix, matrix);
+}
+
+void ModelShader::LoadShadowMapTexture(int unit, int width)
+{
+	LoadTexture(mLocationShadowMapTexture, unit);
+	LoadInteger(mLocationShadowMapTextureWidth, width);
 }

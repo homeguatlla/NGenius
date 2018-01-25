@@ -270,3 +270,8 @@ bool EnergyWallRenderer::HasClippingPlane() const
 {
 	return false;
 }
+
+bool EnergyWallRenderer::IsCastingShadows() const
+{
+	return false;
+}

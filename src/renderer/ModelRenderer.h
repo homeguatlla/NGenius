@@ -16,6 +16,7 @@ class ModelRenderer : public IRenderer
 protected:
 	Model* mModel;
 	const Texture* mTexture;
+	const Texture* mTextureShadowmap;
 	const Light* mLight;
 
 	unsigned int mMatrixVBO;
@@ -23,7 +24,7 @@ protected:
 private:
 	unsigned int mTextureCoordsVBO;
 	unsigned int mNormalVBO;
-	
+	glm::mat4 mShadowSpaceMatrix;
 
 public:
 	ModelRenderer(Model* model, IShaderProgram* shader, const Texture* texture, const Light* light);
@@ -35,6 +36,11 @@ public:
 	bool HasFog() const override;
 	void EnableFog(bool enable) override;
 	bool HasClippingPlane() const override;
+
+	void SetTextureShadowMap(const Texture* shadowMap);
+	void SetShadowMapMatrix(const glm::mat4& matrix);
+
+	bool IsCastingShadows() const override;
 
 private:
 	void Draw() override;

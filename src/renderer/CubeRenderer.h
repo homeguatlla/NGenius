@@ -17,6 +17,7 @@ public:
 	bool IsInstancingAllowed() const override;
 	bool HasFog() const override;
 	bool HasClippingPlane() const override;
+	bool IsCastingShadows() const override;
 
 private:
 	void Create();

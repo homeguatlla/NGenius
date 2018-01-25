@@ -22,6 +22,8 @@
 
 #include "resources/entities/ParticlesEmitter.h"
 
+#include "resources/textures/Texture.h"
+
 NGenius::NGenius(std::string applicationName, float screenWidth, float screenHeight) :
 mRenderSystem(nullptr),
 mPhysicsSystem(nullptr),
@@ -56,6 +58,8 @@ void NGenius::Init()
 	CreateResourcesLibraries();
 	CreateSystems();
 	LoadResources();
+
+	mRenderSystem->SetTextureShadowMap(static_cast<Texture*>(GetTexture("shadow_texture")));
 }
 
 void NGenius::Update()
@@ -381,6 +385,12 @@ void NGenius::SetEnergyWallRadius(float radius)
 {
 	assert(mPhysicsSystem != nullptr);
 	mPhysicsSystem->SetEnergyWallRadius(radius);
+}
+
+void NGenius::SetCameraCastingShadows(const ICamera* camera)
+{
+	assert(mRenderSystem != nullptr);
+	mRenderSystem->SetCameraCastingShadows(camera);
 }
 
 void NGenius::CheckGLError()
