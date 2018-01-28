@@ -23,6 +23,7 @@ const std::string ATTRIBUTE_CLIP_PLANE("clippingPlane");
 const std::string ATTRIBUTE_SHADOW_SPACE_MATRIX("toShadowMapSpace");
 const std::string ATTRIBUTE_SHADOW_TEXTURE("shadowMap");
 const std::string ATTRIBUTE_SHADOW_TEXTURE_WIDTH("shadowMapSize");
+const std::string ATTRIBUTE_SHADOW_PFC("pfcCount");
 
 TerrainShader::TerrainShader() : 
 IShaderProgram(VERTEX_FILE, FRAGMENT_FILE),
@@ -43,7 +44,8 @@ mLocationFogColor(-1),
 mLocationClippingPlane(-1),
 mLocationShadowSpaceMatrix(-1),
 mLocationShadowMapTexture(-1),
-mLocationShadowMapTextureWidth(-1)
+mLocationShadowMapTextureWidth(-1),
+mLocationShadowMapPFC(-1)
 {
 }
 
@@ -78,6 +80,7 @@ void TerrainShader::GetAllUniformLocations()
 	mLocationShadowSpaceMatrix = GetUniformLocation(ATTRIBUTE_SHADOW_SPACE_MATRIX);
 	mLocationShadowMapTexture = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE);
 	mLocationShadowMapTextureWidth = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE_WIDTH);
+	mLocationShadowMapPFC = GetUniformLocation(ATTRIBUTE_SHADOW_PFC);
 }
 
 void TerrainShader::LoadLight(const Light& light)
@@ -133,7 +136,7 @@ void TerrainShader::LoadClippingPlane(const glm::vec4& plane)
 	LoadVector4(mLocationClippingPlane, plane);
 }
 
-void TerrainShader::LoadShadowSpaceMatrix(const glm::mat4& matrix)
+void TerrainShader::LoadShadowMapSpaceMatrix(const glm::mat4& matrix)
 {
 	LoadMatrix4(mLocationShadowSpaceMatrix, matrix);
 }
@@ -142,4 +145,9 @@ void TerrainShader::LoadShadowMapTexture(int unit, int width)
 {
 	LoadTexture(mLocationShadowMapTexture, unit);
 	LoadInteger(mLocationShadowMapTextureWidth, width);
+}
+
+void TerrainShader::LoadShadowMapPFC(int pfcCounter)
+{
+	LoadInteger(mLocationShadowMapPFC, pfcCounter);
 }

@@ -345,6 +345,9 @@
     <ClInclude Include="src\renderer\ShadowRenderer.h">
       <Filter>Header Files\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\systems\ShadowsSystem.h">
+      <Filter>Header Files\resources\systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -595,6 +598,9 @@
     </ClCompile>
     <ClCompile Include="src\renderer\ShadowRenderer.cpp">
       <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\ShadowsSystem.cpp">
+      <Filter>Source Files\resources\systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

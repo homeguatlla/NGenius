@@ -2,20 +2,17 @@
 
 #include <string>
 #include <functional>
+#include <glm/glm.hpp>
 
 class RenderSystem;
 class PhysicsSystem;
 class EntitiesSystem;
 class ParticlesSystem;
 
-class ShadersLibrary;
-class TexturesLibrary;
-class ModelsLibrary;
-class FontsLibrary;
-
 class Model;
 class IShaderProgram;
 class ITexture;
+class Texture;
 class FontType;
 
 class GameEntity;
@@ -25,7 +22,6 @@ class Terrain;
 class ICamera;
 
 struct GLFWwindow;
-struct GLFWmonitor;
 
 class NGenius
 {
@@ -34,16 +30,7 @@ class NGenius
 	EntitiesSystem* mEntitiesSystem;
 	ParticlesSystem* mParticlesSystem;
 
-	ShadersLibrary* mShadersLibrary;
-	TexturesLibrary* mTexturesLibrary;
-	ModelsLibrary* mModelsLibrary;
-	FontsLibrary* mFontsLibrary;
-
-	GLFWwindow* mWindow;
-	float mScreenWidth;
-	float mScreenHeight;
 	std::string mApplicationName;
-	bool mIsFullScreen;
 	float mFPS;
 
 	std::function<void(GLFWwindow* window)> mInputHandler;
@@ -53,7 +40,7 @@ public:
 	explicit NGenius(std::string applicationName, float screenWidth, float screenHeight);
 	~NGenius();
 
-	void Init();
+	void Init(bool isFullscreen);
 	void Update();
 
 	IShaderProgram* GetShader(const std::string& name) const;
@@ -63,7 +50,6 @@ public:
 	float GetFPS() const;
 	float GetScreenWidth() const;
 	float GetScreenHeight() const;
-
 	GLFWwindow* GetGLWindow() const;
 
 	void AddGameEntity(GameEntity* entity);
@@ -76,24 +62,14 @@ public:
 	void SetFullScreen(bool isFullScreen);
 	void SetTerrain(const Terrain* terrain);
 	void SetEnergyWallRadius(float radius);
-	void SetCameraCastingShadows(const ICamera* camera);
-	
+	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
+	void SetCastingShadowsTarget(const glm::vec3& position);
+
 private:
-	bool InitializeWindowAndOpenGL();
-	void DisableVSync(bool enable);
-	GLFWmonitor* GetCurrentMonitor(GLFWwindow *window);
-
-	void CreateResourcesLibraries();
-	void CreateSystems(); 
-	
+	void CreateSystems(float screenWidth, float screenHeight);
 	void DestroySystems();
-	void DestroyResourcesLibraries();
-
-	void CheckGLError();
-
+	
 	void UpdateInput(float deltaTime);
 	void UpdateSystems(float elapsedTime);
-	void LoadResources();
-	
 };
 

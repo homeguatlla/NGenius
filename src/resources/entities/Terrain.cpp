@@ -50,9 +50,6 @@ mIsFlat(false)
 	GetRenderer()->SetVertexs(vertexs);
 	static_cast<TerrainRenderer*>(GetRenderer())->SetTextureCoords(uv);
 	GetRenderer()->SetIndexes(indices);
-
-	//shadow stuff
-	static_cast<TerrainRenderer*>(GetRenderer())->SetTextureShadowMap(mShadowmap);
 }
 
 
@@ -65,11 +62,6 @@ Terrain::~Terrain()
 void Terrain::SetFlat(bool isFlat)
 {
 	mIsFlat = isFlat;
-}
-
-void Terrain::SetShadowMapMatrix(const glm::mat4& shadowMatrix)
-{
-	static_cast<TerrainRenderer*>(GetRenderer())->SetShadowMapMatrix(shadowMatrix);
 }
 
 bool Terrain::IsPointInside(glm::vec2 point) const

@@ -8,6 +8,21 @@ class ICamera;
 class RenderPass;
 class Texture;
 
+class ShadersLibrary;
+class TexturesLibrary;
+class ModelsLibrary;
+class FontsLibrary;
+
+class Model;
+class IShaderProgram;
+class ITexture;
+class FontType;
+
+struct GLFWwindow;
+struct GLFWmonitor;
+
+class ShadowsSystem;
+
 class RenderSystem
 {
 	VertexBuffersManager mVertexsBuffersManager;
@@ -16,24 +31,55 @@ class RenderSystem
 	std::map<char, RenderersList> mRenderersPerPass;
 	std::vector<IRenderer*> mInstances;
 	std::vector<const RenderPass*> mRenderPasses;
-	glm::mat4 mShadowMapMatrix;
-	const Texture* mShadowMapTexture;
+	float mScreenWidth;
+	float mScreenHeight;
+	ShadersLibrary* mShadersLibrary;
+	TexturesLibrary* mTexturesLibrary;
+	ModelsLibrary* mModelsLibrary;
+	FontsLibrary* mFontsLibrary;
 
+	GLFWwindow* mWindow;
+
+	ShadowsSystem* mShadowsSystem;
+
+	bool mIsFullScreen;
 	int mLastClipPlaneNumberUsed;
-
+	
 public:
-	RenderSystem();
+	RenderSystem(float screenWidth, float screenHeight);
 	~RenderSystem();
+
+	void Init(const std::string& applicationName, bool isFullscreen);
 	void Render();
 	void AddToRender(IRenderer* renderer);
 	void AddRenderPass(const RenderPass* renderPass);
-	void SetCameraCastingShadows(const ICamera* camera);
-	void SetTextureShadowMap(const Texture* texture);
 
+	float GetScreenWidth() const;
+	float GetScreenHeight() const;
+	GLFWwindow* GetGLWindow() const;
+	IShaderProgram* GetShader(const std::string& name) const;
+	Model* GetModel(const std::string& name) const;
+	ITexture* GetTexture(const std::string& name) const;
+	FontType* GetFont(const std::string& name) const;
+		
+	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
+	void SetCastingShadowsTarget(const glm::vec3& position);
+	void SetFullScreen(bool isFullScreen);
+	
 private:
+	void CreateResourcesLibraries();
+	void DestroyResourcesLibraries();
+
+	bool InitializeWindowAndOpenGL(const std::string& applicationName, bool isFullscreen);
+	void DisableVSync(bool enable);
+	GLFWmonitor* GetCurrentMonitor(GLFWwindow *window);
+
+	void LoadResources();
+
 	void Render(const RenderPass* renderPass);
 	void UpdateDistancesToCamera(const ICamera* camera, RenderersList* renderers);
 	void RenderInstances(const RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances);
-	glm::mat4 CalculateShadowMapMatrix(const ICamera* camera);
+	
+	void CheckGLError();
 };
 

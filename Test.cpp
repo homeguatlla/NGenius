@@ -141,6 +141,7 @@ bool mIsTextEnabled = false;
 bool mIsStatisticsVisible = false;
 bool mIsShadowEnabled = false;
 bool mIsParticlesEnabled = false;
+bool mIsFullScreen = false;
 
 NGenius mEngine("Demo", SCREEN_WIDTH, SCREEN_HEIGHT);
 ICamera* mGameplayCamera;
@@ -149,10 +150,10 @@ ICamera* mReflectionWaterCamera;
 ICamera* mRefractionWaterCamera;
 ICamera* mMapCamera;
 ICamera* mEagleEyeCamera;
-ICamera* mSunCamera;
 
 RenderPass* mMapPass;
 Light* mSunLight;
+glm::vec3 mSunLightDirection(100000.0f, 100000.0f, 100000.0f);
 Terrain* mTerrain;
 Player* mPlayer;
 GameEntity* mCamera;
@@ -168,7 +169,6 @@ const float mFogGradient = 1.5f;
 glm::vec3 mFogColor = vec3(89.0f, 120.0f, 143.0f) / 255.0f;
 //red glm::vec3 mFogColor = vec3(218.0f, 74.0f, 43.0f) / 255.0f; 
 float mEnergyWallRadius = 22.0f;
-glm::mat4 mShadowMapMatrix;
 
 double aleatori()
 {
@@ -594,14 +594,13 @@ void CreateTextTest()
 void CreateEntities()
 {
 	//LIGHT GAME ENTITY
-	mSunLight = new Light(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1, 1, 1), new CubeRenderer(mEngine.GetShader("default")));
+	mSunLight = new Light(mSunLightDirection, glm::vec3(1, 1, 1), new CubeRenderer(mEngine.GetShader("default")));
 	mSunLight->AddComponent(new VerticalInputComponent(mEngine.GetGLWindow()));
 	mSunLight->GetTransformation()->SetScale(glm::vec3(0.05f));
 
 	mEngine.AddGameEntity(mSunLight);
 
 	//TERRAIN GAME ENTITY
-	mSunCamera = new OrthogonalCamera(mEngine.GetScreenWidth() * 0.01f, mEngine.GetScreenHeight() * 0.01f, -10.0f, 20.0f);
 	//mSunCamera = new OrthogonalCamera(20.0f, 20.0f, -10.0f, 20.0f);
 	//glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
 	//glm::vec3 direction = glm::vec3(camera->GetTarget() - glm::vec3(100000.0f, 100000.0f, 100000.0f));
@@ -789,18 +788,6 @@ void ApplyRefractionCameras(ICamera* camera, ICamera* cameraRefracted)
 	cameraRefracted->SetUp(camera->GetUp());
 }
 
-void ApplyShadowCamera(ICamera* camera, ICamera* shadowCamera)
-{
-	glm::vec3 playerPosition = mPlayer->GetTransformation()->GetPosition();
-	//posicion luz
-	glm::vec3 position = glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f)) + playerPosition;
-	shadowCamera->SetPosition(position);
-	shadowCamera->SetTarget(playerPosition);
-	shadowCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
-
-	mEngine.SetCameraCastingShadows(shadowCamera);
-}
-
 void CreateHudMapRenderPass()
 {
 	//HUD MAP RENDER PASS
@@ -816,21 +803,6 @@ void CreateHudMapRenderPass()
 	mMapPass->SetFrameBufferOutput(frameBuffer);
 	mMapPass->EnableFog(false);
 	mEngine.AddRenderPass(mMapPass);
-}
-
-void CreateShadowRenderPass()
-{
-	//SHADOW RENDER PASS
-	//SHADOW
-	IFrameBuffer* frameShadowBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
-	const Texture* shadowTexture = static_cast<const Texture*>(mEngine.GetTexture("shadow_texture"));
-	frameShadowBuffer->SetDepthTextureAttachment(shadowTexture);
-	frameShadowBuffer->Init();
-
-	RenderPass* shadowPass = new RenderPass(static_cast<ICamera*>(mSunCamera), IRenderer::LAYER_OTHER);
-	shadowPass->SetFrameBufferOutput(frameShadowBuffer);
-	//shadowPass->SetShader(mEngine.GetShader("quad"));
-	mEngine.AddRenderPass(shadowPass);
 }
 
 void CreateWaterRenderPass()
@@ -939,11 +911,6 @@ void CreateParticlesRenderPass()
 void CreateRenderPasses()
 {
 	//CreateHudMapRenderPass();
-	
-	if (mIsShadowEnabled)
-	{
-		CreateShadowRenderPass();
-	}
 
 	if (mIsWaterEnabled)
 	{
@@ -1058,7 +1025,7 @@ void Update(float elapsedTime)
 	}
 	if (mIsShadowEnabled)
 	{
-		ApplyShadowCamera(mGameplayCamera, mSunCamera);
+		mEngine.SetCastingShadowsTarget(mPlayer->GetTransformation()->GetPosition());
 	}
 }
 
@@ -1136,7 +1103,7 @@ void SetupConfiguration()
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = true;
 		mIsShadowEnabled = true;
-		mEngine.SetFullScreen(true);
+		//mIsFullScreen = true;
 		break;
 	}
 }
@@ -1144,7 +1111,9 @@ void SetupConfiguration()
 void Initialize()
 {
 	SetupConfiguration();
-	mEngine.Init();
+	mEngine.Init(mIsFullScreen);
+	mEngine.SetCastingShadowsParameters(mSunLightDirection, 3);
+
 	mEngine.RegisterInputHandler(std::bind(&UpdateInput, std::placeholders::_1));
 	mEngine.RegisterUpdateHandler(std::bind(&Update, std::placeholders::_1));
 }

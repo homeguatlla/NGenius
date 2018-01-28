@@ -162,7 +162,7 @@ void ModelRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertex
 	shader->LoadCameraPosition(camera->GetPosition());
 	if (mTextureShadowmap != nullptr)
 	{
-		shader->LoadShadowSpaceMatrix(mShadowSpaceMatrix);
+		shader->LoadShadowMapSpaceMatrix(mShadowSpaceMatrix);
 		shader->LoadShadowMapTexture(mTextureShadowmap->GetUnit(), mTextureShadowmap->GetWidth());
 	}
 	std::vector<glm::mat4> matrices;

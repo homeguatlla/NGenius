@@ -128,8 +128,9 @@ void TerrainRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vert
 	shader->LoadClippingPlane(mClippingPlane);
 	if (mTextureShadowmap != nullptr)
 	{
-		shader->LoadShadowSpaceMatrix(mShadowSpaceMatrix);
+		shader->LoadShadowMapSpaceMatrix(mShadowSpaceMatrix);
 		shader->LoadShadowMapTexture(mTextureShadowmap->GetUnit(), mTextureShadowmap->GetWidth());
+		shader->LoadShadowMapPFC(mPFCCounter);
 	}
 
 	glm::mat4 MVP = camera->GetProjectionMatrix() * const_cast<ICamera*>(camera)->GetViewMatrix() * mParent->GetTransformation()->GetModelMatrix();
@@ -162,12 +163,9 @@ bool TerrainRenderer::IsCastingShadows() const
 	return true;
 }
 
-void TerrainRenderer::SetTextureShadowMap(const Texture* shadowMap)
+void TerrainRenderer::SetShadowMapParameters(const Texture* shadowMap, const glm::mat4& matrix, int pfcCounter)
 {
 	mTextureShadowmap = shadowMap;
-}
-
-void TerrainRenderer::SetShadowMapMatrix(const glm::mat4& matrix)
-{
 	mShadowSpaceMatrix = matrix;
+	mPFCCounter = pfcCounter;
 }

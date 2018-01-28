@@ -27,7 +27,6 @@ public:
 	float GetHeight(glm::vec2 point) const;
 
 	void SetFlat(bool isFlat);
-	void SetShadowMapMatrix(const glm::mat4& shadowMatrix);
 
 private:
 	float CalculateBarryCenter(glm::vec3& p1, glm::vec3& p2, glm::vec3& p3, glm::vec2& point) const;

@@ -124,7 +124,7 @@ void ModelShader::LoadTime(float time)
 	LoadFloat(mLocationTime, time);
 }
 
-void ModelShader::LoadShadowSpaceMatrix(const glm::mat4& matrix)
+void ModelShader::LoadShadowMapSpaceMatrix(const glm::mat4& matrix)
 {
 	LoadMatrix4(mLocationShadowSpaceMatrix, matrix);
 }

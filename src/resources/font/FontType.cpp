@@ -7,7 +7,6 @@ FontType::FontType()
 {
 }
 
-
 FontType::~FontType()
 { 
 	//Deleting all characters
@@ -58,7 +57,6 @@ void FontType::SetTextureFilename(const std::string& filename)
 {
 	mTextureFilename = filename;
 }
-
 
 unsigned int FontType::GetNumCharacters() const
 {

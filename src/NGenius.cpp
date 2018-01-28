@@ -15,11 +15,6 @@
 #include "resources/systems/PhysicsSystem.h"
 #include "resources/systems/ParticlesSystem.h"
 
-#include "resources/models/ModelsLibrary.h"
-#include "resources/shaders/ShadersLibrary.h"
-#include "resources/textures/TexturesLibrary.h"
-#include "resources/font/FontsLibrary.h"
-
 #include "resources/entities/ParticlesEmitter.h"
 
 #include "resources/textures/Texture.h"
@@ -29,37 +24,19 @@ mRenderSystem(nullptr),
 mPhysicsSystem(nullptr),
 mEntitiesSystem(nullptr),
 mParticlesSystem(nullptr),
-mShadersLibrary(nullptr),
-mTexturesLibrary(nullptr),
-mModelsLibrary(nullptr),
-mFontsLibrary(nullptr),
-mWindow(nullptr),
-mScreenWidth(screenWidth), 
-mScreenHeight(screenHeight),
-mApplicationName(applicationName),
-mIsFullScreen(false)
+mApplicationName(applicationName)
 {
+	CreateSystems(screenWidth, screenHeight);
 }
-
 
 NGenius::~NGenius()
 {
-	DestroyResourcesLibraries();
 	DestroySystems();
 }
 
-void NGenius::Init()
+void NGenius::Init(bool isFullscreen)
 {
-	bool initialized = InitializeWindowAndOpenGL();
-	assert(initialized);
-
-	CheckGLError();
-
-	CreateResourcesLibraries();
-	CreateSystems();
-	LoadResources();
-
-	mRenderSystem->SetTextureShadowMap(static_cast<Texture*>(GetTexture("shadow_texture")));
+	mRenderSystem->Init(mApplicationName, isFullscreen);
 }
 
 void NGenius::Update()
@@ -71,10 +48,6 @@ void NGenius::Update()
 
 	do
 	{
-		// Clear the screen
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//CheckError();
-
 		UpdateInput(elapsedTime / 20.0f);
 
 		UpdateSystems(elapsedTime);
@@ -85,10 +58,6 @@ void NGenius::Update()
 		}
 
 		mRenderSystem->Render();
-
-		// Swap buffers
-		glfwSwapBuffers(mWindow);
-		glfwPollEvents();
 
 		double currentTime = glfwGetTime();
 		elapsedTime = static_cast<float>(currentTime - lastCurrentTime);
@@ -105,7 +74,7 @@ void NGenius::Update()
 		}
 
 	} // Check if the ESC key was pressed or the window was closed
-	while (glfwGetKey(mWindow, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(mWindow) == 0);
+	while (glfwGetKey(mRenderSystem->GetGLWindow(), GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(mRenderSystem->GetGLWindow()) == 0);
 
 	// Close OpenGL window and terminate GLFW
 	glfwTerminate();
@@ -113,11 +82,13 @@ void NGenius::Update()
 
 void NGenius::UpdateInput(float deltaTime)
 {
-	mInputHandler(mWindow);
+	GLFWwindow* window = mRenderSystem->GetGLWindow();
 
-	if (glfwGetKey(mWindow, GLFW_KEY_W) == GLFW_PRESS)
+	mInputHandler(window);
+
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		if (glfwGetKey(mWindow, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
@@ -135,141 +106,9 @@ void NGenius::UpdateSystems(float elapsedTime)
 	mPhysicsSystem->Update(elapsedTime);
 }
 
-GLFWmonitor* NGenius::GetCurrentMonitor(GLFWwindow *window)
+void NGenius::CreateSystems(float screenWidth, float screenHeight)
 {
-	int nmonitors, i;
-	int wx, wy, ww, wh;
-	int mx, my, mw, mh;
-	int overlap, bestoverlap;
-	GLFWmonitor *bestmonitor;
-	GLFWmonitor **monitors;
-	const GLFWvidmode *mode;
-
-	bestoverlap = 0;
-	bestmonitor = NULL;
-
-	glfwGetWindowPos(window, &wx, &wy);
-	glfwGetWindowSize(window, &ww, &wh);
-	monitors = glfwGetMonitors(&nmonitors);
-
-	for (i = 0; i < nmonitors; i++) {
-		mode = glfwGetVideoMode(monitors[i]);
-		glfwGetMonitorPos(monitors[i], &mx, &my);
-		mw = mode->width;
-		mh = mode->height;
-
-		overlap =
-			glm::max(0, glm::min(wx + ww, mx + mw) - glm::max(wx, mx)) *
-			glm::max(0, glm::min(wy + wh, my + mh) - glm::max(wy, my));
-
-		if (bestoverlap < overlap) {
-			bestoverlap = overlap;
-			bestmonitor = monitors[i];
-		}
-	}
-
-	return bestmonitor;
-}
-
-bool NGenius::InitializeWindowAndOpenGL()
-{
-	// Initialise GLFW
-	if (!glfwInit())
-	{
-		fprintf(stderr, "Failed to initialize GLFW\n");
-		getchar();
-		return false;
-	}
-
-	glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); // We want OpenGL 4.5
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
-	// Open a window and create its OpenGL context
-	mWindow = glfwCreateWindow(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight), mApplicationName.c_str(), NULL, NULL);
-	
-	if (mWindow == NULL){
-		fprintf(stderr, "Failed to open GLFW window.\n");
-		getchar();
-		glfwTerminate();
-		return false;
-	}
-
-	if (mIsFullScreen)
-	{
-		GLFWmonitor* monitor = GetCurrentMonitor(mWindow);
-		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-		mScreenWidth = mode->width;
-		mScreenHeight = mode->height;
-		
-		mWindow = glfwCreateWindow(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight), mApplicationName.c_str(), monitor, NULL);
-
-		if (mWindow == NULL) {
-			fprintf(stderr, "Failed to open GLFW window.\n");
-			getchar();
-			glfwTerminate();
-			return false;
-		}
-	}
-
-	glfwMakeContextCurrent(mWindow);
-	glewExperimental = true; // Needed in core profile 
-	CheckGLError();
-
-	// Initialize GLEW
-	if (glewInit() != GLEW_OK) {
-		fprintf(stderr, "Failed to initialize GLEW\n");
-		getchar();
-		glfwTerminate();
-		return false;
-	}
-	CheckGLError(); //esto dispara un error 1282 que se puede descartar. Es un error que depende de la version que inicialicemos.
-
-	// Ensure we can capture the escape key being pressed below
-	//glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-	//// Hide the mouse and enable unlimited mouvement
-	glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-	//// Set the mouse at the center of the screen
-	glfwPollEvents();
-	//glfwSetCursorPos(window, 1024/2, 768/2);
-
-	// Dark blue background
-	glClearColor(0.0f, 0.4f, 0.4f, 0.0f);
-
-	// Enable depth test
-	glEnable(GL_DEPTH_TEST);
-	// Accept fragment if it closer to the camera than the former one
-	glDepthFunc(GL_LESS);
-	glDepthMask(GL_TRUE);
-
-	// Cull triangles which normal is not towards the camera
-	glFrontFace(GL_CCW);
-	glEnable(GL_CULL_FACE);
-
-	DisableVSync(false);
-
-	return true;
-}
-
-void NGenius::DisableVSync(bool enable)
-{
-	glfwSwapInterval(enable ? 1 : 0);
-}
-
-void NGenius::CreateResourcesLibraries()
-{
-	mShadersLibrary = new ShadersLibrary();
-	mTexturesLibrary = new TexturesLibrary();
-	mModelsLibrary = new ModelsLibrary(mTexturesLibrary);
-	mFontsLibrary = new FontsLibrary(mTexturesLibrary);
-}
-
-void NGenius::CreateSystems()
-{
-	mRenderSystem = new RenderSystem();
+	mRenderSystem = new RenderSystem(screenWidth, screenHeight);
 	mPhysicsSystem = new PhysicsSystem();
 	mEntitiesSystem = new EntitiesSystem(mRenderSystem, mPhysicsSystem);
 	mParticlesSystem = new ParticlesSystem();
@@ -281,22 +120,6 @@ void NGenius::DestroySystems()
 	delete mEntitiesSystem;
 	delete mPhysicsSystem;
 	delete mRenderSystem;
-}
-
-void NGenius::DestroyResourcesLibraries()
-{
-	delete mFontsLibrary;
-	delete mModelsLibrary; 
-	delete mTexturesLibrary;
-	delete mShadersLibrary;
-}
-
-void NGenius::LoadResources()
-{
-	mShadersLibrary->Load();
-	mModelsLibrary->Load();
-	mFontsLibrary->Load();
-	mTexturesLibrary->Load();	
 }
 
 void NGenius::RegisterInputHandler(std::function<void(GLFWwindow* window)> callback)
@@ -311,27 +134,27 @@ void NGenius::RegisterUpdateHandler(std::function<void(float elapsedTime)> callb
 
 IShaderProgram* NGenius::GetShader(const std::string& name) const
 {
-	return mShadersLibrary->GetElement(name);
+	return mRenderSystem->GetShader(name);
 }
 
 FontType* NGenius::GetFont(const std::string& name) const
 {
-	return mFontsLibrary->GetElement(name);
+	return mRenderSystem->GetFont(name);
 }
 
 Model* NGenius::GetModel(const std::string& name) const
 {
-	return mModelsLibrary->GetElement(name);
+	return mRenderSystem->GetModel(name);
 }
 
 ITexture* NGenius::GetTexture(const std::string& name) const
 {
-	return mTexturesLibrary->GetElement(name);
+	return mRenderSystem->GetTexture(name);
 }
 
 GLFWwindow* NGenius::GetGLWindow() const
 {
-	return mWindow;
+	return mRenderSystem->GetGLWindow();
 }
 
 float NGenius::GetFPS() const
@@ -341,17 +164,17 @@ float NGenius::GetFPS() const
 
 float NGenius::GetScreenWidth() const
 {
-	return mScreenWidth;
+	return mRenderSystem->GetScreenWidth();
 }
 
 float NGenius::GetScreenHeight() const
 {
-	return mScreenHeight;
+	return mRenderSystem->GetScreenHeight();
 }
 
 void NGenius::SetFullScreen(bool isFullScreen)
 {
-	mIsFullScreen = isFullScreen;
+	mRenderSystem->SetFullScreen(isFullScreen);
 }
 
 void NGenius::AddGameEntity(GameEntity* entity)
@@ -387,16 +210,14 @@ void NGenius::SetEnergyWallRadius(float radius)
 	mPhysicsSystem->SetEnergyWallRadius(radius);
 }
 
-void NGenius::SetCameraCastingShadows(const ICamera* camera)
+void NGenius::SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter)
 {
 	assert(mRenderSystem != nullptr);
-	mRenderSystem->SetCameraCastingShadows(camera);
+	mRenderSystem->SetCastingShadowsParameters(lightDirection, pfcCounter);
 }
 
-void NGenius::CheckGLError()
+void NGenius::SetCastingShadowsTarget(const glm::vec3& position)
 {
-	GLenum err;
-	while ((err = glGetError()) != GL_NO_ERROR) {
-		std::cout << "OpenGL error: " << err << std::endl;
-	}
+	assert(mRenderSystem != nullptr);
+	mRenderSystem->SetCastingShadowsTarget(position);
 }

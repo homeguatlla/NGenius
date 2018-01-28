@@ -27,6 +27,7 @@ class TerrainRenderer : public IRenderer
 	float mScale;
 	glm::vec4 mClippingPlane;
 	glm::mat4 mShadowSpaceMatrix;
+	int mPFCCounter;
 
 public:
 	explicit TerrainRenderer(IShaderProgram* shader, const Texture* textureHeightmap, const Texture* textureBlendmap, const TextureArray* mTextureArray, const Light* light, float scale);
@@ -37,8 +38,7 @@ public:
 	void SetTextureCoords(const std::vector<glm::vec2>& uv);
 	bool HasClippingPlane() const override;
 	void SetClippingPlane(const glm::vec4& plane) override;
-	void SetTextureShadowMap(const Texture* shadowMap);
-	void SetShadowMapMatrix(const glm::mat4& matrix);
+	void SetShadowMapParameters(const Texture* shadowMap, const glm::mat4& matrix, int pfcCounter);
 	void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager) override;
 	bool IsInstancingAllowed() const override;
 	bool HasFog() const override;
