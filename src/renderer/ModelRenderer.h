@@ -25,6 +25,7 @@ private:
 	unsigned int mTextureCoordsVBO;
 	unsigned int mNormalVBO;
 	glm::mat4 mShadowSpaceMatrix;
+	int mPFCCounter;
 
 public:
 	ModelRenderer(Model* model, IShaderProgram* shader, const Texture* texture, const Light* light);
@@ -37,8 +38,7 @@ public:
 	void EnableFog(bool enable) override;
 	bool HasClippingPlane() const override;
 
-	void SetTextureShadowMap(const Texture* shadowMap);
-	void SetShadowMapMatrix(const glm::mat4& matrix);
+	void SetShadowMapParameters(const Texture* shadowMap, const glm::mat4& matrix, int pfcCounter);
 
 	bool IsCastingShadows() const override;
 

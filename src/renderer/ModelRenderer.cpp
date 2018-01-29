@@ -164,7 +164,9 @@ void ModelRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertex
 	{
 		shader->LoadShadowMapSpaceMatrix(mShadowSpaceMatrix);
 		shader->LoadShadowMapTexture(mTextureShadowmap->GetUnit(), mTextureShadowmap->GetWidth());
+		shader->LoadShadowMapPFC(mPFCCounter);
 	}
+
 	std::vector<glm::mat4> matrices;
 	int instances = 1;
 
@@ -268,17 +270,14 @@ bool ModelRenderer::HasClippingPlane() const
 	return false;
 }
 
-void ModelRenderer::SetTextureShadowMap(const Texture* shadowMap)
-{
-	mTextureShadowmap = shadowMap;
-}
-
 bool ModelRenderer::IsCastingShadows() const
 {
 	return true;
 }
 
-void ModelRenderer::SetShadowMapMatrix(const glm::mat4& matrix)
+void ModelRenderer::SetShadowMapParameters(const Texture* shadowMap, const glm::mat4& matrix, int pfcCounter)
 {
+	mTextureShadowmap = shadowMap;
 	mShadowSpaceMatrix = matrix;
+	mPFCCounter = pfcCounter;
 }

@@ -96,7 +96,7 @@ void TexturesLibrary::Load()
 	AddElement("depth_texture", texture);
 
 	texture = new Texture();
-	texture->CreateDepthTexture(++mCurrentTextureUnit, 2048, 2048);
+	texture->CreateDepthTexture(++mCurrentTextureUnit, 4096, 4096);
 	AddElement("shadow_texture", texture);
 
 	texture = new Texture();

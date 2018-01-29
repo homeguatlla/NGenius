@@ -21,6 +21,7 @@ const std::string ATTRIBUTE_TIME("time");
 const std::string ATTRIBUTE_SHADOW_SPACE_MATRIX("toShadowMapSpace");
 const std::string ATTRIBUTE_SHADOW_TEXTURE("shadowMap");
 const std::string ATTRIBUTE_SHADOW_TEXTURE_WIDTH("shadowMapSize");
+const std::string ATTRIBUTE_SHADOW_PFC("pfcCount");
 
 ModelShader::ModelShader() :
 ModelShader(VERTEX_FILE, FRAGMENT_FILE)
@@ -43,7 +44,8 @@ mLocationTile(-1),
 mLocationTime(-1),
 mLocationShadowSpaceMatrix(-1),
 mLocationShadowMapTexture(-1),
-mLocationShadowMapTextureWidth(-1)
+mLocationShadowMapTextureWidth(-1),
+mLocationShadowMapPFC(-1)
 {
 }
 
@@ -79,6 +81,7 @@ void ModelShader::GetAllUniformLocations()
 	mLocationShadowSpaceMatrix = GetUniformLocation(ATTRIBUTE_SHADOW_SPACE_MATRIX);
 	mLocationShadowMapTexture = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE);
 	mLocationShadowMapTextureWidth = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE_WIDTH);
+	mLocationShadowMapPFC = GetUniformLocation(ATTRIBUTE_SHADOW_PFC);
 }
 
 void ModelShader::LoadLight(const Light& light)
@@ -133,4 +136,9 @@ void ModelShader::LoadShadowMapTexture(int unit, int width)
 {
 	LoadTexture(mLocationShadowMapTexture, unit);
 	LoadInteger(mLocationShadowMapTextureWidth, width);
+}
+
+void ModelShader::LoadShadowMapPFC(int pfcCounter)
+{
+	LoadInteger(mLocationShadowMapPFC, pfcCounter);
 }

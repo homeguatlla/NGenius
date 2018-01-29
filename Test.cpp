@@ -113,7 +113,7 @@ enum Configuration
 	SHADOWS,
 	RELEASE
 };
-Configuration mConfiguration = RELEASE;
+Configuration mConfiguration = SHADOWS;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -1103,7 +1103,7 @@ void SetupConfiguration()
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = true;
 		mIsShadowEnabled = true;
-		//mIsFullScreen = true;
+		mIsFullScreen = true;
 		break;
 	}
 }

@@ -25,6 +25,7 @@ public:
 	void LoadTime(float time);
 	void LoadShadowMapSpaceMatrix(const glm::mat4& matrix);
 	void LoadShadowMapTexture(int unit, int width);
+	void LoadShadowMapPFC(int pfcCounter);
 
 private:
 	int mLocationModelMatrix;
@@ -44,5 +45,6 @@ private:
 	int mLocationShadowSpaceMatrix;
 	int mLocationShadowMapTexture;
 	int mLocationShadowMapTextureWidth;
+	int mLocationShadowMapPFC;
 };
 
