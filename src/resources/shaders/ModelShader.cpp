@@ -76,8 +76,10 @@ void ModelShader::GetAllUniformLocations()
 	mLocationFogDensity = GetUniformLocation(ATTRIBUTE_FOG_DENSITY);
 	mLocationFogGradient = GetUniformLocation(ATTRIBUTE_FOG_GRADIENT);
 	mLocationFogColor = GetUniformLocation(ATTRIBUTE_FOG_COLOR);
+	
 	mLocationTile = GetUniformLocation(ATTRIBUTE_TILE);
 	mLocationTime = GetUniformLocation(ATTRIBUTE_TIME);
+	
 	mLocationShadowSpaceMatrix = GetUniformLocation(ATTRIBUTE_SHADOW_SPACE_MATRIX);
 	mLocationShadowMapTexture = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE);
 	mLocationShadowMapTextureWidth = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE_WIDTH);

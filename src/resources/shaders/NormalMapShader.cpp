@@ -20,6 +20,10 @@ const std::string ATTRIBUTE_FOG_COLOR("fogColor");
 const std::string ATTRIBUTE_TILING("tile");
 const std::string ATTRIBUTE_VERTEX_TANGENT("tangentModelspace");
 const std::string ATTRIBUTE_NORMALMAP_TEXTURE("normalmap");
+const std::string ATTRIBUTE_SHADOW_SPACE_MATRIX("toShadowMapSpace");
+const std::string ATTRIBUTE_SHADOW_TEXTURE("shadowMap");
+const std::string ATTRIBUTE_SHADOW_TEXTURE_WIDTH("shadowMapSize");
+const std::string ATTRIBUTE_SHADOW_PFC("pfcCount");
 
 NormalMapShader::NormalMapShader() : 
 IShaderProgram(VERTEX_FILE, FRAGMENT_FILE),
@@ -35,7 +39,11 @@ mLocationFogGradient(-1),
 mLocationFogColor(-1),
 mLocationTiling(-1),
 mLocationTangent(-1),
-mLocationNormalmapTexture(-1)
+mLocationNormalmapTexture(-1),
+mLocationShadowSpaceMatrix(-1),
+mLocationShadowMapTexture(-1),
+mLocationShadowMapTextureWidth(-1),
+mLocationShadowMapPFC(-1)
 {
 }
 
@@ -70,6 +78,11 @@ void NormalMapShader::GetAllUniformLocations()
 
 	mLocationTangent = GetAttributeLocation(ATTRIBUTE_VERTEX_TANGENT);
 	mLocationNormalmapTexture = GetUniformLocation(ATTRIBUTE_NORMALMAP_TEXTURE);
+
+	mLocationShadowSpaceMatrix = GetUniformLocation(ATTRIBUTE_SHADOW_SPACE_MATRIX);
+	mLocationShadowMapTexture = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE);
+	mLocationShadowMapTextureWidth = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE_WIDTH);
+	mLocationShadowMapPFC = GetUniformLocation(ATTRIBUTE_SHADOW_PFC);
 }
 void NormalMapShader::LoadLight(const Light& light)
 {
@@ -111,4 +124,20 @@ void NormalMapShader::LoadTiling(float tile)
 void NormalMapShader::LoadModelNormalmap(int unit)
 {
 	LoadTexture(mLocationNormalmapTexture, unit);
+}
+
+void NormalMapShader::LoadShadowMapSpaceMatrix(const glm::mat4& matrix)
+{
+	LoadMatrix4(mLocationShadowSpaceMatrix, matrix);
+}
+
+void NormalMapShader::LoadShadowMapTexture(int unit, int width)
+{
+	LoadTexture(mLocationShadowMapTexture, unit);
+	LoadInteger(mLocationShadowMapTextureWidth, width);
+}
+
+void NormalMapShader::LoadShadowMapPFC(int pfcCounter)
+{
+	LoadInteger(mLocationShadowMapPFC, pfcCounter);
 }

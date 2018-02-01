@@ -12,6 +12,7 @@ const std::string ATTRIBUTE_TEXTURE("texture");
 const std::string ATTRIBUTE_DEPTH_TEXTURE("depthTexture");
 const std::string ATTRIBUTE_TILE("tile");
 const std::string ATTRIBUTE_TIME("time");
+const std::string ATTRIBTUTE_SCREEN_SIZE("screenSize");
 
 ParticleShader::ParticleShader() :
 ParticleShader(VERTEX_FILE, FRAGMENT_FILE)
@@ -27,7 +28,8 @@ mLocationTexture(-1),
 mLocationDepthTexture(-1),
 mLocationTextureCoords(-1),
 mLocationTile(-1),
-mLocationTime(-1)
+mLocationTime(-1),
+mLocationScreenSize(-1)
 {
 
 }
@@ -52,6 +54,7 @@ void ParticleShader::GetAllUniformLocations()
 	mLocationDepthTexture = GetUniformLocation(ATTRIBUTE_DEPTH_TEXTURE);
 	mLocationTile = GetUniformLocation(ATTRIBUTE_TILE);
 	mLocationTime = GetUniformLocation(ATTRIBUTE_TIME);
+	mLocationScreenSize = GetUniformLocation(ATTRIBTUTE_SCREEN_SIZE);
 }
 
 void ParticleShader::LoadViewMatrix(const glm::mat4& viewmatrix)
@@ -82,4 +85,9 @@ void ParticleShader::LoadTile(float tile)
 void ParticleShader::LoadTime(float time)
 {
 	LoadFloat(mLocationTime, time);
+}
+
+void ParticleShader::LoadScreenSize(const glm::vec2& size)
+{
+	LoadVector2(mLocationScreenSize, size);
 }

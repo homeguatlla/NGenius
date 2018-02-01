@@ -1,12 +1,15 @@
 #pragma once
 #include <vector>
 #include <map>
+#include <string>
 #include <glm/glm.hpp>
 #include "../../VertexBuffersManager.h"
+
 class IRenderer;
 class ICamera;
 class RenderPass;
 class Texture;
+class ITexture;
 
 class ShadersLibrary;
 class TexturesLibrary;
@@ -66,9 +69,13 @@ public:
 	void SetCastingShadowsTarget(const glm::vec3& position);
 	void SetFullScreen(bool isFullScreen);
 	
+	const ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
+
 private:
 	void CreateResourcesLibraries();
 	void DestroyResourcesLibraries();
+
+	void CreateShadowsSystem();
 
 	bool InitializeWindowAndOpenGL(const std::string& applicationName, bool isFullscreen);
 	void DisableVSync(bool enable);

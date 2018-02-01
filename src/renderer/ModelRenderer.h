@@ -20,12 +20,13 @@ protected:
 	const Light* mLight;
 
 	unsigned int mMatrixVBO;
+	glm::mat4 mShadowSpaceMatrix;
+	int mPFCCounter;
 
 private:
 	unsigned int mTextureCoordsVBO;
 	unsigned int mNormalVBO;
-	glm::mat4 mShadowSpaceMatrix;
-	int mPFCCounter;
+	
 
 public:
 	ModelRenderer(Model* model, IShaderProgram* shader, const Texture* texture, const Light* light);

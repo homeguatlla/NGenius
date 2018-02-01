@@ -46,6 +46,8 @@ public:
 	IShaderProgram* GetShader(const std::string& name) const;
 	Model* GetModel(const std::string& name) const;
 	ITexture* GetTexture(const std::string& name) const;
+	const ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
+
 	FontType* GetFont(const std::string& name) const;
 	float GetFPS() const;
 	float GetScreenWidth() const;

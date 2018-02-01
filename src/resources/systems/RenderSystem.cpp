@@ -20,6 +20,8 @@
 
 using namespace std;
 
+static const int SHADOWS_TEXTURE_SIZE = 4096;
+
 RenderSystem::RenderSystem(float screenWidth, float screenHeight) :
 mLastClipPlaneNumberUsed(0),
 mScreenWidth(screenWidth),
@@ -58,11 +60,18 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 	CreateResourcesLibraries();
 	LoadResources();
 
-	mShadowsSystem = new ShadowsSystem(	this,
-										GetScreenWidth(), 
-										GetScreenHeight(), 
-										static_cast<const Texture*>(mTexturesLibrary->GetElement("shadow_texture")));
+	CreateShadowsSystem();
+	
 	mShadowsSystem->Init();
+}
+
+void RenderSystem::CreateShadowsSystem()
+{
+	const Texture* texture = static_cast<const Texture*>(mTexturesLibrary->CreateDepthTexture("shadow_texture", glm::ivec2(SHADOWS_TEXTURE_SIZE)));
+	mShadowsSystem = new ShadowsSystem(	this,
+										GetScreenWidth(),
+										GetScreenHeight(),
+										texture);
 }
 
 void RenderSystem::LoadResources()
@@ -317,7 +326,6 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 		glfwTerminate();
 		return false;
 	}
-
 	if (isFullscreen)
 	{
 		GLFWmonitor* monitor = GetCurrentMonitor(mWindow);
@@ -423,6 +431,12 @@ void RenderSystem::SetCastingShadowsTarget(const glm::vec3& position)
 {
 	assert(mShadowsSystem != nullptr);
 	mShadowsSystem->SetCastingShadowsTarget(position);
+}
+
+const ITexture* RenderSystem::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
+{
+	assert(mTexturesLibrary != nullptr);
+	return mTexturesLibrary->CreateDepthTexture(name, size);
 }
 
 void RenderSystem::CheckGLError()

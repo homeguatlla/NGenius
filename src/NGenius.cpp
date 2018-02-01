@@ -68,7 +68,7 @@ void NGenius::Update()
 		if (accumulatedTime > 1.0f)
 		{
 			mFPS = frames / accumulatedTime;
-			std::cout << "fps: " << mFPS << "\n";
+			//std::cout << "fps: " << mFPS << "\n";
 			accumulatedTime = 0.0f;
 			frames = 0;
 		}
@@ -208,6 +208,12 @@ void NGenius::SetEnergyWallRadius(float radius)
 {
 	assert(mPhysicsSystem != nullptr);
 	mPhysicsSystem->SetEnergyWallRadius(radius);
+}
+
+const ITexture* NGenius::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
+{
+	assert(mRenderSystem != nullptr);
+	return mRenderSystem->CreateDepthTexture(name, size);
 }
 
 void NGenius::SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter)

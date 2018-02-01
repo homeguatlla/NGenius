@@ -92,18 +92,19 @@ void TexturesLibrary::Load()
 	AddElement("yellow_grid", texture);
 
 	texture = new Texture();
-	texture->CreateDepthTexture(++mCurrentTextureUnit, 1024, 1024);
-	AddElement("depth_texture", texture);
-
-	texture = new Texture();
-	texture->CreateDepthTexture(++mCurrentTextureUnit, 4096, 4096);
-	AddElement("shadow_texture", texture);
-
-	texture = new Texture();
 	texture->Load("data/models/stall/stall.png", ++mCurrentTextureUnit, false, false);
 	AddElement("stall", texture);
 
 	LoadTexturesPendingToLoad();
+}
+
+const ITexture* TexturesLibrary::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
+{
+	Texture* texture = new Texture();
+	texture->CreateDepthTexture(++mCurrentTextureUnit, size.x, size.y);
+	AddElement(name, texture);
+
+	return texture;
 }
 
 void TexturesLibrary::LoadTexturesPendingToLoad()

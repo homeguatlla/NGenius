@@ -80,6 +80,12 @@ void ModelNormalMapRenderer::LoadData(const ICamera* camera, VertexBuffersManage
 	shader->LoadFogParameters(mFogColor, mIsFogEnabled ? mFogDensity : 0.0f, mFogGradient);
 	shader->LoadTiling(mTile);
 	shader->LoadCameraPosition(camera->GetPosition());
+	if (mTextureShadowmap != nullptr)
+	{
+		shader->LoadShadowMapSpaceMatrix(mShadowSpaceMatrix);
+		shader->LoadShadowMapTexture(mTextureShadowmap->GetUnit(), mTextureShadowmap->GetWidth());
+		shader->LoadShadowMapPFC(mPFCCounter);
+	}
 
 	std::vector<glm::mat4> matrices;
 	int instances = 1;

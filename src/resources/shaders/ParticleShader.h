@@ -15,6 +15,7 @@ class ParticleShader : public IShaderProgram
 	int mLocationTextureCoords;
 	int mLocationTile;
 	int mLocationTime;
+	int mLocationScreenSize;
 
 public:
 
@@ -30,5 +31,6 @@ public:
 	void LoadDepthTexture(int unit);
 	void LoadTile(float tile);
 	void LoadTime(float time);
+	void LoadScreenSize(const glm::vec2& size);
 };
 

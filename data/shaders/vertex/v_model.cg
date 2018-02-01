@@ -42,6 +42,7 @@ void main()
 	lightDirection = normalize(lightPositionWorldspace - positionWorldspace);
 	eyeDirection = normalize(cameraPosition - positionWorldspace);
 
+	//fog
 	float distance = length(positionRelativeToCamera);
 	fogVisibility = clamp(exp(-pow(distance * fogDensity, fogGradient)), 0.0, 1.0);
 

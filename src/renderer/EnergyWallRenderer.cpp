@@ -152,12 +152,12 @@ void EnergyWallRenderer::LoadData(const ICamera* camera, VertexBuffersManager& v
 	shader->LoadFogParameters(mFogColor, mIsFogEnabled ? mFogDensity : 0.0f, mFogGradient);
 	shader->LoadTile(mTile);
 	shader->LoadCameraPosition(camera->GetPosition());
-	
+	shader->LoadScreenSize(glm::vec2(mDepthTexture->GetWidth(), mDepthTexture->GetHeight()));
+
 	EnergyWall* energyWall = static_cast<EnergyWall*>(GetParent());
 	float time = energyWall->GetLiveTime(); // (particle->GetMaxLiveTime() - particle->GetLiveTime()) / particle->GetMaxLiveTime();
 	//std::cout << "time: " << time << "\n";
 	shader->LoadTime(time);
-
 	shader->LoadContactPosition(energyWall->GetContactPoint());
 
 	std::vector<glm::mat4> matrices;

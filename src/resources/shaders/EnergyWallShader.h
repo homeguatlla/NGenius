@@ -7,6 +7,7 @@ class EnergyWallShader : public ModelShader
 	static const std::string FRAGMENT_FILE;
 	int mLocationDepthTexture;
 	int mLocationContactPoint;
+	int mLocationScreenSize;
 
 public:
 	explicit EnergyWallShader();
@@ -15,6 +16,7 @@ public:
 	void GetAllUniformLocations();
 
 	void LoadDepthTexture(int unit);
-	void LoadContactPosition(glm::vec3 contact);
+	void LoadContactPosition(const glm::vec3& contact);
+	void LoadScreenSize(const glm::vec2& screenSize);
 };
 

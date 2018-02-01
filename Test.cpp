@@ -100,7 +100,7 @@ static const float PLAYER_TURN_SPEED = glm::radians(160.0f);
 static const float VIEW_ANGLE = 45.0f;
 static const float FAR_PLANE = 1000.0f;
 static const float NEAR_PLANE = 0.1f;
-static const float SCREEN_WIDTH = 1024;
+static const float SCREEN_WIDTH = 1024.0f;
 static const float SCREEN_HEIGHT = 768.0f;
 
 static const float SKYBOX_ROTATION_SPEED = 0.01f;
@@ -113,7 +113,7 @@ enum Configuration
 	SHADOWS,
 	RELEASE
 };
-Configuration mConfiguration = SHADOWS;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -160,7 +160,6 @@ GameEntity* mCamera;
 GameEntity* mWater;
 GameEntity* mWaterReflectionCameraEntity;
 GameEntity* mWaterRefractionCameraEntity;
-GameEntity* mShadowCameraEntity;
 EnergyWall* mEnergyWall;
 Text* mFPSText;
 
@@ -593,6 +592,8 @@ void CreateTextTest()
 
 void CreateEntities()
 {
+	const Texture* texture = static_cast<const Texture*>(mEngine.CreateDepthTexture("depth_texture", glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
+
 	//LIGHT GAME ENTITY
 	mSunLight = new Light(mSunLightDirection, glm::vec3(1, 1, 1), new CubeRenderer(mEngine.GetShader("default")));
 	mSunLight->AddComponent(new VerticalInputComponent(mEngine.GetGLWindow()));
@@ -876,14 +877,14 @@ void CreateGUIRenderPass()
 
 void CreateGameplayRenderPass()
 {
-	//RENDER PASS GAMEPLAY
+	//RENDER PASS GAMEPLAY	
 	RenderPass *gameplayPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
 	
-	/*IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
+	IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
 	const Texture* depthTexture = static_cast<const Texture*>(mEngine.GetTexture("depth_texture"));
 	frameBuffer->SetCopyDepthBufferToTexture(depthTexture, 0, 0, static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
 	gameplayPass->SetFrameBufferOutput(frameBuffer);
-	*/
+	
 	mEngine.AddRenderPass(gameplayPass);
 }
 
@@ -1035,13 +1036,13 @@ void SetupConfiguration()
 	{
 	case DEBUG:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
+		mIsWaterEnabled = true;
 		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
-		mIsVegetationEnabled = false;
-		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = false;
-		mIsTerrainFlat = true;
+		mIsFogEnabled = true;
+		mIsVegetationEnabled = true;
+		mIsEnergyWallEnabled = true;
+		mIsSkyboxEnabled = true;
+		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = true;
@@ -1061,21 +1062,6 @@ void SetupConfiguration()
 		mIsShadowEnabled = true;
 		mIsParticlesEnabled = true;
 		break;
-	case ENERGY_WALL:
-		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = true;
-		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = true;
-		mIsVegetationEnabled = true;
-		mIsEnergyWallEnabled = true;
-		mIsSkyboxEnabled = true;
-		mIsTerrainFlat = false;
-		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
-		mEnergyWallRadius = 22.0f;
-		mIsParticlesEnabled = false;
-		mIsShadowEnabled = false;
-		break;
 	case TEXT:
 		mIsDebugModeEnabled = true;
 		mIsWaterEnabled = false;
@@ -1089,6 +1075,22 @@ void SetupConfiguration()
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = false;
+		break;
+	case ENERGY_WALL:
+		mIsDebugModeEnabled = true;
+		mIsWaterEnabled = true;
+		mIsGameplayCameraEnabled = true;
+		mIsFogEnabled = true;
+		mIsVegetationEnabled = true;
+		mIsEnergyWallEnabled = true;
+		mIsSkyboxEnabled = true;
+		mIsTerrainFlat = false;
+		mIsTextEnabled = true;
+		mIsStatisticsVisible = true;
+		mEnergyWallRadius = 22.0f;
+		mIsParticlesEnabled = true;
+		mIsShadowEnabled = true;
+		mIsFullScreen = false;
 		break;
 	case RELEASE:
 		mIsDebugModeEnabled = false;

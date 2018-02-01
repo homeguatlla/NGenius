@@ -15,6 +15,7 @@ mColorVBO(-1),
 mDepthTexture(depthTexture),
 mTile(1.0f)
 {
+	assert(depthTexture != nullptr);
 }
 
 
@@ -130,6 +131,7 @@ void ParticleRenderer::LoadData(const ICamera* camera, VertexBuffersManager& ver
 	shader->LoadViewMatrix(viewMatrix);
 	shader->LoadProjectionMatrix(camera->GetProjectionMatrix());
 	shader->LoadTile(mTile);
+	shader->LoadScreenSize(glm::vec2(mDepthTexture->GetWidth(), mDepthTexture->GetHeight()));
 
 	Particle* particle = static_cast<Particle*>(GetParent());
 	float time = (particle->GetMaxLiveTime() - particle->GetLiveTime()) / particle->GetMaxLiveTime();

@@ -22,6 +22,10 @@ class NormalMapShader : public IShaderProgram
 	int mLocationTiling; 
 	int mLocationTangent;
 	int mLocationNormalmapTexture;
+	int mLocationShadowSpaceMatrix;
+	int mLocationShadowMapTexture;
+	int mLocationShadowMapTextureWidth;
+	int mLocationShadowMapPFC;
 
 public:
 	NormalMapShader();
@@ -38,5 +42,8 @@ public:
 	void LoadFogParameters(const glm::vec3& color, float density, float gradient);
 	void LoadTiling(float tile);
 	void LoadModelNormalmap(int unit);
+	void LoadShadowMapSpaceMatrix(const glm::mat4& matrix);
+	void LoadShadowMapTexture(int unit, int width);
+	void LoadShadowMapPFC(int pfcCounter);
 };
 
