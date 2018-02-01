@@ -25,7 +25,9 @@ public:
 	void Init();
 	void SetCastingShadowsTarget(const glm::vec3& position);
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
+	void SetEnable(bool enable);
 
+	bool IsEnabled() const;
 	const glm::mat4 GetShadowMapMatrix() const;
 	const Texture* GetShadowMapTexture() const;
 	int GetShadowMapPFCCounter() const;

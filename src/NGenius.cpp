@@ -222,6 +222,12 @@ void NGenius::SetCastingShadowsParameters(const glm::vec3& lightDirection, int p
 	mRenderSystem->SetCastingShadowsParameters(lightDirection, pfcCounter);
 }
 
+void NGenius::SetCastingShadowsEnabled(bool enabled)
+{
+	assert(mRenderSystem != nullptr);
+	mRenderSystem->SetCastingShadowsEnabled(enabled);
+}
+
 void NGenius::SetCastingShadowsTarget(const glm::vec3& position)
 {
 	assert(mRenderSystem != nullptr);

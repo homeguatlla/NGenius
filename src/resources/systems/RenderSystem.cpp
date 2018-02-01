@@ -433,6 +433,12 @@ void RenderSystem::SetCastingShadowsTarget(const glm::vec3& position)
 	mShadowsSystem->SetCastingShadowsTarget(position);
 }
 
+void RenderSystem::SetCastingShadowsEnabled(bool enabled)
+{
+	assert(mShadowsSystem != nullptr);
+	mShadowsSystem->SetEnable(enabled);
+}
+
 const ITexture* RenderSystem::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
 {
 	assert(mTexturesLibrary != nullptr);

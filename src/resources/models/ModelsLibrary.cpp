@@ -3,6 +3,8 @@
 #include "Model.h"
 #include "../../loader/OBJLoader.h"
 
+#include <iostream>
+
 ModelsLibrary::ModelsLibrary(TexturesLibrary* texturesLibrary) : mTexturesLibrary(texturesLibrary)
 {
 }
@@ -19,6 +21,7 @@ void ModelsLibrary::Load()
 	LoadModel("enano", "data/models/enano/enano.obj");
 	LoadModel("mazo", "data/models/mazo/mazo.obj");
 
+	LoadModel("barrel", "data/models/props/barrel.obj");
 	LoadModel("stall", "data/models/stall/stall.obj");
 
 	//model = OBJLoader::LoadModel("data/models/hermes/hermes.obj");
@@ -61,5 +64,9 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 		{
 			mTexturesLibrary->AddTextureNameToLoad(model->GetMaterialName() + "_normalmap", model->GetNormalMapTextureName());
 		}
+	}
+	else
+	{
+		std::cout << "Error reading model " << filename;
 	}
 }

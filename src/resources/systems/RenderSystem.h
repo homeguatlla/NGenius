@@ -67,6 +67,7 @@ public:
 		
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
 	void SetCastingShadowsTarget(const glm::vec3& position);
+	void SetCastingShadowsEnabled(bool enabled);
 	void SetFullScreen(bool isFullScreen);
 	
 	const ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);

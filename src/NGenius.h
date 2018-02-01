@@ -64,8 +64,11 @@ public:
 	void SetFullScreen(bool isFullScreen);
 	void SetTerrain(const Terrain* terrain);
 	void SetEnergyWallRadius(float radius);
+
+	//shadows
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
 	void SetCastingShadowsTarget(const glm::vec3& position);
+	void SetCastingShadowsEnabled(bool enabled);
 
 private:
 	void CreateSystems(float screenWidth, float screenHeight);

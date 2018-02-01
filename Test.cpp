@@ -233,8 +233,8 @@ void CreateShadowPlane()
 	//QUAD
 	IRenderer* guiShadowRenderer = new GUIRenderer(	mEngine.GetShader("gui"),
 														static_cast<const Texture*>(mEngine.GetTexture("shadow_texture")),
-														1.0f,
-														1.0f
+														10.0f,
+														10.0f
 													);
 	GameEntity* quadShadow = new GameEntity(	new Transformation(glm::vec3(0.0f, -300.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 												guiShadowRenderer
@@ -662,6 +662,12 @@ void CreateEntities()
 																		nullptr,
 																		mSunLight
 																	);
+	/*
+	ModelRenderer* modelRenderer = new ModelRenderer(mEngine.GetModel("barrel"),
+		mEngine.GetShader("model"),
+		static_cast<Texture*>(mEngine.GetTexture("MedievalDungeonPropsAtlas02_diffuse")),
+		mSunLight
+	);*/
 	modelRenderer->SetFogParameters(mFogColor, mFogDensity, mFogGradient);
 	modelRenderer->SetTile(4.0f);
 
@@ -727,7 +733,7 @@ void CreateEntities()
 
 	if (mIsShadowEnabled)
 	{
-		CreateShadowPlane();
+		//CreateShadowPlane();
 	}
 	float x = 10.0f;
 	float z = 10.0f;
@@ -1115,6 +1121,7 @@ void Initialize()
 	SetupConfiguration();
 	mEngine.Init(mIsFullScreen);
 	mEngine.SetCastingShadowsParameters(mSunLightDirection, 3);
+	mEngine.SetCastingShadowsEnabled(true);
 
 	mEngine.RegisterInputHandler(std::bind(&UpdateInput, std::placeholders::_1));
 	mEngine.RegisterUpdateHandler(std::bind(&Update, std::placeholders::_1));

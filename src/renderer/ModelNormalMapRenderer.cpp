@@ -82,6 +82,8 @@ void ModelNormalMapRenderer::LoadData(const ICamera* camera, VertexBuffersManage
 	shader->LoadCameraPosition(camera->GetPosition());
 	if (mTextureShadowmap != nullptr)
 	{
+		glActiveTexture(GL_TEXTURE0 + mTextureShadowmap->GetUnit());
+		glBindTexture(GL_TEXTURE_2D, mTextureShadowmap->GetID());
 		shader->LoadShadowMapSpaceMatrix(mShadowSpaceMatrix);
 		shader->LoadShadowMapTexture(mTextureShadowmap->GetUnit(), mTextureShadowmap->GetWidth());
 		shader->LoadShadowMapPFC(mPFCCounter);

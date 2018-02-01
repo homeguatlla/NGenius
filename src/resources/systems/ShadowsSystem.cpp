@@ -10,6 +10,7 @@
 #include "../../renderer/IFrameBuffer.h"
 #include "../../renderer/RenderPass.h"
 
+
 ShadowsSystem::ShadowsSystem(RenderSystem* renderSystem, float screenWidth, float screenHeight, const Texture* shadowTexture) :
 mRenderSystem(renderSystem),
 mScreenWidth(screenWidth),
@@ -48,9 +49,18 @@ void ShadowsSystem::SetCastingShadowsTarget(const glm::vec3& position)
 
 void ShadowsSystem::SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter)
 {
-	mIsShadowCastEnabled = true;
 	mDirectionalLightDirection = lightDirection;
 	mPFCCounter = pfcCounter;
+}
+
+void ShadowsSystem::SetEnable(bool enable)
+{
+	mIsShadowCastEnabled = enable;
+}
+
+bool ShadowsSystem::IsEnabled() const
+{
+	return mIsShadowCastEnabled;
 }
 
 const glm::mat4 ShadowsSystem::GetShadowMapMatrix() const
