@@ -231,8 +231,8 @@
     <ClInclude Include="src\resources\systems\EntitiesSystem.h" />
     <ClInclude Include="src\resources\systems\ParticlesSystem.h" />
     <ClInclude Include="src\resources\systems\PhysicsSystem.h" />
-    <ClInclude Include="src\resources\systems\RenderSystem.h" />
-    <ClInclude Include="src\resources\systems\ShadowsSystem.h" />
+    <ClInclude Include="src\resources\systems\renderSystem\RenderSystem.h" />
+    <ClInclude Include="src\resources\systems\renderSystem\ShadowsSystem.h" />
     <ClInclude Include="src\resources\textures\ITexture.h" />
     <ClInclude Include="src\resources\textures\Texture.h" />
     <ClInclude Include="src\resources\textures\TextureArray.h" />
@@ -315,8 +315,8 @@
     <ClCompile Include="src\resources\systems\EntitiesSystem.cpp" />
     <ClCompile Include="src\resources\systems\ParticlesSystem.cpp" />
     <ClCompile Include="src\resources\systems\PhysicsSystem.cpp" />
-    <ClCompile Include="src\resources\systems\RenderSystem.cpp" />
-    <ClCompile Include="src\resources\systems\ShadowsSystem.cpp" />
+    <ClCompile Include="src\resources\systems\renderSystem\RenderSystem.cpp" />
+    <ClCompile Include="src\resources\systems\renderSystem\ShadowsSystem.cpp" />
     <ClCompile Include="src\resources\textures\ITexture.cpp" />
     <ClCompile Include="src\resources\textures\NoiseGenerator.cpp" />
     <ClCompile Include="src\resources\textures\PNGLoader.cpp" />

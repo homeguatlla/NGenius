@@ -88,6 +88,12 @@
     <Filter Include="Source Files\resources\font">
       <UniqueIdentifier>{4e737ab3-91b3-4abc-93f8-3b16f3890205}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\resources\systems\renderSystem">
+      <UniqueIdentifier>{6444d132-836b-43db-9098-7c13aedefe26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\systems\renderSystem">
+      <UniqueIdentifier>{d3ec1117-5473-4d0c-a582-77e9353e59df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -176,9 +182,6 @@
     </ClInclude>
     <ClInclude Include="src\resources\models\ModelsLibrary.h">
       <Filter>Header Files\resources\models</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\systems\RenderSystem.h">
-      <Filter>Header Files\resources\systems</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\textures\TextureArray.h">
       <Filter>Header Files\resources\textures</Filter>
@@ -345,8 +348,11 @@
     <ClInclude Include="src\renderer\ShadowRenderer.h">
       <Filter>Header Files\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\systems\ShadowsSystem.h">
-      <Filter>Header Files\resources\systems</Filter>
+    <ClInclude Include="src\resources\systems\renderSystem\RenderSystem.h">
+      <Filter>Header Files\resources\systems\renderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\renderSystem\ShadowsSystem.h">
+      <Filter>Header Files\resources\systems\renderSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -433,9 +439,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\models\ModelsLibrary.cpp">
       <Filter>Source Files\resources\models</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\systems\RenderSystem.cpp">
-      <Filter>Source Files\resources\systems</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\textures\TextureArray.cpp">
       <Filter>Source Files\resources\textures</Filter>
@@ -599,8 +602,11 @@
     <ClCompile Include="src\renderer\ShadowRenderer.cpp">
       <Filter>Source Files\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\systems\ShadowsSystem.cpp">
-      <Filter>Source Files\resources\systems</Filter>
+    <ClCompile Include="src\resources\systems\renderSystem\RenderSystem.cpp">
+      <Filter>Source Files\resources\systems\renderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\renderSystem\ShadowsSystem.cpp">
+      <Filter>Source Files\resources\systems\renderSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

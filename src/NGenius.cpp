@@ -11,7 +11,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "resources/systems/EntitiesSystem.h"
-#include "resources/systems/RenderSystem.h"
+#include "resources/systems/renderSystem/RenderSystem.h"
 #include "resources/systems/PhysicsSystem.h"
 #include "resources/systems/ParticlesSystem.h"
 

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "EntitiesSystem.h"
-#include "RenderSystem.h"
+#include "renderSystem/RenderSystem.h"
 #include "PhysicsSystem.h"
 #include "../GameEntity.h"
 #include "../components/LODComponent.h"

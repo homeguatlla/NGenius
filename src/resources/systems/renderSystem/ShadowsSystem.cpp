@@ -2,13 +2,13 @@
 #include "ShadowsSystem.h"
 
 #include "RenderSystem.h"
-#include "../Transformation.h"
-#include "../camera/OrthogonalCamera.h"
-#include "../camera/ICamera.h"
+#include "../../Transformation.h"
+#include "../../camera/OrthogonalCamera.h"
+#include "../../camera/ICamera.h"
 
-#include "../../renderer/IRenderer.h"
-#include "../../renderer/IFrameBuffer.h"
-#include "../../renderer/RenderPass.h"
+#include "../../../renderer/IRenderer.h"
+#include "../../../renderer/IFrameBuffer.h"
+#include "../../../renderer/RenderPass.h"
 
 
 ShadowsSystem::ShadowsSystem(RenderSystem* renderSystem, float screenWidth, float screenHeight, const Texture* shadowTexture) :
