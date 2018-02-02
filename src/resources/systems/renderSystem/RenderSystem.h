@@ -24,16 +24,19 @@ class FontType;
 struct GLFWwindow;
 struct GLFWmonitor;
 
-class ShadowsSystem;
+class ShadowsRenderPass;
 
 class RenderSystem
 {
-	VertexBuffersManager mVertexsBuffersManager;
 	typedef std::vector<IRenderer*> RenderersList;
+	typedef std::vector<const RenderPass*>::iterator RenderPassesIterator;
+
+	VertexBuffersManager mVertexsBuffersManager;
 
 	std::map<char, RenderersList> mRenderersPerPass;
 	std::vector<IRenderer*> mInstances;
 	std::vector<const RenderPass*> mRenderPasses;
+	
 	float mScreenWidth;
 	float mScreenHeight;
 	ShadersLibrary* mShadersLibrary;
@@ -43,7 +46,7 @@ class RenderSystem
 
 	GLFWwindow* mWindow;
 
-	ShadowsSystem* mShadowsSystem;
+	ShadowsRenderPass* mShadowsRenderPass;
 
 	bool mIsFullScreen;
 	int mLastClipPlaneNumberUsed;
@@ -55,7 +58,9 @@ public:
 	void Init(const std::string& applicationName, bool isFullscreen);
 	void Render();
 	void AddToRender(IRenderer* renderer);
+	
 	void AddRenderPass(const RenderPass* renderPass);
+	void RemoveRenderPass(const RenderPass* renderPass);
 
 	float GetScreenWidth() const;
 	float GetScreenHeight() const;
@@ -76,6 +81,8 @@ private:
 	void CreateResourcesLibraries();
 	void DestroyResourcesLibraries();
 
+	void CreateRenderPasses();
+	void DestroyRenderPasses();
 	void CreateShadowsSystem();
 
 	bool InitializeWindowAndOpenGL(const std::string& applicationName, bool isFullscreen);

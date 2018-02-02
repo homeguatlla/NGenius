@@ -14,8 +14,8 @@ class IFrameBuffer
 
 	unsigned int mFrameBufferID;
 	unsigned int mDepthBufferID;
-	const Texture* mColorTexture;
-	const Texture* mDepthTexture;
+	Texture* mColorTexture;
+	Texture* mDepthTexture;
 	int mScreenWidth;
 	int mScreenHeight;
 	unsigned int mColorAttachmentNumber;
@@ -37,8 +37,8 @@ public:
 	virtual ~IFrameBuffer();
 
 	void Init();
-	void SetColorTextureAttachment(unsigned int colorAttachmentNumber, const Texture* texture);
-	void SetDepthTextureAttachment(const Texture* texture);
+	void SetColorTextureAttachment(unsigned int colorAttachmentNumber, Texture* texture);
+	void SetDepthTextureAttachment(Texture* texture);
 	void SetDepthAttachment(unsigned int width, unsigned int height);
 	void SetCopyDepthBufferToTexture(const Texture* texture, int x, int y, int imageWidth, int imageHeight);
 	void BindBuffer() const;

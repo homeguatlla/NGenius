@@ -22,7 +22,7 @@ public:
 
 	void Load();
 	void AddTextureNameToLoad(const std::string& name, const std::string& filename, std::function<void(const std::string& textureName, const ITexture* texture)> callback = nullptr);
-	const ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
+	ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
 
 private:
 	void LoadTexturesPendingToLoad();

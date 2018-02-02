@@ -98,7 +98,7 @@ void TexturesLibrary::Load()
 	LoadTexturesPendingToLoad();
 }
 
-const ITexture* TexturesLibrary::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
+ITexture* TexturesLibrary::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
 {
 	Texture* texture = new Texture();
 	texture->CreateDepthTexture(++mCurrentTextureUnit, size.x, size.y);

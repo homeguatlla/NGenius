@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "RenderSystem.h"
-#include "ShadowsSystem.h"
+#include "ShadowsRenderPass.h"
 #include "../../GameEntity.h"
 #include "../../camera/ICamera.h"
 #include "../../models/ModelsLibrary.h"
@@ -35,6 +35,8 @@ mIsFullScreen(false)
 {
 	BitNumber bit;
 	bit.Test();
+
+	CreateRenderPasses();
 }
 
 RenderSystem::~RenderSystem()
@@ -45,8 +47,7 @@ RenderSystem::~RenderSystem()
 	}
 
 	DestroyResourcesLibraries();
-
-	delete mShadowsSystem;
+	DestroyRenderPasses();	
 }
 
 void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
@@ -60,18 +61,25 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 	CreateResourcesLibraries();
 	LoadResources();
 
+	Texture* texture = static_cast<Texture*>(mTexturesLibrary->CreateDepthTexture("shadow_texture", glm::ivec2(SHADOWS_TEXTURE_SIZE)));
+	mShadowsRenderPass->Init(texture);
+}
+
+void RenderSystem::CreateRenderPasses()
+{
 	CreateShadowsSystem();
-	
-	mShadowsSystem->Init();
+}
+
+void RenderSystem::DestroyRenderPasses()
+{
+	delete mShadowsRenderPass;
 }
 
 void RenderSystem::CreateShadowsSystem()
 {
-	const Texture* texture = static_cast<const Texture*>(mTexturesLibrary->CreateDepthTexture("shadow_texture", glm::ivec2(SHADOWS_TEXTURE_SIZE)));
-	mShadowsSystem = new ShadowsSystem(	this,
+	mShadowsRenderPass = new ShadowsRenderPass(	this,
 										GetScreenWidth(),
-										GetScreenHeight(),
-										texture);
+										GetScreenHeight());
 }
 
 void RenderSystem::LoadResources()
@@ -171,7 +179,21 @@ void RenderSystem::Render(const RenderPass* renderPass)
 
 void RenderSystem::AddRenderPass(const RenderPass* renderPass)
 {
-	mRenderPasses.push_back(renderPass);
+	bool found = std::find(mRenderPasses.begin(), mRenderPasses.end(), renderPass) != mRenderPasses.end();
+	if (!found)
+	{
+		mRenderPasses.push_back(renderPass);
+	}
+}
+
+void RenderSystem::RemoveRenderPass(const RenderPass* renderPass)
+{
+	RenderPassesIterator it = std::find(mRenderPasses.begin(), mRenderPasses.end(), renderPass);
+	bool found = it != mRenderPasses.end();
+	if (found)
+	{
+		mRenderPasses.erase(it);
+	}
 }
 
 void RenderSystem::AddToRender(IRenderer* renderer)
@@ -202,9 +224,9 @@ void RenderSystem::RenderInstances(const RenderPass* renderPass, IRenderer* rend
 
 	if (renderer->IsCastingShadows())
 	{
-		renderer->SetShadowMapParameters(	mShadowsSystem->GetShadowMapTexture(), 
-											mShadowsSystem->GetShadowMapMatrix(), 
-											mShadowsSystem->GetShadowMapPFCCounter());
+		renderer->SetShadowMapParameters(	mShadowsRenderPass->GetShadowMapTexture(), 
+											mShadowsRenderPass->GetShadowMapMatrix(), 
+											mShadowsRenderPass->GetShadowMapPFCCounter());
 	}
 	//Apply clipping planes
 	if (renderPass->IsClippingEnabled())
@@ -423,20 +445,20 @@ void RenderSystem::SetFullScreen(bool isFullScreen)
 
 void RenderSystem::SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter)
 {
-	assert(mShadowsSystem != nullptr);
-	mShadowsSystem->SetCastingShadowsParameters(lightDirection, pfcCounter);
+	assert(mShadowsRenderPass != nullptr);
+	mShadowsRenderPass->SetCastingShadowsParameters(lightDirection, pfcCounter);
 }
 
 void RenderSystem::SetCastingShadowsTarget(const glm::vec3& position)
 {
-	assert(mShadowsSystem != nullptr);
-	mShadowsSystem->SetCastingShadowsTarget(position);
+	assert(mShadowsRenderPass != nullptr);
+	mShadowsRenderPass->SetCastingShadowsTarget(position);
 }
 
 void RenderSystem::SetCastingShadowsEnabled(bool enabled)
 {
-	assert(mShadowsSystem != nullptr);
-	mShadowsSystem->SetEnable(enabled);
+	assert(mShadowsRenderPass != nullptr);
+	mShadowsRenderPass->SetEnable(enabled);
 }
 
 const ITexture* RenderSystem::CreateDepthTexture(const std::string& name, const glm::ivec2& size)

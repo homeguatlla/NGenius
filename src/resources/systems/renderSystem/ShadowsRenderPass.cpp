@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "ShadowsSystem.h"
+#include "ShadowsRenderPass.h"
 
 #include "RenderSystem.h"
 #include "../../Transformation.h"
@@ -9,34 +9,42 @@
 #include "../../../renderer/IRenderer.h"
 #include "../../../renderer/IFrameBuffer.h"
 #include "../../../renderer/RenderPass.h"
+#include "../../textures/Texture.h"
 
-
-ShadowsSystem::ShadowsSystem(RenderSystem* renderSystem, float screenWidth, float screenHeight, const Texture* shadowTexture) :
+ShadowsRenderPass::ShadowsRenderPass(RenderSystem* renderSystem, float screenWidth, float screenHeight) :
 mRenderSystem(renderSystem),
 mScreenWidth(screenWidth),
 mScreenHeight(screenHeight),
-mShadowMapTexture(shadowTexture),
-mIsShadowCastEnabled(false)
+mShadowMapTexture(nullptr),
+mIsShadowCastEnabled(false),
+mIsInitialized(false)
 {
 }
 
-ShadowsSystem::~ShadowsSystem()
+ShadowsRenderPass::~ShadowsRenderPass()
 {
 }
 
-void ShadowsSystem::Init()
+void ShadowsRenderPass::Init(Texture* shadowTexture)
 {
-	mShadowCastCamera = CreateShadowCastCamera(mDirectionalLightDirection);
-	RenderPass* renderPass = CreateShadowRenderPass();
-	mRenderSystem->AddRenderPass(renderPass);
+	if (mIsShadowCastEnabled)
+	{
+		assert(shadowTexture != nullptr);
+
+		mShadowMapTexture = shadowTexture;
+		mShadowCastCamera = CreateShadowCastCamera(mDirectionalLightDirection);
+		mRenderPass = CreateShadowRenderPass();
+		mRenderSystem->AddRenderPass(mRenderPass);
+		mIsInitialized = true;
+	}
 }
 
-void ShadowsSystem::UpdateShadowCastMatrix()
+void ShadowsRenderPass::UpdateShadowCastMatrix()
 {
 	mShadowMapMatrix = CalculateShadowMapMatrix(mShadowCastCamera);
 }
 
-void ShadowsSystem::SetCastingShadowsTarget(const glm::vec3& position)
+void ShadowsRenderPass::SetCastingShadowsTarget(const glm::vec3& position)
 {
 	if (mIsShadowCastEnabled)
 	{
@@ -47,38 +55,55 @@ void ShadowsSystem::SetCastingShadowsTarget(const glm::vec3& position)
 	}
 }
 
-void ShadowsSystem::SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter)
+void ShadowsRenderPass::SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter)
 {
 	mDirectionalLightDirection = lightDirection;
 	mPFCCounter = pfcCounter;
 }
 
-void ShadowsSystem::SetEnable(bool enable)
+void ShadowsRenderPass::SetEnable(bool enable)
 {
 	mIsShadowCastEnabled = enable;
+	UpdateState();
 }
 
-bool ShadowsSystem::IsEnabled() const
+void ShadowsRenderPass::UpdateState()
+{
+	if (mIsInitialized)
+	{
+		if (!mIsShadowCastEnabled)
+		{
+			mRenderSystem->RemoveRenderPass(mRenderPass);
+		}
+		else
+		{
+			mRenderSystem->AddRenderPass(mRenderPass);
+		}
+		mShadowMapTexture->SetActive(mIsShadowCastEnabled);
+	}
+}
+
+bool ShadowsRenderPass::IsEnabled() const
 {
 	return mIsShadowCastEnabled;
 }
 
-const glm::mat4 ShadowsSystem::GetShadowMapMatrix() const
+const glm::mat4 ShadowsRenderPass::GetShadowMapMatrix() const
 {
 	return mShadowMapMatrix;
 }
 
-const Texture* ShadowsSystem::GetShadowMapTexture() const
+const Texture* ShadowsRenderPass::GetShadowMapTexture() const
 {
 	return mShadowMapTexture;
 }
 
-int ShadowsSystem::GetShadowMapPFCCounter() const
+int ShadowsRenderPass::GetShadowMapPFCCounter() const
 {
 	return mPFCCounter;
 }
 
-glm::mat4 ShadowsSystem::CalculateShadowMapMatrix(const ICamera* camera)
+glm::mat4 ShadowsRenderPass::CalculateShadowMapMatrix(const ICamera* camera)
 {
 	Transformation transformation(camera->GetPosition(), glm::vec3(0.0f), glm::vec3(1.0f));
 	glm::mat4& matrix = camera->GetProjectionMatrix() * const_cast<ICamera*>(camera)->GetViewMatrix();
@@ -93,14 +118,14 @@ glm::mat4 ShadowsSystem::CalculateShadowMapMatrix(const ICamera* camera)
 	return biasMatrix * matrix;
 }
 
-ICamera* ShadowsSystem::CreateShadowCastCamera(const glm::vec3& directionalLightDirection)
+ICamera* ShadowsRenderPass::CreateShadowCastCamera(const glm::vec3& directionalLightDirection)
 {
 	ICamera* camera = new OrthogonalCamera(mScreenWidth * 0.01f, mScreenHeight * 0.01f, -10.0f, 20.0f);
 
 	return camera;
 }
 
-RenderPass* ShadowsSystem::CreateShadowRenderPass()
+RenderPass* ShadowsRenderPass::CreateShadowRenderPass()
 {
 	//SHADOW RENDER PASS
 	//SHADOW

@@ -805,7 +805,7 @@ void CreateHudMapRenderPass()
 	mMapPass = new RenderPass(static_cast<ICamera*>(mMapCamera), IRenderer::LAYER_OTHER);
 	
 	IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
-	frameBuffer->SetColorTextureAttachment(0, static_cast<const Texture*>(mEngine.GetTexture("map")));
+	frameBuffer->SetColorTextureAttachment(0, static_cast<Texture*>(mEngine.GetTexture("map")));
 	frameBuffer->Init();
 	mMapPass->SetFrameBufferOutput(frameBuffer);
 	mMapPass->EnableFog(false);
@@ -826,7 +826,7 @@ void CreateWaterRenderPass()
 
 	//REFLECTION
 	IFrameBuffer* frameReflectionBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
-	const Texture* reflectionTexture = static_cast<const Texture*>(mEngine.GetTexture("reflection_water"));
+	Texture* reflectionTexture = static_cast<Texture*>(mEngine.GetTexture("reflection_water"));
 	frameReflectionBuffer->SetColorTextureAttachment(0, reflectionTexture);
 	frameReflectionBuffer->SetDepthAttachment(reflectionTexture->GetWidth(), reflectionTexture->GetHeight());
 
@@ -850,8 +850,8 @@ void CreateWaterRenderPass()
 	mEngine.AddGameEntity(mWaterRefractionCameraEntity);
 
 	IFrameBuffer* frameRefractionBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
-	const Texture* refractionTexture = static_cast<const Texture*>(mEngine.GetTexture("refraction_water"));
-	const Texture* refractionDepthTexture = static_cast<const Texture*>(mEngine.GetTexture("refraction_depth_water"));
+	Texture* refractionTexture = static_cast<Texture*>(mEngine.GetTexture("refraction_water"));
+	Texture* refractionDepthTexture = static_cast<Texture*>(mEngine.GetTexture("refraction_depth_water"));
 	frameRefractionBuffer->SetColorTextureAttachment(0, refractionTexture);
 	frameRefractionBuffer->SetDepthTextureAttachment(refractionDepthTexture);
 	frameRefractionBuffer->Init();
@@ -979,6 +979,11 @@ void UpdateInput(GLFWwindow* window)
 		}
 
 		mIsGameplayCameraEnabled = !mIsGameplayCameraEnabled;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		mIsShadowEnabled = !mIsShadowEnabled;
+		mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
 	}
 
 }
@@ -1119,12 +1124,13 @@ void SetupConfiguration()
 void Initialize()
 {
 	SetupConfiguration();
-	mEngine.Init(mIsFullScreen);
-	mEngine.SetCastingShadowsParameters(mSunLightDirection, 3);
-	mEngine.SetCastingShadowsEnabled(true);
-
 	mEngine.RegisterInputHandler(std::bind(&UpdateInput, std::placeholders::_1));
 	mEngine.RegisterUpdateHandler(std::bind(&Update, std::placeholders::_1));
+
+	mEngine.SetCastingShadowsParameters(mSunLightDirection, 3);
+	mEngine.SetCastingShadowsEnabled(true);
+	
+	mEngine.Init(mIsFullScreen);
 }
 
 int main(void)

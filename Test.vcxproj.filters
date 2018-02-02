@@ -351,7 +351,7 @@
     <ClInclude Include="src\resources\systems\renderSystem\RenderSystem.h">
       <Filter>Header Files\resources\systems\renderSystem</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\systems\renderSystem\ShadowsSystem.h">
+    <ClInclude Include="src\resources\systems\renderSystem\ShadowsRenderPass.h">
       <Filter>Header Files\resources\systems\renderSystem</Filter>
     </ClInclude>
   </ItemGroup>
@@ -605,7 +605,7 @@
     <ClCompile Include="src\resources\systems\renderSystem\RenderSystem.cpp">
       <Filter>Source Files\resources\systems\renderSystem</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\systems\renderSystem\ShadowsSystem.cpp">
+    <ClCompile Include="src\resources\systems\renderSystem\ShadowsRenderPass.cpp">
       <Filter>Source Files\resources\systems\renderSystem</Filter>
     </ClCompile>
   </ItemGroup>

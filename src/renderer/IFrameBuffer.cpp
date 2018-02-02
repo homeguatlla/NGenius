@@ -59,12 +59,14 @@ void IFrameBuffer::BindBuffer() const
 		{
 			glViewport(0, 0, mColorTexture->GetWidth(), mColorTexture->GetHeight());
 			glClear(GL_COLOR_BUFFER_BIT);
+			mColorTexture->SetActive(true);
 		}
 
 		if (mType & FRAME_BUFFER_DEPTH_TEXTURE)
 		{
 			glViewport(0, 0, mDepthTexture->GetWidth(), mDepthTexture->GetHeight());
 			glClear(GL_DEPTH_BUFFER_BIT);
+			mDepthTexture->SetActive(true);
 		}
 
 		if (mType & FRAME_BUFFER_DEPTH)
@@ -94,14 +96,14 @@ void IFrameBuffer::CopyBuffer() const
 }
 
 
-void IFrameBuffer::SetColorTextureAttachment(unsigned int colorAttachmentNumber, const Texture* texture)
+void IFrameBuffer::SetColorTextureAttachment(unsigned int colorAttachmentNumber, Texture* texture)
 {
 	mColorAttachmentNumber = colorAttachmentNumber;
 	mColorTexture = texture;
 	mType |= FRAME_BUFFER_COLOR_TEXTURE;
 }
 
-void IFrameBuffer::SetDepthTextureAttachment(const Texture* texture)
+void IFrameBuffer::SetDepthTextureAttachment(Texture* texture)
 {
 	mDepthTexture = texture;
 	mType |= FRAME_BUFFER_DEPTH_TEXTURE;

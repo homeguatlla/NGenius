@@ -16,5 +16,7 @@ public:
 	unsigned int GetUnit() const;
 	unsigned int GetWidth() const;
 	unsigned int GetHeight() const;
+
+	void SetActive(bool active);
 };
 
