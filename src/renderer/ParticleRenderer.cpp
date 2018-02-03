@@ -18,7 +18,6 @@ mTile(1.0f)
 	assert(depthTexture != nullptr);
 }
 
-
 ParticleRenderer::~ParticleRenderer()
 {
 }
@@ -40,7 +39,6 @@ const std::string ParticleRenderer::GetName() const
 {
 	return "ParticleRenderer";
 }
-
 
 void ParticleRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {

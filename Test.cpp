@@ -113,9 +113,10 @@ enum Configuration
 	TEXT,
 	ENERGY_WALL,
 	SHADOWS,
+	PARTICLES,
 	RELEASE
 };
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = RELEASE;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -485,41 +486,39 @@ void CreateParticlesSparkles()
 
 void CreateParticlesTest()
 {
-	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), PhysicsSystem::GRAVITY_VALUE * 0.1f);
-	particle->AddComponent(new CollisionComponent());
+	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
 	particle->SetLiveTime(1.0f);
 
+	glm::vec3 position(5.5f, 0.0f, 3.3f); 
+	float height = mTerrain->GetHeight(glm::vec2(position.x, position.z)) + 0.01f;
+	position.y = height;
+	
+
 	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(	particle,
-																new Transformation(glm::vec3(3.5f, 4.5f, 3.3f), glm::vec3(0.0f), glm::vec3(0.1f)), 
+																new Transformation(position, glm::vec3(0.0f), glm::vec3(0.1f)),
 																nullptr,
 																20);
 	particlesEmitter->SetColorGradientValues(glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec4(0.6f, 0.0f, 0.6f, 0.0f));
-	particlesEmitter->SetScaleValues(0.03f, 0.4f + (rand() % 10) / 100.0f);
-	particlesEmitter->SetVelocity(glm::vec3(0.2f), glm::vec3(0.5f));
+	particlesEmitter->SetScaleValues(0.03f, 0.4f + (rand() % 4) / 10.0f);
+	particlesEmitter->SetVelocity(glm::vec3(0.0f, 0.2f, 0.0f), glm::vec3(0.0f, 0.5f, 0.0f));
 	mEngine.AddGameEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);	
 
 	particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
-	particle->SetLiveTime(2.0f);
+	particle->SetLiveTime(1.0f);
+
+	position = glm::vec3(5.0f, 0.0f, 3.3f);
+	height = mTerrain->GetHeight(glm::vec2(position.x, position.z)) + 0.01f;
+	position.y = height;
 	particlesEmitter = new ParticlesEmitter(	particle,
-												new Transformation(glm::vec3(4.0f, 4.5f, 3.3f), glm::vec3(0.0f), glm::vec3(0.1f)),
+												new Transformation(position, glm::vec3(0.0f), glm::vec3(0.1f)),
 												nullptr,
 												20);
-	particlesEmitter->SetColorGradientValues(glm::vec4(0.0f, 0.8f, 0.0f, 1.0f), glm::vec4(0.0f, 0.8f, 0.6f, 0.0f));
-	particlesEmitter->SetScaleValues(0.3f, 0.5f + (rand() % 4) / 10.0f);
-	particlesEmitter->SetVelocity(glm::vec3(0.2f), glm::vec3(0.5f));
+	particlesEmitter->SetColorGradientValues(glm::vec4(0.0f, 0.8f, 0.0f, 1.0f), glm::vec4(0.0f, 0.6f, 0.6f, 0.0f));
+	particlesEmitter->SetScaleValues(0.03f, 0.4f + (rand() % 4) / 10.0f);
+	particlesEmitter->SetVelocity(glm::vec3(0.0f, 0.2f, 0.0f), glm::vec3(0.0f, 0.5f, 0.0f));
 	mEngine.AddGameEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);
-
-	/*
-	ParticleRenderer* renderer = new ParticleRenderer(	mEngine.GetShader("particle"),
-														static_cast<Texture*>(mEngine.GetTexture("smoke")), 
-														static_cast<Texture*>(mEngine.GetTexture("depth_texture")), 1.0f, 1.0f);
-	renderer->SetLayer(IRenderer::LAYER_PARTICLES);
-	renderer->SetTransparency(true);
-	renderer->SetBillboard(true);
-	GameEntity* particle = new Particle(new Transformation(glm::vec3(4.0f, 7.8f, 3.3f), glm::vec3(0.0f), glm::vec3(0.1f)), renderer, 30.0f);
-	mEngine.AddGameEntity(particle);*/
 }
 
 void CreateEnergyWall()
@@ -698,10 +697,12 @@ void CreateEntities()
 
 	mCamera = new GameEntity(	new Transformation(mGameplayCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
 								new CubeRenderer(mEngine.GetShader("default")));
-	mCamera->AddComponent(new OverWaterComponent(mWaterHeight));
 	mCamera->AddComponent(new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f));
 	mCamera->AddComponent(new CollisionComponent());
-	
+	if (mIsWaterEnabled)
+	{
+		mCamera->AddComponent(new OverWaterComponent(mWaterHeight));
+	}
 
 	mEngine.AddGameEntity(mCamera);
 
@@ -902,12 +903,6 @@ void CreateTerrainRenderPass()
 {
 	//RENDER PASS GAMEPLAY
 	RenderPass *terrainPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TERRAIN);
-
-	/*IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
-	const Texture* depthTexture = static_cast<const Texture*>(mEngine.GetTexture("depth_texture"));
-	frameBuffer->SetCopyDepthBufferToTexture(depthTexture, 0, 0, static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
-	gameplayPass->SetFrameBufferOutput(frameBuffer);
-	*/
 	mEngine.AddRenderPass(terrainPass);
 }
 
@@ -1112,6 +1107,21 @@ void SetupConfiguration()
 		mIsStatisticsVisible = true;
 		mEnergyWallRadius = 22.0f;
 		mIsParticlesEnabled = false;
+		mIsShadowEnabled = false;
+		mIsFullScreen = false;
+		break;
+	case PARTICLES:
+		mIsDebugModeEnabled = true;
+		mIsWaterEnabled = false;
+		mIsGameplayCameraEnabled = true;
+		mIsFogEnabled = false;
+		mIsVegetationEnabled = false;
+		mIsEnergyWallEnabled = false;
+		mIsSkyboxEnabled = true;
+		mIsTerrainFlat = true;
+		mIsTextEnabled = true;
+		mIsStatisticsVisible = true;
+		mIsParticlesEnabled = true;
 		mIsShadowEnabled = false;
 		mIsFullScreen = false;
 		break;

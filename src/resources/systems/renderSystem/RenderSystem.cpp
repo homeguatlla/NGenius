@@ -432,8 +432,8 @@ void RenderSystem::UpdateDistancesToCamera(const ICamera* camera, RenderersList*
 	for (IRenderer* renderer : *renderers)
 	{
 		glm::vec3 position = renderer->GetParent()->GetTransformation()->GetPosition();
-		int distanceToCamera = static_cast<int>(glm::length2(cameraPosition - position));
-		distanceToCamera = glm::min<int>(glm::max<int>(0, distanceToCamera), UINT_MAX);
+		float distanceToCamera = glm::length2(cameraPosition - position);
+		distanceToCamera = glm::round(distanceToCamera);
 		renderer->SetDistance(static_cast<int>(distanceToCamera));
 	}
 }
