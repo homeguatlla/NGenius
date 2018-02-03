@@ -153,7 +153,7 @@ void IFrameBuffer::CreateBuffer()
 	UnbindBuffer();
 }
 
-void IFrameBuffer::SetCopyDepthBufferToTexture(const Texture* texture,  int x, int y, int imageWidth, int imageHeight)
+void IFrameBuffer::SetCopyDepthBufferToTexture(Texture* texture,  int x, int y, int imageWidth, int imageHeight)
 {
 	mCopyBufferHeight = imageHeight;
 	mCopyBufferWidth = imageWidth;
@@ -163,10 +163,9 @@ void IFrameBuffer::SetCopyDepthBufferToTexture(const Texture* texture,  int x, i
 }
 
 
-void IFrameBuffer::CopyDepthBufferIntoTexture(const Texture* texture, int x, int y, int imageWidth, int imageHeight) const
+void IFrameBuffer::CopyDepthBufferIntoTexture(Texture* texture, int x, int y, int imageWidth, int imageHeight) const
 {
-	glActiveTexture(GL_TEXTURE0 + texture->GetUnit());
-	glBindTexture(GL_TEXTURE_2D, texture->GetID());
+	texture->SetActive(true);
 	
 	glReadBuffer(GL_BACK); // Ensure we are reading from the back buffer.
 	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, x, y, imageWidth, imageHeight, 0);

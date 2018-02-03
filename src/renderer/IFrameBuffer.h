@@ -27,7 +27,7 @@ class IFrameBuffer
 	unsigned int mCopyBufferHeight;
 	unsigned int mCopyBufferX;
 	unsigned int mCopyBufferY;
-	const Texture* mCopyBufferTexture;
+	Texture* mCopyBufferTexture;
 
 	int mNumDrawBuffers = 0;
 	unsigned int mDrawBuffersList[2];
@@ -40,7 +40,7 @@ public:
 	void SetColorTextureAttachment(unsigned int colorAttachmentNumber, Texture* texture);
 	void SetDepthTextureAttachment(Texture* texture);
 	void SetDepthAttachment(unsigned int width, unsigned int height);
-	void SetCopyDepthBufferToTexture(const Texture* texture, int x, int y, int imageWidth, int imageHeight);
+	void SetCopyDepthBufferToTexture(Texture* texture, int x, int y, int imageWidth, int imageHeight);
 	void BindBuffer() const;
 	void UnbindBuffer() const;
 	void CopyBuffer() const;
@@ -48,7 +48,7 @@ public:
 
 private:
 	void CreateBuffer();
-	void CopyDepthBufferIntoTexture(const Texture* texture, int x, int y, int imageWidth, int imageHeight) const;
+	void CopyDepthBufferIntoTexture(Texture* texture, int x, int y, int imageWidth, int imageHeight) const;
 	void PrintFrameBufferInfo(unsigned int target, unsigned int fbo) const;
 };
 

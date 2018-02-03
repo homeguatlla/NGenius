@@ -887,7 +887,7 @@ void CreateGameplayRenderPass()
 	RenderPass *gameplayPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
 	
 	IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
-	const Texture* depthTexture = static_cast<const Texture*>(mEngine.GetTexture("depth_texture"));
+	Texture* depthTexture = static_cast<Texture*>(mEngine.GetTexture("depth_texture"));
 	frameBuffer->SetCopyDepthBufferToTexture(depthTexture, 0, 0, static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
 	gameplayPass->SetFrameBufferOutput(frameBuffer);
 	
