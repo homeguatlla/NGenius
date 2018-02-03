@@ -5,15 +5,17 @@
 #include "../GameEntity.h"
 #include "../camera/PerspectiveCamera.h"
 #include "CollisionComponent.h"
+#include "OverWaterComponent.h"
 
 
 //WARNING!! hay que tener en cuenta que, si subimos este valor la cámara por colisión subirá y no mantendrá el ángulo pitch que le hemos definido.
 //es decir, si vemos que el ángulo de la cámara con el target es demasiado alto (vemos al player desde una posición más alta) hay que tener en cuenta que haya subido por este valor
 const float CAMERA_HEIGHT_OFFSET_GROUND = 0.2f;
 const float CAMERA_SMOOTH_MOVEMENT_VALUE = 1.0f;
+const float WATER_HEIGHT_OFFSET = 0.1f;
 
 ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, float distanceFromTarget, float pitch) :
-mCamera(camera), mTarget(target), mDistanceFromTarget(distanceFromTarget), mPitch(pitch), mAngleAroundTarget(0.0f)
+	mCamera(camera), mTarget(target), mDistanceFromTarget(distanceFromTarget), mPitch(pitch), mAngleAroundTarget(0.0f)
 {
 }
 
@@ -44,6 +46,16 @@ void ThirdPersonCameraComponent::Update(float elapsedTime)
 		if (newPosition.y < groundHeight)
 		{
 			newPosition.y = groundHeight;
+		}
+	}
+
+	if (mParent->HasComponent<OverWaterComponent>())
+	{
+		OverWaterComponent* overWaterComponent = mParent->GetComponent<OverWaterComponent>();
+		float waterHeight = overWaterComponent->GetWaterHeight() + WATER_HEIGHT_OFFSET;
+		if (newPosition.y < waterHeight)
+		{
+			newPosition.y = waterHeight;
 		}
 	}
 

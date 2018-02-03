@@ -82,6 +82,7 @@
 #include "src/resources/components/RotationComponent.h"
 #include "src/resources/components/LODComponent.h"
 #include "src/resources/components/BillboardComponent.h"
+#include "src/resources/components/OverWaterComponent.h"
 
 #include "src/renderer/IFrameBuffer.h"
 
@@ -104,6 +105,7 @@ static const float SCREEN_WIDTH = 1024.0f;
 static const float SCREEN_HEIGHT = 768.0f;
 
 static const float SKYBOX_ROTATION_SPEED = 0.01f;
+static const float MIN_FPS_ALLOWED = 30.0f;
 
 enum Configuration
 {
@@ -544,7 +546,7 @@ void CreateTextTest()
 	mFPSText = new Text(	new Transformation(
 												glm::vec3(-mEngine.GetScreenWidth() * 0.5f, mEngine.GetScreenHeight() * 0.5f, 0.0f), 
 												glm::vec3(0.0f), 
-												glm::vec3(0.60f)
+												glm::vec3(0.70f)
 							),
 							mEngine.GetShader("text"), mEngine.GetFont("OCR A Extended"),
 							"FPS:", false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
@@ -696,8 +698,10 @@ void CreateEntities()
 
 	mCamera = new GameEntity(	new Transformation(mGameplayCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
 								new CubeRenderer(mEngine.GetShader("default")));
+	mCamera->AddComponent(new OverWaterComponent(mWaterHeight));
 	mCamera->AddComponent(new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f));
 	mCamera->AddComponent(new CollisionComponent());
+	
 
 	mEngine.AddGameEntity(mCamera);
 
@@ -1016,6 +1020,14 @@ void UpdateEnergyWallCollisions(float elapsedTime)
 void UpdateStatitstics()
 {
 	int fps = static_cast<int>(mEngine.GetFPS());
+	if (fps < MIN_FPS_ALLOWED)
+	{
+		mFPSText->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	}
+	else
+	{
+		mFPSText->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	}
 	mFPSText->UpdateText("FPS: " +std::to_string(fps));
 
 	//mTestText->UpdateText("3D text " + std::to_string(fps));
@@ -1089,18 +1101,18 @@ void SetupConfiguration()
 		break;
 	case ENERGY_WALL:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = true;
+		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = true;
-		mIsVegetationEnabled = true;
+		mIsFogEnabled = false;
+		mIsVegetationEnabled = false;
 		mIsEnergyWallEnabled = true;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mEnergyWallRadius = 22.0f;
-		mIsParticlesEnabled = true;
-		mIsShadowEnabled = true;
+		mIsParticlesEnabled = false;
+		mIsShadowEnabled = false;
 		mIsFullScreen = false;
 		break;
 	case RELEASE:

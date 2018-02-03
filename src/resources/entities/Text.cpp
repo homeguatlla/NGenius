@@ -32,6 +32,11 @@ unsigned int Text::GetID() const
 	return mTextID;
 }
 
+void Text::SetColor(const glm::vec4& color)
+{
+	static_cast<TextRenderer*>(GetRenderer())->SetColor(color);
+}
+
 void Text::SetOutlineColor(const glm::vec4& color)
 {
 	static_cast<TextRenderer*>(GetRenderer())->SetOutlineColor(color);

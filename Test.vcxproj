@@ -196,6 +196,7 @@
     <ClInclude Include="src\resources\components\IComponent.h" />
     <ClInclude Include="src\resources\components\IInputComponent.h" />
     <ClInclude Include="src\resources\components\LODComponent.h" />
+    <ClInclude Include="src\resources\components\OverWaterComponent.h" />
     <ClInclude Include="src\resources\components\PhysicsComponent.h" />
     <ClInclude Include="src\resources\components\PlayerInputComponent.h" />
     <ClInclude Include="src\resources\components\CollisionComponent.h" />
@@ -280,6 +281,7 @@
     <ClCompile Include="src\resources\components\IComponent.cpp" />
     <ClCompile Include="src\resources\components\IInputComponent.cpp" />
     <ClCompile Include="src\resources\components\LODComponent.cpp" />
+    <ClCompile Include="src\resources\components\OverWaterComponent.cpp" />
     <ClCompile Include="src\resources\components\PhysicsComponent.cpp" />
     <ClCompile Include="src\resources\components\PlayerInputComponent.cpp" />
     <ClCompile Include="src\resources\components\CollisionComponent.cpp" />

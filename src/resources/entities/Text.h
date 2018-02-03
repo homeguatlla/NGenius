@@ -23,6 +23,7 @@ public:
 
 	unsigned int GetID() const;
 	void UpdateText(const std::string& text);
+	void SetColor(const glm::vec4& color);
 	void SetOutlineColor(const glm::vec4& color);
 	void SetBorderParameters(float width, float edge, float borderWidth, float borderEdge);
 	void SetShadow(const glm::vec2& offset);

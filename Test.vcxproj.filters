@@ -354,6 +354,9 @@
     <ClInclude Include="src\resources\systems\renderSystem\ShadowsRenderPass.h">
       <Filter>Header Files\resources\systems\renderSystem</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\components\OverWaterComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -607,6 +610,9 @@
     </ClCompile>
     <ClCompile Include="src\resources\systems\renderSystem\ShadowsRenderPass.cpp">
       <Filter>Source Files\resources\systems\renderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\OverWaterComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
