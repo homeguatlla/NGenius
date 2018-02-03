@@ -14,8 +14,8 @@ class EnergyWallRenderer : public IRenderer
 
 protected:
 	Model* mModel;
-	const Texture* mTexture;
-	const Texture* mDepthTexture;
+	Texture* mTexture;
+	Texture* mDepthTexture;
 	
 	unsigned int mMatrixVBO;
 
@@ -25,7 +25,7 @@ private:
 
 
 public:
-	EnergyWallRenderer(Model* model, IShaderProgram* shader, const Texture* texture, const Texture* depthTexture);
+	EnergyWallRenderer(Model* model, IShaderProgram* shader, Texture* texture, Texture* depthTexture);
 	~EnergyWallRenderer();
 
 	EnergyWallRenderer* DoClone() const override { return nullptr; }

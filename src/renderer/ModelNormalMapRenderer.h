@@ -5,11 +5,11 @@ class ModelNormalMapRenderer :	public ModelRenderer
 {
 	std::vector<glm::vec3> mTangents;
 
-	const Texture* mNormalmapTexture;
+	Texture* mNormalmapTexture;
 	unsigned int mTangentVBO;
 
 public:
-	ModelNormalMapRenderer(Model* model, IShaderProgram* shader, const Texture* texture, const Texture* normalmap, const Light* light);
+	ModelNormalMapRenderer(Model* model, IShaderProgram* shader, Texture* texture, Texture* normalmap, const Light* light);
 	~ModelNormalMapRenderer();
 
 	const std::string GetName() const override;

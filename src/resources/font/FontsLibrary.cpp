@@ -37,7 +37,7 @@ void FontsLibrary::LoadFont(const std::string& filename)
 	}
 }
 
-void FontsLibrary::OnTextureFontLoaded(const std::string& textureName, const ITexture* texture)
+void FontsLibrary::OnTextureFontLoaded(const std::string& textureName, ITexture* texture)
 {
 	FontType* fontType = GetElement(textureName);
 	assert(fontType != nullptr);

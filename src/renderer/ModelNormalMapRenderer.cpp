@@ -9,7 +9,7 @@
 #include "../renderer/ModelRenderer.h"
 #include <GL/glew.h>
 
-ModelNormalMapRenderer::ModelNormalMapRenderer(Model* model, IShaderProgram* shader, const Texture* texture, const Texture* normalmap, const Light* light) :
+ModelNormalMapRenderer::ModelNormalMapRenderer(Model* model, IShaderProgram* shader, Texture* texture, Texture* normalmap, const Light* light) :
 ModelRenderer(model, shader, texture, light),
 mNormalmapTexture(normalmap)
 {
@@ -56,8 +56,7 @@ void ModelNormalMapRenderer::PreRender(VertexBuffersManager& vertexBufferManager
 
 	if (mNormalmapTexture != nullptr)
 	{
-		glActiveTexture(GL_TEXTURE0 + mNormalmapTexture->GetUnit());
-		glBindTexture(GL_TEXTURE_2D, mNormalmapTexture->GetID());
+		mNormalmapTexture->SetActive(true);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 }

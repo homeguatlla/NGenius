@@ -78,12 +78,12 @@ const FontType::Char* FontType::GetCharacter(unsigned int id)
 	return mChars[id];
 }
 
-void FontType::SetTexture(const ITexture* texture)
+void FontType::SetTexture(ITexture* texture)
 {
 	mTexture = texture;
 }
 
-const ITexture* FontType::GetTexture() const
+ITexture* FontType::GetTexture() const
 {
 	return mTexture;
 }

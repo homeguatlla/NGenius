@@ -15,7 +15,7 @@ class ModelRenderer : public IRenderer
 	
 protected:
 	Model* mModel;
-	const Texture* mTexture;
+	Texture* mTexture;
 	const Texture* mTextureShadowmap;
 	const Light* mLight;
 
@@ -29,7 +29,7 @@ private:
 	
 
 public:
-	ModelRenderer(Model* model, IShaderProgram* shader, const Texture* texture, const Light* light);
+	ModelRenderer(Model* model, IShaderProgram* shader, Texture* texture, const Light* light);
 	~ModelRenderer();
 
 	ModelRenderer* DoClone() const override { return nullptr; }

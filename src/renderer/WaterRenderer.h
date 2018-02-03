@@ -9,11 +9,11 @@ class Light;
 class WaterRenderer : public IRenderer
 {
 	std::vector<glm::vec2> mTextureCoords;
-	const Texture* mReflectionTexture;
-	const Texture* mRefractionTexture;
-	const Texture* mDistorsionTexture;
-	const Texture* mNormalTexture;
-	const Texture* mDepthTexture;
+	Texture* mReflectionTexture;
+	Texture* mRefractionTexture;
+	Texture* mDistorsionTexture;
+	Texture* mNormalTexture;
+	Texture* mDepthTexture;
 	float mWidth;
 	float mLength;
 	float mWaterSpeed;
@@ -24,7 +24,7 @@ class WaterRenderer : public IRenderer
 	unsigned int mTextureCoordsVBO;
 	unsigned int mMatrixVBO;
 public:
-	explicit WaterRenderer(IShaderProgram* shader, const Texture* reflectionTexture, const Texture* refractionTexture, const Texture* distorsion, const Texture* normal, const Texture* depth, float width, float length, float waterSpeed, const glm::vec4& waterColor, const Light* light);
+	explicit WaterRenderer(IShaderProgram* shader, Texture* reflectionTexture, Texture* refractionTexture, Texture* distorsion, Texture* normal, Texture* depth, float width, float length, float waterSpeed, const glm::vec4& waterColor, const Light* light);
 	~WaterRenderer();
 
 	WaterRenderer* DoClone() const override { return nullptr; }

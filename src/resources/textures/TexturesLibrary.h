@@ -12,7 +12,7 @@ class ITexture;
 
 class TexturesLibrary : public BaseLibrary<ITexture*>
 {
-	typedef std::tuple<std::string, std::string, std::function<void(const std::string& fontName, const ITexture* texture)>> TextureTuple;
+	typedef std::tuple<std::string, std::string, std::function<void(const std::string& fontName, ITexture* texture)>> TextureTuple;
 	std::vector<TextureTuple> mTexturesPendingToLoad;
 	int mCurrentTextureUnit;
 
@@ -21,7 +21,7 @@ public:
 	virtual ~TexturesLibrary();
 
 	void Load();
-	void AddTextureNameToLoad(const std::string& name, const std::string& filename, std::function<void(const std::string& textureName, const ITexture* texture)> callback = nullptr);
+	void AddTextureNameToLoad(const std::string& name, const std::string& filename, std::function<void(const std::string& textureName, ITexture* texture)> callback = nullptr);
 	ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
 
 private:

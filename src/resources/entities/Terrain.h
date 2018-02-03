@@ -12,13 +12,13 @@ class Terrain :	public GameEntity
 {
 	int mNumVertexsSide;
 	float mGridSize;
-	const Texture* mHeightmap;
+	Texture* mHeightmap;
 	const Texture* mShadowmap;
 	float mScale;
 	bool mIsFlat;
 
 public:
-	explicit Terrain(Transformation* transformation, IShaderProgram* shader, const Texture* heightmap, const Texture* blendmap, const TextureArray* textureArray, const Texture* shadowmap, const Light* light, float scale);
+	explicit Terrain(Transformation* transformation, IShaderProgram* shader, Texture* heightmap, Texture* blendmap, TextureArray* textureArray, const Texture* shadowmap, const Light* light, float scale);
 	~Terrain();
 
 	Terrain* DoClone() const override { return nullptr; }

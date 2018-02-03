@@ -97,8 +97,7 @@ void SkyBoxRenderer::SetFogColor(const glm::vec3& fogColor)
 void SkyBoxRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 {
 	IRenderer::PreRender(vertexBufferManager);
-	glActiveTexture(GL_TEXTURE0 + mTextureCubemap->GetUnit());
-	glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCubemap->GetID());
+	mTextureCubemap->SetActive(true);
 }
 
 bool SkyBoxRenderer::IsInstancingAllowed() const

@@ -8,7 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
 
-GUIRenderer::GUIRenderer(IShaderProgram* shader, const Texture* texture, float width, float height) :
+GUIRenderer::GUIRenderer(IShaderProgram* shader, Texture* texture, float width, float height) :
 IRenderer(shader),
 mTexture(texture),
 mWidth(width),
@@ -121,8 +121,7 @@ void GUIRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 			0,                            // stride
 			(void*)0                      // array buffer offset
 		);
-		glActiveTexture(GL_TEXTURE0 + mTexture->GetUnit());
-		glBindTexture(GL_TEXTURE_2D, mTexture->GetID());
+		mTexture->SetActive(true);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 

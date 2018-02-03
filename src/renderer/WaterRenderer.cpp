@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
-WaterRenderer::WaterRenderer(IShaderProgram* shader, const Texture* reflectionTexture, const Texture* refractionTexture, const Texture* distorsion, const Texture* normal, const Texture* depth, float width, float length, float speed, const glm::vec4& waterColor, const Light* light) :
+WaterRenderer::WaterRenderer(IShaderProgram* shader, Texture* reflectionTexture, Texture* refractionTexture, Texture* distorsion, Texture* normal, Texture* depth, float width, float length, float speed, const glm::vec4& waterColor, const Light* light) :
 IRenderer(shader),
 mReflectionTexture(reflectionTexture),
 mRefractionTexture(refractionTexture),
@@ -102,21 +102,12 @@ void WaterRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 			(void*)0                      // array buffer offset
 		);
 	}
-	glActiveTexture(GL_TEXTURE0 + mReflectionTexture->GetUnit());
-	glBindTexture(GL_TEXTURE_2D, mReflectionTexture->GetID());
+	mReflectionTexture->SetActive(true);
+	mRefractionTexture->SetActive(true);
+	mDistorsionTexture->SetActive(true);
+	mNormalTexture->SetActive(true);
+	mDepthTexture->SetActive(true);
 
-	glActiveTexture(GL_TEXTURE0 + mRefractionTexture->GetUnit());
-	glBindTexture(GL_TEXTURE_2D, mRefractionTexture->GetID());
-
-	glActiveTexture(GL_TEXTURE0 + mDistorsionTexture->GetUnit());
-	glBindTexture(GL_TEXTURE_2D, mDistorsionTexture->GetID());
-
-	glActiveTexture(GL_TEXTURE0 + mNormalTexture->GetUnit());
-	glBindTexture(GL_TEXTURE_2D, mNormalTexture->GetID());
-
-	glActiveTexture(GL_TEXTURE0 + mDepthTexture->GetUnit());
-	glBindTexture(GL_TEXTURE_2D, mDepthTexture->GetID());
-	
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	//matrices instanced

@@ -8,7 +8,7 @@ class QuadRenderer : public IRenderer
 {
 protected:
 	std::vector<glm::vec2> mTextureCoords;
-	const Texture* mTexture;
+	Texture* mTexture;
 	float mWidth;
 	float mHeight;
 	bool mIsBillboard;
@@ -16,7 +16,7 @@ protected:
 	unsigned int mMatrixVBO;
 
 public:
-	explicit QuadRenderer(IShaderProgram* shader, const Texture* texture, float width, float height);
+	explicit QuadRenderer(IShaderProgram* shader, Texture* texture, float width, float height);
 	~QuadRenderer();
 
 	QuadRenderer* DoClone() const override;

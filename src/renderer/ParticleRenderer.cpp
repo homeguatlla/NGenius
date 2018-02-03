@@ -9,7 +9,7 @@
 #include <GL/glew.h>
 #include <iostream>
 
-ParticleRenderer::ParticleRenderer(IShaderProgram* shader, const Texture* texture, const Texture* depthTexture, float width, float height) :
+ParticleRenderer::ParticleRenderer(IShaderProgram* shader, Texture* texture, Texture* depthTexture, float width, float height) :
 QuadRenderer(shader, texture, width, height),
 mColorVBO(-1),
 mDepthTexture(depthTexture),
@@ -79,12 +79,10 @@ void ParticleRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 			0,                            // stride
 			(void*)0                      // array buffer offset
 		);
-		glActiveTexture(GL_TEXTURE0 + mTexture->GetUnit());
-		glBindTexture(GL_TEXTURE_2D, mTexture->GetID());
+		mTexture->SetActive(true);
 	}
 
-	glActiveTexture(GL_TEXTURE0 + mDepthTexture->GetUnit());
-	glBindTexture(GL_TEXTURE_2D, mDepthTexture->GetID());
+	mDepthTexture->SetActive(true);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	//color instanced

@@ -6,7 +6,7 @@ class TextureCubemap;
 
 class SkyBoxRenderer :	public IRenderer
 {
-	const TextureCubemap* mTextureCubemap;
+	TextureCubemap* mTextureCubemap;
 	float mSize;
 	glm::vec3 mFogColor;
 

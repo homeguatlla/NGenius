@@ -8,7 +8,7 @@ class GUIRenderer : public IRenderer
 {
 protected:
 	std::vector<glm::vec2> mTextureCoords;
-	const Texture* mTexture;
+	Texture* mTexture;
 	float mWidth;
 	float mHeight;
 	bool mIsBillboard;
@@ -16,7 +16,7 @@ protected:
 	unsigned int mMatrixVBO;
 
 public:
-	explicit GUIRenderer(IShaderProgram* shader, const Texture* texture, float width, float height);
+	explicit GUIRenderer(IShaderProgram* shader, Texture* texture, float width, float height);
 	~GUIRenderer();
 
 	GUIRenderer* DoClone() const override;

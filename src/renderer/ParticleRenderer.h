@@ -8,11 +8,11 @@ class ICamera;
 class ParticleRenderer : public QuadRenderer
 {
 	unsigned int mColorVBO;
-	const Texture* mDepthTexture;
+	Texture* mDepthTexture;
 	float mTile;
 
 public:
-	ParticleRenderer(IShaderProgram* shader, const Texture* texture, const Texture* depthTexture, float width, float height);
+	ParticleRenderer(IShaderProgram* shader, Texture* texture, Texture* depthTexture, float width, float height);
 	~ParticleRenderer();
 
 	ParticleRenderer* DoClone() const override;

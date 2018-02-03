@@ -10,7 +10,7 @@
 #include <iostream>
 
 
-EnergyWallRenderer::EnergyWallRenderer(Model* model, IShaderProgram* shader, const Texture* texture, const Texture* depthTexture) :
+EnergyWallRenderer::EnergyWallRenderer(Model* model, IShaderProgram* shader, Texture* texture, Texture* depthTexture) :
 mModel(model),
 IRenderer(shader),
 mTexture(texture),
@@ -86,12 +86,9 @@ void EnergyWallRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 				0,                            // stride
 				(void*)0                      // array buffer offset
 			);
-			glActiveTexture(GL_TEXTURE0 + mTexture->GetUnit());
-			glBindTexture(GL_TEXTURE_2D, mTexture->GetID());
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-			glActiveTexture(GL_TEXTURE0 + mDepthTexture->GetUnit());
-			glBindTexture(GL_TEXTURE_2D, mDepthTexture->GetID());
+			mTexture->SetActive(true);
+			mDepthTexture->SetActive(true);
+			
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 

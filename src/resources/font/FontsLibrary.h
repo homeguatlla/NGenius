@@ -17,6 +17,6 @@ public:
 	
 private:
 	void LoadFont(const std::string& filename);
-	void OnTextureFontLoaded(const std::string& textureName, const ITexture* texture);
+	void OnTextureFontLoaded(const std::string& textureName, ITexture* texture);
 };
 

@@ -10,7 +10,7 @@
 #include "../resources/entities/Light.h"
 #include "../resources/camera/ICamera.h"
 
-TerrainRenderer::TerrainRenderer(IShaderProgram* shader, const Texture* textureHeightmap, const Texture* textureBlendmap, const TextureArray* textureArray, const Light* light, float scale) :
+TerrainRenderer::TerrainRenderer(IShaderProgram* shader, Texture* textureHeightmap, Texture* textureBlendmap, TextureArray* textureArray, const Light* light, float scale) :
 IRenderer(shader),
 mVertexVAO(-1),
 mVertexVBO(-1),
@@ -87,14 +87,10 @@ void TerrainRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 			(void*)0                      // array buffer offset
 		);
 	}
-	glActiveTexture(GL_TEXTURE0 + mTextureHeightmap->GetUnit());
-	glBindTexture(GL_TEXTURE_2D, mTextureHeightmap->GetID());
 
-	glActiveTexture(GL_TEXTURE0 + mTextureBlendmap->GetUnit());
-	glBindTexture(GL_TEXTURE_2D, mTextureBlendmap->GetID());
-
-	glActiveTexture(GL_TEXTURE0 + mTextureArray->GetUnit());
-	glBindTexture(GL_TEXTURE_2D_ARRAY, mTextureArray->GetID());
+	mTextureHeightmap->SetActive(true);
+	mTextureBlendmap->SetActive(true);
+	mTextureArray->SetActive(true);
 
 	mMatrixID = mShaderProgram->GetUniformLocation("MVP");
 

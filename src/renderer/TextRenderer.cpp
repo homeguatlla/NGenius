@@ -187,8 +187,7 @@ void TextRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 			0,                            // stride
 			(void*)0                      // array buffer offset
 		);
-		glActiveTexture(GL_TEXTURE0 + mFontType->GetTexture()->GetUnit());
-		glBindTexture(GL_TEXTURE_2D, mFontType->GetTexture()->GetID());
+		mFontType->GetTexture()->SetActive(true);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 }

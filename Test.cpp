@@ -232,7 +232,7 @@ void CreateShadowPlane()
 {
 	//QUAD
 	IRenderer* guiShadowRenderer = new GUIRenderer(	mEngine.GetShader("gui"),
-														static_cast<const Texture*>(mEngine.GetTexture("shadow_texture")),
+														static_cast<Texture*>(mEngine.GetTexture("shadow_texture")),
 														10.0f,
 														10.0f
 													);
@@ -246,7 +246,7 @@ void CreateWaterHudPlanes()
 {
 	//QUAD
 	IRenderer* guiReflectionRenderer = new GUIRenderer(	mEngine.GetShader("gui"),
-															static_cast<const Texture*>(mEngine.GetTexture("reflection_water")),
+															static_cast<Texture*>(mEngine.GetTexture("reflection_water")),
 															128.0f,
 															128.0f
 														);
@@ -256,7 +256,7 @@ void CreateWaterHudPlanes()
 	mEngine.AddGameEntity(quadReflection);
 
 	IRenderer* guiRefractionRenderer = new GUIRenderer(mEngine.GetShader("gui"),
-															static_cast<const Texture*>(mEngine.GetTexture("refraction_depth_water")),
+															static_cast<Texture*>(mEngine.GetTexture("refraction_depth_water")),
 															128.0f,
 															128.0f
 														);
@@ -270,7 +270,7 @@ void CreateHUD()
 {
 	//QUAD
 	IRenderer* guiRenderer = new GUIRenderer(	mEngine.GetShader("gui"),
-												static_cast<const Texture*>(mEngine.GetTexture("hud_map")),
+												static_cast<Texture*>(mEngine.GetTexture("hud_map")),
 												128.0f,
 												128.0f
 												);
@@ -280,7 +280,7 @@ void CreateHUD()
 	mEngine.AddGameEntity(quad);
 
 	IRenderer* mapRenderer = new GUIRenderer(mEngine.GetShader("gui"),
-												static_cast<const Texture*>(mEngine.GetTexture("map")),
+												static_cast<Texture*>(mEngine.GetTexture("map")),
 												87.0f,
 												73.0f
 												);
@@ -329,7 +329,7 @@ void CreateSpecificCubes()
 	}
 }
 
-GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string> models, const std::vector<float> distances, const Texture* texture, const Texture* normal)
+GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string> models, const std::vector<float> distances, Texture* texture, Texture* normal)
 {
 	GameEntity* modelEntity = new GameEntity(
 		new Transformation(position, glm::vec3(0.0f), scale),

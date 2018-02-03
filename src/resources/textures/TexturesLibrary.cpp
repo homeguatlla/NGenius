@@ -126,7 +126,7 @@ void TexturesLibrary::LoadTexturesPendingToLoad()
 	mTexturesPendingToLoad.clear();
 }
 
-void TexturesLibrary::AddTextureNameToLoad(const std::string& name, const std::string& filename, std::function<void(const std::string& textureName, const ITexture* texture)> callback)
+void TexturesLibrary::AddTextureNameToLoad(const std::string& name, const std::string& filename, std::function<void(const std::string& textureName, ITexture* texture)> callback)
 {
 	bool found = std::find_if(mTexturesPendingToLoad.begin(), mTexturesPendingToLoad.end(), [&](const TextureTuple& tuple) { 
 		return std::get<0>(tuple).compare(name) == 0; }) != mTexturesPendingToLoad.end();

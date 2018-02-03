@@ -8,7 +8,7 @@
 #include "../resources/camera/ICamera.h"
 #include <GL/glew.h>
 
-ModelRenderer::ModelRenderer(Model* model, IShaderProgram* shader, const Texture* texture, const Light* light) :
+ModelRenderer::ModelRenderer(Model* model, IShaderProgram* shader, Texture* texture, const Light* light) :
 mModel(model),
 IRenderer(shader),
 mTexture(texture),
@@ -94,9 +94,7 @@ void ModelRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
 					0,                            // stride
 					(void*)0                      // array buffer offset
 				);
-
-				glActiveTexture(GL_TEXTURE0 + mTexture->GetUnit());
-				glBindTexture(GL_TEXTURE_2D, mTexture->GetID());
+				mTexture->SetActive(true);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 			}
 		}

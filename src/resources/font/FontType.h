@@ -40,7 +40,7 @@ public:
 	Common mCommon;
 	std::map<unsigned int, Char*> mChars;
 	std::string mTextureFilename;
-	const ITexture* mTexture;
+	ITexture* mTexture;
 
 public:
 	FontType();
@@ -59,8 +59,8 @@ public:
 	unsigned int GetNumCharacters() const;
 	void AddCharacter(unsigned int id, Char* character);
 	const FontType::Char* GetCharacter(unsigned int id);
-	void SetTexture(const ITexture* texture);
-	const ITexture* GetTexture() const;
+	void SetTexture(ITexture* texture);
+	ITexture* GetTexture() const;
 	const std::string GetTextureFilename() const;
 };
 

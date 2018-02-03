@@ -19,10 +19,10 @@ class TerrainRenderer : public IRenderer
 	unsigned int mTextureCoordsVBO;
 	unsigned int mIndexVBO;
 	GLint mMatrixID;
-	const Texture* mTextureHeightmap;
-	const Texture* mTextureBlendmap;
+	Texture* mTextureHeightmap;
+	Texture* mTextureBlendmap;
 	const Texture* mTextureShadowmap;
-	const TextureArray* mTextureArray;
+	TextureArray* mTextureArray;
 	const Light* mLight;
 	float mScale;
 	glm::vec4 mClippingPlane;
@@ -30,7 +30,7 @@ class TerrainRenderer : public IRenderer
 	int mPFCCounter;
 
 public:
-	explicit TerrainRenderer(IShaderProgram* shader, const Texture* textureHeightmap, const Texture* textureBlendmap, const TextureArray* mTextureArray, const Light* light, float scale);
+	explicit TerrainRenderer(IShaderProgram* shader, Texture* textureHeightmap, Texture* textureBlendmap, TextureArray* mTextureArray, const Light* light, float scale);
 	~TerrainRenderer();
 
 	TerrainRenderer* DoClone() const override { return nullptr; }
