@@ -114,6 +114,7 @@ enum Configuration
 	ENERGY_WALL,
 	SHADOWS,
 	PARTICLES,
+	PROPS,
 	RELEASE
 };
 Configuration mConfiguration = RELEASE;
@@ -145,6 +146,7 @@ bool mIsStatisticsVisible = false;
 bool mIsShadowEnabled = false;
 bool mIsParticlesEnabled = false;
 bool mIsFullScreen = false;
+bool mIsPropsEnabled = false;
 
 NGenius mEngine("Demo", SCREEN_WIDTH, SCREEN_HEIGHT);
 ICamera* mGameplayCamera;
@@ -332,7 +334,7 @@ void CreateSpecificCubes()
 	}
 }
 
-GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string> models, const std::vector<float> distances, Texture* texture, Texture* normal)
+GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string>& models, const std::vector<float>& distances, Texture* texture, Texture* normal)
 {
 	GameEntity* modelEntity = new GameEntity(
 		new Transformation(position, glm::vec3(0.0f), scale),
@@ -369,6 +371,41 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 		renderer->SetFogParameters(mFogColor, mFogDensity, mFogGradient);
 		lodComponent->AddLevelOfDetail(renderer, distances[i]);
 	}
+
+	return modelEntity;
+}
+
+GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, const std::string& model, Texture* texture, Texture* normal)
+{
+	GameEntity* modelEntity = new GameEntity(
+												new Transformation(position, glm::vec3(0.0f), scale),
+												nullptr
+											);
+
+	modelEntity->AddComponent(new PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE));
+	modelEntity->AddComponent(new CollisionComponent());
+
+	IRenderer* renderer = nullptr;
+	if (normal != nullptr)
+	{
+		renderer = new ModelNormalMapRenderer(	mEngine.GetModel(model),
+												mEngine.GetShader("normalmap"),
+												texture,
+												normal,
+												mSunLight
+											);
+	}
+	else
+	{
+		renderer = new ModelRenderer(	mEngine.GetModel(model),
+										mEngine.GetShader("model"),
+										texture,
+										mSunLight
+									);
+	}
+	
+	renderer->SetFogParameters(mFogColor, mFogDensity, mFogGradient);
+	modelEntity->SetRenderer(renderer);
 
 	return modelEntity;
 }
@@ -424,6 +461,45 @@ void CreateTrees()
 	}
 }
 
+void CreateProps()
+{
+	int areaSize = 5;
+	int numProps = 3;
+
+	std::vector<std::string> models;
+	std::vector<glm::vec3> positions;
+
+	models.push_back(std::string("barrel"));
+	models.push_back(std::string("chest"));
+	models.push_back(std::string("brazier"));
+
+	positions.push_back(glm::vec3(0.8f, 0.0f, -2.3f));
+	positions.push_back(glm::vec3(0.4f, 0.0f, -2.0f));
+	positions.push_back(glm::vec3(1.0f, 0.0f, -1.7f));
+
+	for (int i = 0; i < numProps; i++)
+	{
+		float x = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
+		float z = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
+
+		x = positions[i % models.size()].x;
+		z = positions[i % models.size()].z;
+
+		float height = mTerrain->GetHeight(glm::vec2(x, z))-0.1f;
+		//if (height > mWaterHeight + 0.2f)
+		{
+			glm::vec3 position(x, height, z);
+			glm::vec3 scale(0.3f);
+			std::string model = models[i % models.size()];
+			Texture* texture = static_cast<Texture*>(mEngine.GetTexture("MedievalDungeonPropsAtlas02_diffuse"));
+			Texture* normal = static_cast<Texture*>(mEngine.GetTexture("MedievalDungeonPropsAtlas02_normalmap"));
+
+			GameEntity* entity = CreateModel(position, scale, model, texture, normal);
+			mEngine.AddGameEntity(entity);
+		}
+	}
+}
+
 Particle* CreateParticle(bool canCollide, Texture* texture, glm::vec3& gravity)
 {
 	ParticleRenderer* renderer = new ParticleRenderer(mEngine.GetShader("particle"), texture, static_cast<Texture*>(mEngine.GetTexture("depth_texture")), 1.0f, 1.0f);
@@ -450,10 +526,10 @@ void CreateParticlesFire()
 {
 	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
 	particle->SetLiveTime(2.0f);
-
-	float x = 0.0f;
-	float z = 0.0f;
-	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 0.01f;
+	
+	float x = 1.0f;
+	float z = -1.7f;
+	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 0.28f;
 
 	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(particle,
 		new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.1f)),
@@ -731,6 +807,11 @@ void CreateEntities()
 		CreateTrees();
 	}
 
+	if (mIsPropsEnabled)
+	{
+		CreateProps();
+	}
+
 	if (mIsEnergyWallEnabled)
 	{
 		CreateEnergyWall();
@@ -979,7 +1060,7 @@ void UpdateInput(GLFWwindow* window)
 
 		mIsGameplayCameraEnabled = !mIsGameplayCameraEnabled;
 	}
-	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
 	{
 		mIsShadowEnabled = !mIsShadowEnabled;
 		mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
@@ -1058,6 +1139,7 @@ void SetupConfiguration()
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
 		mIsVegetationEnabled = true;
+		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = true;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
@@ -1072,6 +1154,7 @@ void SetupConfiguration()
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
 		mIsVegetationEnabled = true;
+		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
@@ -1086,6 +1169,7 @@ void SetupConfiguration()
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
 		mIsVegetationEnabled = false;
+		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
@@ -1100,6 +1184,7 @@ void SetupConfiguration()
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
 		mIsVegetationEnabled = false;
+		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = true;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
@@ -1116,6 +1201,7 @@ void SetupConfiguration()
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
 		mIsVegetationEnabled = false;
+		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = true;
@@ -1125,12 +1211,29 @@ void SetupConfiguration()
 		mIsShadowEnabled = false;
 		mIsFullScreen = false;
 		break;
+	case PROPS:
+		mIsDebugModeEnabled = true;
+		mIsWaterEnabled = false;
+		mIsGameplayCameraEnabled = true;
+		mIsFogEnabled = false;
+		mIsVegetationEnabled = false;
+		mIsPropsEnabled = true;
+		mIsEnergyWallEnabled = false;
+		mIsSkyboxEnabled = true;
+		mIsTerrainFlat = true;
+		mIsTextEnabled = true;
+		mIsStatisticsVisible = true;
+		mIsParticlesEnabled = false;
+		mIsShadowEnabled = false;
+		mIsFullScreen = false;
+		break; 
 	case RELEASE:
 		mIsDebugModeEnabled = false;
 		mIsWaterEnabled = true;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
 		mIsVegetationEnabled = true;
+		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = true;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;

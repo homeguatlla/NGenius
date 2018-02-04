@@ -3,8 +3,9 @@
 # Created with Kaydara FBX
 # 
 
-newmtl Material__366
-map_Kd MedievalDungeonPropsAtlas01.psd
+newmtl MedievalDungeonPropsAtlas02
+map_Kd MedievalDungeonPropsAtlas02.png
+map_bump MedievalDungeonPropsAtlas02_Normals.png
 Ka 0.588000 0.588000 0.588000
 Kd 0.588000 0.588000 0.588000
 Ks 0.000000 0.000000 0.000000

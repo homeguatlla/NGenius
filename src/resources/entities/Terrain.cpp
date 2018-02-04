@@ -52,12 +52,9 @@ mIsFlat(false)
 	GetRenderer()->SetIndexes(indices);
 }
 
-
 Terrain::~Terrain()
 {
 }
-
-
 
 void Terrain::SetFlat(bool isFlat)
 {

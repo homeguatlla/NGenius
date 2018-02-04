@@ -217,7 +217,7 @@ void main() {
 
 	// Material properties
 	vec3 MaterialDiffuseColor = shadowFactor * (rTextureColor.rgb + gTextureColor.rgb + bTextureColor.rgb + aTextureColor.rgb) * lightColor;
-	vec3 MaterialAmbientColor = vec3(0.01f, 0.01f, 0.01f);
+	vec3 MaterialAmbientColor = vec3(0.1f, 0.1f, 0.1f);
 	vec3 MaterialSpecularColor = vec3(0.0f, 0.0f, 0.0f);
 
 	color = ApplyLight(color, MaterialAmbientColor, MaterialDiffuseColor, MaterialSpecularColor);

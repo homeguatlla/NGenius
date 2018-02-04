@@ -7,7 +7,6 @@ TerrainGrid::TerrainGrid()
 {
 }
 
-
 TerrainGrid::~TerrainGrid()
 {
 }

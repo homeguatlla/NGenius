@@ -40,6 +40,8 @@ public:
 	const std::string& GetNormalMapTextureName() const;	
 
 private:
+	void CalculateNormals();
 	void CalculateTangents();
+	glm::vec3 CalculateTriangleNormalFromVertex(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
 };
 

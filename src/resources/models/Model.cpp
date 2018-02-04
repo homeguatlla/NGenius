@@ -2,6 +2,8 @@
 #include "Model.h"
 
 int Model::IDCounter = 0;
+const float EPSILON = 0.0001f;
+const float EPSILON2 = EPSILON * EPSILON;
 
 Model::Model(const std::vector<glm::vec3>& vertexs,
 	const std::vector<glm::vec2>& textureCoords,
@@ -14,9 +16,9 @@ Model::Model(const std::vector<glm::vec3>& vertexs,
 {
 	mModelID = ++IDCounter;
 	assert(vertexs.size() > 0);
+	//CalculateNormals();
 	CalculateTangents();
 }
-
 
 Model::~Model()
 {
@@ -82,6 +84,56 @@ const std::string& Model::GetNormalMapTextureName() const
 	return mNormalMapTextureName;
 }
 
+void Model::CalculateNormals()
+{
+	struct Face 
+	{
+		glm::vec3 vertex[3];
+		glm::vec3 normal;
+	};
+	
+	unsigned int numFaces = mVertexs.size() / 3;
+	std::vector<Face> faces;
+	faces.resize(numFaces);
+
+	int vertex = 0;
+	for (unsigned int face = 0 ; face < numFaces; ++face)
+	{
+		faces[face].vertex[0] = mVertexs[vertex];
+		faces[face].vertex[1] = mVertexs[vertex + 1];
+		faces[face].vertex[2] = mVertexs[vertex + 2];
+
+		glm::vec3 normal = CalculateTriangleNormalFromVertex(faces[face].vertex[0], faces[face].vertex[1], faces[face].vertex[2]);
+		faces[face].normal = normal;
+		vertex += 3;
+	}
+
+	for (unsigned int i = 0; i < mVertexs.size(); ++i)
+	{
+		glm::vec3 normal(0.0f);
+		for (unsigned int face = 0; face < faces.size(); ++face)
+		{
+			if (glm::length(faces[face].vertex[0] - mVertexs[i]) < EPSILON || 
+				glm::length(faces[face].vertex[1] - mVertexs[i]) < EPSILON ||
+				glm::length(faces[face].vertex[2] - mVertexs[i]) < EPSILON)
+			{
+				normal += faces[face].normal;
+			}
+		}
+		normal = glm::normalize(normal);
+		mNormals[i] = normal;
+	}
+}
+
+glm::vec3 Model::CalculateTriangleNormalFromVertex(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c)
+{
+	//This assumes that A->B->C is a counter-clockwise ordering
+	glm::vec3 n = glm::cross(b - a, c - a);
+	float alpha = glm::length(n) / (length(b - a) * length(c - a));
+
+	return glm::normalize(n) * glm::asin(alpha);
+}
+
 void Model::CalculateTangents()
 {
 	std::vector<glm::vec3> tan1(0.0f);
@@ -127,9 +179,10 @@ void Model::CalculateTangents()
 		tan2[index2] += tdir;
 		tan2[index3] += tdir;
 	}
+
 	if (mNormals.size() > 0)
 	{
-		for (long a = 0; a < mVertexs.size(); a++)
+		for (unsigned int a = 0; a < mVertexs.size(); a++)
 		{
 			const glm::vec3& n = mNormals[a];
 			const glm::vec3& t = tan1[a];

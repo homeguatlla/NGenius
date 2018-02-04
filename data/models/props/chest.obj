@@ -2,7 +2,7 @@
 # Wavefront OBJ file
 # Created with Kaydara FBX
 # 
-mtllib chest_original.mtl
+mtllib chest.mtl
 
 g ChestBase_01
 v 0.637483 0.051867 -0.314264

@@ -12,11 +12,9 @@ TextureGenerator::TextureGenerator()
 {
 }
 
-
 TextureGenerator::~TextureGenerator()
 {
 }
-
 
 void TextureGenerator::Generate(std::string filename, int size, float heightScale, bool generateNormals)
 {
@@ -30,6 +28,7 @@ void TextureGenerator::Generate(std::string filename, int size, float heightScal
 
 	SavePNG(filename, size, heightmap);
 }
+
 void TextureGenerator::GenerateOnlyBlendmap(std::string filename, int size)
 {
 	std::vector<unsigned char> heightmap(BPP * size * size, 255);
@@ -178,7 +177,6 @@ void TextureGenerator::GenerateBlendmap(int size, std::vector<unsigned char>& he
 		}
 	}
 }
-
 
 void TextureGenerator::GenerateNormals(int size, std::vector<unsigned char>& heightmap, int length, float heightScale)
 {
