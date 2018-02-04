@@ -35,7 +35,7 @@ mShadowOffset(0.0f)
 
 TextRenderer::~TextRenderer()
 {
-	if (mIsPrerendered)
+	if (IsPrerendered())
 	{
 		glDeleteBuffers(1, &mTextureCoordsVBO);
 	}
@@ -84,7 +84,7 @@ void TextRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuf
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	if (!mIsPrerendered && vertexBufferManager.HasVAO(GetName()))
+	if (!IsPrerendered() && vertexBufferManager.HasVAO(GetName()))
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, mVertexVBO);
 		glBufferData(GL_ARRAY_BUFFER, mVertexs.size() * sizeof(glm::vec3), &mVertexs[0], GL_STATIC_DRAW);

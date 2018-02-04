@@ -25,7 +25,7 @@ mMatrixVBO(-1)
 
 QuadRenderer::~QuadRenderer()
 {
-	if (mIsPrerendered)
+	if (IsPrerendered())
 	{
 		glDeleteBuffers(1, &mTextureCoordsVBO);
 		glDeleteBuffers(1, &mMatrixVBO);

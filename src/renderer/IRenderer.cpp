@@ -108,22 +108,19 @@ GameEntity* IRenderer::GetParent()
 
 void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager, IShaderProgram* shaderRenderPass)
 {
-	/*
 	if (shaderRenderPass != nullptr)
 	{
 		std::swap(mShaderProgram, shaderRenderPass);
-		mIsPrerendered = false;
 		mIsUsingShaderRenderPass = true;
-	}*/
+	}
 
 	Render(camera, vertexBufferManager);
 
-	/*if (mIsUsingShaderRenderPass)
+	if (mIsUsingShaderRenderPass)
 	{
 		std::swap(mShaderProgram, shaderRenderPass);
 		mIsUsingShaderRenderPass = false;
-		mIsPrerendered = false;
-	}*/
+	}
 }
 
 void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)

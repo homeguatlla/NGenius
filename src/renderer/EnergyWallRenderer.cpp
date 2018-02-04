@@ -30,7 +30,7 @@ mMatrixVBO(-1)
 
 EnergyWallRenderer::~EnergyWallRenderer()
 {
-	if (mIsPrerendered)
+	if (IsPrerendered())
 	{
 		glDeleteBuffers(1, &mTextureCoordsVBO);
 		glDeleteBuffers(1, &mMatrixVBO);
@@ -218,7 +218,7 @@ void EnergyWallRenderer::Render(const ICamera* camera, VertexBuffersManager& ver
 
 		mShaderProgram->Use();
 
-		if (!mIsPrerendered)
+		if (!IsPrerendered())
 		{
 			// Load it into a VBO
 			if (vertexBufferManager.HasVAO(GetName()))

@@ -117,7 +117,7 @@ enum Configuration
 	PROPS,
 	RELEASE
 };
-Configuration mConfiguration = RELEASE;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -464,7 +464,7 @@ void CreateTrees()
 void CreateProps()
 {
 	int areaSize = 5;
-	int numProps = 3;
+	int numProps = 4;
 
 	std::vector<std::string> models;
 	std::vector<glm::vec3> positions;
@@ -472,10 +472,12 @@ void CreateProps()
 	models.push_back(std::string("barrel"));
 	models.push_back(std::string("chest"));
 	models.push_back(std::string("brazier"));
+	models.push_back(std::string("stall"));
 
 	positions.push_back(glm::vec3(0.8f, 0.0f, -2.3f));
 	positions.push_back(glm::vec3(0.4f, 0.0f, -2.0f));
 	positions.push_back(glm::vec3(1.0f, 0.0f, -1.7f));
+	positions.push_back(glm::vec3(10.0f, 0.0f, 10.0f));
 
 	for (int i = 0; i < numProps; i++)
 	{
@@ -491,8 +493,17 @@ void CreateProps()
 			glm::vec3 position(x, height, z);
 			glm::vec3 scale(0.3f);
 			std::string model = models[i % models.size()];
-			Texture* texture = static_cast<Texture*>(mEngine.GetTexture("MedievalDungeonPropsAtlas02_diffuse"));
-			Texture* normal = static_cast<Texture*>(mEngine.GetTexture("MedievalDungeonPropsAtlas02_normalmap"));
+			std::string textureName("MedievalDungeonPropsAtlas02_diffuse");
+			std::string textureNormalName("MedievalDungeonPropsAtlas02_normalmap");
+
+			if (model.compare("stall") == 0)
+			{
+				textureName = "stall";
+				textureNormalName = "";
+				scale = glm::vec3(0.1f);
+			}
+			Texture* texture = static_cast<Texture*>(mEngine.GetTexture(textureName));
+			Texture* normal = static_cast<Texture*>(mEngine.GetTexture(textureNormalName));
 
 			GameEntity* entity = CreateModel(position, scale, model, texture, normal);
 			mEngine.AddGameEntity(entity);
@@ -821,18 +832,6 @@ void CreateEntities()
 	{
 		//CreateShadowPlane();
 	}
-	float x = 10.0f;
-	float z = 10.0f;
-	float height = mTerrain->GetHeight(glm::vec2(x, z));
-	GameEntity* stallEntity = new GameEntity(	new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.1f)),
-												new ModelRenderer(	mEngine.GetModel("stall"), 
-																	mEngine.GetShader("model"), 
-																	static_cast<Texture*>(mEngine.GetTexture("stall")),
-																	mSunLight
-												)
-							);
-
-	mEngine.AddGameEntity(stallEntity);
 
 	//SKYBOX the last
 	if (mIsSkyboxEnabled)
@@ -1153,15 +1152,15 @@ void SetupConfiguration()
 		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
-		mIsVegetationEnabled = true;
-		mIsPropsEnabled = true;
+		mIsVegetationEnabled = false;
+		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsShadowEnabled = true;
-		mIsParticlesEnabled = true;
+		mIsParticlesEnabled = false;
 		break;
 	case TEXT:
 		mIsDebugModeEnabled = true;
@@ -1217,11 +1216,11 @@ void SetupConfiguration()
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
 		mIsVegetationEnabled = false;
-		mIsPropsEnabled = true;
+		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = true;
+		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
-		mIsTextEnabled = true;
+		mIsTextEnabled = false;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = false;

@@ -35,7 +35,7 @@ mTextureShadowmap(nullptr)
 
 TerrainRenderer::~TerrainRenderer()
 {
-	if (mIsPrerendered)
+	if (IsPrerendered())
 	{ 
 		glDeleteVertexArrays(1, &mVertexVAO);
 		glDeleteBuffers(1, &mVertexVBO);

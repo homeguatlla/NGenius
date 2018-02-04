@@ -36,7 +36,7 @@ mTextureShadowmap(nullptr)
 
 ModelRenderer::~ModelRenderer()
 {
-	if (mIsPrerendered)
+	if (IsPrerendered())
 	{
 		glDeleteBuffers(1, &mTextureCoordsVBO);
 		glDeleteBuffers(1, &mMatrixVBO);
@@ -221,7 +221,7 @@ void ModelRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBu
 	{
 		mShaderProgram->Use();
 
-		if (!mIsPrerendered)
+		if (!IsPrerendered())
 		{
 			// Load it into a VBO
 			// 1rst attribute buffer : vertices

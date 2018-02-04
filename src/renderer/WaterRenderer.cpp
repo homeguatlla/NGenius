@@ -28,7 +28,7 @@ mLight(light)
 
 WaterRenderer::~WaterRenderer()
 {
-	if (mIsPrerendered)
+	if (IsPrerendered())
 	{
 		glDeleteBuffers(1, &mTextureCoordsVBO);
 		glDeleteBuffers(1, &mMatrixVBO);
