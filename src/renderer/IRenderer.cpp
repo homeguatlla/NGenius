@@ -125,7 +125,7 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 
 void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
-	if (mVertexs.size() > 0 /*&& mIndexes.size() > 0*/)
+	if (mVertexs.size() > 0)
 	{
 		mShaderProgram->Use();
 
