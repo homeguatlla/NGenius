@@ -209,48 +209,16 @@ bool EnergyWallRenderer::IsInstancingAllowed() const
 
 void EnergyWallRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
-	if (mVertexs.size() > 0)
-	{
-		glDisable(GL_CULL_FACE);
-		glDepthMask(false);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE);// GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_CULL_FACE);
+	glDepthMask(false);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);// GL_ONE_MINUS_SRC_ALPHA);
 
-		mShaderProgram->Use();
+	IRenderer::Render(camera, vertexBufferManager);
 
-		if (!IsPrerendered())
-		{
-			// Load it into a VBO
-			if (vertexBufferManager.HasVAO(GetName()))
-			{
-				mVAO = vertexBufferManager.GetVAO(GetName());
-				glBindVertexArray(mVAO);
-			}
-			else
-			{
-				mVAO = vertexBufferManager.CreateVAO(GetName());
-				glBindVertexArray(mVAO);
-
-				PreRender(vertexBufferManager);
-			}
-			mIsPrerendered = true;
-		}
-		else
-		{
-			glBindVertexArray(mVAO);
-		}
-
-		LoadData(camera, vertexBufferManager);
-
-		Draw();
-		mShaderProgram->UnUse();
-
-		glBindVertexArray(0);
-
-		glDisable(GL_BLEND);
-		glDepthMask(true);
-		glEnable(GL_CULL_FACE);
-	}
+	glDisable(GL_BLEND);
+	glDepthMask(true);
+	glEnable(GL_CULL_FACE);
 }
 
 bool EnergyWallRenderer::HasFog() const

@@ -217,40 +217,7 @@ bool ModelRenderer::IsInstancingAllowed() const
 
 void ModelRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffersManager)
 {
-	if (mVertexs.size() > 0)
-	{
-		mShaderProgram->Use();
-
-		if (!IsPrerendered())
-		{
-			// Load it into a VBO
-			// 1rst attribute buffer : vertices
-			if (vertexBuffersManager.HasVAO(GetName()))
-			{
-				mVAO = vertexBuffersManager.GetVAO(GetName());
-				glBindVertexArray(mVAO);
-			}
-			else
-			{
-				mVAO = vertexBuffersManager.CreateVAO(GetName());
-				glBindVertexArray(mVAO);
-
-				PreRender(vertexBuffersManager);
-			}
-			mIsPrerendered = true;
-		}
-		else
-		{
-			glBindVertexArray(mVAO);
-		}
-
-		LoadData(camera, vertexBuffersManager);
-
-		Draw();
-		mShaderProgram->UnUse();
-
-		glBindVertexArray(0);
-	}
+	IRenderer::Render(camera, vertexBuffersManager);
 }
 
 bool ModelRenderer::HasFog() const

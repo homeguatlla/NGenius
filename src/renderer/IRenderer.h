@@ -55,6 +55,7 @@ protected:
 	virtual void Draw() = 0;
 	virtual void LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager) = 0;
 	virtual int GetRenderShaderPassTextureUnit() const = 0;
+	void LoadDataQuadShader(const ICamera* camera, VertexBuffersManager& vertexBufferManager, int textureUnit);
 
 	void CheckError();
 
@@ -115,7 +116,6 @@ protected:
 	virtual IRenderer* DoClone() const = 0;
 
 private:
-	void LoadDataQuadShader(const ICamera* camera, VertexBuffersManager& vertexBufferManager, int textureUnit);
 	void CalculateBoundingBox();
 };
 

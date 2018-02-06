@@ -540,6 +540,7 @@ void CreateParticlesFire()
 	
 	float x = 1.0f;
 	float z = -1.7f;
+
 	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 0.28f;
 
 	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(particle,
@@ -802,7 +803,7 @@ void CreateEntities()
 	
 	if (mIsParticlesEnabled)
 	{
-		CreateParticlesTest();
+		//CreateParticlesTest();
 		CreateParticlesFire();
 		//CreateParticlesSparkles();
 	}

@@ -125,7 +125,7 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 
 void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
-	if (mVertexs.size() > 0 && mIndexes.size() > 0)
+	if (mVertexs.size() > 0 /*&& mIndexes.size() > 0*/)
 	{
 		mShaderProgram->Use();
 
@@ -196,7 +196,8 @@ void IRenderer::LoadDataQuadShader(const ICamera* camera, VertexBuffersManager& 
 		matrices.push_back(modelMatrix);
 	}
 
-	unsigned int matrixVBO = vertexBufferManager.GetVBO("Matrix_QuadRenderer");
+	unsigned int matrixVBO = vertexBufferManager.GetVBO("Matrix_" + GetName());
+
 	glBindBuffer(GL_ARRAY_BUFFER, matrixVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * instances, &matrices[0], GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
