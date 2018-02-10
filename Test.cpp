@@ -464,7 +464,7 @@ void CreateTrees()
 void CreateProps()
 {
 	int areaSize = 5;
-	int numProps = 4;
+	int numProps = 5;
 
 	std::vector<std::string> models;
 	std::vector<glm::vec3> positions;
@@ -473,11 +473,13 @@ void CreateProps()
 	models.push_back(std::string("chest"));
 	models.push_back(std::string("brazier"));
 	models.push_back(std::string("stall"));
+	models.push_back(std::string("cube2"));
 
 	positions.push_back(glm::vec3(0.8f, 0.0f, -2.3f));
 	positions.push_back(glm::vec3(0.4f, 0.0f, -2.0f));
 	positions.push_back(glm::vec3(1.0f, 0.0f, -1.7f));
 	positions.push_back(glm::vec3(10.0f, 0.0f, 10.0f));
+	positions.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	for (int i = 0; i < numProps; i++)
 	{
@@ -501,6 +503,12 @@ void CreateProps()
 				textureName = "stall";
 				textureNormalName = "";
 				scale = glm::vec3(0.1f);
+			}
+			else if (model.compare("cube2") == 0)
+			{
+				textureName = "cube_diffuse";
+				textureNormalName = "";
+				scale = glm::vec3(0.005f);
 			}
 			Texture* texture = static_cast<Texture*>(mEngine.GetTexture(textureName));
 			Texture* normal = static_cast<Texture*>(mEngine.GetTexture(textureNormalName));
@@ -684,7 +692,7 @@ void CreateEntities()
 	const Texture* texture = static_cast<const Texture*>(mEngine.CreateDepthTexture("depth_texture", glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
 
 	//LIGHT GAME ENTITY
-	mSunLight = new Light(mSunLightDirection, glm::vec3(1, 1, 1), new CubeRenderer(mEngine.GetShader("default")));
+	mSunLight = new Light(mSunLightDirection, glm::vec3(1, 1, 1), nullptr);// new CubeRenderer(mEngine.GetShader("default")));
 	mSunLight->AddComponent(new VerticalInputComponent(mEngine.GetGLWindow()));
 	mSunLight->GetTransformation()->SetScale(glm::vec3(0.05f));
 
@@ -784,7 +792,7 @@ void CreateEntities()
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	mCamera = new GameEntity(	new Transformation(mGameplayCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
-								new CubeRenderer(mEngine.GetShader("default")));
+		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
 	mCamera->AddComponent(new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f));
 	mCamera->AddComponent(new CollisionComponent());
 	if (mIsWaterEnabled)
@@ -907,7 +915,7 @@ void CreateWaterRenderPass()
 	ApplyReflectionCameras(waterY, mGameplayCamera, mReflectionWaterCamera);
 	
 	mWaterReflectionCameraEntity = new GameEntity(new Transformation(mReflectionWaterCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
-																new CubeRenderer(mEngine.GetShader("default")));
+		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
 	mEngine.AddGameEntity(mWaterReflectionCameraEntity);
 
 	//REFLECTION
@@ -932,7 +940,7 @@ void CreateWaterRenderPass()
 	ApplyRefractionCameras(mGameplayCamera, mRefractionWaterCamera);
 
 	mWaterRefractionCameraEntity = new GameEntity(	new Transformation(mRefractionWaterCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
-													new CubeRenderer(mEngine.GetShader("default")));
+		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
 	mEngine.AddGameEntity(mWaterRefractionCameraEntity);
 
 	IFrameBuffer* frameRefractionBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
@@ -977,6 +985,8 @@ void CreateGameplayRenderPass()
 	frameBuffer->SetCopyDepthBufferToTexture(depthTexture, 0, 0, static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
 	gameplayPass->SetFrameBufferOutput(frameBuffer);
 	
+	//IRenderer* renderer = new QuadRenderer(mEngine.GetShader("quad"), static_cast<Texture*>(mEngine.GetTexture("terrain_blendmap")), 10.0f, 10.0f);
+	//gameplayPass->SetRenderer(renderer);
 	mEngine.AddRenderPass(gameplayPass);
 }
 
@@ -1135,14 +1145,14 @@ void SetupConfiguration()
 	{
 	case DEBUG:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = true;
+		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
 		mIsVegetationEnabled = true;
 		mIsPropsEnabled = true;
-		mIsEnergyWallEnabled = true;
+		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = true;
-		mIsTerrainFlat = false;
+		mIsTerrainFlat = true;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = true;

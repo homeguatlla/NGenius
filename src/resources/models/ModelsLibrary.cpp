@@ -25,6 +25,7 @@ void ModelsLibrary::Load()
 	LoadModel("chest", "data/models/props/chest.obj");
 	LoadModel("brazier", "data/models/props/brazier.obj");
 	LoadModel("stall", "data/models/stall/stall.obj");
+	LoadModel("cube2", "data/models/props/cube.obj");
 
 	//model = OBJLoader::LoadModel("data/models/hermes/hermes.obj");
 	//AddElement("hermes", model);

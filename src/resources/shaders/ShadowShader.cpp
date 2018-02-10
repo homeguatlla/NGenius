@@ -8,8 +8,8 @@ const std::string ATTRIBUTE_MVP_MATRIX("MVP");
 
 
 ShadowShader::ShadowShader() :
-mLocationMVP(-1),
-IShaderProgram(VERTEX_FILE, FRAGMENT_FILE)
+IShaderProgram(VERTEX_FILE, FRAGMENT_FILE),
+mLocationMVP(-1)
 {
 }
 
