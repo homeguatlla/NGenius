@@ -213,6 +213,8 @@
     <ClInclude Include="src\resources\font\FontsLibrary.h" />
     <ClInclude Include="src\resources\font\FontType.h" />
     <ClInclude Include="src\resources\GameEntity.h" />
+    <ClInclude Include="src\resources\materials\IMaterial.h" />
+    <ClInclude Include="src\resources\materials\MaterialsLibrary.h" />
     <ClInclude Include="src\resources\models\Model.h" />
     <ClInclude Include="src\resources\models\ModelsLibrary.h" />
     <ClInclude Include="src\resources\shaders\DefaultShader.h" />
@@ -298,6 +300,8 @@
     <ClCompile Include="src\resources\font\FontsLibrary.cpp" />
     <ClCompile Include="src\resources\font\FontType.cpp" />
     <ClCompile Include="src\resources\GameEntity.cpp" />
+    <ClCompile Include="src\resources\materials\IMaterial.cpp" />
+    <ClCompile Include="src\resources\materials\MaterialsLibrary.cpp" />
     <ClCompile Include="src\resources\models\Model.cpp" />
     <ClCompile Include="src\resources\models\ModelsLibrary.cpp" />
     <ClCompile Include="src\resources\shaders\DefaultShader.cpp" />

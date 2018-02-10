@@ -94,6 +94,12 @@
     <Filter Include="Header Files\resources\systems\renderSystem">
       <UniqueIdentifier>{d3ec1117-5473-4d0c-a582-77e9353e59df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\resources\materials">
+      <UniqueIdentifier>{8dbc41b5-0a8e-4239-b11c-3f872888d80d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\materials">
+      <UniqueIdentifier>{b6459982-7af3-4e1f-880b-e6ffbbe3a458}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -357,6 +363,12 @@
     <ClInclude Include="src\resources\components\OverWaterComponent.h">
       <Filter>Header Files\resources\components</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\materials\IMaterial.h">
+      <Filter>Header Files\resources\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\MaterialsLibrary.h">
+      <Filter>Header Files\resources\materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -613,6 +625,12 @@
     </ClCompile>
     <ClCompile Include="src\resources\components\OverWaterComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\IMaterial.cpp">
+      <Filter>Source Files\resources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\MaterialsLibrary.cpp">
+      <Filter>Source Files\resources\materials</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
