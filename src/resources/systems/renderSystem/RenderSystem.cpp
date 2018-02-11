@@ -3,12 +3,17 @@
 #include "ShadowsRenderPass.h"
 #include "../../GameEntity.h"
 #include "../../camera/ICamera.h"
+
 #include "../../models/ModelsLibrary.h"
+#include "../../shaders/IShaderProgram.h"
 #include "../../shaders/ShadersLibrary.h"
 #include "../../font/FontsLibrary.h"
 #include "../../textures/TexturesLibrary.h"
 #include "../../textures/Texture.h"
-#include "../../../renderer/IRenderer.h"
+#include "../../materials/IMaterial.h"
+#include "../../materials/MaterialsLibrary.h"
+
+
 #include "../../../renderer/RenderPass.h"
 #include "../../../BitNumber.h"
 
@@ -88,13 +93,14 @@ void RenderSystem::LoadResources()
 	mModelsLibrary->Load();
 	mFontsLibrary->Load();
 	mTexturesLibrary->Load();
+	mMaterialsLibrary->Load();
 }
 
 void RenderSystem::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	for (const RenderPass* pass : mRenderPasses)
+	for (RenderPass* pass : mRenderPasses)
 	{
 		if (pass->IsEnabled())
 		{
@@ -117,7 +123,7 @@ void RenderSystem::Render()
 	glfwPollEvents();
 }
 
-void RenderSystem::Render(const RenderPass* renderPass)
+void RenderSystem::Render(RenderPass* renderPass)
 {
 	RenderersList renderers = mRenderersPerPass[renderPass->GetLayersMask()];
 
@@ -129,7 +135,7 @@ void RenderSystem::Render(const RenderPass* renderPass)
 
 	//STEP 2 ORDER RENDERERS FOLLOWING THE BITRENDERERINFORMATION
 	//double time = glfwGetTime();
-	sort(renderers.begin(), renderers.end(), [](IRenderer* a, IRenderer* b)
+	sort(renderers.begin(), renderers.end(), [](IRenderer_* a, IRenderer_* b)
 	{
 		assert(a != nullptr && b != nullptr);
 		return a->GetBitRendererInformation().GetValue() > b->GetBitRendererInformation().GetValue();
@@ -177,7 +183,7 @@ void RenderSystem::Render(const RenderPass* renderPass)
 	mRenderersPerPass[renderPass->GetLayersMask()].clear();
 }
 
-void RenderSystem::AddRenderPass(const RenderPass* renderPass)
+void RenderSystem::AddRenderPass(RenderPass* renderPass)
 {
 	bool found = std::find(mRenderPasses.begin(), mRenderPasses.end(), renderPass) != mRenderPasses.end();
 	if (!found)
@@ -186,7 +192,7 @@ void RenderSystem::AddRenderPass(const RenderPass* renderPass)
 	}
 }
 
-void RenderSystem::RemoveRenderPass(const RenderPass* renderPass)
+void RenderSystem::RemoveRenderPass(RenderPass* renderPass)
 {
 	RenderPassesIterator it = std::find(mRenderPasses.begin(), mRenderPasses.end(), renderPass);
 	bool found = it != mRenderPasses.end();
@@ -196,7 +202,7 @@ void RenderSystem::RemoveRenderPass(const RenderPass* renderPass)
 	}
 }
 
-void RenderSystem::AddToRender(IRenderer* renderer)
+void RenderSystem::AddToRender(IRenderer_* renderer)
 {
 	//assert(renderer != nullptr);
 	if (renderer != nullptr)
@@ -213,11 +219,11 @@ void RenderSystem::AddToRender(IRenderer* renderer)
 	}
 }
 
-void RenderSystem::RenderInstances(const RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances)
+void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer_* renderer, std::vector<IRenderer_*>& instances)
 {
 	//std::cout << instances.front()->GetBitRendererInformation().GetValue() << " : " << instances.size() << "\n";
 	//Apply fog
-	if (renderer->HasFog())
+	/*if (renderer->HasFog())
 	{
 		renderer->EnableFog(renderPass->IsFogEnabled());
 	}
@@ -247,9 +253,20 @@ void RenderSystem::RenderInstances(const RenderPass* renderPass, IRenderer* rend
 	{
 		renderer->SetInstances(instances);
 		renderer->EnableInstancing(true);
+	}*/
+
+	//TODO primer batching PrepareMaterial hace todo esto
+	IMaterial* material = renderPass->GetMaterial();
+	if (material == nullptr)
+	{
+		material = renderer->GetMaterial();
 	}
 
-	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, renderPass->GetShader());
+	material->GetShader()->Use();
+
+	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, renderPass->GetMaterial());
+
+	material->GetShader()->UnUse();
 }
 
 float RenderSystem::GetScreenWidth() const
@@ -321,6 +338,11 @@ Model* RenderSystem::GetModel(const std::string& name) const
 ITexture* RenderSystem::GetTexture(const std::string& name) const
 {
 	return mTexturesLibrary->GetElement(name);
+}
+
+IMaterial* RenderSystem::GetMaterial(const std::string& name) const
+{
+	return mMaterialsLibrary->GetElement(name);
 }
 
 bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName, bool isFullscreen)
@@ -416,10 +438,12 @@ void RenderSystem::CreateResourcesLibraries()
 	mTexturesLibrary = new TexturesLibrary();
 	mModelsLibrary = new ModelsLibrary(mTexturesLibrary);
 	mFontsLibrary = new FontsLibrary(mTexturesLibrary);
+	mMaterialsLibrary = new MaterialsLibrary();
 }
 
 void RenderSystem::DestroyResourcesLibraries()
 {
+	delete mMaterialsLibrary;
 	delete mFontsLibrary;
 	delete mModelsLibrary;
 	delete mTexturesLibrary;
@@ -429,7 +453,7 @@ void RenderSystem::DestroyResourcesLibraries()
 void RenderSystem::UpdateDistancesToCamera(const ICamera* camera, RenderersList* renderers)
 {
 	glm::vec3 cameraPosition = camera->GetPosition();
-	for (IRenderer* renderer : *renderers)
+	for (IRenderer_* renderer : *renderers)
 	{
 		glm::vec3 position = renderer->GetParent()->GetTransformation()->GetPosition();
 		float distanceToCamera = glm::length2(cameraPosition - position);

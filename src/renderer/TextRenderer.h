@@ -1,11 +1,11 @@
 #pragma once
-#include "IRenderer.h"
+#include "../resources/renderers/IRenderer_.h"
 #include <string>
 
 class IShaderProgram;
 class FontType;
 
-class TextRenderer : public IRenderer
+class TextRenderer : public IRenderer_
 {
 	FontType* mFontType;
 	glm::vec4 mColor;
@@ -31,9 +31,9 @@ public:
 
 	void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager) override;
 	bool IsInstancingAllowed() const override;
-	bool HasFog() const override;
-	bool HasClippingPlane() const override;
-	bool IsCastingShadows() const override;
+	//bool HasFog() const override;
+	//bool HasClippingPlane() const override;
+	//bool IsCastingShadows() const override;
 
 	void SetColor(const glm::vec4& color);
 	void SetOutlineColor(const glm::vec4& color);
@@ -44,6 +44,6 @@ private:
 	void PreRender(VertexBuffersManager& vertexBufferManager) override;
 	void Draw() override;
 	void LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager) override;
-	int GetRenderShaderPassTextureUnit() const override;
+	//int GetRenderShaderPassTextureUnit() const override;
 };
 

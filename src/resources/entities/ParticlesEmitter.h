@@ -37,7 +37,7 @@ class ParticlesEmitter : public GameEntity
 	EntitiesSystem* mEntitiesSystem;
 
 public:
-	ParticlesEmitter(Particle* particle, Transformation* transformation, IRenderer* renderer, float spawnRate);
+	ParticlesEmitter(Particle* particle, Transformation* transformation, IRenderer_* renderer, float spawnRate);
 	~ParticlesEmitter();
 
 	ParticlesEmitter* DoClone() const override { return nullptr; }

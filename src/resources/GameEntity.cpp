@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "GameEntity.h"
-#include "../renderer/IRenderer.h"
+#include "renderers/IRenderer_.h"
 
 
 #include "components\PhysicsComponent.h"
 
-GameEntity::GameEntity(Transformation* transformation, IRenderer* renderer) :
+GameEntity::GameEntity(Transformation* transformation, IRenderer_* renderer) :
 mTransformation(transformation),
 mRenderer(renderer),
 mIsEnabled(true)
@@ -48,12 +48,12 @@ const Transformation* GameEntity::GetTransformation() const
 	return mTransformation;
 }
 
-IRenderer* GameEntity::GetRenderer() const
+IRenderer_* GameEntity::GetRenderer() const
 {
 	return mRenderer;
 }
 
-void GameEntity::SetRenderer(IRenderer* renderer)
+void GameEntity::SetRenderer(IRenderer_* renderer)
 {
 	mRenderer = renderer;
 	if (renderer != nullptr)

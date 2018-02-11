@@ -2,7 +2,7 @@
 #include "Light.h"
 
 
-Light::Light(const glm::vec3& position, const glm::vec3& color, IRenderer* renderer) :
+Light::Light(const glm::vec3& position, const glm::vec3& color, IRenderer_* renderer) :
 GameEntity(new Transformation(position, glm::vec3(0.0f), glm::vec3(1.0f)), renderer),
 mColor(color)
 {

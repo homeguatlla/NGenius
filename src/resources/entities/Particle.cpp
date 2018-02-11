@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "Particle.h"
-#include "../../renderer/IRenderer.h"
+#include "../renderers/IRenderer_.h"
 
 #include <iostream>
 
-Particle::Particle(Transformation* transformation, IRenderer* renderer, float liveTime) :
+Particle::Particle(Transformation* transformation, IRenderer_* renderer, float liveTime) :
 GameEntity(transformation, renderer),
 mMaxLiveTime(liveTime),
 mLiveTime(liveTime),
@@ -25,7 +25,7 @@ Particle::~Particle()
 
 Particle* Particle::DoClone() const
 {
-	IRenderer* cloneRenderer = GetRenderer()->Clone();
+	IRenderer_* cloneRenderer = GetRenderer()->Clone();
 	Particle* clone = new Particle(new Transformation(*GetTransformation()), cloneRenderer, mLiveTime);
 
 	return clone;

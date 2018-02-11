@@ -2,7 +2,7 @@
 #include "LODComponent.h"
 #include "../GameEntity.h"
 #include "../camera/ICamera.h"
-#include "../../renderer/IRenderer.h"
+#include "../renderers/IRenderer_.h"
 #include <glm/gtx/norm.hpp>
 #include <algorithm>
 
@@ -50,7 +50,7 @@ void LODComponent::Update(float elapsedTime)
 
 
 
-void LODComponent::AddLevelOfDetail(IRenderer* renderer, float distance)
+void LODComponent::AddLevelOfDetail(IRenderer_* renderer, float distance)
 {
 	//before start adding levels must add the component to the GameEntity
 	assert(mParent != nullptr);

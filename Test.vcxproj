@@ -216,7 +216,9 @@
     <ClInclude Include="src\resources\materials\IMaterial.h" />
     <ClInclude Include="src\resources\materials\MaterialsLibrary.h" />
     <ClInclude Include="src\resources\models\Model.h" />
+    <ClInclude Include="src\resources\models\ModelRender.h" />
     <ClInclude Include="src\resources\models\ModelsLibrary.h" />
+    <ClInclude Include="src\resources\renderers\IRenderer_.h" />
     <ClInclude Include="src\resources\shaders\DefaultShader.h" />
     <ClInclude Include="src\resources\shaders\EnergyWallShader.h" />
     <ClInclude Include="src\resources\shaders\GUIShader.h" />
@@ -303,7 +305,9 @@
     <ClCompile Include="src\resources\materials\IMaterial.cpp" />
     <ClCompile Include="src\resources\materials\MaterialsLibrary.cpp" />
     <ClCompile Include="src\resources\models\Model.cpp" />
+    <ClCompile Include="src\resources\models\ModelRender.cpp" />
     <ClCompile Include="src\resources\models\ModelsLibrary.cpp" />
+    <ClCompile Include="src\resources\renderers\IRenderer_.cpp" />
     <ClCompile Include="src\resources\shaders\DefaultShader.cpp" />
     <ClCompile Include="src\resources\shaders\EnergyWallShader.cpp" />
     <ClCompile Include="src\resources\shaders\GUIShader.cpp" />

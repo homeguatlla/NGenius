@@ -8,7 +8,7 @@ class EnergyWall : public GameEntity
 	glm::vec3 mContactPoint;
 
 public:
-	explicit EnergyWall(Transformation* transformation, IRenderer* renderer, float maxLiveTime);
+	explicit EnergyWall(Transformation* transformation, IRenderer_* renderer, float maxLiveTime);
 	~EnergyWall();
 
 	EnergyWall* DoClone() const override;

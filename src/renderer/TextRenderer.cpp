@@ -9,13 +9,14 @@
 #include "../resources/Transformation.h"
 #include "../resources/GameEntity.h"
 #include "../resources/models/Model.h"
+#include "../resources/materials/IMaterial.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
 
 const float EXTRA_CHARACTER_PADDING = 0.0f;
 
 TextRenderer::TextRenderer(IShaderProgram* shader, FontType* font, const glm::vec4& color, const int textID) : 
-IRenderer(shader),
+IRenderer_(nullptr, nullptr),
 mFontType(font),
 mTextID(textID),
 mColor(color),
@@ -28,7 +29,7 @@ mShadowOffset(0.0f)
 {
 	assert(font != nullptr);
 	assert(font->GetTexture() != nullptr);
-	SetLayer(IRenderer::LAYER_PARTICLES);
+	SetLayer(IRenderer_::LAYER_PARTICLES);
 	SetTransparency(true);
 	mBitRenderInformation.SetTexture(font->GetTexture()->GetID());
 }
@@ -105,7 +106,7 @@ bool TextRenderer::IsInstancingAllowed() const
 {
 	return false;
 }
-
+/*
 bool TextRenderer::HasFog() const
 {
 	return false;
@@ -119,7 +120,7 @@ bool TextRenderer::HasClippingPlane() const
 bool TextRenderer::IsCastingShadows() const
 {
 	return false;
-}
+}*/
 
 void TextRenderer::Create(const std::string& text, unsigned int width, unsigned int height, bool isCentered)
 {
@@ -169,10 +170,10 @@ void TextRenderer::Create(const std::string& text, unsigned int width, unsigned 
 
 void TextRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 {
-	IRenderer::PreRender(vertexBufferManager);
+	IRenderer_::PreRender(vertexBufferManager);
 
 	// 2nd attribute buffer : texture coords
-	GLint textureID = mShaderProgram->GetAttributeLocation("textureCoordsModelspace");
+	GLint textureID = mMaterial->GetShader()->GetAttributeLocation("textureCoordsModelspace");
 	if (textureID != -1)
 	{
 		mTextureCoordsVBO = vertexBufferManager.CreateVBO("texture_" + GetName());
@@ -195,13 +196,13 @@ void TextRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 
 void TextRenderer::Draw()
 {
-	IRenderer::Draw();
+	IRenderer_::Draw();
 }
 
 void TextRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
 	const glm::mat4 viewMatrix = const_cast<ICamera*>(camera)->GetViewMatrix();
-	TextShader* shader = static_cast<TextShader*>(mShaderProgram);
+	TextShader* shader = static_cast<TextShader*>(mMaterial->GetShader());
 	shader->LoadFontTypeTexture(mFontType->GetTexture()->GetUnit());
 	shader->LoadViewMatrix(viewMatrix);
 	shader->LoadModelMatrix(mParent->GetTransformation()->GetModelMatrix());
@@ -211,8 +212,8 @@ void TextRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexB
 	shader->LoadBorderParameters(mWidth, mEdge, mBorderWidth, mBorderEdge);
 	shader->LoadShadow(mShadowOffset);
 }
-
+/*
 int TextRenderer::GetRenderShaderPassTextureUnit() const
 {
 	return mFontType->GetTexture()->GetUnit();
-}
+}*/

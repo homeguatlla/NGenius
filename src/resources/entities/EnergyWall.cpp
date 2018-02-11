@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "EnergyWall.h"
 
-#include "../../renderer/IRenderer.h"
+#include "../renderers/IRenderer_.h"
 
-EnergyWall::EnergyWall(Transformation* transformation, IRenderer* renderer, float maxLiveTime) : 
+EnergyWall::EnergyWall(Transformation* transformation, IRenderer_* renderer, float maxLiveTime) : 
 GameEntity(transformation, renderer),
 mMaxLiveTime(maxLiveTime),
 mLiveTime(0.0f),
@@ -19,7 +19,7 @@ EnergyWall::~EnergyWall()
 
 EnergyWall* EnergyWall::DoClone() const
 {
-	IRenderer* cloneRenderer = GetRenderer()->Clone();
+	IRenderer_* cloneRenderer = GetRenderer()->Clone();
 	EnergyWall* clone = new EnergyWall(new Transformation(*GetTransformation()), cloneRenderer, mLiveTime);
 
 	return clone;

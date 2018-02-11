@@ -9,9 +9,10 @@
 #include "../resources/textures/TextureArray.h"
 #include "../resources/entities/Light.h"
 #include "../resources/camera/ICamera.h"
+#include "../resources/materials/IMaterial.h"
 
 TerrainRenderer::TerrainRenderer(IShaderProgram* shader, Texture* textureHeightmap, Texture* textureBlendmap, TextureArray* textureArray, const Light* light, float scale) :
-IRenderer(shader),
+IRenderer_(nullptr, nullptr),
 mVertexVAO(-1),
 mVertexVBO(-1),
 mTextureCoordsVBO(-1),
@@ -54,7 +55,7 @@ void TerrainRenderer::SetTextureCoords(const std::vector<glm::vec2>& uv)
 	mTextureCoords = uv;
 	mIsPrerendered = false;
 }
-
+/*
 void TerrainRenderer::SetClippingPlane(const glm::vec4& plane)
 {
 	mClippingPlane = plane;
@@ -64,13 +65,13 @@ bool TerrainRenderer::HasClippingPlane() const
 {
 	return true;
 }
-
+*/
 void TerrainRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 {
-	IRenderer::PreRender(vertexBufferManager);
+	IRenderer_::PreRender(vertexBufferManager);
 
 	// 2nd attribute buffer : texture coords
-	GLint textureID = mShaderProgram->GetAttributeLocation("textureCoordsModelspace");
+	GLint textureID = mMaterial->GetShader()->GetAttributeLocation("textureCoordsModelspace");
 	if (textureID != -1)
 	{
 		glGenBuffers(1, &mTextureCoordsVBO);
@@ -92,14 +93,14 @@ void TerrainRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 	mTextureBlendmap->SetActive(true);
 	mTextureArray->SetActive(true);
 
-	mMatrixID = mShaderProgram->GetUniformLocation("MVP");
+	mMatrixID = mMaterial->GetShader()->GetUniformLocation("MVP");
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void TerrainRenderer::Draw()
 {
-	IRenderer::Draw();
+	IRenderer_::Draw();
 }
 
 bool TerrainRenderer::IsInstancingAllowed() const
@@ -109,7 +110,7 @@ bool TerrainRenderer::IsInstancingAllowed() const
 
 void TerrainRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
-	TerrainShader* shader = static_cast<TerrainShader*>(mShaderProgram);
+	TerrainShader* shader = static_cast<TerrainShader*>(mMaterial->GetShader());
 
 	shader->Use();
 	shader->LoadScale(mScale);
@@ -120,7 +121,7 @@ void TerrainRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vert
 	shader->LoadLight(*mLight);
 	shader->LoadModelMatrix(mParent->GetTransformation()->GetModelMatrix());
 	shader->LoadTile(50.0f);
-	shader->LoadFogParameters(mFogColor, mIsFogEnabled ? mFogDensity : 0.0f, mFogGradient);
+	//shader->LoadFogParameters(mFogColor, mIsFogEnabled ? mFogDensity : 0.0f, mFogGradient);
 	shader->LoadClippingPlane(mClippingPlane);
 	if (mTextureShadowmap != nullptr)
 	{
@@ -134,16 +135,18 @@ void TerrainRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vert
 	glUniformMatrix4fv(mMatrixID, 1, GL_FALSE, &MVP[0][0]);
 }
 
+/*
 int TerrainRenderer::GetRenderShaderPassTextureUnit() const
 {
 	return mTextureBlendmap->GetUnit();
-}
+}*/
 
 void TerrainRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {	
-	IRenderer::Render(camera, vertexBufferManager);
+	IRenderer_::Render(camera, vertexBufferManager);
 }
 
+/*
 bool TerrainRenderer::HasFog() const
 {
 	return true;
@@ -151,7 +154,7 @@ bool TerrainRenderer::HasFog() const
 
 void TerrainRenderer::EnableFog(bool enable)
 {
-	mIsFogEnabled = enable;
+	//mIsFogEnabled = enable;
 }
 
 bool TerrainRenderer::IsCastingShadows() const
@@ -164,4 +167,4 @@ void TerrainRenderer::SetShadowMapParameters(const Texture* shadowMap, const glm
 	mTextureShadowmap = shadowMap;
 	mShadowSpaceMatrix = matrix;
 	mPFCCounter = pfcCounter;
-}
+}*/

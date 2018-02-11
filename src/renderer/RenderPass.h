@@ -3,7 +3,7 @@
 
 class ICamera;
 class IFrameBuffer;
-class IShaderProgram;
+class IMaterial;
 
 class RenderPass
 {
@@ -16,7 +16,7 @@ class RenderPass
 	bool mHasToCalculateDistanceToCamera;
 	int mClippingPlaneNumber;
 	glm::vec4 mClippingPlane;
-	IShaderProgram* mShader;
+	IMaterial* mMaterial;
 
 public:
 	explicit RenderPass(const ICamera* camera, char layersMask);
@@ -37,8 +37,8 @@ public:
 	bool IsFogEnabled() const;
 	void EnableFog(bool enable);
 
-	void SetShader(IShaderProgram* shader);
-	IShaderProgram* GetShader() const;
+	void SetMaterial(IMaterial* material);
+	IMaterial* GetMaterial();
 
 	void SetCalculateDistanceToCamera(bool calculate);
 	bool HasToCalculateDistanceToCamera() const;

@@ -100,6 +100,12 @@
     <Filter Include="Source Files\resources\materials">
       <UniqueIdentifier>{b6459982-7af3-4e1f-880b-e6ffbbe3a458}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\resources\renderers">
+      <UniqueIdentifier>{6d1d937b-8552-468d-abb4-5ad774da8b2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\renderers">
+      <UniqueIdentifier>{0eafe5b9-db6e-474e-a4bf-40a72d69da27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -369,6 +375,12 @@
     <ClInclude Include="src\resources\materials\MaterialsLibrary.h">
       <Filter>Header Files\resources\materials</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\models\ModelRender.h">
+      <Filter>Header Files\resources\models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\IRenderer_.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -631,6 +643,12 @@
     </ClCompile>
     <ClCompile Include="src\resources\materials\MaterialsLibrary.cpp">
       <Filter>Source Files\resources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\ModelRender.cpp">
+      <Filter>Source Files\resources\models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\IRenderer_.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@
 GUITextRenderer::GUITextRenderer(IShaderProgram* shader, FontType* font, const glm::vec4& color, const int textID) :
 	TextRenderer(shader, font, color, textID)
 {
-	SetLayer(IRenderer::LAYER_GUI);
+	SetLayer(IRenderer_::LAYER_GUI);
 }
 
 

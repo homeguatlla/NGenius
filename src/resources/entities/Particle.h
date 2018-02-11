@@ -15,7 +15,7 @@ class Particle : public GameEntity
 	glm::vec4 mColorDestination;
 
 public:
-	Particle(Transformation* transformation, IRenderer* renderer, float liveTime);
+	Particle(Transformation* transformation, IRenderer_* renderer, float liveTime);
 	~Particle();
 
 	Particle* DoClone() const override;

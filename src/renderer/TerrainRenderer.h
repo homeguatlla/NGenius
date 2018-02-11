@@ -2,7 +2,7 @@
 #include <vector>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
-#include "IRenderer.h"
+#include "../resources/renderers/IRenderer_.h"
 
 class IShaderProgram;
 class Texture;
@@ -10,7 +10,7 @@ class TextureArray;
 class ICamera;
 class Light;
 
-class TerrainRenderer : public IRenderer
+class TerrainRenderer : public IRenderer_
 {
 	std::vector<glm::vec2> mTextureCoords;
 
@@ -36,20 +36,20 @@ public:
 	TerrainRenderer* DoClone() const override { return nullptr; }
 	const std::string GetName() const override;
 	void SetTextureCoords(const std::vector<glm::vec2>& uv);
-	bool HasClippingPlane() const override;
-	void SetClippingPlane(const glm::vec4& plane) override;
+	//bool HasClippingPlane() const override;
+	//void SetClippingPlane(const glm::vec4& plane) override;
 	void SetShadowMapParameters(const Texture* shadowMap, const glm::mat4& matrix, int pfcCounter);
 	void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager) override;
 	bool IsInstancingAllowed() const override;
-	bool HasFog() const override;
-	void EnableFog(bool enable) override;
-	bool IsCastingShadows() const override;
+	//bool HasFog() const override;
+	//void EnableFog(bool enable) override;
+	//bool IsCastingShadows() const override;
 
 private:
 
 	void PreRender(VertexBuffersManager& vertexBufferManager) override;
 	void Draw() override;
 	void LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager) override;
-	int GetRenderShaderPassTextureUnit() const override;
+	//int GetRenderShaderPassTextureUnit() const override;
 };
 

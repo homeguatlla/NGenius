@@ -4,12 +4,12 @@
 #include<typeinfo>
 #include "components/IComponent.h"
 
-class IRenderer;
+class IRenderer_;
 
 class GameEntity
 {
 	Transformation* mTransformation;
-	IRenderer* mRenderer;
+	IRenderer_* mRenderer;
 	typedef std::map<const std::type_info*, IComponent*> ComponentsMap;
 	typedef ComponentsMap::iterator IComponentsIterator;
 	ComponentsMap mComponents;
@@ -20,12 +20,12 @@ protected:
 	virtual GameEntity* DoClone() const;
 
 public:
-	explicit GameEntity(Transformation* transformation, IRenderer* renderer);
+	explicit GameEntity(Transformation* transformation, IRenderer_* renderer);
 	explicit GameEntity(Transformation* transformation);
 	virtual ~GameEntity();
 
-	IRenderer* GetRenderer() const;
-	void SetRenderer(IRenderer* renderer);
+	IRenderer_* GetRenderer() const;
+	void SetRenderer(IRenderer_* renderer);
 	Transformation* GetTransformation();
 	const Transformation* GetTransformation() const;
 	GameEntity* Clone();

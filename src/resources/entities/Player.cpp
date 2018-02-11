@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-Player::Player(Transformation* transformation, IRenderer* renderer, PlayerInputComponent* playerInputComponent, PhysicsComponent* physicsComponent, CollisionComponent* collisionComponent) :
+Player::Player(Transformation* transformation, IRenderer_* renderer, PlayerInputComponent* playerInputComponent, PhysicsComponent* physicsComponent, CollisionComponent* collisionComponent) :
 GameEntity(transformation, renderer), mState(IDLE)
 {
 	AddComponent(playerInputComponent);
