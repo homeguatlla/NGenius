@@ -19,8 +19,7 @@ mTextureCoordsVBO(-1),
 mNormalVBO(-1),
 mMatrixVBO(-1)
 {
-	//SetIndexes(mModel->GetIndexes());
-	SetVertexs(mModel->GetVertexs());
+	//SetVertexs(mModel->GetVertexs());
 	mTextureCoords = mModel->GetTextureCoords();
 	mNormals = mModel->GetNormals();
 	mBitRenderInformation.SetModel(model->GetID());
@@ -47,7 +46,7 @@ void EnergyWallRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 {
 	//TODO: IMPROVEMENT podrías guardar los buffers en un array y hacer una sola llamada a glGenBuffers
 	//TODO: IMPROVEMENT en lugar de crear cada vez el array de matrices y pasarlo, puedes usar el glMap, glUnMap functions
-	if (mVertexs.size() > 0)
+	/*if (mVertexs.size() > 0)
 	{
 		// 1rst attribute buffer : vertices
 		GLint vertexModelspaceID = mShaderProgram->GetAttributePosition();
@@ -135,7 +134,7 @@ void EnergyWallRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 			}
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
-	}
+	}*/
 }
 
 void EnergyWallRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
@@ -191,7 +190,7 @@ int EnergyWallRenderer::GetRenderShaderPassTextureUnit() const
 
 void EnergyWallRenderer::Draw()
 {
-	if (mIsInstancingEnabled)
+	/*if (mIsInstancingEnabled)
 	{
 		//glDrawElementsInstancedARB(GL_TRIANGLES, mIndexes.size(), GL_UNSIGNED_INT, 0, mInstances.size());
 		glDrawArraysInstanced(GL_TRIANGLES, 0, mVertexs.size(), mInstances.size());
@@ -199,7 +198,7 @@ void EnergyWallRenderer::Draw()
 	else
 	{
 		glDrawArrays(GL_TRIANGLES, 0, mVertexs.size());
-	}
+	}*/
 }
 
 bool EnergyWallRenderer::IsInstancingAllowed() const

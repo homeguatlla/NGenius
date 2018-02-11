@@ -7,17 +7,24 @@ const float EPSILON2 = EPSILON * EPSILON;
 
 Model::Model(const std::vector<glm::vec3>& vertexs,
 	const std::vector<glm::vec2>& textureCoords,
-	const std::vector<glm::vec3>& normals,
 	const std::vector<unsigned int>& indexes) :
 	mVertexs(vertexs),
 	mTextureCoords(textureCoords),
-	mNormals(normals),
 	mIndexes(indexes)
 {
 	mModelID = ++IDCounter;
 	assert(vertexs.size() > 0);
 	//CalculateNormals();
 	CalculateTangents();
+}
+
+Model::Model(const std::vector<glm::vec3>& vertexs,
+	const std::vector<glm::vec2>& textureCoords,
+	const std::vector<unsigned int>& indexes,
+	const std::vector<glm::vec3>& normals) :
+	mNormals(normals)
+{
+	Model(vertexs, textureCoords, indexes);
 }
 
 Model::~Model()
@@ -34,9 +41,19 @@ std::vector<glm::vec3>& Model::GetVertexs()
 	return mVertexs;
 }
 
+long Model::GetNumberVertexs() const
+{
+	return mVertexs.size();
+}
+
 std::vector<glm::vec2>& Model::GetTextureCoords()
 {
 	return mTextureCoords;
+}
+
+long Model::GetNumberTextureCoords() const
+{
+	return mTextureCoords.size();
 }
 
 std::vector<glm::vec3>& Model::GetNormals()
@@ -44,14 +61,29 @@ std::vector<glm::vec3>& Model::GetNormals()
 	return mNormals;
 }
 
+long Model::GetNumberNormals() const
+{
+	return mNormals.size();
+}
+
 std::vector<glm::vec3>& Model::GetTangents()
 {
 	return mTangents;
 }
 
-std::vector<unsigned int> Model::GetIndexes()
+long Model::GetNumberTangents() const
+{
+	return mTangents.size();
+}
+
+std::vector<unsigned int>& Model::GetIndexes()
 {
 	return mIndexes;
+}
+
+long Model::GetNumberIndexes() const
+{
+	return mIndexes.size();
 }
 
 void  Model::SetMaterialName(const std::string& name)

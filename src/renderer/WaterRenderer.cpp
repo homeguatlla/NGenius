@@ -61,7 +61,7 @@ bool WaterRenderer::IsInstancingAllowed() const
 
 void WaterRenderer::Create()
 {
-	mVertexs.push_back(glm::vec3(-mWidth, mLength, 0.0f));
+	/*mVertexs.push_back(glm::vec3(-mWidth, mLength, 0.0f));
 	mVertexs.push_back(glm::vec3(mWidth, mLength, 0.0f));
 	mVertexs.push_back(glm::vec3(mWidth, -mLength, 0.0f));
 	mVertexs.push_back(glm::vec3(-mWidth, -mLength, 0.0f));
@@ -77,7 +77,7 @@ void WaterRenderer::Create()
 
 	mIndexes.push_back(0);
 	mIndexes.push_back(2);
-	mIndexes.push_back(1);
+	mIndexes.push_back(1);*/
 }
 
 void WaterRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
@@ -154,7 +154,7 @@ void WaterRenderer::Draw()
 {
 	if (mIsInstancingEnabled)
 	{
-		glDrawElementsInstancedARB(GL_TRIANGLES, mIndexes.size(), GL_UNSIGNED_INT, 0, mInstances.size());
+		glDrawElementsInstancedARB(GL_TRIANGLES, GetNumberIndexes(), GL_UNSIGNED_INT, 0, GetNumberInstances());
 	}
 	else
 	{

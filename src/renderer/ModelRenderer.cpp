@@ -23,7 +23,6 @@ mTextureShadowmap(nullptr)
 	assert(texture != nullptr);
 
 	//SetIndexes(mModel->GetIndexes());
-	SetVertexs(mModel->GetVertexs());
 	mTextureCoords = mModel->GetTextureCoords();
 	mNormals = mModel->GetNormals();
 	mBitRenderInformation.SetModel(model->GetID());
@@ -53,7 +52,7 @@ void ModelRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
 {
 	//TODO: IMPROVEMENT podrías guardar los buffers en un array y hacer una sola llamada a glGenBuffers
 	//TODO: IMPROVEMENT en lugar de crear cada vez el array de matrices y pasarlo, puedes usar el glMap, glUnMap functions
-	if (mVertexs.size() > 0)
+	/*if (GetNumberVertexs() > 0)
 	{
 		// 1rst attribute buffer : vertices
 		GLint vertexModelspaceID = mShaderProgram->GetAttributePosition();
@@ -61,7 +60,7 @@ void ModelRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
 		{
 			glGenBuffers(1, &mVertexVBO);
 			glBindBuffer(GL_ARRAY_BUFFER, mVertexVBO);
-			glBufferData(GL_ARRAY_BUFFER, mVertexs.size() * sizeof(glm::vec3), &mVertexs[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, GetNumberVertexs() * sizeof(glm::vec3), &mVertexs[0], GL_STATIC_DRAW);
 
 			glEnableVertexAttribArray(vertexModelspaceID);
 			glVertexAttribPointer(
@@ -141,7 +140,7 @@ void ModelRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
 			}
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
-	}
+	}*/
 }
 
 void ModelRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexBuffersManager)
@@ -199,7 +198,7 @@ int ModelRenderer::GetRenderShaderPassTextureUnit() const
 
 void ModelRenderer::Draw()
 {
-	if (mIsInstancingEnabled)
+	/*if (mIsInstancingEnabled)
 	{
 		//glDrawElementsInstancedARB(GL_TRIANGLES, mIndexes.size(), GL_UNSIGNED_INT, 0, mInstances.size());
 		glDrawArraysInstanced(GL_TRIANGLES, 0, mVertexs.size(), mInstances.size());
@@ -207,7 +206,7 @@ void ModelRenderer::Draw()
 	else
 	{
 		glDrawArrays(GL_TRIANGLES, 0, mVertexs.size());
-	}
+	}*/
 }
 
 bool ModelRenderer::IsInstancingAllowed() const

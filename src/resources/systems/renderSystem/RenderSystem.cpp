@@ -122,7 +122,7 @@ void RenderSystem::Render(const RenderPass* renderPass)
 	RenderersList renderers = mRenderersPerPass[renderPass->GetLayersMask()];
 
 	//STEP 1 CALUCLATE DISTANCE TO CAMERA FOR EACH RENDERER
-	if (renderPass->HasToCalculateDistanceToCamera())
+	if (renderPass->HasToCalculateDistanceToCamera() && renderPass->GetCamera() != nullptr)
 	{
 		UpdateDistancesToCamera(renderPass->GetCamera(), &renderers);
 	}

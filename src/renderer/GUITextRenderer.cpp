@@ -23,7 +23,7 @@ const std::string GUITextRenderer::GetName() const
 
 void GUITextRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
-	glDisable(GL_CULL_FACE);
+	/*glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(false);
 	glEnable(GL_BLEND);
@@ -43,5 +43,5 @@ void GUITextRenderer::Render(const ICamera* camera, VertexBuffersManager& vertex
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(true);
-	glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);*/
 }

@@ -7,6 +7,7 @@ class TextureArray;
 class Light;
 class IShaderProgram;
 class ICamera;
+class Model;
 
 class Terrain :	public GameEntity
 {
@@ -16,6 +17,7 @@ class Terrain :	public GameEntity
 	const Texture* mShadowmap;
 	float mScale;
 	bool mIsFlat;
+	Model* mModel;
 
 public:
 	explicit Terrain(Transformation* transformation, IShaderProgram* shader, Texture* heightmap, Texture* blendmap, TextureArray* textureArray, const Texture* shadowmap, const Light* light, float scale);

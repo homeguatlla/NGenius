@@ -34,7 +34,7 @@ void ShadowRenderer::Create()
 	vertexs.push_back(glm::vec3(-1.0f, -1.0f, 1.0f));
 	vertexs.push_back(glm::vec3(-1.0f, 1.0f, 1.0f));
 
-	SetVertexs(vertexs);
+	//SetVertexs(vertexs);
 
 	std::vector<unsigned int> indexes;
 	indexes.push_back(0);
@@ -74,7 +74,7 @@ void ShadowRenderer::Create()
 	indexes.push_back(3);
 	indexes.push_back(1);
 
-	SetIndexes(indexes);
+	//SetIndexes(indexes);
 }
 
 void ShadowRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
@@ -85,7 +85,7 @@ void ShadowRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
 
 void ShadowRenderer::Draw()
 {
-	glDrawElements(GL_LINES, mIndexes.size(), GL_UNSIGNED_INT, 0);
+	//glDrawElements(GL_LINES, mIndexes.size(), GL_UNSIGNED_INT, 0);
 }
 
 bool ShadowRenderer::IsInstancingAllowed() const

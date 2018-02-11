@@ -115,9 +115,10 @@ enum Configuration
 	SHADOWS,
 	PARTICLES,
 	PROPS,
+	REFACTOR,
 	RELEASE
 };
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = REFACTOR;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -210,8 +211,8 @@ void CreateTerrainNormals(vector<glm::vec3>& vertexs, int numVertexsSide)
 	}
 	//terrainRenderer.SetVertexs(vertexs);
 
-	normalRenderer->SetVertexs(vertexs);
-	normalRenderer->SetNormals(normals);
+	//normalRenderer->SetVertexs(vertexs);
+	//normalRenderer->SetNormals(normals);
 	normalRenderer->Create();
 
 	mEngine.AddGameEntity(entity);
@@ -688,6 +689,11 @@ void CreateTextTest()
 }
 
 void CreateEntities()
+{
+
+}
+
+void CreateEntities2()
 {
 	const Texture* texture = static_cast<const Texture*>(mEngine.CreateDepthTexture("depth_texture", glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
 
@@ -1237,6 +1243,21 @@ void SetupConfiguration()
 		mIsShadowEnabled = false;
 		mIsFullScreen = false;
 		break; 
+	case REFACTOR:
+		mIsDebugModeEnabled = true;
+		mIsWaterEnabled = false;
+		mIsGameplayCameraEnabled = true;
+		mIsFogEnabled = false;
+		mIsVegetationEnabled = false;
+		mIsPropsEnabled = false;
+		mIsEnergyWallEnabled = false;
+		mIsSkyboxEnabled = false;
+		mIsTerrainFlat = true;
+		mIsTextEnabled = false;
+		mIsStatisticsVisible = false;
+		mIsParticlesEnabled = false;
+		mIsShadowEnabled = false;
+		break;
 	case RELEASE:
 		mIsDebugModeEnabled = false;
 		mIsWaterEnabled = true;

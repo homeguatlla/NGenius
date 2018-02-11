@@ -7,6 +7,7 @@
 #include "../textures/Texture.h"
 #include "../textures/TextureArray.h"
 #include "../camera/ICamera.h"
+#include "../models/Model.h"
 #include <ctime>
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -47,13 +48,14 @@ mIsFlat(false)
 	terrainGrid.GenerateIndicesRectangular(indices);
 
 	GetRenderer()->SetLayer(IRenderer::LAYER_TERRAIN);
-	GetRenderer()->SetVertexs(vertexs);
-	static_cast<TerrainRenderer*>(GetRenderer())->SetTextureCoords(uv);
-	GetRenderer()->SetIndexes(indices);
+	mModel = new Model(vertexs, uv, indices);
+
+	GetRenderer()->SetModel(mModel);
 }
 
 Terrain::~Terrain()
 {
+	delete mModel;
 }
 
 void Terrain::SetFlat(bool isFlat)

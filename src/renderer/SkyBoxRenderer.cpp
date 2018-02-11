@@ -30,7 +30,7 @@ const std::string SkyBoxRenderer::GetName() const
 
 void SkyBoxRenderer::Create()
 {
-	mVertexs.push_back(glm::vec3(-mSize, -mSize, -mSize));
+	/*mVertexs.push_back(glm::vec3(-mSize, -mSize, -mSize));
 	mVertexs.push_back(glm::vec3(-mSize, mSize, -mSize));
 	mVertexs.push_back(glm::vec3(mSize, -mSize, -mSize));
 	mVertexs.push_back(glm::vec3(mSize, mSize, -mSize));
@@ -86,7 +86,7 @@ void SkyBoxRenderer::Create()
 
 	mIndexes.push_back(1);
 	mIndexes.push_back(3);
-	mIndexes.push_back(7);
+	mIndexes.push_back(7);*/
 }
 
 void SkyBoxRenderer::SetFogColor(const glm::vec3& fogColor)

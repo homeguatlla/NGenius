@@ -117,7 +117,7 @@ Model* OBJLoader::LoadModel(const std::string& filename)
 
 		if (vertexs.size() > 0)
 		{
-			Model* model = new Model(vertexs, uvs, normals, indexes);
+			Model* model = new Model(vertexs, uvs, indexes, normals);
 
 			if (!materialFilename.empty())
 			{

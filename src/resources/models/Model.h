@@ -19,8 +19,11 @@ class Model
 
 public:
 	Model(	const std::vector<glm::vec3>& vertexs,
-			const std::vector<glm::vec2>& textureCoords, 
-			const std::vector<glm::vec3>& normals, 
+			const std::vector<glm::vec2>& textureCoords,
+			const std::vector<unsigned int>& indexes,
+			const std::vector<glm::vec3>& normals);
+	Model(	const std::vector<glm::vec3>& vertexs,
+			const std::vector<glm::vec2>& textureCoords,
 			const std::vector<unsigned int>& indexes);
 	~Model();
 
@@ -28,9 +31,14 @@ public:
 	std::vector<glm::vec3>& GetVertexs();
 	std::vector<glm::vec2>& GetTextureCoords();
 	std::vector<glm::vec3>& GetNormals();
-	std::vector<unsigned int> GetIndexes();
-
+	std::vector<unsigned int>& GetIndexes();
 	std::vector<glm::vec3>& GetTangents();
+
+	long GetNumberVertexs() const;
+	long GetNumberTextureCoords() const;
+	long GetNumberNormals() const;
+	long GetNumberIndexes() const;
+	long GetNumberTangents() const;
 
 	void SetMaterialName(const std::string& name);
 	const std::string& GetMaterialName() const;
