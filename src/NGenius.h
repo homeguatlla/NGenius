@@ -14,12 +14,14 @@ class IShaderProgram;
 class ITexture;
 class Texture;
 class FontType;
+class IMaterial;
 
 class GameEntity;
 class ParticlesEmitter;
 class RenderPass;
 class Terrain;
 class ICamera;
+
 
 struct GLFWwindow;
 
@@ -47,6 +49,7 @@ public:
 	Model* GetModel(const std::string& name) const;
 	ITexture* GetTexture(const std::string& name) const;
 	const ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
+	IMaterial* GetMaterial(const std::string& name) const;
 
 	FontType* GetFont(const std::string& name) const;
 	float GetFPS() const;

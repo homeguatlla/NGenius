@@ -152,6 +152,11 @@ ITexture* NGenius::GetTexture(const std::string& name) const
 	return mRenderSystem->GetTexture(name);
 }
 
+IMaterial* NGenius::GetMaterial(const std::string& name) const
+{
+	return mRenderSystem->GetMaterial(name);
+}
+
 GLFWwindow* NGenius::GetGLWindow() const
 {
 	return mRenderSystem->GetGLWindow();

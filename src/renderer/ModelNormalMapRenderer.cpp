@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ModelNormalMapRenderer.h"
-#include "../resources/models/Model.h"
+#include "../resources/models/ModelGeometry.h"
 #include "../resources/textures/Texture.h"
 #include "../resources/shaders/IShaderProgram.h"
 #include "../resources/shaders/NormalMapShader.h"
@@ -9,7 +9,7 @@
 #include "../renderer/ModelRenderer.h"
 #include <GL/glew.h>
 
-ModelNormalMapRenderer::ModelNormalMapRenderer(Model* model, IShaderProgram* shader, Texture* texture, Texture* normalmap, const Light* light) :
+ModelNormalMapRenderer::ModelNormalMapRenderer(ModelGeometry* model, IShaderProgram* shader, Texture* texture, Texture* normalmap, const Light* light) :
 ModelRenderer(model, shader, texture, light),
 mNormalmapTexture(normalmap)
 {

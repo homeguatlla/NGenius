@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ModelsLibrary.h"
 #include "Model.h"
+#include "ModelGeometry.h"
 #include "../../loader/OBJLoader.h"
 
 #include <iostream>
@@ -53,10 +54,11 @@ void ModelsLibrary::Load()
 
 void ModelsLibrary::LoadModel(const std::string& name, const std::string& filename)
 {
-	Model* model = OBJLoader::LoadModel(filename);
+	ModelGeometry* model = OBJLoader::LoadModel(filename);
 	if (model != nullptr)
 	{
-		AddElement(name, model);
+		Model* modelRender = new Model(model);
+		AddElement(name, modelRender);
 
 		if (!model->GetDiffuseTextureName().empty())
 		{

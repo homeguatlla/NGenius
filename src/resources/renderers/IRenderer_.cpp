@@ -6,12 +6,12 @@
 #include "../camera/ICamera.h"
 #include "../GameEntity.h"
 #include "../shaders/QuadShader.h"
-#include "../models/ModelRender.h"
+#include "../models/Model.h"
 #include "../materials/IMaterial.h"
 #include <GL/glew.h>
 #include <iostream>
 
-IRenderer_::IRenderer_(ModelRender* model, IMaterial* material) :
+IRenderer_::IRenderer_(Model* model, IMaterial* material) :
 mParent(nullptr),
 mModel(model),
 mIsPrerendered(false),
@@ -20,9 +20,11 @@ mLayer(LAYER_OTHER),
 mMaterial(material),
 mIsVisible(true)
 {
+	assert(model != nullptr);
 	assert(mMaterial != nullptr);
-	mBitRenderInformation.SetShader(mMaterial->GetMaterialID());
+	mBitRenderInformation.SetMaterial(mMaterial->GetMaterialID());
 	mBitRenderInformation.SetLayer(LAYER_OTHER);
+	mBitRenderInformation.SetModel(model->GetID());
 	mBitRenderInformation.SetTransparency(false);
 }
 

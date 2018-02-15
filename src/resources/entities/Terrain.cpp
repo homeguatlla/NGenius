@@ -48,7 +48,7 @@ mIsFlat(false)
 	terrainGrid.GenerateIndicesRectangular(indices);
 
 	GetRenderer()->SetLayer(IRenderer_::LAYER_TERRAIN);
-	/*mModel = new Model(vertexs, uv, indices);
+	/*mModel = new ModelGeometry(vertexs, uv, indices);
 
 	GetRenderer()->SetModelRender(mModel);*/
 }

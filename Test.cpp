@@ -25,6 +25,7 @@
 #include "src/TerrainGrid.h"
 
 #include "src/resources/renderers/IRenderer_.h"
+#include "src/resources/renderers/BasicRenderer.h"
 
 #include "src/renderer/RenderPass.h"
 
@@ -42,7 +43,9 @@
 
 #include "src/resources/font/FontType.h"
 
-#include "src/resources/models/ModelRender.h"
+#include "src/resources/models/Model.h"
+
+#include "src/resources/materials/IMaterial.h"
 
 /*
 #include "src/resources/entities/Light.h"
@@ -369,38 +372,18 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 	return modelEntity;
 }
 
-GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, const std::string& model, Texture* texture, Texture* normal)
+GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, ModelGeometry* model, IMaterial* material)
 {
+	Model* modelRender = new Model(model);
+	IRenderer_* renderer = new BasicRenderer(modelRender, material);
+
 	GameEntity* modelEntity = new GameEntity(
 												new Transformation(position, glm::vec3(0.0f), scale),
-												nullptr
+												renderer
 											);
 
 	modelEntity->AddComponent(new PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE));
 	modelEntity->AddComponent(new CollisionComponent());
-
-	IRenderer_* renderer = nullptr;
-	/*
-	if (normal != nullptr)
-	{
-		renderer = new ModelNormalMapRenderer(	mEngine.GetModel(model),
-												mEngine.GetShader("normalmap"),
-												texture,
-												normal,
-												mSunLight
-											);
-	}
-	else
-	{
-		renderer = new ModelRenderer(	mEngine.GetModel(model),
-										mEngine.GetShader("model"),
-										texture,
-										mSunLight
-									);
-	}
-	
-	renderer->SetFogParameters(mFogColor, mFogDensity, mFogGradient);
-	modelEntity->SetRenderer(renderer);*/
 
 	return modelEntity;
 }
@@ -489,17 +472,17 @@ void CreateProps()
 		{
 			glm::vec3 position(x, height, z);
 			glm::vec3 scale(0.3f);
-			std::string model = models[i % models.size()];
+			std::string modelName = models[i % models.size()];
 			std::string textureName("MedievalDungeonPropsAtlas02_diffuse");
 			std::string textureNormalName("MedievalDungeonPropsAtlas02_normalmap");
 
-			if (model.compare("stall") == 0)
+			if (modelName.compare("stall") == 0)
 			{
 				textureName = "stall";
 				textureNormalName = "";
 				scale = glm::vec3(0.1f);
 			}
-			else if (model.compare("cube2") == 0)
+			else if (modelName.compare("cube2") == 0)
 			{
 				textureName = "cube_diffuse";
 				textureNormalName = "";
@@ -508,8 +491,14 @@ void CreateProps()
 			Texture* texture = static_cast<Texture*>(mEngine.GetTexture(textureName));
 			Texture* normal = static_cast<Texture*>(mEngine.GetTexture(textureNormalName));
 
-			GameEntity* entity = CreateModel(position, scale, model, texture, normal);
-			mEngine.AddGameEntity(entity);
+			Model* model = mEngine.GetModel(modelName);
+			
+			//TODO, si es un material que ya existe, pues hay que crearlo fuera del bucle. Cambiar esto para que solo sea con props que comparten la misma textura
+			//o buscar el material y si no existe crearlo...
+			/*IMaterial* material = mEngine.CreateMaterial("Model");
+
+			GameEntity* entity = CreateModel(position, scale, model, material);
+			mEngine.AddGameEntity(entity);*/
 		}
 	}
 }

@@ -189,9 +189,6 @@
     <ClInclude Include="src\resources\shaders\ModelShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\models\Model.h">
-      <Filter>Header Files\resources\models</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\models\ModelsLibrary.h">
       <Filter>Header Files\resources\models</Filter>
     </ClInclude>
@@ -375,11 +372,23 @@
     <ClInclude Include="src\resources\materials\MaterialsLibrary.h">
       <Filter>Header Files\resources\materials</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\models\ModelRender.h">
-      <Filter>Header Files\resources\models</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\renderers\IRenderer_.h">
       <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\BasicRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\BasicMaterial.h">
+      <Filter>Header Files\resources\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\IMaterialEffect.h">
+      <Filter>Header Files\resources\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\models\ModelGeometry.h">
+      <Filter>Header Files\resources\models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\models\Model.h">
+      <Filter>Header Files\resources\models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -460,9 +469,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\shaders\ModelShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\models\Model.cpp">
-      <Filter>Source Files\resources\models</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\models\ModelsLibrary.cpp">
       <Filter>Source Files\resources\models</Filter>
@@ -644,11 +650,23 @@
     <ClCompile Include="src\resources\materials\MaterialsLibrary.cpp">
       <Filter>Source Files\resources\materials</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\models\ModelRender.cpp">
-      <Filter>Source Files\resources\models</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\renderers\IRenderer_.cpp">
       <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\BasicRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\BasicMaterial.cpp">
+      <Filter>Source Files\resources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\IMaterialEffect.cpp">
+      <Filter>Source Files\resources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\ModelGeometry.cpp">
+      <Filter>Source Files\resources\models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\Model.cpp">
+      <Filter>Source Files\resources\models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

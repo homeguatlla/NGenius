@@ -2,7 +2,7 @@
 #include "IRenderer.h"
 
 
-class Model;
+class ModelGeometry;
 class IShaderProgram;
 class Texture;
 class ICamera;
@@ -14,7 +14,7 @@ class ModelRenderer : public IRenderer
 	std::vector<glm::vec3> mNormals;
 	
 protected:
-	Model* mModel;
+	ModelGeometry* mModel;
 	Texture* mTexture;
 	const Texture* mTextureShadowmap;
 	const Light* mLight;
@@ -29,7 +29,7 @@ private:
 	
 
 public:
-	ModelRenderer(Model* model, IShaderProgram* shader, Texture* texture, const Light* light);
+	ModelRenderer(ModelGeometry* model, IShaderProgram* shader, Texture* texture, const Light* light);
 	~ModelRenderer();
 
 	ModelRenderer* DoClone() const override { return nullptr; }

@@ -6,7 +6,7 @@
 #include "../resources/camera/ICamera.h"
 #include "../resources/GameEntity.h"
 #include "../resources/shaders/QuadShader.h"
-#include "../resources/models/Model.h"
+#include "../resources/models/ModelGeometry.h"
 #include <GL/glew.h>
 #include <iostream>
 
@@ -29,7 +29,7 @@ mIsVisible(true),
 mTile(1.0f)
 {
 	assert(mShaderProgram != nullptr);
-	mBitRenderInformation.SetShader(mShaderProgram->GetProgramID());
+	mBitRenderInformation.SetMaterial(mShaderProgram->GetProgramID());
 	mBitRenderInformation.SetLayer(LAYER_OTHER);
 	mBitRenderInformation.SetTransparency(false);
 }
@@ -43,7 +43,7 @@ IRenderer::~IRenderer()
 		glDeleteBuffers(1, &mIndexVBO);
 	}
 }
-void IRenderer::SetModel(Model* model)
+void IRenderer::SetModel(ModelGeometry* model)
 {
 	mModel = model;
 }

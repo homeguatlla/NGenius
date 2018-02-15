@@ -9,7 +9,7 @@ class ModelNormalMapRenderer :	public ModelRenderer
 	unsigned int mTangentVBO;
 
 public:
-	ModelNormalMapRenderer(Model* model, IShaderProgram* shader, Texture* texture, Texture* normalmap, const Light* light);
+	ModelNormalMapRenderer(ModelGeometry* model, IShaderProgram* shader, Texture* texture, Texture* normalmap, const Light* light);
 	~ModelNormalMapRenderer();
 
 	const std::string GetName() const override;

@@ -1,54 +1,27 @@
 #include "stdafx.h"
-#include "ModelRenderer.h"
-#include "../resources/models/ModelGeometry.h"
-#include "../resources/textures/Texture.h"
-#include "../resources/shaders/IShaderProgram.h"
-#include "../resources/shaders/ModelShader.h"
-#include "../resources/entities/Light.h"
-#include "../resources/camera/ICamera.h"
+#include "BasicRenderer.h"
+#include "../models/Model.h"
+#include "../materials/IMaterial.h"
+#include "../camera/ICamera.h"
 #include <GL/glew.h>
 
-ModelRenderer::ModelRenderer(ModelGeometry* model, IShaderProgram* shader, Texture* texture, const Light* light) :
-mModel(model),
-IRenderer(shader),
-mTexture(texture),
-mLight(light),
-mTextureCoordsVBO(-1),
-mNormalVBO(-1),
-mMatrixVBO(-1),
-mShadowSpaceMatrix(),
-mTextureShadowmap(nullptr)
-{
-	assert(model != nullptr);
-	assert(texture != nullptr);
 
-	//SetIndexes(mModel->GetIndexes());
-	mTextureCoords = mModel->GetTextureCoords();
-	mNormals = mModel->GetNormals();
-	mBitRenderInformation.SetModel(model->GetID());
-	if (texture != nullptr)
-	{
-		mBitRenderInformation.SetTexture(texture->GetID());
-	}
+BasicRenderer::BasicRenderer(Model* model, IMaterial* material) :
+IRenderer_(model, material)
+{
 }
 
 
-ModelRenderer::~ModelRenderer()
+BasicRenderer::~BasicRenderer()
 {
-	if (IsPrerendered())
-	{
-		glDeleteBuffers(1, &mTextureCoordsVBO);
-		glDeleteBuffers(1, &mMatrixVBO);
-	}
-	mInstances.clear();
 }
 
-const std::string ModelRenderer::GetName() const
+const std::string BasicRenderer::GetName() const
 {
-	return std::string("ModelRenderer_") + std::to_string(mModel->GetID());
+	return std::string("BasicRenderer") + std::to_string(mModel->GetID());
 }
 
-void ModelRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
+void BasicRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
 {
 	//TODO: IMPROVEMENT podrías guardar los buffers en un array y hacer una sola llamada a glGenBuffers
 	//TODO: IMPROVEMENT en lugar de crear cada vez el array de matrices y pasarlo, puedes usar el glMap, glUnMap functions
@@ -143,8 +116,9 @@ void ModelRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
 	}*/
 }
 
-void ModelRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexBuffersManager)
+void BasicRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexBuffersManager)
 {
+	/*
 	ModelShader* shader = static_cast<ModelShader*>(mShaderProgram);
 
 	if (mTexture != nullptr)
@@ -189,14 +163,11 @@ void ModelRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertex
 	glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * instances, &matrices[0], GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	*/
 }
 
-int ModelRenderer::GetRenderShaderPassTextureUnit() const
-{
-	return mTexture->GetUnit();
-}
 
-void ModelRenderer::Draw()
+void BasicRenderer::Draw()
 {
 	/*if (mIsInstancingEnabled)
 	{
@@ -209,39 +180,12 @@ void ModelRenderer::Draw()
 	}*/
 }
 
-bool ModelRenderer::IsInstancingAllowed() const
+bool BasicRenderer::IsInstancingAllowed() const
 {
 	return true;
 }
 
-void ModelRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffersManager)
+void BasicRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffersManager)
 {
-	IRenderer::Render(camera, vertexBuffersManager);
-}
-
-bool ModelRenderer::HasFog() const
-{
-	return true;
-}
-
-void ModelRenderer::EnableFog(bool enable)
-{
-	mIsFogEnabled = enable;
-}
-
-bool ModelRenderer::HasClippingPlane() const
-{
-	return false;
-}
-
-bool ModelRenderer::IsCastingShadows() const
-{
-	return true;
-}
-
-void ModelRenderer::SetShadowMapParameters(const Texture* shadowMap, const glm::mat4& matrix, int pfcCounter)
-{
-	mTextureShadowmap = shadowMap;
-	mShadowSpaceMatrix = matrix;
-	mPFCCounter = pfcCounter;
+	IRenderer_::Render(camera, vertexBuffersManager);
 }

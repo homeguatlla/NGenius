@@ -9,7 +9,7 @@
 class ICamera;
 class GameEntity;
 class Texture;
-class ModelRender;
+class Model;
 class IMaterial;
 
 class IRenderer_
@@ -28,7 +28,7 @@ public:
 
 protected:
 	GameEntity* mParent;
-	ModelRender* mModel;
+	Model* mModel;
 	std::vector<IRenderer_*> mInstances;
 	IMaterial* mMaterial;
 
@@ -48,7 +48,7 @@ protected:
 	void CheckError();
 
 public:
-	explicit IRenderer_(ModelRender* model, IMaterial* material);
+	explicit IRenderer_(Model* model, IMaterial* material);
 	virtual ~IRenderer_();
 
 	virtual const std::string GetName() const = 0;

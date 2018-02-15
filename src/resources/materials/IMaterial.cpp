@@ -5,11 +5,9 @@
 
 unsigned IMaterial::IDCounter = 0;
 
-IMaterial::IMaterial(IShaderProgram* shader, ITexture* diffuse, ITexture* normal) :
+IMaterial::IMaterial(IShaderProgram* shader) :
 mMaterialID(0),
-mShader(shader), 
-mDiffuseTexture(diffuse), 
-mNormalmapTexture(normal)
+mShader(shader)
 {
 	mMaterialID = ++IDCounter;
 }
