@@ -21,11 +21,12 @@ const std::string BasicRenderer::GetName() const
 	return std::string("BasicRenderer") + std::to_string(mModel->GetID());
 }
 
+/*
 void BasicRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
 {
 	//TODO: IMPROVEMENT podrías guardar los buffers en un array y hacer una sola llamada a glGenBuffers
 	//TODO: IMPROVEMENT en lugar de crear cada vez el array de matrices y pasarlo, puedes usar el glMap, glUnMap functions
-	/*if (GetNumberVertexs() > 0)
+	if (GetNumberOfVertexs() > 0)
 	{
 		// 1rst attribute buffer : vertices
 		GLint vertexModelspaceID = mShaderProgram->GetAttributePosition();
@@ -33,7 +34,7 @@ void BasicRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
 		{
 			glGenBuffers(1, &mVertexVBO);
 			glBindBuffer(GL_ARRAY_BUFFER, mVertexVBO);
-			glBufferData(GL_ARRAY_BUFFER, GetNumberVertexs() * sizeof(glm::vec3), &mVertexs[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, GetNumberOfVertexs() * sizeof(glm::vec3), &mVertexs[0], GL_STATIC_DRAW);
 
 			glEnableVertexAttribArray(vertexModelspaceID);
 			glVertexAttribPointer(
@@ -113,12 +114,12 @@ void BasicRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
 			}
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
-	}*/
-}
-
+	}
+}*/
+/*
 void BasicRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexBuffersManager)
 {
-	/*
+	
 	ModelShader* shader = static_cast<ModelShader*>(mShaderProgram);
 
 	if (mTexture != nullptr)
@@ -163,29 +164,24 @@ void BasicRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertex
 	glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * instances, &matrices[0], GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	*/
-}
+	
+}*/
 
 
 void BasicRenderer::Draw()
 {
-	/*if (mIsInstancingEnabled)
+	if (mIsInstancingEnabled)
 	{
 		//glDrawElementsInstancedARB(GL_TRIANGLES, mIndexes.size(), GL_UNSIGNED_INT, 0, mInstances.size());
-		glDrawArraysInstanced(GL_TRIANGLES, 0, mVertexs.size(), mInstances.size());
+		glDrawArraysInstanced(GL_TRIANGLES, 0, mModel->GetNumberOfVertexs(), mInstances.size());
 	}
 	else
 	{
-		glDrawArrays(GL_TRIANGLES, 0, mVertexs.size());
-	}*/
+		glDrawArrays(GL_TRIANGLES, 0, mModel->GetNumberOfVertexs());
+	}
 }
 
 bool BasicRenderer::IsInstancingAllowed() const
 {
-	return true;
-}
-
-void BasicRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffersManager)
-{
-	IRenderer_::Render(camera, vertexBuffersManager);
+	return false;
 }

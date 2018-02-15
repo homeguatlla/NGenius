@@ -17,12 +17,14 @@ MaterialsLibrary::~MaterialsLibrary()
 
 }
 
-void MaterialsLibrary::CreateMaterial(const std::string& name, IShaderProgram* shader, ITexture* diffuseTexture, ITexture* normalTexture)
+IMaterial* MaterialsLibrary::CreateMaterial(const std::string& name, IShaderProgram* shader)
 {
 	assert(shader != nullptr);
 
 	IMaterial* material = new BasicMaterial(shader);
 	AddElement(name, material);
+
+	return material;
 }
 
 void MaterialsLibrary::Load()

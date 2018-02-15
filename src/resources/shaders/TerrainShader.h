@@ -11,6 +11,8 @@ public:
 	TerrainShader();
 	~TerrainShader();
 
+	void LoadData(const ICamera* camera, IMaterial* material) override;
+
 	void BindAttributes();
 	void GetAllUniformLocations();
 

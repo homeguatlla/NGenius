@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "ModelShader.h"
+#include "../camera/ICamera.h"
+#include "../materials/IMaterial.h"
+#include "../materials/effects/DiffuseTexture.h"
+#include "../textures/ITexture.h"
 
 const std::string ModelShader::VERTEX_FILE = "data/shaders/vertex/v_model.cg";
 const std::string ModelShader::FRAGMENT_FILE = "data/shaders/fragment/f_model.cg";
@@ -52,6 +56,20 @@ mLocationShadowMapPFC(-1)
 
 ModelShader::~ModelShader()
 {
+}
+
+
+void ModelShader::LoadData(const ICamera* camera, IMaterial* material)
+{
+	LoadViewMatrix(const_cast<ICamera*>(camera)->GetViewMatrix());
+	LoadProjectionMatrix(camera->GetProjectionMatrix());
+	LoadCameraPosition(camera->GetPosition());
+
+	if (material->HasEffect<DiffuseTexture>())
+	{
+		DiffuseTexture* effect = material->GetEffect<DiffuseTexture>();
+		LoadModelTexture(effect->GetDiffuseTexture()->GetUnit());
+	}
 }
 
 void ModelShader::BindAttributes()

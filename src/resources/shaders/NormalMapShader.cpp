@@ -52,6 +52,11 @@ NormalMapShader::~NormalMapShader()
 {
 }
 
+void NormalMapShader::LoadData(const ICamera* camera, IMaterial* material)
+{
+
+}
+
 void NormalMapShader::BindAttributes()
 {
 	BindAttribute(mLocationTextureCoords, ATTRIBUTE_TEXTURE_COORDS);

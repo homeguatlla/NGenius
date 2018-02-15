@@ -66,8 +66,10 @@ bool TerrainRenderer::HasClippingPlane() const
 	return true;
 }
 */
+/*
 void TerrainRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 {
+	
 	IRenderer_::PreRender(vertexBufferManager);
 
 	// 2nd attribute buffer : texture coords
@@ -96,7 +98,7 @@ void TerrainRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 	mMatrixID = mMaterial->GetShader()->GetUniformLocation("MVP");
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
+}*/
 
 void TerrainRenderer::Draw()
 {
@@ -108,6 +110,7 @@ bool TerrainRenderer::IsInstancingAllowed() const
 	return false;
 }
 
+/*
 void TerrainRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
 	TerrainShader* shader = static_cast<TerrainShader*>(mMaterial->GetShader());
@@ -133,18 +136,13 @@ void TerrainRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vert
 	glm::mat4 MVP = camera->GetProjectionMatrix() * const_cast<ICamera*>(camera)->GetViewMatrix() * mParent->GetTransformation()->GetModelMatrix();
 
 	glUniformMatrix4fv(mMatrixID, 1, GL_FALSE, &MVP[0][0]);
-}
+}*/
 
 /*
 int TerrainRenderer::GetRenderShaderPassTextureUnit() const
 {
 	return mTextureBlendmap->GetUnit();
 }*/
-
-void TerrainRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
-{	
-	IRenderer_::Render(camera, vertexBufferManager);
-}
 
 /*
 bool TerrainRenderer::HasFog() const

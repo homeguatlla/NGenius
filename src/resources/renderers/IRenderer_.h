@@ -41,9 +41,8 @@ protected:
 
 	bool mIsVisible;
 
-	virtual void PreRender(VertexBuffersManager& vertexBufferManager) = 0;
+	//virtual void PreRender(VertexBuffersManager& vertexBufferManager) = 0;
 	virtual void Draw() = 0;
-	virtual void LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager) = 0;
 
 	void CheckError();
 
@@ -59,7 +58,6 @@ public:
 	IMaterial* GetMaterial();
 
 	void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager, IMaterial* material);
-	virtual void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager) = 0;
 	
 	const BitNumber& GetBitRendererInformation() const;
 

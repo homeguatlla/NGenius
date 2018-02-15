@@ -25,6 +25,11 @@ GUIShader::~GUIShader()
 {
 }
 
+void GUIShader::LoadData(const ICamera* camera, IMaterial* material)
+{
+
+}
+
 void GUIShader::BindAttributes()
 {
 	BindAttribute(mLocationTextureCoords, ATTRIBUTE_TEXTURE_COORDS);

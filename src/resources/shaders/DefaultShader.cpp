@@ -15,6 +15,10 @@ DefaultShader::~DefaultShader()
 {
 }
 
+void DefaultShader::LoadData(const ICamera* camera, IMaterial* material)
+{
+
+}
 
 void DefaultShader::BindAttributes()
 {

@@ -52,7 +52,7 @@ void ModelRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
 {
 	//TODO: IMPROVEMENT podrías guardar los buffers en un array y hacer una sola llamada a glGenBuffers
 	//TODO: IMPROVEMENT en lugar de crear cada vez el array de matrices y pasarlo, puedes usar el glMap, glUnMap functions
-	/*if (GetNumberVertexs() > 0)
+	/*if (GetNumberOfVertexs() > 0)
 	{
 		// 1rst attribute buffer : vertices
 		GLint vertexModelspaceID = mShaderProgram->GetAttributePosition();
@@ -60,7 +60,7 @@ void ModelRenderer::PreRender(VertexBuffersManager& vertexBuffersManager)
 		{
 			glGenBuffers(1, &mVertexVBO);
 			glBindBuffer(GL_ARRAY_BUFFER, mVertexVBO);
-			glBufferData(GL_ARRAY_BUFFER, GetNumberVertexs() * sizeof(glm::vec3), &mVertexs[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, GetNumberOfVertexs() * sizeof(glm::vec3), &mVertexs[0], GL_STATIC_DRAW);
 
 			glEnableVertexAttribArray(vertexModelspaceID);
 			glVertexAttribPointer(

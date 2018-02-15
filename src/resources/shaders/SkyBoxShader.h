@@ -16,6 +16,8 @@ public:
 	SkyBoxShader();
 	~SkyBoxShader();
 
+	void LoadData(const ICamera* camera, IMaterial* material) override;
+
 	void GetAllUniformLocations() override;
 	void BindAttributes() override;
 	void LoadModelMatrix(const glm::mat4& modelMatrix);

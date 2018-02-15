@@ -34,11 +34,11 @@ public:
 	std::vector<unsigned int>& GetIndexes();
 	std::vector<glm::vec3>& GetTangents();
 
-	long GetNumberVertexs() const;
-	long GetNumberTextureCoords() const;
-	long GetNumberNormals() const;
-	long GetNumberIndexes() const;
-	long GetNumberTangents() const;
+	long GetNumberOfVertexs() const;
+	long GetNumberOfTextureCoords() const;
+	long GetNumberOfNormals() const;
+	long GetNumberOfIndexes() const;
+	long GetNumberOfTangents() const;
 
 	void SetMaterialName(const std::string& name);
 	const std::string& GetMaterialName() const;

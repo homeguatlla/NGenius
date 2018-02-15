@@ -37,11 +37,11 @@ bool IRenderer_::IsPrerendered() const
 {
 	return mIsPrerendered;
 }
-
+/*
 void IRenderer_::PreRender(VertexBuffersManager& vertexBufferManager)
 {
 	
-}
+}*/
 
 void IRenderer_::SetParent(GameEntity* parent)
 {
@@ -60,34 +60,14 @@ IMaterial* IRenderer_::GetMaterial()
 
 void IRenderer_::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager, IMaterial* material)
 {
-	Render(camera, vertexBufferManager);
-}
-
-void IRenderer_::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
-{
-	/*
-	if (!mIsPrerendered)
+	if (!mModel->IsBuilt())
 	{
-		if (vertexBufferManager.HasVAO(GetName()))
-		{
-			mVAO = vertexBufferManager.GetVAO(GetName());
-			glBindVertexArray(mVAO);
-		}
-		else
-		{
-			mVAO = vertexBufferManager.CreateVAO(GetName());
-			glBindVertexArray(mVAO);
+		mModel->Build(vertexBufferManager, material);
+	}
 
-			PreRender(vertexBufferManager);
-		}
-		mIsPrerendered = true;
-	}
-	else
-	{			
-		glBindVertexArray(mVAO);
-	}
-		*/
-	LoadData(camera, vertexBufferManager);
+	glBindVertexArray(mModel->GetVAOID());
+
+	material->Apply(camera);
 		
 	Draw();
 

@@ -16,7 +16,6 @@ mLocationPosition(-1)
 	mFragmentShaderID = Load(fragmentShaderFilename, GL_FRAGMENT_SHADER);
 }
 
-
 IShaderProgram::~IShaderProgram()
 {
 	UnUse();
@@ -67,6 +66,7 @@ void IShaderProgram::UnUse()
 {
 	//glUseProgram(0);
 }
+
 void IShaderProgram::BindAttributesInternal()
 {
 	BindAttribute(mLocationPosition, ATTRIBUTE_VERTEX_POSITION);

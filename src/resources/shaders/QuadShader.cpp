@@ -25,6 +25,11 @@ QuadShader::~QuadShader()
 {
 }
 
+void QuadShader::LoadData(const ICamera* camera, IMaterial* material)
+{
+
+}
+
 void QuadShader::BindAttributes()
 {
 	BindAttribute(mLocationTextureCoords, ATTRIBUTE_TEXTURE_COORDS);

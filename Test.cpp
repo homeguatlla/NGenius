@@ -46,7 +46,7 @@
 #include "src/resources/models/Model.h"
 
 #include "src/resources/materials/IMaterial.h"
-
+#include "src/resources/materials/effects/DiffuseTexture.h"
 /*
 #include "src/resources/entities/Light.h"
 #include "src/resources/entities/Terrain.h"
@@ -372,10 +372,9 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 	return modelEntity;
 }
 
-GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, ModelGeometry* model, IMaterial* material)
+GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, Model* model, IMaterial* material)
 {
-	Model* modelRender = new Model(model);
-	IRenderer_* renderer = new BasicRenderer(modelRender, material);
+	IRenderer_* renderer = new BasicRenderer(model, material);
 
 	GameEntity* modelEntity = new GameEntity(
 												new Transformation(position, glm::vec3(0.0f), scale),
@@ -450,14 +449,22 @@ void CreateProps()
 	models.push_back(std::string("barrel"));
 	models.push_back(std::string("chest"));
 	models.push_back(std::string("brazier"));
-	models.push_back(std::string("stall"));
-	models.push_back(std::string("cube2"));
 
 	positions.push_back(glm::vec3(0.8f, 0.0f, -2.3f));
 	positions.push_back(glm::vec3(0.4f, 0.0f, -2.0f));
 	positions.push_back(glm::vec3(1.0f, 0.0f, -1.7f));
 	positions.push_back(glm::vec3(10.0f, 0.0f, 10.0f));
 	positions.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+
+	std::string textureName("MedievalDungeonPropsAtlas02_diffuse");
+	std::string textureNormalName("MedievalDungeonPropsAtlas02_normalmap");
+
+	Texture* texture = static_cast<Texture*>(mEngine.GetTexture(textureName));
+	Texture* normal = static_cast<Texture*>(mEngine.GetTexture(textureNormalName));
+
+	IMaterial* material = mEngine.CreateMaterial("model", mEngine.GetShader("model"));
+	material->AddEffect(new DiffuseTexture(texture));
+	//material->AddEffect(new MaterialEffectNormalMap(normal));
 
 	for (int i = 0; i < numProps; i++)
 	{
@@ -473,32 +480,11 @@ void CreateProps()
 			glm::vec3 position(x, height, z);
 			glm::vec3 scale(0.3f);
 			std::string modelName = models[i % models.size()];
-			std::string textureName("MedievalDungeonPropsAtlas02_diffuse");
-			std::string textureNormalName("MedievalDungeonPropsAtlas02_normalmap");
-
-			if (modelName.compare("stall") == 0)
-			{
-				textureName = "stall";
-				textureNormalName = "";
-				scale = glm::vec3(0.1f);
-			}
-			else if (modelName.compare("cube2") == 0)
-			{
-				textureName = "cube_diffuse";
-				textureNormalName = "";
-				scale = glm::vec3(0.005f);
-			}
-			Texture* texture = static_cast<Texture*>(mEngine.GetTexture(textureName));
-			Texture* normal = static_cast<Texture*>(mEngine.GetTexture(textureNormalName));
-
-			Model* model = mEngine.GetModel(modelName);
 			
-			//TODO, si es un material que ya existe, pues hay que crearlo fuera del bucle. Cambiar esto para que solo sea con props que comparten la misma textura
-			//o buscar el material y si no existe crearlo...
-			/*IMaterial* material = mEngine.CreateMaterial("Model");
+			Model* model = mEngine.GetModel(modelName);
 
 			GameEntity* entity = CreateModel(position, scale, model, material);
-			mEngine.AddGameEntity(entity);*/
+			mEngine.AddGameEntity(entity);
 		}
 	}
 }
@@ -660,6 +646,17 @@ void CreateTextTest()
 
 void CreateEntities()
 {
+	//CAMERA
+	mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
+	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 15.0f));
+	mEagleEyeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
+	mEagleEyeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+
+	mGameplayCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
+	mGameplayCamera->SetPosition(glm::vec3(0.0f, 4.9f, 3.0f));
+	mGameplayCamera->SetTarget(glm::vec3(0.0f, 4.9f, 0.0f));
+	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+
 	if (mIsPropsEnabled)
 	{
 		CreateProps();

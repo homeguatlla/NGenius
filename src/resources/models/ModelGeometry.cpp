@@ -47,7 +47,7 @@ std::vector<glm::vec3>& ModelGeometry::GetVertexs()
 	return mVertexs;
 }
 
-long ModelGeometry::GetNumberVertexs() const
+long ModelGeometry::GetNumberOfVertexs() const
 {
 	return mVertexs.size();
 }
@@ -57,7 +57,7 @@ std::vector<glm::vec2>& ModelGeometry::GetTextureCoords()
 	return mTextureCoords;
 }
 
-long ModelGeometry::GetNumberTextureCoords() const
+long ModelGeometry::GetNumberOfTextureCoords() const
 {
 	return mTextureCoords.size();
 }
@@ -67,7 +67,7 @@ std::vector<glm::vec3>& ModelGeometry::GetNormals()
 	return mNormals;
 }
 
-long ModelGeometry::GetNumberNormals() const
+long ModelGeometry::GetNumberOfNormals() const
 {
 	return mNormals.size();
 }
@@ -77,7 +77,7 @@ std::vector<glm::vec3>& ModelGeometry::GetTangents()
 	return mTangents;
 }
 
-long ModelGeometry::GetNumberTangents() const
+long ModelGeometry::GetNumberOfTangents() const
 {
 	return mTangents.size();
 }
@@ -87,7 +87,7 @@ std::vector<unsigned int>& ModelGeometry::GetIndexes()
 	return mIndexes;
 }
 
-long ModelGeometry::GetNumberIndexes() const
+long ModelGeometry::GetNumberOfIndexes() const
 {
 	return mIndexes.size();
 }

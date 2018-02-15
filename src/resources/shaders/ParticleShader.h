@@ -23,6 +23,8 @@ public:
 	ParticleShader(const std::string& vertexFile, const std::string& fragmentFile);
 	~ParticleShader();
 
+	void LoadData(const ICamera* camera, IMaterial* material) override;
+
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
 	void LoadViewMatrix(const glm::mat4& modelview);

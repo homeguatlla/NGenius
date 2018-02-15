@@ -15,7 +15,7 @@ public:
 	MaterialsLibrary();
 	virtual ~MaterialsLibrary();
 
-	void CreateMaterial(const std::string& name, IShaderProgram* shader, ITexture* diffuseTexture, ITexture* normalTexture);
+	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 
 	void Load();
 };

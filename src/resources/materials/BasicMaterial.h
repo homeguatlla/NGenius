@@ -6,7 +6,6 @@ class IShaderProgram;
 
 class BasicMaterial : public IMaterial
 {
-
 public:
 	BasicMaterial(IShaderProgram* shader);
 	virtual ~BasicMaterial();

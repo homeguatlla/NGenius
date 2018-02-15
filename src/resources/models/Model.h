@@ -8,8 +8,9 @@ class IMaterial;
 
 class Model
 {
-	ModelGeometry* mModel;
+	ModelGeometry* mModelGeometry;
 	AABB mAABB;
+	int mVAO;
 
 public:
 	Model(ModelGeometry* model);
@@ -17,11 +18,15 @@ public:
 
 	unsigned int GetID() const;
 	const AABB& GetAABB() const;
+	int GetVAOID() const;
 
+	int GetNumberOfVertexs() const;
+
+	bool IsBuilt() const;
 	void Build(VertexBuffersManager& vertexBufferManager, IMaterial* material);
-
+	
 private:
-	void CreateVertexsBuffer(VertexBuffersManager& vertexBufferManager, IMaterial* material);
+	void CreateVertexsBuffer(VertexBuffersManager& vertexBufferManager, int location);
 	void CalculateAABB();
 };
 

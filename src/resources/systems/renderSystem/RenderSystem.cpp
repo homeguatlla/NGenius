@@ -28,7 +28,6 @@ using namespace std;
 static const int SHADOWS_TEXTURE_SIZE = 4096;
 
 RenderSystem::RenderSystem(float screenWidth, float screenHeight) :
-mLastClipPlaneNumberUsed(0),
 mScreenWidth(screenWidth),
 mScreenHeight(screenHeight),
 mShadersLibrary(nullptr),
@@ -36,6 +35,8 @@ mTexturesLibrary(nullptr),
 mModelsLibrary(nullptr),
 mFontsLibrary(nullptr),
 mWindow(nullptr),
+mCurrentMaterial(nullptr),
+mLastClipPlaneNumberUsed(0),
 mIsFullScreen(false)
 {
 	BitNumber bit;
@@ -185,6 +186,8 @@ void RenderSystem::Render(RenderPass* renderPass)
 
 void RenderSystem::AddRenderPass(RenderPass* renderPass)
 {
+	assert(renderPass != nullptr);
+	assert(renderPass->GetCamera() != nullptr);
 	bool found = std::find(mRenderPasses.begin(), mRenderPasses.end(), renderPass) != mRenderPasses.end();
 	if (!found)
 	{
@@ -255,18 +258,27 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer_* renderer,
 		renderer->EnableInstancing(true);
 	}*/
 
-	//TODO primer batching PrepareMaterial hace todo esto
+	SelectMaterial(renderPass, renderer);
+
+	mCurrentMaterial->Use();
+
+	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, mCurrentMaterial);
+
+	mCurrentMaterial->UnUse();
+}
+
+void RenderSystem::SelectMaterial(RenderPass* renderPass, IRenderer_* renderer)
+{
 	IMaterial* material = renderPass->GetMaterial();
 	if (material == nullptr)
 	{
 		material = renderer->GetMaterial();
 	}
 
-	material->GetShader()->Use();
-
-	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, renderPass->GetMaterial());
-
-	material->GetShader()->UnUse();
+	if (mCurrentMaterial == nullptr || mCurrentMaterial->GetMaterialID() != material->GetMaterialID())
+	{
+		mCurrentMaterial = material;
+	}
 }
 
 float RenderSystem::GetScreenWidth() const
@@ -489,6 +501,11 @@ const ITexture* RenderSystem::CreateDepthTexture(const std::string& name, const 
 {
 	assert(mTexturesLibrary != nullptr);
 	return mTexturesLibrary->CreateDepthTexture(name, size);
+}
+
+IMaterial* RenderSystem::CreateMaterial(const std::string& name, IShaderProgram* shader)
+{
+	return mMaterialsLibrary->CreateMaterial(name, shader);
 }
 
 void RenderSystem::CheckGLError()

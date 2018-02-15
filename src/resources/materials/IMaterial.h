@@ -5,6 +5,7 @@
 
 class IShaderProgram;
 class IMaterialEffect;
+class ICamera;
 
 class IMaterial
 {
@@ -18,14 +19,17 @@ class IMaterial
 
 	MaterialEffectsMap mEffects;
 
-protected:
-
 public:
 	IMaterial(IShaderProgram* shader);
 	virtual ~IMaterial();
 
 	unsigned int GetMaterialID() const;
 	
+	void Use();
+	void UnUse();
+
+	void Apply(const ICamera* camera);
+
 	IShaderProgram* GetShader();
 
 	virtual IMaterial* Clone() const;

@@ -25,6 +25,11 @@ SkyBoxShader::~SkyBoxShader()
 {
 }
 
+void SkyBoxShader::LoadData(const ICamera* camera, IMaterial* material)
+{
+
+}
+
 void SkyBoxShader::BindAttributes()
 {
 

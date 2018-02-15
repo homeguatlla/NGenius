@@ -134,31 +134,37 @@ void NGenius::RegisterUpdateHandler(std::function<void(float elapsedTime)> callb
 
 IShaderProgram* NGenius::GetShader(const std::string& name) const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetShader(name);
 }
 
 FontType* NGenius::GetFont(const std::string& name) const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetFont(name);
 }
 
 Model* NGenius::GetModel(const std::string& name) const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetModel(name);
 }
 
 ITexture* NGenius::GetTexture(const std::string& name) const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetTexture(name);
 }
 
 IMaterial* NGenius::GetMaterial(const std::string& name) const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetMaterial(name);
 }
 
 GLFWwindow* NGenius::GetGLWindow() const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetGLWindow();
 }
 
@@ -169,16 +175,19 @@ float NGenius::GetFPS() const
 
 float NGenius::GetScreenWidth() const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetScreenWidth();
 }
 
 float NGenius::GetScreenHeight() const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetScreenHeight();
 }
 
 void NGenius::SetFullScreen(bool isFullScreen)
 {
+	assert(mRenderSystem != nullptr);
 	mRenderSystem->SetFullScreen(isFullScreen);
 }
 
@@ -219,6 +228,12 @@ const ITexture* NGenius::CreateDepthTexture(const std::string& name, const glm::
 {
 	assert(mRenderSystem != nullptr);
 	return mRenderSystem->CreateDepthTexture(name, size);
+}
+
+IMaterial* NGenius::CreateMaterial(const std::string& name, IShaderProgram* shader)
+{
+	assert(mRenderSystem != nullptr);
+	return mRenderSystem->CreateMaterial(name, shader);
 }
 
 void NGenius::SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter)

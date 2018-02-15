@@ -1,7 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
 
-
 class DefaultShader : public IShaderProgram
 {
 	static const std::string VERTEX_FILE;
@@ -10,6 +9,8 @@ class DefaultShader : public IShaderProgram
 public:
 	DefaultShader();
 	~DefaultShader();
+
+	void LoadData(const ICamera* camera, IMaterial* material) override;
 
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;

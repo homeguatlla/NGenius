@@ -13,6 +13,8 @@ public:
 	explicit EnergyWallShader();
 	~EnergyWallShader();
 
+	void LoadData(const ICamera* camera, IMaterial* material) override;
+
 	void GetAllUniformLocations();
 
 	void LoadDepthTexture(int unit);

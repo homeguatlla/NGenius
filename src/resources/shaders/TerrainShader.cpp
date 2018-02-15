@@ -54,6 +54,10 @@ TerrainShader::~TerrainShader()
 {
 }
 
+void TerrainShader::LoadData(const ICamera* camera, IMaterial* material)
+{
+
+}
 
 void TerrainShader::BindAttributes()
 {

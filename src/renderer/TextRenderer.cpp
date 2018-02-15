@@ -79,9 +79,10 @@ void TextRenderer::SetShadow(const glm::vec2& offset)
 	mShadowOffset = offset;
 }
 
+/*
 void TextRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
-	/*glDisable(GL_CULL_FACE);
+	glDisable(GL_CULL_FACE);
 	glDepthMask(false);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -89,18 +90,18 @@ void TextRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuf
 	if (!IsPrerendered() && vertexBufferManager.HasVAO(GetName()))
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, mVertexVBO);
-		glBufferData(GL_ARRAY_BUFFER, GetNumberVertexs() * sizeof(glm::vec3), &mVertexs[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, GetNumberOfVertexs() * sizeof(glm::vec3), &mVertexs[0], GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexVBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, GetNumberIndexes() * sizeof(unsigned int), &mIndexes[0], GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, GetNumberOfIndexes() * sizeof(unsigned int), &mIndexes[0], GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, mTextureCoordsVBO);
-		glBufferData(GL_ARRAY_BUFFER, GetNumberTextureCoords() * sizeof(glm::vec2), &mTextureCoords[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, GetNumberOfTextureCoords() * sizeof(glm::vec2), &mTextureCoords[0], GL_STATIC_DRAW);
 	}
 	IRenderer::Render(camera, vertexBufferManager);
 
 	glDisable(GL_BLEND);
 	glDepthMask(true);
-	glEnable(GL_CULL_FACE);*/
-}
+	glEnable(GL_CULL_FACE);
+}*/
 
 bool TextRenderer::IsInstancingAllowed() const
 {
@@ -167,7 +168,7 @@ void TextRenderer::Create(const std::string& text, unsigned int width, unsigned 
 	//SetVertexs(vertexs);
 	//SetIndexes(indexs);
 }
-
+/*
 void TextRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 {
 	IRenderer_::PreRender(vertexBufferManager);
@@ -192,13 +193,13 @@ void TextRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 		mFontType->GetTexture()->SetActive(true);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
-}
+}*/
 
 void TextRenderer::Draw()
 {
 	IRenderer_::Draw();
 }
-
+/*
 void TextRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
 	const glm::mat4 viewMatrix = const_cast<ICamera*>(camera)->GetViewMatrix();
@@ -211,7 +212,7 @@ void TextRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexB
 	shader->LoadOutlineColor(mOutlineColor);
 	shader->LoadBorderParameters(mWidth, mEdge, mBorderWidth, mBorderEdge);
 	shader->LoadShadow(mShadowOffset);
-}
+}*/
 /*
 int TextRenderer::GetRenderShaderPassTextureUnit() const
 {

@@ -39,7 +39,6 @@ public:
 	//bool HasClippingPlane() const override;
 	//void SetClippingPlane(const glm::vec4& plane) override;
 	void SetShadowMapParameters(const Texture* shadowMap, const glm::mat4& matrix, int pfcCounter);
-	void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager) override;
 	bool IsInstancingAllowed() const override;
 	//bool HasFog() const override;
 	//void EnableFog(bool enable) override;
@@ -47,9 +46,7 @@ public:
 
 private:
 
-	void PreRender(VertexBuffersManager& vertexBufferManager) override;
 	void Draw() override;
-	void LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager) override;
 	//int GetRenderShaderPassTextureUnit() const override;
 };
 

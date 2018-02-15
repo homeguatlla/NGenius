@@ -106,6 +106,12 @@
     <Filter Include="Header Files\resources\renderers">
       <UniqueIdentifier>{0eafe5b9-db6e-474e-a4bf-40a72d69da27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\resources\materials\effects">
+      <UniqueIdentifier>{86251382-a004-4faa-a3c8-6895cf59b502}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\materials\effects">
+      <UniqueIdentifier>{cca33aa1-84bb-4323-a091-dd5494bacd68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -390,6 +396,9 @@
     <ClInclude Include="src\resources\models\Model.h">
       <Filter>Header Files\resources\models</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\DiffuseTexture.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -667,6 +676,9 @@
     </ClCompile>
     <ClCompile Include="src\resources\models\Model.cpp">
       <Filter>Source Files\resources\models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\DiffuseTexture.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

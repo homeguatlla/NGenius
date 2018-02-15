@@ -29,7 +29,6 @@ public:
 	const std::string GetName() const override;
 	void Create(const std::string& text, unsigned int width, unsigned int height, bool isCentered);
 
-	void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager) override;
 	bool IsInstancingAllowed() const override;
 	//bool HasFog() const override;
 	//bool HasClippingPlane() const override;
@@ -41,9 +40,9 @@ public:
 	void SetShadow(const glm::vec2& offset);
 
 private:
-	void PreRender(VertexBuffersManager& vertexBufferManager) override;
+	//void PreRender(VertexBuffersManager& vertexBufferManager) override;
 	void Draw() override;
-	void LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager) override;
+	//void LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager) override;
 	//int GetRenderShaderPassTextureUnit() const override;
 };
 

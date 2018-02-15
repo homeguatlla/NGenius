@@ -38,6 +38,11 @@ ParticleShader::~ParticleShader()
 {
 }
 
+void ParticleShader::LoadData(const ICamera* camera, IMaterial* material)
+{
+
+}
+
 void ParticleShader::BindAttributes()
 {
 	BindAttribute(mLocationTextureCoords, ATTRIBUTE_TEXTURE_COORDS);

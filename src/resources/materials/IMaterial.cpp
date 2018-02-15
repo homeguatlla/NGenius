@@ -9,6 +9,7 @@ IMaterial::IMaterial(IShaderProgram* shader) :
 mMaterialID(0),
 mShader(shader)
 {
+	assert(shader != nullptr);
 	mMaterialID = ++IDCounter;
 }
 
@@ -19,6 +20,21 @@ IMaterial::~IMaterial()
 unsigned int IMaterial::GetMaterialID() const
 {
 	return mMaterialID;
+}
+
+void IMaterial::Use()
+{
+	mShader->Use();
+}
+
+void IMaterial::UnUse()
+{
+	mShader->UnUse();
+}
+
+void IMaterial::Apply(const ICamera* camera)
+{
+	mShader->LoadData(camera, this);
 }
 
 IShaderProgram*  IMaterial::GetShader()

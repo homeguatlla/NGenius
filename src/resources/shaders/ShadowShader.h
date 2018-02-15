@@ -10,6 +10,8 @@ public:
 	ShadowShader();
 	~ShadowShader();
 
+	void LoadData(const ICamera* camera, IMaterial* material) override;
+	
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
 	void LoadMVPMatrix(const glm::mat4& matrix);

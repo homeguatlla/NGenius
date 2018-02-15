@@ -1,7 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
 
-
 class GUIShader : public IShaderProgram
 {
 	static const std::string VERTEX_FILE;
@@ -16,6 +15,8 @@ public:
 
 	GUIShader();
 	~GUIShader();
+
+	void LoadData(const ICamera* camera, IMaterial* material) override;
 
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;

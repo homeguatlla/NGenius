@@ -21,6 +21,11 @@ EnergyWallShader::~EnergyWallShader()
 {
 }
 
+void EnergyWallShader::LoadData(const ICamera* camera, IMaterial* material)
+{
+
+}
+
 void EnergyWallShader::GetAllUniformLocations()
 {
 	ModelShader::GetAllUniformLocations();

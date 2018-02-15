@@ -31,6 +31,8 @@ public:
 	NormalMapShader();
 	~NormalMapShader();
 
+	void LoadData(const ICamera* camera, IMaterial* material) override;
+	
 	void BindAttributes();
 	void GetAllUniformLocations();
 

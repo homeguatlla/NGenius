@@ -61,6 +61,8 @@ public:
 	void AddParticleEmitter(ParticlesEmitter* emitter);
 	void AddRenderPass(RenderPass* renderPass);
 
+	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
+
 	void RegisterInputHandler(std::function<void(GLFWwindow* window)> callback);
 	void RegisterUpdateHandler(std::function<void(float elapsedTime)> callback);
 

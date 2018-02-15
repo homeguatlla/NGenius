@@ -23,6 +23,8 @@ public:
 	TextShader();
 	~TextShader();
 
+	void LoadData(const ICamera* camera, IMaterial* material) override;
+
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
 	void LoadViewMatrix(const glm::mat4& viewmatrix);

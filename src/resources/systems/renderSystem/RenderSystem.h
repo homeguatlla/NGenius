@@ -52,6 +52,8 @@ class RenderSystem
 
 	ShadowsRenderPass* mShadowsRenderPass;
 
+	IMaterial* mCurrentMaterial;
+
 	int mLastClipPlaneNumberUsed;
 	bool mIsFullScreen;
 	
@@ -80,6 +82,8 @@ public:
 	void SetCastingShadowsEnabled(bool enabled);
 	void SetFullScreen(bool isFullScreen);
 	
+	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
+
 	const ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
 
 private:
@@ -100,6 +104,8 @@ private:
 	void UpdateDistancesToCamera(const ICamera* camera, RenderersList* renderers);
 	void RenderInstances(RenderPass* renderPass, IRenderer_* renderer, std::vector<IRenderer_*>& instances);
 	
+	void SelectMaterial(RenderPass* renderPass, IRenderer_* renderer);
+
 	void CheckGLError();
 };
 

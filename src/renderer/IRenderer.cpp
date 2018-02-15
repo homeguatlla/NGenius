@@ -249,17 +249,17 @@ void IRenderer::SetInstances(std::vector<IRenderer*> instances)
 
 long IRenderer::GetNumberIndexes() const
 {
-	return mModel->GetNumberIndexes();
+	return mModel->GetNumberOfIndexes();
 }
 
 long IRenderer::GetNumberVertexs() const
 {
-	return mModel->GetNumberVertexs();
+	return mModel->GetNumberOfVertexs();
 }
 
 long IRenderer::GetNumberTextureCoords() const
 {
-	return mModel->GetNumberTextureCoords();
+	return mModel->GetNumberOfTextureCoords();
 }
 
 long IRenderer::GetNumberInstances() const
