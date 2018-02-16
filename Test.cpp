@@ -441,7 +441,7 @@ void CreateTrees()
 void CreateProps()
 {
 	int areaSize = 5;
-	int numProps = 3;
+	int numProps = 4;
 
 	std::vector<std::string> models;
 	std::vector<glm::vec3> positions;
@@ -451,8 +451,10 @@ void CreateProps()
 	models.push_back(std::string("brazier"));
 
 	positions.push_back(glm::vec3(1.f, 0.0f, 0.0f));
-	positions.push_back(glm::vec3(0.0f, 0.0f, -1.0f));
-	positions.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
+	positions.push_back(glm::vec3(0.5f, 0.0f, 0.0f));
+	positions.push_back(glm::vec3(-0.5f, 0.0f, 0.0f));
+	positions.push_back(glm::vec3(-1.0f, 0.0f, 0.0f));
+
 
 	positions.push_back(glm::vec3(0.8f, 0.0f, -2.3f));
 	positions.push_back(glm::vec3(0.4f, 0.0f, -2.0f));
@@ -475,8 +477,8 @@ void CreateProps()
 		float x = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
 		float z = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
 
-		x = positions[i % models.size()].x;
-		z = positions[i % models.size()].z;
+		x = positions[i % positions.size()].x;
+		z = positions[i % positions.size()].z;
 
 		float height = 0;// mTerrain->GetHeight(glm::vec2(x, z)) - 0.1f;
 		//if (height > mWaterHeight + 0.2f)

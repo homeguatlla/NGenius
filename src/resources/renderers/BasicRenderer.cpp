@@ -183,5 +183,5 @@ void BasicRenderer::Draw()
 
 bool BasicRenderer::IsInstancingAllowed() const
 {
-	return false;
+	return true;
 }
