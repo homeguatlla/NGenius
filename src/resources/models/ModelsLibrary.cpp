@@ -18,28 +18,28 @@ ModelsLibrary::~ModelsLibrary()
 
 void ModelsLibrary::Load()
 {
-	LoadModel("cube", "data/models/cube/cube.obj");
-	LoadModel("enano", "data/models/enano/enano.obj");
-	LoadModel("mazo", "data/models/mazo/mazo.obj");
+	LoadModel("cube", "data/models/cube/cube.obj", false, true);
+	LoadModel("enano", "data/models/enano/enano.obj", false, true);
+	LoadModel("mazo", "data/models/mazo/mazo.obj", false, true);
 
-	LoadModel("barrel", "data/models/props/barrel.obj");
-	LoadModel("chest", "data/models/props/chest.obj");
-	LoadModel("brazier", "data/models/props/brazier.obj");
-	LoadModel("stall", "data/models/stall/stall.obj");
-	LoadModel("cube2", "data/models/props/cube.obj");
+	LoadModel("barrel", "data/models/props/barrel.obj", true, true);
+	LoadModel("chest", "data/models/props/chest.obj", false, true);
+	LoadModel("brazier", "data/models/props/brazier.obj", false, true);
+	LoadModel("stall", "data/models/stall/stall.obj", false, true);
+	LoadModel("cube2", "data/models/props/cube.obj", false, true);
 
 	//model = OBJLoader::LoadModel("data/models/hermes/hermes.obj");
 	//AddElement("hermes", model);
 
-	LoadModel("sphere", "data/models/sphere/sphere.obj");
+	LoadModel("sphere", "data/models/sphere/sphere.obj", false, true);
 	
-	LoadModel("tree_foliage_0", "data/models/tree4/tree_foliage_lod0.obj");
-	LoadModel("tree_foliage_1", "data/models/tree4/tree_foliage_lod1.obj");
-	LoadModel("tree_foliage_2", "data/models/tree4/tree_foliage_lod2.obj");
+	LoadModel("tree_foliage_0", "data/models/tree4/tree_foliage_lod0.obj", false, true);
+	LoadModel("tree_foliage_1", "data/models/tree4/tree_foliage_lod1.obj", false, true);
+	LoadModel("tree_foliage_2", "data/models/tree4/tree_foliage_lod2.obj", false, true);
 
-	LoadModel("tree_trunk_0", "data/models/tree4/tree_trunk_lod0.obj");
-	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj");
-	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj");
+	LoadModel("tree_trunk_0", "data/models/tree4/tree_trunk_lod0.obj", false, true);
+	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", false, true);
+	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
 
 
 	//LoadModel("marine", "data/models/marine/marine.obj");
@@ -52,9 +52,12 @@ void ModelsLibrary::Load()
 	//AddElement("tree2", model);
 }
 
-void ModelsLibrary::LoadModel(const std::string& name, const std::string& filename)
+void ModelsLibrary::LoadModel(const std::string& name, const std::string& filename, bool calculateNormals, bool calculateTangents)
 {
 	ModelGeometry* model = OBJLoader::LoadModel(filename);
+
+	model->Build(calculateNormals, calculateTangents);
+
 	if (model != nullptr)
 	{
 		Model* modelRender = new Model(model);

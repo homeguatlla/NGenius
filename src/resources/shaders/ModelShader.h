@@ -17,13 +17,7 @@ public:
 	void BindAttributes();
 	void GetAllUniformLocations();
 
-	void LoadLight(const Light& light);
-	void LoadViewMatrix(const glm::mat4& modelview);
-	void LoadProjectionMatrix(const glm::mat4& projectionmatrix);
-	void LoadCameraPosition(const glm::vec3& position);
-	void LoadModelTexture(int unit);
 	void LoadFogParameters(const glm::vec3& color, float density, float gradient);
-	void LoadTile(float tile);
 	void LoadTime(float time);
 	void LoadShadowMapSpaceMatrix(const glm::mat4& matrix);
 	void LoadShadowMapTexture(int unit, int width);

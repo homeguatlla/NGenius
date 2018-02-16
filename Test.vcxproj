@@ -215,6 +215,8 @@
     <ClInclude Include="src\resources\GameEntity.h" />
     <ClInclude Include="src\resources\materials\BasicMaterial.h" />
     <ClInclude Include="src\resources\materials\effects\DiffuseTexture.h" />
+    <ClInclude Include="src\resources\materials\effects\LightProperties.h" />
+    <ClInclude Include="src\resources\materials\effects\NormalTexture.h" />
     <ClInclude Include="src\resources\materials\IMaterial.h" />
     <ClInclude Include="src\resources\materials\IMaterialEffect.h" />
     <ClInclude Include="src\resources\materials\MaterialsLibrary.h" />
@@ -238,6 +240,7 @@
     <ClInclude Include="src\resources\shaders\TextShader.h" />
     <ClInclude Include="src\resources\shaders\WaterShader.h" />
     <ClInclude Include="src\resources\systems\EntitiesSystem.h" />
+    <ClInclude Include="src\resources\systems\LightsSystem.h" />
     <ClInclude Include="src\resources\systems\ParticlesSystem.h" />
     <ClInclude Include="src\resources\systems\PhysicsSystem.h" />
     <ClInclude Include="src\resources\systems\renderSystem\RenderSystem.h" />
@@ -308,6 +311,8 @@
     <ClCompile Include="src\resources\GameEntity.cpp" />
     <ClCompile Include="src\resources\materials\BasicMaterial.cpp" />
     <ClCompile Include="src\resources\materials\effects\DiffuseTexture.cpp" />
+    <ClCompile Include="src\resources\materials\effects\LightProperties.cpp" />
+    <ClCompile Include="src\resources\materials\effects\NormalTexture.cpp" />
     <ClCompile Include="src\resources\materials\IMaterial.cpp" />
     <ClCompile Include="src\resources\materials\IMaterialEffect.cpp" />
     <ClCompile Include="src\resources\materials\MaterialsLibrary.cpp" />
@@ -331,6 +336,7 @@
     <ClCompile Include="src\resources\shaders\TextShader.cpp" />
     <ClCompile Include="src\resources\shaders\WaterShader.cpp" />
     <ClCompile Include="src\resources\systems\EntitiesSystem.cpp" />
+    <ClCompile Include="src\resources\systems\LightsSystem.cpp" />
     <ClCompile Include="src\resources\systems\ParticlesSystem.cpp" />
     <ClCompile Include="src\resources\systems\PhysicsSystem.cpp" />
     <ClCompile Include="src\resources\systems\renderSystem\RenderSystem.cpp" />

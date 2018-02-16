@@ -19,7 +19,6 @@ public:
 	const std::string GetName() const override;
 	
 private:
-	void Draw() override;
 	bool IsInstancingAllowed() const override;
 };
 

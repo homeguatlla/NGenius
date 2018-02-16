@@ -15,6 +15,7 @@ uniform vec3 fogColor;
 uniform sampler2D shadowMap;
 uniform int shadowMapSize;
 uniform int pfcCount;
+uniform vec3 lightColor;
 
 float totalTexelsShadow = (pfcCount * 2.0 + 1.0) * (pfcCount * 2.0 + 1.0);
 
@@ -34,7 +35,7 @@ vec4 ApplyLight(vec3 ambient, vec3 materialDiffuse, vec3 materialSpecular)
 	
 	//float attenuation = length(lightPosition - positionWorldspace);
 
-	color.rgb = ambient + diffuse + specular;// * (1.0f / attenuation);
+	color.rgb = lightColor * (ambient + diffuse + specular);// * (1.0f / attenuation);
 	color.a = 1.0f;
 	
 	return color;
@@ -69,7 +70,7 @@ float ApplyShadow(int pfcCount, float totalTexels)
 void main()
 {
 	// Material properties
-	float shadowFactor = ApplyShadow(pfcCount, totalTexelsShadow);
+	float shadowFactor = 1.0f; //ApplyShadow(pfcCount, totalTexelsShadow);
 	vec4 MaterialDiffuseColor = shadowFactor * texture2D(texture, textureCoords);
 
 	if(MaterialDiffuseColor.a < 0.5)
@@ -80,6 +81,6 @@ void main()
 	vec3 MaterialAmbientColor = vec3(0.1f, 0.1f, 0.1f);
 	vec3 MaterialSpecularColor = vec3(1.0f, 1.0f, 1.0f);
 	color = ApplyLight(MaterialAmbientColor, MaterialDiffuseColor.rgb, MaterialSpecularColor);
-	color = ApplyFog(color);
+	//color = ApplyFog(color);
 }
 

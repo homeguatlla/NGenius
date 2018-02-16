@@ -8,6 +8,7 @@ class RenderSystem;
 class PhysicsSystem;
 class EntitiesSystem;
 class ParticlesSystem;
+class LightsSystem;
 
 class Model;
 class IShaderProgram;
@@ -15,6 +16,7 @@ class ITexture;
 class Texture;
 class FontType;
 class IMaterial;
+class Light;
 
 class GameEntity;
 class ParticlesEmitter;
@@ -31,6 +33,7 @@ class NGenius
 	PhysicsSystem* mPhysicsSystem;
 	EntitiesSystem* mEntitiesSystem;
 	ParticlesSystem* mParticlesSystem;
+	LightsSystem* mLightsSystem;
 
 	std::string mApplicationName;
 	float mFPS;
@@ -60,6 +63,7 @@ public:
 	void AddGameEntity(GameEntity* entity);
 	void AddParticleEmitter(ParticlesEmitter* emitter);
 	void AddRenderPass(RenderPass* renderPass);
+	void AddLight(Light* light);
 
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 

@@ -149,14 +149,14 @@ void ModelRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertex
 
 	if (mTexture != nullptr)
 	{
-		shader->LoadModelTexture(mTexture->GetUnit());
+		//shader->LoadModelTexture(mTexture->GetUnit());
 	}
-	shader->LoadLight(*mLight);
-	shader->LoadViewMatrix(const_cast<ICamera*>(camera)->GetViewMatrix());
-	shader->LoadProjectionMatrix(camera->GetProjectionMatrix());
+	//shader->LoadLight(*mLight);
+	//shader->LoadViewMatrix(const_cast<ICamera*>(camera)->GetViewMatrix());
+	//shader->LoadProjectionMatrix(camera->GetProjectionMatrix());
 	shader->LoadFogParameters(mFogColor, mIsFogEnabled ? mFogDensity : 0.0f, mFogGradient);
-	shader->LoadTile(mTile);
-	shader->LoadCameraPosition(camera->GetPosition());
+	//shader->LoadTile(mTile);
+	//shader->LoadCameraPosition(camera->GetPosition());
 	if (mTextureShadowmap != nullptr)
 	{
 		shader->LoadShadowMapSpaceMatrix(mShadowSpaceMatrix);

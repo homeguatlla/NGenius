@@ -47,6 +47,8 @@
 
 #include "src/resources/materials/IMaterial.h"
 #include "src/resources/materials/effects/DiffuseTexture.h"
+#include "src/resources/materials/effects/LightProperties.h"
+
 /*
 #include "src/resources/entities/Light.h"
 #include "src/resources/entities/Terrain.h"
@@ -468,8 +470,9 @@ void CreateProps()
 	Texture* texture = static_cast<Texture*>(mEngine.GetTexture(textureName));
 	Texture* normal = static_cast<Texture*>(mEngine.GetTexture(textureNormalName));
 
-	IMaterial* material = mEngine.CreateMaterial("model", mEngine.GetShader("default"));
-	material->AddEffect(new DiffuseTexture(texture));
+	IMaterial* material = mEngine.CreateMaterial("model", mEngine.GetShader("model"));
+	material->AddEffect(new DiffuseTexture(texture, 1));
+	material->AddEffect(new LightProperties(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
 	//material->AddEffect(new MaterialEffectNormalMap(normal));
 
 	for (int i = 0; i < numProps; i++)
@@ -659,7 +662,7 @@ void CreateEntities()
 	mEagleEyeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	mGameplayCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	mGameplayCamera->SetPosition(glm::vec3(0.0f, 0.0f, 3.0f));
+	mGameplayCamera->SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
 	mGameplayCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 

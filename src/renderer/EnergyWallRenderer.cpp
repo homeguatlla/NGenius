@@ -141,13 +141,13 @@ void EnergyWallRenderer::LoadData(const ICamera* camera, VertexBuffersManager& v
 {
 	EnergyWallShader* shader = static_cast<EnergyWallShader*>(mShaderProgram);
 
-	shader->LoadModelTexture(mTexture->GetUnit());
+	//shader->LoadModelTexture(mTexture->GetUnit());
 	shader->LoadDepthTexture(mDepthTexture->GetUnit());
-	shader->LoadViewMatrix(const_cast<ICamera*>(camera)->GetViewMatrix());
-	shader->LoadProjectionMatrix(camera->GetProjectionMatrix());
+	//shader->LoadViewMatrix(const_cast<ICamera*>(camera)->GetViewMatrix());
+	//shader->LoadProjectionMatrix(camera->GetProjectionMatrix());
 	shader->LoadFogParameters(mFogColor, mIsFogEnabled ? mFogDensity : 0.0f, mFogGradient);
-	shader->LoadTile(mTile);
-	shader->LoadCameraPosition(camera->GetPosition());
+	//shader->LoadTile(mTile);
+	//shader->LoadCameraPosition(camera->GetPosition());
 	shader->LoadScreenSize(glm::vec2(mDepthTexture->GetWidth(), mDepthTexture->GetHeight()));
 
 	EnergyWall* energyWall = static_cast<EnergyWall*>(GetParent());

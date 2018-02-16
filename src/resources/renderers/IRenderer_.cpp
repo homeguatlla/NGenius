@@ -86,7 +86,15 @@ void IRenderer_::Render(const ICamera* camera, VertexBuffersManager& vertexBuffe
 
 void IRenderer_::Draw()
 {
-	//glDrawElements(GL_TRIANGLES, mModel->GetIndexes().size(), GL_UNSIGNED_INT, 0);
+	if (mIsInstancingEnabled)
+	{
+		//glDrawElementsInstancedARB(GL_TRIANGLES, mIndexes.size(), GL_UNSIGNED_INT, 0, mInstances.size());
+		glDrawArraysInstanced(GL_TRIANGLES, 0, mModel->GetNumberOfVertexs(), mInstances.size());
+	}
+	else
+	{
+		glDrawArrays(GL_TRIANGLES, 0, mModel->GetNumberOfVertexs());
+	}
 }
 
 const BitNumber& IRenderer_::GetBitRendererInformation() const

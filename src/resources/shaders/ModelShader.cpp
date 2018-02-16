@@ -3,6 +3,7 @@
 #include "../camera/ICamera.h"
 #include "../materials/IMaterial.h"
 #include "../materials/effects/DiffuseTexture.h"
+#include "../materials/effects/LightProperties.h"
 #include "../textures/ITexture.h"
 
 const std::string ModelShader::VERTEX_FILE = "data/shaders/vertex/v_model.cg";
@@ -58,17 +59,24 @@ ModelShader::~ModelShader()
 {
 }
 
-
 void ModelShader::LoadData(const ICamera* camera, IMaterial* material)
 {
-	LoadViewMatrix(const_cast<ICamera*>(camera)->GetViewMatrix());
-	LoadProjectionMatrix(camera->GetProjectionMatrix());
-	LoadCameraPosition(camera->GetPosition());
+	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
+	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
+	LoadVector3(mLocationCameraPosition, camera->GetPosition());
 
 	if (material->HasEffect<DiffuseTexture>())
 	{
 		DiffuseTexture* effect = material->GetEffect<DiffuseTexture>();
-		LoadModelTexture(effect->GetDiffuseTexture()->GetUnit());
+		LoadTexture(mLocationTexture, effect->GetDiffuseTexture()->GetUnit());
+		LoadFloat(mLocationTile, effect->GetTile());
+	}
+
+	if (material->HasEffect<LightProperties>())
+	{
+		LightProperties* effect = material->GetEffect<LightProperties>();
+		LoadVector3(mLocationLightPosition, effect->GetPosition());
+		LoadVector3(mLocationLightColor, effect->GetColor());
 	}
 }
 
@@ -88,7 +96,7 @@ void ModelShader::GetAllUniformLocations()
 	mLocationProjectionMatrix = GetUniformLocation(ATTRIBUTE_PROJECTION_MATRIX);
 	mLocationViewMatrix = GetUniformLocation(ATTRIBUTE_VIEW_MATRIX);
 	mLocationLightPosition = GetUniformLocation(ATTRIBUTE_LIGHT_POSITION);
-	//mLocationLightColor = GetUniformLocation(ATTRIBUTE_LIGHT_COLOR);
+	mLocationLightColor = GetUniformLocation(ATTRIBUTE_LIGHT_COLOR);
 	mLocationCameraPosition = GetUniformLocation(ATTRIBUTE_CAMERA_POSITION);
 	mLocationTexture = GetUniformLocation(ATTRIBUTE_TEXTURE);
 	mLocationFogDensity = GetUniformLocation(ATTRIBUTE_FOG_DENSITY);
@@ -104,42 +112,11 @@ void ModelShader::GetAllUniformLocations()
 	mLocationShadowMapPFC = GetUniformLocation(ATTRIBUTE_SHADOW_PFC);
 }
 
-void ModelShader::LoadLight(const Light& light)
-{
-	LoadVector3(mLocationLightPosition, light.GetPosition());
-	//LoadVector3(mLocationLightColor, light.GetColor());
-}
-
-void ModelShader::LoadViewMatrix(const glm::mat4& viewmatrix)
-{
-	LoadMatrix4(mLocationViewMatrix, viewmatrix);
-}
-
-void ModelShader::LoadProjectionMatrix(const glm::mat4& projectionMatrix)
-{
-	LoadMatrix4(mLocationProjectionMatrix, projectionMatrix);
-}
-
-void ModelShader::LoadCameraPosition(const glm::vec3& position)
-{
-	LoadVector3(mLocationCameraPosition, position);
-}
-
-void ModelShader::LoadModelTexture(int unit)
-{
-	LoadTexture(mLocationTexture, unit);
-}
-
 void ModelShader::LoadFogParameters(const glm::vec3& color, float density, float gradient)
 {
 	LoadVector3(mLocationFogColor, color);
 	LoadFloat(mLocationFogDensity, density);
 	LoadFloat(mLocationFogGradient, gradient);
-}
-
-void ModelShader::LoadTile(float tile)
-{
-	LoadFloat(mLocationTile, tile);
 }
 
 void ModelShader::LoadTime(float time)

@@ -42,7 +42,7 @@ protected:
 	bool mIsVisible;
 
 	//virtual void PreRender(VertexBuffersManager& vertexBufferManager) = 0;
-	virtual void Draw() = 0;
+	virtual void Draw();
 
 	void CheckError();
 

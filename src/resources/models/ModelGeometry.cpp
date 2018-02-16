@@ -14,8 +14,6 @@ ModelGeometry::ModelGeometry(const std::vector<glm::vec3>& vertexs,
 {
 	mModelID = ++IDCounter;
 	assert(vertexs.size() > 0);
-	//CalculateNormals();
-	CalculateTangents();
 }
 
 ModelGeometry::ModelGeometry(const std::vector<glm::vec3>& vertexs,
@@ -29,8 +27,6 @@ ModelGeometry::ModelGeometry(const std::vector<glm::vec3>& vertexs,
 {
 	mModelID = ++IDCounter;
 	assert(vertexs.size() > 0);
-	//CalculateNormals();
-	CalculateTangents();
 }
 
 ModelGeometry::~ModelGeometry()
@@ -90,6 +86,18 @@ std::vector<unsigned int>& ModelGeometry::GetIndexes()
 long ModelGeometry::GetNumberOfIndexes() const
 {
 	return mIndexes.size();
+}
+
+void ModelGeometry::Build(bool calculateNormals, bool calculateTangents)
+{
+	if (calculateNormals)
+	{
+		CalculateNormals();
+	}
+	if (calculateTangents)
+	{
+		CalculateTangents();
+	}
 }
 
 void  ModelGeometry::SetMaterialName(const std::string& name)

@@ -14,6 +14,7 @@
 #include "resources/systems/renderSystem/RenderSystem.h"
 #include "resources/systems/PhysicsSystem.h"
 #include "resources/systems/ParticlesSystem.h"
+#include "resources/systems/LightsSystem.h"
 
 #include "resources/entities/ParticlesEmitter.h"
 
@@ -112,10 +113,12 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 	mPhysicsSystem = new PhysicsSystem();
 	mEntitiesSystem = new EntitiesSystem(mRenderSystem, mPhysicsSystem);
 	mParticlesSystem = new ParticlesSystem();
+	mLightsSystem = new LightsSystem(mEntitiesSystem);
 }
 
 void NGenius::DestroySystems()
 {
+	delete mLightsSystem;
 	delete mParticlesSystem;
 	delete mEntitiesSystem;
 	delete mPhysicsSystem;
@@ -210,6 +213,11 @@ void NGenius::AddRenderPass(RenderPass* renderPass)
 {
 	assert(mRenderSystem != nullptr);
 	mRenderSystem->AddRenderPass(renderPass);
+}
+
+void NGenius::AddLight(Light* light)
+{
+	mLightsSystem->AddLight(light);
 }
 
 void NGenius::SetTerrain(const Terrain* terrain)

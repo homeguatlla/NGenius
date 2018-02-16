@@ -12,7 +12,7 @@
 #include "../../textures/Texture.h"
 #include "../../materials/IMaterial.h"
 #include "../../materials/MaterialsLibrary.h"
-
+#include "../../materials/effects/DiffuseTexture.h"
 
 #include "../../../renderer/RenderPass.h"
 #include "../../../BitNumber.h"
@@ -36,6 +36,8 @@ mModelsLibrary(nullptr),
 mFontsLibrary(nullptr),
 mWindow(nullptr),
 mCurrentMaterial(nullptr),
+mDiffuseTexture(nullptr),
+mNormalTexture(nullptr),
 mLastClipPlaneNumberUsed(0),
 mIsFullScreen(false)
 {
@@ -263,9 +265,24 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer_* renderer,
 
 	mCurrentMaterial->Use();
 
+	SelectTextures();
+	
 	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, mCurrentMaterial);
 
 	mCurrentMaterial->UnUse();
+}
+
+void RenderSystem::SelectTextures()
+{
+	if (mCurrentMaterial->HasEffect<DiffuseTexture>())
+	{
+		ITexture* diffuse = mCurrentMaterial->GetEffect<DiffuseTexture>()->GetDiffuseTexture();
+		if (diffuse != mDiffuseTexture)
+		{
+			mDiffuseTexture = diffuse;
+			mDiffuseTexture->SetActive(true);
+		}
+	}
 }
 
 void RenderSystem::SelectMaterial(RenderPass* renderPass, IRenderer_* renderer)

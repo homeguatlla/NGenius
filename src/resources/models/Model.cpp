@@ -71,6 +71,19 @@ void Model::Build(VertexBuffersManager& vertexBufferManager, IMaterial* material
 	{
 		CreateVertexsVBO(vertexBufferManager, location);
 	}
+	//TODO los atributos de location deberían estar en algún lado definidos dentro del Shader o del material
+	location = material->GetShader()->GetAttributeLocation("textureCoordsModelspace");
+	if (location != -1)
+	{
+		CreateTextureCoordsVBO(vertexBufferManager, location);
+	}
+
+	location = material->GetShader()->GetAttributeLocation("normalModelspace");
+	if (location != -1)
+	{
+		CreateNormalsVBO(vertexBufferManager, location);
+	}
+
 	location = material->GetShader()->GetAttributeLocation("M");
 	if (location != -1)
 	{
@@ -83,26 +96,22 @@ void Model::Build(VertexBuffersManager& vertexBufferManager, IMaterial* material
 void Model::CreateModelMatrixVBO(VertexBuffersManager& vertexBufferManager, int location)
 {
 	//matrices instanced
-	GLint matrixLocationID = location;
-	if (matrixLocationID != -1)
-	{
-		std::string name("model_matrix");
-		name.append(std::to_string(GetID()));
-		mMatrixVBO = vertexBufferManager.CreateVBO(name);
-		glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);
+	std::string name("model_matrix_");
+	name.append(std::to_string(GetID()));
+	mMatrixVBO = vertexBufferManager.CreateVBO(name);
+	glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);
 
-		for (unsigned int i = 0; i < 4; ++i)
-		{
-			glEnableVertexAttribArray(matrixLocationID + i);
-			glVertexAttribPointer(	matrixLocationID + i,
-									4, GL_FLOAT, GL_FALSE,
-									sizeof(glm::mat4),
-									(void*)(sizeof(glm::vec4) * i));
-			glVertexAttribDivisorARB(matrixLocationID + i, 1);
-			//glDisableVertexAttribArray(matrixLocation + i);
-		}
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	for (unsigned int i = 0; i < 4; ++i)
+	{
+		glEnableVertexAttribArray(location + i);
+		glVertexAttribPointer(location + i,
+								4, GL_FLOAT, GL_FALSE,
+								sizeof(glm::mat4),
+								(void*)(sizeof(glm::vec4) * i));
+		glVertexAttribDivisorARB(location + i, 1);
+		//glDisableVertexAttribArray(matrixLocation + i);
 	}
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Model::CreateVertexsVBO(VertexBuffersManager& vertexBufferManager, int location)
@@ -111,26 +120,78 @@ void Model::CreateVertexsVBO(VertexBuffersManager& vertexBufferManager, int loca
 	if (numVertexs > 0)
 	{
 		// 1rst attribute buffer : vertices
-		if (location != -1)
-		{
-			std::string name("model");
-			name.append(std::to_string(GetID()));
+		std::string name("model_vertexs_");
+		name.append(std::to_string(GetID()));
 
-			unsigned int vertexVBO = vertexBufferManager.CreateVBO(name);
-			glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
-			glBufferData(GL_ARRAY_BUFFER, numVertexs * sizeof(glm::vec3), &mModelGeometry->GetVertexs()[0], GL_STATIC_DRAW);
+		unsigned int vertexVBO = vertexBufferManager.CreateVBO(name);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
+		glBufferData(GL_ARRAY_BUFFER, numVertexs * sizeof(glm::vec3), &mModelGeometry->GetVertexs()[0], GL_STATIC_DRAW);
 
-			glEnableVertexAttribArray(location);
-			glVertexAttribPointer(
-				location,  // The attribute we want to configure
-				3,                            // size
-				GL_FLOAT,                     // type
-				GL_FALSE,                     // normalized?
-				0,                            // stride
-				(void*)0                      // array buffer offset
-			);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-		}
+		glEnableVertexAttribArray(location);
+		glVertexAttribPointer(
+			location,  // The attribute we want to configure
+			3,                            // size
+			GL_FLOAT,                     // type
+			GL_FALSE,                     // normalized?
+			0,                            // stride
+			(void*)0                      // array buffer offset
+		);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+}
+
+void Model::CreateTextureCoordsVBO(VertexBuffersManager& vertexBufferManager, int location)
+{
+	// 2nd attribute buffer : texture coords
+	long numTextureCoords = mModelGeometry->GetNumberOfTextureCoords();
+	if (numTextureCoords > 0)
+	{
+		std::string name("model_texture_coords_");
+		name.append(std::to_string(GetID()));
+
+		unsigned int textureCoordsVBO = vertexBufferManager.CreateVBO(name);
+
+		glGenBuffers(1, &textureCoordsVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, textureCoordsVBO);
+		glBufferData(GL_ARRAY_BUFFER, numTextureCoords * sizeof(glm::vec2), &mModelGeometry->GetTextureCoords()[0], GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(location);
+		glVertexAttribPointer(
+			location,  // The attribute we want to configure
+			2,                            // size
+			GL_FLOAT,                     // type
+			GL_FALSE,                     // normalized?
+			0,                            // stride
+			(void*)0                      // array buffer offset
+		);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+}
+
+void Model::CreateNormalsVBO(VertexBuffersManager& vertexBufferManager, int location)
+{
+	//3rd normals
+	long numNormals = mModelGeometry->GetNumberOfNormals();
+	if (numNormals > 0)
+	{
+		std::string name("model_normals_");
+		name.append(std::to_string(GetID()));
+
+		unsigned int normalsVBO = vertexBufferManager.CreateVBO(name);
+		glGenBuffers(1, &normalsVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, normalsVBO);
+		glBufferData(GL_ARRAY_BUFFER, numNormals * sizeof(glm::vec3), &mModelGeometry->GetNormals()[0], GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(location);
+		glVertexAttribPointer(
+			location,  // The attribute we want to configure
+			3,                            // size
+			GL_FLOAT,                     // type
+			GL_FALSE,                     // normalized?
+			0,                            // stride
+			(void*)0                      // array buffer offset
+		);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 }
 

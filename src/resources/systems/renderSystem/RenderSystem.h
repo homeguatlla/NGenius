@@ -54,6 +54,9 @@ class RenderSystem
 
 	IMaterial* mCurrentMaterial;
 
+	ITexture* mDiffuseTexture;
+	ITexture* mNormalTexture;
+
 	int mLastClipPlaneNumberUsed;
 	bool mIsFullScreen;
 	
@@ -105,6 +108,7 @@ private:
 	void RenderInstances(RenderPass* renderPass, IRenderer_* renderer, std::vector<IRenderer_*>& instances);
 	
 	void SelectMaterial(RenderPass* renderPass, IRenderer_* renderer);
+	void SelectTextures();
 
 	void CheckGLError();
 };

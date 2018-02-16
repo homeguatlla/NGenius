@@ -40,6 +40,7 @@ public:
 	long GetNumberOfIndexes() const;
 	long GetNumberOfTangents() const;
 
+	void Build(bool calculateNormals, bool calculateTangents);
 	void SetMaterialName(const std::string& name);
 	const std::string& GetMaterialName() const;
 	void SetDiffuseTextureName(const std::string& name);
