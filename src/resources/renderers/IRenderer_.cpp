@@ -5,6 +5,7 @@
 #include "../shaders/IShaderProgram.h"
 #include "../camera/ICamera.h"
 #include "../GameEntity.h"
+#include "../Transformation.h"
 #include "../shaders/QuadShader.h"
 #include "../models/Model.h"
 #include "../materials/IMaterial.h"
@@ -67,6 +68,15 @@ void IRenderer_::Render(const ICamera* camera, VertexBuffersManager& vertexBuffe
 
 	glBindVertexArray(mModel->GetVAOID());
 
+	std::vector<glm::mat4> matrices;
+
+	for (IRenderer_* renderer : mInstances)
+	{
+		glm::mat4 modelMatrix = renderer->GetParent()->GetTransformation()->GetModelMatrix();
+		matrices.push_back(modelMatrix);
+	}
+
+	mModel->Apply(matrices);
 	material->Apply(camera);
 		
 	Draw();

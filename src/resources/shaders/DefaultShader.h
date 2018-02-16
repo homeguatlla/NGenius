@@ -14,10 +14,11 @@ public:
 
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
-	void LoadTransformationMatrix(const glm::mat4& matrix);
 
 private:
 	
-	int mLocationMVP;
+	int mLocationM;
+	int mLocationV;
+	int mLocationP;
 };
 

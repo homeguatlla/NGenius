@@ -441,7 +441,7 @@ void CreateTrees()
 void CreateProps()
 {
 	int areaSize = 5;
-	int numProps = 5;
+	int numProps = 3;
 
 	std::vector<std::string> models;
 	std::vector<glm::vec3> positions;
@@ -449,6 +449,10 @@ void CreateProps()
 	models.push_back(std::string("barrel"));
 	models.push_back(std::string("chest"));
 	models.push_back(std::string("brazier"));
+
+	positions.push_back(glm::vec3(1.f, 0.0f, 0.0f));
+	positions.push_back(glm::vec3(0.0f, 0.0f, -1.0f));
+	positions.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
 
 	positions.push_back(glm::vec3(0.8f, 0.0f, -2.3f));
 	positions.push_back(glm::vec3(0.4f, 0.0f, -2.0f));
@@ -462,7 +466,7 @@ void CreateProps()
 	Texture* texture = static_cast<Texture*>(mEngine.GetTexture(textureName));
 	Texture* normal = static_cast<Texture*>(mEngine.GetTexture(textureNormalName));
 
-	IMaterial* material = mEngine.CreateMaterial("model", mEngine.GetShader("model"));
+	IMaterial* material = mEngine.CreateMaterial("model", mEngine.GetShader("default"));
 	material->AddEffect(new DiffuseTexture(texture));
 	//material->AddEffect(new MaterialEffectNormalMap(normal));
 
@@ -653,8 +657,8 @@ void CreateEntities()
 	mEagleEyeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	mGameplayCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	mGameplayCamera->SetPosition(glm::vec3(0.0f, 4.9f, 3.0f));
-	mGameplayCamera->SetTarget(glm::vec3(0.0f, 4.9f, 0.0f));
+	mGameplayCamera->SetPosition(glm::vec3(0.0f, 0.0f, 3.0f));
+	mGameplayCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	if (mIsPropsEnabled)
@@ -1048,7 +1052,6 @@ void UpdateInput(GLFWwindow* window)
 		mIsShadowEnabled = !mIsShadowEnabled;
 		mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
 	}
-
 }
 
 /*

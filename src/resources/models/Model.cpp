@@ -8,7 +8,8 @@
 
 Model::Model(ModelGeometry* model) :
 mModelGeometry(model),
-mVAO(-1)
+mVAO(-1),
+mMatrixVBO(-1)
 {
 	assert(model != nullptr);
 	assert(model->GetNumberOfVertexs() > 0);
@@ -45,6 +46,13 @@ int Model::GetNumberOfVertexs() const
 	return mModelGeometry->GetNumberOfVertexs();
 }
 
+void Model::Apply(std::vector<glm::mat4>& matrices)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * matrices.size(), &matrices[0], GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 bool Model::IsBuilt() const 
 {
 	return mVAO != -1;
@@ -52,19 +60,52 @@ bool Model::IsBuilt() const
 
 void Model::Build(VertexBuffersManager& vertexBufferManager, IMaterial* material)
 {
-	mVAO = vertexBufferManager.CreateVAO("model_" + mModelGeometry->GetID());
+	std::string name("model_");
+	name.append(std::to_string(GetID()));
+
+	mVAO = vertexBufferManager.CreateVAO(name);
 	glBindVertexArray(mVAO);
 
 	int location = material->GetShader()->GetAttributePosition();
 	if ( location != -1)
 	{
-		CreateVertexsBuffer(vertexBufferManager, location);
+		CreateVertexsVBO(vertexBufferManager, location);
+	}
+	location = material->GetShader()->GetAttributeLocation("M");
+	if (location != -1)
+	{
+		CreateModelMatrixVBO(vertexBufferManager, location);
 	}
 	//TODO add normal, texture, tangent, model matrix, color
 	glBindVertexArray(0);
 }
 
-void Model::CreateVertexsBuffer(VertexBuffersManager& vertexBufferManager, int location)
+void Model::CreateModelMatrixVBO(VertexBuffersManager& vertexBufferManager, int location)
+{
+	//matrices instanced
+	GLint matrixLocationID = location;
+	if (matrixLocationID != -1)
+	{
+		std::string name("model_matrix");
+		name.append(std::to_string(GetID()));
+		mMatrixVBO = vertexBufferManager.CreateVBO(name);
+		glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);
+
+		for (unsigned int i = 0; i < 4; ++i)
+		{
+			glEnableVertexAttribArray(matrixLocationID + i);
+			glVertexAttribPointer(	matrixLocationID + i,
+									4, GL_FLOAT, GL_FALSE,
+									sizeof(glm::mat4),
+									(void*)(sizeof(glm::vec4) * i));
+			glVertexAttribDivisorARB(matrixLocationID + i, 1);
+			//glDisableVertexAttribArray(matrixLocation + i);
+		}
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+}
+
+void Model::CreateVertexsVBO(VertexBuffersManager& vertexBufferManager, int location)
 {
 	long numVertexs = mModelGeometry->GetNumberOfVertexs();
 	if (numVertexs > 0)
@@ -72,7 +113,10 @@ void Model::CreateVertexsBuffer(VertexBuffersManager& vertexBufferManager, int l
 		// 1rst attribute buffer : vertices
 		if (location != -1)
 		{
-			unsigned int vertexVBO = vertexBufferManager.CreateVBO("model" + GetID());
+			std::string name("model");
+			name.append(std::to_string(GetID()));
+
+			unsigned int vertexVBO = vertexBufferManager.CreateVBO(name);
 			glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
 			glBufferData(GL_ARRAY_BUFFER, numVertexs * sizeof(glm::vec3), &mModelGeometry->GetVertexs()[0], GL_STATIC_DRAW);
 

@@ -250,13 +250,14 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer_* renderer,
 	else
 	{
 		glDisable(mLastClipPlaneNumberUsed);
-	}
+	}*/
+
+	renderer->SetInstances(instances);
 
 	if (instances.size() > 1)
 	{
-		renderer->SetInstances(instances);
 		renderer->EnableInstancing(true);
-	}*/
+	}
 
 	SelectMaterial(renderPass, renderer);
 

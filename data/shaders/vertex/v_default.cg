@@ -1,10 +1,12 @@
 #version 330 core
 
 in vec3 vertexModelspace;
-uniform mat4 MVP;
+in mat4 M;
+
+uniform mat4 V;
+uniform mat4 P;
 
 void main(void)
 {
-	vec4 v = vec4(vertexModelspace,1);
-    gl_Position = MVP * v;
+	gl_Position = P * V * M * vec4(vertexModelspace, 1);
 }

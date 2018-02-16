@@ -2,6 +2,7 @@
 
 #include "../../AABB.h"
 #include "../../VertexBuffersManager.h"
+#include <vector>
 
 class ModelGeometry;
 class IMaterial;
@@ -11,6 +12,7 @@ class Model
 	ModelGeometry* mModelGeometry;
 	AABB mAABB;
 	int mVAO;
+	int mMatrixVBO;
 
 public:
 	Model(ModelGeometry* model);
@@ -22,11 +24,14 @@ public:
 
 	int GetNumberOfVertexs() const;
 
+	void Apply(std::vector<glm::mat4>& matrices);
+
 	bool IsBuilt() const;
 	void Build(VertexBuffersManager& vertexBufferManager, IMaterial* material);
 	
 private:
-	void CreateVertexsBuffer(VertexBuffersManager& vertexBufferManager, int location);
+	void CreateVertexsVBO(VertexBuffersManager& vertexBufferManager, int location);
+	void CreateModelMatrixVBO(VertexBuffersManager& vertexBufferManager, int location);
 	void CalculateAABB();
 };
 
