@@ -212,6 +212,7 @@
     <ClInclude Include="src\resources\font\FontType.h" />
     <ClInclude Include="src\resources\GameEntity.h" />
     <ClInclude Include="src\resources\materials\BasicMaterial.h" />
+    <ClInclude Include="src\resources\materials\effects\ClippingPlaneMaterialEffect.h" />
     <ClInclude Include="src\resources\materials\effects\DiffuseTexture.h" />
     <ClInclude Include="src\resources\materials\effects\FogProperties.h" />
     <ClInclude Include="src\resources\materials\effects\HeightMapTexture.h" />
@@ -311,6 +312,7 @@
     <ClCompile Include="src\resources\font\FontType.cpp" />
     <ClCompile Include="src\resources\GameEntity.cpp" />
     <ClCompile Include="src\resources\materials\BasicMaterial.cpp" />
+    <ClCompile Include="src\resources\materials\effects\ClippingPlaneMaterialEffect.cpp" />
     <ClCompile Include="src\resources\materials\effects\DiffuseTexture.cpp" />
     <ClCompile Include="src\resources\materials\effects\FogProperties.cpp" />
     <ClCompile Include="src\resources\materials\effects\HeightMapTexture.cpp" />

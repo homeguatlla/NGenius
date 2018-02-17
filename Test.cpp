@@ -53,6 +53,7 @@
 #include "src/resources/materials/effects/ShadowProperties.h"
 #include "src/resources/materials/effects/HeightMapTexture.h"
 #include "src/resources/materials/effects/TextureArrayMaterialEffect.h"
+#include "src/resources/materials/effects/ClippingPlaneMaterialEffect.h"
 
 #include "src/resources/entities/Terrain.h"
 /*
@@ -676,6 +677,7 @@ void CreateTerrain()
 	material->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new HeightMapTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")), 1.0f));
 	material->AddEffect(new TextureArrayMaterialEffect(static_cast<TextureArray*>(mEngine.GetTexture("terrain_array"))));
+	material->AddEffect(new ClippingPlaneMaterialEffect());
 
 	//material->AddEffect(new LightProperties(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	//material->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));

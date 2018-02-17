@@ -9,6 +9,7 @@
 #include "../materials/effects/ShadowProperties.h"
 #include "../materials/effects/HeightMapTexture.h"
 #include "../materials/effects/TextureArrayMaterialEffect.h"
+#include "../materials/effects/ClippingPlaneMaterialEffect.h"
 
 #include "../textures/ITexture.h"
 #include "../textures/TextureArray.h"
@@ -95,6 +96,12 @@ void TerrainShader::LoadData(const ICamera* camera, const Transformation* transf
 		LoadTexture(mLocationArrayTexture, effect->GetTextureArray()->GetUnit());
 	}
 
+	if (material->HasEffect<ClippingPlaneMaterialEffect>())
+	{
+		ClippingPlaneMaterialEffect* effect = material->GetEffect<ClippingPlaneMaterialEffect>();
+		LoadVector4(mLocationClippingPlane, effect->GetClippingPlane());
+	}
+
 	if (material->HasEffect<LightProperties>())
 	{
 		LightProperties* effect = material->GetEffect<LightProperties>();
@@ -153,20 +160,4 @@ void TerrainShader::GetAllUniformLocations()
 void TerrainShader::LoadScale(float scale)
 {
 	LoadFloat(mLocationScale, scale);
-}
-
-void TerrainShader::LoadHeightMapTexture(int unit)
-{
-	LoadTexture(mLocationHeightMapTexture, unit);
-}
-
-void TerrainShader::LoadArrayTexture(int unit)
-{
-	LoadTexture(mLocationArrayTexture, unit);
-}
-
-
-void TerrainShader::LoadClippingPlane(const glm::vec4& plane)
-{
-	LoadVector4(mLocationClippingPlane, plane);
 }

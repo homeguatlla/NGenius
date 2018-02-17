@@ -16,9 +16,6 @@ public:
 	void GetAllUniformLocations();
 
 	void LoadScale(float scale);
-	void LoadArrayTexture(int index);
-	void LoadHeightMapTexture(int unit);
-	void LoadClippingPlane(const glm::vec4& plane);
 	
 private:
 	int mLocationMVPMatrix;

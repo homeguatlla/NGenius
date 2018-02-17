@@ -14,6 +14,7 @@
 #include "../../materials/MaterialsLibrary.h"
 #include "../../materials/effects/DiffuseTexture.h"
 #include "../../materials/effects/NormalTexture.h"
+#include "../../materials/effects/ClippingPlaneMaterialEffect.h"
 
 #include "../../../renderer/RenderPass.h"
 #include "../../../BitNumber.h"
@@ -240,20 +241,7 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer_* renderer,
 											mShadowsRenderPass->GetShadowMapMatrix(), 
 											mShadowsRenderPass->GetShadowMapPFCCounter());
 	}
-	//Apply clipping planes
-	if (renderPass->IsClippingEnabled())
-	{
-		mLastClipPlaneNumberUsed = renderPass->GetClippingPlaneNumber();
-		glEnable(mLastClipPlaneNumberUsed);
-		if (renderer->HasClippingPlane())
-		{
-			renderer->SetClippingPlane(renderPass->GetClippingPlane());
-		}
-	}
-	else
-	{
-		glDisable(mLastClipPlaneNumberUsed);
-	}*/
+	*/
 
 	renderer->SetInstances(instances);
 
@@ -264,6 +252,8 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer_* renderer,
 
 	SelectMaterial(renderPass, renderer);
 
+	SelectClippingPlane(renderPass);
+
 	mCurrentMaterial->Use();
 
 	SelectTextures();
@@ -271,6 +261,25 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer_* renderer,
 	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, mCurrentMaterial);
 
 	mCurrentMaterial->UnUse();
+}
+
+void RenderSystem::SelectClippingPlane(RenderPass* renderPass)
+{
+	//Apply clipping planes
+	if (renderPass->IsClippingEnabled())
+	{
+		mLastClipPlaneNumberUsed = renderPass->GetClippingPlaneNumber();
+		glEnable(mLastClipPlaneNumberUsed);
+		if (mCurrentMaterial->HasEffect<ClippingPlaneMaterialEffect>())
+		{
+			ClippingPlaneMaterialEffect* effect = mCurrentMaterial->GetEffect<ClippingPlaneMaterialEffect>();
+			effect->SetClippingPlane(renderPass->GetClippingPlane());
+		}
+	}
+	else
+	{
+		glDisable(mLastClipPlaneNumberUsed);
+	}
 }
 
 void RenderSystem::SelectTextures()

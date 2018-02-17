@@ -417,6 +417,9 @@
     <ClInclude Include="src\resources\materials\effects\TextureArrayMaterialEffect.h">
       <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\ClippingPlaneMaterialEffect.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -714,6 +717,9 @@
       <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\materials\effects\TextureArrayMaterialEffect.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\ClippingPlaneMaterialEffect.cpp">
       <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
   </ItemGroup>
