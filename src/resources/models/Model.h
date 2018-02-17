@@ -33,6 +33,7 @@ private:
 	void CreateVertexsVBO(VertexBuffersManager& vertexBufferManager, int location);
 	void CreateTextureCoordsVBO(VertexBuffersManager& vertexBufferManager, int location);
 	void CreateNormalsVBO(VertexBuffersManager& vertexBufferManager, int location);
+	void CreateTangentsVBO(VertexBuffersManager& vertexBufferManager, int location);
 	void CreateModelMatrixVBO(VertexBuffersManager& vertexBufferManager, int location);
 	void CalculateAABB();
 };

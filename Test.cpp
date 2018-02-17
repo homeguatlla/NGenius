@@ -473,11 +473,11 @@ void CreateProps()
 	Texture* texture = static_cast<Texture*>(mEngine.GetTexture(textureName));
 	Texture* normal = static_cast<Texture*>(mEngine.GetTexture(textureNormalName));
 
-	IMaterial* material = mEngine.CreateMaterial("model", mEngine.GetShader("model"));
+	IMaterial* material = mEngine.CreateMaterial("model", mEngine.GetShader("normalmap"));
 	material->AddEffect(new DiffuseTexture(texture, glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	material->AddEffect(new LightProperties(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
-	//material->AddEffect(new MaterialEffectNormalMap(normal));
+	material->AddEffect(new NormalTexture(normal, 1));
 
 	for (int i = 0; i < numProps; i++)
 	{

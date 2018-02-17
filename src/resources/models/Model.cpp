@@ -84,6 +84,12 @@ void Model::Build(VertexBuffersManager& vertexBufferManager, IMaterial* material
 		CreateNormalsVBO(vertexBufferManager, location);
 	}
 
+	location = material->GetShader()->GetAttributeLocation("tangentModelspace");
+	if (location != -1)
+	{
+		CreateTangentsVBO(vertexBufferManager, location);
+	}
+
 	location = material->GetShader()->GetAttributeLocation("M");
 	if (location != -1)
 	{
@@ -181,6 +187,33 @@ void Model::CreateNormalsVBO(VertexBuffersManager& vertexBufferManager, int loca
 		glGenBuffers(1, &normalsVBO);
 		glBindBuffer(GL_ARRAY_BUFFER, normalsVBO);
 		glBufferData(GL_ARRAY_BUFFER, numNormals * sizeof(glm::vec3), &mModelGeometry->GetNormals()[0], GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(location);
+		glVertexAttribPointer(
+			location,  // The attribute we want to configure
+			3,                            // size
+			GL_FLOAT,                     // type
+			GL_FALSE,                     // normalized?
+			0,                            // stride
+			(void*)0                      // array buffer offset
+		);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+}
+
+void Model::CreateTangentsVBO(VertexBuffersManager& vertexBufferManager, int location)
+{
+	//4rd tangents
+	long numTangents = mModelGeometry->GetNumberOfTangents();
+	if (numTangents > 0)
+	{
+		std::string name("model_tangents_");
+		name.append(std::to_string(GetID()));
+
+		unsigned int tangentsVBO = vertexBufferManager.CreateVBO(name);
+		glGenBuffers(1, &tangentsVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, tangentsVBO);
+		glBufferData(GL_ARRAY_BUFFER, numTangents * sizeof(glm::vec3), &mModelGeometry->GetTangents()[0], GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(location);
 		glVertexAttribPointer(

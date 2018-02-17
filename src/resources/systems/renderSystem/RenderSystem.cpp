@@ -13,6 +13,7 @@
 #include "../../materials/IMaterial.h"
 #include "../../materials/MaterialsLibrary.h"
 #include "../../materials/effects/DiffuseTexture.h"
+#include "../../materials/effects/NormalTexture.h"
 
 #include "../../../renderer/RenderPass.h"
 #include "../../../BitNumber.h"
@@ -281,6 +282,16 @@ void RenderSystem::SelectTextures()
 		{
 			mDiffuseTexture = diffuse;
 			mDiffuseTexture->SetActive(true);
+		}
+	}
+
+	if (mCurrentMaterial->HasEffect<NormalTexture>())
+	{
+		ITexture* normal = mCurrentMaterial->GetEffect<NormalTexture>()->GetNormalTexture();
+		if (normal != mNormalTexture)
+		{
+			mNormalTexture = normal;
+			mNormalTexture->SetActive(true);
 		}
 	}
 }
