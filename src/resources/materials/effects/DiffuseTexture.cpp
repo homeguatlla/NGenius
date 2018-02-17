@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "DiffuseTexture.h"
 
-DiffuseTexture::DiffuseTexture(ITexture* texture, int tile) :
+DiffuseTexture::DiffuseTexture(ITexture* texture, const glm::vec3& color, float tile) :
 mTexture(texture),
+mColor(color),
 mTile(tile)
 {
 }
@@ -16,8 +17,12 @@ ITexture* DiffuseTexture::GetDiffuseTexture() const
 {
 	return mTexture;
 }
+const glm::vec3 DiffuseTexture::GetColor() const
+{
+	return mColor;
+}
 
-int DiffuseTexture::GetTile() const
+float DiffuseTexture::GetTile() const
 {
 	return mTile;
 }

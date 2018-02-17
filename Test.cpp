@@ -47,7 +47,10 @@
 
 #include "src/resources/materials/IMaterial.h"
 #include "src/resources/materials/effects/DiffuseTexture.h"
+#include "src/resources/materials/effects/NormalTexture.h"
 #include "src/resources/materials/effects/LightProperties.h"
+#include "src/resources/materials/effects/FogProperties.h"
+#include "src/resources/materials/effects/ShadowProperties.h"
 
 /*
 #include "src/resources/entities/Light.h"
@@ -471,8 +474,9 @@ void CreateProps()
 	Texture* normal = static_cast<Texture*>(mEngine.GetTexture(textureNormalName));
 
 	IMaterial* material = mEngine.CreateMaterial("model", mEngine.GetShader("model"));
-	material->AddEffect(new DiffuseTexture(texture, 1));
-	material->AddEffect(new LightProperties(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
+	material->AddEffect(new DiffuseTexture(texture, glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	material->AddEffect(new LightProperties(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	material->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
 	//material->AddEffect(new MaterialEffectNormalMap(normal));
 
 	for (int i = 0; i < numProps; i++)
@@ -1225,7 +1229,7 @@ void SetupConfiguration()
 		mIsDebugModeEnabled = true;
 		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
+		mIsFogEnabled = true;
 		mIsVegetationEnabled = false;
 		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = false;
@@ -1271,7 +1275,7 @@ int main(void)
 {
 	Initialize();
 
-	mFogDensity = mIsFogEnabled ? 0.04f : 0.0f;
+	mFogDensity = mIsFogEnabled ? mFogDensity : 0.0f;
 
 	CreateEntities();
 	CreateRenderPasses();

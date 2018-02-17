@@ -6,14 +6,14 @@ class ITexture;
 class NormalTexture : public IMaterialEffect
 {
 	ITexture* mTexture;
-	int mTile;
+	float mTile;
 
 public:
-	NormalTexture(ITexture* texture, int tile);
+	NormalTexture(ITexture* texture, float tile);
 	virtual ~NormalTexture();
 
 	ITexture* GetNormalTexture() const;
-	int GetTile() const;
+	float GetTile() const;
 
 	NormalTexture* DoClone() const override;
 };

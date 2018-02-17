@@ -1,6 +1,5 @@
 #pragma once
 #include "IShaderProgram.h"
-#include "../../resources/entities/Light.h"
 
 class ModelShader :	public IShaderProgram
 {
@@ -17,12 +16,6 @@ public:
 	void BindAttributes();
 	void GetAllUniformLocations();
 
-	void LoadFogParameters(const glm::vec3& color, float density, float gradient);
-	void LoadTime(float time);
-	void LoadShadowMapSpaceMatrix(const glm::mat4& matrix);
-	void LoadShadowMapTexture(int unit, int width);
-	void LoadShadowMapPFC(int pfcCounter);
-
 private:
 	int mLocationModelMatrix;
 	int mLocationViewMatrix;
@@ -37,7 +30,6 @@ private:
 	int	mLocationFogGradient;
 	int mLocationFogColor;
 	int mLocationTile;
-	int mLocationTime;
 	int mLocationShadowSpaceMatrix;
 	int mLocationShadowMapTexture;
 	int mLocationShadowMapTextureWidth;

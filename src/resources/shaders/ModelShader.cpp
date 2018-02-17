@@ -4,6 +4,8 @@
 #include "../materials/IMaterial.h"
 #include "../materials/effects/DiffuseTexture.h"
 #include "../materials/effects/LightProperties.h"
+#include "../materials/effects/FogProperties.h"
+#include "../materials/effects/ShadowProperties.h"
 #include "../textures/ITexture.h"
 
 const std::string ModelShader::VERTEX_FILE = "data/shaders/vertex/v_model.cg";
@@ -22,7 +24,6 @@ const std::string ATTRIBUTE_FOG_DENSITY("fogDensity");
 const std::string ATTRIBUTE_FOG_GRADIENT("fogGradient");
 const std::string ATTRIBUTE_FOG_COLOR("fogColor");
 const std::string ATTRIBUTE_TILE("tile");
-const std::string ATTRIBUTE_TIME("time");
 const std::string ATTRIBUTE_SHADOW_SPACE_MATRIX("toShadowMapSpace");
 const std::string ATTRIBUTE_SHADOW_TEXTURE("shadowMap");
 const std::string ATTRIBUTE_SHADOW_TEXTURE_WIDTH("shadowMapSize");
@@ -46,7 +47,6 @@ mLocationFogDensity(-1),
 mLocationFogGradient(-1),
 mLocationFogColor(-1),
 mLocationTile(-1),
-mLocationTime(-1),
 mLocationShadowSpaceMatrix(-1),
 mLocationShadowMapTexture(-1),
 mLocationShadowMapTextureWidth(-1),
@@ -78,6 +78,23 @@ void ModelShader::LoadData(const ICamera* camera, IMaterial* material)
 		LoadVector3(mLocationLightPosition, effect->GetPosition());
 		LoadVector3(mLocationLightColor, effect->GetColor());
 	}
+
+	if (material->HasEffect<FogProperties>())
+	{
+		FogProperties* effect = material->GetEffect<FogProperties>();
+		LoadVector3(mLocationFogColor, effect->GetColor());
+		LoadFloat(mLocationFogDensity, effect->GetDensity());
+		LoadFloat(mLocationFogGradient, effect->GetGradient());
+	}
+
+	if (material->HasEffect<ShadowProperties>())
+	{
+		ShadowProperties* effect = material->GetEffect<ShadowProperties>();
+		LoadMatrix4(mLocationShadowSpaceMatrix, effect->GetMatrix());
+		LoadTexture(mLocationShadowMapTexture, effect->GetDepthTexture()->GetUnit());
+		LoadInteger(mLocationShadowMapTextureWidth, effect->GetDepthTexture()->GetWidth());
+		LoadInteger(mLocationShadowMapPFC, effect->GetPFCCounter());
+	}
 }
 
 void ModelShader::BindAttributes()
@@ -104,38 +121,9 @@ void ModelShader::GetAllUniformLocations()
 	mLocationFogColor = GetUniformLocation(ATTRIBUTE_FOG_COLOR);
 	
 	mLocationTile = GetUniformLocation(ATTRIBUTE_TILE);
-	mLocationTime = GetUniformLocation(ATTRIBUTE_TIME);
 	
 	mLocationShadowSpaceMatrix = GetUniformLocation(ATTRIBUTE_SHADOW_SPACE_MATRIX);
 	mLocationShadowMapTexture = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE);
 	mLocationShadowMapTextureWidth = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE_WIDTH);
 	mLocationShadowMapPFC = GetUniformLocation(ATTRIBUTE_SHADOW_PFC);
-}
-
-void ModelShader::LoadFogParameters(const glm::vec3& color, float density, float gradient)
-{
-	LoadVector3(mLocationFogColor, color);
-	LoadFloat(mLocationFogDensity, density);
-	LoadFloat(mLocationFogGradient, gradient);
-}
-
-void ModelShader::LoadTime(float time)
-{
-	LoadFloat(mLocationTime, time);
-}
-
-void ModelShader::LoadShadowMapSpaceMatrix(const glm::mat4& matrix)
-{
-	LoadMatrix4(mLocationShadowSpaceMatrix, matrix);
-}
-
-void ModelShader::LoadShadowMapTexture(int unit, int width)
-{
-	LoadTexture(mLocationShadowMapTexture, unit);
-	LoadInteger(mLocationShadowMapTextureWidth, width);
-}
-
-void ModelShader::LoadShadowMapPFC(int pfcCounter)
-{
-	LoadInteger(mLocationShadowMapPFC, pfcCounter);
 }

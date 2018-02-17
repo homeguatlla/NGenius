@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "NormalTexture.h"
 
-NormalTexture::NormalTexture(ITexture* texture, int tile) :
+NormalTexture::NormalTexture(ITexture* texture, float tile) :
 mTexture(texture),
 mTile(tile)
 {
@@ -17,7 +17,7 @@ ITexture* NormalTexture::GetNormalTexture() const
 	return mTexture;
 }
 
-int NormalTexture::GetTile() const
+float NormalTexture::GetTile() const
 {
 	return mTile;
 }

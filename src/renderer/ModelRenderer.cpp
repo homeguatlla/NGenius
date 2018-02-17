@@ -154,15 +154,15 @@ void ModelRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertex
 	//shader->LoadLight(*mLight);
 	//shader->LoadViewMatrix(const_cast<ICamera*>(camera)->GetViewMatrix());
 	//shader->LoadProjectionMatrix(camera->GetProjectionMatrix());
-	shader->LoadFogParameters(mFogColor, mIsFogEnabled ? mFogDensity : 0.0f, mFogGradient);
+	//shader->LoadFogParameters(mFogColor, mIsFogEnabled ? mFogDensity : 0.0f, mFogGradient);
 	//shader->LoadTile(mTile);
 	//shader->LoadCameraPosition(camera->GetPosition());
-	if (mTextureShadowmap != nullptr)
+	/*if (mTextureShadowmap != nullptr)
 	{
 		shader->LoadShadowMapSpaceMatrix(mShadowSpaceMatrix);
 		shader->LoadShadowMapTexture(mTextureShadowmap->GetUnit(), mTextureShadowmap->GetWidth());
 		shader->LoadShadowMapPFC(mPFCCounter);
-	}
+	}*/
 
 	std::vector<glm::mat4> matrices;
 	int instances = 1;

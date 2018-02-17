@@ -215,8 +215,10 @@
     <ClInclude Include="src\resources\GameEntity.h" />
     <ClInclude Include="src\resources\materials\BasicMaterial.h" />
     <ClInclude Include="src\resources\materials\effects\DiffuseTexture.h" />
+    <ClInclude Include="src\resources\materials\effects\FogProperties.h" />
     <ClInclude Include="src\resources\materials\effects\LightProperties.h" />
     <ClInclude Include="src\resources\materials\effects\NormalTexture.h" />
+    <ClInclude Include="src\resources\materials\effects\ShadowProperties.h" />
     <ClInclude Include="src\resources\materials\IMaterial.h" />
     <ClInclude Include="src\resources\materials\IMaterialEffect.h" />
     <ClInclude Include="src\resources\materials\MaterialsLibrary.h" />
@@ -311,8 +313,10 @@
     <ClCompile Include="src\resources\GameEntity.cpp" />
     <ClCompile Include="src\resources\materials\BasicMaterial.cpp" />
     <ClCompile Include="src\resources\materials\effects\DiffuseTexture.cpp" />
+    <ClCompile Include="src\resources\materials\effects\FogProperties.cpp" />
     <ClCompile Include="src\resources\materials\effects\LightProperties.cpp" />
     <ClCompile Include="src\resources\materials\effects\NormalTexture.cpp" />
+    <ClCompile Include="src\resources\materials\effects\ShadowProperties.cpp" />
     <ClCompile Include="src\resources\materials\IMaterial.cpp" />
     <ClCompile Include="src\resources\materials\IMaterialEffect.cpp" />
     <ClCompile Include="src\resources\materials\MaterialsLibrary.cpp" />

@@ -408,6 +408,12 @@
     <ClInclude Include="src\resources\materials\effects\NormalTexture.h">
       <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\FogProperties.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\ShadowProperties.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -696,6 +702,12 @@
       <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\materials\effects\NormalTexture.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\FogProperties.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\ShadowProperties.cpp">
       <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
   </ItemGroup>
