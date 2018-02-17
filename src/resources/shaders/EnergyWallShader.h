@@ -13,7 +13,7 @@ public:
 	explicit EnergyWallShader();
 	~EnergyWallShader();
 
-	void LoadData(const ICamera* camera, IMaterial* material) override;
+	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
 	void GetAllUniformLocations();
 

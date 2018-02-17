@@ -6,6 +6,7 @@
 class IShaderProgram;
 class IMaterialEffect;
 class ICamera;
+class Transformation;
 
 class IMaterial
 {
@@ -28,7 +29,7 @@ public:
 	void Use();
 	void UnUse();
 
-	void Apply(const ICamera* camera);
+	void Apply(const ICamera* camera, const Transformation* transformation);
 
 	IShaderProgram* GetShader();
 

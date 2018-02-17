@@ -46,6 +46,11 @@ int Model::GetNumberOfVertexs() const
 	return mModelGeometry->GetNumberOfVertexs();
 }
 
+int Model::GetNumberOfIndexes() const
+{
+	return mModelGeometry->GetNumberOfIndexes();
+}
+
 void Model::Apply(std::vector<glm::mat4>& matrices)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);
@@ -77,6 +82,8 @@ void Model::Build(VertexBuffersManager& vertexBufferManager, IMaterial* material
 	{
 		CreateTextureCoordsVBO(vertexBufferManager, location);
 	}
+
+	CreateIndexesVBO(vertexBufferManager);
 
 	location = material->GetShader()->GetAttributeLocation("normalModelspace");
 	if (location != -1)
@@ -118,6 +125,21 @@ void Model::CreateModelMatrixVBO(VertexBuffersManager& vertexBufferManager, int 
 		//glDisableVertexAttribArray(matrixLocation + i);
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Model::CreateIndexesVBO(VertexBuffersManager& vertexBufferManager)
+{
+	long numIndexes = mModelGeometry->GetNumberOfIndexes();
+	if (numIndexes > 0)
+	{
+		//to index geometry
+		std::string name("model_indexes_");
+		name.append(std::to_string(GetID()));
+		unsigned int indexesVBO = vertexBufferManager.CreateVBO(name);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexesVBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndexes * sizeof(unsigned int), &mModelGeometry->GetIndexes()[0], GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 }
 
 void Model::CreateVertexsVBO(VertexBuffersManager& vertexBufferManager, int location)

@@ -4,23 +4,20 @@
 
 class Texture;
 class TextureArray;
-class Light;
-class IShaderProgram;
-class ICamera;
-class ModelGeometry;
+class IMaterial;
+class Model;
 
 class Terrain :	public GameEntity
 {
 	int mNumVertexsSide;
 	float mGridSize;
-	Texture* mHeightmap;
-	const Texture* mShadowmap;
 	float mScale;
 	bool mIsFlat;
-	ModelGeometry* mModel;
+	Texture* mHeightmap;
+	Model* mModel;
 
 public:
-	explicit Terrain(Transformation* transformation, IShaderProgram* shader, Texture* heightmap, Texture* blendmap, TextureArray* textureArray, const Texture* shadowmap, const Light* light, float scale);
+	explicit Terrain(Transformation* transformation, IMaterial* material, Texture* heightmap, float scale);
 	~Terrain();
 
 	Terrain* DoClone() const override { return nullptr; }

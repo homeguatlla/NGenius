@@ -21,7 +21,7 @@ EnergyWallShader::~EnergyWallShader()
 {
 }
 
-void EnergyWallShader::LoadData(const ICamera* camera, IMaterial* material)
+void EnergyWallShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 
 }

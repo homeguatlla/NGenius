@@ -59,7 +59,7 @@ ModelShader::~ModelShader()
 {
 }
 
-void ModelShader::LoadData(const ICamera* camera, IMaterial* material)
+void ModelShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
 	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());

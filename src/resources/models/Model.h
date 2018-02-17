@@ -23,6 +23,7 @@ public:
 	int GetVAOID() const;
 
 	int GetNumberOfVertexs() const;
+	int GetNumberOfIndexes() const;
 
 	void Apply(std::vector<glm::mat4>& matrices);
 
@@ -31,6 +32,7 @@ public:
 	
 private:
 	void CreateVertexsVBO(VertexBuffersManager& vertexBufferManager, int location);
+	void CreateIndexesVBO(VertexBuffersManager& vertexBufferManager);
 	void CreateTextureCoordsVBO(VertexBuffersManager& vertexBufferManager, int location);
 	void CreateNormalsVBO(VertexBuffersManager& vertexBufferManager, int location);
 	void CreateTangentsVBO(VertexBuffersManager& vertexBufferManager, int location);

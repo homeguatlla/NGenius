@@ -44,7 +44,7 @@ void TextShader::BindAttributes()
 	BindAttribute(mLocationTextureCoords, ATTRIBUTE_TEXTURE_COORDS);
 }
 
-void TextShader::LoadData(const ICamera* camera, IMaterial* material)
+void TextShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 
 }

@@ -22,7 +22,7 @@ DefaultShader::~DefaultShader()
 {
 }
 
-void DefaultShader::LoadData(const ICamera* camera, IMaterial* material)
+void DefaultShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	LoadMatrix4(mLocationV, const_cast<ICamera*>(camera)->GetViewMatrix());
 	LoadMatrix4(mLocationP, camera->GetProjectionMatrix());

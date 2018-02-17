@@ -1,6 +1,5 @@
 #pragma once
 #include "IShaderProgram.h"
-#include "../../resources/entities/Light.h"
 
 class TerrainShader : public IShaderProgram
 {
@@ -11,25 +10,15 @@ public:
 	TerrainShader();
 	~TerrainShader();
 
-	void LoadData(const ICamera* camera, IMaterial* material) override;
+	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
 	void BindAttributes();
 	void GetAllUniformLocations();
 
-	//TODO light debería ser const
-	void LoadLight(const Light& light);
-	void LoadModelMatrix(const glm::mat4& modelmatrix);
-	void LoadCameraPosition(const glm::vec3& position);
 	void LoadScale(float scale);
 	void LoadArrayTexture(int index);
 	void LoadHeightMapTexture(int unit);
-	void LoadBlendMapTexture(int unit);
-	void LoadTile(float tile);
-	void LoadFogParameters(const glm::vec3& color, float density, float gradient);
 	void LoadClippingPlane(const glm::vec4& plane);
-	void LoadShadowMapSpaceMatrix(const glm::mat4& matrix);
-	void LoadShadowMapTexture(int unit, int width);
-	void LoadShadowMapPFC(int pfcCounter);
 	
 private:
 	int mLocationMVPMatrix;

@@ -25,7 +25,7 @@
 #include "src/TerrainGrid.h"
 
 #include "src/resources/renderers/IRenderer_.h"
-#include "src/resources/renderers/BasicRenderer.h"
+#include "src/resources/renderers/VertexsRenderer.h"
 
 #include "src/renderer/RenderPass.h"
 
@@ -51,10 +51,13 @@
 #include "src/resources/materials/effects/LightProperties.h"
 #include "src/resources/materials/effects/FogProperties.h"
 #include "src/resources/materials/effects/ShadowProperties.h"
+#include "src/resources/materials/effects/HeightMapTexture.h"
+#include "src/resources/materials/effects/TextureArrayMaterialEffect.h"
 
+#include "src/resources/entities/Terrain.h"
 /*
 #include "src/resources/entities/Light.h"
-#include "src/resources/entities/Terrain.h"
+
 #include "src/resources/entities/Player.h"
 #include "src/resources/entities/Particle.h"
 #include "src/resources/entities/ParticlesEmitter.h"
@@ -157,7 +160,7 @@ ICamera* mEagleEyeCamera;
 RenderPass* mMapPass;
 //Light* mSunLight;
 glm::vec3 mSunLightDirection(100000.0f, 100000.0f, 100000.0f);
-//Terrain* mTerrain;
+Terrain* mTerrain;
 //Player* mPlayer;
 GameEntity* mCamera;
 /*
@@ -379,7 +382,7 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 
 GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, Model* model, IMaterial* material)
 {
-	IRenderer_* renderer = new BasicRenderer(model, material);
+	IRenderer_* renderer = new VertexsRenderer(model, material);
 
 	GameEntity* modelEntity = new GameEntity(
 												new Transformation(position, glm::vec3(0.0f), scale),
@@ -475,7 +478,7 @@ void CreateProps()
 
 	IMaterial* material = mEngine.CreateMaterial("model", mEngine.GetShader("normalmap"));
 	material->AddEffect(new DiffuseTexture(texture, glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	material->AddEffect(new LightProperties(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	material->AddEffect(new LightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new NormalTexture(normal, 1));
 
@@ -657,6 +660,42 @@ void CreateTextTest()
 }
 */
 
+void CreateTerrain()
+{
+	//TERRAIN GAME ENTITY
+	//mSunCamera = new OrthogonalCamera(20.0f, 20.0f, -10.0f, 20.0f);
+	//glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
+	//glm::vec3 direction = glm::vec3(camera->GetTarget() - glm::vec3(100000.0f, 100000.0f, 100000.0f));
+	//glm::mat4 depthViewMatrix = glm::lookAt(direction, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	//glm::mat4 depthModelMatrix = glm::mat4(1.0);
+	//glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
+
+	IMaterial* material = mEngine.CreateMaterial("terrain", mEngine.GetShader("terrain"));
+	material->AddEffect(new DiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_blendmap")), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+	material->AddEffect(new LightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	material->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
+	material->AddEffect(new HeightMapTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")), 1.0f));
+	material->AddEffect(new TextureArrayMaterialEffect(static_cast<TextureArray*>(mEngine.GetTexture("terrain_array"))));
+
+	//material->AddEffect(new LightProperties(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	//material->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
+
+	terrainHeightScale = mIsTerrainFlat ? 0.0f : terrainHeightScale;
+	mTerrain = new Terrain(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
+							material,
+							static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")),
+							terrainHeightScale);
+
+	mTerrain->AddComponent(new DebugInputComponent(mEngine.GetGLWindow()));
+	mTerrain->SetFlat(mIsTerrainFlat);
+			
+	mEngine.AddGameEntity(mTerrain);	
+	mEngine.SetTerrain(mTerrain);
+
+	//TERRAIN NORMALS ENTITY
+	//CreateTerrainNormals(vertexs, numVertexsSide);
+}
+
 void CreateEntities()
 {
 	//CAMERA
@@ -666,9 +705,11 @@ void CreateEntities()
 	mEagleEyeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	mGameplayCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	mGameplayCamera->SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
+	mGameplayCamera->SetPosition(glm::vec3(0.0f, 1.0f, 2.0f));
 	mGameplayCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+
+	CreateTerrain();
 
 	if (mIsPropsEnabled)
 	{
@@ -688,37 +729,7 @@ void CreateEntities2()
 
 	mEngine.AddGameEntity(mSunLight);
 
-	//TERRAIN GAME ENTITY
-	//mSunCamera = new OrthogonalCamera(20.0f, 20.0f, -10.0f, 20.0f);
-	//glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
-	//glm::vec3 direction = glm::vec3(camera->GetTarget() - glm::vec3(100000.0f, 100000.0f, 100000.0f));
-	//glm::mat4 depthViewMatrix = glm::lookAt(direction, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	//glm::mat4 depthModelMatrix = glm::mat4(1.0);
-	//glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
-
-	terrainHeightScale = mIsTerrainFlat ? 0.0f : terrainHeightScale;
-	mTerrain = new Terrain(new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
-								  mEngine.GetShader("terrain"),
-								  static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")),
-								  static_cast<Texture*>(mEngine.GetTexture("terrain_blendmap")),
-								  static_cast<TextureArray*>(mEngine.GetTexture("terrain_array")),
-								  static_cast<Texture*>(mEngine.GetTexture("shadow_texture")),
-								  mSunLight,
-								  terrainHeightScale);
-
-	mTerrain->AddComponent(new DebugInputComponent(mEngine.GetGLWindow()));
-	mTerrain->SetFlat(mIsTerrainFlat);
-
-	TerrainRenderer* renderer = static_cast<TerrainRenderer*>(mTerrain->GetRenderer());
-	renderer->SetFogParameters(mFogColor, mFogDensity, mFogGradient);
-	//AddBoundingBoxesFrom(mTerrain);
-
-	mEngine.AddGameEntity(mTerrain);
-
-	mEngine.SetTerrain(mTerrain);
 	
-	//TERRAIN NORMALS ENTITY
-	//CreateTerrainNormals(vertexs, numVertexsSide);
 
 	//WATER
 	if (mIsWaterEnabled)

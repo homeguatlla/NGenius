@@ -11,7 +11,7 @@ public:
 	ModelShader(const std::string& vertexFile, const std::string& fragmentFile);
 	~ModelShader();
 
-	virtual void LoadData(const ICamera* camera, IMaterial* material) override;
+	virtual void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
 	void BindAttributes();
 	void GetAllUniformLocations();

@@ -57,7 +57,7 @@ void WaterShader::BindAttributes()
 	BindAttribute(mLocationModelMatrix, ATTRIBUTE_MODEL_MATRIX);
 }
 
-void WaterShader::LoadData(const ICamera* camera, IMaterial* material)
+void WaterShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 
 }

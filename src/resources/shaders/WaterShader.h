@@ -31,7 +31,7 @@ public:
 	WaterShader();
 	~WaterShader();
 
-	void LoadData(const ICamera* camera, IMaterial* material) override;
+	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;

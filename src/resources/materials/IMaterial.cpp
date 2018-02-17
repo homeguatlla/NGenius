@@ -32,9 +32,9 @@ void IMaterial::UnUse()
 	mShader->UnUse();
 }
 
-void IMaterial::Apply(const ICamera* camera)
+void IMaterial::Apply(const ICamera* camera, const Transformation* transformation)
 {
-	mShader->LoadData(camera, this);
+	mShader->LoadData(camera, transformation, this);
 }
 
 IShaderProgram*  IMaterial::GetShader()

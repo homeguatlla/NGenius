@@ -189,9 +189,6 @@
     <ClInclude Include="src\resources\BaseLibrary.h">
       <Filter>Header Files\resources</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\ModelRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\shaders\ModelShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
@@ -309,9 +306,6 @@
     <ClInclude Include="src\renderer\GUIRenderer.h">
       <Filter>Header Files\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\ModelNormalMapRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\shaders\NormalMapShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
@@ -381,9 +375,6 @@
     <ClInclude Include="src\resources\renderers\IRenderer_.h">
       <Filter>Header Files\resources\renderers</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\renderers\BasicRenderer.h">
-      <Filter>Header Files\resources\renderers</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\materials\BasicMaterial.h">
       <Filter>Header Files\resources\materials</Filter>
     </ClInclude>
@@ -412,6 +403,18 @@
       <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\materials\effects\ShadowProperties.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\VertexsRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\IndexesRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\HeightMapTexture.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\TextureArrayMaterialEffect.h">
       <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -487,9 +490,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\BaseLibrary.cpp">
       <Filter>Source Files\resources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\ModelRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\shaders\ModelShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
@@ -605,9 +605,6 @@
     <ClCompile Include="src\renderer\GUIRenderer.cpp">
       <Filter>Source Files\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\ModelNormalMapRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\shaders\NormalMapShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
@@ -677,9 +674,6 @@
     <ClCompile Include="src\resources\renderers\IRenderer_.cpp">
       <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\renderers\BasicRenderer.cpp">
-      <Filter>Source Files\resources\renderers</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\materials\BasicMaterial.cpp">
       <Filter>Source Files\resources\materials</Filter>
     </ClCompile>
@@ -708,6 +702,18 @@
       <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\materials\effects\ShadowProperties.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\VertexsRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\IndexesRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\HeightMapTexture.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\TextureArrayMaterialEffect.cpp">
       <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
   </ItemGroup>

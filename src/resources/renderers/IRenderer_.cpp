@@ -77,7 +77,7 @@ void IRenderer_::Render(const ICamera* camera, VertexBuffersManager& vertexBuffe
 	}
 
 	mModel->Apply(matrices);
-	material->Apply(camera);
+	material->Apply(camera, mInstances[0]->GetParent()->GetTransformation());
 		
 	Draw();
 
@@ -93,7 +93,7 @@ void IRenderer_::Draw()
 	}
 	else
 	{
-		glDrawArrays(GL_TRIANGLES, 0, mModel->GetNumberOfVertexs());
+		glDrawElements(GL_TRIANGLES, mModel->GetNumberOfIndexes(), GL_UNSIGNED_INT, 0);
 	}
 }
 

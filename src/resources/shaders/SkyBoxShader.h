@@ -16,7 +16,7 @@ public:
 	SkyBoxShader();
 	~SkyBoxShader();
 
-	void LoadData(const ICamera* camera, IMaterial* material) override;
+	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
 	void GetAllUniformLocations() override;
 	void BindAttributes() override;

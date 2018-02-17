@@ -4,6 +4,7 @@
 
 class IMaterial;
 class ICamera;
+class Transformation;
 
 class IShaderProgram
 {
@@ -18,7 +19,7 @@ public:
 	void Use();
 	void UnUse();
 
-	virtual void LoadData(const ICamera* camera, IMaterial* material) = 0;
+	virtual void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) = 0;
 
 	void BindAttribute(int attribute, const std::string& variableName);
 	int GetUniformLocation(const std::string& uniformName);

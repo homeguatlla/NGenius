@@ -4,20 +4,18 @@
 
 class Model;
 class IMaterial;
-class Texture;
-class ICamera;
 
-class BasicRenderer : public IRenderer_
+class IndexesRenderer : public IRenderer_
 {
 	unsigned int mMatrixVBO;
 
 public:
-	BasicRenderer(Model* model, IMaterial* material);
-	~BasicRenderer();
+	IndexesRenderer(Model* model, IMaterial* material);
+	~IndexesRenderer();
 
-	BasicRenderer* DoClone() const override { return nullptr; }
+	IndexesRenderer* DoClone() const override { return nullptr; }
 	const std::string GetName() const override;
-	
+
 private:
 	bool IsInstancingAllowed() const override;
 };

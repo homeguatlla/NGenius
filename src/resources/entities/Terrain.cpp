@@ -1,56 +1,45 @@
 #include "stdafx.h"
 #include "Terrain.h"
-#include "../textures/ITexture.h"
-#include "../../renderer/TerrainRenderer.h"
+#include "../renderers/IndexesRenderer.h"
 #include "../../TerrainGrid.h"
+#include "../textures/ITexture.h"
 #include "../textures/TextureGenerator.h"
 #include "../textures/Texture.h"
-#include "../textures/TextureArray.h"
-#include "../camera/ICamera.h"
+#include "../models/ModelGeometry.h"
 #include "../models/Model.h"
 #include <ctime>
 
 #include <glm/gtc/matrix_transform.hpp>
 
-Terrain::Terrain(Transformation* transformation, IShaderProgram* shader, Texture* heightmap, Texture* blendmap, TextureArray* textureArray, const Texture* shadowmap, const Light* light, float scale) :
+Terrain::Terrain(Transformation* transformation, IMaterial* material, Texture* heightmap, float scale) :
 GameEntity(transformation),
 mHeightmap(heightmap),
-mShadowmap(shadowmap),
 mScale(scale),
 mIsFlat(false)
 {
-	SetRenderer(new TerrainRenderer(shader,
-									heightmap,
-									blendmap,
-									textureArray,
-									light,
-									scale));
-	std::vector<glm::vec3> vertexs;
-	std::vector<glm::vec2> uv;
-	std::vector<unsigned int> indices;
-	TerrainGrid terrainGrid;
-
-	mNumVertexsSide = 256;
-
 	//better generate texture high resolution.
 	//With 256 num vertexs side seems not so much different than with 1024. With 1024 there are more bumps and in fact is worst and the performance downs 50%.
 	//TextureGenerator tg;
 	//tg.Generate("data/terrain_heightmap_256.png", mNumVertexsSide, scale, true);
 	//tg.GenerateOnlyBlendmap("data/terrain_blendmap_1024.png", mNumVertexsSide);
 	//return;
-	
 
 	srand(time(NULL));
 
+	std::vector<glm::vec3> vertexs;
+	std::vector<glm::vec2> uv;
+	std::vector<unsigned int> indices;
+
 	mGridSize = 65;
-	
+	mNumVertexsSide = 256;
+	TerrainGrid terrainGrid;
 	terrainGrid.GeneratePointsRectangular(vertexs, uv, mNumVertexsSide, mGridSize, 0, true);
 	terrainGrid.GenerateIndicesRectangular(indices);
 
-	GetRenderer()->SetLayer(IRenderer_::LAYER_TERRAIN);
-	/*mModel = new ModelGeometry(vertexs, uv, indices);
+	mModel = new Model(new ModelGeometry(vertexs, uv, indices));
+	SetRenderer(new IndexesRenderer(mModel, material));
 
-	GetRenderer()->SetModelRender(mModel);*/
+	GetRenderer()->SetLayer(IRenderer_::LAYER_TERRAIN);
 }
 
 Terrain::~Terrain()

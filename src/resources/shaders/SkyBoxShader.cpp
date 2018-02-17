@@ -25,7 +25,7 @@ SkyBoxShader::~SkyBoxShader()
 {
 }
 
-void SkyBoxShader::LoadData(const ICamera* camera, IMaterial* material)
+void SkyBoxShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 
 }
