@@ -14,8 +14,6 @@ public:
 
 	void BindAttributes();
 	void GetAllUniformLocations();
-
-	void LoadScale(float scale);
 	
 private:
 	int mLocationMVPMatrix;

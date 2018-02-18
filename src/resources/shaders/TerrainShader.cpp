@@ -76,6 +76,8 @@ void TerrainShader::LoadData(const ICamera* camera, const Transformation* transf
 
 	LoadVector3(mLocationCameraPosition, camera->GetPosition());
 
+	LoadFloat(mLocationScale, 7.5f);
+
 	if (material->HasEffect<DiffuseTexture>())
 	{
 		DiffuseTexture* effect = material->GetEffect<DiffuseTexture>();
@@ -87,7 +89,6 @@ void TerrainShader::LoadData(const ICamera* camera, const Transformation* transf
 	{
 		HeightMapTexture* effect = material->GetEffect<HeightMapTexture>();
 		LoadTexture(mLocationHeightMapTexture, effect->GetHeightMapTexture()->GetUnit());
-		LoadFloat(mLocationTile, effect->GetTile());
 	}
 
 	if (material->HasEffect<TextureArrayMaterialEffect>())
@@ -144,10 +145,8 @@ void TerrainShader::GetAllUniformLocations()
 	mLocationArrayTexture = GetUniformLocation(ATTRIBUTE_ARRAY_TEXTURE);
 	mLocationHeightMapTexture = GetUniformLocation(ATTRIBUTE_HEIGHTMAP_TEXTURE);
 	mLocationTile = GetUniformLocation(ATTRIBUTE_TILE);
-
 	mLocationScale = GetUniformLocation(ATTRIBUTE_SCALE);
 	mLocationClippingPlane = GetUniformLocation(ATTRIBUTE_CLIP_PLANE);
-	
 	mLocationFogDensity = GetUniformLocation(ATTRIBUTE_FOG_DENSITY);
 	mLocationFogGradient = GetUniformLocation(ATTRIBUTE_FOG_GRADIENT);
 	mLocationFogColor = GetUniformLocation(ATTRIBUTE_FOG_COLOR);
@@ -155,9 +154,4 @@ void TerrainShader::GetAllUniformLocations()
 	mLocationShadowMapTexture = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE);
 	mLocationShadowMapTextureWidth = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE_WIDTH);
 	mLocationShadowMapPFC = GetUniformLocation(ATTRIBUTE_SHADOW_PFC);
-}
-
-void TerrainShader::LoadScale(float scale)
-{
-	LoadFloat(mLocationScale, scale);
 }

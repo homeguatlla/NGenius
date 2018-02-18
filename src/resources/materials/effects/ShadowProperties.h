@@ -6,7 +6,7 @@ class ITexture;
 
 class ShadowProperties : public IMaterialEffect
 {
-	ITexture* mDepthTexture;
+	const ITexture* mDepthTexture;
 	glm::mat4 mMatrix;
 	int mPFCCounter;
 
@@ -14,8 +14,8 @@ public:
 	ShadowProperties();
 	virtual ~ShadowProperties();
 
-	void SetParameters(ITexture* texture, const glm::mat4& matrix, int pfcCounter);
-	ITexture* GetDepthTexture() const;
+	void SetParameters(const ITexture* texture, const glm::mat4& matrix, int pfcCounter);
+	const ITexture* GetDepthTexture() const;
 	int GetPFCCounter() const;
 	const glm::mat4& GetMatrix() const;
 

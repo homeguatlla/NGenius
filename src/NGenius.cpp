@@ -104,7 +104,7 @@ void NGenius::UpdateSystems(float elapsedTime)
 {
 	mParticlesSystem->Update(elapsedTime);
 	mEntitiesSystem->Update(elapsedTime);
-	//mPhysicsSystem->Update(elapsedTime);
+	mPhysicsSystem->Update(elapsedTime);
 }
 
 void NGenius::CreateSystems(float screenWidth, float screenHeight)

@@ -110,6 +110,7 @@ private:
 	void SelectMaterial(RenderPass* renderPass, IRenderer_* renderer);
 	void SelectTextures();
 	void SelectClippingPlane(RenderPass* renderPass);
+	void ApplyShadows(IRenderer_* renderer);
 
 	void CheckGLError();
 };

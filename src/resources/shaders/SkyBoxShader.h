@@ -20,10 +20,6 @@ public:
 
 	void GetAllUniformLocations() override;
 	void BindAttributes() override;
-	void LoadModelMatrix(const glm::mat4& modelMatrix);
-	void LoadViewMatrix(const glm::mat4& viewMatrix);
-	void LoadProjectionMatrix(const glm::mat4& projectionMatrix);
 	void LoadCubemapTexture(int unit);
-	void LoadFogColor(const glm::vec3& fogColor);
 };
 

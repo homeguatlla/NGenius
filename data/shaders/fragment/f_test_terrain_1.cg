@@ -197,7 +197,7 @@ float ApplyShadow(int pfcCount, float totalTexels)
 }
 
 void main() {
-	float shadowFactor = 1.0;//ApplyShadow(pfcCount, totalTexelsShadow);
+	float shadowFactor = ApplyShadow(pfcCount, totalTexelsShadow);
 
 	vec4 blendmapColor = texture(blendMap, textureCoords.xy);
 	vec2 tiledTextureCoords = textureCoords * tile;
@@ -220,10 +220,8 @@ void main() {
 	vec3 MaterialAmbientColor = vec3(0.1f, 0.1f, 0.1f);
 	vec3 MaterialSpecularColor = vec3(0.0f, 0.0f, 0.0f);
 
-	//color = ApplyLight(color, MaterialAmbientColor, MaterialDiffuseColor, MaterialSpecularColor);
-	//color = ApplyFog(color);
+	color = ApplyLight(color, MaterialAmbientColor, MaterialDiffuseColor, MaterialSpecularColor);
+	color = ApplyFog(color);
 	//color.rgb = ApplyFog(color.rgb, distance, cameraPos, eyeDirection).rgb;
-
-	color = vec4(MaterialDiffuseColor, 1.0);
 }
 

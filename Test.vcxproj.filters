@@ -147,9 +147,6 @@
     <ClInclude Include="src\renderer\NormalRenderer.h">
       <Filter>Header Files\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\TerrainRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\shaders\IShaderProgram.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
@@ -230,9 +227,6 @@
     </ClInclude>
     <ClInclude Include="src\resources\shaders\SkyBoxShader.h">
       <Filter>Header Files\resources\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\SkyBoxRenderer.h">
-      <Filter>Header Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\textures\ITexture.h">
       <Filter>Header Files\resources\textures</Filter>
@@ -420,6 +414,12 @@
     <ClInclude Include="src\resources\materials\effects\ClippingPlaneMaterialEffect.h">
       <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\renderers\SkyBoxRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\TextureCubemapMaterialEffect.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -439,9 +439,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\shaders\TerrainShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\TerrainRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\renderer\NormalRenderer.cpp">
       <Filter>Source Files\renderer</Filter>
@@ -532,9 +529,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\shaders\SkyBoxShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\SkyBoxRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\textures\ITexture.cpp">
       <Filter>Source Files\resources\textures</Filter>
@@ -720,6 +714,12 @@
       <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\materials\effects\ClippingPlaneMaterialEffect.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\SkyBoxRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\TextureCubemapMaterialEffect.cpp">
       <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
   </ItemGroup>

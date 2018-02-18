@@ -70,7 +70,7 @@ float ApplyShadow(int pfcCount, float totalTexels)
 void main()
 {
 	// Material properties
-	float shadowFactor = 1.0f; //ApplyShadow(pfcCount, totalTexelsShadow);
+	float shadowFactor = ApplyShadow(pfcCount, totalTexelsShadow);
 	vec4 MaterialDiffuseColor = shadowFactor * texture2D(texture, textureCoords);
 
 	if(MaterialDiffuseColor.a < 0.5)

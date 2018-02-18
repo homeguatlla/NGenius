@@ -26,6 +26,7 @@
 
 #include "src/resources/renderers/IRenderer_.h"
 #include "src/resources/renderers/VertexsRenderer.h"
+#include "src/resources/renderers/SkyBoxRenderer.h"
 
 #include "src/renderer/RenderPass.h"
 
@@ -54,12 +55,13 @@
 #include "src/resources/materials/effects/HeightMapTexture.h"
 #include "src/resources/materials/effects/TextureArrayMaterialEffect.h"
 #include "src/resources/materials/effects/ClippingPlaneMaterialEffect.h"
+#include "src/resources/materials/effects/TextureCubemapMaterialEffect.h"
 
 #include "src/resources/entities/Terrain.h"
+#include "src/resources/entities/Player.h"
+
 /*
 #include "src/resources/entities/Light.h"
-
-#include "src/resources/entities/Player.h"
 #include "src/resources/entities/Particle.h"
 #include "src/resources/entities/ParticlesEmitter.h"
 #include "src/resources/entities/EnergyWall.h"
@@ -131,8 +133,8 @@ int muevej[] = { 0, 1, 0, -1 };
 
 const float Pi = 3.141592f;
 
-float terrainHeightScale = 7.5f;
-float mWaterHeight = 8.2f * terrainHeightScale / 15.0f;
+float mTerrainHeightScale = 7.5f;
+float mWaterHeight = 8.2f * mTerrainHeightScale / 15.0f;
 
 
 bool mIsDebugModeEnabled = false;
@@ -162,7 +164,7 @@ RenderPass* mMapPass;
 //Light* mSunLight;
 glm::vec3 mSunLightDirection(100000.0f, 100000.0f, 100000.0f);
 Terrain* mTerrain;
-//Player* mPlayer;
+Player* mPlayer;
 GameEntity* mCamera;
 /*
 GameEntity* mWater;
@@ -206,7 +208,7 @@ void CreateTerrainNormals(vector<glm::vec3>& vertexs, int numVertexsSide)
 			int index = i + j * numVertexsSide;
 			int d = j + i * numVertexsSide;
 			float height = data[4 * d + 3];
-			vertexs[index].y = height / 255.0f * terrainHeightScale;
+			vertexs[index].y = height / 255.0f * mTerrainHeightScale;
 
 			glm::vec3 normal = glm::vec3(data[4 * d] / 255.0f, data[4 * d + 1] / 255.0f, data[4 * d + 2] / 255.0f);
 			//normals.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -340,7 +342,7 @@ void CreateSpecificCubes()
 }
 */
 
-GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string>& models, const std::vector<float>& distances, Texture* texture, Texture* normal)
+GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string>& models, const std::vector<float>& distances, IMaterial* material, IMaterial* materialNormalmap)
 {
 	GameEntity* modelEntity = new GameEntity(
 		new Transformation(position, glm::vec3(0.0f), scale),
@@ -356,26 +358,14 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 
 	for (unsigned int i = 0; i < models.size(); ++i)
 	{
-		IRenderer_* renderer = nullptr;
-		/*if (i == 0 && normal != nullptr)
+		IMaterial* m = material;
+		if (i == 0)
 		{
-			renderer = new ModelNormalMapRenderer(mEngine.GetModel(models[i]),
-				mEngine.GetShader("normalmap"),
-				texture,
-				normal,
-				mSunLight
-				);
+			m = materialNormalmap;
 		}
-		else
-		{
-			renderer = new ModelRenderer(mEngine.GetModel(models[i]),
-				mEngine.GetShader("model"),
-				texture,
-				mSunLight
-				);
-		}
-		renderer->SetFogParameters(mFogColor, mFogDensity, mFogGradient);
-		lodComponent->AddLevelOfDetail(renderer, distances[i]);*/
+
+		IRenderer_* renderer = new VertexsRenderer(mEngine.GetModel(models[i]), m);
+		lodComponent->AddLevelOfDetail(renderer, distances[i]);
 	}
 
 	return modelEntity;
@@ -398,7 +388,7 @@ GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, Model
 
 void CreateTrees()
 {
-	/*std::vector<glm::vec3> positions;
+	std::vector<glm::vec3> positions;
 	std::vector<glm::vec3> sizes;
 
 	int areaSize = 50;
@@ -416,8 +406,6 @@ void CreateTrees()
 		}
 	}
 
-	//positions.push_back(glm::vec3(6.4f, 0.0f, 3.3f));	
-	//sizes.push_back(glm::vec3(0.2f, 1.2f, 0.2f));
 	std::vector<std::string> modelsFoliage;
 	modelsFoliage.push_back("tree_foliage_0");
 	modelsFoliage.push_back("tree_foliage_1");
@@ -433,18 +421,37 @@ void CreateTrees()
 	modelsTrunk.push_back("tree_trunk_1");
 	modelsTrunk.push_back("tree_trunk_2");
 	
+	IMaterial* materialFoliage = mEngine.CreateMaterial("tree_foliage", mEngine.GetShader("model"));
+	materialFoliage->AddEffect(new DiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_foliage_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	materialFoliage->AddEffect(new LightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	materialFoliage->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
+	
+	IMaterial* materialFoliageNormalMap = mEngine.CreateMaterial("tree_foliage_normalmap", mEngine.GetShader("normalmap"));
+	materialFoliageNormalMap->AddEffect(new DiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_foliage_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	materialFoliageNormalMap->AddEffect(new LightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	materialFoliageNormalMap->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
+	materialFoliageNormalMap->AddEffect(new NormalTexture(static_cast<Texture*>(mEngine.GetTexture("tree_foliage_normalmap")), 1));
+
+	IMaterial* materialTrunk = mEngine.CreateMaterial("tree_trunk", mEngine.GetShader("model"));
+	materialTrunk->AddEffect(new DiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	materialTrunk->AddEffect(new LightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	materialTrunk->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
+
+	IMaterial* materialTrunkNormalmap = mEngine.CreateMaterial("tree_trunk_normalmap", mEngine.GetShader("normalmap"));
+	materialTrunkNormalmap->AddEffect(new DiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	materialTrunkNormalmap->AddEffect(new LightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	materialTrunkNormalmap->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
+	materialTrunkNormalmap->AddEffect(new NormalTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_normalmap")), 1));
+
+
 	for (unsigned long i = 0; i < positions.size(); i++)
 	{
-		GameEntity* entity = CreateModelWithLod(	positions[i], sizes[i], modelsFoliage, distances, 
-													static_cast<Texture*>(mEngine.GetTexture("tree_foliage_diffuse")),
-													static_cast<Texture*>(mEngine.GetTexture("tree_foliage_normalmap")));
+		GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], modelsFoliage, distances, materialFoliage, materialFoliageNormalMap);
 		mEngine.AddGameEntity(entity);
 		
-		entity = CreateModelWithLod(	positions[i], sizes[i], modelsTrunk, distances, 
-										static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")),
-										static_cast<Texture*>(mEngine.GetTexture("tree_trunk_normalmap")));
+		entity = CreateModelWithLod(positions[i], sizes[i], modelsTrunk, distances, materialTrunk, materialTrunkNormalmap);
 		mEngine.AddGameEntity(entity);
-	}*/
+	}
 }
 
 void CreateProps()
@@ -672,21 +679,19 @@ void CreateTerrain()
 	//glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
 
 	IMaterial* material = mEngine.CreateMaterial("terrain", mEngine.GetShader("terrain"));
-	material->AddEffect(new DiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_blendmap")), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+	material->AddEffect(new DiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_blendmap")), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f));
 	material->AddEffect(new LightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new HeightMapTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")), 1.0f));
 	material->AddEffect(new TextureArrayMaterialEffect(static_cast<TextureArray*>(mEngine.GetTexture("terrain_array"))));
 	material->AddEffect(new ClippingPlaneMaterialEffect());
+	material->AddEffect(new ShadowProperties());
 
-	//material->AddEffect(new LightProperties(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
-	//material->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
-
-	terrainHeightScale = mIsTerrainFlat ? 0.0f : terrainHeightScale;
+	mTerrainHeightScale = mIsTerrainFlat ? 0.0f : mTerrainHeightScale;
 	mTerrain = new Terrain(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 							material,
 							static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")),
-							terrainHeightScale);
+							mTerrainHeightScale);
 
 	mTerrain->AddComponent(new DebugInputComponent(mEngine.GetGLWindow()));
 	mTerrain->SetFlat(mIsTerrainFlat);
@@ -698,24 +703,96 @@ void CreateTerrain()
 	//CreateTerrainNormals(vertexs, numVertexsSide);
 }
 
+void CreatePlayer()
+{
+	//PLAYER
+	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("normalmap"));
+	material->AddEffect(new DiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("enano_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	material->AddEffect(new NormalTexture(static_cast<Texture*>(mEngine.GetTexture("enano_normalmap")), 1.0f));
+	material->AddEffect(new LightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	material->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
+	material->AddEffect(new ShadowProperties());
+	
+	Model* model = mEngine.GetModel("enano");
+	IRenderer_* renderer = new VertexsRenderer(model, material);
+
+	mPlayer = new Player(new Transformation(glm::vec3(0.0f, 4.9f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.03f)),
+		renderer,
+		new PlayerInputComponent(mEngine.GetGLWindow(), PLAYER_RUN_SPEED, PLAYER_TURN_SPEED, PLAYER_UPWARDS_HEIGHT),
+		new PhysicsComponent(false, PhysicsSystem::GRAVITY_VALUE),
+		new CollisionComponent()
+	);
+	mPlayer->AddComponent(new EnergyWallCollisionComponent());
+	mEngine.AddGameEntity(mPlayer);
+}
+
+void CreateGameCameraEntity()
+{
+	mCamera = new GameEntity(new Transformation(mGameplayCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
+		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
+	mCamera->AddComponent(new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f));
+	mCamera->AddComponent(new CollisionComponent());
+	if (mIsWaterEnabled)
+	{
+		mCamera->AddComponent(new OverWaterComponent(mWaterHeight));
+	}
+
+	mEngine.AddGameEntity(mCamera);
+}
+
+void CreateSkybox()
+{
+	//SKYBOX the last
+	if (mIsSkyboxEnabled)
+	{
+		IMaterial* material = mEngine.CreateMaterial("skybox", mEngine.GetShader("skybox"));
+		material->AddEffect(new TextureCubemapMaterialEffect(static_cast<TextureCubemap*>(mEngine.GetTexture("cubemap"))));
+		material->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
+
+		SkyBoxRenderer* skyboxRenderer = new SkyBoxRenderer(mEngine.GetModel("skybox"), material);
+		skyboxRenderer->SetLayer(IRenderer_::LAYER_PARTICLES);
+		
+		GameEntity* skyBox = new GameEntity(
+			new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(50.0f)),
+			skyboxRenderer
+		);
+		skyBox->AddComponent(new RotationComponent(glm::vec3(0.0f, 1.0f, 0.0f), SKYBOX_ROTATION_SPEED));
+		mEngine.AddGameEntity(skyBox);
+	}
+}
+
 void CreateEntities()
 {
 	//CAMERA
 	mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 15.0f));
+	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 55.0f, 15.0f));
 	mEagleEyeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mEagleEyeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	mGameplayCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	mGameplayCamera->SetPosition(glm::vec3(0.0f, 1.0f, 2.0f));
+	mGameplayCamera->SetPosition(glm::vec3(0.0f, 8.0f, 2.0f));
 	mGameplayCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 
+	CreatePlayer();
+
+	CreateGameCameraEntity();
+
 	CreateTerrain();
+
+	if (mIsVegetationEnabled)
+	{
+		CreateTrees();
+	}
 
 	if (mIsPropsEnabled)
 	{
 		CreateProps();
+	}
+
+	if (mIsSkyboxEnabled)
+	{
+		CreateSkybox();
 	}
 }
 
@@ -755,49 +832,6 @@ void CreateEntities2()
 		waterRenderer->SetFogParameters(mFogColor, mFogDensity, mFogGradient);
 		mEngine.AddGameEntity(mWater);
 	}
-	//PLAYER
-	ModelNormalMapRenderer* modelRenderer = new ModelNormalMapRenderer(mEngine.GetModel("enano"),
-																		mEngine.GetShader("normalmap"),
-																		static_cast<Texture*>(mEngine.GetTexture("enano_diffuse")),
-																		nullptr,
-																		mSunLight
-																	);
-	modelRenderer->SetFogParameters(mFogColor, mFogDensity, mFogGradient);
-	modelRenderer->SetTile(4.0f);
-
-	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 4.9f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.03f)),
-							modelRenderer,
-							new PlayerInputComponent(mEngine.GetGLWindow(), PLAYER_RUN_SPEED, PLAYER_TURN_SPEED, PLAYER_UPWARDS_HEIGHT),
-							new PhysicsComponent(false, PhysicsSystem::GRAVITY_VALUE),
-							new CollisionComponent()
-						);
-	mPlayer->AddComponent(new EnergyWallCollisionComponent());
-	//mPlayer->AddComponent(new RotationComponent(glm::vec3(0.0f, 1.0f, 0.0f), 30.0f));
-	//AddBoundingBoxesFrom(mPlayer);
-
-	mEngine.AddGameEntity(mPlayer);
-
-	//CAMERA
-	mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth()/mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 15.0f));
-	mEagleEyeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
-	mEagleEyeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
-
-	mGameplayCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	mGameplayCamera->SetPosition(glm::vec3(0.0f, 4.9f, 3.0f));
-	mGameplayCamera->SetTarget(glm::vec3(0.0f, 4.9f, 0.0f));
-	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
-
-	mCamera = new GameEntity(	new Transformation(mGameplayCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
-		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
-	mCamera->AddComponent(new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f));
-	mCamera->AddComponent(new CollisionComponent());
-	if (mIsWaterEnabled)
-	{
-		mCamera->AddComponent(new OverWaterComponent(mWaterHeight));
-	}
-
-	mEngine.AddGameEntity(mCamera);
 
 	//CreateSpecificCubes();
 
@@ -837,23 +871,6 @@ void CreateEntities2()
 	if (mIsShadowEnabled)
 	{
 		//CreateShadowPlane();
-	}
-
-	//SKYBOX the last
-	if (mIsSkyboxEnabled)
-	{
-		SkyBoxRenderer* skyboxRenderer = new SkyBoxRenderer(mEngine.GetShader("skybox"),
-			static_cast<TextureCubemap*>(mEngine.GetTexture("cubemap")),
-			1.0f);
-		skyboxRenderer->SetLayer(IRenderer::LAYER_PARTICLES);
-		skyboxRenderer->SetFogColor(mFogColor);
-
-		GameEntity* skyBox = new GameEntity(
-			new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
-			skyboxRenderer
-			);
-		skyBox->AddComponent(new RotationComponent(glm::vec3(0.0f, 1.0f, 0.0f), SKYBOX_ROTATION_SPEED));
-		mEngine.AddGameEntity(skyBox);
 	}
 }
 */
@@ -1060,7 +1077,10 @@ void UpdateInput(GLFWwindow* window)
 		std::swap(*gameplayCamera, *eagleEyeCamera);
 		if (mIsGameplayCameraEnabled)
 		{
-			mCamera->RemoveComponent<ThirdPersonCameraComponent>();
+			if (mCamera->HasComponent<ThirdPersonCameraComponent>())
+			{
+				mCamera->RemoveComponent<ThirdPersonCameraComponent>();
+			}
 		}
 		else
 		{
@@ -1133,11 +1153,11 @@ void Update(float elapsedTime)
 	if (mIsStatisticsVisible && mIsTextEnabled)
 	{
 		UpdateStatitstics();
-	}
+	}*/
 	if (mIsShadowEnabled)
 	{
 		mEngine.SetCastingShadowsTarget(mPlayer->GetTransformation()->GetPosition());
-	}*/
+	}
 }
 
 void SetupConfiguration()
@@ -1243,15 +1263,15 @@ void SetupConfiguration()
 		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
-		mIsVegetationEnabled = false;
+		mIsVegetationEnabled = true;
 		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = false;
-		mIsTerrainFlat = true;
+		mIsSkyboxEnabled = true;
+		mIsTerrainFlat = false;
 		mIsTextEnabled = false;
 		mIsStatisticsVisible = false;
 		mIsParticlesEnabled = false;
-		mIsShadowEnabled = false;
+		mIsShadowEnabled = true;
 		break;
 	case RELEASE:
 		mIsDebugModeEnabled = false;

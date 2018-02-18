@@ -14,7 +14,10 @@
 #include "../../materials/MaterialsLibrary.h"
 #include "../../materials/effects/DiffuseTexture.h"
 #include "../../materials/effects/NormalTexture.h"
+#include "../../materials/effects/HeightMapTexture.h"
 #include "../../materials/effects/ClippingPlaneMaterialEffect.h"
+#include "../../materials/effects/ShadowProperties.h"
+
 
 #include "../../../renderer/RenderPass.h"
 #include "../../../BitNumber.h"
@@ -234,13 +237,6 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer_* renderer,
 	{
 		renderer->EnableFog(renderPass->IsFogEnabled());
 	}
-
-	if (renderer->IsCastingShadows())
-	{
-		renderer->SetShadowMapParameters(	mShadowsRenderPass->GetShadowMapTexture(), 
-											mShadowsRenderPass->GetShadowMapMatrix(), 
-											mShadowsRenderPass->GetShadowMapPFCCounter());
-	}
 	*/
 
 	renderer->SetInstances(instances);
@@ -254,6 +250,8 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer_* renderer,
 
 	SelectClippingPlane(renderPass);
 
+	ApplyShadows(renderer);
+
 	mCurrentMaterial->Use();
 
 	SelectTextures();
@@ -261,6 +259,17 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer_* renderer,
 	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, mCurrentMaterial);
 
 	mCurrentMaterial->UnUse();
+}
+
+void RenderSystem::ApplyShadows(IRenderer_* renderer)
+{
+	if (mCurrentMaterial->HasEffect<ShadowProperties>())
+	{
+		ShadowProperties* effect = mCurrentMaterial->GetEffect<ShadowProperties>();
+		effect->SetParameters(	mShadowsRenderPass->GetShadowMapTexture(),
+								mShadowsRenderPass->GetShadowMapMatrix(),
+								mShadowsRenderPass->GetShadowMapPFCCounter());
+	}
 }
 
 void RenderSystem::SelectClippingPlane(RenderPass* renderPass)
@@ -302,6 +311,28 @@ void RenderSystem::SelectTextures()
 			mNormalTexture = normal;
 			mNormalTexture->SetActive(true);
 		}
+	}
+
+	if (mCurrentMaterial->HasEffect<HeightMapTexture>())
+	{
+		ITexture* heightmap = mCurrentMaterial->GetEffect<HeightMapTexture>()->GetHeightMapTexture();
+		heightmap->SetActive(true);
+		/*if (heightmap != mNormalTexture)
+		{
+			mNormalTexture = heightmap;
+			mNormalTexture->SetActive(true);
+		}*/
+	}
+
+	if (mCurrentMaterial->HasEffect<HeightMapTexture>())
+	{
+		ITexture* heightmap = mCurrentMaterial->GetEffect<HeightMapTexture>()->GetHeightMapTexture();
+		heightmap->SetActive(true);
+		/*if (heightmap != mNormalTexture)
+		{
+		mNormalTexture = heightmap;
+		mNormalTexture->SetActive(true);
+		}*/
 	}
 }
 

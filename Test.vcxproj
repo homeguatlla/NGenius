@@ -179,8 +179,6 @@
     <ClInclude Include="src\renderer\QuadRenderer.h" />
     <ClInclude Include="src\renderer\RenderPass.h" />
     <ClInclude Include="src\renderer\ShadowRenderer.h" />
-    <ClInclude Include="src\renderer\SkyBoxRenderer.h" />
-    <ClInclude Include="src\renderer\TerrainRenderer.h" />
     <ClInclude Include="src\renderer\TextRenderer.h" />
     <ClInclude Include="src\renderer\WaterRenderer.h" />
     <ClInclude Include="src\resources\BaseLibrary.h" />
@@ -213,6 +211,7 @@
     <ClInclude Include="src\resources\GameEntity.h" />
     <ClInclude Include="src\resources\materials\BasicMaterial.h" />
     <ClInclude Include="src\resources\materials\effects\ClippingPlaneMaterialEffect.h" />
+    <ClInclude Include="src\resources\materials\effects\TextureCubemapMaterialEffect.h" />
     <ClInclude Include="src\resources\materials\effects\DiffuseTexture.h" />
     <ClInclude Include="src\resources\materials\effects\FogProperties.h" />
     <ClInclude Include="src\resources\materials\effects\HeightMapTexture.h" />
@@ -226,6 +225,7 @@
     <ClInclude Include="src\resources\models\ModelGeometry.h" />
     <ClInclude Include="src\resources\models\Model.h" />
     <ClInclude Include="src\resources\models\ModelsLibrary.h" />
+    <ClInclude Include="src\resources\renderers\SkyBoxRenderer.h" />
     <ClInclude Include="src\resources\renderers\VertexsRenderer.h" />
     <ClInclude Include="src\resources\renderers\IndexesRenderer.h" />
     <ClInclude Include="src\resources\renderers\IRenderer_.h" />
@@ -279,8 +279,6 @@
     <ClCompile Include="src\renderer\QuadRenderer.cpp" />
     <ClCompile Include="src\renderer\RenderPass.cpp" />
     <ClCompile Include="src\renderer\ShadowRenderer.cpp" />
-    <ClCompile Include="src\renderer\SkyBoxRenderer.cpp" />
-    <ClCompile Include="src\renderer\TerrainRenderer.cpp" />
     <ClCompile Include="src\renderer\TextRenderer.cpp" />
     <ClCompile Include="src\renderer\WaterRenderer.cpp" />
     <ClCompile Include="src\resources\BaseLibrary.cpp" />
@@ -313,6 +311,7 @@
     <ClCompile Include="src\resources\GameEntity.cpp" />
     <ClCompile Include="src\resources\materials\BasicMaterial.cpp" />
     <ClCompile Include="src\resources\materials\effects\ClippingPlaneMaterialEffect.cpp" />
+    <ClCompile Include="src\resources\materials\effects\TextureCubemapMaterialEffect.cpp" />
     <ClCompile Include="src\resources\materials\effects\DiffuseTexture.cpp" />
     <ClCompile Include="src\resources\materials\effects\FogProperties.cpp" />
     <ClCompile Include="src\resources\materials\effects\HeightMapTexture.cpp" />
@@ -326,6 +325,7 @@
     <ClCompile Include="src\resources\models\ModelGeometry.cpp" />
     <ClCompile Include="src\resources\models\Model.cpp" />
     <ClCompile Include="src\resources\models\ModelsLibrary.cpp" />
+    <ClCompile Include="src\resources\renderers\SkyBoxRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\VertexsRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\IndexesRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\IRenderer_.cpp" />

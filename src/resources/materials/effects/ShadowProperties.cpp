@@ -10,14 +10,14 @@ ShadowProperties::~ShadowProperties()
 {
 }
 
-void ShadowProperties::SetParameters(ITexture* texture, const glm::mat4& matrix, int pfcCounter)
+void ShadowProperties::SetParameters(const ITexture* texture, const glm::mat4& matrix, int pfcCounter)
 {
 	mDepthTexture = texture;
 	mMatrix = matrix;
 	mPFCCounter = pfcCounter;
 }
 
-ITexture* ShadowProperties::GetDepthTexture() const
+const ITexture* ShadowProperties::GetDepthTexture() const
 {
 	return mDepthTexture;
 }

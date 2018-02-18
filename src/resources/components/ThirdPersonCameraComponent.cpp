@@ -17,6 +17,7 @@ const float WATER_HEIGHT_OFFSET = 0.1f;
 ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, float distanceFromTarget, float pitch) :
 	mCamera(camera), mTarget(target), mDistanceFromTarget(distanceFromTarget), mPitch(pitch), mAngleAroundTarget(0.0f)
 {
+	assert(target != nullptr);
 }
 
 
