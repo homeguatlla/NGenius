@@ -59,13 +59,14 @@
 
 #include "src/resources/entities/Terrain.h"
 #include "src/resources/entities/Player.h"
+#include "src/resources/entities/Text.h"
 
 /*
 #include "src/resources/entities/Light.h"
 #include "src/resources/entities/Particle.h"
 #include "src/resources/entities/ParticlesEmitter.h"
 #include "src/resources/entities/EnergyWall.h"
-#include "src/resources/entities/Text.h"*/
+*/
 
 #include "src/resources/camera/ICamera.h"
 #include "src/resources/camera/PerspectiveCamera.h"
@@ -170,9 +171,9 @@ GameEntity* mCamera;
 GameEntity* mWater;
 GameEntity* mWaterReflectionCameraEntity;
 GameEntity* mWaterRefractionCameraEntity;
-EnergyWall* mEnergyWall;
+EnergyWall* mEnergyWall;*/
 Text* mFPSText;
-*/
+
 
 float mFogDensity = 0.04f;
 const float mFogGradient = 1.5f;
@@ -1121,7 +1122,7 @@ void UpdateEnergyWallCollisions(float elapsedTime)
 		mEnergyWall->GetRenderer()->SetVisibility(false);
 	}
 }
-
+*/
 void UpdateStatitstics()
 {
 	int fps = static_cast<int>(mEngine.GetFPS());
@@ -1137,23 +1138,22 @@ void UpdateStatitstics()
 
 	//mTestText->UpdateText("3D text " + std::to_string(fps));
 }
-*/
+
 
 void Update(float elapsedTime)
 {
-	/*
 	if (mIsWaterEnabled)
 	{
-		UpdateWaterCameras();
+		//UpdateWaterCameras();
 	}
 	if (mIsEnergyWallEnabled)
 	{
-		UpdateEnergyWallCollisions(elapsedTime);
+		//UpdateEnergyWallCollisions(elapsedTime);
 	}
 	if (mIsStatisticsVisible && mIsTextEnabled)
 	{
 		UpdateStatitstics();
-	}*/
+	}
 	if (mIsShadowEnabled)
 	{
 		mEngine.SetCastingShadowsTarget(mPlayer->GetTransformation()->GetPosition());
