@@ -360,7 +360,7 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 	for (unsigned int i = 0; i < models.size(); ++i)
 	{
 		IMaterial* m = material;
-		if (i == 0)
+		if (i == 0 && materialNormalmap != nullptr)
 		{
 			m = materialNormalmap;
 		}
@@ -426,28 +426,24 @@ void CreateTrees()
 	materialFoliage->AddEffect(new DiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_foliage_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	materialFoliage->AddEffect(new LightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	materialFoliage->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
-	
-	IMaterial* materialFoliageNormalMap = mEngine.CreateMaterial("tree_foliage_normalmap", mEngine.GetShader("normalmap"));
-	materialFoliageNormalMap->AddEffect(new DiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_foliage_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	materialFoliageNormalMap->AddEffect(new LightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
-	materialFoliageNormalMap->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
-	materialFoliageNormalMap->AddEffect(new NormalTexture(static_cast<Texture*>(mEngine.GetTexture("tree_foliage_normalmap")), 1));
+	materialFoliage->AddEffect(new ShadowProperties());
 
 	IMaterial* materialTrunk = mEngine.CreateMaterial("tree_trunk", mEngine.GetShader("model"));
 	materialTrunk->AddEffect(new DiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	materialTrunk->AddEffect(new LightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	materialTrunk->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
+	materialTrunk->AddEffect(new ShadowProperties());
 
 	IMaterial* materialTrunkNormalmap = mEngine.CreateMaterial("tree_trunk_normalmap", mEngine.GetShader("normalmap"));
 	materialTrunkNormalmap->AddEffect(new DiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	materialTrunkNormalmap->AddEffect(new LightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	materialTrunkNormalmap->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
 	materialTrunkNormalmap->AddEffect(new NormalTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_normalmap")), 1));
-
+	materialTrunkNormalmap->AddEffect(new ShadowProperties());
 
 	for (unsigned long i = 0; i < positions.size(); i++)
 	{
-		GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], modelsFoliage, distances, materialFoliage, materialFoliageNormalMap);
+		GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], modelsFoliage, distances, materialFoliage, nullptr);
 		mEngine.AddGameEntity(entity);
 		
 		entity = CreateModelWithLod(positions[i], sizes[i], modelsTrunk, distances, materialTrunk, materialTrunkNormalmap);
@@ -490,6 +486,7 @@ void CreateProps()
 	material->AddEffect(new LightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new FogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new NormalTexture(normal, 1));
+	material->AddEffect(new ShadowProperties());
 
 	for (int i = 0; i < numProps; i++)
 	{
@@ -631,30 +628,33 @@ void CreateEnergyWall()
 	mEngine.AddGameEntity(mEnergyWall);
 	mEngine.SetEnergyWallRadius(mEnergyWallRadius);
 }
+*/
 
 void CreateTextTest()
 {
-	mFPSText = new Text(	new Transformation(
-												glm::vec3(-mEngine.GetScreenWidth() * 0.5f, mEngine.GetScreenHeight() * 0.5f, 0.0f), 
-												glm::vec3(0.0f), 
-												glm::vec3(0.70f)
+	IMaterial* material = mEngine.CreateMaterial("text", mEngine.GetShader("text"));
+	mFPSText = new Text(new Transformation(
+									glm::vec3(-mEngine.GetScreenWidth() * 0.5f, mEngine.GetScreenHeight() * 0.5f, 0.0f),
+									glm::vec3(0.0f),
+									glm::vec3(0.70f)
 							),
-							mEngine.GetShader("text"), mEngine.GetFont("OCR A Extended"),
-							"FPS:", false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
+						material, mEngine.GetFont("OCR A Extended"),
+						"FPS:", false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
 	mEngine.AddGameEntity(mFPSText);
 
 	float x = 0.0f;
 	float z = 0.0f;
 	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
 
+	IMaterial* material3D = mEngine.CreateMaterial("text3D", mEngine.GetShader("default"));
 
-	Text* mTestText = new Text(new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(.01f)),
-		mEngine.GetShader("text"), mEngine.GetFont("OCR A Extended"),
-		"Origin", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
-	mTestText->SetOutlineColor(glm::vec4(0.0f, 1.0f, 1.0f, 0.8f));
-	mTestText->SetBorderParameters(0.4f, 0.1f, 0.3f, 0.7f);
+	Text* mTestText = new Text(	new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(5.0f)),
+								material3D, mEngine.GetFont("OCR A Extended"),
+								"Origin", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
+	//mTestText->SetOutlineColor(glm::vec4(0.0f, 1.0f, 1.0f, 0.8f));
+	//mTestText->SetBorderParameters(0.4f, 0.1f, 0.3f, 0.7f);
 	mEngine.AddGameEntity(mTestText);
-
+	/*
 	x = 10.0f;
 	z = 10.0f;
 	height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
@@ -665,9 +665,8 @@ void CreateTextTest()
 	mTestText->SetOutlineColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.8f));
 	mTestText->SetBorderParameters(0.5f, 0.1f, 0.5f, 0.4f);
 	mTestText->SetShadow(glm::vec2(0.002f, 0.002f));
-	mEngine.AddGameEntity(mTestText);
+	mEngine.AddGameEntity(mTestText);*/
 }
-*/
 
 void CreateTerrain()
 {
@@ -780,6 +779,11 @@ void CreateEntities()
 	CreateGameCameraEntity();
 
 	CreateTerrain();
+
+	if (mIsTextEnabled)
+	{
+		CreateTextTest();
+	}
 
 	if (mIsVegetationEnabled)
 	{
@@ -1085,7 +1089,7 @@ void UpdateInput(GLFWwindow* window)
 		}
 		else
 		{
-			//mCamera->AddComponent(new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 2.0f, 10.0f));
+			mCamera->AddComponent(new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f));
 		}
 
 		mIsGameplayCameraEnabled = !mIsGameplayCameraEnabled;
@@ -1123,22 +1127,22 @@ void UpdateEnergyWallCollisions(float elapsedTime)
 	}
 }
 */
+
 void UpdateStatitstics()
 {
 	int fps = static_cast<int>(mEngine.GetFPS());
 	if (fps < MIN_FPS_ALLOWED)
 	{
-		mFPSText->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		//mFPSText->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 	}
 	else
 	{
-		mFPSText->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		//mFPSText->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 	mFPSText->UpdateText("FPS: " +std::to_string(fps));
 
 	//mTestText->UpdateText("3D text " + std::to_string(fps));
 }
-
 
 void Update(float elapsedTime)
 {
@@ -1262,16 +1266,16 @@ void SetupConfiguration()
 		mIsDebugModeEnabled = true;
 		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = true;
-		mIsVegetationEnabled = true;
-		mIsPropsEnabled = true;
+		mIsFogEnabled = false;
+		mIsVegetationEnabled = false;
+		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = true;
-		mIsTerrainFlat = false;
-		mIsTextEnabled = false;
+		mIsSkyboxEnabled = false;
+		mIsTerrainFlat = true;
+		mIsTextEnabled = true;
 		mIsStatisticsVisible = false;
 		mIsParticlesEnabled = false;
-		mIsShadowEnabled = true;
+		mIsShadowEnabled = false;
 		break;
 	case RELEASE:
 		mIsDebugModeEnabled = false;

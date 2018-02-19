@@ -18,6 +18,7 @@ class ModelGeometry
 	std::string mNormalMapTextureName;
 
 public:
+	ModelGeometry();
 	ModelGeometry(	const std::vector<glm::vec3>& vertexs,
 			const std::vector<glm::vec2>& textureCoords,
 			const std::vector<unsigned int>& indexes,
@@ -28,9 +29,12 @@ public:
 	~ModelGeometry();
 
 	unsigned int GetID() const;
+	void SetVertexs(std::vector<glm::vec3>& vertexs);
 	std::vector<glm::vec3>& GetVertexs();
+	void SetTextureCoords(std::vector<glm::vec2>& textureCoords);
 	std::vector<glm::vec2>& GetTextureCoords();
 	std::vector<glm::vec3>& GetNormals();
+	void SetIndexes(std::vector<unsigned int>& indexes);
 	std::vector<unsigned int>& GetIndexes();
 	std::vector<glm::vec3>& GetTangents();
 

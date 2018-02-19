@@ -171,7 +171,6 @@
     <ClInclude Include="src\renderer\CubeRenderer.h" />
     <ClInclude Include="src\renderer\EnergyWallRenderer.h" />
     <ClInclude Include="src\renderer\GUIRenderer.h" />
-    <ClInclude Include="src\renderer\GUITextRenderer.h" />
     <ClInclude Include="src\renderer\IFrameBuffer.h" />
     <ClInclude Include="src\renderer\IRenderer.h" />
     <ClInclude Include="src\renderer\NormalRenderer.h" />
@@ -179,7 +178,6 @@
     <ClInclude Include="src\renderer\QuadRenderer.h" />
     <ClInclude Include="src\renderer\RenderPass.h" />
     <ClInclude Include="src\renderer\ShadowRenderer.h" />
-    <ClInclude Include="src\renderer\TextRenderer.h" />
     <ClInclude Include="src\renderer\WaterRenderer.h" />
     <ClInclude Include="src\resources\BaseLibrary.h" />
     <ClInclude Include="src\resources\camera\ICamera.h" />
@@ -225,7 +223,9 @@
     <ClInclude Include="src\resources\models\ModelGeometry.h" />
     <ClInclude Include="src\resources\models\Model.h" />
     <ClInclude Include="src\resources\models\ModelsLibrary.h" />
+    <ClInclude Include="src\resources\renderers\GUITextRenderer.h" />
     <ClInclude Include="src\resources\renderers\SkyBoxRenderer.h" />
+    <ClInclude Include="src\resources\renderers\TextRenderer.h" />
     <ClInclude Include="src\resources\renderers\VertexsRenderer.h" />
     <ClInclude Include="src\resources\renderers\IndexesRenderer.h" />
     <ClInclude Include="src\resources\renderers\IRenderer_.h" />
@@ -271,7 +271,6 @@
     <ClCompile Include="src\renderer\CubeRenderer.cpp" />
     <ClCompile Include="src\renderer\EnergyWallRenderer.cpp" />
     <ClCompile Include="src\renderer\GUIRenderer.cpp" />
-    <ClCompile Include="src\renderer\GUITextRenderer.cpp" />
     <ClCompile Include="src\renderer\IFrameBuffer.cpp" />
     <ClCompile Include="src\renderer\IRenderer.cpp" />
     <ClCompile Include="src\renderer\NormalRenderer.cpp" />
@@ -279,7 +278,6 @@
     <ClCompile Include="src\renderer\QuadRenderer.cpp" />
     <ClCompile Include="src\renderer\RenderPass.cpp" />
     <ClCompile Include="src\renderer\ShadowRenderer.cpp" />
-    <ClCompile Include="src\renderer\TextRenderer.cpp" />
     <ClCompile Include="src\renderer\WaterRenderer.cpp" />
     <ClCompile Include="src\resources\BaseLibrary.cpp" />
     <ClCompile Include="src\resources\camera\ICamera.cpp" />
@@ -325,7 +323,9 @@
     <ClCompile Include="src\resources\models\ModelGeometry.cpp" />
     <ClCompile Include="src\resources\models\Model.cpp" />
     <ClCompile Include="src\resources\models\ModelsLibrary.cpp" />
+    <ClCompile Include="src\resources\renderers\GUITextRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\SkyBoxRenderer.cpp" />
+    <ClCompile Include="src\resources\renderers\TextRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\VertexsRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\IndexesRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\IRenderer_.cpp" />

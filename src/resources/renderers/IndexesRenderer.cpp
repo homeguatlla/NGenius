@@ -11,11 +11,11 @@ IRenderer_(model, material)
 IndexesRenderer::~IndexesRenderer()
 {
 }
-
+/*
 const std::string IndexesRenderer::GetName() const
 {
 	return std::string("IndexesRenderer") + std::to_string(mModel->GetID());
-}
+}*/
 
 bool IndexesRenderer::IsInstancingAllowed() const
 {

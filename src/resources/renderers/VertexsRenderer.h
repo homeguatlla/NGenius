@@ -16,7 +16,7 @@ public:
 	~VertexsRenderer();
 
 	VertexsRenderer* DoClone() const override { return nullptr; }
-	const std::string GetName() const override;
+	//const std::string GetName() const override;
 	void Draw() override;
 
 private:

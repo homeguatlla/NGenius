@@ -13,11 +13,9 @@ public:
 	~SkyBoxRenderer();
 
 	SkyBoxRenderer* DoClone() const override { return nullptr; }
-	const std::string GetName() const override;
 	bool IsInstancingAllowed() const override;
 
 private:
-	void Create();
 	void Draw() override;
 };
 

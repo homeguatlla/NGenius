@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "TextShader.h"
 #include "IShaderProgram.h"
+#include "../camera/ICamera.h"
+#include "../Transformation.h"
 
 const std::string TextShader::VERTEX_FILE = "data/shaders/vertex/v_text.cg";
 const std::string TextShader::FRAGMENT_FILE = "data/shaders/fragment/f_text.cg";
@@ -46,7 +48,9 @@ void TextShader::BindAttributes()
 
 void TextShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
-
+	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
+	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
+	LoadMatrix4(mLocationModelMatrix, const_cast<Transformation*>(transformation)->GetModelMatrix());
 }
 
 void TextShader::GetAllUniformLocations()
@@ -63,21 +67,6 @@ void TextShader::GetAllUniformLocations()
 	mLocationBorderWidth = GetUniformLocation(ATTRIBUTE_BORDER_WIDTH);
 	mLocationBorderEdge = GetUniformLocation(ATTRIBUTE_BORDER_EDGE);
 	mLocationShadowOffset = GetUniformLocation(ATTRIBUTE_SHADOW_OFFSET);
-}
-
-void TextShader::LoadViewMatrix(const glm::mat4& viewmatrix)
-{
-	LoadMatrix4(mLocationViewMatrix, viewmatrix);
-}
-
-void TextShader::LoadModelMatrix(const glm::mat4& modelmatrix)
-{
-	LoadMatrix4(mLocationModelMatrix, modelmatrix);
-}
-
-void TextShader::LoadProjectionMatrix(const glm::mat4& projectionMatrix)
-{
-	LoadMatrix4(mLocationProjectionMatrix, projectionMatrix);
 }
 
 void TextShader::LoadFontTypeTexture(int unit)

@@ -1,12 +1,9 @@
 #include "stdafx.h"
 #include "GUITextRenderer.h"
-#include "../resources/shaders/IShaderProgram.h"
-#include "../resources/font/FontType.h"
-
 #include <GL/glew.h>
 
-GUITextRenderer::GUITextRenderer(IShaderProgram* shader, FontType* font, const glm::vec4& color, const int textID) :
-	TextRenderer(shader, font, color, textID)
+GUITextRenderer::GUITextRenderer(Model* model, IMaterial* material) :
+	TextRenderer(model, material)
 {
 	SetLayer(IRenderer_::LAYER_GUI);
 }
@@ -16,12 +13,7 @@ GUITextRenderer::~GUITextRenderer()
 {
 }
 
-const std::string GUITextRenderer::GetName() const
-{
-	return "GUITextRenderer_" + std::to_string(mTextID);
-}
-
-void GUITextRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
+void GUITextRenderer::Draw()
 {
 	/*glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);

@@ -14,7 +14,7 @@ public:
 	~IndexesRenderer();
 
 	IndexesRenderer* DoClone() const override { return nullptr; }
-	const std::string GetName() const override;
+	//const std::string GetName() const override;
 
 private:
 	bool IsInstancingAllowed() const override;

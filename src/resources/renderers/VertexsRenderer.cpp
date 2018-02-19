@@ -14,11 +14,11 @@ IRenderer_(model, material)
 VertexsRenderer::~VertexsRenderer()
 {
 }
-
+/*
 const std::string VertexsRenderer::GetName() const
 {
 	return std::string("VertexsRenderer") + std::to_string(mModel->GetID());
-}
+}*/
 
 void VertexsRenderer::Draw()
 {

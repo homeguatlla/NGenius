@@ -324,9 +324,6 @@
     <ClInclude Include="src\loader\FontLoader.h">
       <Filter>Header Files\loader</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\TextRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\shaders\TextShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
@@ -338,9 +335,6 @@
     </ClInclude>
     <ClInclude Include="FileReader.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\GUITextRenderer.h">
-      <Filter>Header Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\entities\Text.h">
       <Filter>Header Files\resources\entities</Filter>
@@ -419,6 +413,12 @@
     </ClInclude>
     <ClInclude Include="src\resources\materials\effects\TextureCubemapMaterialEffect.h">
       <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\GUITextRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\TextRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -629,9 +629,6 @@
     <ClCompile Include="src\resources\shaders\TextShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\TextRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\font\FontType.cpp">
       <Filter>Source Files\resources\font</Filter>
     </ClCompile>
@@ -640,9 +637,6 @@
     </ClCompile>
     <ClCompile Include="FileReader.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\GUITextRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\entities\Text.cpp">
       <Filter>Source Files\resources\entities</Filter>
@@ -721,6 +715,12 @@
     </ClCompile>
     <ClCompile Include="src\resources\materials\effects\TextureCubemapMaterialEffect.cpp">
       <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\GUITextRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\TextRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

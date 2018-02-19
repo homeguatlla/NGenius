@@ -76,7 +76,7 @@ void TerrainShader::LoadData(const ICamera* camera, const Transformation* transf
 
 	LoadVector3(mLocationCameraPosition, camera->GetPosition());
 
-	LoadFloat(mLocationScale, 7.5f);
+	LoadFloat(mLocationScale, 0.0f);//7.5f);
 
 	if (material->HasEffect<DiffuseTexture>())
 	{

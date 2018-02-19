@@ -5,6 +5,11 @@ int ModelGeometry::IDCounter = 0;
 const float EPSILON = 0.0001f;
 const float EPSILON2 = EPSILON * EPSILON;
 
+ModelGeometry::ModelGeometry()
+{
+
+}
+
 ModelGeometry::ModelGeometry(const std::vector<glm::vec3>& vertexs,
 	const std::vector<glm::vec2>& textureCoords,
 	const std::vector<unsigned int>& indexes) :
@@ -38,6 +43,11 @@ unsigned int ModelGeometry::GetID() const
 	return mModelID;
 }
 
+void ModelGeometry::SetVertexs(std::vector<glm::vec3>& vertexs)
+{
+	mVertexs = vertexs;
+}
+
 std::vector<glm::vec3>& ModelGeometry::GetVertexs()
 {
 	return mVertexs;
@@ -46,6 +56,11 @@ std::vector<glm::vec3>& ModelGeometry::GetVertexs()
 long ModelGeometry::GetNumberOfVertexs() const
 {
 	return mVertexs.size();
+}
+
+void ModelGeometry::SetTextureCoords(std::vector<glm::vec2>& textureCoords)
+{
+	mTextureCoords = textureCoords;
 }
 
 std::vector<glm::vec2>& ModelGeometry::GetTextureCoords()
@@ -76,6 +91,11 @@ std::vector<glm::vec3>& ModelGeometry::GetTangents()
 long ModelGeometry::GetNumberOfTangents() const
 {
 	return mTangents.size();
+}
+
+void ModelGeometry::SetIndexes(std::vector<unsigned int>& indexes)
+{
+	mIndexes = indexes;
 }
 
 std::vector<unsigned int>& ModelGeometry::GetIndexes()

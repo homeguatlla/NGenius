@@ -13,6 +13,9 @@ class Model
 	AABB mAABB;
 	int mVAO;
 	int mMatrixVBO;
+	int mVertexsVBO;
+	int mIndexesVBO;
+	int mTextureCoordsVBO;
 
 public:
 	Model(ModelGeometry* model);
@@ -29,7 +32,8 @@ public:
 
 	bool IsBuilt() const;
 	void Build(VertexBuffersManager& vertexBufferManager, IMaterial* material);
-	
+	void UpdateVBOs();
+
 private:
 	void CreateVertexsVBO(VertexBuffersManager& vertexBufferManager, int location);
 	void CreateIndexesVBO(VertexBuffersManager& vertexBufferManager);
