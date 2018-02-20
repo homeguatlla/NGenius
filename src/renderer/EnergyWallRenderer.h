@@ -1,7 +1,7 @@
 #pragma once
 #include "IRenderer.h"
 
-class ModelGeometry;
+class Mesh;
 class IShaderProgram;
 class Texture;
 class ICamera;
@@ -13,7 +13,7 @@ class EnergyWallRenderer : public IRenderer
 	std::vector<glm::vec3> mNormals;
 
 protected:
-	ModelGeometry* mModel;
+	Mesh* mModel;
 	Texture* mTexture;
 	Texture* mDepthTexture;
 	
@@ -25,7 +25,7 @@ private:
 
 
 public:
-	EnergyWallRenderer(ModelGeometry* model, IShaderProgram* shader, Texture* texture, Texture* depthTexture);
+	EnergyWallRenderer(Mesh* model, IShaderProgram* shader, Texture* texture, Texture* depthTexture);
 	~EnergyWallRenderer();
 
 	EnergyWallRenderer* DoClone() const override { return nullptr; }

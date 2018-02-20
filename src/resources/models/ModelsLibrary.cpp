@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ModelsLibrary.h"
 #include "Model.h"
-#include "ModelGeometry.h"
+#include "Mesh.h"
 #include "../../loader/OBJLoader.h"
 
 #include <iostream>
@@ -55,7 +55,7 @@ void ModelsLibrary::Load()
 
 void ModelsLibrary::LoadModel(const std::string& name, const std::string& filename, bool calculateNormals, bool calculateTangents)
 {
-	ModelGeometry* model = OBJLoader::LoadModel(filename);
+	Mesh* model = OBJLoader::LoadModel(filename);
 
 	model->Build(calculateNormals, calculateTangents);
 
@@ -146,8 +146,8 @@ void ModelsLibrary::CreateSkybox()
 	indexes.push_back(7);
 	
 	std::vector<glm::vec2> uv;
-	ModelGeometry* modelGeometry = new ModelGeometry(vertexs, uv, indexes);
-	Model* model = new Model(modelGeometry);
+	Mesh* mMesh = new Mesh(vertexs, uv, indexes);
+	Model* model = new Model(mMesh);
 
 	AddElement("skybox", model);
 }

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "EnergyWallRenderer.h"
-#include "../resources/models/ModelGeometry.h"
+#include "../resources/models/Mesh.h"
 #include "../resources/textures/Texture.h"
 #include "../resources/shaders/IShaderProgram.h"
 #include "../resources/shaders/EnergyWallShader.h"
@@ -10,7 +10,7 @@
 #include <iostream>
 
 
-EnergyWallRenderer::EnergyWallRenderer(ModelGeometry* model, IShaderProgram* shader, Texture* texture, Texture* depthTexture) :
+EnergyWallRenderer::EnergyWallRenderer(Mesh* model, IShaderProgram* shader, Texture* texture, Texture* depthTexture) :
 mModel(model),
 IRenderer(shader),
 mTexture(texture),

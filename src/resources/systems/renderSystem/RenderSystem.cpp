@@ -12,11 +12,11 @@
 #include "../../textures/Texture.h"
 #include "../../materials/IMaterial.h"
 #include "../../materials/MaterialsLibrary.h"
-#include "../../materials/effects/DiffuseTexture.h"
-#include "../../materials/effects/NormalTexture.h"
-#include "../../materials/effects/HeightMapTexture.h"
-#include "../../materials/effects/ClippingPlaneMaterialEffect.h"
-#include "../../materials/effects/ShadowProperties.h"
+#include "../../materials/effects/MaterialEffectDiffuseTexture.h"
+#include "../../materials/effects/MaterialEffectNormalTexture.h"
+#include "../../materials/effects/MaterialEffectHeightMapTexture.h"
+#include "../../materials/effects/MaterialEffectClippingPlane.h"
+#include "../../materials/effects/MaterialEffectShadowProperties.h"
 
 
 #include "../../../renderer/RenderPass.h"
@@ -263,9 +263,9 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer_* renderer,
 
 void RenderSystem::ApplyShadows(IRenderer_* renderer)
 {
-	if (mCurrentMaterial->HasEffect<ShadowProperties>())
+	if (mCurrentMaterial->HasEffect<MaterialEffectShadowProperties>())
 	{
-		ShadowProperties* effect = mCurrentMaterial->GetEffect<ShadowProperties>();
+		MaterialEffectShadowProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectShadowProperties>();
 		effect->SetParameters(	mShadowsRenderPass->GetShadowMapTexture(),
 								mShadowsRenderPass->GetShadowMapMatrix(),
 								mShadowsRenderPass->GetShadowMapPFCCounter());
@@ -279,9 +279,9 @@ void RenderSystem::SelectClippingPlane(RenderPass* renderPass)
 	{
 		mLastClipPlaneNumberUsed = renderPass->GetClippingPlaneNumber();
 		glEnable(mLastClipPlaneNumberUsed);
-		if (mCurrentMaterial->HasEffect<ClippingPlaneMaterialEffect>())
+		if (mCurrentMaterial->HasEffect<MaterialEffectClippingPlane>())
 		{
-			ClippingPlaneMaterialEffect* effect = mCurrentMaterial->GetEffect<ClippingPlaneMaterialEffect>();
+			MaterialEffectClippingPlane* effect = mCurrentMaterial->GetEffect<MaterialEffectClippingPlane>();
 			effect->SetClippingPlane(renderPass->GetClippingPlane());
 		}
 	}
@@ -293,9 +293,9 @@ void RenderSystem::SelectClippingPlane(RenderPass* renderPass)
 
 void RenderSystem::SelectTextures()
 {
-	if (mCurrentMaterial->HasEffect<DiffuseTexture>())
+	if (mCurrentMaterial->HasEffect<MaterialEffectDiffuseTexture>())
 	{
-		ITexture* diffuse = mCurrentMaterial->GetEffect<DiffuseTexture>()->GetDiffuseTexture();
+		ITexture* diffuse = mCurrentMaterial->GetEffect<MaterialEffectDiffuseTexture>()->GetDiffuseTexture();
 		if (diffuse != mDiffuseTexture)
 		{
 			mDiffuseTexture = diffuse;
@@ -303,9 +303,9 @@ void RenderSystem::SelectTextures()
 		}
 	}
 
-	if (mCurrentMaterial->HasEffect<NormalTexture>())
+	if (mCurrentMaterial->HasEffect<MaterialEffectNormalTexture>())
 	{
-		ITexture* normal = mCurrentMaterial->GetEffect<NormalTexture>()->GetNormalTexture();
+		ITexture* normal = mCurrentMaterial->GetEffect<MaterialEffectNormalTexture>()->GetNormalTexture();
 		if (normal != mNormalTexture)
 		{
 			mNormalTexture = normal;
@@ -313,9 +313,9 @@ void RenderSystem::SelectTextures()
 		}
 	}
 
-	if (mCurrentMaterial->HasEffect<HeightMapTexture>())
+	if (mCurrentMaterial->HasEffect<MaterialEffectHeightMapTexture>())
 	{
-		ITexture* heightmap = mCurrentMaterial->GetEffect<HeightMapTexture>()->GetHeightMapTexture();
+		ITexture* heightmap = mCurrentMaterial->GetEffect<MaterialEffectHeightMapTexture>()->GetHeightMapTexture();
 		heightmap->SetActive(true);
 		/*if (heightmap != mNormalTexture)
 		{
@@ -324,9 +324,9 @@ void RenderSystem::SelectTextures()
 		}*/
 	}
 
-	if (mCurrentMaterial->HasEffect<HeightMapTexture>())
+	if (mCurrentMaterial->HasEffect<MaterialEffectHeightMapTexture>())
 	{
-		ITexture* heightmap = mCurrentMaterial->GetEffect<HeightMapTexture>()->GetHeightMapTexture();
+		ITexture* heightmap = mCurrentMaterial->GetEffect<MaterialEffectHeightMapTexture>()->GetHeightMapTexture();
 		heightmap->SetActive(true);
 		/*if (heightmap != mNormalTexture)
 		{

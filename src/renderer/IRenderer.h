@@ -9,7 +9,7 @@ class IShaderProgram;
 class ICamera;
 class GameEntity;
 class Texture;
-class ModelGeometry;
+class Mesh;
 
 class IRenderer
 {
@@ -27,7 +27,7 @@ public:
 
 protected:
 	GameEntity* mParent;
-	ModelGeometry* mModel;
+	Mesh* mModel;
 	std::vector<IRenderer*> mInstances;
 	IShaderProgram* mShaderProgram;
 
@@ -76,7 +76,7 @@ public:
 	virtual void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager) = 0;
 	void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager, IShaderProgram* shaderRenderPass);
 	
-	void SetModel(ModelGeometry* model);
+	void SetModel(Mesh* model);
 	const BitNumber& GetBitRendererInformation() const;
 
 	bool IsPrerendered() const;

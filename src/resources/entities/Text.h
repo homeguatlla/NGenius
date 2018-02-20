@@ -5,7 +5,7 @@
 class Transformation;
 class FontType;
 class Model;
-class ModelGeometry;
+class Mesh;
 class IMaterial;
 
 class Text : public GameEntity
@@ -20,7 +20,7 @@ class Text : public GameEntity
 	glm::vec4 mColor;
 	FontType* mFontType;
 	Model* mModel;
-	ModelGeometry* mModelGeometry;
+	Mesh* mMesh;
 
 public:
 	Text(	Transformation* transformation, IMaterial* material, FontType* font, const std::string& text, 

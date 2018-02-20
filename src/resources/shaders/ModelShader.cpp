@@ -2,10 +2,10 @@
 #include "ModelShader.h"
 #include "../camera/ICamera.h"
 #include "../materials/IMaterial.h"
-#include "../materials/effects/DiffuseTexture.h"
-#include "../materials/effects/LightProperties.h"
-#include "../materials/effects/FogProperties.h"
-#include "../materials/effects/ShadowProperties.h"
+#include "../materials/effects/MaterialEffectDiffuseTexture.h"
+#include "../materials/effects/MaterialEffectLightProperties.h"
+#include "../materials/effects/MaterialEffectFogProperties.h"
+#include "../materials/effects/MaterialEffectShadowProperties.h"
 #include "../textures/ITexture.h"
 
 const std::string ModelShader::VERTEX_FILE = "data/shaders/vertex/v_model.cg";
@@ -65,31 +65,31 @@ void ModelShader::LoadData(const ICamera* camera, const Transformation* transfor
 	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
 	LoadVector3(mLocationCameraPosition, camera->GetPosition());
 
-	if (material->HasEffect<DiffuseTexture>())
+	if (material->HasEffect<MaterialEffectDiffuseTexture>())
 	{
-		DiffuseTexture* effect = material->GetEffect<DiffuseTexture>();
+		MaterialEffectDiffuseTexture* effect = material->GetEffect<MaterialEffectDiffuseTexture>();
 		LoadTexture(mLocationTexture, effect->GetDiffuseTexture()->GetUnit());
 		LoadFloat(mLocationTile, effect->GetTile());
 	}
 
-	if (material->HasEffect<LightProperties>())
+	if (material->HasEffect<MaterialEffectLightProperties>())
 	{
-		LightProperties* effect = material->GetEffect<LightProperties>();
+		MaterialEffectLightProperties* effect = material->GetEffect<MaterialEffectLightProperties>();
 		LoadVector3(mLocationLightPosition, effect->GetPosition());
 		LoadVector3(mLocationLightColor, effect->GetColor());
 	}
 
-	if (material->HasEffect<FogProperties>())
+	if (material->HasEffect<MaterialEffectFogProperties>())
 	{
-		FogProperties* effect = material->GetEffect<FogProperties>();
+		MaterialEffectFogProperties* effect = material->GetEffect<MaterialEffectFogProperties>();
 		LoadVector3(mLocationFogColor, effect->GetColor());
 		LoadFloat(mLocationFogDensity, effect->GetDensity());
 		LoadFloat(mLocationFogGradient, effect->GetGradient());
 	}
 
-	if (material->HasEffect<ShadowProperties>())
+	if (material->HasEffect<MaterialEffectShadowProperties>())
 	{
-		ShadowProperties* effect = material->GetEffect<ShadowProperties>();
+		MaterialEffectShadowProperties* effect = material->GetEffect<MaterialEffectShadowProperties>();
 		LoadMatrix4(mLocationShadowSpaceMatrix, effect->GetMatrix());
 		LoadTexture(mLocationShadowMapTexture, effect->GetDepthTexture()->GetUnit());
 		LoadInteger(mLocationShadowMapTextureWidth, effect->GetDepthTexture()->GetWidth());

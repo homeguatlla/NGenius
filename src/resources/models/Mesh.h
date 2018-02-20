@@ -3,7 +3,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-class ModelGeometry
+class Mesh
 {
 	static int IDCounter;
 
@@ -18,15 +18,15 @@ class ModelGeometry
 	std::string mNormalMapTextureName;
 
 public:
-	ModelGeometry();
-	ModelGeometry(	const std::vector<glm::vec3>& vertexs,
+	Mesh();
+	Mesh(	const std::vector<glm::vec3>& vertexs,
 			const std::vector<glm::vec2>& textureCoords,
 			const std::vector<unsigned int>& indexes,
 			const std::vector<glm::vec3>& normals);
-	ModelGeometry(	const std::vector<glm::vec3>& vertexs,
+	Mesh(	const std::vector<glm::vec3>& vertexs,
 			const std::vector<glm::vec2>& textureCoords,
 			const std::vector<unsigned int>& indexes);
-	~ModelGeometry();
+	~Mesh();
 
 	unsigned int GetID() const;
 	void SetVertexs(std::vector<glm::vec3>& vertexs);

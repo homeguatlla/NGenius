@@ -3,17 +3,17 @@
 #include <glm/glm.hpp>
 
 
-class ClippingPlaneMaterialEffect : public IMaterialEffect
+class MaterialEffectClippingPlane : public IMaterialEffect
 {
 	glm::vec4 mPlane;
 
 public:
-	ClippingPlaneMaterialEffect();
-	virtual ~ClippingPlaneMaterialEffect();
+	MaterialEffectClippingPlane();
+	virtual ~MaterialEffectClippingPlane();
 
 	void SetClippingPlane(const glm::vec4& plane);
 	const glm::vec4 GetClippingPlane() const;
 
-	ClippingPlaneMaterialEffect* DoClone() const override;
+	MaterialEffectClippingPlane* DoClone() const override;
 };
 

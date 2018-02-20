@@ -5,8 +5,8 @@
 #include "../camera/ICamera.h"
 
 #include "../materials/IMaterial.h"
-#include "../materials/effects/FogProperties.h"
-#include "../materials/effects/TextureCubemapMaterialEffect.h"
+#include "../materials/effects/MaterialEffectFogProperties.h"
+#include "../materials/effects/MaterialEffectTextureCubemap.h"
 
 #include "../textures/ITexture.h"
 #include "../textures/TextureCubemap.h"
@@ -41,15 +41,15 @@ void SkyBoxShader::LoadData(const ICamera* camera, const Transformation* transfo
 	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
 	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
 
-	if (material->HasEffect<TextureCubemapMaterialEffect>())
+	if (material->HasEffect<MaterialEffectTextureCubemap>())
 	{
-		TextureCubemapMaterialEffect* effect = material->GetEffect<TextureCubemapMaterialEffect>();
+		MaterialEffectTextureCubemap* effect = material->GetEffect<MaterialEffectTextureCubemap>();
 		LoadTexture(mLocationCubemapTexture, effect->GetCubemap()->GetUnit());
 	}
 
-	if (material->HasEffect<FogProperties>())
+	if (material->HasEffect<MaterialEffectFogProperties>())
 	{
-		FogProperties* effect = material->GetEffect<FogProperties>();
+		MaterialEffectFogProperties* effect = material->GetEffect<MaterialEffectFogProperties>();
 		LoadVector3(mLocationFogColor, effect->GetColor());
 	}
 }

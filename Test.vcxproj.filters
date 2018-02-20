@@ -369,29 +369,11 @@
     <ClInclude Include="src\resources\materials\IMaterialEffect.h">
       <Filter>Header Files\resources\materials</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\models\ModelGeometry.h">
-      <Filter>Header Files\resources\models</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\models\Model.h">
       <Filter>Header Files\resources\models</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\materials\effects\DiffuseTexture.h">
-      <Filter>Header Files\resources\materials\effects</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\systems\LightsSystem.h">
       <Filter>Header Files\resources\systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\materials\effects\LightProperties.h">
-      <Filter>Header Files\resources\materials\effects</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\materials\effects\NormalTexture.h">
-      <Filter>Header Files\resources\materials\effects</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\materials\effects\FogProperties.h">
-      <Filter>Header Files\resources\materials\effects</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\materials\effects\ShadowProperties.h">
-      <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\renderers\VertexsRenderer.h">
       <Filter>Header Files\resources\renderers</Filter>
@@ -399,26 +381,47 @@
     <ClInclude Include="src\resources\renderers\IndexesRenderer.h">
       <Filter>Header Files\resources\renderers</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\materials\effects\HeightMapTexture.h">
-      <Filter>Header Files\resources\materials\effects</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\materials\effects\TextureArrayMaterialEffect.h">
-      <Filter>Header Files\resources\materials\effects</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\materials\effects\ClippingPlaneMaterialEffect.h">
-      <Filter>Header Files\resources\materials\effects</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\renderers\SkyBoxRenderer.h">
       <Filter>Header Files\resources\renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\materials\effects\TextureCubemapMaterialEffect.h">
-      <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\renderers\GUITextRenderer.h">
       <Filter>Header Files\resources\renderers</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\renderers\TextRenderer.h">
       <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\models\Mesh.h">
+      <Filter>Header Files\resources\models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectClippingPlane.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectDiffuseTexture.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectFogProperties.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectHeightMapTexture.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectLightProperties.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectShadowProperties.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectText.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectTextureArray.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectTextureCubemap.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectNormalTexture.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -671,29 +674,11 @@
     <ClCompile Include="src\resources\materials\IMaterialEffect.cpp">
       <Filter>Source Files\resources\materials</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\models\ModelGeometry.cpp">
-      <Filter>Source Files\resources\models</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\models\Model.cpp">
       <Filter>Source Files\resources\models</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\materials\effects\DiffuseTexture.cpp">
-      <Filter>Source Files\resources\materials\effects</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\systems\LightsSystem.cpp">
       <Filter>Source Files\resources\systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\materials\effects\LightProperties.cpp">
-      <Filter>Source Files\resources\materials\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\materials\effects\NormalTexture.cpp">
-      <Filter>Source Files\resources\materials\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\materials\effects\FogProperties.cpp">
-      <Filter>Source Files\resources\materials\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\materials\effects\ShadowProperties.cpp">
-      <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\renderers\VertexsRenderer.cpp">
       <Filter>Source Files\resources\renderers</Filter>
@@ -701,26 +686,47 @@
     <ClCompile Include="src\resources\renderers\IndexesRenderer.cpp">
       <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\materials\effects\HeightMapTexture.cpp">
-      <Filter>Source Files\resources\materials\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\materials\effects\TextureArrayMaterialEffect.cpp">
-      <Filter>Source Files\resources\materials\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\materials\effects\ClippingPlaneMaterialEffect.cpp">
-      <Filter>Source Files\resources\materials\effects</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\renderers\SkyBoxRenderer.cpp">
       <Filter>Source Files\resources\renderers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\materials\effects\TextureCubemapMaterialEffect.cpp">
-      <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\renderers\GUITextRenderer.cpp">
       <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\renderers\TextRenderer.cpp">
       <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\Mesh.cpp">
+      <Filter>Source Files\resources\models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectClippingPlane.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectDiffuseTexture.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectFogProperties.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectHeightMapTexture.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectLightProperties.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectNormalTexture.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectShadowProperties.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectText.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectTextureArray.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectTextureCubemap.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

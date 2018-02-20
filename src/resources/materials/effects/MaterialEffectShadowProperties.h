@@ -4,21 +4,21 @@
 
 class ITexture;
 
-class ShadowProperties : public IMaterialEffect
+class MaterialEffectShadowProperties : public IMaterialEffect
 {
 	const ITexture* mDepthTexture;
 	glm::mat4 mMatrix;
 	int mPFCCounter;
 
 public:
-	ShadowProperties();
-	virtual ~ShadowProperties();
+	MaterialEffectShadowProperties();
+	virtual ~MaterialEffectShadowProperties();
 
 	void SetParameters(const ITexture* texture, const glm::mat4& matrix, int pfcCounter);
 	const ITexture* GetDepthTexture() const;
 	int GetPFCCounter() const;
 	const glm::mat4& GetMatrix() const;
 
-	ShadowProperties* DoClone() const override;
+	MaterialEffectShadowProperties* DoClone() const override;
 };
 

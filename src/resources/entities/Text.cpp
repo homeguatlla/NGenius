@@ -5,7 +5,7 @@
 #include "../renderers/TextRenderer.h"
 #include "../renderers/GUITextRenderer.h"
 #include "../models/Model.h"
-#include "../models/ModelGeometry.h"
+#include "../models/Mesh.h"
 #include "../font/FontType.h"
 
 const float EXTRA_CHARACTER_PADDING = 0.0f;
@@ -24,10 +24,10 @@ Text::Text(Transformation* transformation, IMaterial* material, FontType* font,
 	assert(material != nullptr);
 	assert(font != nullptr);
 
-	mModelGeometry = new ModelGeometry();
-	mModel = new Model(mModelGeometry);
+	mMesh = new Mesh();
+	mModel = new Model(mMesh);
 
-	isText3D ? SetRenderer(new TextRenderer(mModel, material)) : 0;// : SetRenderer(new GUITextRenderer(material, font, mColor, mTextID));
+	isText3D ? SetRenderer(new TextRenderer(mModel, material)) : SetRenderer(new GUITextRenderer(mModel, material));
 	UpdateText(text);
 }
 
@@ -93,7 +93,7 @@ void Text::Create(const std::string& text, unsigned int width, unsigned int heig
 		}
 	}
 
-	mModelGeometry->SetVertexs(vertexs);
-	mModelGeometry->SetIndexes(indexs);
-	mModelGeometry->SetTextureCoords(uv);
+	mMesh->SetVertexs(vertexs);
+	mMesh->SetIndexes(indexs);
+	mMesh->SetTextureCoords(uv);
 }

@@ -1,16 +1,16 @@
 #include "stdafx.h"
-#include "ModelGeometry.h"
+#include "Mesh.h"
 
-int ModelGeometry::IDCounter = 0;
+int Mesh::IDCounter = 0;
 const float EPSILON = 0.0001f;
 const float EPSILON2 = EPSILON * EPSILON;
 
-ModelGeometry::ModelGeometry()
+Mesh::Mesh()
 {
-
+	mModelID = ++IDCounter;
 }
 
-ModelGeometry::ModelGeometry(const std::vector<glm::vec3>& vertexs,
+Mesh::Mesh(const std::vector<glm::vec3>& vertexs,
 	const std::vector<glm::vec2>& textureCoords,
 	const std::vector<unsigned int>& indexes) :
 	mVertexs(vertexs),
@@ -21,7 +21,7 @@ ModelGeometry::ModelGeometry(const std::vector<glm::vec3>& vertexs,
 	assert(vertexs.size() > 0);
 }
 
-ModelGeometry::ModelGeometry(const std::vector<glm::vec3>& vertexs,
+Mesh::Mesh(const std::vector<glm::vec3>& vertexs,
 	const std::vector<glm::vec2>& textureCoords,
 	const std::vector<unsigned int>& indexes,
 	const std::vector<glm::vec3>& normals) :
@@ -34,81 +34,81 @@ ModelGeometry::ModelGeometry(const std::vector<glm::vec3>& vertexs,
 	assert(vertexs.size() > 0);
 }
 
-ModelGeometry::~ModelGeometry()
+Mesh::~Mesh()
 {
 }
 
-unsigned int ModelGeometry::GetID() const
+unsigned int Mesh::GetID() const
 {
 	return mModelID;
 }
 
-void ModelGeometry::SetVertexs(std::vector<glm::vec3>& vertexs)
+void Mesh::SetVertexs(std::vector<glm::vec3>& vertexs)
 {
 	mVertexs = vertexs;
 }
 
-std::vector<glm::vec3>& ModelGeometry::GetVertexs()
+std::vector<glm::vec3>& Mesh::GetVertexs()
 {
 	return mVertexs;
 }
 
-long ModelGeometry::GetNumberOfVertexs() const
+long Mesh::GetNumberOfVertexs() const
 {
 	return mVertexs.size();
 }
 
-void ModelGeometry::SetTextureCoords(std::vector<glm::vec2>& textureCoords)
+void Mesh::SetTextureCoords(std::vector<glm::vec2>& textureCoords)
 {
 	mTextureCoords = textureCoords;
 }
 
-std::vector<glm::vec2>& ModelGeometry::GetTextureCoords()
+std::vector<glm::vec2>& Mesh::GetTextureCoords()
 {
 	return mTextureCoords;
 }
 
-long ModelGeometry::GetNumberOfTextureCoords() const
+long Mesh::GetNumberOfTextureCoords() const
 {
 	return mTextureCoords.size();
 }
 
-std::vector<glm::vec3>& ModelGeometry::GetNormals()
+std::vector<glm::vec3>& Mesh::GetNormals()
 {
 	return mNormals;
 }
 
-long ModelGeometry::GetNumberOfNormals() const
+long Mesh::GetNumberOfNormals() const
 {
 	return mNormals.size();
 }
 
-std::vector<glm::vec3>& ModelGeometry::GetTangents()
+std::vector<glm::vec3>& Mesh::GetTangents()
 {
 	return mTangents;
 }
 
-long ModelGeometry::GetNumberOfTangents() const
+long Mesh::GetNumberOfTangents() const
 {
 	return mTangents.size();
 }
 
-void ModelGeometry::SetIndexes(std::vector<unsigned int>& indexes)
+void Mesh::SetIndexes(std::vector<unsigned int>& indexes)
 {
 	mIndexes = indexes;
 }
 
-std::vector<unsigned int>& ModelGeometry::GetIndexes()
+std::vector<unsigned int>& Mesh::GetIndexes()
 {
 	return mIndexes;
 }
 
-long ModelGeometry::GetNumberOfIndexes() const
+long Mesh::GetNumberOfIndexes() const
 {
 	return mIndexes.size();
 }
 
-void ModelGeometry::Build(bool calculateNormals, bool calculateTangents)
+void Mesh::Build(bool calculateNormals, bool calculateTangents)
 {
 	if (calculateNormals)
 	{
@@ -120,37 +120,37 @@ void ModelGeometry::Build(bool calculateNormals, bool calculateTangents)
 	}
 }
 
-void  ModelGeometry::SetMaterialName(const std::string& name)
+void  Mesh::SetMaterialName(const std::string& name)
 {
 	mMaterialName = name;
 }
 
-const std::string&  ModelGeometry::GetMaterialName() const
+const std::string&  Mesh::GetMaterialName() const
 {
 	return mMaterialName;
 }
 
-void ModelGeometry::SetDiffuseTextureName(const std::string& name)
+void Mesh::SetDiffuseTextureName(const std::string& name)
 {
 	mDiffuseTextureName = name;
 }
 
-const std::string& ModelGeometry::GetDiffuseTextureName() const
+const std::string& Mesh::GetDiffuseTextureName() const
 {
 	return mDiffuseTextureName;
 }
 
-void ModelGeometry::SetNormalMapTextureName(const std::string& name)
+void Mesh::SetNormalMapTextureName(const std::string& name)
 {
 	mNormalMapTextureName = name;
 }
 
-const std::string& ModelGeometry::GetNormalMapTextureName() const
+const std::string& Mesh::GetNormalMapTextureName() const
 {
 	return mNormalMapTextureName;
 }
 
-void ModelGeometry::CalculateNormals()
+void Mesh::CalculateNormals()
 {
 	struct Face 
 	{
@@ -191,7 +191,7 @@ void ModelGeometry::CalculateNormals()
 	}
 }
 
-glm::vec3 ModelGeometry::CalculateTriangleNormalFromVertex(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c)
+glm::vec3 Mesh::CalculateTriangleNormalFromVertex(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c)
 {
 	//This assumes that A->B->C is a counter-clockwise ordering
 	glm::vec3 n = glm::cross(b - a, c - a);
@@ -200,7 +200,7 @@ glm::vec3 ModelGeometry::CalculateTriangleNormalFromVertex(const glm::vec3& a, c
 	return glm::normalize(n) * glm::asin(alpha);
 }
 
-void ModelGeometry::CalculateTangents()
+void Mesh::CalculateTangents()
 {
 	std::vector<glm::vec3> tan1(0.0f);
 	std::vector<glm::vec3> tan2(0.0f);

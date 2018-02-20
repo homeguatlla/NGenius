@@ -4,12 +4,12 @@
 #include "../../VertexBuffersManager.h"
 #include <vector>
 
-class ModelGeometry;
+class Mesh;
 class IMaterial;
 
 class Model
 {
-	ModelGeometry* mModelGeometry;
+	Mesh* mMesh;
 	AABB mAABB;
 	int mVAO;
 	int mMatrixVBO;
@@ -18,7 +18,7 @@ class Model
 	int mTextureCoordsVBO;
 
 public:
-	Model(ModelGeometry* model);
+	Model(Mesh* model);
 	~Model();
 
 	unsigned int GetID() const;

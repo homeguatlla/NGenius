@@ -4,20 +4,20 @@
 
 class ITexture;
 
-class DiffuseTexture : public IMaterialEffect
+class MaterialEffectDiffuseTexture : public IMaterialEffect
 {
 	ITexture* mTexture;
 	glm::vec3 mColor;
 	float mTile;	
 
 public:
-	DiffuseTexture(ITexture* texture, const glm::vec3& color, float tile);
-	virtual ~DiffuseTexture();
+	MaterialEffectDiffuseTexture(ITexture* texture, const glm::vec3& color, float tile);
+	virtual ~MaterialEffectDiffuseTexture();
 
 	ITexture* GetDiffuseTexture() const;
 	const glm::vec3 GetColor() const;
 	float GetTile() const;
 
-	DiffuseTexture* DoClone() const override;
+	MaterialEffectDiffuseTexture* DoClone() const override;
 };
 

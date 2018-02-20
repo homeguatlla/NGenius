@@ -3,6 +3,10 @@
 #include "IShaderProgram.h"
 #include "../camera/ICamera.h"
 #include "../Transformation.h"
+#include "../textures/ITexture.h"
+#include "../materials/IMaterial.h"
+#include "../materials/effects/MaterialEffectDiffuseTexture.h"
+#include "../materials/effects/MaterialEffectText.h"
 
 const std::string TextShader::VERTEX_FILE = "data/shaders/vertex/v_text.cg";
 const std::string TextShader::FRAGMENT_FILE = "data/shaders/fragment/f_text.cg";
@@ -36,7 +40,6 @@ mLocationShadowOffset(-1)
 {
 }
 
-
 TextShader::~TextShader()
 {
 }
@@ -51,6 +54,24 @@ void TextShader::LoadData(const ICamera* camera, const Transformation* transform
 	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
 	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
 	LoadMatrix4(mLocationModelMatrix, const_cast<Transformation*>(transformation)->GetModelMatrix());
+
+	if (material->HasEffect<MaterialEffectDiffuseTexture>())
+	{
+		MaterialEffectDiffuseTexture* effect = material->GetEffect<MaterialEffectDiffuseTexture>();
+		LoadTexture(mLocationTexture, effect->GetDiffuseTexture()->GetUnit());
+	}
+
+	if (material->HasEffect<MaterialEffectText>())
+	{
+		MaterialEffectText* effect = material->GetEffect<MaterialEffectText>();
+		LoadVector4(mLocationColor, effect->GetColor());
+		LoadVector4(mLocationOutlineColor, effect->GetOutlineColor());
+		LoadFloat(mLocationWidth, effect->GetWidth());
+		LoadFloat(mLocationEdge, effect->GetEdge());
+		LoadFloat(mLocationBorderWidth, effect->GetBorderWidth());
+		LoadFloat(mLocationBorderEdge, effect->GetBorderEdge());
+		LoadVector2(mLocationShadowOffset, effect->GetShadowOffset());
+	}
 }
 
 void TextShader::GetAllUniformLocations()
@@ -67,32 +88,4 @@ void TextShader::GetAllUniformLocations()
 	mLocationBorderWidth = GetUniformLocation(ATTRIBUTE_BORDER_WIDTH);
 	mLocationBorderEdge = GetUniformLocation(ATTRIBUTE_BORDER_EDGE);
 	mLocationShadowOffset = GetUniformLocation(ATTRIBUTE_SHADOW_OFFSET);
-}
-
-void TextShader::LoadFontTypeTexture(int unit)
-{
-	LoadTexture(mLocationTexture, unit);
-}
-
-void TextShader::LoadColor(const glm::vec4& color)
-{
-	LoadVector4(mLocationColor, color);
-}
-
-void TextShader::LoadOutlineColor(const glm::vec4& color)
-{
-	LoadVector4(mLocationOutlineColor, color);
-}
-
-void TextShader::LoadBorderParameters(float width, float edge, float borderWidth, float borderEdge)
-{
-	LoadFloat(mLocationWidth, width);
-	LoadFloat(mLocationEdge, edge);
-	LoadFloat(mLocationBorderWidth, borderWidth);
-	LoadFloat(mLocationBorderEdge, borderEdge);
-}
-
-void TextShader::LoadShadow(const glm::vec2& offset)
-{
-	LoadVector2(mLocationShadowOffset, offset);
 }

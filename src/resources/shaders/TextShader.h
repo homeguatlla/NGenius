@@ -27,10 +27,5 @@ public:
 
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
-	void LoadFontTypeTexture(int unit);
-	void LoadColor(const glm::vec4& color);
-	void LoadOutlineColor(const glm::vec4& color);
-	void LoadBorderParameters(float width, float edge, float borderWidth, float borderEdge);
-	void LoadShadow(const glm::vec2& offset);
 };
 

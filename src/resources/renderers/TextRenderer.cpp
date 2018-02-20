@@ -2,7 +2,6 @@
 #include "TextRenderer.h"
 
 #include "../renderers/IRenderer_.h"
-#include "../materials/IMaterial.h"
 #include "../font/FontType.h"
 #include "../camera/ICamera.h"
 #include "../Transformation.h"
@@ -15,7 +14,6 @@ IRenderer_(model, material)
 {
 	SetLayer(IRenderer_::LAYER_PARTICLES);
 	SetTransparency(true);
-	//mBitRenderInformation.SetTexture(font->GetTexture()->GetID());
 }
 
 TextRenderer::~TextRenderer()
@@ -33,7 +31,7 @@ void TextRenderer::Draw()
 	glDepthMask(false);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	
 	IRenderer_::Draw();
 
 	glDisable(GL_BLEND);

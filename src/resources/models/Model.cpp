@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "Model.h"
-#include "ModelGeometry.h"
+#include "Mesh.h"
 #include "../materials/IMaterial.h"
 #include "../shaders/IShaderProgram.h"
 
 #include <GL/glew.h>
 
-Model::Model(ModelGeometry* model) :
-mModelGeometry(model),
+Model::Model(Mesh* model) :
+mMesh(model),
 mVAO(-1),
 mMatrixVBO(-1),
 mVertexsVBO(-1),
@@ -24,7 +24,7 @@ mIndexesVBO(-1)
 
 Model::~Model()
 {
-	delete mModelGeometry;
+	delete mMesh;
 	//TODO falta eliminar el VAO y los VBO que se hayan creado
 	//entonces quizá no hace falta que cuando se creen se use el vertexbuffermanager, 
 	//o si se usa, hay que guardar una referencia a este para poder hacer el remove vao, y por tanto se tiene que pasar en el constructor
@@ -34,7 +34,7 @@ Model::~Model()
 
 unsigned int Model::GetID() const
 {
-	return mModelGeometry->GetID();
+	return mMesh->GetID();
 }
 
 const AABB& Model::GetAABB() const
@@ -49,12 +49,12 @@ int Model::GetVAOID() const
 
 int Model::GetNumberOfVertexs() const
 {
-	return mModelGeometry->GetNumberOfVertexs();
+	return mMesh->GetNumberOfVertexs();
 }
 
 int Model::GetNumberOfIndexes() const
 {
-	return mModelGeometry->GetNumberOfIndexes();
+	return mMesh->GetNumberOfIndexes();
 }
 
 void Model::Apply(std::vector<glm::mat4>& matrices)
@@ -71,12 +71,16 @@ bool Model::IsBuilt() const
 
 void Model::UpdateVBOs()
 {
+	glBindVertexArray(mVAO);
+
 	glBindBuffer(GL_ARRAY_BUFFER, mVertexsVBO);
-	glBufferData(GL_ARRAY_BUFFER, mModelGeometry->GetNumberOfVertexs() * sizeof(glm::vec3), &mModelGeometry->GetVertexs()[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, mMesh->GetNumberOfVertexs() * sizeof(glm::vec3), &mMesh->GetVertexs()[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexesVBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mModelGeometry->GetNumberOfIndexes() * sizeof(unsigned int), &mModelGeometry->GetIndexes()[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mMesh->GetNumberOfIndexes() * sizeof(unsigned int), &mMesh->GetIndexes()[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, mTextureCoordsVBO);
-	glBufferData(GL_ARRAY_BUFFER, mModelGeometry->GetNumberOfTextureCoords() * sizeof(glm::vec2), &mModelGeometry->GetTextureCoords()[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, mMesh->GetNumberOfTextureCoords() * sizeof(glm::vec2), &mMesh->GetTextureCoords()[0], GL_STATIC_DRAW);
+
+	glBindVertexArray(0);
 }
 
 void Model::Build(VertexBuffersManager& vertexBufferManager, IMaterial* material)
@@ -145,7 +149,7 @@ void Model::CreateModelMatrixVBO(VertexBuffersManager& vertexBufferManager, int 
 
 void Model::CreateIndexesVBO(VertexBuffersManager& vertexBufferManager)
 {
-	long numIndexes = mModelGeometry->GetNumberOfIndexes();
+	long numIndexes = mMesh->GetNumberOfIndexes();
 	if (numIndexes > 0)
 	{
 		//to index geometry
@@ -153,14 +157,14 @@ void Model::CreateIndexesVBO(VertexBuffersManager& vertexBufferManager)
 		name.append(std::to_string(GetID()));
 		mIndexesVBO = vertexBufferManager.CreateVBO(name);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexesVBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndexes * sizeof(unsigned int), &mModelGeometry->GetIndexes()[0], GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndexes * sizeof(unsigned int), &mMesh->GetIndexes()[0], GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 }
 
 void Model::CreateVertexsVBO(VertexBuffersManager& vertexBufferManager, int location)
 {
-	long numVertexs = mModelGeometry->GetNumberOfVertexs();
+	long numVertexs = mMesh->GetNumberOfVertexs();
 	if (numVertexs > 0)
 	{
 		// 1rst attribute buffer : vertices
@@ -169,7 +173,7 @@ void Model::CreateVertexsVBO(VertexBuffersManager& vertexBufferManager, int loca
 
 		mVertexsVBO = vertexBufferManager.CreateVBO(name);
 		glBindBuffer(GL_ARRAY_BUFFER, mVertexsVBO);
-		glBufferData(GL_ARRAY_BUFFER, numVertexs * sizeof(glm::vec3), &mModelGeometry->GetVertexs()[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, numVertexs * sizeof(glm::vec3), &mMesh->GetVertexs()[0], GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(location);
 		glVertexAttribPointer(
@@ -187,7 +191,7 @@ void Model::CreateVertexsVBO(VertexBuffersManager& vertexBufferManager, int loca
 void Model::CreateTextureCoordsVBO(VertexBuffersManager& vertexBufferManager, int location)
 {
 	// 2nd attribute buffer : texture coords
-	long numTextureCoords = mModelGeometry->GetNumberOfTextureCoords();
+	long numTextureCoords = mMesh->GetNumberOfTextureCoords();
 	if (numTextureCoords > 0)
 	{
 		std::string name("model_texture_coords_");
@@ -196,7 +200,7 @@ void Model::CreateTextureCoordsVBO(VertexBuffersManager& vertexBufferManager, in
 		mTextureCoordsVBO = vertexBufferManager.CreateVBO(name);
 
 		glBindBuffer(GL_ARRAY_BUFFER, mTextureCoordsVBO);
-		glBufferData(GL_ARRAY_BUFFER, numTextureCoords * sizeof(glm::vec2), &mModelGeometry->GetTextureCoords()[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, numTextureCoords * sizeof(glm::vec2), &mMesh->GetTextureCoords()[0], GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(location);
 		glVertexAttribPointer(
@@ -214,7 +218,7 @@ void Model::CreateTextureCoordsVBO(VertexBuffersManager& vertexBufferManager, in
 void Model::CreateNormalsVBO(VertexBuffersManager& vertexBufferManager, int location)
 {
 	//3rd normals
-	long numNormals = mModelGeometry->GetNumberOfNormals();
+	long numNormals = mMesh->GetNumberOfNormals();
 	if (numNormals > 0)
 	{
 		std::string name("model_normals_");
@@ -223,7 +227,7 @@ void Model::CreateNormalsVBO(VertexBuffersManager& vertexBufferManager, int loca
 		unsigned int normalsVBO = vertexBufferManager.CreateVBO(name);
 		glGenBuffers(1, &normalsVBO);
 		glBindBuffer(GL_ARRAY_BUFFER, normalsVBO);
-		glBufferData(GL_ARRAY_BUFFER, numNormals * sizeof(glm::vec3), &mModelGeometry->GetNormals()[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, numNormals * sizeof(glm::vec3), &mMesh->GetNormals()[0], GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(location);
 		glVertexAttribPointer(
@@ -241,7 +245,7 @@ void Model::CreateNormalsVBO(VertexBuffersManager& vertexBufferManager, int loca
 void Model::CreateTangentsVBO(VertexBuffersManager& vertexBufferManager, int location)
 {
 	//4rd tangents
-	long numTangents = mModelGeometry->GetNumberOfTangents();
+	long numTangents = mMesh->GetNumberOfTangents();
 	if (numTangents > 0)
 	{
 		std::string name("model_tangents_");
@@ -250,7 +254,7 @@ void Model::CreateTangentsVBO(VertexBuffersManager& vertexBufferManager, int loc
 		unsigned int tangentsVBO = vertexBufferManager.CreateVBO(name);
 		glGenBuffers(1, &tangentsVBO);
 		glBindBuffer(GL_ARRAY_BUFFER, tangentsVBO);
-		glBufferData(GL_ARRAY_BUFFER, numTangents * sizeof(glm::vec3), &mModelGeometry->GetTangents()[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, numTangents * sizeof(glm::vec3), &mMesh->GetTangents()[0], GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(location);
 		glVertexAttribPointer(
@@ -267,10 +271,10 @@ void Model::CreateTangentsVBO(VertexBuffersManager& vertexBufferManager, int loc
 
 void Model::CalculateAABB()
 {
-	glm::vec3 min(mModelGeometry->GetVertexs()[0]);
-	glm::vec3 max(mModelGeometry->GetVertexs()[0]);
+	glm::vec3 min(mMesh->GetVertexs()[0]);
+	glm::vec3 max(mMesh->GetVertexs()[0]);
 
-	for (glm::vec3 vertex : mModelGeometry->GetVertexs())
+	for (glm::vec3 vertex : mMesh->GetVertexs())
 	{
 	min = glm::min(min, vertex);
 	max = glm::max(max, vertex);

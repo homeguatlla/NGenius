@@ -3,7 +3,7 @@
 #include "ModelShader.h"
 #include "../textures/ITexture.h"
 #include "../materials/IMaterial.h"
-#include "../materials/effects/NormalTexture.h"
+#include "../materials/effects/MaterialEffectNormalTexture.h"
 
 const std::string NormalMapShader::VERTEX_FILE = "data/shaders/vertex/v_model_normalmap.cg";
 const std::string NormalMapShader::FRAGMENT_FILE = "data/shaders/fragment/f_model_normalmap.cg";
@@ -28,9 +28,9 @@ void NormalMapShader::LoadData(const ICamera* camera, const Transformation* tran
 {
 	ModelShader::LoadData(camera, transformation, material);
 
-	if (material->HasEffect<NormalTexture>())
+	if (material->HasEffect<MaterialEffectNormalTexture>())
 	{
-		NormalTexture* effect = material->GetEffect<NormalTexture>();
+		MaterialEffectNormalTexture* effect = material->GetEffect<MaterialEffectNormalTexture>();
 		LoadTexture(mLocationNormalmapTexture, effect->GetNormalTexture()->GetUnit());
 		//LoadFloat(mLocationTile, effect->GetTile());
 	}

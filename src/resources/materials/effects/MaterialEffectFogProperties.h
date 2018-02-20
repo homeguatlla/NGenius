@@ -3,15 +3,15 @@
 #include <glm/glm.hpp>
 
 
-class FogProperties : public IMaterialEffect
+class MaterialEffectFogProperties : public IMaterialEffect
 {
 	glm::vec3 mColor;
 	float mDensity;
 	float mGradient;
 
 public:
-	FogProperties(const glm::vec3& color, float density, float gradient);
-	virtual ~FogProperties();
+	MaterialEffectFogProperties(const glm::vec3& color, float density, float gradient);
+	virtual ~MaterialEffectFogProperties();
 
 	void SetProperties(const glm::vec3& color, float density, float gradient);
 
@@ -19,6 +19,6 @@ public:
 	float GetDensity() const;
 	float GetGradient() const;
 
-	FogProperties* DoClone() const override;
+	MaterialEffectFogProperties* DoClone() const override;
 };
 

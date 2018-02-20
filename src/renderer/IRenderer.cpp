@@ -6,7 +6,7 @@
 #include "../resources/camera/ICamera.h"
 #include "../resources/GameEntity.h"
 #include "../resources/shaders/QuadShader.h"
-#include "../resources/models/ModelGeometry.h"
+#include "../resources/models/Mesh.h"
 #include <GL/glew.h>
 #include <iostream>
 
@@ -43,7 +43,7 @@ IRenderer::~IRenderer()
 		glDeleteBuffers(1, &mIndexVBO);
 	}
 }
-void IRenderer::SetModel(ModelGeometry* model)
+void IRenderer::SetModel(Mesh* model)
 {
 	mModel = model;
 }

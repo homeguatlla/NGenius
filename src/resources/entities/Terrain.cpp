@@ -5,7 +5,7 @@
 #include "../textures/ITexture.h"
 #include "../textures/TextureGenerator.h"
 #include "../textures/Texture.h"
-#include "../models/ModelGeometry.h"
+#include "../models/Mesh.h"
 #include "../models/Model.h"
 #include <ctime>
 
@@ -36,7 +36,7 @@ mIsFlat(false)
 	terrainGrid.GeneratePointsRectangular(vertexs, uv, mNumVertexsSide, mGridSize, 0, true);
 	terrainGrid.GenerateIndicesRectangular(indices);
 
-	mModel = new Model(new ModelGeometry(vertexs, uv, indices));
+	mModel = new Model(new Mesh(vertexs, uv, indices));
 	SetRenderer(new IndexesRenderer(mModel, material));
 
 	GetRenderer()->SetLayer(IRenderer_::LAYER_TERRAIN);

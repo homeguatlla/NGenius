@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SkyBoxRenderer.h"
 #include "../models/Model.h"
-#include "../models/ModelGeometry.h"
+#include "../models/Mesh.h"
 #include <GL/glew.h>
 
 SkyBoxRenderer::SkyBoxRenderer(Model* model, IMaterial* material) :
