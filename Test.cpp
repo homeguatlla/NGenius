@@ -57,6 +57,7 @@
 #include "src/resources/materials/effects/MaterialEffectClippingPlane.h"
 #include "src/resources/materials/effects/MaterialEffectTextureCubemap.h"
 #include "src/resources/materials/effects/MaterialEffectText.h"
+#include "src/resources/materials/effects/MaterialEffectFloat.h"
 
 #include "src/resources/entities/Terrain.h"
 #include "src/resources/entities/Player.h"
@@ -174,7 +175,7 @@ GameEntity* mWaterReflectionCameraEntity;
 GameEntity* mWaterRefractionCameraEntity;
 EnergyWall* mEnergyWall;*/
 Text* mFPSText;
-
+IMaterial* materialFPSText;
 
 float mFogDensity = 0.04f;
 const float mFogGradient = 1.5f;
@@ -635,14 +636,14 @@ void CreateTextTest()
 {
 	FontType* font = mEngine.GetFont("OCR A Extended");
 
-	IMaterial* material = mEngine.CreateMaterial("text", mEngine.GetShader("text"));
-	material->AddEffect(new MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
-	material->AddEffect(new MaterialEffectText(	glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+	materialFPSText = mEngine.CreateMaterial("text", mEngine.GetShader("text"));
+	materialFPSText->AddEffect(new MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
+	materialFPSText->AddEffect(new MaterialEffectText(	glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 													glm::vec4(1.0f, 1.0f, 1.0f, 0.0f),
 													0.4f,
 													0.1f,
-													0.3f,
-													0.8f,
+													0.0f,
+													0.0f,
 													glm::vec2(0.0f)));
 
 	mFPSText = new Text(new Transformation(
@@ -650,7 +651,7 @@ void CreateTextTest()
 									glm::vec3(0.0f),
 									glm::vec3(0.70f)
 							),
-						material, font,
+						materialFPSText, font,
 						"FPS:", false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
 	mEngine.AddGameEntity(mFPSText);
 
@@ -661,11 +662,11 @@ void CreateTextTest()
 	IMaterial* material3D = mEngine.CreateMaterial("text3D", mEngine.GetShader("text"));
 	material3D->AddEffect(new MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
 	material3D->AddEffect(new MaterialEffectText(	glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
-													glm::vec4(0.0f, 1.0f, 1.0f, 0.8f),
+													glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
 													0.4f,
 													0.1f,
 													0.3f,
-													0.8f,
+													0.6f,
 													glm::vec2(0.0f)));
 
 	Text* mTestText = new Text(	new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.01f)),
@@ -704,6 +705,7 @@ void CreateTerrain()
 	material->AddEffect(new MaterialEffectTextureArray(static_cast<TextureArray*>(mEngine.GetTexture("terrain_array"))));
 	material->AddEffect(new MaterialEffectClippingPlane());
 	material->AddEffect(new MaterialEffectShadowProperties());
+	material->AddEffect(new MaterialEffectFloat(&mTerrainHeightScale));
 
 	mTerrainHeightScale = mIsTerrainFlat ? 0.0f : mTerrainHeightScale;
 	mTerrain = new Terrain(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
@@ -1148,14 +1150,15 @@ void UpdateEnergyWallCollisions(float elapsedTime)
 
 void UpdateStatitstics()
 {
+	MaterialEffectText* effect = materialFPSText->GetEffect<MaterialEffectText>();
 	int fps = static_cast<int>(mEngine.GetFPS());
 	if (fps < MIN_FPS_ALLOWED)
 	{
-		//mFPSText->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		effect->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 	}
 	else
 	{
-		//mFPSText->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		effect->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 	mFPSText->UpdateText("FPS: " +std::to_string(fps));
 }
@@ -1287,11 +1290,11 @@ void SetupConfiguration()
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = false;
-		mIsTerrainFlat = true;
+		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
-		mIsShadowEnabled = false;
+		mIsShadowEnabled = true;
 		break;
 	case RELEASE:
 		mIsDebugModeEnabled = false;

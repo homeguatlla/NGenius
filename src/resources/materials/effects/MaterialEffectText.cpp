@@ -17,6 +17,11 @@ MaterialEffectText::~MaterialEffectText()
 {
 }
 
+void MaterialEffectText::SetColor(const glm::vec4& color)
+{
+	mColor = color;
+}
+
 glm::vec4 MaterialEffectText::GetColor() const
 {
 	return mColor;

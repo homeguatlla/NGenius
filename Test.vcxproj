@@ -210,6 +210,7 @@
     <ClInclude Include="src\resources\materials\BasicMaterial.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectClippingPlane.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectDiffuseTexture.h" />
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectFogProperties.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectHeightMapTexture.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectLightProperties.h" />
@@ -311,6 +312,7 @@
     <ClCompile Include="src\resources\materials\BasicMaterial.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectClippingPlane.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectDiffuseTexture.cpp" />
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectFogProperties.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectHeightMapTexture.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectLightProperties.cpp" />

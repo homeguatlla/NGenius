@@ -15,6 +15,11 @@ mShader(shader)
 
 IMaterial::~IMaterial()
 {
+	for (auto& pair : mEffects)
+	{
+		delete pair.second;
+	}
+	mEffects.clear();
 }
 
 unsigned int IMaterial::GetMaterialID() const

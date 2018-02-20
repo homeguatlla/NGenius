@@ -10,6 +10,7 @@
 #include "../materials/effects/MaterialEffectHeightMapTexture.h"
 #include "../materials/effects/MaterialEffectTextureArray.h"
 #include "../materials/effects/MaterialEffectClippingPlane.h"
+#include "../materials/effects/MaterialEffectFloat.h"
 
 #include "../textures/ITexture.h"
 #include "../textures/TextureArray.h"
@@ -76,7 +77,11 @@ void TerrainShader::LoadData(const ICamera* camera, const Transformation* transf
 
 	LoadVector3(mLocationCameraPosition, camera->GetPosition());
 
-	LoadFloat(mLocationScale, 0.0f);//7.5f);
+	if (material->HasEffect<MaterialEffectFloat>())
+	{
+		MaterialEffectFloat* effect = material->GetEffect<MaterialEffectFloat>();
+		LoadFloat(mLocationScale, effect->GetFloat());
+	}
 
 	if (material->HasEffect<MaterialEffectDiffuseTexture>())
 	{

@@ -17,6 +17,7 @@ public:
 		float borderWidth, float borderEdge, const glm::vec2& shadowOffset);
 	virtual ~MaterialEffectText();
 
+	void SetColor(const glm::vec4& color);
 	glm::vec4 GetColor() const;
 	glm::vec4 GetOutlineColor() const;
 	float GetWidth() const;
