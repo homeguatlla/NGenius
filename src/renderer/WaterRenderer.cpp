@@ -164,7 +164,9 @@ void WaterRenderer::Draw()
 
 void WaterRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
+	/*
 	WaterShader* shader = static_cast<WaterShader*>(mShaderProgram);
+
 	shader->LoadReflectionTexture(mReflectionTexture->GetUnit());
 	shader->LoadRefractionTexture(mRefractionTexture->GetUnit());
 	shader->LoadDistorsionTexture(mDistorsionTexture->GetUnit());
@@ -203,6 +205,7 @@ void WaterRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertex
 	glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * instances, &matrices[0], GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	*/
 }
 
 int WaterRenderer::GetRenderShaderPassTextureUnit() const

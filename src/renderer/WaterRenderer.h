@@ -24,7 +24,8 @@ class WaterRenderer : public IRenderer
 	unsigned int mTextureCoordsVBO;
 	unsigned int mMatrixVBO;
 public:
-	explicit WaterRenderer(IShaderProgram* shader, Texture* reflectionTexture, Texture* refractionTexture, Texture* distorsion, Texture* normal, Texture* depth, float width, float length, float waterSpeed, const glm::vec4& waterColor, const Light* light);
+	explicit WaterRenderer(IShaderProgram* shader, Texture* reflectionTexture, Texture* refractionTexture, Texture* distorsion, 
+		Texture* normal, Texture* depth, float width, float length, float waterSpeed, const glm::vec4& waterColor, const Light* light);
 	~WaterRenderer();
 
 	WaterRenderer* DoClone() const override { return nullptr; }

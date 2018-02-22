@@ -10,6 +10,8 @@
 #include "../../font/FontsLibrary.h"
 #include "../../textures/TexturesLibrary.h"
 #include "../../textures/Texture.h"
+#include "../../textures/TextureArray.h"
+#include "../../textures/TextureCubemap.h"
 #include "../../materials/IMaterial.h"
 #include "../../materials/MaterialsLibrary.h"
 #include "../../materials/effects/MaterialEffectDiffuseTexture.h"
@@ -17,7 +19,9 @@
 #include "../../materials/effects/MaterialEffectHeightMapTexture.h"
 #include "../../materials/effects/MaterialEffectClippingPlane.h"
 #include "../../materials/effects/MaterialEffectShadowProperties.h"
-
+#include "../../materials/effects/MaterialEffectWater.h"
+#include "../../materials/effects/MaterialEffectTextureArray.h"
+#include "../../materials/effects/MaterialEffectTextureCubemap.h"
 
 #include "../../../renderer/RenderPass.h"
 #include "../../../BitNumber.h"
@@ -333,6 +337,28 @@ void RenderSystem::SelectTextures()
 		mNormalTexture = heightmap;
 		mNormalTexture->SetActive(true);
 		}*/
+	}
+
+	if (mCurrentMaterial->HasEffect<MaterialEffectTextureArray>())
+	{
+		TextureArray* texture = mCurrentMaterial->GetEffect<MaterialEffectTextureArray>()->GetTextureArray();
+		texture->SetActive(true);
+	}
+
+	if (mCurrentMaterial->HasEffect<MaterialEffectTextureCubemap>())
+	{
+		TextureCubemap* texture = mCurrentMaterial->GetEffect<MaterialEffectTextureCubemap>()->GetCubemap();
+		texture->SetActive(true);
+	}
+
+	if (mCurrentMaterial->HasEffect<MaterialEffectWater>())
+	{
+		MaterialEffectWater* effect = mCurrentMaterial->GetEffect<MaterialEffectWater>();
+		effect->GetReflectionTexture()->SetActive(true);
+		effect->GetRefractionTexture()->SetActive(true);
+		effect->GetDistorsionTexture()->SetActive(true);
+		effect->GetNormalTexture()->SetActive(true);
+		effect->GetDepthTexture()->SetActive(true);
 	}
 }
 

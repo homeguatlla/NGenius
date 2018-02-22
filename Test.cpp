@@ -58,10 +58,12 @@
 #include "src/resources/materials/effects/MaterialEffectTextureCubemap.h"
 #include "src/resources/materials/effects/MaterialEffectText.h"
 #include "src/resources/materials/effects/MaterialEffectFloat.h"
+#include "src/resources/materials/effects/MaterialEffectWater.h"
 
 #include "src/resources/entities/Terrain.h"
 #include "src/resources/entities/Player.h"
 #include "src/resources/entities/Text.h"
+#include "src/resources/entities/Water.h"
 
 /*
 #include "src/resources/entities/Light.h"
@@ -168,12 +170,12 @@ RenderPass* mMapPass;
 glm::vec3 mSunLightDirection(100000.0f, 100000.0f, 100000.0f);
 Terrain* mTerrain;
 Player* mPlayer;
+Water* mWater;
 GameEntity* mCamera;
-/*
-GameEntity* mWater;
+
 GameEntity* mWaterReflectionCameraEntity;
 GameEntity* mWaterRefractionCameraEntity;
-EnergyWall* mEnergyWall;*/
+//EnergyWall* mEnergyWall;
 Text* mFPSText;
 IMaterial* materialFPSText;
 
@@ -426,19 +428,19 @@ void CreateTrees()
 	
 	IMaterial* materialFoliage = mEngine.CreateMaterial("tree_foliage", mEngine.GetShader("model"));
 	materialFoliage->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_foliage_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	materialFoliage->AddEffect(new MaterialEffectLightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	materialFoliage->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	materialFoliage->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	materialFoliage->AddEffect(new MaterialEffectShadowProperties());
 
 	IMaterial* materialTrunk = mEngine.CreateMaterial("tree_trunk", mEngine.GetShader("model"));
 	materialTrunk->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	materialTrunk->AddEffect(new MaterialEffectLightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	materialTrunk->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	materialTrunk->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	materialTrunk->AddEffect(new MaterialEffectShadowProperties());
 
 	IMaterial* materialTrunkNormalmap = mEngine.CreateMaterial("tree_trunk_normalmap", mEngine.GetShader("normalmap"));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	materialTrunkNormalmap->AddEffect(new MaterialEffectLightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	materialTrunkNormalmap->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_normalmap")), 1));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectShadowProperties());
@@ -485,7 +487,7 @@ void CreateProps()
 
 	IMaterial* material = mEngine.CreateMaterial("model", mEngine.GetShader("normalmap"));
 	material->AddEffect(new MaterialEffectDiffuseTexture(texture, glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectNormalTexture(normal, 1));
 	material->AddEffect(new MaterialEffectShadowProperties());
@@ -510,6 +512,38 @@ void CreateProps()
 			GameEntity* entity = CreateModel(position, scale, model, material);
 			mEngine.AddGameEntity(entity);
 		}
+	}
+}
+
+void CreateWater()
+{
+	//WATER
+	if (mIsWaterEnabled)
+	{
+		float waterSpeed = 0.01f;
+		IMaterial* material = mEngine.CreateMaterial("water", mEngine.GetShader("water"));
+		material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
+		material->AddEffect(new MaterialEffectWater(
+														mEngine.GetTexture("reflection_water"),
+														mEngine.GetTexture("refraction_water"),
+														mEngine.GetTexture("distorsion_water"),
+														mEngine.GetTexture("normal_water"),
+														mEngine.GetTexture("refraction_depth_water"),
+														waterSpeed,
+														glm::vec4(0.0f, 0.3f, 0.8f, 0.0f)
+													));
+		material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+
+		mWater = new Water(		new Transformation(
+													glm::vec3(4.0f, mWaterHeight, 4.5f), 
+													glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), 
+													glm::vec3(1.0f)),
+								material,
+								50.0f,
+								50.0f,
+								waterSpeed
+							);
+		mEngine.AddGameEntity(mWater);
 	}
 }
 
@@ -699,7 +733,7 @@ void CreateTerrain()
 
 	IMaterial* material = mEngine.CreateMaterial("terrain", mEngine.GetShader("terrain"));
 	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_blendmap")), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f));
-	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectHeightMapTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")), 1.0f));
 	material->AddEffect(new MaterialEffectTextureArray(static_cast<TextureArray*>(mEngine.GetTexture("terrain_array"))));
@@ -729,7 +763,7 @@ void CreatePlayer()
 	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("normalmap"));
 	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("enano_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("enano_normalmap")), 1.0f));
-	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectShadowProperties());
 	
@@ -800,6 +834,8 @@ void CreateEntities()
 
 	CreateTerrain();
 
+	CreateWater();
+
 	if (mIsTextEnabled)
 	{
 		CreateTextTest();
@@ -833,31 +869,6 @@ void CreateEntities2()
 
 	mEngine.AddGameEntity(mSunLight);
 
-	
-
-	//WATER
-	if (mIsWaterEnabled)
-	{
-		WaterRenderer* waterRenderer = new WaterRenderer(	mEngine.GetShader("water"),
-															static_cast<Texture*>(mEngine.GetTexture("reflection_water")),
-															static_cast<Texture*>(mEngine.GetTexture("refraction_water")),
-															static_cast<Texture*>(mEngine.GetTexture("distorsion_water")),
-															static_cast<Texture*>(mEngine.GetTexture("normal_water")),
-															static_cast<Texture*>(mEngine.GetTexture("refraction_depth_water")),
-															50.0f, //8.0f,
-															50.0f,//11.0f,
-															0.0005f,
-															glm::vec4(0.0f, 0.3f, 0.8f, 0.0f),
-															mSunLight
-														);
-		mWater = new GameEntity(	new Transformation(glm::vec3(4.0f, mWaterHeight, 4.5f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(1.0f)),
-									waterRenderer
-								);
-		waterRenderer->SetLayer(IRenderer::LAYER_WATER);
-		waterRenderer->SetFogParameters(mFogColor, mFogDensity, mFogGradient);
-		mEngine.AddGameEntity(mWater);
-	}
-
 	//CreateSpecificCubes();
 
 	//CreateHUD();
@@ -870,22 +881,6 @@ void CreateEntities2()
 		//CreateParticlesTest();
 		CreateParticlesFire();
 		//CreateParticlesSparkles();
-	}
-	
-
-	if (mIsTextEnabled)
-	{
-		CreateTextTest();
-	}
-	
-	if (mIsVegetationEnabled)
-	{
-		CreateTrees();
-	}
-
-	if (mIsPropsEnabled)
-	{
-		CreateProps();
 	}
 
 	if (mIsEnergyWallEnabled)
@@ -948,7 +943,6 @@ void CreateHudMapRenderPass()
 
 void CreateWaterRenderPass()
 {
-	/*
 	float waterY = mWater->GetTransformation()->GetPosition().y;
 
 	//WATER RENDER PASS	
@@ -967,7 +961,7 @@ void CreateWaterRenderPass()
 
 	frameReflectionBuffer->Init();
 	
-	RenderPass* reflectionWaterPass = new RenderPass(static_cast<ICamera*>(mReflectionWaterCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES);
+	RenderPass* reflectionWaterPass = new RenderPass(static_cast<ICamera*>(mReflectionWaterCamera), IRenderer_::LAYER_TERRAIN | IRenderer_::LAYER_OTHER | IRenderer_::LAYER_PARTICLES);
 	reflectionWaterPass->SetFrameBufferOutput(frameReflectionBuffer);
 	reflectionWaterPass->EnableClipping(true);
 	reflectionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);
@@ -991,7 +985,7 @@ void CreateWaterRenderPass()
 	frameRefractionBuffer->SetDepthTextureAttachment(refractionDepthTexture);
 	frameRefractionBuffer->Init();
 
-	RenderPass* refractionWaterPass = new RenderPass(static_cast<ICamera*>(mRefractionWaterCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER);
+	RenderPass* refractionWaterPass = new RenderPass(static_cast<ICamera*>(mRefractionWaterCamera), IRenderer_::LAYER_TERRAIN | IRenderer_::LAYER_OTHER);
 	refractionWaterPass->SetFrameBufferOutput(frameRefractionBuffer);
 	refractionWaterPass->EnableClipping(true);
 	refractionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);
@@ -1002,7 +996,7 @@ void CreateWaterRenderPass()
 	refractionWaterPass->SetClippingPlane(glm::vec4(0.0f, -1.0f, 0.0f, waterY + 2.0f));
 	refractionWaterPass->EnableFog(false);
 
-	mEngine.AddRenderPass(refractionWaterPass);*/
+	mEngine.AddRenderPass(refractionWaterPass);
 }
 
 void CreateGUIRenderPass()
@@ -1121,7 +1115,6 @@ void UpdateInput(GLFWwindow* window)
 	}
 }
 
-/*
 void UpdateWaterCameras()
 {
 	ApplyReflectionCameras(mWater->GetTransformation()->GetPosition().y, mGameplayCamera, mReflectionWaterCamera);
@@ -1130,6 +1123,7 @@ void UpdateWaterCameras()
 	mWaterRefractionCameraEntity->GetTransformation()->SetPosition(mGameplayCamera->GetPosition());
 }
 
+/*
 void UpdateEnergyWallCollisions(float elapsedTime)
 {
 	EnergyWallCollisionComponent* component = mPlayer->GetComponent<EnergyWallCollisionComponent>();
@@ -1167,7 +1161,7 @@ void Update(float elapsedTime)
 {
 	if (mIsWaterEnabled)
 	{
-		//UpdateWaterCameras();
+		UpdateWaterCameras();
 	}
 	if (mIsEnergyWallEnabled)
 	{
@@ -1283,13 +1277,13 @@ void SetupConfiguration()
 		break; 
 	case REFACTOR:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
+		mIsWaterEnabled = true;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
-		mIsVegetationEnabled = false;
-		mIsPropsEnabled = false;
+		mIsVegetationEnabled = true;
+		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = false;
+		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;

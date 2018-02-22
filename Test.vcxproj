@@ -204,6 +204,7 @@
     <ClInclude Include="src\resources\entities\Player.h" />
     <ClInclude Include="src\resources\entities\Terrain.h" />
     <ClInclude Include="src\resources\entities\Text.h" />
+    <ClInclude Include="src\resources\entities\Water.h" />
     <ClInclude Include="src\resources\font\FontsLibrary.h" />
     <ClInclude Include="src\resources\font\FontType.h" />
     <ClInclude Include="src\resources\GameEntity.h" />
@@ -219,6 +220,7 @@
     <ClInclude Include="src\resources\materials\effects\MaterialEffectText.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectTextureArray.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectTextureCubemap.h" />
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectWater.h" />
     <ClInclude Include="src\resources\materials\IMaterial.h" />
     <ClInclude Include="src\resources\materials\IMaterialEffect.h" />
     <ClInclude Include="src\resources\materials\MaterialsLibrary.h" />
@@ -306,6 +308,7 @@
     <ClCompile Include="src\resources\entities\Player.cpp" />
     <ClCompile Include="src\resources\entities\Terrain.cpp" />
     <ClCompile Include="src\resources\entities\Text.cpp" />
+    <ClCompile Include="src\resources\entities\Water.cpp" />
     <ClCompile Include="src\resources\font\FontsLibrary.cpp" />
     <ClCompile Include="src\resources\font\FontType.cpp" />
     <ClCompile Include="src\resources\GameEntity.cpp" />
@@ -321,6 +324,7 @@
     <ClCompile Include="src\resources\materials\effects\MaterialEffectText.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectTextureArray.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectTextureCubemap.cpp" />
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectWater.cpp" />
     <ClCompile Include="src\resources\materials\IMaterial.cpp" />
     <ClCompile Include="src\resources\materials\IMaterialEffect.cpp" />
     <ClCompile Include="src\resources\materials\MaterialsLibrary.cpp" />

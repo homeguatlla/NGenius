@@ -135,6 +135,9 @@ RenderPass* ShadowsRenderPass::CreateShadowRenderPass()
 
 	RenderPass* shadowPass = new RenderPass(static_cast<ICamera*>(mShadowCastCamera), IRenderer_::LAYER_OTHER);
 	shadowPass->SetFrameBufferOutput(frameShadowBuffer);
-	//shadowPass->SetShader(mRenderSystem->GetShader("quad"));
+
+	//IMaterial* material = mRenderSystem->CreateMaterial("shadow", mRenderSystem->GetShader("default"));
+	//shadowPass->SetMaterial(material);
+
 	return shadowPass;
 }

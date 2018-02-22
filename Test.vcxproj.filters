@@ -426,6 +426,12 @@
     <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat.h">
       <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\entities\Water.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectWater.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -732,6 +738,12 @@
       <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Water.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectWater.cpp">
       <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
   </ItemGroup>
