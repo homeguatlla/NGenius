@@ -27,12 +27,5 @@ public:
 
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
-	void LoadViewMatrix(const glm::mat4& modelview);
-	void LoadProjectionMatrix(const glm::mat4& projectionmatrix);
-	void LoadQuadTexture(int unit);
-	void LoadDepthTexture(int unit);
-	void LoadTile(float tile);
-	void LoadTime(float time);
-	void LoadScreenSize(const glm::vec2& size);
 };
 

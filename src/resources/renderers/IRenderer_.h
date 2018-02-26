@@ -40,6 +40,7 @@ protected:
 	BitNumber mBitRenderInformation;
 
 	bool mIsVisible;
+	bool mIsBillboard;
 
 	//virtual void PreRender(VertexBuffersManager& vertexBufferManager) = 0;
 	virtual void Draw();
@@ -75,6 +76,8 @@ public:
 	virtual bool IsInstancingAllowed() const = 0;
 	void EnableInstancing(bool enable);
 	void SetInstances(std::vector<IRenderer_*> instances);
+	
+	void SetBillboard(bool billboard);
 
 	const AABB& GetAABB() const;
 
@@ -82,5 +85,7 @@ public:
 
 protected:
 	virtual IRenderer_* DoClone() const = 0;
+private:
+	void ModifyModelMatrixToAvoidRotations(const glm::mat4& viewMatrix, const glm::vec3& scale, float angleZ, glm::mat4& modelMatrix);
 };
 

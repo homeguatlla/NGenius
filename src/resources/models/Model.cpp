@@ -57,10 +57,17 @@ int Model::GetNumberOfIndexes() const
 	return mMesh->GetNumberOfIndexes();
 }
 
-void Model::Apply(std::vector<glm::mat4>& matrices)
+void Model::Apply(const std::vector<glm::mat4>& matrices)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * matrices.size(), &matrices[0], GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Model::Apply(const std::vector<glm::vec4>& colors)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, mColorVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * colors.size(), &colors[0], GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -122,8 +129,26 @@ void Model::Build(VertexBuffersManager& vertexBufferManager, IMaterial* material
 	{
 		CreateModelMatrixVBO(vertexBufferManager, location);
 	}
-	//TODO add normal, texture, tangent, model matrix, color
+	
+	location = material->GetShader()->GetAttributeLocation("colorGradient");
+	if(location != -1)
+	{
+		CreateColorVBO(vertexBufferManager, location);
+	}
+
 	glBindVertexArray(0);
+}
+
+void Model::CreateColorVBO(VertexBuffersManager& vertexBufferManager, int location)
+{
+	std::string name("model_color_");
+	name.append(std::to_string(GetID()));
+	mColorVBO = vertexBufferManager.CreateVBO(name);
+	glBindBuffer(GL_ARRAY_BUFFER, mColorVBO);
+	glEnableVertexAttribArray(location);
+	glVertexAttribPointer(location, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribDivisorARB(location, 1);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Model::CreateModelMatrixVBO(VertexBuffersManager& vertexBufferManager, int location)

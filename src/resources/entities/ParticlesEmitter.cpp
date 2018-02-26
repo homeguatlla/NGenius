@@ -143,7 +143,7 @@ Particle* ParticlesEmitter::CreateParticle()
 	if (abs(rotationRange) > 0)
 	{
 		float sign = 1.0f - 2.0f * (rand() % 2);
-		float speed = rand() % rotationRange;
+		float speed = static_cast<float>(rand() % rotationRange);
 		particle->SetRotationSpeed(sign * speed);
 	}
 

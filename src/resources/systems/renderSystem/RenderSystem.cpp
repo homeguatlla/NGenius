@@ -22,6 +22,7 @@
 #include "../../materials/effects/MaterialEffectWater.h"
 #include "../../materials/effects/MaterialEffectTextureArray.h"
 #include "../../materials/effects/MaterialEffectTextureCubemap.h"
+#include "../../materials/effects/MaterialEffectParticle.h"
 
 #include "../../../renderer/RenderPass.h"
 #include "../../../BitNumber.h"
@@ -236,12 +237,6 @@ void RenderSystem::AddToRender(IRenderer_* renderer)
 void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer_* renderer, std::vector<IRenderer_*>& instances)
 {
 	//std::cout << instances.front()->GetBitRendererInformation().GetValue() << " : " << instances.size() << "\n";
-	//Apply fog
-	/*if (renderer->HasFog())
-	{
-		renderer->EnableFog(renderPass->IsFogEnabled());
-	}
-	*/
 
 	renderer->SetInstances(instances);
 
@@ -321,22 +316,6 @@ void RenderSystem::SelectTextures()
 	{
 		ITexture* heightmap = mCurrentMaterial->GetEffect<MaterialEffectHeightMapTexture>()->GetHeightMapTexture();
 		heightmap->SetActive(true);
-		/*if (heightmap != mNormalTexture)
-		{
-			mNormalTexture = heightmap;
-			mNormalTexture->SetActive(true);
-		}*/
-	}
-
-	if (mCurrentMaterial->HasEffect<MaterialEffectHeightMapTexture>())
-	{
-		ITexture* heightmap = mCurrentMaterial->GetEffect<MaterialEffectHeightMapTexture>()->GetHeightMapTexture();
-		heightmap->SetActive(true);
-		/*if (heightmap != mNormalTexture)
-		{
-		mNormalTexture = heightmap;
-		mNormalTexture->SetActive(true);
-		}*/
 	}
 
 	if (mCurrentMaterial->HasEffect<MaterialEffectTextureArray>())
@@ -358,6 +337,13 @@ void RenderSystem::SelectTextures()
 		effect->GetRefractionTexture()->SetActive(true);
 		effect->GetDistorsionTexture()->SetActive(true);
 		effect->GetNormalTexture()->SetActive(true);
+		effect->GetDepthTexture()->SetActive(true);
+	}
+
+	if (mCurrentMaterial->HasEffect<MaterialEffectParticle>())
+	{
+		MaterialEffectParticle* effect = mCurrentMaterial->GetEffect<MaterialEffectParticle>();
+		effect->GetTexture()->SetActive(true);
 		effect->GetDepthTexture()->SetActive(true);
 	}
 }

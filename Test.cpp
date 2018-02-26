@@ -59,16 +59,17 @@
 #include "src/resources/materials/effects/MaterialEffectText.h"
 #include "src/resources/materials/effects/MaterialEffectFloat.h"
 #include "src/resources/materials/effects/MaterialEffectWater.h"
+#include "src/resources/materials/effects/MaterialEffectParticle.h"
 
 #include "src/resources/entities/Terrain.h"
 #include "src/resources/entities/Player.h"
 #include "src/resources/entities/Text.h"
 #include "src/resources/entities/Water.h"
+#include "src/resources/entities/Particle.h"
+#include "src/resources/entities/ParticlesEmitter.h"
 
 /*
 #include "src/resources/entities/Light.h"
-#include "src/resources/entities/Particle.h"
-#include "src/resources/entities/ParticlesEmitter.h"
 #include "src/resources/entities/EnergyWall.h"
 */
 
@@ -520,7 +521,7 @@ void CreateWater()
 	//WATER
 	if (mIsWaterEnabled)
 	{
-		float waterSpeed = 0.01f;
+		float waterSpeed = 0.02f;
 		IMaterial* material = mEngine.CreateMaterial("water", mEngine.GetShader("water"));
 		material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 		material->AddEffect(new MaterialEffectWater(
@@ -547,18 +548,19 @@ void CreateWater()
 	}
 }
 
-/*
 Particle* CreateParticle(bool canCollide, Texture* texture, glm::vec3& gravity)
 {
-	ParticleRenderer* renderer = new ParticleRenderer(mEngine.GetShader("particle"), texture, static_cast<Texture*>(mEngine.GetTexture("depth_texture")), 1.0f, 1.0f);
-	renderer->SetLayer(IRenderer::LAYER_PARTICLES);
-	renderer->SetTransparency(true);
-	renderer->SetBillboard(true);
-	renderer->SetFogParameters(mFogColor, mFogDensity, mFogGradient);
+	IMaterial* material = mEngine.CreateMaterial("particle", mEngine.GetShader("particle"));
+	material->AddEffect(new MaterialEffectParticle(	texture, 
+													mEngine.GetTexture("depth_texture"), 
+													glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight()), 
+													1.0f)
+						);
 
-	Particle* particle = new Particle(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
-										renderer,
-										6.0f);
+	Particle* particle = new Particle(new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
+		mEngine.GetModel("quad"),
+		material,
+		6.0f);
 	PhysicsComponent* physicsComponent = new PhysicsComponent(false, gravity);
 	particle->AddComponent(physicsComponent);
 
@@ -573,8 +575,8 @@ Particle* CreateParticle(bool canCollide, Texture* texture, glm::vec3& gravity)
 void CreateParticlesFire()
 {
 	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
-	particle->SetLiveTime(2.0f);
-	
+	particle->SetLiveTime(10.0f);
+
 	float x = 1.0f;
 	float z = -1.7f;
 
@@ -583,14 +585,16 @@ void CreateParticlesFire()
 	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(particle,
 		new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.1f)),
 		nullptr,
-		100);
+		1);
 	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 1.0f, 0.25f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
-	particlesEmitter->SetScaleValues(0.03f, 0.005f);
+	particlesEmitter->SetScaleValues(0.3f, 0.5f);
 	particlesEmitter->SetVelocity(glm::vec3(0.0f), glm::vec3(0.02f, 0.2f, 0.02f));
 	particlesEmitter->SetSpawnArea(glm::vec3(-0.02f, 0.0f, -0.02f), glm::vec3(0.03f, 0.0f, 0.03f));
 	mEngine.AddGameEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);
 }
+
+/*
 
 void CreateParticlesSparkles()
 {
@@ -817,6 +821,8 @@ void CreateSkybox()
 
 void CreateEntities()
 {
+	const Texture* texture = static_cast<const Texture*>(mEngine.CreateDepthTexture("depth_texture", glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
+
 	//CAMERA
 	mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
 	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 55.0f, 15.0f));
@@ -849,6 +855,13 @@ void CreateEntities()
 	if (mIsPropsEnabled)
 	{
 		CreateProps();
+	}
+
+	if (mIsParticlesEnabled)
+	{
+		//CreateParticlesTest();
+		CreateParticlesFire();
+		//CreateParticlesSparkles();
 	}
 
 	if (mIsSkyboxEnabled)
@@ -1277,18 +1290,19 @@ void SetupConfiguration()
 		break; 
 	case REFACTOR:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = true;
+		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = true;
-		mIsVegetationEnabled = true;
-		mIsPropsEnabled = true;
+		mIsFogEnabled = false;
+		mIsVegetationEnabled = false;
+		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = true;
-		mIsTerrainFlat = false;
-		mIsTextEnabled = true;
+		mIsSkyboxEnabled = false;
+		mIsTerrainFlat = true;
+		mIsTextEnabled = false;
 		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = false;
-		mIsShadowEnabled = true;
+		mIsParticlesEnabled = true;
+		mIsShadowEnabled = false;
+		mIsFullScreen = false;
 		break;
 	case RELEASE:
 		mIsDebugModeEnabled = false;

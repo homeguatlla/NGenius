@@ -16,6 +16,7 @@ class Model
 	int mVertexsVBO;
 	int mIndexesVBO;
 	int mTextureCoordsVBO;
+	int mColorVBO;
 
 public:
 	Model(Mesh* model);
@@ -28,7 +29,8 @@ public:
 	int GetNumberOfVertexs() const;
 	int GetNumberOfIndexes() const;
 
-	void Apply(std::vector<glm::mat4>& matrices);
+	void Apply(const std::vector<glm::mat4>& matrices);
+	void Apply(const std::vector<glm::vec4>& colors);
 
 	bool IsBuilt() const;
 	void Build(VertexBuffersManager& vertexBufferManager, IMaterial* material);
@@ -41,6 +43,7 @@ private:
 	void CreateNormalsVBO(VertexBuffersManager& vertexBufferManager, int location);
 	void CreateTangentsVBO(VertexBuffersManager& vertexBufferManager, int location);
 	void CreateModelMatrixVBO(VertexBuffersManager& vertexBufferManager, int location);
+	void CreateColorVBO(VertexBuffersManager& vertexBufferManager, int location);
 	void CalculateAABB();
 };
 

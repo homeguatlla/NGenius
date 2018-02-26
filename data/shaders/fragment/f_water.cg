@@ -79,6 +79,5 @@ void main()
 	color = mix(reflectionColor, refractionColor, reflectionFresnelFactor);
 	color = mix(refractionColor,  color, depthFactor);
 	color = mix(color, waterColor, 0.2) + vec4(specularColor, 1.0);
-	//color = vec4(clamp(waterDepth * 10, 0.0, 1.0));
 	//color = ApplyFog(color);
 }

@@ -10,7 +10,6 @@ ModelsLibrary::ModelsLibrary(TexturesLibrary* texturesLibrary) : mTexturesLibrar
 {
 }
 
-
 ModelsLibrary::~ModelsLibrary()
 {
 	
@@ -19,6 +18,8 @@ ModelsLibrary::~ModelsLibrary()
 void ModelsLibrary::Load()
 {
 	CreateSkybox();
+	CreateQuad();
+
 	LoadModel("cube2", "data/models/cube/cube.obj", false, true);
 	LoadModel("enano", "data/models/enano/enano.obj", false, true);
 	LoadModel("mazo", "data/models/mazo/mazo.obj", false, true);
@@ -79,7 +80,6 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 		std::cout << "Error reading model " << filename;
 	}
 }
-
 
 void ModelsLibrary::CreateSkybox()
 {
@@ -150,4 +150,33 @@ void ModelsLibrary::CreateSkybox()
 	Model* model = new Model(mMesh);
 
 	AddElement("skybox", model);
+}
+
+void ModelsLibrary::CreateQuad()
+{
+	std::vector<glm::vec3> vertexs;
+	vertexs.push_back(glm::vec3(-0.5, 0.5, 0.0f));
+	vertexs.push_back(glm::vec3(0.5, 0.5, 0.0f));
+	vertexs.push_back(glm::vec3(0.5, -0.5, 0.0f));
+	vertexs.push_back(glm::vec3(-0.5, -0.5, 0.0f));
+
+	std::vector<glm::vec2> uv;
+	uv.push_back(glm::vec2(0.0f, 1.0f));
+	uv.push_back(glm::vec2(1.0f, 1.0f));
+	uv.push_back(glm::vec2(1.0f, 0.0f));
+	uv.push_back(glm::vec2(0.0f, 0.0f));
+
+	std::vector<unsigned int> indexs;
+	indexs.push_back(0);
+	indexs.push_back(3);
+	indexs.push_back(2);
+
+	indexs.push_back(0);
+	indexs.push_back(2);
+	indexs.push_back(1);
+
+	Mesh* mMesh = new Mesh(vertexs, uv, indexs);
+	Model* model = new Model(mMesh);
+
+	AddElement("quad", model);
 }

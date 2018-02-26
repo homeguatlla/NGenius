@@ -216,6 +216,7 @@
     <ClInclude Include="src\resources\materials\effects\MaterialEffectHeightMapTexture.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectLightProperties.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectNormalTexture.h" />
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectParticle.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectShadowProperties.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectText.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectTextureArray.h" />
@@ -228,6 +229,7 @@
     <ClInclude Include="src\resources\models\Model.h" />
     <ClInclude Include="src\resources\models\ModelsLibrary.h" />
     <ClInclude Include="src\resources\renderers\GUITextRenderer.h" />
+    <ClInclude Include="src\resources\renderers\ParticleRenderer.h" />
     <ClInclude Include="src\resources\renderers\SkyBoxRenderer.h" />
     <ClInclude Include="src\resources\renderers\TextRenderer.h" />
     <ClInclude Include="src\resources\renderers\VertexsRenderer.h" />
@@ -320,6 +322,7 @@
     <ClCompile Include="src\resources\materials\effects\MaterialEffectHeightMapTexture.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectLightProperties.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectNormalTexture.cpp" />
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectParticle.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectShadowProperties.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectText.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectTextureArray.cpp" />
@@ -332,6 +335,7 @@
     <ClCompile Include="src\resources\models\Model.cpp" />
     <ClCompile Include="src\resources\models\ModelsLibrary.cpp" />
     <ClCompile Include="src\resources\renderers\GUITextRenderer.cpp" />
+    <ClCompile Include="src\resources\renderers\ParticleRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\SkyBoxRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\TextRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\VertexsRenderer.cpp" />

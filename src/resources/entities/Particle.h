@@ -1,6 +1,9 @@
 #pragma once
 #include "../GameEntity.h"
 
+class Model;
+class IMaterial;
+
 class Particle : public GameEntity
 {
 	const float mMaxLiveTime;
@@ -10,12 +13,15 @@ class Particle : public GameEntity
 	float mRotation;
 	float mDistanceToTheCamera;
 
+	Model* mModel;
+	IMaterial* mMaterial;
+
 	glm::vec4 mColor;
 	glm::vec4 mColorOrigin;
 	glm::vec4 mColorDestination;
 
 public:
-	Particle(Transformation* transformation, IRenderer_* renderer, float liveTime);
+	Particle(Transformation* transformation, Model* model, IMaterial* material, float liveTime);
 	~Particle();
 
 	Particle* DoClone() const override;
