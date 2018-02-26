@@ -575,7 +575,7 @@ Particle* CreateParticle(bool canCollide, Texture* texture, glm::vec3& gravity)
 void CreateParticlesFire()
 {
 	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
-	particle->SetLiveTime(10.0f);
+	particle->SetLiveTime(5.0f);
 
 	float x = 1.0f;
 	float z = -1.7f;
@@ -585,9 +585,10 @@ void CreateParticlesFire()
 	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(particle,
 		new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.1f)),
 		nullptr,
-		1);
+		10);
 	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 1.0f, 0.25f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
-	particlesEmitter->SetScaleValues(0.3f, 0.5f);
+	//particlesEmitter->SetScaleValues(0.03f, 0.005f);
+	particlesEmitter->SetScaleValues(0.3f, 0.3f);
 	particlesEmitter->SetVelocity(glm::vec3(0.0f), glm::vec3(0.02f, 0.2f, 0.02f));
 	particlesEmitter->SetSpawnArea(glm::vec3(-0.02f, 0.0f, -0.02f), glm::vec3(0.03f, 0.0f, 0.03f));
 	mEngine.AddGameEntity(particlesEmitter);
