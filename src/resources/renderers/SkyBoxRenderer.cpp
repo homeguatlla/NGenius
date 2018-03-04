@@ -5,7 +5,7 @@
 #include <GL/glew.h>
 
 SkyBoxRenderer::SkyBoxRenderer(Model* model, IMaterial* material) :
-	IRenderer_(model, material)
+	IRenderer(model, material)
 {
 }
 
@@ -25,7 +25,7 @@ void SkyBoxRenderer::Draw()
 	//glDepthMask(GL_FALSE);
 	glDepthFunc(GL_LEQUAL);
 
-	IRenderer_::Draw();
+	IRenderer::Draw();
 
 	glDepthFunc(GL_LESS);
 	//glDepthMask(GL_TRUE);

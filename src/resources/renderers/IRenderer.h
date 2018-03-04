@@ -12,7 +12,7 @@ class Texture;
 class Model;
 class IMaterial;
 
-class IRenderer_
+class IRenderer
 {
 public:
 	enum RENDER_LAYER
@@ -29,7 +29,7 @@ public:
 protected:
 	GameEntity* mParent;
 	Model* mModel;
-	std::vector<IRenderer_*> mInstances;
+	std::vector<IRenderer*> mInstances;
 	IMaterial* mMaterial;
 
 	bool mIsPrerendered;
@@ -48,8 +48,8 @@ protected:
 	void CheckError();
 
 public:
-	explicit IRenderer_(Model* model, IMaterial* material);
-	virtual ~IRenderer_();
+	explicit IRenderer(Model* model, IMaterial* material);
+	virtual ~IRenderer();
 
 	//virtual const std::string GetName() const = 0;
 
@@ -75,16 +75,16 @@ public:
 
 	virtual bool IsInstancingAllowed() const = 0;
 	void EnableInstancing(bool enable);
-	void SetInstances(std::vector<IRenderer_*> instances);
+	void SetInstances(std::vector<IRenderer*> instances);
 	
 	void SetBillboard(bool billboard);
 
 	const AABB& GetAABB() const;
 
-	virtual IRenderer_* Clone() const;
+	virtual IRenderer* Clone() const;
 
 protected:
-	virtual IRenderer_* DoClone() const = 0;
+	virtual IRenderer* DoClone() const = 0;
 private:
 	void ModifyModelMatrixToAvoidRotations(const glm::mat4& viewMatrix, const glm::vec3& scale, float angleZ, glm::mat4& modelMatrix);
 };

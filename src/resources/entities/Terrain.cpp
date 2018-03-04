@@ -39,7 +39,7 @@ mIsFlat(false)
 	mModel = new Model(new Mesh(vertexs, uv, indices));
 	SetRenderer(new IndexesRenderer(mModel, material));
 
-	GetRenderer()->SetLayer(IRenderer_::LAYER_TERRAIN);
+	GetRenderer()->SetLayer(IRenderer::LAYER_TERRAIN);
 }
 
 Terrain::~Terrain()

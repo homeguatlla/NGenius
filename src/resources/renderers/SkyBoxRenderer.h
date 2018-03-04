@@ -1,10 +1,10 @@
 #pragma once
-#include "IRenderer_.h"
+#include "IRenderer.h"
 
 class Model;
 class IMaterial;
 
-class SkyBoxRenderer :	public IRenderer_
+class SkyBoxRenderer :	public IRenderer
 {
 	float mSize;
 

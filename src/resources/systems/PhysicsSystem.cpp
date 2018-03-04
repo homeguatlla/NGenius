@@ -8,7 +8,7 @@
 #include "../components/EnergyWallCollisionComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../entities/Terrain.h"
-#include "../renderers/IRenderer_.h"
+#include "../renderers/IRenderer.h"
 
 
 const glm::vec3 PhysicsSystem::GRAVITY_VALUE(0.0f, -9.8f, 0.0f);
@@ -167,7 +167,7 @@ bool PhysicsSystem::ApplyCollisions(GameEntity *entity, float *groundHeight)
 
 	*groundHeight = mTerrain->GetHeight(glm::vec2(position.x, position.z));
 	float entityBottomHeight = 0.0f;
-	IRenderer_* renderer = entity->GetRenderer();
+	IRenderer* renderer = entity->GetRenderer();
 	if (renderer != nullptr)
 	{
 		float rendererHeight = renderer->GetAABB().GetVertexMax().y - renderer->GetAABB().GetVertexMin().y;
@@ -188,7 +188,7 @@ bool PhysicsSystem::ApplyEnergyWallCollision(GameEntity *entity, glm::vec3& coll
 	Transformation* transformation = entity->GetTransformation();
 
 	float entityRadius = 0.0f;
-	IRenderer_* renderer = entity->GetRenderer();
+	IRenderer* renderer = entity->GetRenderer();
 	if (renderer != nullptr)
 	{
 		glm::vec3 side = renderer->GetAABB().GetVertexMax() - renderer->GetAABB().GetVertexMin();

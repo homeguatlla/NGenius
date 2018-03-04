@@ -1,5 +1,5 @@
 #pragma once
-#include "IRenderer_.h"
+#include "IRenderer.h"
 #include<string>
 
 class Model;
@@ -7,7 +7,7 @@ class IMaterial;
 class Texture;
 class ICamera;
 
-class VertexsRenderer : public IRenderer_
+class VertexsRenderer : public IRenderer
 {
 	unsigned int mMatrixVBO;
 

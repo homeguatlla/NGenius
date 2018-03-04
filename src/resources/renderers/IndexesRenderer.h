@@ -1,11 +1,11 @@
 #pragma once
-#include "IRenderer_.h"
+#include "IRenderer.h"
 #include<string>
 
 class Model;
 class IMaterial;
 
-class IndexesRenderer : public IRenderer_
+class IndexesRenderer : public IRenderer
 {
 	unsigned int mMatrixVBO;
 

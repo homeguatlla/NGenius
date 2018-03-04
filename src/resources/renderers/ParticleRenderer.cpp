@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ParticleRenderer.h"
 
-#include "../renderers/IRenderer_.h"
+#include "../renderers/IRenderer.h"
 #include "../camera/ICamera.h"
 #include "../Transformation.h"
 #include "../models/Model.h"
@@ -9,9 +9,9 @@
 #include <GL/glew.h>
 
 ParticleRenderer::ParticleRenderer(Model* model, IMaterial* material) :
-IRenderer_(model, material)
+IRenderer(model, material)
 {
-	SetLayer(IRenderer_::LAYER_PARTICLES);
+	SetLayer(IRenderer::LAYER_PARTICLES);
 	SetTransparency(true);
 	SetBillboard(true);
 }
@@ -33,7 +33,7 @@ void ParticleRenderer::Draw()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	IRenderer_::Draw();
+	IRenderer::Draw();
 
 	glDisable(GL_BLEND);
 	//glEnable(GL_DEPTH_TEST);

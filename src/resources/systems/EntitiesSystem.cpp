@@ -29,7 +29,7 @@ void EntitiesSystem::Update(float elapsedTime)
 	for (GameEntity* entity : mEntities)
 	{
 		entity->Update(elapsedTime);
-		IRenderer_* renderer = entity->GetRenderer();
+		IRenderer* renderer = entity->GetRenderer();
 		mRenderSystem->AddToRender(renderer);
 	}
 }

@@ -19,7 +19,7 @@ mContactPoint(0.0f)
 	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
 	material->AddEffect(new MaterialEffectFloat(&mLiveTime));
 	SetRenderer(new EnergyWallRenderer(model, material));
-	GetRenderer()->SetLayer(IRenderer_::LAYER_PARTICLES);
+	GetRenderer()->SetLayer(IRenderer::LAYER_PARTICLES);
 	GetRenderer()->SetTransparency(true);
 }
 

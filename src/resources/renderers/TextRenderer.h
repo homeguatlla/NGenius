@@ -1,12 +1,12 @@
 #pragma once
-#include "IRenderer_.h"
+#include "IRenderer.h"
 #include <string>
 
 class IShaderProgram;
 class FontType;
 class Model;
 
-class TextRenderer : public IRenderer_
+class TextRenderer : public IRenderer
 {
 
 public:

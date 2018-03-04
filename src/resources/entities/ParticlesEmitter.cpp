@@ -13,7 +13,7 @@
 
 #include <iostream>
 
-ParticlesEmitter::ParticlesEmitter(Particle* particle, Transformation* transformation, IRenderer_* renderer, float spawnRate) :
+ParticlesEmitter::ParticlesEmitter(Particle* particle, Transformation* transformation, IRenderer* renderer, float spawnRate) :
 GameEntity(transformation, renderer),
 mOriginalParticle(particle),
 mSpawnRate(spawnRate),

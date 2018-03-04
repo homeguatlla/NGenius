@@ -24,7 +24,7 @@
 
 #include "src/TerrainGrid.h"
 
-#include "src/resources/renderers/IRenderer_.h"
+#include "src/resources/renderers/IRenderer.h"
 #include "src/resources/renderers/VertexsRenderer.h"
 #include "src/resources/renderers/IndexesRenderer.h"
 #include "src/resources/renderers/SkyBoxRenderer.h"
@@ -353,7 +353,7 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 			m = materialNormalmap;
 		}
 
-		IRenderer_* renderer = new VertexsRenderer(mEngine.GetModel(models[i]), m);
+		IRenderer* renderer = new VertexsRenderer(mEngine.GetModel(models[i]), m);
 		lodComponent->AddLevelOfDetail(renderer, distances[i]);
 	}
 
@@ -362,7 +362,7 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 
 GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, Model* model, IMaterial* material)
 {
-	IRenderer_* renderer = new VertexsRenderer(model, material);
+	IRenderer* renderer = new VertexsRenderer(model, material);
 
 	GameEntity* modelEntity = new GameEntity(
 												new Transformation(position, glm::vec3(0.0f), scale),
@@ -592,8 +592,8 @@ void CreateHUD()
 	//QUAD
 	IMaterial* material = mEngine.CreateMaterial("gui", mEngine.GetShader("gui"));
 	material->AddEffect(new MaterialEffectDiffuseTexture(mEngine.GetTexture("hud_map"), glm::vec3(1.0f), 1.0f));
-	IRenderer_* guiRenderer = new IndexesRenderer(mEngine.GetModel("gui_quad"), material);
-	guiRenderer->SetLayer(IRenderer_::LAYER_GUI);
+	IRenderer* guiRenderer = new IndexesRenderer(mEngine.GetModel("gui_quad"), material);
+	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
 	GameEntity* quad = new GameEntity(new Transformation(glm::vec3(420.0f, -300.0f, 0.0f), glm::vec3(0.0f), glm::vec3(256.0f)),
 		guiRenderer
@@ -771,7 +771,7 @@ void CreatePlayer()
 	material->AddEffect(new MaterialEffectShadowProperties());
 	
 	Model* model = mEngine.GetModel("enano");
-	IRenderer_* renderer = new VertexsRenderer(model, material);
+	IRenderer* renderer = new VertexsRenderer(model, material);
 
 	mPlayer = new Player(new Transformation(glm::vec3(0.0f, 4.9f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.03f)),
 		renderer,
@@ -807,7 +807,7 @@ void CreateSkybox()
 		material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 
 		SkyBoxRenderer* skyboxRenderer = new SkyBoxRenderer(mEngine.GetModel("skybox"), material);
-		skyboxRenderer->SetLayer(IRenderer_::LAYER_PARTICLES);
+		skyboxRenderer->SetLayer(IRenderer::LAYER_PARTICLES);
 		
 		GameEntity* skyBox = new GameEntity(
 			new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(50.0f)),
@@ -937,7 +937,7 @@ void CreateHudMapRenderPass()
 	mMapCamera->SetPosition(glm::vec3(0.0f, 100.0f, 0.0f));
 	mMapCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mMapCamera->SetUp(glm::vec3(1.0f, 0.0f, 0.0f));
-	mMapPass = new RenderPass(static_cast<ICamera*>(mMapCamera), IRenderer_::LAYER_OTHER);
+	mMapPass = new RenderPass(static_cast<ICamera*>(mMapCamera), IRenderer::LAYER_OTHER);
 	
 	IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
 	frameBuffer->SetColorTextureAttachment(0, static_cast<Texture*>(mEngine.GetTexture("map")));
@@ -967,7 +967,7 @@ void CreateWaterRenderPass()
 
 	frameReflectionBuffer->Init();
 	
-	RenderPass* reflectionWaterPass = new RenderPass(static_cast<ICamera*>(mReflectionWaterCamera), IRenderer_::LAYER_TERRAIN | IRenderer_::LAYER_OTHER | IRenderer_::LAYER_PARTICLES);
+	RenderPass* reflectionWaterPass = new RenderPass(static_cast<ICamera*>(mReflectionWaterCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES);
 	reflectionWaterPass->SetFrameBufferOutput(frameReflectionBuffer);
 	reflectionWaterPass->EnableClipping(true);
 	reflectionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);
@@ -991,7 +991,7 @@ void CreateWaterRenderPass()
 	frameRefractionBuffer->SetDepthTextureAttachment(refractionDepthTexture);
 	frameRefractionBuffer->Init();
 
-	RenderPass* refractionWaterPass = new RenderPass(static_cast<ICamera*>(mRefractionWaterCamera), IRenderer_::LAYER_TERRAIN | IRenderer_::LAYER_OTHER);
+	RenderPass* refractionWaterPass = new RenderPass(static_cast<ICamera*>(mRefractionWaterCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER);
 	refractionWaterPass->SetFrameBufferOutput(frameRefractionBuffer);
 	refractionWaterPass->EnableClipping(true);
 	refractionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);
@@ -1012,14 +1012,14 @@ void CreateGUIRenderPass()
 	mGuiCamera->SetPosition(glm::vec3(0.0f, 0.0f, 40.0f));
 	mGuiCamera->SetTarget(glm::vec3(0.0f, 0.0f, -50.0f));
 	mGuiCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
-	RenderPass *guiPass = new RenderPass(static_cast<ICamera*>(mGuiCamera), IRenderer_::LAYER_GUI);
+	RenderPass *guiPass = new RenderPass(static_cast<ICamera*>(mGuiCamera), IRenderer::LAYER_GUI);
 	mEngine.AddRenderPass(guiPass);
 }
 
 void CreateGameplayRenderPass()
 {
 	//RENDER PASS GAMEPLAY	
-	RenderPass *gameplayPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer_::LAYER_OTHER | IRenderer_::LAYER_WATER | IRenderer_::LAYER_DEBUG);
+	RenderPass *gameplayPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
 	
 	IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
 	Texture* depthTexture = static_cast<Texture*>(mEngine.GetTexture("depth_texture"));
@@ -1034,14 +1034,14 @@ void CreateGameplayRenderPass()
 void CreateTerrainRenderPass()
 {
 	//RENDER PASS GAMEPLAY
-	RenderPass *terrainPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer_::LAYER_TERRAIN);
+	RenderPass *terrainPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TERRAIN);
 	mEngine.AddRenderPass(terrainPass);
 }
 
 void CreateParticlesRenderPass()
 {
 	//RENDER PASS PARTICLES
-	RenderPass *particlesPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer_::LAYER_PARTICLES);
+	RenderPass *particlesPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_PARTICLES);
 	particlesPass->SetCalculateDistanceToCamera(true);
 	mEngine.AddRenderPass(particlesPass);
 }

@@ -6,7 +6,7 @@
 #include "../../camera/OrthogonalCamera.h"
 #include "../../camera/ICamera.h"
 
-#include "../../renderers/IRenderer_.h"
+#include "../../renderers/IRenderer.h"
 #include "../../../renderer/IFrameBuffer.h"
 #include "../../../renderer/RenderPass.h"
 #include "../../textures/Texture.h"
@@ -133,7 +133,7 @@ RenderPass* ShadowsRenderPass::CreateShadowRenderPass()
 	frameShadowBuffer->SetDepthTextureAttachment(mShadowMapTexture);
 	frameShadowBuffer->Init();
 
-	RenderPass* shadowPass = new RenderPass(static_cast<ICamera*>(mShadowCastCamera), IRenderer_::LAYER_OTHER);
+	RenderPass* shadowPass = new RenderPass(static_cast<ICamera*>(mShadowCastCamera), IRenderer::LAYER_OTHER);
 	shadowPass->SetFrameBufferOutput(frameShadowBuffer);
 
 	//IMaterial* material = mRenderSystem->CreateMaterial("shadow", mRenderSystem->GetShader("default"));

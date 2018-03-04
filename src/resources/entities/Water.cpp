@@ -19,7 +19,7 @@ mCurrentWaterSpeed(speed)
 	Create();
 	SetRenderer(new IndexesRenderer(mModel, material));
 
-	GetRenderer()->SetLayer(IRenderer_::LAYER_WATER);
+	GetRenderer()->SetLayer(IRenderer::LAYER_WATER);
 	if (material->HasEffect<MaterialEffectWater>())
 	{
 		mWaterEffect = material->GetEffect<MaterialEffectWater>();

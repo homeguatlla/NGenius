@@ -5,7 +5,7 @@
 GUITextRenderer::GUITextRenderer(Model* model, IMaterial* material) :
 	TextRenderer(model, material)
 {
-	SetLayer(IRenderer_::LAYER_GUI);
+	SetLayer(IRenderer::LAYER_GUI);
 }
 
 
@@ -21,7 +21,7 @@ void GUITextRenderer::Draw()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	IRenderer_::Draw();
+	IRenderer::Draw();
 
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);

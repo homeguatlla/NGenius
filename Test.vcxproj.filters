@@ -333,9 +333,6 @@
     <ClInclude Include="src\resources\materials\MaterialsLibrary.h">
       <Filter>Header Files\resources\materials</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\renderers\IRenderer_.h">
-      <Filter>Header Files\resources\renderers</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\materials\BasicMaterial.h">
       <Filter>Header Files\resources\materials</Filter>
     </ClInclude>
@@ -424,6 +421,9 @@
       <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\renderers\EnergyWallRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\IRenderer.h">
       <Filter>Header Files\resources\renderers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -641,9 +641,6 @@
     <ClCompile Include="src\resources\materials\MaterialsLibrary.cpp">
       <Filter>Source Files\resources\materials</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\renderers\IRenderer_.cpp">
-      <Filter>Source Files\resources\renderers</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\materials\BasicMaterial.cpp">
       <Filter>Source Files\resources\materials</Filter>
     </ClCompile>
@@ -732,6 +729,9 @@
       <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\renderers\EnergyWallRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\IRenderer.cpp">
       <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
   </ItemGroup>

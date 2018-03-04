@@ -20,7 +20,7 @@ mColorDestination(1.0f)
 {
 	ParticleRenderer* renderer = new ParticleRenderer(model, material);
 	renderer->SetTransparency(true);
-	renderer->SetLayer(IRenderer_::LAYER_PARTICLES);
+	renderer->SetLayer(IRenderer::LAYER_PARTICLES);
 	SetRenderer(renderer);
 }
 

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "IRenderer_.h"
+#include "IRenderer.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include "../shaders/IShaderProgram.h"
@@ -18,7 +18,7 @@
 #include <iostream>
 #include <typeinfo.h>
 
-IRenderer_::IRenderer_(Model* model, IMaterial* material) :
+IRenderer::IRenderer(Model* model, IMaterial* material) :
 mParent(nullptr),
 mModel(model),
 mIsPrerendered(false),
@@ -36,37 +36,37 @@ mIsBillboard(false)
 	mBitRenderInformation.SetTransparency(false);
 }
 
-IRenderer_::~IRenderer_()
+IRenderer::~IRenderer()
 {
 	
 }
 
-bool IRenderer_::IsPrerendered() const
+bool IRenderer::IsPrerendered() const
 {
 	return mIsPrerendered;
 }
 /*
-void IRenderer_::PreRender(VertexBuffersManager& vertexBufferManager)
+void IRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 {
 	
 }*/
 
-void IRenderer_::SetParent(GameEntity* parent)
+void IRenderer::SetParent(GameEntity* parent)
 {
 	mParent = parent;
 }
 
-GameEntity* IRenderer_::GetParent()
+GameEntity* IRenderer::GetParent()
 {
 	return mParent;
 }
 
-IMaterial* IRenderer_::GetMaterial()
+IMaterial* IRenderer::GetMaterial()
 {
 	return mMaterial;
 }
 
-void IRenderer_::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager, IMaterial* material)
+void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager, IMaterial* material)
 {
 	if (!mModel->IsBuilt())
 	{
@@ -80,7 +80,7 @@ void IRenderer_::Render(const ICamera* camera, VertexBuffersManager& vertexBuffe
 
 	const glm::mat4 viewMatrix = const_cast<ICamera*>(camera)->GetViewMatrix();
 
-	for (IRenderer_* renderer : mInstances)
+	for (IRenderer* renderer : mInstances)
 	{
 		glm::mat4 modelMatrix = renderer->GetParent()->GetTransformation()->GetModelMatrix();
 
@@ -114,7 +114,7 @@ void IRenderer_::Render(const ICamera* camera, VertexBuffersManager& vertexBuffe
 	glBindVertexArray(0);
 }
 
-void IRenderer_::Draw()
+void IRenderer::Draw()
 {
 	if (mIsInstancingEnabled)
 	{
@@ -127,67 +127,67 @@ void IRenderer_::Draw()
 	}
 }
 
-const BitNumber& IRenderer_::GetBitRendererInformation() const
+const BitNumber& IRenderer::GetBitRendererInformation() const
 {
 	return mBitRenderInformation;
 }
 
-void IRenderer_::SetLayer(char layer)
+void IRenderer::SetLayer(char layer)
 {
 	mLayer = layer;
 	mBitRenderInformation.SetLayer(mLayer);
 }
 
-char IRenderer_::GetLayer() const
+char IRenderer::GetLayer() const
 {
 	return mLayer;
 }
 
-void IRenderer_::SetTransparency(bool transparent)
+void IRenderer::SetTransparency(bool transparent)
 {
 	mBitRenderInformation.SetTransparency(transparent);
 }
 
-void IRenderer_::SetDistance(unsigned int distance)
+void IRenderer::SetDistance(unsigned int distance)
 {
 	mBitRenderInformation.SetDistance(distance);
 }
 
-bool IRenderer_::IsVisible() const
+bool IRenderer::IsVisible() const
 {
 	return mIsVisible;
 }
 
-void IRenderer_::SetVisibility(bool visible)
+void IRenderer::SetVisibility(bool visible)
 {
 	mIsVisible = visible;
 }
 
-void IRenderer_::EnableInstancing(bool enable)
+void IRenderer::EnableInstancing(bool enable)
 {
 	mIsInstancingEnabled = enable;
 }
 
-void IRenderer_::SetInstances(std::vector<IRenderer_*> instances)
+void IRenderer::SetInstances(std::vector<IRenderer*> instances)
 {
 	mInstances = instances;
 }
 
-void IRenderer_::SetBillboard(bool billboard)
+void IRenderer::SetBillboard(bool billboard)
 {
 	mIsBillboard = billboard;
 }
 
-IRenderer_* IRenderer_::Clone() const
+IRenderer* IRenderer::Clone() const
 {
-	IRenderer_* clone = DoClone();
+	IRenderer* clone = DoClone();
 
 	assert(typeid(*clone) == typeid(*this));
 
 	return clone;
 }
 
-void IRenderer_::CheckError()
+void IRenderer::CheckError()
 {
 	/*
 	GLenum err;
@@ -196,12 +196,12 @@ void IRenderer_::CheckError()
 	}*/
 }
 
-const AABB& IRenderer_::GetAABB() const
+const AABB& IRenderer::GetAABB() const
 {
 	return mModel->GetAABB();
 }
 
-void IRenderer_::ModifyModelMatrixToAvoidRotations(const glm::mat4& viewMatrix, const glm::vec3& scale, float angleZ, glm::mat4& modelMatrix)
+void IRenderer::ModifyModelMatrixToAvoidRotations(const glm::mat4& viewMatrix, const glm::vec3& scale, float angleZ, glm::mat4& modelMatrix)
 {
 	modelMatrix[0][0] = viewMatrix[0][0];
 	modelMatrix[0][1] = viewMatrix[1][0];

@@ -7,7 +7,7 @@
 
 
 VertexsRenderer::VertexsRenderer(Model* model, IMaterial* material) :
-IRenderer_(model, material)
+IRenderer(model, material)
 {
 }
 

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Text.h"
 #include "../Transformation.h"
-#include "../renderers/IRenderer_.h"
+#include "../renderers/IRenderer.h"
 #include "../renderers/TextRenderer.h"
 #include "../renderers/GUITextRenderer.h"
 #include "../models/Model.h"

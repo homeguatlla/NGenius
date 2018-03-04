@@ -149,7 +149,7 @@ void RenderSystem::Render(RenderPass* renderPass)
 
 	//STEP 2 ORDER RENDERERS FOLLOWING THE BITRENDERERINFORMATION
 	//double time = glfwGetTime();
-	sort(renderers.begin(), renderers.end(), [](IRenderer_* a, IRenderer_* b)
+	sort(renderers.begin(), renderers.end(), [](IRenderer* a, IRenderer* b)
 	{
 		assert(a != nullptr && b != nullptr);
 		return a->GetBitRendererInformation().GetValue() > b->GetBitRendererInformation().GetValue();
@@ -218,7 +218,7 @@ void RenderSystem::RemoveRenderPass(RenderPass* renderPass)
 	}
 }
 
-void RenderSystem::AddToRender(IRenderer_* renderer)
+void RenderSystem::AddToRender(IRenderer* renderer)
 {
 	//assert(renderer != nullptr);
 	if (renderer != nullptr)
@@ -235,7 +235,7 @@ void RenderSystem::AddToRender(IRenderer_* renderer)
 	}
 }
 
-void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer_* renderer, std::vector<IRenderer_*>& instances)
+void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances)
 {
 	//std::cout << instances.front()->GetBitRendererInformation().GetValue() << " : " << instances.size() << "\n";
 
@@ -261,7 +261,7 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer_* renderer,
 	mCurrentMaterial->UnUse();
 }
 
-void RenderSystem::ApplyShadows(IRenderer_* renderer)
+void RenderSystem::ApplyShadows(IRenderer* renderer)
 {
 	if (mCurrentMaterial->HasEffect<MaterialEffectShadowProperties>())
 	{
@@ -359,7 +359,7 @@ void RenderSystem::SelectTextures()
 	}
 }
 
-void RenderSystem::SelectMaterial(RenderPass* renderPass, IRenderer_* renderer)
+void RenderSystem::SelectMaterial(RenderPass* renderPass, IRenderer* renderer)
 {
 	IMaterial* material = renderPass->GetMaterial();
 	if (material == nullptr)
@@ -557,7 +557,7 @@ void RenderSystem::DestroyResourcesLibraries()
 void RenderSystem::UpdateDistancesToCamera(const ICamera* camera, RenderersList* renderers)
 {
 	glm::vec3 cameraPosition = camera->GetPosition();
-	for (IRenderer_* renderer : *renderers)
+	for (IRenderer* renderer : *renderers)
 	{
 		glm::vec3 position = renderer->GetParent()->GetTransformation()->GetPosition();
 		float distanceToCamera = glm::length2(cameraPosition - position);

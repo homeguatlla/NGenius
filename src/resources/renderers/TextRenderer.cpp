@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TextRenderer.h"
 
-#include "../renderers/IRenderer_.h"
+#include "../renderers/IRenderer.h"
 #include "../font/FontType.h"
 #include "../camera/ICamera.h"
 #include "../Transformation.h"
@@ -10,9 +10,9 @@
 #include <GL/glew.h>
 
 TextRenderer::TextRenderer(Model* model, IMaterial* material) : 
-IRenderer_(model, material)
+IRenderer(model, material)
 {
-	SetLayer(IRenderer_::LAYER_PARTICLES);
+	SetLayer(IRenderer::LAYER_PARTICLES);
 	SetTransparency(true);
 }
 
@@ -32,7 +32,7 @@ void TextRenderer::Draw()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	IRenderer_::Draw();
+	IRenderer::Draw();
 
 	glDisable(GL_BLEND);
 	glDepthMask(true);

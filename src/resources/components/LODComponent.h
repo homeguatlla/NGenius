@@ -3,16 +3,16 @@
 #include <vector>
 
 class ICamera;
-class IRenderer_;
+class IRenderer;
 
 class LODComponent : public IComponent
 {
 	struct LOD
 	{
 		float distance;
-		IRenderer_* renderer;
+		IRenderer* renderer;
 
-		LOD(IRenderer_* _renderer, float _distance) : renderer(_renderer), distance(_distance) {}
+		LOD(IRenderer* _renderer, float _distance) : renderer(_renderer), distance(_distance) {}
 	};
 
 	const ICamera* mCamera;
@@ -26,6 +26,6 @@ public:
 	IComponent* DoClone() const override;
 	void Update(float elapsedTime) override;
 
-	void AddLevelOfDetail(IRenderer_* renderer, float distance);
+	void AddLevelOfDetail(IRenderer* renderer, float distance);
 };
 

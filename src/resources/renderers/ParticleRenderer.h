@@ -1,11 +1,11 @@
 #pragma once
-#include "IRenderer_.h"
+#include "IRenderer.h"
 
 class IShaderProgram;
 class Model;
 class IMaterial;
 
-class ParticleRenderer : public IRenderer_
+class ParticleRenderer : public IRenderer
 {
 
 public:

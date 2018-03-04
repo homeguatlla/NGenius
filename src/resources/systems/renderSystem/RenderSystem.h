@@ -4,7 +4,7 @@
 #include <string>
 #include <glm/glm.hpp>
 #include "../../../VertexBuffersManager.h"
-#include "../../renderers/IRenderer_.h"
+#include "../../renderers/IRenderer.h"
 
 class ICamera;
 class RenderPass;
@@ -30,13 +30,13 @@ class ShadowsRenderPass;
 
 class RenderSystem
 {
-	typedef std::vector<IRenderer_*> RenderersList;
+	typedef std::vector<IRenderer*> RenderersList;
 	typedef std::vector<RenderPass*>::iterator RenderPassesIterator;
 
 	VertexBuffersManager mVertexsBuffersManager;
 
 	std::map<char, RenderersList> mRenderersPerPass;
-	std::vector<IRenderer_*> mInstances;
+	std::vector<IRenderer*> mInstances;
 	std::vector<RenderPass*> mRenderPasses;
 	
 	float mScreenWidth;
@@ -66,7 +66,7 @@ public:
 
 	void Init(const std::string& applicationName, bool isFullscreen);
 	void Render();
-	void AddToRender(IRenderer_* renderer);
+	void AddToRender(IRenderer* renderer);
 	
 	void AddRenderPass(RenderPass* renderPass);
 	void RemoveRenderPass(RenderPass* renderPass);
@@ -105,12 +105,12 @@ private:
 
 	void Render(RenderPass* renderPass);
 	void UpdateDistancesToCamera(const ICamera* camera, RenderersList* renderers);
-	void RenderInstances(RenderPass* renderPass, IRenderer_* renderer, std::vector<IRenderer_*>& instances);
+	void RenderInstances(RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances);
 	
-	void SelectMaterial(RenderPass* renderPass, IRenderer_* renderer);
+	void SelectMaterial(RenderPass* renderPass, IRenderer* renderer);
 	void SelectTextures();
 	void SelectClippingPlane(RenderPass* renderPass);
-	void ApplyShadows(IRenderer_* renderer);
+	void ApplyShadows(IRenderer* renderer);
 
 	void CheckGLError();
 };

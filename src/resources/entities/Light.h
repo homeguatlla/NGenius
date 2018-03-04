@@ -5,7 +5,7 @@
 class Light : public GameEntity
 {
 public:
-	explicit Light(const glm::vec3& position, const glm::vec3& color, IRenderer_* renderer);
+	explicit Light(const glm::vec3& position, const glm::vec3& color, IRenderer* renderer);
 	explicit Light(const glm::vec3& position, const glm::vec3& color);
 	~Light();
 

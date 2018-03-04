@@ -21,7 +21,7 @@ class Player : public GameEntity
 	State mState;
 
 public:
-	explicit Player(Transformation* transformation, IRenderer_* renderer, PlayerInputComponent* playerInputComponent, PhysicsComponent* physicsComponent, CollisionComponent* collisionComponent);
+	explicit Player(Transformation* transformation, IRenderer* renderer, PlayerInputComponent* playerInputComponent, PhysicsComponent* physicsComponent, CollisionComponent* collisionComponent);
 	virtual ~Player();
 
 	Player* DoClone() const override { return nullptr; }
