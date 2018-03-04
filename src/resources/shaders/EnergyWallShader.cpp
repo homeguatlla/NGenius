@@ -4,6 +4,7 @@
 #include "../materials/effects/MaterialEffectDepthTexture.h"
 #include "../materials/effects/MaterialEffectFloat3.h"
 #include "../materials/effects/MaterialEffectFloat2.h"
+#include "../materials/effects/MaterialEffectFloat.h"
 #include "../textures/ITexture.h"
 
 const std::string EnergyWallShader::VERTEX_FILE = "data/shaders/vertex/v_energy_wall.cg";
@@ -12,12 +13,14 @@ const std::string EnergyWallShader::FRAGMENT_FILE = "data/shaders/fragment/f_ene
 const std::string ATTRIBUTE_DEPTH_TEXTURE("depthTexture");
 const std::string ATTRIBUTE_CONTACT_POINT("contactPoint");
 const std::string ATTRIBUTE_SCREEN_SIZE("screenSize");
+const std::string ATTRIBUTE_TIME("time");
 
 EnergyWallShader::EnergyWallShader() : 
 ModelShader(EnergyWallShader::VERTEX_FILE, EnergyWallShader::FRAGMENT_FILE),
 mLocationDepthTexture(-1),
 mLocationContactPoint(-1),
-mLocationScreenSize(-1)
+mLocationScreenSize(-1),
+mLocationTime(-1)
 {
 }
 
@@ -34,6 +37,12 @@ void EnergyWallShader::LoadData(const ICamera* camera, const Transformation* tra
 	{
 		MaterialEffectDepthTexture* effect = material->GetEffect<MaterialEffectDepthTexture>();
 		LoadTexture(mLocationDepthTexture, effect->GetDepthTexture()->GetUnit());
+	}
+
+	if (material->HasEffect<MaterialEffectFloat>())
+	{
+		MaterialEffectFloat* effect = material->GetEffect<MaterialEffectFloat>();
+		LoadFloat(mLocationTime, effect->GetFloat());
 	}
 
 	if (material->HasEffect<MaterialEffectFloat2>())
@@ -55,4 +64,5 @@ void EnergyWallShader::GetAllUniformLocations()
 	mLocationDepthTexture = GetUniformLocation(ATTRIBUTE_DEPTH_TEXTURE);
 	mLocationContactPoint = GetUniformLocation(ATTRIBUTE_CONTACT_POINT);
 	mLocationScreenSize = GetUniformLocation(ATTRIBUTE_SCREEN_SIZE);
+	mLocationTime = GetUniformLocation(ATTRIBUTE_TIME);
 }

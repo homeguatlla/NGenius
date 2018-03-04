@@ -131,7 +131,7 @@ enum Configuration
 	REFACTOR,
 	RELEASE
 };
-Configuration mConfiguration = REFACTOR;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -472,12 +472,6 @@ void CreateProps()
 	models.push_back(std::string("chest"));
 	models.push_back(std::string("brazier"));
 
-	positions.push_back(glm::vec3(1.f, 0.0f, 0.0f));
-	positions.push_back(glm::vec3(0.5f, 0.0f, 0.0f));
-	positions.push_back(glm::vec3(-0.5f, 0.0f, 0.0f));
-	positions.push_back(glm::vec3(-1.0f, 0.0f, 0.0f));
-
-
 	positions.push_back(glm::vec3(0.8f, 0.0f, -2.3f));
 	positions.push_back(glm::vec3(0.4f, 0.0f, -2.0f));
 	positions.push_back(glm::vec3(1.0f, 0.0f, -1.7f));
@@ -581,8 +575,8 @@ void CreateParticlesFire()
 	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
 	particle->SetLiveTime(1.5f);
 
-	float x = 0.0f;
-	float z = -0.7f;
+	float x = 1.0f;
+	float z = -1.7f;
 
 	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 0.28f;
 
@@ -604,22 +598,12 @@ void CreateEnergyWall()
 	material->AddEffect(new MaterialEffectDiffuseTexture(mEngine.GetTexture("yellow_grid"), glm::vec3(0.0f), 50.0f));
 	material->AddEffect(new MaterialEffectDepthTexture(mEngine.GetTexture("depth_texture"), 1.0f));
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
-	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
 
-
-	/*EnergyWallRenderer* renderer = new EnergyWallRenderer(mEngine.GetModel("sphere"),
-		mEngine.GetShader("energy_wall"),
-		static_cast<Texture*>(mEngine.GetTexture("yellow_grid")),
-		static_cast<Texture*>(mEngine.GetTexture("depth_texture")));
-
-	renderer->SetLayer(IRenderer::LAYER_PARTICLES);
-	renderer->SetTransparency(true);
-	renderer->SetTile(50.0f);*/
-	//renderer->SetVisibility(false);
-	/*
-	mEnergyWall = new EnergyWall(new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(mEnergyWallRadius)),
-		renderer, 2.0f);*/
-	//mEnergyWall->SetEnabled(false);
+	mEnergyWall = new EnergyWall(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(mEnergyWallRadius)),
+									material,
+									mEngine.GetModel("sphere"),
+									2.0f
+								);
 	mEngine.AddGameEntity(mEnergyWall);
 	mEngine.SetEnergyWallRadius(mEnergyWallRadius);
 }
@@ -836,7 +820,7 @@ void CreateEntities()
 
 	//CAMERA
 	mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 55.0f, 15.0f));
+	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 15.0f));
 	mEagleEyeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mEagleEyeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -1197,14 +1181,14 @@ void SetupConfiguration()
 	{
 	case DEBUG:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
+		mIsWaterEnabled = true;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
 		mIsVegetationEnabled = true;
 		mIsPropsEnabled = true;
-		mIsEnergyWallEnabled = false;
+		mIsEnergyWallEnabled = true;
 		mIsSkyboxEnabled = true;
-		mIsTerrainFlat = true;
+		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = true;
@@ -1296,7 +1280,7 @@ void SetupConfiguration()
 		mIsFogEnabled = false;
 		mIsVegetationEnabled = false;
 		mIsPropsEnabled = false;
-		mIsEnergyWallEnabled = false;
+		mIsEnergyWallEnabled = true;
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
 		mIsTextEnabled = false;

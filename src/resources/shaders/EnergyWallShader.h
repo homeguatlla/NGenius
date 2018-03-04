@@ -8,6 +8,7 @@ class EnergyWallShader : public ModelShader
 	int mLocationDepthTexture;
 	int mLocationContactPoint;
 	int mLocationScreenSize;
+	int mLocationTime;
 
 public:
 	explicit EnergyWallShader();

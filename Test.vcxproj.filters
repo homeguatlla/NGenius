@@ -423,6 +423,9 @@
     <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat4.h">
       <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\renderers\EnergyWallRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -727,6 +730,9 @@
     </ClCompile>
     <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat4.cpp">
       <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\EnergyWallRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

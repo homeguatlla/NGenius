@@ -23,6 +23,7 @@
 #include "../../materials/effects/MaterialEffectTextureArray.h"
 #include "../../materials/effects/MaterialEffectTextureCubemap.h"
 #include "../../materials/effects/MaterialEffectParticle.h"
+#include "../../materials/effects/MaterialEffectDepthTexture.h"
 
 #include "../../../renderer/RenderPass.h"
 #include "../../../BitNumber.h"
@@ -309,6 +310,16 @@ void RenderSystem::SelectTextures()
 		{
 			mNormalTexture = normal;
 			mNormalTexture->SetActive(true);
+		}
+	}
+
+	if (mCurrentMaterial->HasEffect<MaterialEffectDepthTexture>())
+	{
+		ITexture* depthTexture = mCurrentMaterial->GetEffect<MaterialEffectDepthTexture>()->GetDepthTexture();
+		//if (depth != mNormalTexture)
+		{
+			//mNormalTexture = normal;
+			depthTexture->SetActive(true);
 		}
 	}
 

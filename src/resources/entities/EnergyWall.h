@@ -1,14 +1,19 @@
 #pragma once
 #include "../GameEntity.h"
 
+class Model;
+class IMaterial;
+
 class EnergyWall : public GameEntity
 {
+	IMaterial* mMaterial;
+	Model* mModel;
 	float mMaxLiveTime;
 	float mLiveTime;
 	glm::vec3 mContactPoint;
 
 public:
-	explicit EnergyWall(Transformation* transformation, IRenderer_* renderer, float maxLiveTime);
+	explicit EnergyWall(Transformation* transformation, IMaterial* material, Model* model, float maxLiveTime);
 	~EnergyWall();
 
 	EnergyWall* DoClone() const override;

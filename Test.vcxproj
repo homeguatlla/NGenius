@@ -223,6 +223,7 @@
     <ClInclude Include="src\resources\models\Mesh.h" />
     <ClInclude Include="src\resources\models\Model.h" />
     <ClInclude Include="src\resources\models\ModelsLibrary.h" />
+    <ClInclude Include="src\resources\renderers\EnergyWallRenderer.h" />
     <ClInclude Include="src\resources\renderers\GUITextRenderer.h" />
     <ClInclude Include="src\resources\renderers\ParticleRenderer.h" />
     <ClInclude Include="src\resources\renderers\SkyBoxRenderer.h" />
@@ -324,6 +325,7 @@
     <ClCompile Include="src\resources\models\Mesh.cpp" />
     <ClCompile Include="src\resources\models\Model.cpp" />
     <ClCompile Include="src\resources\models\ModelsLibrary.cpp" />
+    <ClCompile Include="src\resources\renderers\EnergyWallRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\GUITextRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\ParticleRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\SkyBoxRenderer.cpp" />
