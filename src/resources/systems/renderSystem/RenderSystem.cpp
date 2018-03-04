@@ -25,7 +25,7 @@
 #include "../../materials/effects/MaterialEffectParticle.h"
 #include "../../materials/effects/MaterialEffectDepthTexture.h"
 
-#include "../../../renderer/RenderPass.h"
+#include "RenderPass.h"
 #include "../../../BitNumber.h"
 
 #include <iostream>

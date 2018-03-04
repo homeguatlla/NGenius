@@ -7,8 +7,8 @@
 #include "../../camera/ICamera.h"
 
 #include "../../renderers/IRenderer.h"
-#include "../../../renderer/IFrameBuffer.h"
-#include "../../../renderer/RenderPass.h"
+#include "IFrameBuffer.h"
+#include "RenderPass.h"
 #include "../../textures/Texture.h"
 
 ShadowsRenderPass::ShadowsRenderPass(RenderSystem* renderSystem, float screenWidth, float screenHeight) :

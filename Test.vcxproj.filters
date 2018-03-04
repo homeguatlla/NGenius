@@ -22,12 +22,6 @@
     <Filter Include="Source Files\resources\shaders">
       <UniqueIdentifier>{26be7ddc-d2f3-4973-a0d9-10302f3b413e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\renderer">
-      <UniqueIdentifier>{e33ad438-9275-477c-8aaf-1775ce6d162a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\renderer">
-      <UniqueIdentifier>{ffcb6274-7aa0-4cb8-8844-71b433084b58}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\resources\textures">
       <UniqueIdentifier>{d6ef87a0-030d-4426-a4a4-ce929df009b5}</UniqueIdentifier>
     </Filter>
@@ -234,9 +228,6 @@
     <ClInclude Include="src\resources\camera\PerspectiveCamera.h">
       <Filter>Header Files\resources\camera</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\RenderPass.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\AABB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -247,9 +238,6 @@
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
     <ClInclude Include="src\BitNumber.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\IFrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\components\PhysicsComponent.h">
@@ -426,6 +414,12 @@
     <ClInclude Include="src\resources\renderers\IRenderer.h">
       <Filter>Header Files\resources\renderers</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\systems\renderSystem\RenderPass.h">
+      <Filter>Header Files\resources\systems\renderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\renderSystem\IFrameBuffer.h">
+      <Filter>Header Files\resources\systems\renderSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -542,9 +536,6 @@
     <ClCompile Include="src\resources\camera\PerspectiveCamera.cpp">
       <Filter>Source Files\resources\camera</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\RenderPass.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\AABB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -555,9 +546,6 @@
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
     <ClCompile Include="src\BitNumber.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\IFrameBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\entities\Particle.cpp">
@@ -733,6 +721,12 @@
     </ClCompile>
     <ClCompile Include="src\resources\renderers\IRenderer.cpp">
       <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\renderSystem\RenderPass.cpp">
+      <Filter>Source Files\resources\systems\renderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\renderSystem\IFrameBuffer.cpp">
+      <Filter>Source Files\resources\systems\renderSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

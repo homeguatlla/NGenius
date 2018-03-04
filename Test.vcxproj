@@ -168,8 +168,6 @@
     <ClInclude Include="src\NGenius.h" />
     <ClInclude Include="src\NoiseGenerator.h" />
     <ClInclude Include="src\PNGLoader.h" />
-    <ClInclude Include="src\renderer\IFrameBuffer.h" />
-    <ClInclude Include="src\renderer\RenderPass.h" />
     <ClInclude Include="src\resources\BaseLibrary.h" />
     <ClInclude Include="src\resources\camera\ICamera.h" />
     <ClInclude Include="src\resources\camera\OrthogonalCamera.h" />
@@ -249,6 +247,8 @@
     <ClInclude Include="src\resources\systems\LightsSystem.h" />
     <ClInclude Include="src\resources\systems\ParticlesSystem.h" />
     <ClInclude Include="src\resources\systems\PhysicsSystem.h" />
+    <ClInclude Include="src\resources\systems\renderSystem\IFrameBuffer.h" />
+    <ClInclude Include="src\resources\systems\renderSystem\RenderPass.h" />
     <ClInclude Include="src\resources\systems\renderSystem\RenderSystem.h" />
     <ClInclude Include="src\resources\systems\renderSystem\ShadowsRenderPass.h" />
     <ClInclude Include="src\resources\textures\ITexture.h" />
@@ -270,8 +270,6 @@
     <ClCompile Include="src\loader\FontLoader.cpp" />
     <ClCompile Include="src\loader\OBJLoader.cpp" />
     <ClCompile Include="src\NGenius.cpp" />
-    <ClCompile Include="src\renderer\IFrameBuffer.cpp" />
-    <ClCompile Include="src\renderer\RenderPass.cpp" />
     <ClCompile Include="src\resources\BaseLibrary.cpp" />
     <ClCompile Include="src\resources\camera\ICamera.cpp" />
     <ClCompile Include="src\resources\camera\OrthogonalCamera.cpp" />
@@ -351,6 +349,8 @@
     <ClCompile Include="src\resources\systems\LightsSystem.cpp" />
     <ClCompile Include="src\resources\systems\ParticlesSystem.cpp" />
     <ClCompile Include="src\resources\systems\PhysicsSystem.cpp" />
+    <ClCompile Include="src\resources\systems\renderSystem\IFrameBuffer.cpp" />
+    <ClCompile Include="src\resources\systems\renderSystem\RenderPass.cpp" />
     <ClCompile Include="src\resources\systems\renderSystem\RenderSystem.cpp" />
     <ClCompile Include="src\resources\systems\renderSystem\ShadowsRenderPass.cpp" />
     <ClCompile Include="src\resources\textures\ITexture.cpp" />

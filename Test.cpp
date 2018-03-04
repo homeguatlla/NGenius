@@ -29,7 +29,8 @@
 #include "src/resources/renderers/IndexesRenderer.h"
 #include "src/resources/renderers/SkyBoxRenderer.h"
 
-#include "src/renderer/RenderPass.h"
+#include "src/resources/systems/renderSystem/RenderPass.h"
+#include "src/resources/systems/renderSystem/IFrameBuffer.h"
 
 #include "src/resources/textures/PNGLoader.h"
 #include "src/resources/textures/TextureGenerator.h"
@@ -98,7 +99,7 @@
 #include "src/resources/components/BillboardComponent.h"
 #include "src/resources/components/OverWaterComponent.h"
 
-#include "src/renderer/IFrameBuffer.h"
+
 
 //#include "src/resources/entities/Particle.h"
 //#include "src/renderer/ParticleRenderer.h"

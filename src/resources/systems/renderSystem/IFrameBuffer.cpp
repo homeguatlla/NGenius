@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "IFrameBuffer.h"
-#include "../resources/textures/Texture.h"
+#include "../../textures/Texture.h"
 #include <GL/glew.h>
 
 IFrameBuffer::IFrameBuffer(int screenWidth, int screenHeight) :
