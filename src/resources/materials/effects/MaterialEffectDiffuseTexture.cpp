@@ -6,6 +6,7 @@ mTexture(texture),
 mColor(color),
 mTile(tile)
 {
+	assert(texture != nullptr);
 }
 
 

@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "MaterialEffectTextureCubemap.h"
+#include <assert.h>
 
 MaterialEffectTextureCubemap::MaterialEffectTextureCubemap(TextureCubemap* textureCubemap) :
 mTexture(textureCubemap)
 {
+	assert(textureCubemap != nullptr);
 }
 
 

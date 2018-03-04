@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "MaterialEffectTextureArray.h"
+#include <assert.h>
 
 MaterialEffectTextureArray::MaterialEffectTextureArray(TextureArray* textureArray) :
 mTexture(textureArray)
 {
+	assert(textureArray != nullptr);
 }
 
 

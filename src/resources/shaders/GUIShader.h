@@ -20,8 +20,5 @@ public:
 
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
-	void LoadViewMatrix(const glm::mat4& modelview);
-	void LoadProjectionMatrix(const glm::mat4& projectionmatrix);
-	void LoadGUITexture(int unit);
 };
 

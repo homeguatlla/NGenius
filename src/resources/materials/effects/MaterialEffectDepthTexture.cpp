@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "MaterialEffectDepthTexture.h"
+#include <assert.h>
 
 MaterialEffectDepthTexture::MaterialEffectDepthTexture(ITexture* texture, float tile) :
 mTexture(texture),
 mTile(tile)
 {
+	assert(texture != nullptr);
 }
 
 

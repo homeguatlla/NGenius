@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "MaterialEffectHeightMapTexture.h"
+#include <assert.h>
 
 MaterialEffectHeightMapTexture::MaterialEffectHeightMapTexture(ITexture* texture, float tile) :
 mTexture(texture),
 mTile(tile)
 {
+	assert(texture != nullptr);
 }
 
 

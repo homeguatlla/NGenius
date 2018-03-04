@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "MaterialEffectNormalTexture.h"
+#include <assert.h>
 
 MaterialEffectNormalTexture::MaterialEffectNormalTexture(ITexture* texture, float tile) :
 mTexture(texture),
 mTile(tile)
 {
+	assert(texture != nullptr);
 }
 
 

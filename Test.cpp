@@ -26,6 +26,7 @@
 
 #include "src/resources/renderers/IRenderer_.h"
 #include "src/resources/renderers/VertexsRenderer.h"
+#include "src/resources/renderers/IndexesRenderer.h"
 #include "src/resources/renderers/SkyBoxRenderer.h"
 
 #include "src/renderer/RenderPass.h"
@@ -288,29 +289,7 @@ void CreateWaterHudPlanes()
 	mEngine.AddGameEntity(guiRefraction);
 }
 
-void CreateHUD()
-{
-	//QUAD
-	IRenderer* guiRenderer = new GUIRenderer(	mEngine.GetShader("gui"),
-												static_cast<Texture*>(mEngine.GetTexture("hud_map")),
-												128.0f,
-												128.0f
-												);
-	GameEntity* quad = new GameEntity(	new Transformation(glm::vec3(420.0f, -300.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
-										guiRenderer
-									 );
-	mEngine.AddGameEntity(quad);
 
-	IRenderer* mapRenderer = new GUIRenderer(mEngine.GetShader("gui"),
-												static_cast<Texture*>(mEngine.GetTexture("map")),
-												87.0f,
-												73.0f
-												);
-	GameEntity* map = new GameEntity(new Transformation(glm::vec3(420.0f, -300.0f, -1.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
-										mapRenderer
-									);
-	mEngine.AddGameEntity(map);
-}
 
 void CreateSpecificCubes()
 {
@@ -608,6 +587,35 @@ void CreateEnergyWall()
 	mEngine.SetEnergyWallRadius(mEnergyWallRadius);
 }
 
+void CreateHUD()
+{
+	//QUAD
+	IMaterial* material = mEngine.CreateMaterial("gui", mEngine.GetShader("gui"));
+	material->AddEffect(new MaterialEffectDiffuseTexture(mEngine.GetTexture("hud_map"), glm::vec3(1.0f), 1.0f));
+	IRenderer_* guiRenderer = new VertexsRenderer(mEngine.GetModel("quad"), material);
+	guiRenderer->SetLayer(IRenderer_::LAYER_GUI);
+
+	GameEntity* quad = new GameEntity(new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(64.0f)),
+		guiRenderer
+	);
+	/*
+	GameEntity* quad = new GameEntity(new Transformation(glm::vec3(420.0f, -300.0f, 0.0f), glm::vec3(0.0f), glm::vec3(50.0f)),
+		guiRenderer
+	);*/
+	mEngine.AddGameEntity(quad);
+
+	/*
+	IRenderer* mapRenderer = new GUIRenderer(mEngine.GetShader("gui"),
+		static_cast<Texture*>(mEngine.GetTexture("map")),
+		87.0f,
+		73.0f
+	);
+	GameEntity* map = new GameEntity(new Transformation(glm::vec3(420.0f, -300.0f, -1.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
+		mapRenderer
+	);
+	mEngine.AddGameEntity(map);*/
+}
+
 /*
 
 void CreateParticlesSparkles()
@@ -820,7 +828,7 @@ void CreateEntities()
 
 	//CAMERA
 	mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 15.0f));
+	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 55.0f, 15.0f));
 	mEagleEyeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mEagleEyeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -828,6 +836,8 @@ void CreateEntities()
 	mGameplayCamera->SetPosition(glm::vec3(0.0f, 8.0f, 2.0f));
 	mGameplayCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+
+	CreateHUD();
 
 	CreatePlayer();
 
