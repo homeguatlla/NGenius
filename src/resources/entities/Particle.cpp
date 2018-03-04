@@ -85,7 +85,7 @@ float Particle::GetLiveTime() const
 	return mLiveTime;
 }
 
-void Particle::SetColorGradientValues(glm::vec4 origin, glm::vec4 destination)
+void Particle::SetColorGradientValues(const glm::vec4& origin, const glm::vec4& destination)
 {
 	mColorOrigin = origin;
 	mColorDestination = destination;

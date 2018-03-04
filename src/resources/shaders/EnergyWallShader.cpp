@@ -1,5 +1,10 @@
 #include "stdafx.h"
 #include "EnergyWallShader.h"
+#include "../materials/IMaterial.h"
+#include "../materials/effects/MaterialEffectDepthTexture.h"
+#include "../materials/effects/MaterialEffectFloat3.h"
+#include "../materials/effects/MaterialEffectFloat2.h"
+#include "../textures/ITexture.h"
 
 const std::string EnergyWallShader::VERTEX_FILE = "data/shaders/vertex/v_energy_wall.cg";
 const std::string EnergyWallShader::FRAGMENT_FILE = "data/shaders/fragment/f_energy_wall.cg";
@@ -23,7 +28,25 @@ EnergyWallShader::~EnergyWallShader()
 
 void EnergyWallShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
+	ModelShader::LoadData(camera, transformation, material);
 
+	if (material->HasEffect<MaterialEffectDepthTexture>())
+	{
+		MaterialEffectDepthTexture* effect = material->GetEffect<MaterialEffectDepthTexture>();
+		LoadTexture(mLocationDepthTexture, effect->GetDepthTexture()->GetUnit());
+	}
+
+	if (material->HasEffect<MaterialEffectFloat2>())
+	{
+		MaterialEffectFloat2* effect = material->GetEffect<MaterialEffectFloat2>();
+		LoadVector2(mLocationScreenSize, effect->GetValue());
+	}
+
+	if (material->HasEffect<MaterialEffectFloat3>())
+	{
+		MaterialEffectFloat3* effect = material->GetEffect<MaterialEffectFloat3>();
+		LoadVector3(mLocationContactPoint, effect->GetValue());
+	}
 }
 
 void EnergyWallShader::GetAllUniformLocations()
@@ -32,19 +55,4 @@ void EnergyWallShader::GetAllUniformLocations()
 	mLocationDepthTexture = GetUniformLocation(ATTRIBUTE_DEPTH_TEXTURE);
 	mLocationContactPoint = GetUniformLocation(ATTRIBUTE_CONTACT_POINT);
 	mLocationScreenSize = GetUniformLocation(ATTRIBUTE_SCREEN_SIZE);
-}
-
-void EnergyWallShader::LoadDepthTexture(int unit)
-{
-	LoadTexture(mLocationDepthTexture, unit);
-}
-
-void EnergyWallShader::LoadContactPosition(const glm::vec3& contact)
-{
-	LoadVector3(mLocationContactPoint, contact);
-}
-
-void EnergyWallShader::LoadScreenSize(const glm::vec2& screenSize)
-{
-	LoadVector2(mLocationScreenSize, screenSize);
 }

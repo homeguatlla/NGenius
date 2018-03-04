@@ -31,7 +31,7 @@ public:
 	void SetScaleFactor(glm::vec2& scale);
 	void SetRotationSpeed(float rotationSpeed);
 	void SetLiveTime(float liveTime);
-	void SetColorGradientValues(glm::vec4 origin, glm::vec4 destination);
+	void SetColorGradientValues(const glm::vec4& origin, const glm::vec4& destination);
 	const glm::vec4& GetColor() const;
 	float GetMaxLiveTime() const;
 	float GetLiveTime() const;

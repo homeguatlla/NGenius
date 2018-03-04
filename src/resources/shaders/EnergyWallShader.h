@@ -16,9 +16,5 @@ public:
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
 	void GetAllUniformLocations();
-
-	void LoadDepthTexture(int unit);
-	void LoadContactPosition(const glm::vec3& contact);
-	void LoadScreenSize(const glm::vec2& screenSize);
 };
 

@@ -11,6 +11,8 @@
 #include "../shaders/IShaderProgram.h"
 
 
+#include <iostream>
+
 ParticlesEmitter::ParticlesEmitter(Particle* particle, Transformation* transformation, IRenderer_* renderer, float spawnRate) :
 GameEntity(transformation, renderer),
 mOriginalParticle(particle),
@@ -42,6 +44,11 @@ void ParticlesEmitter::Update(float elapsedTime)
 	{
 		RemoveDeadParticles();
 		SpawnNewParticles(elapsedTime);
+		/*
+		for (int i = 0; i < mParticles.size(); ++i)
+		{
+			std::cout << "particle: " << i << " live: " << mParticles[i]->GetLiveTime() << "\n";
+		}*/
 	}
 }
 
@@ -173,7 +180,7 @@ void ParticlesEmitter::SetEntitiesSystem(EntitiesSystem* entitiesSystem)
 	mEntitiesSystem = entitiesSystem;
 }
 
-void ParticlesEmitter::SetColorGradientValues(glm::vec4& origin, glm::vec4& destination)
+void ParticlesEmitter::SetColorGradientValues(const glm::vec4& origin, const glm::vec4& destination)
 {
 	mColorOrigin = origin;
 	mColorDestination = destination;

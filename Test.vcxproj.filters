@@ -138,15 +138,6 @@
     <ClInclude Include="src\resources\shaders\DefaultShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\CubeRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\IRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\NormalRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\shaders\IShaderProgram.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
@@ -234,9 +225,6 @@
     <ClInclude Include="src\resources\shaders\QuadShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\QuadRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\camera\OrthogonalCamera.h">
       <Filter>Header Files\resources\camera</Filter>
     </ClInclude>
@@ -257,9 +245,6 @@
     </ClInclude>
     <ClInclude Include="src\resources\shaders\WaterShader.h">
       <Filter>Header Files\resources\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\WaterRenderer.h">
-      <Filter>Header Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\BitNumber.h">
       <Filter>Header Files</Filter>
@@ -282,9 +267,6 @@
     <ClInclude Include="src\resources\shaders\ParticleShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\ParticleRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\systems\EntitiesSystem.h">
       <Filter>Header Files\resources\systems</Filter>
     </ClInclude>
@@ -297,17 +279,11 @@
     <ClInclude Include="src\resources\shaders\GUIShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\GUIRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\shaders\NormalMapShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\components\EnergyWallCollisionComponent.h">
       <Filter>Header Files\resources\components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\EnergyWallRenderer.h">
-      <Filter>Header Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\NGenius.h">
       <Filter>Header Files</Filter>
@@ -341,9 +317,6 @@
     </ClInclude>
     <ClInclude Include="src\resources\shaders\ShadowShader.h">
       <Filter>Header Files\resources\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\ShadowRenderer.h">
-      <Filter>Header Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\systems\renderSystem\RenderSystem.h">
       <Filter>Header Files\resources\systems\renderSystem</Filter>
@@ -438,6 +411,18 @@
     <ClInclude Include="src\resources\materials\effects\MaterialEffectParticle.h">
       <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectDepthTexture.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat2.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat3.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat4.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -457,15 +442,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\shaders\TerrainShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\NormalRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\IRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\CubeRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\shaders\IShaderProgram.cpp">
       <Filter>Source Files\resources\shaders</Filter>
@@ -554,9 +530,6 @@
     <ClCompile Include="src\resources\shaders\QuadShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\QuadRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\camera\ICamera.cpp">
       <Filter>Source Files\resources\camera</Filter>
     </ClCompile>
@@ -577,9 +550,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\shaders\WaterShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\WaterRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\BitNumber.cpp">
       <Filter>Source Files</Filter>
@@ -602,9 +572,6 @@
     <ClCompile Include="src\resources\shaders\ParticleShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\ParticleRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\systems\EntitiesSystem.cpp">
       <Filter>Source Files\resources\systems</Filter>
     </ClCompile>
@@ -617,17 +584,11 @@
     <ClCompile Include="src\resources\shaders\GUIShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\GUIRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\shaders\NormalMapShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\components\EnergyWallCollisionComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\EnergyWallRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\NGenius.cpp">
       <Filter>Source Files</Filter>
@@ -661,9 +622,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\shaders\ShadowShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\ShadowRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\systems\renderSystem\RenderSystem.cpp">
       <Filter>Source Files\resources\systems\renderSystem</Filter>
@@ -756,6 +714,18 @@
       <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\materials\effects\MaterialEffectParticle.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectDepthTexture.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat2.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat3.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat4.cpp">
       <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
   </ItemGroup>

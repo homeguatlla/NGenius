@@ -95,7 +95,7 @@ void IRenderer_::Render(const ICamera* camera, VertexBuffersManager& vertexBuffe
 
 		if (typeid(*renderer) == typeid(ParticleRenderer))
 		{
-			Particle* particle = static_cast<Particle*>(mParent);
+			Particle* particle = static_cast<Particle*>(renderer->GetParent());
 			const glm::vec4 color = particle->GetColor();
 			colors.push_back(color);
 		}

@@ -60,6 +60,9 @@
 #include "src/resources/materials/effects/MaterialEffectFloat.h"
 #include "src/resources/materials/effects/MaterialEffectWater.h"
 #include "src/resources/materials/effects/MaterialEffectParticle.h"
+#include "src/resources/materials/effects/MaterialEffectDepthTexture.h"
+#include "src/resources/materials/effects/MaterialEffectFloat2.h"
+#include "src/resources/materials/effects/MaterialEffectFloat3.h"
 
 #include "src/resources/entities/Terrain.h"
 #include "src/resources/entities/Player.h"
@@ -67,10 +70,11 @@
 #include "src/resources/entities/Water.h"
 #include "src/resources/entities/Particle.h"
 #include "src/resources/entities/ParticlesEmitter.h"
+#include "src/resources/entities/EnergyWall.h"
 
 /*
 #include "src/resources/entities/Light.h"
-#include "src/resources/entities/EnergyWall.h"
+
 */
 
 #include "src/resources/camera/ICamera.h"
@@ -176,7 +180,7 @@ GameEntity* mCamera;
 
 GameEntity* mWaterReflectionCameraEntity;
 GameEntity* mWaterRefractionCameraEntity;
-//EnergyWall* mEnergyWall;
+EnergyWall* mEnergyWall;
 Text* mFPSText;
 IMaterial* materialFPSText;
 
@@ -575,24 +579,49 @@ Particle* CreateParticle(bool canCollide, Texture* texture, glm::vec3& gravity)
 void CreateParticlesFire()
 {
 	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
-	particle->SetLiveTime(5.0f);
+	particle->SetLiveTime(1.5f);
 
-	float x = 1.0f;
-	float z = -1.7f;
+	float x = 0.0f;
+	float z = -0.7f;
 
 	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 0.28f;
 
-	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(particle,
-		new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.1f)),
-		nullptr,
-		10);
-	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 1.0f, 0.25f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
-	//particlesEmitter->SetScaleValues(0.03f, 0.005f);
-	particlesEmitter->SetScaleValues(0.3f, 0.3f);
+	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(	particle,
+																new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.1f)),
+																nullptr,
+																100);
+	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 1.0f, 0.25f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));	
+	particlesEmitter->SetScaleValues(0.03f, 0.005f);
 	particlesEmitter->SetVelocity(glm::vec3(0.0f), glm::vec3(0.02f, 0.2f, 0.02f));
 	particlesEmitter->SetSpawnArea(glm::vec3(-0.02f, 0.0f, -0.02f), glm::vec3(0.03f, 0.0f, 0.03f));
 	mEngine.AddGameEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);
+}
+
+void CreateEnergyWall()
+{
+	IMaterial* material = mEngine.CreateMaterial("energy_wall", mEngine.GetShader("energy_wall"));
+	material->AddEffect(new MaterialEffectDiffuseTexture(mEngine.GetTexture("yellow_grid"), glm::vec3(0.0f), 50.0f));
+	material->AddEffect(new MaterialEffectDepthTexture(mEngine.GetTexture("depth_texture"), 1.0f));
+	material->AddEffect(new MaterialEffectFloat2(glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
+	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
+
+
+	/*EnergyWallRenderer* renderer = new EnergyWallRenderer(mEngine.GetModel("sphere"),
+		mEngine.GetShader("energy_wall"),
+		static_cast<Texture*>(mEngine.GetTexture("yellow_grid")),
+		static_cast<Texture*>(mEngine.GetTexture("depth_texture")));
+
+	renderer->SetLayer(IRenderer::LAYER_PARTICLES);
+	renderer->SetTransparency(true);
+	renderer->SetTile(50.0f);*/
+	//renderer->SetVisibility(false);
+	/*
+	mEnergyWall = new EnergyWall(new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(mEnergyWallRadius)),
+		renderer, 2.0f);*/
+	//mEnergyWall->SetEnabled(false);
+	mEngine.AddGameEntity(mEnergyWall);
+	mEngine.SetEnergyWallRadius(mEnergyWallRadius);
 }
 
 /*
@@ -649,25 +678,6 @@ void CreateParticlesTest()
 	particlesEmitter->SetVelocity(glm::vec3(0.0f, 0.2f, 0.0f), glm::vec3(0.0f, 0.5f, 0.0f));
 	mEngine.AddGameEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);
-}
-
-void CreateEnergyWall()
-{
-	EnergyWallRenderer* renderer = new EnergyWallRenderer(	mEngine.GetModel("sphere"), 
-															mEngine.GetShader("energy_wall"),
-															static_cast<Texture*>(mEngine.GetTexture("yellow_grid")),
-															static_cast<Texture*>(mEngine.GetTexture("depth_texture")));
-	
-	renderer->SetLayer(IRenderer::LAYER_PARTICLES);
-	renderer->SetTransparency(true);
-	renderer->SetTile(50.0f);
-	//renderer->SetVisibility(false);
-
-	mEnergyWall = new EnergyWall(new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(mEnergyWallRadius)),
-									renderer, 2.0f);
-	//mEnergyWall->SetEnabled(false);
-	mEngine.AddGameEntity(mEnergyWall);
-	mEngine.SetEnergyWallRadius(mEnergyWallRadius);
 }
 */
 
@@ -865,6 +875,11 @@ void CreateEntities()
 		//CreateParticlesSparkles();
 	}
 
+	if (mIsEnergyWallEnabled)
+	{
+		CreateEnergyWall();
+	}
+
 	if (mIsSkyboxEnabled)
 	{
 		CreateSkybox();
@@ -888,19 +903,6 @@ void CreateEntities2()
 	//CreateHUD();
 
 	//CreateWaterHudPlanes();
-	
-	
-	if (mIsParticlesEnabled)
-	{
-		//CreateParticlesTest();
-		CreateParticlesFire();
-		//CreateParticlesSparkles();
-	}
-
-	if (mIsEnergyWallEnabled)
-	{
-		CreateEnergyWall();
-	}
 
 	if (mIsShadowEnabled)
 	{
@@ -1137,7 +1139,6 @@ void UpdateWaterCameras()
 	mWaterRefractionCameraEntity->GetTransformation()->SetPosition(mGameplayCamera->GetPosition());
 }
 
-/*
 void UpdateEnergyWallCollisions(float elapsedTime)
 {
 	EnergyWallCollisionComponent* component = mPlayer->GetComponent<EnergyWallCollisionComponent>();
@@ -1154,7 +1155,6 @@ void UpdateEnergyWallCollisions(float elapsedTime)
 		mEnergyWall->GetRenderer()->SetVisibility(false);
 	}
 }
-*/
 
 void UpdateStatitstics()
 {
@@ -1179,7 +1179,7 @@ void Update(float elapsedTime)
 	}
 	if (mIsEnergyWallEnabled)
 	{
-		//UpdateEnergyWallCollisions(elapsedTime);
+		UpdateEnergyWallCollisions(elapsedTime);
 	}
 	if (mIsStatisticsVisible && mIsTextEnabled)
 	{
