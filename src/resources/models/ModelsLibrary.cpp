@@ -18,7 +18,13 @@ ModelsLibrary::~ModelsLibrary()
 void ModelsLibrary::Load()
 {
 	CreateSkybox();
-	CreateQuad();
+	CreateQuad("quad");
+	//necesitamos un gui_quad porque sino, cuando se construye (build) 
+	//buscará el atributo color_gradient. Si no lo tiene, que para el shader_gui no lo tiene, 
+	//después para las partículas no lo asignará y no les funcionará el color_gradient.
+	//creando tres quads, ya es diferente la cosa.
+	CreateQuad("gui_quad");
+	CreateQuad("particle_quad");
 
 	LoadModel("cube2", "data/models/cube/cube.obj", false, true);
 	LoadModel("enano", "data/models/enano/enano.obj", false, true);
@@ -152,7 +158,7 @@ void ModelsLibrary::CreateSkybox()
 	AddElement("skybox", model);
 }
 
-void ModelsLibrary::CreateQuad()
+void ModelsLibrary::CreateQuad(const std::string& name)
 {
 	std::vector<glm::vec3> vertexs;
 	vertexs.push_back(glm::vec3(-0.5, 0.5, 0.0f));
@@ -178,5 +184,5 @@ void ModelsLibrary::CreateQuad()
 	Mesh* mMesh = new Mesh(vertexs, uv, indexs);
 	Model* model = new Model(mMesh);
 
-	AddElement("quad", model);
+	AddElement(name, model);
 }

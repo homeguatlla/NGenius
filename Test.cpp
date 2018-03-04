@@ -535,7 +535,7 @@ Particle* CreateParticle(bool canCollide, Texture* texture, glm::vec3& gravity)
 						);
 
 	Particle* particle = new Particle(new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
-		mEngine.GetModel("quad"),
+		mEngine.GetModel("particle_quad"),
 		material,
 		6.0f);
 	PhysicsComponent* physicsComponent = new PhysicsComponent(false, gravity);
@@ -552,7 +552,7 @@ Particle* CreateParticle(bool canCollide, Texture* texture, glm::vec3& gravity)
 void CreateParticlesFire()
 {
 	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
-	particle->SetLiveTime(1.5f);
+	particle->SetLiveTime(2.0f);
 
 	float x = 1.0f;
 	float z = -1.7f;
@@ -592,16 +592,12 @@ void CreateHUD()
 	//QUAD
 	IMaterial* material = mEngine.CreateMaterial("gui", mEngine.GetShader("gui"));
 	material->AddEffect(new MaterialEffectDiffuseTexture(mEngine.GetTexture("hud_map"), glm::vec3(1.0f), 1.0f));
-	IRenderer_* guiRenderer = new VertexsRenderer(mEngine.GetModel("quad"), material);
+	IRenderer_* guiRenderer = new IndexesRenderer(mEngine.GetModel("gui_quad"), material);
 	guiRenderer->SetLayer(IRenderer_::LAYER_GUI);
 
-	GameEntity* quad = new GameEntity(new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(64.0f)),
+	GameEntity* quad = new GameEntity(new Transformation(glm::vec3(420.0f, -300.0f, 0.0f), glm::vec3(0.0f), glm::vec3(256.0f)),
 		guiRenderer
 	);
-	/*
-	GameEntity* quad = new GameEntity(new Transformation(glm::vec3(420.0f, -300.0f, 0.0f), glm::vec3(0.0f), glm::vec3(50.0f)),
-		guiRenderer
-	);*/
 	mEngine.AddGameEntity(quad);
 
 	/*

@@ -35,8 +35,8 @@ void ParticleRenderer::Draw()
 	
 	IRenderer_::Draw();
 
-	//glDisable(GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+	//glEnable(GL_DEPTH_TEST);
 	glDepthMask(true);
 	glEnable(GL_CULL_FACE);
 }
