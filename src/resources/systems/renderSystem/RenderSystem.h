@@ -95,7 +95,7 @@ private:
 
 	void CreateRenderPasses();
 	void DestroyRenderPasses();
-	void CreateShadowsSystem();
+	void CreateShadowsRenderPass();
 
 	bool InitializeWindowAndOpenGL(const std::string& applicationName, bool isFullscreen);
 	void DisableVSync(bool enable);

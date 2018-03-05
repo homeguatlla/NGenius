@@ -86,7 +86,7 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 
 void RenderSystem::CreateRenderPasses()
 {
-	CreateShadowsSystem();
+	CreateShadowsRenderPass();
 }
 
 void RenderSystem::DestroyRenderPasses()
@@ -94,7 +94,7 @@ void RenderSystem::DestroyRenderPasses()
 	delete mShadowsRenderPass;
 }
 
-void RenderSystem::CreateShadowsSystem()
+void RenderSystem::CreateShadowsRenderPass()
 {
 	mShadowsRenderPass = new ShadowsRenderPass(	this,
 										GetScreenWidth(),
