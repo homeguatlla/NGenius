@@ -4,8 +4,8 @@
 #include <string>
 #include <glm/glm.hpp>
 #include "../../../VertexBuffersManager.h"
+#include "../../renderers/IRenderer.h"
 
-class IRenderer;
 class ICamera;
 class RenderPass;
 class Texture;
@@ -15,11 +15,13 @@ class ShadersLibrary;
 class TexturesLibrary;
 class ModelsLibrary;
 class FontsLibrary;
+class MaterialsLibrary;
 
 class Model;
 class IShaderProgram;
 class ITexture;
 class FontType;
+class IMaterial;
 
 struct GLFWwindow;
 struct GLFWmonitor;
@@ -29,27 +31,34 @@ class ShadowsRenderPass;
 class RenderSystem
 {
 	typedef std::vector<IRenderer*> RenderersList;
-	typedef std::vector<const RenderPass*>::iterator RenderPassesIterator;
+	typedef std::vector<RenderPass*>::iterator RenderPassesIterator;
 
 	VertexBuffersManager mVertexsBuffersManager;
 
 	std::map<char, RenderersList> mRenderersPerPass;
 	std::vector<IRenderer*> mInstances;
-	std::vector<const RenderPass*> mRenderPasses;
+	std::vector<RenderPass*> mRenderPasses;
 	
 	float mScreenWidth;
 	float mScreenHeight;
+
 	ShadersLibrary* mShadersLibrary;
 	TexturesLibrary* mTexturesLibrary;
 	ModelsLibrary* mModelsLibrary;
 	FontsLibrary* mFontsLibrary;
+	MaterialsLibrary* mMaterialsLibrary;
 
 	GLFWwindow* mWindow;
 
 	ShadowsRenderPass* mShadowsRenderPass;
 
-	bool mIsFullScreen;
+	IMaterial* mCurrentMaterial;
+
+	ITexture* mDiffuseTexture;
+	ITexture* mNormalTexture;
+
 	int mLastClipPlaneNumberUsed;
+	bool mIsFullScreen;
 	
 public:
 	RenderSystem(float screenWidth, float screenHeight);
@@ -59,8 +68,8 @@ public:
 	void Render();
 	void AddToRender(IRenderer* renderer);
 	
-	void AddRenderPass(const RenderPass* renderPass);
-	void RemoveRenderPass(const RenderPass* renderPass);
+	void AddRenderPass(RenderPass* renderPass);
+	void RemoveRenderPass(RenderPass* renderPass);
 
 	float GetScreenWidth() const;
 	float GetScreenHeight() const;
@@ -69,12 +78,15 @@ public:
 	Model* GetModel(const std::string& name) const;
 	ITexture* GetTexture(const std::string& name) const;
 	FontType* GetFont(const std::string& name) const;
+	IMaterial* GetMaterial(const std::string& name) const;
 		
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
 	void SetCastingShadowsTarget(const glm::vec3& position);
 	void SetCastingShadowsEnabled(bool enabled);
 	void SetFullScreen(bool isFullScreen);
 	
+	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
+
 	const ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
 
 private:
@@ -83,7 +95,7 @@ private:
 
 	void CreateRenderPasses();
 	void DestroyRenderPasses();
-	void CreateShadowsSystem();
+	void CreateShadowsRenderPass();
 
 	bool InitializeWindowAndOpenGL(const std::string& applicationName, bool isFullscreen);
 	void DisableVSync(bool enable);
@@ -91,10 +103,15 @@ private:
 
 	void LoadResources();
 
-	void Render(const RenderPass* renderPass);
+	void Render(RenderPass* renderPass);
 	void UpdateDistancesToCamera(const ICamera* camera, RenderersList* renderers);
-	void RenderInstances(const RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances);
+	void RenderInstances(RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances);
 	
+	void SelectMaterial(RenderPass* renderPass, IRenderer* renderer);
+	void SelectTextures();
+	void SelectClippingPlane(RenderPass* renderPass);
+	void ApplyShadows(IRenderer* renderer);
+
 	void CheckGLError();
 };
 

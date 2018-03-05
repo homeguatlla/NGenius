@@ -10,6 +10,7 @@ class PhysicsSystem
 	std::vector<GameEntity*> mEntities;
 	const Terrain* mTerrain;
 	float mEnergyWallRadius;
+	glm::vec3 mEnergyWallPosition;
 
 public:
 	static const glm::vec3 GRAVITY_VALUE;
@@ -24,7 +25,7 @@ public:
 
 	//TODO eliminar este método cuando no haga falta
 	void SetTerrain(const Terrain* terrain);
-	void SetEnergyWallRadius(float radius);
+	void SetEnergyWall(const glm::vec3& position, float radius);
 
 private:
 	void ApplyMRU(float deltaTime, GameEntity* entity);

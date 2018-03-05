@@ -6,10 +6,13 @@
 #include "../resources/camera/ICamera.h"
 #include "../resources/GameEntity.h"
 #include "../resources/shaders/QuadShader.h"
+#include "../resources/models/Mesh.h"
 #include <GL/glew.h>
 #include <iostream>
 
 IRenderer::IRenderer(IShaderProgram* shader) :
+mParent(nullptr),
+mModel(nullptr),
 mIsPrerendered(false),
 mIsInstancingEnabled(false),
 mIsUsingShaderRenderPass(false),
@@ -18,7 +21,6 @@ mShaderProgram(shader),
 mVAO(-1),
 mVertexVBO(-1),
 mIndexVBO(-1),
-mParent(nullptr),
 mFogDensity(0.0f),
 mFogGradient(1.0f),
 mFogColor(0.0f),
@@ -27,7 +29,7 @@ mIsVisible(true),
 mTile(1.0f)
 {
 	assert(mShaderProgram != nullptr);
-	mBitRenderInformation.SetShader(mShaderProgram->GetProgramID());
+	mBitRenderInformation.SetMaterial(mShaderProgram->GetProgramID());
 	mBitRenderInformation.SetLayer(LAYER_OTHER);
 	mBitRenderInformation.SetTransparency(false);
 }
@@ -41,18 +43,9 @@ IRenderer::~IRenderer()
 		glDeleteBuffers(1, &mIndexVBO);
 	}
 }
-
-void IRenderer::SetVertexs(const std::vector<glm::vec3>& vertexs)
+void IRenderer::SetModel(Mesh* model)
 {
-	mVertexs = vertexs;
-	mIsPrerendered = false;
-	CalculateBoundingBox();
-}
-
-void IRenderer::SetIndexes(const std::vector<unsigned int>& indexes)
-{
-	mIndexes = indexes;
-	mIsPrerendered = false;
+	mModel = model;
 }
 
 bool IRenderer::IsPrerendered() const
@@ -62,12 +55,12 @@ bool IRenderer::IsPrerendered() const
 
 void IRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 {
-	if (mVertexs.size() > 0 && mIndexes.size() > 0)
+	if (mModel->GetVertexs().size() > 0 && mModel->GetIndexes().size() > 0)
 	{
 		// 1rst attribute buffer : vertices
 		mVertexVBO = vertexBufferManager.CreateVBO("vertex_" + GetName());
 		glBindBuffer(GL_ARRAY_BUFFER, mVertexVBO);
-		glBufferData(GL_ARRAY_BUFFER, mVertexs.size() * sizeof(glm::vec3), &mVertexs[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, mModel->GetVertexs().size() * sizeof(glm::vec3), &mModel->GetVertexs()[0], GL_STATIC_DRAW);
 		
 		GLuint vertexModelspaceID = mShaderProgram->GetAttributePosition();
 		glEnableVertexAttribArray(vertexModelspaceID);
@@ -84,7 +77,7 @@ void IRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 		//to index geometry
 		mIndexVBO = vertexBufferManager.CreateVBO("index_" + GetName());
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexVBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndexes.size() * sizeof(unsigned int), &mIndexes[0], GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, mModel->GetIndexes().size() * sizeof(unsigned int), &mModel->GetIndexes()[0], GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 }
@@ -125,7 +118,7 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 
 void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
-	if (mVertexs.size() > 0)
+	if (mModel->GetVertexs().size() > 0)
 	{
 		mShaderProgram->Use();
 
@@ -167,7 +160,7 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 
 void IRenderer::Draw()
 {
-	glDrawElements(GL_TRIANGLES, mIndexes.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, mModel->GetIndexes().size(), GL_UNSIGNED_INT, 0);
 }
 
 void IRenderer::LoadDataQuadShader(const ICamera* camera, VertexBuffersManager& vertexBufferManager, int textureUnit)
@@ -254,6 +247,26 @@ void IRenderer::SetInstances(std::vector<IRenderer*> instances)
 	mInstances = instances;
 }
 
+long IRenderer::GetNumberIndexes() const
+{
+	return mModel->GetNumberOfIndexes();
+}
+
+long IRenderer::GetNumberVertexs() const
+{
+	return mModel->GetNumberOfVertexs();
+}
+
+long IRenderer::GetNumberTextureCoords() const
+{
+	return mModel->GetNumberOfTextureCoords();
+}
+
+long IRenderer::GetNumberInstances() const
+{
+	return mInstances.size();
+}
+
 glm::mat4 IRenderer::GetModelMatrix()
 {
 	return mParent->GetTransformation()->GetModelMatrix();
@@ -284,10 +297,10 @@ const AABB& IRenderer::GetBoundingBox() const
 
 void IRenderer::CalculateBoundingBox()
 {
-	glm::vec3 min(mVertexs[0]);
-	glm::vec3 max(mVertexs[0]);
+	glm::vec3 min(mModel->GetVertexs()[0]);
+	glm::vec3 max(mModel->GetVertexs()[0]);
 
-	for (glm::vec3 vertex : mVertexs)
+	for (glm::vec3 vertex : mModel->GetVertexs())
 	{
 		min = glm::min(min, vertex);
 		max = glm::max(max, vertex);

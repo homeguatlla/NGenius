@@ -14,3 +14,4 @@ newmtl enano
 	Ke 0.0000 0.0000 0.0000
 
 	map_Kd enano.png
+	map_bump normal.png

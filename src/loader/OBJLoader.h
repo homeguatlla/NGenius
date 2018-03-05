@@ -4,16 +4,16 @@
 #include <vector>
 
 
-class Model;
+class Mesh;
 
 class OBJLoader : public FileReader
 {
 public:
-	static Model* LoadModel(const std::string& filename);
+	static Mesh* LoadModel(const std::string& filename);
 
 private:
 
-	static struct FaceValues
+	struct FaceValues
 	{
 		glm::uvec4 vertex;
 		glm::uvec4 texture;
@@ -23,7 +23,7 @@ private:
 	};
 	typedef struct FaceValues Face;
 
-	static void LoadMaterial(Model* model, const std::string& path, const std::string& filename);
+	static void LoadMaterial(Mesh* model, const std::string& path, const std::string& filename);
 	static Face ReadFace3(std::string line);
 	static Face ReadFace4(std::string line);
 

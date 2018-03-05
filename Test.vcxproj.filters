@@ -22,12 +22,6 @@
     <Filter Include="Source Files\resources\shaders">
       <UniqueIdentifier>{26be7ddc-d2f3-4973-a0d9-10302f3b413e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\renderer">
-      <UniqueIdentifier>{e33ad438-9275-477c-8aaf-1775ce6d162a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\renderer">
-      <UniqueIdentifier>{ffcb6274-7aa0-4cb8-8844-71b433084b58}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\resources\textures">
       <UniqueIdentifier>{d6ef87a0-030d-4426-a4a4-ce929df009b5}</UniqueIdentifier>
     </Filter>
@@ -94,6 +88,24 @@
     <Filter Include="Header Files\resources\systems\renderSystem">
       <UniqueIdentifier>{d3ec1117-5473-4d0c-a582-77e9353e59df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\resources\materials">
+      <UniqueIdentifier>{8dbc41b5-0a8e-4239-b11c-3f872888d80d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\materials">
+      <UniqueIdentifier>{b6459982-7af3-4e1f-880b-e6ffbbe3a458}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\renderers">
+      <UniqueIdentifier>{6d1d937b-8552-468d-abb4-5ad774da8b2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\renderers">
+      <UniqueIdentifier>{0eafe5b9-db6e-474e-a4bf-40a72d69da27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\materials\effects">
+      <UniqueIdentifier>{86251382-a004-4faa-a3c8-6895cf59b502}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\materials\effects">
+      <UniqueIdentifier>{cca33aa1-84bb-4323-a091-dd5494bacd68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -119,18 +131,6 @@
     </ClInclude>
     <ClInclude Include="src\resources\shaders\DefaultShader.h">
       <Filter>Header Files\resources\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\CubeRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\IRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\NormalRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\TerrainRenderer.h">
-      <Filter>Header Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\shaders\IShaderProgram.h">
       <Filter>Header Files\resources\shaders</Filter>
@@ -171,14 +171,8 @@
     <ClInclude Include="src\resources\BaseLibrary.h">
       <Filter>Header Files\resources</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\ModelRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\shaders\ModelShader.h">
       <Filter>Header Files\resources\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\models\Model.h">
-      <Filter>Header Files\resources\models</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\models\ModelsLibrary.h">
       <Filter>Header Files\resources\models</Filter>
@@ -219,17 +213,11 @@
     <ClInclude Include="src\resources\shaders\SkyBoxShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\SkyBoxRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\textures\ITexture.h">
       <Filter>Header Files\resources\textures</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\shaders\QuadShader.h">
       <Filter>Header Files\resources\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\QuadRenderer.h">
-      <Filter>Header Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\camera\OrthogonalCamera.h">
       <Filter>Header Files\resources\camera</Filter>
@@ -240,9 +228,6 @@
     <ClInclude Include="src\resources\camera\PerspectiveCamera.h">
       <Filter>Header Files\resources\camera</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\RenderPass.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\AABB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -252,13 +237,7 @@
     <ClInclude Include="src\resources\shaders\WaterShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\WaterRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\BitNumber.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\IFrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\components\PhysicsComponent.h">
@@ -276,9 +255,6 @@
     <ClInclude Include="src\resources\shaders\ParticleShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\ParticleRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\systems\EntitiesSystem.h">
       <Filter>Header Files\resources\systems</Filter>
     </ClInclude>
@@ -291,20 +267,11 @@
     <ClInclude Include="src\resources\shaders\GUIShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\GUIRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\ModelNormalMapRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\shaders\NormalMapShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\components\EnergyWallCollisionComponent.h">
       <Filter>Header Files\resources\components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\EnergyWallRenderer.h">
-      <Filter>Header Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\NGenius.h">
       <Filter>Header Files</Filter>
@@ -321,9 +288,6 @@
     <ClInclude Include="src\loader\FontLoader.h">
       <Filter>Header Files\loader</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\TextRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\shaders\TextShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
@@ -336,17 +300,11 @@
     <ClInclude Include="FileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\GUITextRenderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\entities\Text.h">
       <Filter>Header Files\resources\entities</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\shaders\ShadowShader.h">
       <Filter>Header Files\resources\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\ShadowRenderer.h">
-      <Filter>Header Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\systems\renderSystem\RenderSystem.h">
       <Filter>Header Files\resources\systems\renderSystem</Filter>
@@ -356,6 +314,111 @@
     </ClInclude>
     <ClInclude Include="src\resources\components\OverWaterComponent.h">
       <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\IMaterial.h">
+      <Filter>Header Files\resources\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\MaterialsLibrary.h">
+      <Filter>Header Files\resources\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\BasicMaterial.h">
+      <Filter>Header Files\resources\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\IMaterialEffect.h">
+      <Filter>Header Files\resources\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\models\Model.h">
+      <Filter>Header Files\resources\models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\LightsSystem.h">
+      <Filter>Header Files\resources\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\VertexsRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\IndexesRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\SkyBoxRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\GUITextRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\TextRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\models\Mesh.h">
+      <Filter>Header Files\resources\models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectClippingPlane.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectDiffuseTexture.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectFogProperties.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectHeightMapTexture.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectLightProperties.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectShadowProperties.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectText.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectTextureArray.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectTextureCubemap.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectNormalTexture.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Water.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectWater.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\ParticleRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectParticle.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectDepthTexture.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat2.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat3.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat4.h">
+      <Filter>Header Files\resources\materials\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\EnergyWallRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\IRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\renderSystem\RenderPass.h">
+      <Filter>Header Files\resources\systems\renderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\renderSystem\IFrameBuffer.h">
+      <Filter>Header Files\resources\systems\renderSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -376,18 +439,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\shaders\TerrainShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\TerrainRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\NormalRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\IRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\CubeRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\shaders\IShaderProgram.cpp">
       <Filter>Source Files\resources\shaders</Filter>
@@ -431,14 +482,8 @@
     <ClCompile Include="src\resources\BaseLibrary.cpp">
       <Filter>Source Files\resources</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\ModelRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\shaders\ModelShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\models\Model.cpp">
-      <Filter>Source Files\resources\models</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\models\ModelsLibrary.cpp">
       <Filter>Source Files\resources\models</Filter>
@@ -476,17 +521,11 @@
     <ClCompile Include="src\resources\shaders\SkyBoxShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\SkyBoxRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\textures\ITexture.cpp">
       <Filter>Source Files\resources\textures</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\shaders\QuadShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\QuadRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\camera\ICamera.cpp">
       <Filter>Source Files\resources\camera</Filter>
@@ -497,9 +536,6 @@
     <ClCompile Include="src\resources\camera\PerspectiveCamera.cpp">
       <Filter>Source Files\resources\camera</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\RenderPass.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\AABB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -509,13 +545,7 @@
     <ClCompile Include="src\resources\shaders\WaterShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\WaterRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\BitNumber.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\IFrameBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\entities\Particle.cpp">
@@ -533,9 +563,6 @@
     <ClCompile Include="src\resources\shaders\ParticleShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\ParticleRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\systems\EntitiesSystem.cpp">
       <Filter>Source Files\resources\systems</Filter>
     </ClCompile>
@@ -548,20 +575,11 @@
     <ClCompile Include="src\resources\shaders\GUIShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\GUIRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\ModelNormalMapRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\shaders\NormalMapShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\components\EnergyWallCollisionComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\EnergyWallRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\NGenius.cpp">
       <Filter>Source Files</Filter>
@@ -581,9 +599,6 @@
     <ClCompile Include="src\resources\shaders\TextShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\TextRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\font\FontType.cpp">
       <Filter>Source Files\resources\font</Filter>
     </ClCompile>
@@ -593,17 +608,11 @@
     <ClCompile Include="FileReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\GUITextRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\entities\Text.cpp">
       <Filter>Source Files\resources\entities</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\shaders\ShadowShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\ShadowRenderer.cpp">
-      <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\systems\renderSystem\RenderSystem.cpp">
       <Filter>Source Files\resources\systems\renderSystem</Filter>
@@ -613,6 +622,111 @@
     </ClCompile>
     <ClCompile Include="src\resources\components\OverWaterComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\IMaterial.cpp">
+      <Filter>Source Files\resources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\MaterialsLibrary.cpp">
+      <Filter>Source Files\resources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\BasicMaterial.cpp">
+      <Filter>Source Files\resources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\IMaterialEffect.cpp">
+      <Filter>Source Files\resources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\Model.cpp">
+      <Filter>Source Files\resources\models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\LightsSystem.cpp">
+      <Filter>Source Files\resources\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\VertexsRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\IndexesRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\SkyBoxRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\GUITextRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\TextRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\Mesh.cpp">
+      <Filter>Source Files\resources\models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectClippingPlane.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectDiffuseTexture.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectFogProperties.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectHeightMapTexture.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectLightProperties.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectNormalTexture.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectShadowProperties.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectText.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectTextureArray.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectTextureCubemap.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Water.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectWater.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\ParticleRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectParticle.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectDepthTexture.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat2.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat3.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat4.cpp">
+      <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\EnergyWallRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\IRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\renderSystem\RenderPass.cpp">
+      <Filter>Source Files\resources\systems\renderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\renderSystem\IFrameBuffer.cpp">
+      <Filter>Source Files\resources\systems\renderSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,19 @@
 #include "stdafx.h"
 #include "TerrainShader.h"
+#include "../camera/ICamera.h"
+#include "../Transformation.h"
+#include "../materials/IMaterial.h"
+#include "../materials/effects/MaterialEffectDiffuseTexture.h"
+#include "../materials/effects/MaterialEffectLightProperties.h"
+#include "../materials/effects/MaterialEffectFogProperties.h"
+#include "../materials/effects/MaterialEffectShadowProperties.h"
+#include "../materials/effects/MaterialEffectHeightMapTexture.h"
+#include "../materials/effects/MaterialEffectTextureArray.h"
+#include "../materials/effects/MaterialEffectClippingPlane.h"
+#include "../materials/effects/MaterialEffectFloat.h"
+
+#include "../textures/ITexture.h"
+#include "../textures/TextureArray.h"
 
 const std::string TerrainShader::VERTEX_FILE = "data/shaders/vertex/v_test_terrain_1.cg";
 const std::string TerrainShader::FRAGMENT_FILE = "data/shaders/fragment/f_test_terrain_1.cg";
@@ -10,7 +24,6 @@ const std::string ATTRIBUTE_LIGHT_COLOR("lightColor");
 const std::string ATTRIBUTE_SCALE("scale");
 const std::string ATTRIBUTE_MVP_MATRIX("MVP");
 const std::string ATTRIBUTE_MODEL_MATRIX("M");
-const std::string ATTRIBUTE_VIEW_MATRIX("V");
 const std::string ATTRIBUTE_TEXTURE_COORDS("textureCoordsModelspace");
 const std::string ATTRIBUTE_ARRAY_TEXTURE("textureArray");
 const std::string ATTRIBUTE_HEIGHTMAP_TEXTURE("heightMap");
@@ -54,6 +67,71 @@ TerrainShader::~TerrainShader()
 {
 }
 
+void TerrainShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
+{
+	glm::mat4 MVP = camera->GetProjectionMatrix() * 
+					const_cast<ICamera*>(camera)->GetViewMatrix() * 
+					const_cast<Transformation*>(transformation)->GetModelMatrix();
+	LoadMatrix4(mLocationMVPMatrix, MVP);
+	LoadMatrix4(mLocationModelMatrix, const_cast<Transformation*>(transformation)->GetModelMatrix());
+
+	LoadVector3(mLocationCameraPosition, camera->GetPosition());
+
+	MaterialEffectFloat* effect = material->GetEffect<MaterialEffectFloat>();
+	if (effect != nullptr)
+	{
+		LoadFloat(mLocationScale, effect->GetFloat());
+	}
+
+	MaterialEffectDiffuseTexture* effectDiffuse = material->GetEffect<MaterialEffectDiffuseTexture>();
+	if (effectDiffuse != nullptr)
+	{
+		LoadTexture(mLocationBlendMapTexture, effectDiffuse->GetDiffuseTexture()->GetUnit());
+		LoadFloat(mLocationTile, effectDiffuse->GetTile());
+	}
+
+	MaterialEffectHeightMapTexture* effectHeightMap = material->GetEffect<MaterialEffectHeightMapTexture>();
+	if (effectHeightMap != nullptr)
+	{
+		LoadTexture(mLocationHeightMapTexture, effectHeightMap->GetHeightMapTexture()->GetUnit());
+	}
+
+	MaterialEffectTextureArray* effectTextureArray = material->GetEffect<MaterialEffectTextureArray>();
+	if (effectTextureArray != nullptr)
+	{
+		LoadTexture(mLocationArrayTexture, effectTextureArray->GetTextureArray()->GetUnit());
+	}
+
+	MaterialEffectClippingPlane* effectClipping = material->GetEffect<MaterialEffectClippingPlane>();
+	if (effectClipping != nullptr)
+	{
+		LoadVector4(mLocationClippingPlane, effectClipping->GetClippingPlane());
+	}
+
+	MaterialEffectLightProperties* effectLight = material->GetEffect<MaterialEffectLightProperties>();
+	if (effectLight != nullptr)
+	{
+		LoadVector3(mLocationLightPosition, effectLight->GetPosition());
+		LoadVector3(mLocationLightColor, effectLight->GetColor());
+	}
+
+	MaterialEffectFogProperties* effectFog = material->GetEffect<MaterialEffectFogProperties>();
+	if (effectFog != nullptr)
+	{
+		LoadVector3(mLocationFogColor, effectFog->GetColor());
+		LoadFloat(mLocationFogDensity, effectFog->GetDensity());
+		LoadFloat(mLocationFogGradient, effectFog->GetGradient());
+	}
+
+	MaterialEffectShadowProperties* effectShadow = material->GetEffect<MaterialEffectShadowProperties>();
+	if (effectShadow != nullptr)
+	{
+		LoadMatrix4(mLocationShadowSpaceMatrix, effectShadow->GetMatrix());
+		LoadTexture(mLocationShadowMapTexture, effectShadow->GetDepthTexture()->GetUnit());
+		LoadInteger(mLocationShadowMapTextureWidth, effectShadow->GetDepthTexture()->GetWidth());
+		LoadInteger(mLocationShadowMapPFC, effectShadow->GetPFCCounter());
+	}
+}
 
 void TerrainShader::BindAttributes()
 {
@@ -68,86 +146,17 @@ void TerrainShader::GetAllUniformLocations()
 	mLocationLightPosition = GetUniformLocation(ATTRIBUTE_LIGHT_POSITION);
 	mLocationLightColor = GetUniformLocation(ATTRIBUTE_LIGHT_COLOR);
 	mLocationCameraPosition = GetUniformLocation(ATTRIBUTE_CAMERA_POSITION);
-	mLocationScale = GetUniformLocation(ATTRIBUTE_SCALE);
+	mLocationBlendMapTexture = GetUniformLocation(ATTRIBUTE_BLENDMAP_TEXTURE);
 	mLocationArrayTexture = GetUniformLocation(ATTRIBUTE_ARRAY_TEXTURE);
 	mLocationHeightMapTexture = GetUniformLocation(ATTRIBUTE_HEIGHTMAP_TEXTURE);
-	mLocationBlendMapTexture = GetUniformLocation(ATTRIBUTE_BLENDMAP_TEXTURE);
 	mLocationTile = GetUniformLocation(ATTRIBUTE_TILE);
+	mLocationScale = GetUniformLocation(ATTRIBUTE_SCALE);
+	mLocationClippingPlane = GetUniformLocation(ATTRIBUTE_CLIP_PLANE);
 	mLocationFogDensity = GetUniformLocation(ATTRIBUTE_FOG_DENSITY);
 	mLocationFogGradient = GetUniformLocation(ATTRIBUTE_FOG_GRADIENT);
 	mLocationFogColor = GetUniformLocation(ATTRIBUTE_FOG_COLOR);
-	mLocationClippingPlane = GetUniformLocation(ATTRIBUTE_CLIP_PLANE);
 	mLocationShadowSpaceMatrix = GetUniformLocation(ATTRIBUTE_SHADOW_SPACE_MATRIX);
 	mLocationShadowMapTexture = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE);
 	mLocationShadowMapTextureWidth = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE_WIDTH);
 	mLocationShadowMapPFC = GetUniformLocation(ATTRIBUTE_SHADOW_PFC);
-}
-
-void TerrainShader::LoadLight(const Light& light)
-{
-	LoadVector3(mLocationLightPosition, light.GetPosition());
-	LoadVector3(mLocationLightColor, light.GetColor());
-}
-
-void TerrainShader::LoadModelMatrix(const glm::mat4& modelmatrix)
-{
-	LoadMatrix4(mLocationModelMatrix, modelmatrix);
-}
-
-void TerrainShader::LoadCameraPosition(const glm::vec3& position)
-{
-	LoadVector3(mLocationCameraPosition, position);
-}
-
-void TerrainShader::LoadScale(float scale)
-{
-	LoadFloat(mLocationScale, scale);
-}
-
-void TerrainShader::LoadHeightMapTexture(int unit)
-{
-	LoadTexture(mLocationHeightMapTexture, unit);
-}
-
-void TerrainShader::LoadBlendMapTexture(int unit)
-{
-	LoadTexture(mLocationBlendMapTexture, unit);
-}
-
-void TerrainShader::LoadArrayTexture(int unit)
-{
-	LoadTexture(mLocationArrayTexture, unit);
-}
-
-void TerrainShader::LoadTile(float tile)
-{
-	LoadFloat(mLocationTile, tile);
-}
-
-void TerrainShader::LoadFogParameters(const glm::vec3& color, float density, float gradient)
-{
-	LoadFloat(mLocationFogDensity, density);
-	LoadFloat(mLocationFogGradient, gradient);
-	LoadVector3(mLocationFogColor, color);
-}
-
-void TerrainShader::LoadClippingPlane(const glm::vec4& plane)
-{
-	LoadVector4(mLocationClippingPlane, plane);
-}
-
-void TerrainShader::LoadShadowMapSpaceMatrix(const glm::mat4& matrix)
-{
-	LoadMatrix4(mLocationShadowSpaceMatrix, matrix);
-}
-
-void TerrainShader::LoadShadowMapTexture(int unit, int width)
-{
-	LoadTexture(mLocationShadowMapTexture, unit);
-	LoadInteger(mLocationShadowMapTextureWidth, width);
-}
-
-void TerrainShader::LoadShadowMapPFC(int pfcCounter)
-{
-	LoadInteger(mLocationShadowMapPFC, pfcCounter);
 }

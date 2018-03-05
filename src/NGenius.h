@@ -8,18 +8,22 @@ class RenderSystem;
 class PhysicsSystem;
 class EntitiesSystem;
 class ParticlesSystem;
+class LightsSystem;
 
 class Model;
 class IShaderProgram;
 class ITexture;
 class Texture;
 class FontType;
+class IMaterial;
+class Light;
 
 class GameEntity;
 class ParticlesEmitter;
 class RenderPass;
 class Terrain;
 class ICamera;
+
 
 struct GLFWwindow;
 
@@ -29,6 +33,7 @@ class NGenius
 	PhysicsSystem* mPhysicsSystem;
 	EntitiesSystem* mEntitiesSystem;
 	ParticlesSystem* mParticlesSystem;
+	LightsSystem* mLightsSystem;
 
 	std::string mApplicationName;
 	float mFPS;
@@ -47,6 +52,7 @@ public:
 	Model* GetModel(const std::string& name) const;
 	ITexture* GetTexture(const std::string& name) const;
 	const ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
+	IMaterial* GetMaterial(const std::string& name) const;
 
 	FontType* GetFont(const std::string& name) const;
 	float GetFPS() const;
@@ -57,13 +63,16 @@ public:
 	void AddGameEntity(GameEntity* entity);
 	void AddParticleEmitter(ParticlesEmitter* emitter);
 	void AddRenderPass(RenderPass* renderPass);
+	void AddLight(Light* light);
+
+	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 
 	void RegisterInputHandler(std::function<void(GLFWwindow* window)> callback);
 	void RegisterUpdateHandler(std::function<void(float elapsedTime)> callback);
 
 	void SetFullScreen(bool isFullScreen);
 	void SetTerrain(const Terrain* terrain);
-	void SetEnergyWallRadius(float radius);
+	void SetEnergyWall(const glm::vec3& position, float radius);
 
 	//shadows
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);

@@ -82,7 +82,7 @@ void QuadRenderer::Create()
 	vertexs.push_back(glm::vec3(mWidth, mHeight, 0.0f));
 	vertexs.push_back(glm::vec3(mWidth, -mHeight, 0.0f));
 	vertexs.push_back(glm::vec3(-mWidth, -mHeight, 0.0f));
-	SetVertexs(vertexs);
+	//SetVertexs(vertexs);
 
 	mTextureCoords.push_back(glm::vec2(0.0f, 1.0f));
 	mTextureCoords.push_back(glm::vec2(1.0f, 1.0f));
@@ -97,7 +97,7 @@ void QuadRenderer::Create()
 	indexs.push_back(0);
 	indexs.push_back(2);
 	indexs.push_back(1);	
-	SetIndexes(indexs);
+	//SetIndexes(indexs);
 }
 
 void QuadRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
@@ -149,7 +149,7 @@ void QuadRenderer::Draw()
 {
 	if (mIsInstancingEnabled)
 	{
-		glDrawElementsInstancedARB(GL_TRIANGLES, mIndexes.size(), GL_UNSIGNED_INT, 0, mInstances.size());
+		//glDrawElementsInstancedARB(GL_TRIANGLES, mIndexes.size(), GL_UNSIGNED_INT, 0, mInstances.size());
 	}
 	else
 	{

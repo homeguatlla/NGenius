@@ -1,6 +1,16 @@
 #include "stdafx.h"
 #include "SkyBoxShader.h"
 
+#include "../Transformation.h"
+#include "../camera/ICamera.h"
+
+#include "../materials/IMaterial.h"
+#include "../materials/effects/MaterialEffectFogProperties.h"
+#include "../materials/effects/MaterialEffectTextureCubemap.h"
+
+#include "../textures/ITexture.h"
+#include "../textures/TextureCubemap.h"
+
 const std::string SkyBoxShader::VERTEX_FILE = "data/shaders/vertex/v_skybox.cg";
 const std::string SkyBoxShader::FRAGMENT_FILE = "data/shaders/fragment/f_skybox.cg";
 
@@ -25,6 +35,25 @@ SkyBoxShader::~SkyBoxShader()
 {
 }
 
+void SkyBoxShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
+{
+	LoadMatrix4(mLocationModelMatrix, const_cast<Transformation*>(transformation)->GetModelMatrix());
+	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
+	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
+
+	MaterialEffectTextureCubemap* effectCubemap = material->GetEffect<MaterialEffectTextureCubemap>();
+	if (effectCubemap != nullptr)
+	{
+		LoadTexture(mLocationCubemapTexture, effectCubemap->GetCubemap()->GetUnit());
+	}
+
+	MaterialEffectFogProperties* effectFog = material->GetEffect<MaterialEffectFogProperties>();
+	if (effectFog != nullptr)
+	{
+		LoadVector3(mLocationFogColor, effectFog->GetColor());
+	}
+}
+
 void SkyBoxShader::BindAttributes()
 {
 
@@ -39,27 +68,7 @@ void SkyBoxShader::GetAllUniformLocations()
 	mLocationFogColor = GetUniformLocation(ATTRIBUTE_FOG_COLOR);
 }
 
-void SkyBoxShader::LoadModelMatrix(const glm::mat4& modelMatrix)
-{
-	LoadMatrix4(mLocationModelMatrix, modelMatrix);
-}
-
-void SkyBoxShader::LoadViewMatrix(const glm::mat4& viewMatrix)
-{
-	LoadMatrix4(mLocationViewMatrix, viewMatrix);
-}
-
-void SkyBoxShader::LoadProjectionMatrix(const glm::mat4& projectionMatrix)
-{
-	LoadMatrix4(mLocationProjectionMatrix, projectionMatrix);
-}
-
 void SkyBoxShader::LoadCubemapTexture(int unit)
 {
 	LoadTexture(mLocationCubemapTexture, unit);
-}
-
-void SkyBoxShader::LoadFogColor(const glm::vec3& fogColor)
-{
-	LoadVector3(mLocationFogColor, fogColor);
 }

@@ -84,7 +84,7 @@ void TexturesLibrary::Load()
 	AddElement("refraction_depth_water", texture);	
 
 	texture = new Texture();
-	texture->Load("data/textures/smoke_64.png", ++mCurrentTextureUnit, false, false);
+	texture->Load("data/textures/smoke_64_.png", ++mCurrentTextureUnit, false, false);
 	AddElement("smoke", texture);
 
 	texture = new Texture();

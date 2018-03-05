@@ -12,7 +12,7 @@ mIsClippingEnabled(false),
 mHasToCalculateDistanceToCamera(false),
 mClippingPlaneNumber(0),
 mClippingPlane(0.0f, 0.0f, 0.0f, 0.0f),
-mShader(nullptr)
+mMaterial(nullptr)
 {
 }
 
@@ -80,14 +80,14 @@ void RenderPass::EnableFog(bool enable)
 	mIsFogEnabled = enable;
 }
 
-void RenderPass::SetShader(IShaderProgram* shader)
+void RenderPass::SetMaterial(IMaterial* material)
 {
-	mShader = shader;
+	mMaterial = material;
 }
 
-IShaderProgram* RenderPass::GetShader() const
+IMaterial* RenderPass::GetMaterial()
 {
-	return mShader;
+	return mMaterial;
 }
 
 void RenderPass::SetCalculateDistanceToCamera(bool calculate)

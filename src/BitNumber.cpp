@@ -36,10 +36,10 @@ void BitNumber::SetTexture(uint64_t  id)
 	mBitsWithoutDistance = mBits;
 }
 
-void BitNumber::SetShader(uint64_t  id)
+void BitNumber::SetMaterial(uint64_t  id)
 {
-	mBits &= ~MASK_SHADER;
-	uint64_t  number = id << 48 & MASK_SHADER;
+	mBits &= ~MASK_MATERIAL;
+	uint64_t  number = id << 48 & MASK_MATERIAL;
 	mBits |= number;
 
 	mBitsWithoutDistance = mBits;
@@ -91,13 +91,13 @@ void BitNumber::Test()
 	BitNumber number;
 	
 	assert(number.GetString() == "0000000000000000000000000000000000000000000000000000000000000000");
-	number.SetShader(1);
+	number.SetMaterial(1);
 	assert(number.GetString() == "0000000000000001000000000000000000000000000000000000000000000000");
-	number.SetShader(32);
+	number.SetMaterial(32);
 	assert(number.GetString() == "0000000000100000000000000000000000000000000000000000000000000000");
 	number.SetModel(4);
 	assert(number.GetString() == "0000000000100000000000000000010000000000000000000000000000000000");
-	number.SetShader(8);
+	number.SetMaterial(8);
 	assert(number.GetString() == "0000000000001000000000000000010000000000000000000000000000000000");
 	number.SetTexture(64);
 	assert(number.GetString() == "0000000000001000010000000000010000000000000000000000000000000000");

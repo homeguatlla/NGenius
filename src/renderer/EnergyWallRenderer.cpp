@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "EnergyWallRenderer.h"
-#include "../resources/models/Model.h"
+#include "../resources/models/Mesh.h"
 #include "../resources/textures/Texture.h"
 #include "../resources/shaders/IShaderProgram.h"
 #include "../resources/shaders/EnergyWallShader.h"
@@ -10,7 +10,7 @@
 #include <iostream>
 
 
-EnergyWallRenderer::EnergyWallRenderer(Model* model, IShaderProgram* shader, Texture* texture, Texture* depthTexture) :
+EnergyWallRenderer::EnergyWallRenderer(Mesh* model, IShaderProgram* shader, Texture* texture, Texture* depthTexture) :
 mModel(model),
 IRenderer(shader),
 mTexture(texture),
@@ -19,8 +19,7 @@ mTextureCoordsVBO(-1),
 mNormalVBO(-1),
 mMatrixVBO(-1)
 {
-	//SetIndexes(mModel->GetIndexes());
-	SetVertexs(mModel->GetVertexs());
+	//SetVertexs(mModel->GetVertexs());
 	mTextureCoords = mModel->GetTextureCoords();
 	mNormals = mModel->GetNormals();
 	mBitRenderInformation.SetModel(model->GetID());
@@ -47,7 +46,7 @@ void EnergyWallRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 {
 	//TODO: IMPROVEMENT podrías guardar los buffers en un array y hacer una sola llamada a glGenBuffers
 	//TODO: IMPROVEMENT en lugar de crear cada vez el array de matrices y pasarlo, puedes usar el glMap, glUnMap functions
-	if (mVertexs.size() > 0)
+	/*if (mVertexs.size() > 0)
 	{
 		// 1rst attribute buffer : vertices
 		GLint vertexModelspaceID = mShaderProgram->GetAttributePosition();
@@ -135,26 +134,26 @@ void EnergyWallRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 			}
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
-	}
+	}*/
 }
 
 void EnergyWallRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
 	EnergyWallShader* shader = static_cast<EnergyWallShader*>(mShaderProgram);
 
-	shader->LoadModelTexture(mTexture->GetUnit());
+	//shader->LoadModelTexture(mTexture->GetUnit());
 	shader->LoadDepthTexture(mDepthTexture->GetUnit());
-	shader->LoadViewMatrix(const_cast<ICamera*>(camera)->GetViewMatrix());
-	shader->LoadProjectionMatrix(camera->GetProjectionMatrix());
-	shader->LoadFogParameters(mFogColor, mIsFogEnabled ? mFogDensity : 0.0f, mFogGradient);
-	shader->LoadTile(mTile);
-	shader->LoadCameraPosition(camera->GetPosition());
+	//shader->LoadViewMatrix(const_cast<ICamera*>(camera)->GetViewMatrix());
+	//shader->LoadProjectionMatrix(camera->GetProjectionMatrix());
+	//shader->LoadFogParameters(mFogColor, mIsFogEnabled ? mFogDensity : 0.0f, mFogGradient);
+	//shader->LoadTile(mTile);
+	//shader->LoadCameraPosition(camera->GetPosition());
 	shader->LoadScreenSize(glm::vec2(mDepthTexture->GetWidth(), mDepthTexture->GetHeight()));
 
 	EnergyWall* energyWall = static_cast<EnergyWall*>(GetParent());
 	float time = energyWall->GetLiveTime(); // (particle->GetMaxLiveTime() - particle->GetLiveTime()) / particle->GetMaxLiveTime();
 	//std::cout << "time: " << time << "\n";
-	shader->LoadTime(time);
+	//shader->LoadTime(time);
 	shader->LoadContactPosition(energyWall->GetContactPoint());
 
 	std::vector<glm::mat4> matrices;
@@ -191,7 +190,7 @@ int EnergyWallRenderer::GetRenderShaderPassTextureUnit() const
 
 void EnergyWallRenderer::Draw()
 {
-	if (mIsInstancingEnabled)
+	/*if (mIsInstancingEnabled)
 	{
 		//glDrawElementsInstancedARB(GL_TRIANGLES, mIndexes.size(), GL_UNSIGNED_INT, 0, mInstances.size());
 		glDrawArraysInstanced(GL_TRIANGLES, 0, mVertexs.size(), mInstances.size());
@@ -199,7 +198,7 @@ void EnergyWallRenderer::Draw()
 	else
 	{
 		glDrawArrays(GL_TRIANGLES, 0, mVertexs.size());
-	}
+	}*/
 }
 
 bool EnergyWallRenderer::IsInstancingAllowed() const

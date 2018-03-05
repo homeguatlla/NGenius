@@ -2,7 +2,7 @@
 #include "LODComponent.h"
 #include "../GameEntity.h"
 #include "../camera/ICamera.h"
-#include "../../renderer/IRenderer.h"
+#include "../renderers/IRenderer.h"
 #include <glm/gtx/norm.hpp>
 #include <algorithm>
 

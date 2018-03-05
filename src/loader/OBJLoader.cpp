@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "OBJLoader.h"
-#include "../resources/models/Model.h"
+#include "../resources/models/Mesh.h"
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
 
-Model* OBJLoader::LoadModel(const std::string& filename)
+Mesh* OBJLoader::LoadModel(const std::string& filename)
 {
 	std::vector<glm::vec3> tempVertexs;
 	std::vector<glm::vec3> tempNormals;
@@ -117,7 +117,7 @@ Model* OBJLoader::LoadModel(const std::string& filename)
 
 		if (vertexs.size() > 0)
 		{
-			Model* model = new Model(vertexs, uvs, normals, indexes);
+			Mesh* model = new Mesh(vertexs, uvs, indexes, normals);
 
 			if (!materialFilename.empty())
 			{
@@ -131,7 +131,7 @@ Model* OBJLoader::LoadModel(const std::string& filename)
 	return nullptr;
 }
 
-void OBJLoader::LoadMaterial(Model* model, const std::string& path,  const std::string& filename)
+void OBJLoader::LoadMaterial(Mesh* model, const std::string& path,  const std::string& filename)
 {
 	std::string diffuseTexture;
 	std::string normalMapTexture;

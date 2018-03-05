@@ -6,9 +6,9 @@
 #include "../../camera/OrthogonalCamera.h"
 #include "../../camera/ICamera.h"
 
-#include "../../../renderer/IRenderer.h"
-#include "../../../renderer/IFrameBuffer.h"
-#include "../../../renderer/RenderPass.h"
+#include "../../renderers/IRenderer.h"
+#include "IFrameBuffer.h"
+#include "RenderPass.h"
 #include "../../textures/Texture.h"
 
 ShadowsRenderPass::ShadowsRenderPass(RenderSystem* renderSystem, float screenWidth, float screenHeight) :
@@ -135,6 +135,9 @@ RenderPass* ShadowsRenderPass::CreateShadowRenderPass()
 
 	RenderPass* shadowPass = new RenderPass(static_cast<ICamera*>(mShadowCastCamera), IRenderer::LAYER_OTHER);
 	shadowPass->SetFrameBufferOutput(frameShadowBuffer);
-	//shadowPass->SetShader(mRenderSystem->GetShader("quad"));
+
+	IMaterial* material = mRenderSystem->CreateMaterial("shadow", mRenderSystem->GetShader("default"));
+	//shadowPass->SetMaterial(material);
+
 	return shadowPass;
 }

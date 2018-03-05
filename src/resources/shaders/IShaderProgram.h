@@ -2,6 +2,10 @@
 #include <string>
 #include <glm/glm.hpp>
 
+class IMaterial;
+class ICamera;
+class Transformation;
+
 class IShaderProgram
 {
 protected:
@@ -14,6 +18,9 @@ public:
 	int GetProgramID() { return mProgramID; }
 	void Use();
 	void UnUse();
+
+	virtual void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) = 0;
+
 	void BindAttribute(int attribute, const std::string& variableName);
 	int GetUniformLocation(const std::string& uniformName);
 	int GetAttributeLocation(const std::string& name);

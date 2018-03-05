@@ -29,7 +29,7 @@ void NormalRenderer::SetNormals(std::vector<glm::vec3>& normals)
 
 void NormalRenderer::Create()
 {
-	if (mVertexs.size() > 0 && mNormals.size() == mVertexs.size())
+	/*if (mVertexs.size() > 0 && mNormals.size() == mVertexs.size())
 	{
 		std::vector<glm::vec3> newVertexs;
 		for (unsigned int i = 0; i < mVertexs.size(); ++i)
@@ -45,7 +45,7 @@ void NormalRenderer::Create()
 		}
 		mVertexs = newVertexs;
 		mIsPrerendered = false;
-	}
+	}*/
 }
 
 void NormalRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
@@ -57,7 +57,7 @@ void NormalRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 
 void NormalRenderer::Draw()
 {
-	glDrawElements(GL_LINES, mIndexes.size(), GL_UNSIGNED_INT, 0);
+	//glDrawElements(GL_LINES, mIndexes.size(), GL_UNSIGNED_INT, 0);
 }
 
 void NormalRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager)

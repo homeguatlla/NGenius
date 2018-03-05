@@ -14,6 +14,7 @@
 #include "resources/systems/renderSystem/RenderSystem.h"
 #include "resources/systems/PhysicsSystem.h"
 #include "resources/systems/ParticlesSystem.h"
+#include "resources/systems/LightsSystem.h"
 
 #include "resources/entities/ParticlesEmitter.h"
 
@@ -112,10 +113,12 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 	mPhysicsSystem = new PhysicsSystem();
 	mEntitiesSystem = new EntitiesSystem(mRenderSystem, mPhysicsSystem);
 	mParticlesSystem = new ParticlesSystem();
+	mLightsSystem = new LightsSystem(mEntitiesSystem);
 }
 
 void NGenius::DestroySystems()
 {
+	delete mLightsSystem;
 	delete mParticlesSystem;
 	delete mEntitiesSystem;
 	delete mPhysicsSystem;
@@ -134,26 +137,37 @@ void NGenius::RegisterUpdateHandler(std::function<void(float elapsedTime)> callb
 
 IShaderProgram* NGenius::GetShader(const std::string& name) const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetShader(name);
 }
 
 FontType* NGenius::GetFont(const std::string& name) const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetFont(name);
 }
 
 Model* NGenius::GetModel(const std::string& name) const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetModel(name);
 }
 
 ITexture* NGenius::GetTexture(const std::string& name) const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetTexture(name);
+}
+
+IMaterial* NGenius::GetMaterial(const std::string& name) const
+{
+	assert(mRenderSystem != nullptr);
+	return mRenderSystem->GetMaterial(name);
 }
 
 GLFWwindow* NGenius::GetGLWindow() const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetGLWindow();
 }
 
@@ -164,16 +178,19 @@ float NGenius::GetFPS() const
 
 float NGenius::GetScreenWidth() const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetScreenWidth();
 }
 
 float NGenius::GetScreenHeight() const
 {
+	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetScreenHeight();
 }
 
 void NGenius::SetFullScreen(bool isFullScreen)
 {
+	assert(mRenderSystem != nullptr);
 	mRenderSystem->SetFullScreen(isFullScreen);
 }
 
@@ -198,22 +215,33 @@ void NGenius::AddRenderPass(RenderPass* renderPass)
 	mRenderSystem->AddRenderPass(renderPass);
 }
 
+void NGenius::AddLight(Light* light)
+{
+	mLightsSystem->AddLight(light);
+}
+
 void NGenius::SetTerrain(const Terrain* terrain)
 {
 	assert(mPhysicsSystem != nullptr);
 	mPhysicsSystem->SetTerrain(terrain);
 }
 
-void NGenius::SetEnergyWallRadius(float radius)
+void NGenius::SetEnergyWall(const glm::vec3& position, float radius)
 {
 	assert(mPhysicsSystem != nullptr);
-	mPhysicsSystem->SetEnergyWallRadius(radius);
+	mPhysicsSystem->SetEnergyWall(position, radius);
 }
 
 const ITexture* NGenius::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
 {
 	assert(mRenderSystem != nullptr);
 	return mRenderSystem->CreateDepthTexture(name, size);
+}
+
+IMaterial* NGenius::CreateMaterial(const std::string& name, IShaderProgram* shader)
+{
+	assert(mRenderSystem != nullptr);
+	return mRenderSystem->CreateMaterial(name, shader);
 }
 
 void NGenius::SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter)

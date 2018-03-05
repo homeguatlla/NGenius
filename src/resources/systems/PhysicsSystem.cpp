@@ -8,7 +8,7 @@
 #include "../components/EnergyWallCollisionComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../entities/Terrain.h"
-#include "../../renderer/IRenderer.h"
+#include "../renderers/IRenderer.h"
 
 
 const glm::vec3 PhysicsSystem::GRAVITY_VALUE(0.0f, -9.8f, 0.0f);
@@ -115,9 +115,10 @@ void PhysicsSystem::SetTerrain(const Terrain* terrain)
 	mTerrain = terrain;
 }
 
-void PhysicsSystem::SetEnergyWallRadius(float radius)
+void PhysicsSystem::SetEnergyWall(const glm::vec3& position, float radius)
 {
 	mEnergyWallRadius = radius;
+	mEnergyWallPosition = position;
 }
 
 void PhysicsSystem::AddEntity(GameEntity* entity)
@@ -170,9 +171,9 @@ bool PhysicsSystem::ApplyCollisions(GameEntity *entity, float *groundHeight)
 	IRenderer* renderer = entity->GetRenderer();
 	if (renderer != nullptr)
 	{
-		float rendererHeight = renderer->GetBoundingBox().GetVertexMax().y - renderer->GetBoundingBox().GetVertexMin().y;
+		float rendererHeight = renderer->GetAABB().GetVertexMax().y - renderer->GetAABB().GetVertexMin().y;
 		float factor = 1.0f/(rendererHeight * 100.0f);
-		entityBottomHeight = glm::abs(renderer->GetBoundingBox().GetVertexMin().y * transformation->GetScale().y) + factor; 
+		entityBottomHeight = glm::abs(renderer->GetAABB().GetVertexMin().y * transformation->GetScale().y) + factor;
 	}
 	position.y = glm::max(position.y, *groundHeight + entityBottomHeight);
 	transformation->SetPosition(position);
@@ -183,15 +184,14 @@ bool PhysicsSystem::ApplyCollisions(GameEntity *entity, float *groundHeight)
 
 bool PhysicsSystem::ApplyEnergyWallCollision(GameEntity *entity, glm::vec3& collisionPoint)
 {
-	glm::vec3 energyWallCenter(0.0f);
-
 	Transformation* transformation = entity->GetTransformation();
 
 	float entityRadius = 0.0f;
 	IRenderer* renderer = entity->GetRenderer();
+	
 	if (renderer != nullptr)
 	{
-		glm::vec3 side = renderer->GetBoundingBox().GetVertexMax() - renderer->GetBoundingBox().GetVertexMin();
+		glm::vec3 side = renderer->GetAABB().GetVertexMax() - renderer->GetAABB().GetVertexMin();
 		side *= transformation->GetScale();
 
 		float maxSide = glm::max(side.x, glm::max(side.y, side.z));
@@ -199,31 +199,33 @@ bool PhysicsSystem::ApplyEnergyWallCollision(GameEntity *entity, glm::vec3& coll
 	}
 
 	glm::vec3 position = transformation->GetPosition();
-	glm::vec3 vector = position - energyWallCenter;
+	glm::vec3 vector = position - mEnergyWallPosition;
 
-	float distanceToTheCenter = glm::distance(position, energyWallCenter);
-
+	float distanceToTheCenter = glm::length(vector);
+	
 	bool isInside = distanceToTheCenter < mEnergyWallRadius;
-	bool isOutside = distanceToTheCenter > mEnergyWallRadius;
+	bool isOutside = distanceToTheCenter >= mEnergyWallRadius;
 	bool isColliding = false;
 
 	if (isInside)
 	{
-		isColliding = distanceToTheCenter > (mEnergyWallRadius - entityRadius);
+		float diffRadius = mEnergyWallRadius - entityRadius;
+		isColliding = distanceToTheCenter > diffRadius;
 		if (isColliding)
 		{
 			collisionPoint = glm::normalize(vector) * mEnergyWallRadius;
-			position = energyWallCenter + glm::normalize(vector) * (mEnergyWallRadius - entityRadius);
+			position = mEnergyWallPosition + glm::normalize(vector) * diffRadius;
 			transformation->SetPosition(position);
 		}
 	}
 	else if (isOutside)
 	{
-		isColliding = distanceToTheCenter <= (mEnergyWallRadius + entityRadius);
+		float sumRadius = mEnergyWallRadius + entityRadius;
+		isColliding = distanceToTheCenter <= sumRadius;
 		if (isColliding)
 		{
 			collisionPoint = glm::normalize(vector) * mEnergyWallRadius;
-			position = energyWallCenter + glm::normalize(vector) * (mEnergyWallRadius + entityRadius);
+			position = mEnergyWallPosition + glm::normalize(vector) * sumRadius;
 			transformation->SetPosition(position);
 		}
 	}

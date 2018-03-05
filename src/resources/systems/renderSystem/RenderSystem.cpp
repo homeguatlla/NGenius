@@ -3,13 +3,29 @@
 #include "ShadowsRenderPass.h"
 #include "../../GameEntity.h"
 #include "../../camera/ICamera.h"
+
 #include "../../models/ModelsLibrary.h"
+#include "../../shaders/IShaderProgram.h"
 #include "../../shaders/ShadersLibrary.h"
 #include "../../font/FontsLibrary.h"
 #include "../../textures/TexturesLibrary.h"
 #include "../../textures/Texture.h"
-#include "../../../renderer/IRenderer.h"
-#include "../../../renderer/RenderPass.h"
+#include "../../textures/TextureArray.h"
+#include "../../textures/TextureCubemap.h"
+#include "../../materials/IMaterial.h"
+#include "../../materials/MaterialsLibrary.h"
+#include "../../materials/effects/MaterialEffectDiffuseTexture.h"
+#include "../../materials/effects/MaterialEffectNormalTexture.h"
+#include "../../materials/effects/MaterialEffectHeightMapTexture.h"
+#include "../../materials/effects/MaterialEffectClippingPlane.h"
+#include "../../materials/effects/MaterialEffectShadowProperties.h"
+#include "../../materials/effects/MaterialEffectWater.h"
+#include "../../materials/effects/MaterialEffectTextureArray.h"
+#include "../../materials/effects/MaterialEffectTextureCubemap.h"
+#include "../../materials/effects/MaterialEffectParticle.h"
+#include "../../materials/effects/MaterialEffectDepthTexture.h"
+
+#include "RenderPass.h"
 #include "../../../BitNumber.h"
 
 #include <iostream>
@@ -23,7 +39,6 @@ using namespace std;
 static const int SHADOWS_TEXTURE_SIZE = 4096;
 
 RenderSystem::RenderSystem(float screenWidth, float screenHeight) :
-mLastClipPlaneNumberUsed(0),
 mScreenWidth(screenWidth),
 mScreenHeight(screenHeight),
 mShadersLibrary(nullptr),
@@ -31,6 +46,10 @@ mTexturesLibrary(nullptr),
 mModelsLibrary(nullptr),
 mFontsLibrary(nullptr),
 mWindow(nullptr),
+mCurrentMaterial(nullptr),
+mDiffuseTexture(nullptr),
+mNormalTexture(nullptr),
+mLastClipPlaneNumberUsed(0),
 mIsFullScreen(false)
 {
 	BitNumber bit;
@@ -67,7 +86,7 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 
 void RenderSystem::CreateRenderPasses()
 {
-	CreateShadowsSystem();
+	CreateShadowsRenderPass();
 }
 
 void RenderSystem::DestroyRenderPasses()
@@ -75,7 +94,7 @@ void RenderSystem::DestroyRenderPasses()
 	delete mShadowsRenderPass;
 }
 
-void RenderSystem::CreateShadowsSystem()
+void RenderSystem::CreateShadowsRenderPass()
 {
 	mShadowsRenderPass = new ShadowsRenderPass(	this,
 										GetScreenWidth(),
@@ -88,13 +107,14 @@ void RenderSystem::LoadResources()
 	mModelsLibrary->Load();
 	mFontsLibrary->Load();
 	mTexturesLibrary->Load();
+	mMaterialsLibrary->Load();
 }
 
 void RenderSystem::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	for (const RenderPass* pass : mRenderPasses)
+	for (RenderPass* pass : mRenderPasses)
 	{
 		if (pass->IsEnabled())
 		{
@@ -117,12 +137,12 @@ void RenderSystem::Render()
 	glfwPollEvents();
 }
 
-void RenderSystem::Render(const RenderPass* renderPass)
+void RenderSystem::Render(RenderPass* renderPass)
 {
 	RenderersList renderers = mRenderersPerPass[renderPass->GetLayersMask()];
 
 	//STEP 1 CALUCLATE DISTANCE TO CAMERA FOR EACH RENDERER
-	if (renderPass->HasToCalculateDistanceToCamera())
+	if (renderPass->HasToCalculateDistanceToCamera() && renderPass->GetCamera() != nullptr)
 	{
 		UpdateDistancesToCamera(renderPass->GetCamera(), &renderers);
 	}
@@ -177,8 +197,10 @@ void RenderSystem::Render(const RenderPass* renderPass)
 	mRenderersPerPass[renderPass->GetLayersMask()].clear();
 }
 
-void RenderSystem::AddRenderPass(const RenderPass* renderPass)
+void RenderSystem::AddRenderPass(RenderPass* renderPass)
 {
+	assert(renderPass != nullptr);
+	assert(renderPass->GetCamera() != nullptr);
 	bool found = std::find(mRenderPasses.begin(), mRenderPasses.end(), renderPass) != mRenderPasses.end();
 	if (!found)
 	{
@@ -186,7 +208,7 @@ void RenderSystem::AddRenderPass(const RenderPass* renderPass)
 	}
 }
 
-void RenderSystem::RemoveRenderPass(const RenderPass* renderPass)
+void RenderSystem::RemoveRenderPass(RenderPass* renderPass)
 {
 	RenderPassesIterator it = std::find(mRenderPasses.begin(), mRenderPasses.end(), renderPass);
 	bool found = it != mRenderPasses.end();
@@ -213,43 +235,142 @@ void RenderSystem::AddToRender(IRenderer* renderer)
 	}
 }
 
-void RenderSystem::RenderInstances(const RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances)
+void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances)
 {
 	//std::cout << instances.front()->GetBitRendererInformation().GetValue() << " : " << instances.size() << "\n";
-	//Apply fog
-	if (renderer->HasFog())
+
+	renderer->SetInstances(instances);
+
+	if (instances.size() > 1)
 	{
-		renderer->EnableFog(renderPass->IsFogEnabled());
+		renderer->EnableInstancing(true);
 	}
 
-	if (renderer->IsCastingShadows())
+	SelectMaterial(renderPass, renderer);
+
+	SelectClippingPlane(renderPass);
+
+	ApplyShadows(renderer);
+
+	mCurrentMaterial->Use();
+
+	SelectTextures();
+	
+	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, mCurrentMaterial);
+
+	mCurrentMaterial->UnUse();
+}
+
+void RenderSystem::ApplyShadows(IRenderer* renderer)
+{
+	if (mCurrentMaterial->HasEffect<MaterialEffectShadowProperties>())
 	{
-		renderer->SetShadowMapParameters(	mShadowsRenderPass->GetShadowMapTexture(), 
-											mShadowsRenderPass->GetShadowMapMatrix(), 
-											mShadowsRenderPass->GetShadowMapPFCCounter());
+		MaterialEffectShadowProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectShadowProperties>();
+		effect->SetParameters(	mShadowsRenderPass->GetShadowMapTexture(),
+								mShadowsRenderPass->GetShadowMapMatrix(),
+								mShadowsRenderPass->GetShadowMapPFCCounter());
 	}
+}
+
+void RenderSystem::SelectClippingPlane(RenderPass* renderPass)
+{
 	//Apply clipping planes
 	if (renderPass->IsClippingEnabled())
 	{
 		mLastClipPlaneNumberUsed = renderPass->GetClippingPlaneNumber();
 		glEnable(mLastClipPlaneNumberUsed);
-		if (renderer->HasClippingPlane())
+		if (mCurrentMaterial->HasEffect<MaterialEffectClippingPlane>())
 		{
-			renderer->SetClippingPlane(renderPass->GetClippingPlane());
+			MaterialEffectClippingPlane* effect = mCurrentMaterial->GetEffect<MaterialEffectClippingPlane>();
+			effect->SetClippingPlane(renderPass->GetClippingPlane());
 		}
 	}
 	else
 	{
 		glDisable(mLastClipPlaneNumberUsed);
 	}
+}
 
-	if (instances.size() > 1)
+void RenderSystem::SelectTextures()
+{
+	if (mCurrentMaterial->HasEffect<MaterialEffectDiffuseTexture>())
 	{
-		renderer->SetInstances(instances);
-		renderer->EnableInstancing(true);
+		ITexture* diffuse = mCurrentMaterial->GetEffect<MaterialEffectDiffuseTexture>()->GetDiffuseTexture();
+		if (diffuse != mDiffuseTexture)
+		{
+			mDiffuseTexture = diffuse;
+			mDiffuseTexture->SetActive(true);
+		}
 	}
 
-	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, renderPass->GetShader());
+	if (mCurrentMaterial->HasEffect<MaterialEffectNormalTexture>())
+	{
+		ITexture* normal = mCurrentMaterial->GetEffect<MaterialEffectNormalTexture>()->GetNormalTexture();
+		if (normal != mNormalTexture)
+		{
+			mNormalTexture = normal;
+			mNormalTexture->SetActive(true);
+		}
+	}
+
+	if (mCurrentMaterial->HasEffect<MaterialEffectDepthTexture>())
+	{
+		ITexture* depthTexture = mCurrentMaterial->GetEffect<MaterialEffectDepthTexture>()->GetDepthTexture();
+		//if (depth != mNormalTexture)
+		{
+			//mNormalTexture = normal;
+			depthTexture->SetActive(true);
+		}
+	}
+
+	if (mCurrentMaterial->HasEffect<MaterialEffectHeightMapTexture>())
+	{
+		ITexture* heightmap = mCurrentMaterial->GetEffect<MaterialEffectHeightMapTexture>()->GetHeightMapTexture();
+		heightmap->SetActive(true);
+	}
+
+	if (mCurrentMaterial->HasEffect<MaterialEffectTextureArray>())
+	{
+		TextureArray* texture = mCurrentMaterial->GetEffect<MaterialEffectTextureArray>()->GetTextureArray();
+		texture->SetActive(true);
+	}
+
+	if (mCurrentMaterial->HasEffect<MaterialEffectTextureCubemap>())
+	{
+		TextureCubemap* texture = mCurrentMaterial->GetEffect<MaterialEffectTextureCubemap>()->GetCubemap();
+		texture->SetActive(true);
+	}
+
+	if (mCurrentMaterial->HasEffect<MaterialEffectWater>())
+	{
+		MaterialEffectWater* effect = mCurrentMaterial->GetEffect<MaterialEffectWater>();
+		effect->GetReflectionTexture()->SetActive(true);
+		effect->GetRefractionTexture()->SetActive(true);
+		effect->GetDistorsionTexture()->SetActive(true);
+		effect->GetNormalTexture()->SetActive(true);
+		effect->GetDepthTexture()->SetActive(true);
+	}
+
+	if (mCurrentMaterial->HasEffect<MaterialEffectParticle>())
+	{
+		MaterialEffectParticle* effect = mCurrentMaterial->GetEffect<MaterialEffectParticle>();
+		effect->GetTexture()->SetActive(true);
+		effect->GetDepthTexture()->SetActive(true);
+	}
+}
+
+void RenderSystem::SelectMaterial(RenderPass* renderPass, IRenderer* renderer)
+{
+	IMaterial* material = renderPass->GetMaterial();
+	if (material == nullptr)
+	{
+		material = renderer->GetMaterial();
+	}
+
+	if (mCurrentMaterial == nullptr || mCurrentMaterial->GetMaterialID() != material->GetMaterialID())
+	{
+		mCurrentMaterial = material;
+	}
 }
 
 float RenderSystem::GetScreenWidth() const
@@ -321,6 +442,11 @@ Model* RenderSystem::GetModel(const std::string& name) const
 ITexture* RenderSystem::GetTexture(const std::string& name) const
 {
 	return mTexturesLibrary->GetElement(name);
+}
+
+IMaterial* RenderSystem::GetMaterial(const std::string& name) const
+{
+	return mMaterialsLibrary->GetElement(name);
 }
 
 bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName, bool isFullscreen)
@@ -416,10 +542,12 @@ void RenderSystem::CreateResourcesLibraries()
 	mTexturesLibrary = new TexturesLibrary();
 	mModelsLibrary = new ModelsLibrary(mTexturesLibrary);
 	mFontsLibrary = new FontsLibrary(mTexturesLibrary);
+	mMaterialsLibrary = new MaterialsLibrary();
 }
 
 void RenderSystem::DestroyResourcesLibraries()
 {
+	delete mMaterialsLibrary;
 	delete mFontsLibrary;
 	delete mModelsLibrary;
 	delete mTexturesLibrary;
@@ -465,6 +593,11 @@ const ITexture* RenderSystem::CreateDepthTexture(const std::string& name, const 
 {
 	assert(mTexturesLibrary != nullptr);
 	return mTexturesLibrary->CreateDepthTexture(name, size);
+}
+
+IMaterial* RenderSystem::CreateMaterial(const std::string& name, IShaderProgram* shader)
+{
+	return mMaterialsLibrary->CreateMaterial(name, shader);
 }
 
 void RenderSystem::CheckGLError()

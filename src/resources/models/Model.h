@@ -1,47 +1,49 @@
 #pragma once
 
+#include "../../AABB.h"
+#include "../../VertexBuffersManager.h"
 #include <vector>
-#include <glm/glm.hpp>
+
+class Mesh;
+class IMaterial;
 
 class Model
 {
-	static int IDCounter;
-
-	std::vector<glm::vec3> mVertexs; 
-	std::vector<glm::vec2> mTextureCoords;
-	std::vector<glm::vec3> mNormals;
-	std::vector<glm::vec3> mTangents;
-	std::vector<unsigned int> mIndexes;
-	int mModelID;
-	std::string mMaterialName;
-	std::string mDiffuseTextureName;
-	std::string mNormalMapTextureName;
+	Mesh* mMesh;
+	AABB mAABB;
+	int mVAO;
+	int mMatrixVBO;
+	int mVertexsVBO;
+	int mIndexesVBO;
+	int mTextureCoordsVBO;
+	int mColorVBO;
 
 public:
-	Model(	const std::vector<glm::vec3>& vertexs,
-			const std::vector<glm::vec2>& textureCoords, 
-			const std::vector<glm::vec3>& normals, 
-			const std::vector<unsigned int>& indexes);
+	Model(Mesh* model);
 	~Model();
 
 	unsigned int GetID() const;
-	std::vector<glm::vec3>& GetVertexs();
-	std::vector<glm::vec2>& GetTextureCoords();
-	std::vector<glm::vec3>& GetNormals();
-	std::vector<unsigned int> GetIndexes();
+	const AABB& GetAABB() const;
+	int GetVAOID() const;
 
-	std::vector<glm::vec3>& GetTangents();
+	int GetNumberOfVertexs() const;
+	int GetNumberOfIndexes() const;
 
-	void SetMaterialName(const std::string& name);
-	const std::string& GetMaterialName() const;
-	void SetDiffuseTextureName(const std::string& name);
-	const std::string& GetDiffuseTextureName() const;
-	void SetNormalMapTextureName(const std::string& name);
-	const std::string& GetNormalMapTextureName() const;	
+	void Apply(const std::vector<glm::mat4>& matrices);
+	void Apply(const std::vector<glm::vec4>& colors);
+
+	bool IsBuilt() const;
+	void Build(VertexBuffersManager& vertexBufferManager, IMaterial* material);
+	void UpdateVBOs();
 
 private:
-	void CalculateNormals();
-	void CalculateTangents();
-	glm::vec3 CalculateTriangleNormalFromVertex(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
+	void CreateVertexsVBO(VertexBuffersManager& vertexBufferManager, int location);
+	void CreateIndexesVBO(VertexBuffersManager& vertexBufferManager);
+	void CreateTextureCoordsVBO(VertexBuffersManager& vertexBufferManager, int location);
+	void CreateNormalsVBO(VertexBuffersManager& vertexBufferManager, int location);
+	void CreateTangentsVBO(VertexBuffersManager& vertexBufferManager, int location);
+	void CreateModelMatrixVBO(VertexBuffersManager& vertexBufferManager, int location);
+	void CreateColorVBO(VertexBuffersManager& vertexBufferManager, int location);
+	void CalculateAABB();
 };
 

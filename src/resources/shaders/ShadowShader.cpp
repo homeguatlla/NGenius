@@ -18,6 +18,10 @@ ShadowShader::~ShadowShader()
 {
 }
 
+void ShadowShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
+{
+
+}
 
 void ShadowShader::BindAttributes()
 {

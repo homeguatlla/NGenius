@@ -15,6 +15,7 @@ uniform vec3 fogColor;
 uniform sampler2D shadowMap;
 uniform int shadowMapSize;
 uniform int pfcCount;
+uniform vec3 lightColor;
 
 float totalTexelsShadow = (pfcCount * 2.0 + 1.0) * (pfcCount * 2.0 + 1.0);
 
@@ -34,7 +35,7 @@ vec4 ApplyLight(vec3 ambient, vec3 materialDiffuse, vec3 materialSpecular)
 	
 	//float attenuation = length(lightPosition - positionWorldspace);
 
-	color.rgb = ambient + diffuse + specular;// * (1.0f / attenuation);
+	color.rgb = lightColor * (ambient + diffuse + specular);// * (1.0f / attenuation);
 	color.a = 1.0f;
 	
 	return color;

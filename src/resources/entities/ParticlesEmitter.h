@@ -45,7 +45,7 @@ public:
 	void SetEntitiesSystem(EntitiesSystem* entitiesSystem);
 
 	void Update(float elapsedTime) override;
-	void SetColorGradientValues(glm::vec4& origin, glm::vec4& destination);
+	void SetColorGradientValues(const glm::vec4& origin, const glm::vec4& destination);
 	void SetScaleValues(float origin, float destination);
 	void SetVelocity(const glm::vec3& min, const glm::vec3& max);
 	void SetRotationSpeed(float min, float max);

@@ -9,6 +9,7 @@ class IShaderProgram;
 class ICamera;
 class GameEntity;
 class Texture;
+class Mesh;
 
 class IRenderer
 {
@@ -26,8 +27,7 @@ public:
 
 protected:
 	GameEntity* mParent;
-	std::vector<glm::vec3> mVertexs;
-	std::vector<unsigned int> mIndexes;
+	Mesh* mModel;
 	std::vector<IRenderer*> mInstances;
 	IShaderProgram* mShaderProgram;
 
@@ -57,6 +57,11 @@ protected:
 	virtual int GetRenderShaderPassTextureUnit() const = 0;
 	void LoadDataQuadShader(const ICamera* camera, VertexBuffersManager& vertexBufferManager, int textureUnit);
 
+	long GetNumberIndexes() const;
+	long GetNumberVertexs() const;
+	long GetNumberTextureCoords() const;
+	long GetNumberInstances() const;
+
 	void CheckError();
 
 public:
@@ -71,8 +76,7 @@ public:
 	virtual void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager) = 0;
 	void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager, IShaderProgram* shaderRenderPass);
 	
-	void SetVertexs(const std::vector<glm::vec3>& vertexs);
-	void SetIndexes(const std::vector<unsigned int>& indexes);
+	void SetModel(Mesh* model);
 	const BitNumber& GetBitRendererInformation() const;
 
 	bool IsPrerendered() const;

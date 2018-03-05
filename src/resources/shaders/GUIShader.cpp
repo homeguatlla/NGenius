@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "GUIShader.h"
+#include "../materials/IMaterial.h"
+#include "../materials/effects/MaterialEffectDiffuseTexture.h"
+#include "../textures/ITexture.h"
+#include "../camera/ICamera.h"
 
 const std::string GUIShader::VERTEX_FILE = "data/shaders/vertex/v_gui_quad.cg";
 const std::string GUIShader::FRAGMENT_FILE = "data/shaders/fragment/f_gui_quad.cg";
@@ -25,6 +29,18 @@ GUIShader::~GUIShader()
 {
 }
 
+void GUIShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
+{
+	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
+	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
+	
+	MaterialEffectDiffuseTexture* effect = material->GetEffect<MaterialEffectDiffuseTexture>();
+	if (effect != nullptr)
+	{
+		LoadTexture(mLocationTexture, effect->GetDiffuseTexture()->GetUnit());
+	}
+}
+
 void GUIShader::BindAttributes()
 {
 	BindAttribute(mLocationTextureCoords, ATTRIBUTE_TEXTURE_COORDS);
@@ -38,19 +54,4 @@ void GUIShader::GetAllUniformLocations()
 	mLocationProjectionMatrix = GetUniformLocation(ATTRIBUTE_PROJECTION_MATRIX);
 	mLocationViewMatrix = GetUniformLocation(ATTRIBUTE_VIEW_MATRIX);
 	mLocationTexture = GetUniformLocation(ATTRIBUTE_TEXTURE);
-}
-
-void GUIShader::LoadViewMatrix(const glm::mat4& viewmatrix)
-{
-	LoadMatrix4(mLocationViewMatrix, viewmatrix);
-}
-
-void GUIShader::LoadProjectionMatrix(const glm::mat4& projectionMatrix)
-{
-	LoadMatrix4(mLocationProjectionMatrix, projectionMatrix);
-}
-
-void GUIShader::LoadGUITexture(int unit)
-{
-	LoadTexture(mLocationTexture, unit);
 }

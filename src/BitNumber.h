@@ -10,7 +10,7 @@ class BitNumber
 	
 	const long long MASK_LAYER = 0xFE00000000000000;
 	const long long MASK_TRANSPARENCY = 0x0100000000000000;
-	const long long MASK_SHADER = 0x00FF000000000000;
+	const long long MASK_MATERIAL = 0x00FF000000000000;
 	const long long MASK_TEXTURE = 0x0000FF0000000000;
 	const long long MASK_MODEL = 0x000000FF00000000;
 	const long long MASK_DISTANCE = 0x000000000000FFFF;
@@ -26,7 +26,7 @@ public:
 	void SetDistance(uint64_t  id);
 	void SetModel(uint64_t  id);
 	void SetTexture(uint64_t  id);
-	void SetShader(uint64_t  id);
+	void SetMaterial(uint64_t  id);
 	void SetLayer(uint64_t  id);
 	//false opaque, true transparent and then will be rendered opaque first
 	void SetTransparency(bool transparent);

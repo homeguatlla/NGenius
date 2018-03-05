@@ -120,7 +120,7 @@ void ParticleRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
 
 void ParticleRenderer::LoadData(const ICamera* camera, VertexBuffersManager& vertexBufferManager)
 {
-	const glm::mat4 viewMatrix = const_cast<ICamera*>(camera)->GetViewMatrix();
+	/*const glm::mat4 viewMatrix = const_cast<ICamera*>(camera)->GetViewMatrix();
 	ParticleShader* shader = static_cast<ParticleShader*>(mShaderProgram);
 	shader->LoadQuadTexture(mTexture->GetUnit());
 	shader->LoadDepthTexture(mDepthTexture->GetUnit());
@@ -133,7 +133,7 @@ void ParticleRenderer::LoadData(const ICamera* camera, VertexBuffersManager& ver
 	float time = (particle->GetMaxLiveTime() - particle->GetLiveTime()) / particle->GetMaxLiveTime();
 	//std::cout << "time: " << time << "\n";
 	shader->LoadTime(time);
-
+	
 	std::vector<glm::mat4> matrices;
 	std::vector<glm::vec4> colors;
 	int instances = 1;
@@ -190,6 +190,7 @@ void ParticleRenderer::LoadData(const ICamera* camera, VertexBuffersManager& ver
 	glBindBuffer(GL_ARRAY_BUFFER, mColorVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * instances, &colors[0], GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	*/
 }
 
 int ParticleRenderer::GetRenderShaderPassTextureUnit() const

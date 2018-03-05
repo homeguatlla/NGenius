@@ -1,11 +1,13 @@
 #include "stdafx.h"
 #include "Particle.h"
-#include "../../renderer/IRenderer.h"
+#include "../renderers/ParticleRenderer.h"
 
 #include <iostream>
 
-Particle::Particle(Transformation* transformation, IRenderer* renderer, float liveTime) :
-GameEntity(transformation, renderer),
+Particle::Particle(Transformation* transformation, Model* model, IMaterial* material, float liveTime) :
+GameEntity(transformation),
+mModel(model),
+mMaterial(material),
 mMaxLiveTime(liveTime),
 mLiveTime(liveTime),
 mScale(1.0f),
@@ -16,6 +18,10 @@ mColor(1.0f),
 mColorOrigin(1.0f),
 mColorDestination(1.0f)
 {
+	ParticleRenderer* renderer = new ParticleRenderer(model, material);
+	renderer->SetTransparency(true);
+	renderer->SetLayer(IRenderer::LAYER_PARTICLES);
+	SetRenderer(renderer);
 }
 
 
@@ -25,8 +31,7 @@ Particle::~Particle()
 
 Particle* Particle::DoClone() const
 {
-	IRenderer* cloneRenderer = GetRenderer()->Clone();
-	Particle* clone = new Particle(new Transformation(*GetTransformation()), cloneRenderer, mLiveTime);
+	Particle* clone = new Particle(new Transformation(*GetTransformation()), mModel, mMaterial, mLiveTime);
 
 	return clone;
 }
@@ -80,7 +85,7 @@ float Particle::GetLiveTime() const
 	return mLiveTime;
 }
 
-void Particle::SetColorGradientValues(glm::vec4 origin, glm::vec4 destination)
+void Particle::SetColorGradientValues(const glm::vec4& origin, const glm::vec4& destination)
 {
 	mColorOrigin = origin;
 	mColorDestination = destination;

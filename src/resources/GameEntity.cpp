@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "GameEntity.h"
-#include "../renderer/IRenderer.h"
+#include "renderers/IRenderer.h"
 
 
 #include "components\PhysicsComponent.h"

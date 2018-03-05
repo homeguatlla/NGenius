@@ -1,7 +1,12 @@
 #include "stdafx.h"
 #include "WaterShader.h"
-
-#include "../entities/Light.h"
+#include "../camera/ICamera.h"
+#include "../Transformation.h"
+#include "../textures/ITexture.h"
+#include "../materials/IMaterial.h"
+#include "../materials/effects/MaterialEffectFogProperties.h"
+#include "../materials/effects/MaterialEffectLightProperties.h"
+#include "../materials/effects/MaterialEffectWater.h"
 
 const std::string WaterShader::VERTEX_FILE = "data/shaders/vertex/v_water.cg";
 const std::string WaterShader::FRAGMENT_FILE = "data/shaders/fragment/f_water.cg";
@@ -57,6 +62,40 @@ void WaterShader::BindAttributes()
 	BindAttribute(mLocationModelMatrix, ATTRIBUTE_MODEL_MATRIX);
 }
 
+void WaterShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
+{
+	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
+	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
+	LoadVector3(mLocationCameraPosition, camera->GetPosition());
+
+	MaterialEffectWater* effect = material->GetEffect<MaterialEffectWater>();
+	if (effect != nullptr)
+	{
+		LoadTexture(mLocationReflectionTexture, effect->GetReflectionTexture()->GetUnit());
+		LoadTexture(mLocationRefractionTexture, effect->GetRefractionTexture()->GetUnit());
+		LoadTexture(mLocationDistorsionTexture, effect->GetDistorsionTexture()->GetUnit());
+		LoadTexture(mLocationNormalTexture, effect->GetNormalTexture()->GetUnit());
+		LoadTexture(mLocationDepthTexture, effect->GetDepthTexture()->GetUnit());
+		LoadFloat(mLocationWaterSpeed, effect->GetSpeed());
+		LoadVector4(mLocationWaterColor, effect->GetColor());
+	}
+
+	MaterialEffectLightProperties* effectLight = material->GetEffect<MaterialEffectLightProperties>();
+	if (effectLight != nullptr)
+	{
+		LoadVector3(mLocationLightPosition, effectLight->GetPosition());
+		LoadVector3(mLocationLightColor, effectLight->GetColor());
+	}
+
+	MaterialEffectFogProperties* effectFog = material->GetEffect<MaterialEffectFogProperties>();
+	if (effectFog != nullptr)
+	{
+		LoadVector3(mLocationFogColor, effectFog->GetColor());
+		LoadFloat(mLocationFogDensity, effectFog->GetDensity());
+		LoadFloat(mLocationFogGradient, effectFog->GetGradient());
+	}
+}
+
 void WaterShader::GetAllUniformLocations()
 {
 	mLocationTextureCoords = GetAttributeLocation(ATTRIBUTE_TEXTURE_COORDS);
@@ -77,67 +116,4 @@ void WaterShader::GetAllUniformLocations()
 	mLocationFogDensity = GetUniformLocation(ATTRIBUTE_FOG_DENSITY);
 	mLocationFogGradient = GetUniformLocation(ATTRIBUTE_FOG_GRADIENT);
 	mLocationFogColor = GetUniformLocation(ATTRIBUTE_FOG_COLOR);
-}
-
-void WaterShader::LoadViewMatrix(const glm::mat4& viewmatrix)
-{
-	LoadMatrix4(mLocationViewMatrix, viewmatrix);
-}
-
-void WaterShader::LoadProjectionMatrix(const glm::mat4& projectionMatrix)
-{
-	LoadMatrix4(mLocationProjectionMatrix, projectionMatrix);
-}
-
-void WaterShader::LoadReflectionTexture(int unit)
-{
-	LoadTexture(mLocationReflectionTexture, unit);
-}
-
-void WaterShader::LoadRefractionTexture(int unit)
-{
-	LoadTexture(mLocationRefractionTexture, unit);
-}
-
-void WaterShader::LoadDistorsionTexture(int unit)
-{
-	LoadTexture(mLocationDistorsionTexture, unit);
-}
-
-void WaterShader::LoadNormalTexture(int unit)
-{
-	LoadTexture(mLocationNormalTexture, unit);
-}
-
-void WaterShader::LoadDepthTexture(int unit)
-{
-	LoadTexture(mLocationDepthTexture, unit);
-}
-
-void WaterShader::LoadWaterSpeed(float speed)
-{
-	LoadFloat(mLocationWaterSpeed, speed);
-}
-
-void WaterShader::LoadWaterColor(const glm::vec4& color)
-{
-	LoadVector4(mLocationWaterColor, color);
-}
-
-void WaterShader::LoadCameraPosition(const glm::vec3& position)
-{
-	LoadVector3(mLocationCameraPosition, position);
-}
-
-void WaterShader::LoadLight(const Light* light)
-{
-	LoadVector3(mLocationLightPosition, light->GetPosition());
-	LoadVector3(mLocationLightColor, light->GetColor());
-}
-
-void WaterShader::LoadFogParameters(const glm::vec3& color, float density, float gradient)
-{
-	LoadVector3(mLocationFogColor, color);
-	LoadFloat(mLocationFogDensity, density);
-	LoadFloat(mLocationFogGradient, gradient);
 }
