@@ -34,9 +34,9 @@ void GUIShader::LoadData(const ICamera* camera, const Transformation* transforma
 	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
 	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
 	
-	if (material->HasEffect<MaterialEffectDiffuseTexture>())
+	MaterialEffectDiffuseTexture* effect = material->GetEffect<MaterialEffectDiffuseTexture>();
+	if (effect != nullptr)
 	{
-		MaterialEffectDiffuseTexture* effect = material->GetEffect<MaterialEffectDiffuseTexture>();
 		LoadTexture(mLocationTexture, effect->GetDiffuseTexture()->GetUnit());
 	}
 }

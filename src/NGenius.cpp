@@ -226,10 +226,10 @@ void NGenius::SetTerrain(const Terrain* terrain)
 	mPhysicsSystem->SetTerrain(terrain);
 }
 
-void NGenius::SetEnergyWallRadius(float radius)
+void NGenius::SetEnergyWall(const glm::vec3& position, float radius)
 {
 	assert(mPhysicsSystem != nullptr);
-	mPhysicsSystem->SetEnergyWallRadius(radius);
+	mPhysicsSystem->SetEnergyWall(position, radius);
 }
 
 const ITexture* NGenius::CreateDepthTexture(const std::string& name, const glm::ivec2& size)

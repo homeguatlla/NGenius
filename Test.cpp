@@ -36,9 +36,6 @@
 #include "src/resources/textures/TextureGenerator.h"
 
 #include "src/resources/shaders/IShaderProgram.h"
-//#include "src/resources/shaders/TerrainShader.h"
-//#include "src/resources/shaders/SkyBoxShader.h"
-
 
 #include "src/resources/textures/Texture.h"
 #include "src/resources/textures/TextureArray.h"
@@ -99,11 +96,6 @@
 #include "src/resources/components/BillboardComponent.h"
 #include "src/resources/components/OverWaterComponent.h"
 
-
-
-//#include "src/resources/entities/Particle.h"
-//#include "src/renderer/ParticleRenderer.h"
-
 using namespace glm;
 using namespace std;
 
@@ -130,7 +122,6 @@ enum Configuration
 	SHADOWS,
 	PARTICLES,
 	PROPS,
-	REFACTOR,
 	RELEASE
 };
 Configuration mConfiguration = DEBUG;
@@ -191,6 +182,7 @@ const float mFogGradient = 1.5f;
 glm::vec3 mFogColor = vec3(89.0f, 120.0f, 143.0f) / 255.0f;
 //red glm::vec3 mFogColor = vec3(218.0f, 74.0f, 43.0f) / 255.0f; 
 float mEnergyWallRadius = 22.0f;
+glm::vec3 mEnergyWallPosition(0.0f, 0.0f, 0.0f);
 
 double aleatori()
 {
@@ -579,13 +571,13 @@ void CreateEnergyWall()
 	material->AddEffect(new MaterialEffectDepthTexture(mEngine.GetTexture("depth_texture"), 1.0f));
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
 
-	mEnergyWall = new EnergyWall(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(mEnergyWallRadius)),
+	mEnergyWall = new EnergyWall(	new Transformation(mEnergyWallPosition, glm::vec3(0.0f), glm::vec3(mEnergyWallRadius)),
 									material,
 									mEngine.GetModel("sphere"),
 									2.0f
 								);
 	mEngine.AddGameEntity(mEnergyWall);
-	mEngine.SetEnergyWallRadius(mEnergyWallRadius);
+	mEngine.SetEnergyWall(mEnergyWallPosition, mEnergyWallRadius);
 }
 
 void CreateHUD()
@@ -825,7 +817,7 @@ void CreateEntities()
 
 	//CAMERA
 	mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 55.0f, 15.0f));
+	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 15.0f));
 	mEagleEyeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mEagleEyeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -1138,12 +1130,12 @@ void UpdateEnergyWallCollisions(float elapsedTime)
 		glm::vec3 collisionPoint = component->GetCollisionPoint();
 		mEnergyWall->SetContactPoint(collisionPoint);
 		mEnergyWall->SetLiveTime(mEnergyWall->GetMaxLiveTime());
-		mEnergyWall->GetRenderer()->SetVisibility(true);
+		//mEnergyWall->GetRenderer()->SetVisibility(true);
 	}
 	else if (!mEnergyWall->IsAlive())
 	{
 		mEnergyWall->SetContactPoint(glm::vec3(0.0f));
-		mEnergyWall->GetRenderer()->SetVisibility(false);
+		//mEnergyWall->GetRenderer()->SetVisibility(false);
 	}
 }
 
@@ -1280,22 +1272,6 @@ void SetupConfiguration()
 		mIsShadowEnabled = false;
 		mIsFullScreen = false;
 		break; 
-	case REFACTOR:
-		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
-		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
-		mIsVegetationEnabled = false;
-		mIsPropsEnabled = false;
-		mIsEnergyWallEnabled = true;
-		mIsSkyboxEnabled = false;
-		mIsTerrainFlat = true;
-		mIsTextEnabled = false;
-		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = true;
-		mIsShadowEnabled = false;
-		mIsFullScreen = false;
-		break;
 	case RELEASE:
 		mIsDebugModeEnabled = false;
 		mIsWaterEnabled = true;

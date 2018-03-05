@@ -33,28 +33,28 @@ void EnergyWallShader::LoadData(const ICamera* camera, const Transformation* tra
 {
 	ModelShader::LoadData(camera, transformation, material);
 
-	if (material->HasEffect<MaterialEffectDepthTexture>())
+	MaterialEffectDepthTexture* effectDepth = material->GetEffect<MaterialEffectDepthTexture>();
+	if (effectDepth != nullptr)
 	{
-		MaterialEffectDepthTexture* effect = material->GetEffect<MaterialEffectDepthTexture>();
-		LoadTexture(mLocationDepthTexture, effect->GetDepthTexture()->GetUnit());
+		LoadTexture(mLocationDepthTexture, effectDepth->GetDepthTexture()->GetUnit());
 	}
 
-	if (material->HasEffect<MaterialEffectFloat>())
+	MaterialEffectFloat* effectFloat = material->GetEffect<MaterialEffectFloat>();
+	if (effectFloat != nullptr)
 	{
-		MaterialEffectFloat* effect = material->GetEffect<MaterialEffectFloat>();
-		LoadFloat(mLocationTime, effect->GetFloat());
+		LoadFloat(mLocationTime, effectFloat->GetFloat());
 	}
 
-	if (material->HasEffect<MaterialEffectFloat2>())
+	MaterialEffectFloat2* effectFloat2 = material->GetEffect<MaterialEffectFloat2>();
+	if (effectFloat2 != nullptr)
 	{
-		MaterialEffectFloat2* effect = material->GetEffect<MaterialEffectFloat2>();
-		LoadVector2(mLocationScreenSize, effect->GetValue());
+		LoadVector2(mLocationScreenSize, effectFloat2->GetValue());
 	}
 
-	if (material->HasEffect<MaterialEffectFloat3>())
+	MaterialEffectFloat3* effectFloat3 = material->GetEffect<MaterialEffectFloat3>();
+	if (effectFloat3 != nullptr)
 	{
-		MaterialEffectFloat3* effect = material->GetEffect<MaterialEffectFloat3>();
-		LoadVector3(mLocationContactPoint, effect->GetValue());
+		LoadVector3(mLocationContactPoint, effectFloat3->GetValue());
 	}
 }
 

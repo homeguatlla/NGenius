@@ -68,9 +68,9 @@ void WaterShader::LoadData(const ICamera* camera, const Transformation* transfor
 	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
 	LoadVector3(mLocationCameraPosition, camera->GetPosition());
 
-	if (material->HasEffect<MaterialEffectWater>())
+	MaterialEffectWater* effect = material->GetEffect<MaterialEffectWater>();
+	if (effect != nullptr)
 	{
-		MaterialEffectWater* effect = material->GetEffect<MaterialEffectWater>();
 		LoadTexture(mLocationReflectionTexture, effect->GetReflectionTexture()->GetUnit());
 		LoadTexture(mLocationRefractionTexture, effect->GetRefractionTexture()->GetUnit());
 		LoadTexture(mLocationDistorsionTexture, effect->GetDistorsionTexture()->GetUnit());
@@ -80,19 +80,19 @@ void WaterShader::LoadData(const ICamera* camera, const Transformation* transfor
 		LoadVector4(mLocationWaterColor, effect->GetColor());
 	}
 
-	if (material->HasEffect<MaterialEffectLightProperties>())
+	MaterialEffectLightProperties* effectLight = material->GetEffect<MaterialEffectLightProperties>();
+	if (effectLight != nullptr)
 	{
-		MaterialEffectLightProperties* effect = material->GetEffect<MaterialEffectLightProperties>();
-		LoadVector3(mLocationLightPosition, effect->GetPosition());
-		LoadVector3(mLocationLightColor, effect->GetColor());
+		LoadVector3(mLocationLightPosition, effectLight->GetPosition());
+		LoadVector3(mLocationLightColor, effectLight->GetColor());
 	}
 
-	if (material->HasEffect<MaterialEffectFogProperties>())
+	MaterialEffectFogProperties* effectFog = material->GetEffect<MaterialEffectFogProperties>();
+	if (effectFog != nullptr)
 	{
-		MaterialEffectFogProperties* effect = material->GetEffect<MaterialEffectFogProperties>();
-		LoadVector3(mLocationFogColor, effect->GetColor());
-		LoadFloat(mLocationFogDensity, effect->GetDensity());
-		LoadFloat(mLocationFogGradient, effect->GetGradient());
+		LoadVector3(mLocationFogColor, effectFog->GetColor());
+		LoadFloat(mLocationFogDensity, effectFog->GetDensity());
+		LoadFloat(mLocationFogGradient, effectFog->GetGradient());
 	}
 }
 

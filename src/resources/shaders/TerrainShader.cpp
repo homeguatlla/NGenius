@@ -77,59 +77,59 @@ void TerrainShader::LoadData(const ICamera* camera, const Transformation* transf
 
 	LoadVector3(mLocationCameraPosition, camera->GetPosition());
 
-	if (material->HasEffect<MaterialEffectFloat>())
+	MaterialEffectFloat* effect = material->GetEffect<MaterialEffectFloat>();
+	if (effect != nullptr)
 	{
-		MaterialEffectFloat* effect = material->GetEffect<MaterialEffectFloat>();
 		LoadFloat(mLocationScale, effect->GetFloat());
 	}
 
-	if (material->HasEffect<MaterialEffectDiffuseTexture>())
+	MaterialEffectDiffuseTexture* effectDiffuse = material->GetEffect<MaterialEffectDiffuseTexture>();
+	if (effectDiffuse != nullptr)
 	{
-		MaterialEffectDiffuseTexture* effect = material->GetEffect<MaterialEffectDiffuseTexture>();
-		LoadTexture(mLocationBlendMapTexture, effect->GetDiffuseTexture()->GetUnit());
-		LoadFloat(mLocationTile, effect->GetTile());
+		LoadTexture(mLocationBlendMapTexture, effectDiffuse->GetDiffuseTexture()->GetUnit());
+		LoadFloat(mLocationTile, effectDiffuse->GetTile());
 	}
 
-	if (material->HasEffect<MaterialEffectHeightMapTexture>())
+	MaterialEffectHeightMapTexture* effectHeightMap = material->GetEffect<MaterialEffectHeightMapTexture>();
+	if (effectHeightMap != nullptr)
 	{
-		MaterialEffectHeightMapTexture* effect = material->GetEffect<MaterialEffectHeightMapTexture>();
-		LoadTexture(mLocationHeightMapTexture, effect->GetHeightMapTexture()->GetUnit());
+		LoadTexture(mLocationHeightMapTexture, effectHeightMap->GetHeightMapTexture()->GetUnit());
 	}
 
-	if (material->HasEffect<MaterialEffectTextureArray>())
+	MaterialEffectTextureArray* effectTextureArray = material->GetEffect<MaterialEffectTextureArray>();
+	if (effectTextureArray != nullptr)
 	{
-		MaterialEffectTextureArray* effect = material->GetEffect<MaterialEffectTextureArray>();
-		LoadTexture(mLocationArrayTexture, effect->GetTextureArray()->GetUnit());
+		LoadTexture(mLocationArrayTexture, effectTextureArray->GetTextureArray()->GetUnit());
 	}
 
-	if (material->HasEffect<MaterialEffectClippingPlane>())
+	MaterialEffectClippingPlane* effectClipping = material->GetEffect<MaterialEffectClippingPlane>();
+	if (effectClipping != nullptr)
 	{
-		MaterialEffectClippingPlane* effect = material->GetEffect<MaterialEffectClippingPlane>();
-		LoadVector4(mLocationClippingPlane, effect->GetClippingPlane());
+		LoadVector4(mLocationClippingPlane, effectClipping->GetClippingPlane());
 	}
 
-	if (material->HasEffect<MaterialEffectLightProperties>())
+	MaterialEffectLightProperties* effectLight = material->GetEffect<MaterialEffectLightProperties>();
+	if (effectLight != nullptr)
 	{
-		MaterialEffectLightProperties* effect = material->GetEffect<MaterialEffectLightProperties>();
-		LoadVector3(mLocationLightPosition, effect->GetPosition());
-		LoadVector3(mLocationLightColor, effect->GetColor());
+		LoadVector3(mLocationLightPosition, effectLight->GetPosition());
+		LoadVector3(mLocationLightColor, effectLight->GetColor());
 	}
 
-	if (material->HasEffect<MaterialEffectFogProperties>())
+	MaterialEffectFogProperties* effectFog = material->GetEffect<MaterialEffectFogProperties>();
+	if (effectFog != nullptr)
 	{
-		MaterialEffectFogProperties* effect = material->GetEffect<MaterialEffectFogProperties>();
-		LoadVector3(mLocationFogColor, effect->GetColor());
-		LoadFloat(mLocationFogDensity, effect->GetDensity());
-		LoadFloat(mLocationFogGradient, effect->GetGradient());
+		LoadVector3(mLocationFogColor, effectFog->GetColor());
+		LoadFloat(mLocationFogDensity, effectFog->GetDensity());
+		LoadFloat(mLocationFogGradient, effectFog->GetGradient());
 	}
 
-	if (material->HasEffect<MaterialEffectShadowProperties>())
+	MaterialEffectShadowProperties* effectShadow = material->GetEffect<MaterialEffectShadowProperties>();
+	if (effectShadow != nullptr)
 	{
-		MaterialEffectShadowProperties* effect = material->GetEffect<MaterialEffectShadowProperties>();
-		LoadMatrix4(mLocationShadowSpaceMatrix, effect->GetMatrix());
-		LoadTexture(mLocationShadowMapTexture, effect->GetDepthTexture()->GetUnit());
-		LoadInteger(mLocationShadowMapTextureWidth, effect->GetDepthTexture()->GetWidth());
-		LoadInteger(mLocationShadowMapPFC, effect->GetPFCCounter());
+		LoadMatrix4(mLocationShadowSpaceMatrix, effectShadow->GetMatrix());
+		LoadTexture(mLocationShadowMapTexture, effectShadow->GetDepthTexture()->GetUnit());
+		LoadInteger(mLocationShadowMapTextureWidth, effectShadow->GetDepthTexture()->GetWidth());
+		LoadInteger(mLocationShadowMapPFC, effectShadow->GetPFCCounter());
 	}
 }
 

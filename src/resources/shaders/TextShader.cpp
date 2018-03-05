@@ -55,22 +55,22 @@ void TextShader::LoadData(const ICamera* camera, const Transformation* transform
 	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
 	LoadMatrix4(mLocationModelMatrix, const_cast<Transformation*>(transformation)->GetModelMatrix());
 
-	if (material->HasEffect<MaterialEffectDiffuseTexture>())
+	MaterialEffectDiffuseTexture* effectDiffuse = material->GetEffect<MaterialEffectDiffuseTexture>();
+	if (effectDiffuse != nullptr)
 	{
-		MaterialEffectDiffuseTexture* effect = material->GetEffect<MaterialEffectDiffuseTexture>();
-		LoadTexture(mLocationTexture, effect->GetDiffuseTexture()->GetUnit());
+		LoadTexture(mLocationTexture, effectDiffuse->GetDiffuseTexture()->GetUnit());
 	}
 
-	if (material->HasEffect<MaterialEffectText>())
+	MaterialEffectText* effectText = material->GetEffect<MaterialEffectText>();
+	if (effectText != nullptr)
 	{
-		MaterialEffectText* effect = material->GetEffect<MaterialEffectText>();
-		LoadVector4(mLocationColor, effect->GetColor());
-		LoadVector4(mLocationOutlineColor, effect->GetOutlineColor());
-		LoadFloat(mLocationWidth, effect->GetWidth());
-		LoadFloat(mLocationEdge, effect->GetEdge());
-		LoadFloat(mLocationBorderWidth, effect->GetBorderWidth());
-		LoadFloat(mLocationBorderEdge, effect->GetBorderEdge());
-		LoadVector2(mLocationShadowOffset, effect->GetShadowOffset());
+		LoadVector4(mLocationColor, effectText->GetColor());
+		LoadVector4(mLocationOutlineColor, effectText->GetOutlineColor());
+		LoadFloat(mLocationWidth, effectText->GetWidth());
+		LoadFloat(mLocationEdge, effectText->GetEdge());
+		LoadFloat(mLocationBorderWidth, effectText->GetBorderWidth());
+		LoadFloat(mLocationBorderEdge, effectText->GetBorderEdge());
+		LoadVector2(mLocationShadowOffset, effectText->GetShadowOffset());
 	}
 }
 

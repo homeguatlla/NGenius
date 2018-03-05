@@ -48,9 +48,9 @@ void ParticleShader::LoadData(const ICamera* camera, const Transformation* trans
 	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
 	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
 
-	if (material->HasEffect<MaterialEffectParticle>())
+	MaterialEffectParticle* effect = material->GetEffect<MaterialEffectParticle>();
+	if (effect != nullptr)
 	{
-		MaterialEffectParticle* effect = material->GetEffect<MaterialEffectParticle>();
 		LoadTexture(mLocationTexture, effect->GetTexture()->GetUnit());
 		LoadTexture(mLocationDepthTexture, effect->GetDepthTexture()->GetUnit());
 		LoadFloat(mLocationTile, effect->GetTile());

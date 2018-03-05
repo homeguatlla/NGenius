@@ -41,16 +41,16 @@ void SkyBoxShader::LoadData(const ICamera* camera, const Transformation* transfo
 	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
 	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
 
-	if (material->HasEffect<MaterialEffectTextureCubemap>())
+	MaterialEffectTextureCubemap* effectCubemap = material->GetEffect<MaterialEffectTextureCubemap>();
+	if (effectCubemap != nullptr)
 	{
-		MaterialEffectTextureCubemap* effect = material->GetEffect<MaterialEffectTextureCubemap>();
-		LoadTexture(mLocationCubemapTexture, effect->GetCubemap()->GetUnit());
+		LoadTexture(mLocationCubemapTexture, effectCubemap->GetCubemap()->GetUnit());
 	}
 
-	if (material->HasEffect<MaterialEffectFogProperties>())
+	MaterialEffectFogProperties* effectFog = material->GetEffect<MaterialEffectFogProperties>();
+	if (effectFog != nullptr)
 	{
-		MaterialEffectFogProperties* effect = material->GetEffect<MaterialEffectFogProperties>();
-		LoadVector3(mLocationFogColor, effect->GetColor());
+		LoadVector3(mLocationFogColor, effectFog->GetColor());
 	}
 }
 

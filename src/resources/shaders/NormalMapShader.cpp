@@ -28,9 +28,9 @@ void NormalMapShader::LoadData(const ICamera* camera, const Transformation* tran
 {
 	ModelShader::LoadData(camera, transformation, material);
 
-	if (material->HasEffect<MaterialEffectNormalTexture>())
+	MaterialEffectNormalTexture* effect = material->GetEffect<MaterialEffectNormalTexture>();
+	if (effect != nullptr)
 	{
-		MaterialEffectNormalTexture* effect = material->GetEffect<MaterialEffectNormalTexture>();
 		LoadTexture(mLocationNormalmapTexture, effect->GetNormalTexture()->GetUnit());
 		//LoadFloat(mLocationTile, effect->GetTile());
 	}
