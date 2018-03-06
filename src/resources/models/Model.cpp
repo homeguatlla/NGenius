@@ -226,7 +226,6 @@ void Model::CreateTextureCoordsVBO(VertexBuffersManager& vertexBufferManager, in
 
 		glBindBuffer(GL_ARRAY_BUFFER, mTextureCoordsVBO);
 		glBufferData(GL_ARRAY_BUFFER, numTextureCoords * sizeof(glm::vec2), &mMesh->GetTextureCoords()[0], GL_STATIC_DRAW);
-
 		glEnableVertexAttribArray(location);
 		glVertexAttribPointer(
 			location,  // The attribute we want to configure

@@ -37,5 +37,4 @@ void DefaultShader::GetAllUniformLocations()
 {
 	mLocationP = GetUniformLocation(ATTRIBUTE_PROJECTION_MATRIX);
 	mLocationV = GetUniformLocation(ATTRIBUTE_VIEW_MATRIX);
-
 }

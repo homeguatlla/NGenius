@@ -59,6 +59,7 @@ class RenderSystem
 
 	int mLastClipPlaneNumberUsed;
 	bool mIsFullScreen;
+	bool mIsClippingEnabled;
 	
 public:
 	RenderSystem(float screenWidth, float screenHeight);

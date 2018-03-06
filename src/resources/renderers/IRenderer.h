@@ -57,6 +57,7 @@ public:
 	GameEntity* GetParent();
 
 	IMaterial* GetMaterial();
+	Model* GetModel();
 
 	void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager, IMaterial* material);
 	

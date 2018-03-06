@@ -14,10 +14,14 @@ public:
 	
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
-	void LoadMVPMatrix(const glm::mat4& matrix);
 
 private:
 
-	int mLocationMVP;
+	int mLocationM;
+	int mLocationV;
+	int mLocationP;
+	int mLocationTextureCoords;
+	int mLocationTexture;
+	int mLocationTile;
 };
 

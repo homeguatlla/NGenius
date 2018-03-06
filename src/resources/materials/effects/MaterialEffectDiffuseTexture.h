@@ -11,12 +11,16 @@ class MaterialEffectDiffuseTexture : public IMaterialEffect
 	float mTile;	
 
 public:
+	MaterialEffectDiffuseTexture();
 	MaterialEffectDiffuseTexture(ITexture* texture, const glm::vec3& color, float tile);
 	virtual ~MaterialEffectDiffuseTexture();
 
 	ITexture* GetDiffuseTexture() const;
 	const glm::vec3 GetColor() const;
 	float GetTile() const;
+
+	void SetDiffuseTexture(ITexture* texture);
+	void SetTile(float tile);
 
 	MaterialEffectDiffuseTexture* DoClone() const override;
 };

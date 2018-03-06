@@ -1019,8 +1019,10 @@ void CreateGameplayRenderPass()
 	frameBuffer->SetCopyDepthBufferToTexture(depthTexture, 0, 0, static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
 	gameplayPass->SetFrameBufferOutput(frameBuffer);
 	
-	//IRenderer* renderer = new QuadRenderer(mEngine.GetShader("quad"), static_cast<Texture*>(mEngine.GetTexture("terrain_blendmap")), 10.0f, 10.0f);
-	//gameplayPass->SetRenderer(renderer);
+	//IMaterial* material = mEngine.GetMaterial("shadow");
+	//material->AddEffect(new MaterialEffectDiffuseTexture(mEngine.GetTexture("tree_foliage_diffuse"), glm::vec3(0.0f), 1.0f));
+	//gameplayPass->SetMaterial(material);
+
 	mEngine.AddRenderPass(gameplayPass);
 }
 
@@ -1201,10 +1203,10 @@ void SetupConfiguration()
 		mIsVegetationEnabled = false;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = true;
+		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = false;
-		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
+		mIsTextEnabled = false;
+		mIsStatisticsVisible = false;
 		mIsShadowEnabled = true;
 		mIsParticlesEnabled = false;
 		break;

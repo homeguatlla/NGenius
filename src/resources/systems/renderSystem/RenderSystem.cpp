@@ -5,6 +5,7 @@
 #include "../../camera/ICamera.h"
 
 #include "../../models/ModelsLibrary.h"
+#include "../../models/Model.h"
 #include "../../shaders/IShaderProgram.h"
 #include "../../shaders/ShadersLibrary.h"
 #include "../../font/FontsLibrary.h"
@@ -50,7 +51,8 @@ mCurrentMaterial(nullptr),
 mDiffuseTexture(nullptr),
 mNormalTexture(nullptr),
 mLastClipPlaneNumberUsed(0),
-mIsFullScreen(false)
+mIsFullScreen(false),
+mIsClippingEnabled(false)
 {
 	BitNumber bit;
 	bit.Test();
@@ -246,6 +248,13 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 		renderer->EnableInstancing(true);
 	}
 
+	if (!renderer->GetModel()->IsBuilt())
+	{
+		//initializing the model with the material it has. Once initialized, will be ok 
+		//to change the material.
+		renderer->GetModel()->Build(mVertexsBuffersManager, renderer->GetMaterial());
+	}
+
 	SelectMaterial(renderPass, renderer);
 
 	SelectClippingPlane(renderPass);
@@ -263,9 +272,9 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 
 void RenderSystem::ApplyShadows(IRenderer* renderer)
 {
-	if (mCurrentMaterial->HasEffect<MaterialEffectShadowProperties>())
+	MaterialEffectShadowProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectShadowProperties>();
+	if (effect != nullptr)
 	{
-		MaterialEffectShadowProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectShadowProperties>();
 		effect->SetParameters(	mShadowsRenderPass->GetShadowMapTexture(),
 								mShadowsRenderPass->GetShadowMapMatrix(),
 								mShadowsRenderPass->GetShadowMapPFCCounter());
@@ -277,85 +286,90 @@ void RenderSystem::SelectClippingPlane(RenderPass* renderPass)
 	//Apply clipping planes
 	if (renderPass->IsClippingEnabled())
 	{
+		mIsClippingEnabled = true;
 		mLastClipPlaneNumberUsed = renderPass->GetClippingPlaneNumber();
 		glEnable(mLastClipPlaneNumberUsed);
-		if (mCurrentMaterial->HasEffect<MaterialEffectClippingPlane>())
+		MaterialEffectClippingPlane* effect = mCurrentMaterial->GetEffect<MaterialEffectClippingPlane>();
+		if (effect != nullptr)
 		{
-			MaterialEffectClippingPlane* effect = mCurrentMaterial->GetEffect<MaterialEffectClippingPlane>();
 			effect->SetClippingPlane(renderPass->GetClippingPlane());
 		}
 	}
 	else
 	{
-		glDisable(mLastClipPlaneNumberUsed);
+		if (mIsClippingEnabled)
+		{
+			mIsClippingEnabled = false;
+			glDisable(mLastClipPlaneNumberUsed);
+		}
 	}
 }
 
 void RenderSystem::SelectTextures()
 {
-	if (mCurrentMaterial->HasEffect<MaterialEffectDiffuseTexture>())
+	MaterialEffectDiffuseTexture* diffuseTexture = mCurrentMaterial->GetEffect<MaterialEffectDiffuseTexture>();
+	if (diffuseTexture != nullptr)
 	{
-		ITexture* diffuse = mCurrentMaterial->GetEffect<MaterialEffectDiffuseTexture>()->GetDiffuseTexture();
-		if (diffuse != mDiffuseTexture)
+		if (diffuseTexture->GetDiffuseTexture() != mDiffuseTexture)
 		{
-			mDiffuseTexture = diffuse;
+			mDiffuseTexture = diffuseTexture->GetDiffuseTexture();
 			mDiffuseTexture->SetActive(true);
 		}
 	}
 
-	if (mCurrentMaterial->HasEffect<MaterialEffectNormalTexture>())
+	MaterialEffectNormalTexture* normalMaterial = mCurrentMaterial->GetEffect<MaterialEffectNormalTexture>();
+	if (normalMaterial != nullptr)
 	{
-		ITexture* normal = mCurrentMaterial->GetEffect<MaterialEffectNormalTexture>()->GetNormalTexture();
-		if (normal != mNormalTexture)
+		if (normalMaterial->GetNormalTexture() != mNormalTexture)
 		{
-			mNormalTexture = normal;
+			mNormalTexture = normalMaterial->GetNormalTexture();
 			mNormalTexture->SetActive(true);
 		}
 	}
 
-	if (mCurrentMaterial->HasEffect<MaterialEffectDepthTexture>())
+	MaterialEffectDepthTexture* depthMaterial = mCurrentMaterial->GetEffect<MaterialEffectDepthTexture>();
+	if (depthMaterial != nullptr)
 	{
-		ITexture* depthTexture = mCurrentMaterial->GetEffect<MaterialEffectDepthTexture>()->GetDepthTexture();
 		//if (depth != mNormalTexture)
 		{
 			//mNormalTexture = normal;
-			depthTexture->SetActive(true);
+			depthMaterial->GetDepthTexture()->SetActive(true);
 		}
 	}
 
-	if (mCurrentMaterial->HasEffect<MaterialEffectHeightMapTexture>())
+	MaterialEffectHeightMapTexture* heightmapMaterial = mCurrentMaterial->GetEffect<MaterialEffectHeightMapTexture>();
+	if (heightmapMaterial != nullptr)
 	{
-		ITexture* heightmap = mCurrentMaterial->GetEffect<MaterialEffectHeightMapTexture>()->GetHeightMapTexture();
-		heightmap->SetActive(true);
+		heightmapMaterial->GetHeightMapTexture()->SetActive(true);
 	}
 
-	if (mCurrentMaterial->HasEffect<MaterialEffectTextureArray>())
+	MaterialEffectTextureArray* textureArrayMaterial = mCurrentMaterial->GetEffect<MaterialEffectTextureArray>();
+	if (textureArrayMaterial != nullptr)
 	{
-		TextureArray* texture = mCurrentMaterial->GetEffect<MaterialEffectTextureArray>()->GetTextureArray();
-		texture->SetActive(true);
+		textureArrayMaterial->GetTextureArray()->SetActive(true);
 	}
 
-	if (mCurrentMaterial->HasEffect<MaterialEffectTextureCubemap>())
+	MaterialEffectTextureCubemap* textureCubemapMaterial = mCurrentMaterial->GetEffect<MaterialEffectTextureCubemap>();
+	if (textureCubemapMaterial != nullptr)
 	{
-		TextureCubemap* texture = mCurrentMaterial->GetEffect<MaterialEffectTextureCubemap>()->GetCubemap();
-		texture->SetActive(true);
+		textureCubemapMaterial->GetCubemap()->SetActive(true);
 	}
 
-	if (mCurrentMaterial->HasEffect<MaterialEffectWater>())
+	MaterialEffectWater* effectWater = mCurrentMaterial->GetEffect<MaterialEffectWater>();
+	if (effectWater != nullptr)
 	{
-		MaterialEffectWater* effect = mCurrentMaterial->GetEffect<MaterialEffectWater>();
-		effect->GetReflectionTexture()->SetActive(true);
-		effect->GetRefractionTexture()->SetActive(true);
-		effect->GetDistorsionTexture()->SetActive(true);
-		effect->GetNormalTexture()->SetActive(true);
-		effect->GetDepthTexture()->SetActive(true);
+		effectWater->GetReflectionTexture()->SetActive(true);
+		effectWater->GetRefractionTexture()->SetActive(true);
+		effectWater->GetDistorsionTexture()->SetActive(true);
+		effectWater->GetNormalTexture()->SetActive(true);
+		effectWater->GetDepthTexture()->SetActive(true);
 	}
 
-	if (mCurrentMaterial->HasEffect<MaterialEffectParticle>())
+	MaterialEffectParticle* effectParticle = mCurrentMaterial->GetEffect<MaterialEffectParticle>();
+	if (effectParticle != nullptr)
 	{
-		MaterialEffectParticle* effect = mCurrentMaterial->GetEffect<MaterialEffectParticle>();
-		effect->GetTexture()->SetActive(true);
-		effect->GetDepthTexture()->SetActive(true);
+		effectParticle->GetTexture()->SetActive(true);
+		effectParticle->GetDepthTexture()->SetActive(true);
 	}
 }
 
@@ -365,6 +379,18 @@ void RenderSystem::SelectMaterial(RenderPass* renderPass, IRenderer* renderer)
 	if (material == nullptr)
 	{
 		material = renderer->GetMaterial();
+	}
+	else 
+	{
+		//TODO copiar todos los parámetros del material del renderer al material del render pass
+		//no termina de funcionar del todo, con esta textura porque faltan las hojas...
+		MaterialEffectDiffuseTexture* materialEffectDiffuseRenderPass = material->GetEffect<MaterialEffectDiffuseTexture>();
+		MaterialEffectDiffuseTexture* materialEffectDiffuse = renderer->GetMaterial()->GetEffect<MaterialEffectDiffuseTexture>();
+
+		if (materialEffectDiffuseRenderPass != nullptr && materialEffectDiffuse != nullptr)
+		{
+			materialEffectDiffuseRenderPass->SetDiffuseTexture(materialEffectDiffuse->GetDiffuseTexture());
+		}
 	}
 
 	if (mCurrentMaterial == nullptr || mCurrentMaterial->GetMaterialID() != material->GetMaterialID())

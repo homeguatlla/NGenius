@@ -66,13 +66,13 @@ IMaterial* IRenderer::GetMaterial()
 	return mMaterial;
 }
 
+Model* IRenderer::GetModel()
+{
+	return mModel;
+}
+
 void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager, IMaterial* material)
 {
-	if (!mModel->IsBuilt())
-	{
-		mModel->Build(vertexBufferManager, material);
-	}
-
 	glBindVertexArray(mModel->GetVAOID());
 
 	std::vector<glm::mat4> matrices;
@@ -108,7 +108,7 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 		mModel->Apply(colors);
 	}
 	material->Apply(camera, mInstances[0]->GetParent()->GetTransformation());
-		
+	
 	Draw();
 
 	glBindVertexArray(0);

@@ -12,6 +12,7 @@
 #include "ParticleShader.h"
 #include "EnergyWallShader.h"
 #include "TextShader.h"
+#include "ShadowShader.h"
 
 ShadersLibrary::ShadersLibrary()
 {
@@ -68,4 +69,8 @@ void ShadersLibrary::Load()
 	program = new TextShader();
 	program->Init();
 	AddElement("text", program);
+
+	program = new ShadowShader();
+	program->Init();
+	AddElement("shadow", program);
 }

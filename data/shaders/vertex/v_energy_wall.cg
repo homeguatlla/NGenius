@@ -1,10 +1,11 @@
 #version 330 core
 
+in mat4 M;
 in vec3 vertexModelspace;
 in vec2 textureCoordsModelspace;
 in vec3 normalModelspace;
 in vec3 tangentModelspace;
-in mat4 M;
+
 
 out vec2 textureCoords;
 out vec3 positionWorldspace;

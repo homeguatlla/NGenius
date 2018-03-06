@@ -1,8 +1,8 @@
 #version 330 core
 
+in mat4 M;
 in vec3 vertexModelspace;
 in vec2 textureCoordsModelspace;
-in mat4 M;
 in vec4 colorGradient;
 
 uniform mat4 V;

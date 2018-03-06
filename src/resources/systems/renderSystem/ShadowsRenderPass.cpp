@@ -10,6 +10,9 @@
 #include "IFrameBuffer.h"
 #include "RenderPass.h"
 #include "../../textures/Texture.h"
+#include "../../materials/IMaterial.h"
+#include "../../materials/effects/MaterialEffectDiffuseTexture.h"
+#include "../../textures/ITexture.h"
 
 ShadowsRenderPass::ShadowsRenderPass(RenderSystem* renderSystem, float screenWidth, float screenHeight) :
 mRenderSystem(renderSystem),
@@ -136,8 +139,10 @@ RenderPass* ShadowsRenderPass::CreateShadowRenderPass()
 	RenderPass* shadowPass = new RenderPass(static_cast<ICamera*>(mShadowCastCamera), IRenderer::LAYER_OTHER);
 	shadowPass->SetFrameBufferOutput(frameShadowBuffer);
 
-	IMaterial* material = mRenderSystem->CreateMaterial("shadow", mRenderSystem->GetShader("default"));
-	//shadowPass->SetMaterial(material);
+	IMaterial* material = mRenderSystem->CreateMaterial("shadow", mRenderSystem->GetShader("shadow"));
+	material->AddEffect(new MaterialEffectDiffuseTexture());
+
+	shadowPass->SetMaterial(material);
 
 	return shadowPass;
 }
