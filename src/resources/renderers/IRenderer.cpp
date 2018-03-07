@@ -80,24 +80,40 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 
 	const glm::mat4 viewMatrix = const_cast<ICamera*>(camera)->GetViewMatrix();
 
-	for (IRenderer* renderer : mInstances)
+	//TODO estos bucles son mejorables.
+	//la idea es diferenciar entre partículas y no partículas.
+	if (typeid(*mInstances[0]) == typeid(ParticleRenderer))
 	{
-		glm::mat4 modelMatrix = renderer->GetParent()->GetTransformation()->GetModelMatrix();
-
-		if (mIsBillboard)
+		for (IRenderer* renderer : mInstances)
 		{
-			glm::vec3 scale = renderer->GetParent()->GetTransformation()->GetScale();
-			float angleZ = renderer->GetParent()->GetTransformation()->GetRotation().z;
+			Transformation* transformation = renderer->GetParent()->GetTransformation();
+			
+			glm::mat4 modelMatrix = transformation->GetModelMatrix();
+			glm::vec3 scale = transformation->GetScale();
+			float angleZ = transformation->GetRotation().z;
 			ModifyModelMatrixToAvoidRotations(viewMatrix, scale, angleZ, modelMatrix);
-		}
+			
+			matrices.push_back(modelMatrix);
 
-		matrices.push_back(modelMatrix);
-
-		if (typeid(*renderer) == typeid(ParticleRenderer))
-		{
 			Particle* particle = static_cast<Particle*>(renderer->GetParent());
 			const glm::vec4 color = particle->GetColor();
 			colors.push_back(color);
+		}
+	}
+	else
+	{
+		for (IRenderer* renderer : mInstances)
+		{
+			Transformation* transformation = renderer->GetParent()->GetTransformation();
+
+			glm::mat4 modelMatrix = transformation->GetModelMatrix();
+			if (mIsBillboard)
+			{
+				glm::vec3 scale = transformation->GetScale();
+				float angleZ = transformation->GetRotation().z;
+				ModifyModelMatrixToAvoidRotations(viewMatrix, scale, angleZ, modelMatrix);
+			}
+			matrices.push_back(modelMatrix);
 		}
 	}
 
