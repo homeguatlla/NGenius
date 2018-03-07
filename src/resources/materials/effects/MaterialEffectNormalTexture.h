@@ -15,6 +15,8 @@ public:
 	ITexture* GetNormalTexture() const;
 	float GetTile() const;
 
+	void CopyValuesFrom(IMaterial* material) override;
+
 	MaterialEffectNormalTexture* DoClone() const override;
 };
 

@@ -20,6 +20,8 @@ public:
 	const glm::vec2& GetScreenSize() const;
 	float GetTile() const;
 
+	void CopyValuesFrom(IMaterial* material) override;
+
 	MaterialEffectParticle* DoClone() const override;
 };
 

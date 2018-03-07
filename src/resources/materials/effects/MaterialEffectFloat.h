@@ -13,6 +13,8 @@ public:
 
 	float GetFloat() const;
 
+	void CopyValuesFrom(IMaterial* material) override;
+
 	MaterialEffectFloat* DoClone() const override;
 };
 

@@ -13,6 +13,8 @@ public:
 
 	TextureArray* GetTextureArray() const;
 
+	void CopyValuesFrom(IMaterial* material) override;
+
 	MaterialEffectTextureArray* DoClone() const override;
 };
 

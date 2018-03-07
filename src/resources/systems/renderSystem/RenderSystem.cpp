@@ -382,15 +382,7 @@ void RenderSystem::SelectMaterial(RenderPass* renderPass, IRenderer* renderer)
 	}
 	else 
 	{
-		//TODO copiar todos los parámetros del material del renderer al material del render pass
-		//no termina de funcionar del todo, con esta textura porque faltan las hojas...
-		MaterialEffectDiffuseTexture* materialEffectDiffuseRenderPass = material->GetEffect<MaterialEffectDiffuseTexture>();
-		MaterialEffectDiffuseTexture* materialEffectDiffuse = renderer->GetMaterial()->GetEffect<MaterialEffectDiffuseTexture>();
-
-		if (materialEffectDiffuseRenderPass != nullptr && materialEffectDiffuse != nullptr)
-		{
-			materialEffectDiffuseRenderPass->SetDiffuseTexture(materialEffectDiffuse->GetDiffuseTexture());
-		}
+		material->CopyMaterialEffectsValuesFrom(renderer->GetMaterial());
 	}
 
 	if (mCurrentMaterial == nullptr || mCurrentMaterial->GetMaterialID() != material->GetMaterialID())

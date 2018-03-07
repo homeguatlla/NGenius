@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MaterialEffectWater.h"
+#include "../IMaterial.h"
 
 MaterialEffectWater::MaterialEffectWater(ITexture* reflectionTexture, ITexture* refractionTexture,
 	ITexture* distorsionTexture, ITexture* normalTexture, ITexture* depthTexture, float waterSpeed, const glm::vec4& waterColor) :
@@ -55,6 +56,21 @@ float MaterialEffectWater::GetSpeed() const
 void MaterialEffectWater::SetSpeed(float speed)
 {
 	mSpeed = speed;
+}
+
+void MaterialEffectWater::CopyValuesFrom(IMaterial* material)
+{
+	MaterialEffectWater* effect = material->GetEffect<MaterialEffectWater>();
+	if (effect != nullptr)
+	{
+		mRefractionTexture = effect->GetRefractionTexture();
+		mReflectionTexture = effect->GetReflectionTexture();
+		mDistorsionTexture = effect->GetDistorsionTexture();
+		mDepthTexture = effect->GetDepthTexture();
+		mNormalTexture = effect->GetNormalTexture();
+		mSpeed = effect->GetSpeed();
+		mColor = effect->GetColor();
+	}
 }
 
 MaterialEffectWater* MaterialEffectWater::DoClone() const

@@ -22,6 +22,8 @@ public:
 	void SetDiffuseTexture(ITexture* texture);
 	void SetTile(float tile);
 
+	void CopyValuesFrom(IMaterial* material) override;
+
 	MaterialEffectDiffuseTexture* DoClone() const override;
 };
 

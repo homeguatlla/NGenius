@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MaterialEffectDepthTexture.h"
+#include "../IMaterial.h"
 #include <assert.h>
 
 MaterialEffectDepthTexture::MaterialEffectDepthTexture(ITexture* texture, float tile) :
@@ -22,6 +23,16 @@ ITexture* MaterialEffectDepthTexture::GetDepthTexture() const
 float MaterialEffectDepthTexture::GetTile() const
 {
 	return mTile;
+}
+
+void MaterialEffectDepthTexture::CopyValuesFrom(IMaterial* material)
+{
+	MaterialEffectDepthTexture* effect = material->GetEffect<MaterialEffectDepthTexture>();
+	if (effect != nullptr)
+	{
+		mTexture = effect->GetDepthTexture();
+		mTile = effect->GetTile();
+	}
 }
 
 MaterialEffectDepthTexture* MaterialEffectDepthTexture::DoClone() const

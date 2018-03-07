@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "MaterialEffectClippingPlane.h"
+#include "../IMaterial.h"
 
-MaterialEffectClippingPlane::MaterialEffectClippingPlane()
+MaterialEffectClippingPlane::MaterialEffectClippingPlane() :
+	mPlane(glm::vec4(0.0f))
 {
 }
 
@@ -18,6 +20,15 @@ void MaterialEffectClippingPlane::SetClippingPlane(const glm::vec4& plane)
 const glm::vec4 MaterialEffectClippingPlane::GetClippingPlane() const
 {
 	return mPlane;
+}
+
+void MaterialEffectClippingPlane::CopyValuesFrom(IMaterial* material)
+{
+	MaterialEffectClippingPlane* effect = material->GetEffect<MaterialEffectClippingPlane>();
+	if (effect != nullptr)
+	{
+		mPlane = effect->GetClippingPlane();
+	}
 }
 
 MaterialEffectClippingPlane* MaterialEffectClippingPlane::DoClone() const

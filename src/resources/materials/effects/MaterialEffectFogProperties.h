@@ -19,6 +19,8 @@ public:
 	float GetDensity() const;
 	float GetGradient() const;
 
+	void CopyValuesFrom(IMaterial* material) override;
+
 	MaterialEffectFogProperties* DoClone() const override;
 };
 

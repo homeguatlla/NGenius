@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "MaterialEffectShadowProperties.h"
+#include "../IMaterial.h"
 
-MaterialEffectShadowProperties::MaterialEffectShadowProperties() 
+MaterialEffectShadowProperties::MaterialEffectShadowProperties() :
+	mDepthTexture(nullptr),
+	mPFCCounter(0),
+	mMatrix(glm::mat4(0.0f))
 {
 }
 
@@ -30,6 +34,17 @@ int MaterialEffectShadowProperties::GetPFCCounter() const
 const glm::mat4& MaterialEffectShadowProperties::GetMatrix() const
 {
 	return mMatrix;
+}
+
+void MaterialEffectShadowProperties::CopyValuesFrom(IMaterial* material)
+{
+	MaterialEffectShadowProperties* effect = material->GetEffect<MaterialEffectShadowProperties>();
+	if (effect != nullptr)
+	{
+		mMatrix = effect->GetMatrix();
+		mPFCCounter = effect->GetPFCCounter();
+		mDepthTexture = effect->GetDepthTexture();
+	}
 }
 
 MaterialEffectShadowProperties* MaterialEffectShadowProperties::DoClone() const

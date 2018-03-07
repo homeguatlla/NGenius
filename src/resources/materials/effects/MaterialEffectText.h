@@ -26,6 +26,8 @@ public:
 	float GetBorderEdge() const;
 	glm::vec2 GetShadowOffset() const;
 
+	void CopyValuesFrom(IMaterial* material) override;
+
 	MaterialEffectText* DoClone() const override;
 };
 

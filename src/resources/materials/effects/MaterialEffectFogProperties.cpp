@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MaterialEffectFogProperties.h"
+#include "../IMaterial.h"
 
 MaterialEffectFogProperties::MaterialEffectFogProperties(const glm::vec3& color, float density, float gradient) :
 	mColor(color),
@@ -33,6 +34,17 @@ float MaterialEffectFogProperties::GetDensity() const
 float MaterialEffectFogProperties::GetGradient() const
 {
 	return mGradient;
+}
+
+void MaterialEffectFogProperties::CopyValuesFrom(IMaterial* material)
+{
+	MaterialEffectFogProperties* effect = material->GetEffect<MaterialEffectFogProperties>();
+	if (effect != nullptr)
+	{
+		mColor = effect->GetColor();
+		mDensity = effect->GetDensity();
+		mGradient = effect->GetGradient();
+	}
 }
 
 MaterialEffectFogProperties* MaterialEffectFogProperties::DoClone() const

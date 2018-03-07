@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MaterialEffectText.h"
+#include "../IMaterial.h"
 
 MaterialEffectText::MaterialEffectText(const glm::vec4& color, const glm::vec4& outlineColor, float width, float edge,
 	float borderWidth, float borderEdge, const glm::vec2& shadowOffset) :
@@ -55,6 +56,21 @@ float MaterialEffectText::GetBorderEdge() const
 glm::vec2 MaterialEffectText::GetShadowOffset() const
 {
 	return mShadowOffset;
+}
+
+void MaterialEffectText::CopyValuesFrom(IMaterial* material)
+{
+	MaterialEffectText* effect = material->GetEffect<MaterialEffectText>();
+	if (effect != nullptr)
+	{
+		mColor = effect->GetColor();
+		mOutlineColor = effect->GetOutlineColor();
+		mWidth = effect->GetWidth();
+		mEdge = effect->GetEdge();
+		mBorderWidth = effect->GetBorderWidth();
+		mBorderEdge = effect->GetBorderEdge();
+		mShadowOffset = effect->GetShadowOffset();
+	}
 }
 
 MaterialEffectText* MaterialEffectText::DoClone() const

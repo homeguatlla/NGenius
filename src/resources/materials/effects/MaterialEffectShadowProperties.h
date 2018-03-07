@@ -19,6 +19,8 @@ public:
 	int GetPFCCounter() const;
 	const glm::mat4& GetMatrix() const;
 
+	void CopyValuesFrom(IMaterial* material) override;
+
 	MaterialEffectShadowProperties* DoClone() const override;
 };
 

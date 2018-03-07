@@ -14,6 +14,8 @@ public:
 	glm::vec3 GetPosition() const;
 	glm::vec3 GetColor() const;
 
+	void CopyValuesFrom(IMaterial* material) override;
+
 	MaterialEffectLightProperties* DoClone() const override;
 };
 

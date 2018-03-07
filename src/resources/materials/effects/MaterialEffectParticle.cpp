@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "MaterialEffectParticle.h"
-
+#include "../IMaterial.h"
 #include <assert.h>
 
 MaterialEffectParticle::MaterialEffectParticle(ITexture* texture, ITexture* depthTexture, const glm::vec2& screenSize, float tile) :
@@ -35,6 +35,18 @@ const glm::vec2& MaterialEffectParticle::GetScreenSize() const
 float MaterialEffectParticle::GetTile() const
 {
 	return mTile;
+}
+
+void MaterialEffectParticle::CopyValuesFrom(IMaterial* material)
+{
+	MaterialEffectParticle* effect = material->GetEffect<MaterialEffectParticle>();
+	if (effect != nullptr)
+	{
+		mTile = effect->GetTile();
+		mScreenSize = effect->GetScreenSize();
+		mTexture = effect->GetTexture();
+		mDepthTexture = effect->GetDepthTexture();
+	}
 }
 
 MaterialEffectParticle* MaterialEffectParticle::DoClone() const

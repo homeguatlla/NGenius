@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "MaterialEffectDiffuseTexture.h"
+#include "../IMaterial.h"
 
-MaterialEffectDiffuseTexture::MaterialEffectDiffuseTexture()
+MaterialEffectDiffuseTexture::MaterialEffectDiffuseTexture() :
+	mTexture(nullptr),
+	mColor(glm::vec3(0.0f)),
+	mTile(1.0f)
 {
 
 }
@@ -42,6 +46,17 @@ float MaterialEffectDiffuseTexture::GetTile() const
 void MaterialEffectDiffuseTexture::SetTile(float tile)
 {
 	mTile = tile;
+}
+
+void MaterialEffectDiffuseTexture::CopyValuesFrom(IMaterial* material)
+{
+	MaterialEffectDiffuseTexture* effectDiffuse = material->GetEffect<MaterialEffectDiffuseTexture>();
+	if (effectDiffuse != nullptr)
+	{
+		mTexture = effectDiffuse->GetDiffuseTexture();
+		mTile = effectDiffuse->GetTile();
+		mColor = effectDiffuse->GetColor();
+	}
 }
 
 MaterialEffectDiffuseTexture* MaterialEffectDiffuseTexture::DoClone() const

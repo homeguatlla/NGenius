@@ -15,6 +15,8 @@ public:
 	ITexture* GetHeightMapTexture() const;
 	float GetTile() const;
 
+	void CopyValuesFrom(IMaterial* material) override;
+
 	MaterialEffectHeightMapTexture* DoClone() const override;
 };
 

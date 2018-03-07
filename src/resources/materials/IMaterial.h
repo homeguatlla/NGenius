@@ -30,6 +30,7 @@ public:
 	void UnUse();
 
 	void Apply(const ICamera* camera, const Transformation* transformation);
+	void CopyMaterialEffectsValuesFrom(IMaterial* material);
 
 	IShaderProgram* GetShader();
 

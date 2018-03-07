@@ -29,6 +29,8 @@ public:
 	float GetSpeed() const;
 	void SetSpeed(float speed);
 
+	void CopyValuesFrom(IMaterial* material) override;
+
 	MaterialEffectWater* DoClone() const override;
 };
 

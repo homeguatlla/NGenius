@@ -13,6 +13,8 @@ public:
 
 	void SetClippingPlane(const glm::vec4& plane);
 	const glm::vec4 GetClippingPlane() const;
+	
+	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectClippingPlane* DoClone() const override;
 };

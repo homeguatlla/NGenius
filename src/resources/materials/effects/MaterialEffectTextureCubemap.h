@@ -13,6 +13,8 @@ public:
 
 	TextureCubemap* GetCubemap() const;
 
+	void CopyValuesFrom(IMaterial* material) override;
+
 	MaterialEffectTextureCubemap* DoClone() const override;
 };
 

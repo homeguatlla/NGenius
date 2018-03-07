@@ -15,6 +15,8 @@ public:
 	ITexture* GetDepthTexture() const;
 	float GetTile() const;
 
+	void CopyValuesFrom(IMaterial* material) override;
+
 	MaterialEffectDepthTexture* DoClone() const override;
 };
 

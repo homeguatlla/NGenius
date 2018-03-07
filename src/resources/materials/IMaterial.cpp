@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "IMaterial.h"
 #include "../shaders/IShaderProgram.h"
+#include "IMaterialEffect.h"
 #include <GL/glew.h>
 
 unsigned IMaterial::IDCounter = 0;
@@ -45,6 +46,17 @@ void IMaterial::Apply(const ICamera* camera, const Transformation* transformatio
 IShaderProgram*  IMaterial::GetShader()
 {
 	return mShader;
+}
+
+void IMaterial::CopyMaterialEffectsValuesFrom(IMaterial* material)
+{
+	IMaterialEffectIterator it = mEffects.begin();
+
+	for (; it != mEffects.end(); ++it)
+	{
+		IMaterialEffect* effect = it->second;
+		effect->CopyValuesFrom(material);
+	}
 }
 
 IMaterial* IMaterial::Clone() const

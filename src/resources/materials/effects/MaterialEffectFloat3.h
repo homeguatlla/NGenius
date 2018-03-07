@@ -14,6 +14,8 @@ public:
 	void SetValue(const glm::vec3& value);
 	const glm::vec3 GetValue() const;
 
+	void CopyValuesFrom(IMaterial* material) override;
+
 	MaterialEffectFloat3* DoClone() const override;
 };
 
