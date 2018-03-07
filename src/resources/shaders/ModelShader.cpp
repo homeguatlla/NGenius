@@ -88,7 +88,7 @@ void ModelShader::LoadData(const ICamera* camera, const Transformation* transfor
 	}
 
 	MaterialEffectShadowProperties* effectShadow = material->GetEffect<MaterialEffectShadowProperties>();
-	if (effectShadow != nullptr)
+	if (effectShadow != nullptr && effectShadow->GetDepthTexture() != nullptr)
 	{
 		LoadMatrix4(mLocationShadowSpaceMatrix, effectShadow->GetMatrix());
 		LoadTexture(mLocationShadowMapTexture, effectShadow->GetDepthTexture()->GetUnit());

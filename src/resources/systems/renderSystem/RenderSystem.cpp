@@ -272,12 +272,15 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 
 void RenderSystem::ApplyShadows(IRenderer* renderer)
 {
-	MaterialEffectShadowProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectShadowProperties>();
-	if (effect != nullptr)
+	if (mShadowsRenderPass->IsEnabled())
 	{
-		effect->SetParameters(	mShadowsRenderPass->GetShadowMapTexture(),
-								mShadowsRenderPass->GetShadowMapMatrix(),
-								mShadowsRenderPass->GetShadowMapPFCCounter());
+		MaterialEffectShadowProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectShadowProperties>();
+		if (effect != nullptr)
+		{
+			effect->SetParameters(mShadowsRenderPass->GetShadowMapTexture(),
+				mShadowsRenderPass->GetShadowMapMatrix(),
+				mShadowsRenderPass->GetShadowMapPFCCounter());
+		}
 	}
 }
 
@@ -376,7 +379,7 @@ void RenderSystem::SelectTextures()
 void RenderSystem::SelectMaterial(RenderPass* renderPass, IRenderer* renderer)
 {
 	IMaterial* material = renderPass->GetMaterial();
-	if (material == nullptr)
+	if (material == nullptr || !mShadowsRenderPass->IsEnabled())
 	{
 		material = renderer->GetMaterial();
 	}

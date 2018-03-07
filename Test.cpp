@@ -124,7 +124,7 @@ enum Configuration
 	PROPS,
 	RELEASE
 };
-Configuration mConfiguration = PROPS;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -1308,7 +1308,7 @@ void Initialize()
 	mEngine.RegisterUpdateHandler(std::bind(&Update, std::placeholders::_1));
 
 	mEngine.SetCastingShadowsParameters(mSunLightDirection, 3);
-	mEngine.SetCastingShadowsEnabled(true);
+	mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
 	
 	mEngine.Init(mIsFullScreen);
 }
