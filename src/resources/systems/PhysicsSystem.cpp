@@ -171,9 +171,12 @@ bool PhysicsSystem::ApplyCollisions(GameEntity *entity, float *groundHeight)
 	IRenderer* renderer = entity->GetRenderer();
 	if (renderer != nullptr)
 	{
-		float rendererHeight = renderer->GetAABB().GetVertexMax().y - renderer->GetAABB().GetVertexMin().y;
-		float factor = 1.0f/(rendererHeight * 100.0f);
-		entityBottomHeight = glm::abs(renderer->GetAABB().GetVertexMin().y * transformation->GetScale().y) + factor;
+		glm::vec3 max = renderer->GetAABB().GetVertexMax();
+		glm::vec3 min = renderer->GetAABB().GetVertexMin();
+		glm::mat3 matrix = glm::mat3(transformation->GetModelMatrix());
+		max = max * matrix;
+		min = min * matrix;
+		entityBottomHeight = glm::abs(min.y);
 	}
 	position.y = glm::max(position.y, *groundHeight + entityBottomHeight);
 	transformation->SetPosition(position);

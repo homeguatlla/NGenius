@@ -124,7 +124,7 @@ enum Configuration
 	PROPS,
 	RELEASE
 };
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = PROPS;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -353,12 +353,12 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 	return modelEntity;
 }
 
-GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, Model* model, IMaterial* material)
+GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, const glm::vec3& rotation, Model* model, IMaterial* material)
 {
 	IRenderer* renderer = new VertexsRenderer(model, material);
 
 	GameEntity* modelEntity = new GameEntity(
-												new Transformation(position, glm::vec3(0.0f), scale),
+												new Transformation(position, rotation, scale),
 												renderer
 											);
 
@@ -439,6 +439,7 @@ void CreateProps()
 
 	std::vector<std::string> models;
 	std::vector<glm::vec3> positions;
+	std::vector<glm::vec3> rotations;
 
 	models.push_back(std::string("barrel"));
 	models.push_back(std::string("chest"));
@@ -447,8 +448,14 @@ void CreateProps()
 	positions.push_back(glm::vec3(0.8f, 0.0f, -2.3f));
 	positions.push_back(glm::vec3(0.4f, 0.0f, -2.0f));
 	positions.push_back(glm::vec3(1.0f, 0.0f, -1.7f));
+	positions.push_back(glm::vec3(1.1f, 0.0f, -2.3f));
 	positions.push_back(glm::vec3(10.0f, 0.0f, 10.0f));
 	positions.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+
+	rotations.push_back(glm::vec3(0.0f));
+	rotations.push_back(glm::vec3(0.0f));
+	rotations.push_back(glm::vec3(0.0f));
+	rotations.push_back(glm::vec3(1.5f, 0.0f, 0.0f));
 
 	std::string textureName("MedievalDungeonPropsAtlas02_diffuse");
 	std::string textureNormalName("MedievalDungeonPropsAtlas02_normalmap");
@@ -471,16 +478,17 @@ void CreateProps()
 		x = positions[i % positions.size()].x;
 		z = positions[i % positions.size()].z;
 
-		float height = 0;// mTerrain->GetHeight(glm::vec2(x, z)) - 0.1f;
+		float height = mTerrain->GetHeight(glm::vec2(x, z)) - 0.1f;
 		//if (height > mWaterHeight + 0.2f)
 		{
 			glm::vec3 position(x, height, z);
 			glm::vec3 scale(0.3f);
-			std::string modelName = models[i % models.size()];
+			glm::vec3 rotation(rotations[i % rotations.size()]);
 			
+			std::string modelName = models[i % models.size()];
 			Model* model = mEngine.GetModel(modelName);
 
-			GameEntity* entity = CreateModel(position, scale, model, material);
+			GameEntity* entity = CreateModel(position, scale, rotation, model, material);
 			mEngine.AddGameEntity(entity);
 		}
 	}
@@ -1264,10 +1272,10 @@ void SetupConfiguration()
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
 		mIsVegetationEnabled = false;
-		mIsPropsEnabled = false;
+		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = false;
-		mIsTerrainFlat = true;
+		mIsTerrainFlat = false;
 		mIsTextEnabled = false;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
