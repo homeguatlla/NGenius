@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileReader.h" />
+    <ClInclude Include="GameConstants.h" />
     <ClInclude Include="src\AABB.h" />
     <ClInclude Include="src\BasicTypes.h" />
     <ClInclude Include="src\BitNumber.h" />
@@ -172,6 +173,8 @@
     <ClInclude Include="src\resources\camera\ICamera.h" />
     <ClInclude Include="src\resources\camera\OrthogonalCamera.h" />
     <ClInclude Include="src\resources\camera\PerspectiveCamera.h" />
+    <ClInclude Include="src\resources\command\commands\RiseTerrainCommand.h" />
+    <ClInclude Include="src\resources\command\ICommand.h" />
     <ClInclude Include="src\resources\components\BillboardComponent.h" />
     <ClInclude Include="src\resources\components\CameraComponent.h" />
     <ClInclude Include="src\resources\components\DebugInputComponent.h" />
@@ -274,6 +277,8 @@
     <ClCompile Include="src\resources\camera\ICamera.cpp" />
     <ClCompile Include="src\resources\camera\OrthogonalCamera.cpp" />
     <ClCompile Include="src\resources\camera\PerspectiveCamera.cpp" />
+    <ClCompile Include="src\resources\command\commands\RiseTerrainCommand.cpp" />
+    <ClCompile Include="src\resources\command\ICommand.cpp" />
     <ClCompile Include="src\resources\components\BillboardComponent.cpp" />
     <ClCompile Include="src\resources\components\CameraComponent.cpp" />
     <ClCompile Include="src\resources\components\DebugInputComponent.cpp" />

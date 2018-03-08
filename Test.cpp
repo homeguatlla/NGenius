@@ -19,6 +19,7 @@
 #include <complex>
 #include <ctime>
 
+#include "GameConstants.h"
 #include "src/NGenius.h"
 #include "src/resources/systems/PhysicsSystem.h"
 
@@ -96,23 +97,16 @@
 #include "src/resources/components/BillboardComponent.h"
 #include "src/resources/components/OverWaterComponent.h"
 
+#include "src/resources/command/ICommand.h"
+#include "src/resources/command/commands/RiseTerrainCommand.h"
+
 using namespace glm;
 using namespace std;
 
 #define and &&
 #define or ||
 
-static const float PLAYER_UPWARDS_HEIGHT = 2.0f;
-static const float PLAYER_RUN_SPEED = 2.0f;
-static const float PLAYER_TURN_SPEED = glm::radians(160.0f);
-static const float VIEW_ANGLE = 45.0f;
-static const float FAR_PLANE = 1000.0f;
-static const float NEAR_PLANE = 0.1f;
-static const float SCREEN_WIDTH = 1024.0f;
-static const float SCREEN_HEIGHT = 768.0f;
 
-static const float SKYBOX_ROTATION_SPEED = 0.01f;
-static const float MIN_FPS_ALLOWED = 30.0f;
 
 enum Configuration
 {
@@ -136,9 +130,7 @@ int muevej[] = { 0, 1, 0, -1 };
 
 const float Pi = 3.141592f;
 
-float mTerrainHeightScale = 7.5f;
-float mWaterHeight = 8.2f * mTerrainHeightScale / 15.0f;
-
+float mWaterHeight = 8.2f * TERRAIN_SCALE / 15.0f;
 
 bool mIsDebugModeEnabled = false;
 bool mIsWaterEnabled = true;
@@ -183,6 +175,8 @@ glm::vec3 mFogColor = vec3(89.0f, 120.0f, 143.0f) / 255.0f;
 //red glm::vec3 mFogColor = vec3(218.0f, 74.0f, 43.0f) / 255.0f; 
 float mEnergyWallRadius = 22.0f;
 glm::vec3 mEnergyWallPosition(0.0f, 0.0f, 0.0f);
+
+ICommand* mCurrentCommand = nullptr;
 
 double aleatori()
 {
@@ -743,13 +737,13 @@ void CreateTerrain()
 	material->AddEffect(new MaterialEffectTextureArray(static_cast<TextureArray*>(mEngine.GetTexture("terrain_array"))));
 	material->AddEffect(new MaterialEffectClippingPlane());
 	material->AddEffect(new MaterialEffectShadowProperties());
-	material->AddEffect(new MaterialEffectFloat(&mTerrainHeightScale));
+	material->AddEffect(new MaterialEffectFloat(TERRAIN_SCALE));
 
-	mTerrainHeightScale = mIsTerrainFlat ? 0.0f : mTerrainHeightScale;
+	float scale = mIsTerrainFlat ? 0.0f : TERRAIN_SCALE;
 	mTerrain = new Terrain(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 							material,
 							static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")),
-							mTerrainHeightScale);
+							scale);
 
 	mTerrain->AddComponent(new DebugInputComponent(mEngine.GetGLWindow()));
 	mTerrain->SetFlat(mIsTerrainFlat);
@@ -790,6 +784,7 @@ void CreateGameCameraEntity()
 		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
 	mCamera->AddComponent(new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f));
 	mCamera->AddComponent(new CollisionComponent());
+	
 	if (mIsWaterEnabled)
 	{
 		mCamera->AddComponent(new OverWaterComponent(mWaterHeight));
@@ -1074,30 +1069,6 @@ void DeleteEntities()
 
 void UpdateInput(GLFWwindow* window)
 {
-	/*if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
-	mCamera->Move(200 * deltaTime);
-
-	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
-	mCamera->Move(-200 * deltaTime);*/
-
-	//cameraDirection = glm::vec3(glm::rotate(glm::mat4(1.0f), -0.5f*delta * 180.0f / Pi, upVector)*glm::vec4(cameraDirection, 1.0));
-
-	/*if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-	glm::vec3 orto = glm::cross(upVector, cameraDirection);
-	cameraDirection = glm::vec3(glm::rotate(glm::mat4(1.0f), 0.5f*delta * 180.0f / Pi, orto)*glm::vec4(cameraDirection, 1.0));
-	upVector = glm::vec3(glm::rotate(glm::mat4(1.0f), 0.5f*delta * 180.0f / Pi, orto)*glm::vec4(upVector, 1.0));
-	}
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-	glm::vec3 orto = glm::cross(upVector, cameraDirection);
-	cameraDirection = glm::vec3(glm::rotate(glm::mat4(1.0f), -0.5f*delta * 180.0f / Pi, orto)*glm::vec4(cameraDirection, 1.0));
-	upVector = glm::vec3(glm::rotate(glm::mat4(1.0f), -0.5f*delta * 180.0f / Pi, orto)*glm::vec4(upVector, 1.0));
-	}
-	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-	upVector = glm::vec3(glm::rotate(glm::mat4(1.0f), -0.5f*delta * 180.0f / Pi, cameraDirection)*glm::vec4(upVector, 1.0));
-	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
-	upVector = glm::vec3(glm::rotate(glm::mat4(1.0f), 0.5f*delta * 180.0f / Pi, cameraDirection)*glm::vec4(upVector, 1.0));
-	*/
-
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 	{
 		PerspectiveCamera* gameplayCamera = static_cast<PerspectiveCamera*>(mGameplayCamera);
@@ -1121,6 +1092,18 @@ void UpdateInput(GLFWwindow* window)
 	{
 		mIsShadowEnabled = !mIsShadowEnabled;
 		mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
+	}
+	else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+	{
+		if (mCurrentCommand == nullptr)
+		{
+			mCurrentCommand = new RiseTerrainCommand(mTerrain);
+		}
+	}
+
+	if (mCurrentCommand != nullptr)
+	{
+		mCurrentCommand->Execute();
 	}
 }
 
@@ -1164,8 +1147,26 @@ void UpdateStatitstics()
 	mFPSText->UpdateText("FPS: " +std::to_string(fps));
 }
 
+void UpdateCommand(float elapsedTime)
+{
+	if (mCurrentCommand != nullptr)
+	{
+		if (mCurrentCommand->HasFinished())
+		{
+			delete mCurrentCommand;
+			mCurrentCommand = nullptr;
+		}
+		else
+		{
+			mCurrentCommand->Update(elapsedTime);
+		}
+	}
+}
+
 void Update(float elapsedTime)
 {
+	UpdateCommand(elapsedTime);
+	
 	if (mIsWaterEnabled)
 	{
 		UpdateWaterCameras();
@@ -1190,7 +1191,7 @@ void SetupConfiguration()
 	{
 	case DEBUG:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = true;
+		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
 		mIsVegetationEnabled = true;

@@ -7,6 +7,8 @@
 #include "../textures/Texture.h"
 #include "../models/Mesh.h"
 #include "../models/Model.h"
+#include "../materials/IMaterial.h"
+#include "../materials/effects/MaterialEffectFloat.h"
 #include <ctime>
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -23,6 +25,7 @@ mIsFlat(false)
 	//tg.Generate("data/terrain_heightmap_256.png", mNumVertexsSide, scale, true);
 	//tg.GenerateOnlyBlendmap("data/terrain_blendmap_1024.png", mNumVertexsSide);
 	//return;
+	assert(material != nullptr);
 
 	srand(time(NULL));
 
@@ -40,6 +43,9 @@ mIsFlat(false)
 	SetRenderer(new IndexesRenderer(mModel, material));
 
 	GetRenderer()->SetLayer(IRenderer::LAYER_TERRAIN);
+
+	mMaterialEffectFloat = material->GetEffect<MaterialEffectFloat>();
+	assert(mMaterialEffectFloat != nullptr);
 }
 
 Terrain::~Terrain()
@@ -50,6 +56,12 @@ Terrain::~Terrain()
 void Terrain::SetFlat(bool isFlat)
 {
 	mIsFlat = isFlat;
+}
+
+void Terrain::SetScale(float scale)
+{
+	mScale = scale;
+	mMaterialEffectFloat->SetValue(mScale);
 }
 
 bool Terrain::IsPointInside(glm::vec2 point) const

@@ -5,13 +5,14 @@ class ITexture;
 
 class MaterialEffectFloat : public IMaterialEffect
 {
-	float* mValue;
+	float mValue;
 
 public:
-	MaterialEffectFloat(float* value);
+	MaterialEffectFloat(float value);
 	virtual ~MaterialEffectFloat();
 
-	float GetFloat() const;
+	float GetValue() const;
+	void SetValue(float value);
 
 	void CopyValuesFrom(IMaterial* material) override;
 

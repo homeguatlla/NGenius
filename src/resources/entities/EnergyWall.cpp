@@ -12,12 +12,14 @@ mMaterial(material),
 mModel(model),
 mMaxLiveTime(maxLiveTime),
 mLiveTime(0.0f),
-mContactPoint(0.0f)
+mContactPoint(0.0f),
+mMaterialEffectFloat(nullptr)
 {
 	assert(model != nullptr);
 	assert(material != nullptr);
 	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
-	material->AddEffect(new MaterialEffectFloat(&mLiveTime));
+	mMaterialEffectFloat = new MaterialEffectFloat(mLiveTime);
+	material->AddEffect(mMaterialEffectFloat);
 	SetRenderer(new EnergyWallRenderer(model, material));
 	GetRenderer()->SetLayer(IRenderer::LAYER_PARTICLES);
 	GetRenderer()->SetTransparency(true);
@@ -41,6 +43,7 @@ void EnergyWall::Update(float elapsedTime)
 	assert(mLiveTime <= mMaxLiveTime);
 
 	mLiveTime = glm::max(0.0f, mLiveTime - elapsedTime);
+	mMaterialEffectFloat->SetValue(mLiveTime);	
 }
 
 void EnergyWall::SetLiveTime(float liveTime)

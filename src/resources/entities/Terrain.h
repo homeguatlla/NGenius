@@ -6,6 +6,7 @@ class Texture;
 class TextureArray;
 class IMaterial;
 class Model;
+class MaterialEffectFloat;
 
 class Terrain :	public GameEntity
 {
@@ -15,6 +16,7 @@ class Terrain :	public GameEntity
 	bool mIsFlat;
 	Texture* mHeightmap;
 	Model* mModel;
+	MaterialEffectFloat* mMaterialEffectFloat;
 
 public:
 	explicit Terrain(Transformation* transformation, IMaterial* material, Texture* heightmap, float scale);
@@ -26,6 +28,7 @@ public:
 	float GetHeight(glm::vec2 point) const;
 
 	void SetFlat(bool isFlat);
+	void SetScale(float scale);
 
 private:
 	float CalculateBarryCenter(glm::vec3& p1, glm::vec3& p2, glm::vec3& p3, glm::vec2& point) const;

@@ -106,6 +106,18 @@
     <Filter Include="Header Files\resources\materials\effects">
       <UniqueIdentifier>{cca33aa1-84bb-4323-a091-dd5494bacd68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\resources\command">
+      <UniqueIdentifier>{e2510ea2-5e3b-45bb-b20c-8feb386ba768}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\command">
+      <UniqueIdentifier>{bbd3ade9-ea63-4743-9212-a122e519fd03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\command\commands">
+      <UniqueIdentifier>{86b79763-48a8-44d4-8956-177640c49ec0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\command\commands">
+      <UniqueIdentifier>{18f4b866-22d6-40fd-91c4-6b9c092eba4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -420,6 +432,15 @@
     <ClInclude Include="src\resources\systems\renderSystem\IFrameBuffer.h">
       <Filter>Header Files\resources\systems\renderSystem</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\command\commands\RiseTerrainCommand.h">
+      <Filter>Header Files\resources\command\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\command\ICommand.h">
+      <Filter>Header Files\resources\command</Filter>
+    </ClInclude>
+    <ClInclude Include="GameConstants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -727,6 +748,12 @@
     </ClCompile>
     <ClCompile Include="src\resources\systems\renderSystem\IFrameBuffer.cpp">
       <Filter>Source Files\resources\systems\renderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\command\ICommand.cpp">
+      <Filter>Source Files\resources\command</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\command\commands\RiseTerrainCommand.cpp">
+      <Filter>Source Files\resources\command\commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -42,7 +42,7 @@ void EnergyWallShader::LoadData(const ICamera* camera, const Transformation* tra
 	MaterialEffectFloat* effectFloat = material->GetEffect<MaterialEffectFloat>();
 	if (effectFloat != nullptr)
 	{
-		LoadFloat(mLocationTime, effectFloat->GetFloat());
+		LoadFloat(mLocationTime, effectFloat->GetValue());
 	}
 
 	MaterialEffectFloat2* effectFloat2 = material->GetEffect<MaterialEffectFloat2>();

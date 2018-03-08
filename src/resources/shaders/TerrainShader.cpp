@@ -80,7 +80,7 @@ void TerrainShader::LoadData(const ICamera* camera, const Transformation* transf
 	MaterialEffectFloat* effect = material->GetEffect<MaterialEffectFloat>();
 	if (effect != nullptr)
 	{
-		LoadFloat(mLocationScale, effect->GetFloat());
+		LoadFloat(mLocationScale, effect->GetValue());
 	}
 
 	MaterialEffectDiffuseTexture* effectDiffuse = material->GetEffect<MaterialEffectDiffuseTexture>();

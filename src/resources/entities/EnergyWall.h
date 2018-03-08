@@ -1,8 +1,10 @@
 #pragma once
 #include "../GameEntity.h"
 
+
 class Model;
 class IMaterial;
+class MaterialEffectFloat;
 
 class EnergyWall : public GameEntity
 {
@@ -11,6 +13,7 @@ class EnergyWall : public GameEntity
 	float mMaxLiveTime;
 	float mLiveTime;
 	glm::vec3 mContactPoint;
+	MaterialEffectFloat* mMaterialEffectFloat;
 
 public:
 	explicit EnergyWall(Transformation* transformation, IMaterial* material, Model* model, float maxLiveTime);

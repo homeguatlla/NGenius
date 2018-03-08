@@ -2,7 +2,7 @@
 #include "MaterialEffectFloat.h"
 #include "../IMaterial.h"
 
-MaterialEffectFloat::MaterialEffectFloat(float* value) :
+MaterialEffectFloat::MaterialEffectFloat(float value) :
 mValue(value)
 {
 }
@@ -12,9 +12,14 @@ MaterialEffectFloat::~MaterialEffectFloat()
 {
 }
 
-float MaterialEffectFloat::GetFloat() const
+float MaterialEffectFloat::GetValue() const
 {
-	return *mValue;
+	return mValue;
+}
+
+void MaterialEffectFloat::SetValue(float value)
+{
+	mValue = value;
 }
 
 void MaterialEffectFloat::CopyValuesFrom(IMaterial* material)
@@ -22,7 +27,7 @@ void MaterialEffectFloat::CopyValuesFrom(IMaterial* material)
 	MaterialEffectFloat* effect = material->GetEffect<MaterialEffectFloat>();
 	if (effect != nullptr)
 	{
-		*mValue = effect->GetFloat();
+		mValue = effect->GetValue();
 	}
 
 }
