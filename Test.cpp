@@ -425,7 +425,7 @@ void CreateTrees()
 void CreateProps()
 {
 	int areaSize = 5;
-	int numProps = 4;
+	int numProps = 6;
 
 	std::vector<std::string> models;
 	std::vector<glm::vec3> positions;
@@ -434,18 +434,29 @@ void CreateProps()
 	models.push_back(std::string("barrel"));
 	models.push_back(std::string("chest"));
 	models.push_back(std::string("brazier"));
+	models.push_back(std::string("barrel"));
+	models.push_back(std::string("crate"));
+	models.push_back(std::string("statue"));
+	//models.push_back(std::string("floor"));
+	
+
 
 	positions.push_back(glm::vec3(0.8f, 0.0f, -2.3f));
 	positions.push_back(glm::vec3(0.4f, 0.0f, -2.0f));
 	positions.push_back(glm::vec3(1.0f, 0.0f, -1.7f));
 	positions.push_back(glm::vec3(1.1f, 0.0f, -2.3f));
-	positions.push_back(glm::vec3(10.0f, 0.0f, 10.0f));
+	positions.push_back(glm::vec3(2.5f, 0.0f, -2.7f));
+	positions.push_back(glm::vec3(-2.0f, 0.0f, 2.0f));
 	positions.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+	
 
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(1.5f, 0.0f, 0.0f));
+	rotations.push_back(glm::vec3(0.0f));
+	rotations.push_back(glm::vec3(0.7f, 0.0f, 0.0f));
+	rotations.push_back(glm::vec3(0.0f));
 
 	std::string textureName("MedievalDungeonPropsAtlas02_diffuse");
 	std::string textureNormalName("MedievalDungeonPropsAtlas02_normalmap");

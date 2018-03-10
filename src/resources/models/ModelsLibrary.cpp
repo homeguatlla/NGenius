@@ -35,6 +35,9 @@ void ModelsLibrary::Load()
 	LoadModel("brazier", "data/models/props/brazier.obj", false, true);
 	LoadModel("stall", "data/models/stall/stall.obj", false, true);
 	LoadModel("cube3", "data/models/props/cube.obj", false, true);
+	LoadModel("crate", "data/models/props/crate.obj", true, true);
+	LoadModel("floor", "data/models/props/floor.obj", true, true);
+	LoadModel("statue", "data/models/props/statue.obj", true, true);
 
 	//model = OBJLoader::LoadModel("data/models/hermes/hermes.obj");
 	//AddElement("hermes", model);
