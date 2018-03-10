@@ -27,6 +27,7 @@ struct GLFWwindow;
 struct GLFWmonitor;
 
 class ShadowsRenderPass;
+class WaterRenderPass;
 
 class RenderSystem
 {
@@ -51,6 +52,7 @@ class RenderSystem
 	GLFWwindow* mWindow;
 
 	ShadowsRenderPass* mShadowsRenderPass;
+	WaterRenderPass* mWaterRenderPass;
 
 	IMaterial* mCurrentMaterial;
 
@@ -84,11 +86,15 @@ public:
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
 	void SetCastingShadowsTarget(const glm::vec3& position);
 	void SetCastingShadowsEnabled(bool enabled);
+
+	void SetWaterEnabled(bool enabled);
+	void SetWaterParameters(const ICamera* camera, float waterY);
+
 	void SetFullScreen(bool isFullScreen);
 	
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 
-	const ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
+	ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
 
 private:
 	void CreateResourcesLibraries();
@@ -96,7 +102,6 @@ private:
 
 	void CreateRenderPasses();
 	void DestroyRenderPasses();
-	void CreateShadowsRenderPass();
 
 	bool InitializeWindowAndOpenGL(const std::string& applicationName, bool isFullscreen);
 	void DisableVSync(bool enable);

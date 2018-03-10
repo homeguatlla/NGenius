@@ -13,6 +13,9 @@
 #include "../../materials/IMaterial.h"
 #include "../../materials/effects/MaterialEffectDiffuseTexture.h"
 #include "../../textures/ITexture.h"
+#include "../../textures/Texture.h"
+
+static const int SHADOWS_TEXTURE_SIZE = 4096;
 
 ShadowsRenderPass::ShadowsRenderPass(RenderSystem* renderSystem, float screenWidth, float screenHeight) :
 mRenderSystem(renderSystem),
@@ -28,13 +31,13 @@ ShadowsRenderPass::~ShadowsRenderPass()
 {
 }
 
-void ShadowsRenderPass::Init(Texture* shadowTexture)
+void ShadowsRenderPass::Init()
 {
 	if (mIsShadowCastEnabled)
 	{
-		assert(shadowTexture != nullptr);
+		mShadowMapTexture = static_cast<Texture*>(mRenderSystem->CreateDepthTexture("shadow_texture", glm::ivec2(SHADOWS_TEXTURE_SIZE)));
+		assert(mShadowMapTexture != nullptr);
 
-		mShadowMapTexture = shadowTexture;
 		mShadowCastCamera = CreateShadowCastCamera(mDirectionalLightDirection);
 		mRenderPass = CreateShadowRenderPass();
 		mRenderSystem->AddRenderPass(mRenderPass);

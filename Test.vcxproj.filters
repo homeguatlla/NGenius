@@ -441,6 +441,9 @@
     <ClInclude Include="GameConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\systems\renderSystem\WaterRenderPass.h">
+      <Filter>Header Files\resources\systems\renderSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -754,6 +757,9 @@
     </ClCompile>
     <ClCompile Include="src\resources\command\commands\RiseTerrainCommand.cpp">
       <Filter>Source Files\resources\command\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\renderSystem\WaterRenderPass.cpp">
+      <Filter>Source Files\resources\systems\renderSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

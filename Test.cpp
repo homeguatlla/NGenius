@@ -150,8 +150,6 @@ bool mIsPropsEnabled = false;
 NGenius mEngine("Demo", SCREEN_WIDTH, SCREEN_HEIGHT);
 ICamera* mGameplayCamera;
 ICamera* mGuiCamera;
-ICamera* mReflectionWaterCamera;
-ICamera* mRefractionWaterCamera;
 ICamera* mMapCamera;
 ICamera* mEagleEyeCamera;
 
@@ -163,8 +161,6 @@ Player* mPlayer;
 Water* mWater;
 GameEntity* mCamera;
 
-GameEntity* mWaterReflectionCameraEntity;
-GameEntity* mWaterRefractionCameraEntity;
 EnergyWall* mEnergyWall;
 Text* mFPSText;
 IMaterial* materialFPSText;
@@ -814,10 +810,8 @@ void CreateSkybox()
 	}
 }
 
-void CreateEntities()
+void CreateCameras()
 {
-	const Texture* texture = static_cast<const Texture*>(mEngine.CreateDepthTexture("depth_texture", glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
-
 	//CAMERA
 	mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
 	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 15.0f));
@@ -828,6 +822,11 @@ void CreateEntities()
 	mGameplayCamera->SetPosition(glm::vec3(0.0f, 8.0f, 2.0f));
 	mGameplayCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+}
+
+void CreateEntities()
+{
+	const Texture* texture = static_cast<const Texture*>(mEngine.CreateDepthTexture("depth_texture", glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
 
 	CreateHUD();
 
@@ -905,27 +904,6 @@ void DisableRenderPasses()
 	}
 }
 
-void ApplyReflectionCameras(float yReflectionPlane, ICamera* camera, ICamera* cameraReflected)
-{
-	float distance = 2 * (camera->GetPosition().y - yReflectionPlane);
-	glm::vec3 position = camera->GetPosition();
-	position.y -= distance;
-	cameraReflected->SetPosition(position);
-
-	distance = 2 * (camera->GetTarget().y - yReflectionPlane);
-	glm::vec3 target = camera->GetTarget();
-	target.y -= distance;
-	cameraReflected->SetTarget(target);
-	cameraReflected->SetUp(camera->GetUp());
-}
-
-void ApplyRefractionCameras(ICamera* camera, ICamera* cameraRefracted)
-{
-	cameraRefracted->SetPosition(camera->GetPosition());
-	cameraRefracted->SetTarget(camera->GetTarget());
-	cameraRefracted->SetUp(camera->GetUp());
-}
-
 void CreateHudMapRenderPass()
 {
 	//HUD MAP RENDER PASS
@@ -941,64 +919,6 @@ void CreateHudMapRenderPass()
 	mMapPass->SetFrameBufferOutput(frameBuffer);
 	mMapPass->EnableFog(false);
 	mEngine.AddRenderPass(mMapPass);
-}
-
-void CreateWaterRenderPass()
-{
-	float waterY = mWater->GetTransformation()->GetPosition().y;
-
-	//WATER RENDER PASS	
-	mReflectionWaterCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	ApplyReflectionCameras(waterY, mGameplayCamera, mReflectionWaterCamera);
-	
-	mWaterReflectionCameraEntity = new GameEntity(new Transformation(mReflectionWaterCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
-		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
-	mEngine.AddGameEntity(mWaterReflectionCameraEntity);
-
-	//REFLECTION
-	IFrameBuffer* frameReflectionBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
-	Texture* reflectionTexture = static_cast<Texture*>(mEngine.GetTexture("reflection_water"));
-	frameReflectionBuffer->SetColorTextureAttachment(0, reflectionTexture);
-	frameReflectionBuffer->SetDepthAttachment(reflectionTexture->GetWidth(), reflectionTexture->GetHeight());
-
-	frameReflectionBuffer->Init();
-	
-	RenderPass* reflectionWaterPass = new RenderPass(static_cast<ICamera*>(mReflectionWaterCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES);
-	reflectionWaterPass->SetFrameBufferOutput(frameReflectionBuffer);
-	reflectionWaterPass->EnableClipping(true);
-	reflectionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);
-	reflectionWaterPass->SetClippingPlane(glm::vec4(0.0f, 1.0f, 0.0f, -waterY+0.2));
-	reflectionWaterPass->EnableFog(true);
-
-	mEngine.AddRenderPass(reflectionWaterPass);
-
-	//REFRACTION	
-	mRefractionWaterCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	ApplyRefractionCameras(mGameplayCamera, mRefractionWaterCamera);
-
-	mWaterRefractionCameraEntity = new GameEntity(	new Transformation(mRefractionWaterCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
-		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
-	mEngine.AddGameEntity(mWaterRefractionCameraEntity);
-
-	IFrameBuffer* frameRefractionBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
-	Texture* refractionTexture = static_cast<Texture*>(mEngine.GetTexture("refraction_water"));
-	Texture* refractionDepthTexture = static_cast<Texture*>(mEngine.GetTexture("refraction_depth_water"));
-	frameRefractionBuffer->SetColorTextureAttachment(0, refractionTexture);
-	frameRefractionBuffer->SetDepthTextureAttachment(refractionDepthTexture);
-	frameRefractionBuffer->Init();
-
-	RenderPass* refractionWaterPass = new RenderPass(static_cast<ICamera*>(mRefractionWaterCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER);
-	refractionWaterPass->SetFrameBufferOutput(frameRefractionBuffer);
-	refractionWaterPass->EnableClipping(true);
-	refractionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);
-	//we need to add +2.0 to the water height, because when applying distorsion to the texture can get points 
-	//out the refraction area drawed, and these points are blue (the color of the water plane), getting 
-	//a bit more of the height, cutting over the water, we are painting more space in the water plane and then
-	//the distorsion is not affecting, otherwise the border of the water has a bit of blue color (the default color of the plane)
-	refractionWaterPass->SetClippingPlane(glm::vec4(0.0f, -1.0f, 0.0f, waterY + 2.0f));
-	refractionWaterPass->EnableFog(false);
-
-	mEngine.AddRenderPass(refractionWaterPass);
 }
 
 void CreateGUIRenderPass()
@@ -1047,11 +967,6 @@ void CreateParticlesRenderPass()
 void CreateRenderPasses()
 {
 	//CreateHudMapRenderPass();
-
-	if (mIsWaterEnabled)
-	{
-		CreateWaterRenderPass();
-	}
 
 	CreateTerrainRenderPass();
 
@@ -1107,14 +1022,6 @@ void UpdateInput(GLFWwindow* window)
 	}
 }
 
-void UpdateWaterCameras()
-{
-	ApplyReflectionCameras(mWater->GetTransformation()->GetPosition().y, mGameplayCamera, mReflectionWaterCamera);
-	mWaterReflectionCameraEntity->GetTransformation()->SetPosition(mReflectionWaterCamera->GetPosition());
-	ApplyRefractionCameras(mGameplayCamera, mRefractionWaterCamera);
-	mWaterRefractionCameraEntity->GetTransformation()->SetPosition(mGameplayCamera->GetPosition());
-}
-
 void UpdateEnergyWallCollisions(float elapsedTime)
 {
 	EnergyWallCollisionComponent* component = mPlayer->GetComponent<EnergyWallCollisionComponent>();
@@ -1167,10 +1074,6 @@ void Update(float elapsedTime)
 {
 	UpdateCommand(elapsedTime);
 	
-	if (mIsWaterEnabled)
-	{
-		UpdateWaterCameras();
-	}
 	if (mIsEnergyWallEnabled)
 	{
 		UpdateEnergyWallCollisions(elapsedTime);
@@ -1191,7 +1094,7 @@ void SetupConfiguration()
 	{
 	case DEBUG:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
+		mIsWaterEnabled = true;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
 		mIsVegetationEnabled = true;
@@ -1305,20 +1208,26 @@ void SetupConfiguration()
 void Initialize()
 {
 	SetupConfiguration();
+
+	CreateCameras();
+
 	mEngine.RegisterInputHandler(std::bind(&UpdateInput, std::placeholders::_1));
 	mEngine.RegisterUpdateHandler(std::bind(&Update, std::placeholders::_1));
 
 	mEngine.SetCastingShadowsParameters(mSunLightDirection, 3);
 	mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
+
+	mEngine.SetWaterEnabled(mIsWaterEnabled);
+	mEngine.SetWaterParameters(mGameplayCamera, mWaterHeight);
 	
 	mEngine.Init(mIsFullScreen);
+
+	mFogDensity = mIsFogEnabled ? mFogDensity : 0.0f;
 }
 
 int main(void)
 {
 	Initialize();
-
-	mFogDensity = mIsFogEnabled ? mFogDensity : 0.0f;
 
 	CreateEntities();
 	CreateRenderPasses();

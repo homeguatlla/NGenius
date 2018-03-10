@@ -256,6 +256,18 @@ void NGenius::SetCastingShadowsEnabled(bool enabled)
 	mRenderSystem->SetCastingShadowsEnabled(enabled);
 }
 
+void NGenius::SetWaterEnabled(bool enabled)
+{
+	assert(mRenderSystem != nullptr);
+	mRenderSystem->SetWaterEnabled(enabled);
+}
+
+void NGenius::SetWaterParameters(const ICamera* camera, float waterY)
+{
+	assert(mRenderSystem != nullptr);
+	mRenderSystem->SetWaterParameters(camera, waterY);
+}
+
 void NGenius::SetCastingShadowsTarget(const glm::vec3& position)
 {
 	assert(mRenderSystem != nullptr);

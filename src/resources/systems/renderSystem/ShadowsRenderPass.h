@@ -24,7 +24,7 @@ public:
 	ShadowsRenderPass(RenderSystem* renderSystem, float screenWidth, float screenHeight);
 	~ShadowsRenderPass();
 
-	void Init(Texture* shadowTexture);
+	void Init();
 	void SetCastingShadowsTarget(const glm::vec3& position);
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
 	void SetEnable(bool enable);

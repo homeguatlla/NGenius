@@ -79,6 +79,10 @@ public:
 	void SetCastingShadowsTarget(const glm::vec3& position);
 	void SetCastingShadowsEnabled(bool enabled);
 
+	//water
+	void SetWaterEnabled(bool enabled);
+	void SetWaterParameters(const ICamera* camera, float waterY);
+
 private:
 	void CreateSystems(float screenWidth, float screenHeight);
 	void DestroySystems();

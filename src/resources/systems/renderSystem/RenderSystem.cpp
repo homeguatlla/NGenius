@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "RenderSystem.h"
 #include "ShadowsRenderPass.h"
+#include "WaterRenderPass.h"
 #include "../../GameEntity.h"
 #include "../../camera/ICamera.h"
 
@@ -37,8 +38,6 @@
 
 using namespace std;
 
-static const int SHADOWS_TEXTURE_SIZE = 4096;
-
 RenderSystem::RenderSystem(float screenWidth, float screenHeight) :
 mScreenWidth(screenWidth),
 mScreenHeight(screenHeight),
@@ -47,6 +46,8 @@ mTexturesLibrary(nullptr),
 mModelsLibrary(nullptr),
 mFontsLibrary(nullptr),
 mWindow(nullptr),
+mShadowsRenderPass(nullptr),
+mWaterRenderPass(nullptr),
 mCurrentMaterial(nullptr),
 mDiffuseTexture(nullptr),
 mNormalTexture(nullptr),
@@ -82,25 +83,20 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 	CreateResourcesLibraries();
 	LoadResources();
 
-	Texture* texture = static_cast<Texture*>(mTexturesLibrary->CreateDepthTexture("shadow_texture", glm::ivec2(SHADOWS_TEXTURE_SIZE)));
-	mShadowsRenderPass->Init(texture);
+	mShadowsRenderPass->Init();
+	mWaterRenderPass->Init();
 }
 
 void RenderSystem::CreateRenderPasses()
 {
-	CreateShadowsRenderPass();
+	mShadowsRenderPass = new ShadowsRenderPass(this, GetScreenWidth(), GetScreenHeight());
+	mWaterRenderPass = new WaterRenderPass(this, GetScreenWidth(), GetScreenHeight());
 }
 
 void RenderSystem::DestroyRenderPasses()
 {
 	delete mShadowsRenderPass;
-}
-
-void RenderSystem::CreateShadowsRenderPass()
-{
-	mShadowsRenderPass = new ShadowsRenderPass(	this,
-										GetScreenWidth(),
-										GetScreenHeight());
+	delete mWaterRenderPass;
 }
 
 void RenderSystem::LoadResources()
@@ -114,6 +110,8 @@ void RenderSystem::LoadResources()
 
 void RenderSystem::Render()
 {
+	mWaterRenderPass->Update();
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	for (RenderPass* pass : mRenderPasses)
@@ -610,7 +608,18 @@ void RenderSystem::SetCastingShadowsEnabled(bool enabled)
 	mShadowsRenderPass->SetEnable(enabled);
 }
 
-const ITexture* RenderSystem::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
+void RenderSystem::SetWaterEnabled(bool enabled)
+{
+	assert(mWaterRenderPass != nullptr);
+	mWaterRenderPass->SetEnable(enabled);
+}
+
+void RenderSystem::SetWaterParameters(const ICamera* camera, float waterY)
+{
+	mWaterRenderPass->SetWaterParameters(camera, waterY);
+}
+
+ITexture* RenderSystem::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
 {
 	assert(mTexturesLibrary != nullptr);
 	return mTexturesLibrary->CreateDepthTexture(name, size);

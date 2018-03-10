@@ -18,7 +18,6 @@ mEnergyWallRadius(0.0f)
 {
 }
 
-
 PhysicsSystem::~PhysicsSystem()
 {
 	mEntities.clear();
