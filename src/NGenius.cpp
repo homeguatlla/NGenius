@@ -268,8 +268,8 @@ void NGenius::SetWaterParameters(const ICamera* camera, float waterY)
 	mRenderSystem->SetWaterParameters(camera, waterY);
 }
 
-void NGenius::SetCastingShadowsTarget(const glm::vec3& position)
+void NGenius::SetCastingShadowsTarget(const GameEntity* target)
 {
 	assert(mRenderSystem != nullptr);
-	mRenderSystem->SetCastingShadowsTarget(position);
+	mRenderSystem->SetCastingShadowsTarget(target);
 }

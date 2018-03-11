@@ -116,9 +116,10 @@ enum Configuration
 	SHADOWS,
 	PARTICLES,
 	PROPS,
+	COLLISIONS,
 	RELEASE
 };
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = COLLISIONS;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -736,6 +737,8 @@ void CreateTerrain()
 	//glm::mat4 depthModelMatrix = glm::mat4(1.0);
 	//glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
 
+	float scale = mIsTerrainFlat ? 0.0f : TERRAIN_SCALE;
+
 	IMaterial* material = mEngine.CreateMaterial("terrain", mEngine.GetShader("terrain"));
 	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_blendmap")), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f));
 	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
@@ -744,9 +747,8 @@ void CreateTerrain()
 	material->AddEffect(new MaterialEffectTextureArray(static_cast<TextureArray*>(mEngine.GetTexture("terrain_array"))));
 	material->AddEffect(new MaterialEffectClippingPlane());
 	material->AddEffect(new MaterialEffectShadowProperties());
-	material->AddEffect(new MaterialEffectFloat(TERRAIN_SCALE));
-
-	float scale = mIsTerrainFlat ? 0.0f : TERRAIN_SCALE;
+	material->AddEffect(new MaterialEffectFloat(scale));
+	
 	mTerrain = new Terrain(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 							material,
 							static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")),
@@ -975,7 +977,7 @@ void CreateParticlesRenderPass()
 	mEngine.AddRenderPass(particlesPass);
 }
 
-void CreateRenderPasses()
+void CreateSubSystems()
 {
 	//CreateHudMapRenderPass();
 
@@ -1093,10 +1095,6 @@ void Update(float elapsedTime)
 	{
 		UpdateStatitstics();
 	}
-	if (mIsShadowEnabled)
-	{
-		mEngine.SetCastingShadowsTarget(mPlayer->GetTransformation()->GetPosition());
-	}
 }
 
 void SetupConfiguration()
@@ -1197,6 +1195,21 @@ void SetupConfiguration()
 		mIsShadowEnabled = false;
 		mIsFullScreen = false;
 		break; 
+	case COLLISIONS:
+		mIsDebugModeEnabled = true;
+		mIsWaterEnabled = false;
+		mIsGameplayCameraEnabled = true;
+		mIsFogEnabled = false;
+		mIsVegetationEnabled = false;
+		mIsPropsEnabled = true;
+		mIsEnergyWallEnabled = false;
+		mIsSkyboxEnabled = false;
+		mIsTerrainFlat = false;
+		mIsTextEnabled = false;
+		mIsStatisticsVisible = false;
+		mIsParticlesEnabled = false;
+		mIsShadowEnabled = true;
+		break;
 	case RELEASE:
 		mIsDebugModeEnabled = false;
 		mIsWaterEnabled = true;
@@ -1241,7 +1254,9 @@ int main(void)
 	Initialize();
 
 	CreateEntities();
-	CreateRenderPasses();
+	CreateSubSystems();
+
+	mEngine.SetCastingShadowsTarget(mPlayer);
 
 	mEngine.Update();
 

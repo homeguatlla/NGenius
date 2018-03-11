@@ -76,7 +76,7 @@ public:
 
 	//shadows
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
-	void SetCastingShadowsTarget(const glm::vec3& position);
+	void SetCastingShadowsTarget(const GameEntity* target);
 	void SetCastingShadowsEnabled(bool enabled);
 
 	//water

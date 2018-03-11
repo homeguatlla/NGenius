@@ -5,13 +5,15 @@ class ICamera;
 class Texture;
 class RenderPass;
 class RenderSystem;
+class GameEntity;
 
-class ShadowsRenderPass
+class ShadowsRenderPassSubSystem
 {
 	RenderSystem* mRenderSystem;
 	ICamera* mShadowCastCamera;
 	Texture* mShadowMapTexture;
 	RenderPass* mRenderPass;
+	const GameEntity* mTarget;
 	glm::mat4 mShadowMapMatrix;
 	glm::vec3 mDirectionalLightDirection;
 	int mPFCCounter;
@@ -21,11 +23,13 @@ class ShadowsRenderPass
 	bool mIsInitialized;
 
 public:
-	ShadowsRenderPass(RenderSystem* renderSystem, float screenWidth, float screenHeight);
-	~ShadowsRenderPass();
+	ShadowsRenderPassSubSystem(RenderSystem* renderSystem, float screenWidth, float screenHeight);
+	~ShadowsRenderPassSubSystem();
 
 	void Init();
-	void SetCastingShadowsTarget(const glm::vec3& position);
+	void Update();
+
+	void SetCastingShadowsTarget(const GameEntity* target);
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
 	void SetEnable(bool enable);
 

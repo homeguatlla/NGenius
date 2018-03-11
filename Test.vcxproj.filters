@@ -321,9 +321,6 @@
     <ClInclude Include="src\resources\systems\renderSystem\RenderSystem.h">
       <Filter>Header Files\resources\systems\renderSystem</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\systems\renderSystem\ShadowsRenderPass.h">
-      <Filter>Header Files\resources\systems\renderSystem</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\components\OverWaterComponent.h">
       <Filter>Header Files\resources\components</Filter>
     </ClInclude>
@@ -441,7 +438,10 @@
     <ClInclude Include="GameConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\systems\renderSystem\WaterRenderPass.h">
+    <ClInclude Include="src\resources\systems\renderSystem\ShadowsRenderPassSubsystem.h">
+      <Filter>Header Files\resources\systems\renderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\renderSystem\WaterRenderPassSubSystem.h">
       <Filter>Header Files\resources\systems\renderSystem</Filter>
     </ClInclude>
   </ItemGroup>
@@ -641,9 +641,6 @@
     <ClCompile Include="src\resources\systems\renderSystem\RenderSystem.cpp">
       <Filter>Source Files\resources\systems\renderSystem</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\systems\renderSystem\ShadowsRenderPass.cpp">
-      <Filter>Source Files\resources\systems\renderSystem</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\components\OverWaterComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
     </ClCompile>
@@ -758,7 +755,10 @@
     <ClCompile Include="src\resources\command\commands\RiseTerrainCommand.cpp">
       <Filter>Source Files\resources\command\commands</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\systems\renderSystem\WaterRenderPass.cpp">
+    <ClCompile Include="src\resources\systems\renderSystem\ShadowsRenderPassSubSystem.cpp">
+      <Filter>Source Files\resources\systems\renderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\renderSystem\WaterRenderPassSubSystem.cpp">
       <Filter>Source Files\resources\systems\renderSystem</Filter>
     </ClCompile>
   </ItemGroup>

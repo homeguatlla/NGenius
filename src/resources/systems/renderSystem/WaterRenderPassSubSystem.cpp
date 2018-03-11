@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "WaterRenderPass.h"
+#include "WaterRenderPassSubSystem.h"
 #include "RenderSystem.h"
 #include "../../Transformation.h"
 #include "../../camera/PerspectiveCamera.h"
@@ -20,7 +20,7 @@ static const float VIEW_ANGLE = 45.0f;
 static const float FAR_PLANE = 1000.0f;
 static const float NEAR_PLANE = 0.1f;
 
-WaterRenderPass::WaterRenderPass(RenderSystem* renderSystem, float screenWidth, float screenHeight) :
+WaterRenderPassSubSystem::WaterRenderPassSubSystem(RenderSystem* renderSystem, float screenWidth, float screenHeight) :
 mReflectionCamera(nullptr),
 mRefractionCamera(nullptr),
 mGameplayCamera(nullptr),
@@ -34,13 +34,13 @@ mIsInitialized(false)
 {
 }
 
-WaterRenderPass::~WaterRenderPass()
+WaterRenderPassSubSystem::~WaterRenderPassSubSystem()
 {
 	delete mReflectionCamera;
 	delete mRefractionCamera;
 }
 
-void WaterRenderPass::Init()
+void WaterRenderPassSubSystem::Init()
 {
 	if (mIsWaterEnabled)
 	{
@@ -54,34 +54,34 @@ void WaterRenderPass::Init()
 	}
 }
 
-void WaterRenderPass::SetEnable(bool enable)
+void WaterRenderPassSubSystem::SetEnable(bool enable)
 {
 	mIsWaterEnabled = enable;
 }
 
-bool WaterRenderPass::IsEnabled() const
+bool WaterRenderPassSubSystem::IsEnabled() const
 {
 	return mIsWaterEnabled;
 }
 
-void WaterRenderPass::SetWaterParameters(const ICamera* gameplayCamera, float waterY)
+void WaterRenderPassSubSystem::SetWaterParameters(const ICamera* gameplayCamera, float waterY)
 {
 	assert(gameplayCamera != nullptr);
 	mGameplayCamera = gameplayCamera;
 	mWaterY = waterY;
 }
 
-ICamera* WaterRenderPass::CreateReflectionCamera()
+ICamera* WaterRenderPassSubSystem::CreateReflectionCamera()
 {
 	return new PerspectiveCamera(VIEW_ANGLE, mScreenWidth / mScreenHeight, NEAR_PLANE, FAR_PLANE);
 }
 
-ICamera* WaterRenderPass::CreateRefractionCamera()
+ICamera* WaterRenderPassSubSystem::CreateRefractionCamera()
 {
 	return new PerspectiveCamera(VIEW_ANGLE, mScreenWidth / mScreenHeight, NEAR_PLANE, FAR_PLANE);
 }
 
-RenderPass* WaterRenderPass::CreateRefractionRenderPass()
+RenderPass* WaterRenderPassSubSystem::CreateRefractionRenderPass()
 {
 	//REFRACTION	
 	ApplyRefractionCameras(mGameplayCamera, mRefractionCamera);
@@ -112,7 +112,7 @@ RenderPass* WaterRenderPass::CreateRefractionRenderPass()
 	return refractionWaterPass;
 }
 
-RenderPass* WaterRenderPass::CreateReflectionRenderPass()
+RenderPass* WaterRenderPassSubSystem::CreateReflectionRenderPass()
 {
 	//WATER RENDER PASS	
 	ApplyReflectionCameras(mWaterY, mGameplayCamera, mReflectionCamera);
@@ -140,7 +140,7 @@ RenderPass* WaterRenderPass::CreateReflectionRenderPass()
 	return reflectionWaterPass;
 }
 
-void WaterRenderPass::ApplyReflectionCameras(float yReflectionPlane, const ICamera* camera, ICamera* cameraReflected)
+void WaterRenderPassSubSystem::ApplyReflectionCameras(float yReflectionPlane, const ICamera* camera, ICamera* cameraReflected)
 {
 	float distance = 2 * (camera->GetPosition().y - yReflectionPlane);
 	glm::vec3 position = camera->GetPosition();
@@ -154,15 +154,18 @@ void WaterRenderPass::ApplyReflectionCameras(float yReflectionPlane, const ICame
 	cameraReflected->SetUp(camera->GetUp());
 }
 
-void WaterRenderPass::ApplyRefractionCameras(const ICamera* camera, ICamera* cameraRefracted)
+void WaterRenderPassSubSystem::ApplyRefractionCameras(const ICamera* camera, ICamera* cameraRefracted)
 {
 	cameraRefracted->SetPosition(camera->GetPosition());
 	cameraRefracted->SetTarget(camera->GetTarget());
 	cameraRefracted->SetUp(camera->GetUp());
 }
 
-void WaterRenderPass::Update()
+void WaterRenderPassSubSystem::Update()
 {
-	ApplyReflectionCameras(mWaterY, mGameplayCamera, mReflectionCamera);
-	ApplyRefractionCameras(mGameplayCamera, mRefractionCamera);
+	if (mIsInitialized)
+	{
+		ApplyReflectionCameras(mWaterY, mGameplayCamera, mReflectionCamera);
+		ApplyRefractionCameras(mGameplayCamera, mRefractionCamera);
+	}
 }

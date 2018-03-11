@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "ShadowsRenderPass.h"
+#include "ShadowsRenderPassSubSystem.h"
 
 #include "RenderSystem.h"
-#include "../../Transformation.h"
+#include "../../GameEntity.h"
 #include "../../camera/OrthogonalCamera.h"
 #include "../../camera/ICamera.h"
 
@@ -17,21 +17,22 @@
 
 static const int SHADOWS_TEXTURE_SIZE = 4096;
 
-ShadowsRenderPass::ShadowsRenderPass(RenderSystem* renderSystem, float screenWidth, float screenHeight) :
+ShadowsRenderPassSubSystem::ShadowsRenderPassSubSystem(RenderSystem* renderSystem, float screenWidth, float screenHeight) :
 mRenderSystem(renderSystem),
 mScreenWidth(screenWidth),
 mScreenHeight(screenHeight),
 mShadowMapTexture(nullptr),
+mTarget(nullptr),
 mIsShadowCastEnabled(false),
 mIsInitialized(false)
 {
 }
 
-ShadowsRenderPass::~ShadowsRenderPass()
+ShadowsRenderPassSubSystem::~ShadowsRenderPassSubSystem()
 {
 }
 
-void ShadowsRenderPass::Init()
+void ShadowsRenderPassSubSystem::Init()
 {
 	if (mIsShadowCastEnabled)
 	{
@@ -45,35 +46,41 @@ void ShadowsRenderPass::Init()
 	}
 }
 
-void ShadowsRenderPass::UpdateShadowCastMatrix()
-{
-	mShadowMapMatrix = CalculateShadowMapMatrix(mShadowCastCamera);
-}
-
-void ShadowsRenderPass::SetCastingShadowsTarget(const glm::vec3& position)
+void ShadowsRenderPassSubSystem::Update()
 {
 	if (mIsShadowCastEnabled)
 	{
-		mShadowCastCamera->SetPosition(glm::normalize(mDirectionalLightDirection) + position);
-		mShadowCastCamera->SetTarget(position);
-		mShadowCastCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 		UpdateShadowCastMatrix();
 	}
 }
 
-void ShadowsRenderPass::SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter)
+void ShadowsRenderPassSubSystem::UpdateShadowCastMatrix()
+{
+	glm::vec3 position = mTarget->GetTransformation()->GetPosition();
+	mShadowCastCamera->SetPosition(glm::normalize(mDirectionalLightDirection) + position);
+	mShadowCastCamera->SetTarget(position);
+	mShadowCastCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	mShadowMapMatrix = CalculateShadowMapMatrix(mShadowCastCamera);
+}
+
+void ShadowsRenderPassSubSystem::SetCastingShadowsTarget(const GameEntity* target)
+{
+	mTarget = target;
+}
+
+void ShadowsRenderPassSubSystem::SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter)
 {
 	mDirectionalLightDirection = lightDirection;
 	mPFCCounter = pfcCounter;
 }
 
-void ShadowsRenderPass::SetEnable(bool enable)
+void ShadowsRenderPassSubSystem::SetEnable(bool enable)
 {
 	mIsShadowCastEnabled = enable;
 	UpdateState();
 }
 
-void ShadowsRenderPass::UpdateState()
+void ShadowsRenderPassSubSystem::UpdateState()
 {
 	if (mIsInitialized)
 	{
@@ -89,27 +96,27 @@ void ShadowsRenderPass::UpdateState()
 	}
 }
 
-bool ShadowsRenderPass::IsEnabled() const
+bool ShadowsRenderPassSubSystem::IsEnabled() const
 {
 	return mIsShadowCastEnabled;
 }
 
-const glm::mat4 ShadowsRenderPass::GetShadowMapMatrix() const
+const glm::mat4 ShadowsRenderPassSubSystem::GetShadowMapMatrix() const
 {
 	return mShadowMapMatrix;
 }
 
-const Texture* ShadowsRenderPass::GetShadowMapTexture() const
+const Texture* ShadowsRenderPassSubSystem::GetShadowMapTexture() const
 {
 	return mShadowMapTexture;
 }
 
-int ShadowsRenderPass::GetShadowMapPFCCounter() const
+int ShadowsRenderPassSubSystem::GetShadowMapPFCCounter() const
 {
 	return mPFCCounter;
 }
 
-glm::mat4 ShadowsRenderPass::CalculateShadowMapMatrix(const ICamera* camera)
+glm::mat4 ShadowsRenderPassSubSystem::CalculateShadowMapMatrix(const ICamera* camera)
 {
 	Transformation transformation(camera->GetPosition(), glm::vec3(0.0f), glm::vec3(1.0f));
 	glm::mat4& matrix = camera->GetProjectionMatrix() * const_cast<ICamera*>(camera)->GetViewMatrix();
@@ -124,14 +131,14 @@ glm::mat4 ShadowsRenderPass::CalculateShadowMapMatrix(const ICamera* camera)
 	return biasMatrix * matrix;
 }
 
-ICamera* ShadowsRenderPass::CreateShadowCastCamera(const glm::vec3& directionalLightDirection)
+ICamera* ShadowsRenderPassSubSystem::CreateShadowCastCamera(const glm::vec3& directionalLightDirection)
 {
 	ICamera* camera = new OrthogonalCamera(mScreenWidth * 0.01f, mScreenHeight * 0.01f, -10.0f, 20.0f);
 
 	return camera;
 }
 
-RenderPass* ShadowsRenderPass::CreateShadowRenderPass()
+RenderPass* ShadowsRenderPassSubSystem::CreateShadowRenderPass()
 {
 	//SHADOW RENDER PASS
 	//SHADOW

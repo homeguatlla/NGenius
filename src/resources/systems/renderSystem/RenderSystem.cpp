@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "RenderSystem.h"
-#include "ShadowsRenderPass.h"
-#include "WaterRenderPass.h"
+#include "ShadowsRenderPassSubSystem.h"
+#include "WaterRenderPassSubSystem.h"
 #include "../../GameEntity.h"
 #include "../../camera/ICamera.h"
 
@@ -58,7 +58,7 @@ mIsClippingEnabled(false)
 	BitNumber bit;
 	bit.Test();
 
-	CreateRenderPasses();
+	CreateSubSystems();
 }
 
 RenderSystem::~RenderSystem()
@@ -69,7 +69,7 @@ RenderSystem::~RenderSystem()
 	}
 
 	DestroyResourcesLibraries();
-	DestroyRenderPasses();	
+	DestroySubSystems();	
 }
 
 void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
@@ -87,13 +87,13 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 	mWaterRenderPass->Init();
 }
 
-void RenderSystem::CreateRenderPasses()
+void RenderSystem::CreateSubSystems()
 {
-	mShadowsRenderPass = new ShadowsRenderPass(this, GetScreenWidth(), GetScreenHeight());
-	mWaterRenderPass = new WaterRenderPass(this, GetScreenWidth(), GetScreenHeight());
+	mShadowsRenderPass = new ShadowsRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
+	mWaterRenderPass = new WaterRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
 }
 
-void RenderSystem::DestroyRenderPasses()
+void RenderSystem::DestroySubSystems()
 {
 	delete mShadowsRenderPass;
 	delete mWaterRenderPass;
@@ -108,9 +108,15 @@ void RenderSystem::LoadResources()
 	mMaterialsLibrary->Load();
 }
 
+void RenderSystem::UpdateSubsystems()
+{
+	mShadowsRenderPass->Update();
+	mWaterRenderPass->Update();
+}
+
 void RenderSystem::Render()
 {
-	mWaterRenderPass->Update();
+	UpdateSubsystems();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -596,10 +602,10 @@ void RenderSystem::SetCastingShadowsParameters(const glm::vec3& lightDirection, 
 	mShadowsRenderPass->SetCastingShadowsParameters(lightDirection, pfcCounter);
 }
 
-void RenderSystem::SetCastingShadowsTarget(const glm::vec3& position)
+void RenderSystem::SetCastingShadowsTarget(const GameEntity* target)
 {
 	assert(mShadowsRenderPass != nullptr);
-	mShadowsRenderPass->SetCastingShadowsTarget(position);
+	mShadowsRenderPass->SetCastingShadowsTarget(target);
 }
 
 void RenderSystem::SetCastingShadowsEnabled(bool enabled)

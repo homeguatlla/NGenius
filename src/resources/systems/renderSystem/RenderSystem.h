@@ -26,8 +26,8 @@ class IMaterial;
 struct GLFWwindow;
 struct GLFWmonitor;
 
-class ShadowsRenderPass;
-class WaterRenderPass;
+class ShadowsRenderPassSubSystem;
+class WaterRenderPassSubSystem;
 
 class RenderSystem
 {
@@ -51,8 +51,8 @@ class RenderSystem
 
 	GLFWwindow* mWindow;
 
-	ShadowsRenderPass* mShadowsRenderPass;
-	WaterRenderPass* mWaterRenderPass;
+	ShadowsRenderPassSubSystem* mShadowsRenderPass;
+	WaterRenderPassSubSystem* mWaterRenderPass;
 
 	IMaterial* mCurrentMaterial;
 
@@ -84,7 +84,7 @@ public:
 	IMaterial* GetMaterial(const std::string& name) const;
 		
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
-	void SetCastingShadowsTarget(const glm::vec3& position);
+	void SetCastingShadowsTarget(const GameEntity* target);
 	void SetCastingShadowsEnabled(bool enabled);
 
 	void SetWaterEnabled(bool enabled);
@@ -100,8 +100,8 @@ private:
 	void CreateResourcesLibraries();
 	void DestroyResourcesLibraries();
 
-	void CreateRenderPasses();
-	void DestroyRenderPasses();
+	void CreateSubSystems();
+	void DestroySubSystems();
 
 	bool InitializeWindowAndOpenGL(const std::string& applicationName, bool isFullscreen);
 	void DisableVSync(bool enable);
@@ -110,6 +110,7 @@ private:
 	void LoadResources();
 
 	void Render(RenderPass* renderPass);
+	void UpdateSubsystems();
 	void UpdateDistancesToCamera(const ICamera* camera, RenderersList* renderers);
 	void RenderInstances(RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances);
 	

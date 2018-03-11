@@ -253,8 +253,8 @@
     <ClInclude Include="src\resources\systems\renderSystem\IFrameBuffer.h" />
     <ClInclude Include="src\resources\systems\renderSystem\RenderPass.h" />
     <ClInclude Include="src\resources\systems\renderSystem\RenderSystem.h" />
-    <ClInclude Include="src\resources\systems\renderSystem\ShadowsRenderPass.h" />
-    <ClInclude Include="src\resources\systems\renderSystem\WaterRenderPass.h" />
+    <ClInclude Include="src\resources\systems\renderSystem\ShadowsRenderPassSubsystem.h" />
+    <ClInclude Include="src\resources\systems\renderSystem\WaterRenderPassSubSystem.h" />
     <ClInclude Include="src\resources\textures\ITexture.h" />
     <ClInclude Include="src\resources\textures\Texture.h" />
     <ClInclude Include="src\resources\textures\TextureArray.h" />
@@ -358,8 +358,8 @@
     <ClCompile Include="src\resources\systems\renderSystem\IFrameBuffer.cpp" />
     <ClCompile Include="src\resources\systems\renderSystem\RenderPass.cpp" />
     <ClCompile Include="src\resources\systems\renderSystem\RenderSystem.cpp" />
-    <ClCompile Include="src\resources\systems\renderSystem\ShadowsRenderPass.cpp" />
-    <ClCompile Include="src\resources\systems\renderSystem\WaterRenderPass.cpp" />
+    <ClCompile Include="src\resources\systems\renderSystem\ShadowsRenderPassSubSystem.cpp" />
+    <ClCompile Include="src\resources\systems\renderSystem\WaterRenderPassSubSystem.cpp" />
     <ClCompile Include="src\resources\textures\ITexture.cpp" />
     <ClCompile Include="src\resources\textures\NoiseGenerator.cpp" />
     <ClCompile Include="src\resources\textures\PNGLoader.cpp" />

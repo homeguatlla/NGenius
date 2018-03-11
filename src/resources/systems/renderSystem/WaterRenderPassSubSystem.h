@@ -6,7 +6,7 @@ class Texture;
 class RenderPass;
 class RenderSystem;
 
-class WaterRenderPass
+class WaterRenderPassSubSystem
 {
 	ICamera* mReflectionCamera;
 	ICamera* mRefractionCamera;
@@ -21,8 +21,8 @@ class WaterRenderPass
 	float mWaterY;
 
 public:
-	WaterRenderPass(RenderSystem* renderSystem, float screenWidth, float screenHeight);
-	~WaterRenderPass();
+	WaterRenderPassSubSystem(RenderSystem* renderSystem, float screenWidth, float screenHeight);
+	~WaterRenderPassSubSystem();
 
 	void Init();
 	void Update();
