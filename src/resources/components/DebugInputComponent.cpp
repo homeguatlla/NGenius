@@ -5,7 +5,7 @@
 #include "../GameEntity.h"
 #include "../Transformation.h"
 
-DebugInputComponent::DebugInputComponent(GLFWwindow* window) : IInputComponent(window)
+DebugInputComponent::DebugInputComponent()
 {
 }
 
@@ -24,16 +24,16 @@ void DebugInputComponent::Update(float elapsedTime)
 	bool isDirty = false;
 	float angle = 0.0f;
 
-	if (glfwGetKey(mWindow, GLFW_KEY_D) == GLFW_PRESS)
+	/*if (glfwGetKey(mWindow, GLFW_KEY_R) == GLFW_PRESS)
 	{
 		isDirty = true;
 		angle = -2.0f;
 	}
-	else if (glfwGetKey(mWindow, GLFW_KEY_A) == GLFW_PRESS)
+	else if (glfwGetKey(mWindow, GLFW_KEY_R) == GLFW_PRESS && glfwGetKey(mWindow, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
 		isDirty = true;
 		angle = 2.0f;
-	}
+	}*/
 
 	if (isDirty)
 	{

@@ -1,20 +1,23 @@
 #pragma once
 #include "IComponent.h"
+#include "../../input/IInputListener.h"
+
 #include <glm/glm.hpp>
 
 class GameEntity;
 class PerspectiveCamera;
 
-class ThirdPersonCameraComponent : public IComponent
+class ThirdPersonCameraComponent : public IComponent, public IInputListener
 {
 	PerspectiveCamera* mCamera;
 	GameEntity* mTarget;
 	float mDistanceFromTarget;
 	float mPitch;
 	float mAngleAroundTarget;
-
+	const float mZoomSpeed;
+	float mCurrentZoomSpeed;
 public:
-	explicit ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, float distanceFromTarget, float pitch);
+	explicit ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, float distanceFromTarget, float pitch, float zoomSpeed);
 	~ThirdPersonCameraComponent();
 
 	ThirdPersonCameraComponent* DoClone() const;
@@ -24,6 +27,10 @@ public:
 	glm::vec3 GetCameraPosition() const;
 
 private:
+	void OnKey(int key, int action) override {};
+	void OnMouseScroll(float scroll) override;
+
+	void UpdateZoomSpeed(float scroll);
 	float CalculateHorizontalDistance() const;
 	float CalculateVerticalDistance() const;
 	glm::vec3 CalculateCameraPosition(float horizontalDistance, float verticalDistance) const;

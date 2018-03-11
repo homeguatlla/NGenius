@@ -6,6 +6,7 @@
 #include "../camera/PerspectiveCamera.h"
 #include "CollisionComponent.h"
 #include "OverWaterComponent.h"
+#include "PlayerInputComponent.h"
 
 
 //WARNING!! hay que tener en cuenta que, si subimos este valor la cámara por colisión subirá y no mantendrá el ángulo pitch que le hemos definido.
@@ -14,12 +15,11 @@ const float CAMERA_HEIGHT_OFFSET_GROUND = 0.2f;
 const float CAMERA_SMOOTH_MOVEMENT_VALUE = 1.0f;
 const float WATER_HEIGHT_OFFSET = 0.1f;
 
-ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, float distanceFromTarget, float pitch) :
-	mCamera(camera), mTarget(target), mDistanceFromTarget(distanceFromTarget), mPitch(pitch), mAngleAroundTarget(0.0f)
+ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, float distanceFromTarget, float pitch, float zoomSpeed) :
+	mCamera(camera), mTarget(target), mDistanceFromTarget(distanceFromTarget), mPitch(pitch), mAngleAroundTarget(0.0f), mZoomSpeed(zoomSpeed)
 {
 	assert(target != nullptr);
 }
-
 
 ThirdPersonCameraComponent::~ThirdPersonCameraComponent()
 {
@@ -105,4 +105,15 @@ glm::vec3 ThirdPersonCameraComponent::CalculateCameraPosition(float horizontalDi
 	newPosition.z = targetPosition.z - offsetZ;
 
 	return newPosition;
+}
+
+void ThirdPersonCameraComponent::OnMouseScroll(float scroll)
+{
+	UpdateZoomSpeed(scroll);
+}
+
+void ThirdPersonCameraComponent::UpdateZoomSpeed(float scroll)
+{
+	mCurrentZoomSpeed = mZoomSpeed * scroll;
+	mDistanceFromTarget += mCurrentZoomSpeed;
 }

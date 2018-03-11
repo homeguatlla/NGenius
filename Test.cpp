@@ -100,6 +100,8 @@
 #include "src/resources/command/ICommand.h"
 #include "src/resources/command/commands/RiseTerrainCommand.h"
 
+#include "src/input/IInputListener.h"
+
 using namespace glm;
 using namespace std;
 
@@ -153,6 +155,7 @@ ICamera* mGameplayCamera;
 ICamera* mGuiCamera;
 ICamera* mMapCamera;
 ICamera* mEagleEyeCamera;
+ThirdPersonCameraComponent* mThirdPersonCameraComponent;
 
 RenderPass* mMapPass;
 //Light* mSunLight;
@@ -314,6 +317,17 @@ void CreateSpecificCubes()
 	}
 }
 */
+
+void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset)
+{
+	mEngine.OnMouseScroll(yOffset);
+}
+
+void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	mEngine.OnKey(key, action);
+	std::cout << "key = " << key << " action = " << action << "\n";
+}
 
 GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string>& models, const std::vector<float>& distances, IMaterial* material, IMaterial* materialNormalmap)
 {
@@ -754,7 +768,7 @@ void CreateTerrain()
 							static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")),
 							scale);
 
-	mTerrain->AddComponent(new DebugInputComponent(mEngine.GetGLWindow()));
+	mTerrain->AddComponent(new DebugInputComponent());
 	mTerrain->SetFlat(mIsTerrainFlat);
 			
 	mEngine.AddGameEntity(mTerrain);	
@@ -774,12 +788,15 @@ void CreatePlayer()
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectShadowProperties());
 	
+	PlayerInputComponent* inputComponent = new PlayerInputComponent(PLAYER_RUN_SPEED, PLAYER_TURN_SPEED, PLAYER_UPWARDS_HEIGHT);
+	mEngine.RegisterAllEventsInputListener(inputComponent);
+
 	Model* model = mEngine.GetModel("enano");
 	IRenderer* renderer = new VertexsRenderer(model, material);
 
 	mPlayer = new Player(new Transformation(glm::vec3(0.0f, 4.9f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.03f)),
 		renderer,
-		new PlayerInputComponent(mEngine.GetGLWindow(), PLAYER_RUN_SPEED, PLAYER_TURN_SPEED, PLAYER_UPWARDS_HEIGHT),
+		inputComponent,
 		new PhysicsComponent(false, PhysicsSystem::GRAVITY_VALUE),
 		new CollisionComponent()
 	);
@@ -791,7 +808,10 @@ void CreateGameCameraEntity()
 {
 	mCamera = new GameEntity(new Transformation(mGameplayCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
 		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
-	mCamera->AddComponent(new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f));
+
+	mThirdPersonCameraComponent = new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f, PLAYER_ZOOM_SPEED);
+	mEngine.RegisterAllEventsInputListener(mThirdPersonCameraComponent);
+	mCamera->AddComponent(mThirdPersonCameraComponent);
 	mCamera->AddComponent(new CollisionComponent());
 	
 	if (mIsWaterEnabled)
@@ -1011,7 +1031,8 @@ void UpdateInput(GLFWwindow* window)
 		}
 		else
 		{
-			mCamera->AddComponent(new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f));
+			mThirdPersonCameraComponent = new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f, PLAYER_ZOOM_SPEED);
+			mCamera->AddComponent(mThirdPersonCameraComponent);
 		}
 
 		mIsGameplayCameraEnabled = !mIsGameplayCameraEnabled;
@@ -1245,6 +1266,9 @@ void Initialize()
 	mEngine.SetWaterParameters(mGameplayCamera, mWaterHeight);
 	
 	mEngine.Init(mIsFullScreen);
+
+	glfwSetScrollCallback(mEngine.GetGLWindow(), &ScrollCallback);
+	glfwSetKeyCallback(mEngine.GetGLWindow(), &KeyCallback);
 
 	mFogDensity = mIsFogEnabled ? mFogDensity : 0.0f;
 }

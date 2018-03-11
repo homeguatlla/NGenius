@@ -118,6 +118,12 @@
     <Filter Include="Source Files\resources\command\commands">
       <UniqueIdentifier>{18f4b866-22d6-40fd-91c4-6b9c092eba4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\input">
+      <UniqueIdentifier>{4c6d2187-59b9-4f52-a9f5-8895130a9463}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\input">
+      <UniqueIdentifier>{efd1b11c-a485-4365-a1db-39eed7554dea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -444,6 +450,12 @@
     <ClInclude Include="src\resources\systems\renderSystem\WaterRenderPassSubSystem.h">
       <Filter>Header Files\resources\systems\renderSystem</Filter>
     </ClInclude>
+    <ClInclude Include="src\listeners\IInputListener.h">
+      <Filter>Header Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\InputManager.h">
+      <Filter>Header Files\input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -760,6 +772,12 @@
     </ClCompile>
     <ClCompile Include="src\resources\systems\renderSystem\WaterRenderPassSubSystem.cpp">
       <Filter>Source Files\resources\systems\renderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\InputManager.cpp">
+      <Filter>Source Files\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\IInputListener.cpp">
+      <Filter>Source Files\input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

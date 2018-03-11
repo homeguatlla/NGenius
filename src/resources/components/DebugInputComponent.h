@@ -4,7 +4,7 @@
 class DebugInputComponent :	public IInputComponent
 {
 public:
-	explicit DebugInputComponent(GLFWwindow* window);
+	explicit DebugInputComponent();
 	~DebugInputComponent();
 
 	DebugInputComponent* DoClone() const override;

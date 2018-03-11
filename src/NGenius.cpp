@@ -10,6 +10,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "input/InputManager.h"
+
 #include "resources/systems/EntitiesSystem.h"
 #include "resources/systems/renderSystem/RenderSystem.h"
 #include "resources/systems/PhysicsSystem.h"
@@ -38,6 +40,7 @@ NGenius::~NGenius()
 void NGenius::Init(bool isFullscreen)
 {
 	mRenderSystem->Init(mApplicationName, isFullscreen);
+	mInputManager->Init(mRenderSystem->GetGLWindow());
 }
 
 void NGenius::Update()
@@ -49,7 +52,7 @@ void NGenius::Update()
 
 	do
 	{
-		UpdateInput(elapsedTime / 20.0f);
+		mInputManager->Update(elapsedTime / 20.0f);
 
 		UpdateSystems(elapsedTime);
 
@@ -81,25 +84,6 @@ void NGenius::Update()
 	glfwTerminate();
 }
 
-void NGenius::UpdateInput(float deltaTime)
-{
-	GLFWwindow* window = mRenderSystem->GetGLWindow();
-
-	mInputHandler(window);
-
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-	{
-		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		}
-		else
-		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		}
-	}
-}
-
 void NGenius::UpdateSystems(float elapsedTime)
 {
 	mParticlesSystem->Update(elapsedTime);
@@ -114,10 +98,13 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 	mEntitiesSystem = new EntitiesSystem(mRenderSystem, mPhysicsSystem);
 	mParticlesSystem = new ParticlesSystem();
 	mLightsSystem = new LightsSystem(mEntitiesSystem);
+
+	mInputManager = new InputManager();
 }
 
 void NGenius::DestroySystems()
 {
+	delete mInputManager;
 	delete mLightsSystem;
 	delete mParticlesSystem;
 	delete mEntitiesSystem;
@@ -125,14 +112,34 @@ void NGenius::DestroySystems()
 	delete mRenderSystem;
 }
 
+void NGenius::RegisterAllEventsInputListener(IInputListener* listener)
+{
+	mInputManager->RegisterAllEventsInputListener(listener);
+}
+
+void NGenius::UnRegisterInputListener(IInputListener* listener)
+{
+	mInputManager->UnRegisterInputListener(listener);
+}
+
 void NGenius::RegisterInputHandler(std::function<void(GLFWwindow* window)> callback)
 {
-	mInputHandler = callback;
+	mInputManager->RegisterInputHandler(callback);
 }
 
 void NGenius::RegisterUpdateHandler(std::function<void(float elapsedTime)> callback)
 {
 	mUpdateHandler = callback;
+}
+
+void NGenius::OnKey(int key, int action)
+{
+	mInputManager->OnKey(key, action);
+}
+
+void NGenius::OnMouseScroll(float scroll)
+{
+	mInputManager->OnMouseScroll(scroll);
 }
 
 IShaderProgram* NGenius::GetShader(const std::string& name) const

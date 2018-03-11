@@ -164,6 +164,8 @@
     <ClInclude Include="src\AABB.h" />
     <ClInclude Include="src\BasicTypes.h" />
     <ClInclude Include="src\BitNumber.h" />
+    <ClInclude Include="src\input\InputManager.h" />
+    <ClInclude Include="src\listeners\IInputListener.h" />
     <ClInclude Include="src\loader\FontLoader.h" />
     <ClInclude Include="src\loader\OBJLoader.h" />
     <ClInclude Include="src\NGenius.h" />
@@ -271,6 +273,8 @@
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="src\AABB.cpp" />
     <ClCompile Include="src\BitNumber.cpp" />
+    <ClCompile Include="src\input\IInputListener.cpp" />
+    <ClCompile Include="src\input\InputManager.cpp" />
     <ClCompile Include="src\loader\FontLoader.cpp" />
     <ClCompile Include="src\loader\OBJLoader.cpp" />
     <ClCompile Include="src\NGenius.cpp" />

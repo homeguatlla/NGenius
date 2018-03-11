@@ -4,7 +4,7 @@
 class VerticalInputComponent : public IInputComponent
 {
 public:
-	explicit VerticalInputComponent(GLFWwindow* window);
+	explicit VerticalInputComponent();
 	~VerticalInputComponent();
 
 	VerticalInputComponent* DoClone() const override;

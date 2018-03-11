@@ -1,20 +1,20 @@
 #include "stdafx.h"
 #include "PlayerInputComponent.h"
-#include <GLFW/glfw3.h>
-
 #include "../GameEntity.h"
 #include "../Transformation.h"
 
-PlayerInputComponent::PlayerInputComponent(GLFWwindow* window, float runSpeed, float turnSpeed, float upwardsSpeed) :
-IInputComponent(window),
+#include <GLFW/glfw3.h>
+#include <functional>
+
+PlayerInputComponent::PlayerInputComponent(float runSpeed, float turnSpeed, float upwardsSpeed) :
 mRunSpeed(runSpeed),
 mTurnSpeed(turnSpeed),
 mUpwardsSpeed(upwardsSpeed),
 mHasMoved(false),
 mHasJumped(false)
 {
+	
 }
-
 
 PlayerInputComponent::~PlayerInputComponent()
 {
@@ -50,57 +50,53 @@ bool PlayerInputComponent::HasJumped() const
 	return mHasJumped;
 }
 
-void PlayerInputComponent::Update(float elapsedTime)
-{
-	mHasMoved = UpdateTurnSpeed(elapsedTime);
-	mHasMoved |= UpdateRunSpeed(elapsedTime);
-	mHasMoved |= UpdateUpwardsSpeed(elapsedTime);
-}
-
-bool PlayerInputComponent::UpdateTurnSpeed(float elapsedTime)
+void PlayerInputComponent::UpdateTurnSpeed(int key, int action)
 {
 	bool moved = true;
-
-	if (glfwGetKey(mWindow, GLFW_KEY_LEFT) == GLFW_PRESS)
+	
+	if (key == GLFW_KEY_A)
 	{
 		mCurrentTurnSpeed = mTurnSpeed;
 	}
-	else if (glfwGetKey(mWindow, GLFW_KEY_RIGHT) == GLFW_PRESS)
+	else if (key == GLFW_KEY_D)
 	{
 		mCurrentTurnSpeed = -mTurnSpeed;
 	}
-	else
+
+	if (action == GLFW_RELEASE)
 	{
 		mCurrentTurnSpeed = 0.0f;
 		moved = false;
 	}
-	return moved;
+
+	mHasMoved |= moved;
 }
 
-bool PlayerInputComponent::UpdateRunSpeed(float elapsedTime)
+void PlayerInputComponent::UpdateRunSpeed(int key, int action)
 {
 	bool moved = true;
-
-	if (glfwGetKey(mWindow, GLFW_KEY_UP) == GLFW_PRESS)
+	
+	if (key == GLFW_KEY_W)
 	{
 		mCurrentRunSpeed = mRunSpeed;
 	}
-	else if (glfwGetKey(mWindow, GLFW_KEY_DOWN) == GLFW_PRESS)
+	else if (key == GLFW_KEY_S)
 	{
 		mCurrentRunSpeed = -mRunSpeed;
 	}
-	else
+	
+	if(action == GLFW_RELEASE)
 	{
 		mCurrentRunSpeed = 0.0f;
 		moved = false;
 	}
-
-	return moved;
+	
+	mHasMoved |= moved;
 }
 
-bool PlayerInputComponent::UpdateUpwardsSpeed(float elapsedTime)
+void PlayerInputComponent::UpdateUpwardsSpeed(int action)
 {
-	if (glfwGetKey(mWindow, GLFW_KEY_SPACE) == GLFW_PRESS)
+	if (action == GLFW_PRESS)
 	{
 		mCurrentUpwardsSpeed = mUpwardsSpeed;
 		mHasJumped = true;
@@ -110,6 +106,24 @@ bool PlayerInputComponent::UpdateUpwardsSpeed(float elapsedTime)
 		mCurrentUpwardsSpeed  = 0.0f;
 		mHasJumped = false;
 	}
-	
-	return mHasJumped;
+}
+
+void PlayerInputComponent::OnKey(int key, int action)
+{
+	switch (key)
+	{
+		case GLFW_KEY_SPACE:
+			UpdateUpwardsSpeed(action);
+			break;
+		case GLFW_KEY_W:
+		case GLFW_KEY_S:
+			UpdateRunSpeed(key, action);
+		break;
+		case GLFW_KEY_A:
+		case GLFW_KEY_D:
+			UpdateTurnSpeed(key, action);
+			break;
+		default:
+			break;
+	}
 }

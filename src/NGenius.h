@@ -10,6 +10,9 @@ class EntitiesSystem;
 class ParticlesSystem;
 class LightsSystem;
 
+class InputManager;
+class IInputListener;
+
 class Model;
 class IShaderProgram;
 class ITexture;
@@ -34,11 +37,10 @@ class NGenius
 	EntitiesSystem* mEntitiesSystem;
 	ParticlesSystem* mParticlesSystem;
 	LightsSystem* mLightsSystem;
-
+	InputManager* mInputManager;
 	std::string mApplicationName;
 	float mFPS;
-
-	std::function<void(GLFWwindow* window)> mInputHandler;
+	
 	std::function<void(float elapsedTime)> mUpdateHandler;
 
 public:
@@ -67,8 +69,13 @@ public:
 
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 
+	void RegisterAllEventsInputListener(IInputListener* listener);
+	void UnRegisterInputListener(IInputListener* listener);
 	void RegisterInputHandler(std::function<void(GLFWwindow* window)> callback);
 	void RegisterUpdateHandler(std::function<void(float elapsedTime)> callback);
+
+	void OnKey(int key, int action);
+	void OnMouseScroll(float scroll);
 
 	void SetFullScreen(bool isFullScreen);
 	void SetTerrain(const Terrain* terrain);

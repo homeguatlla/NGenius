@@ -1,17 +1,15 @@
 #pragma once
 #include "IComponent.h"
+#include "../../input/IInputListener.h"
 
-struct GLFWwindow;
-
-class IInputComponent : public IComponent
+class IInputComponent : public IComponent, public IInputListener
 {
-protected:
-	GLFWwindow* mWindow;
-
 public:
-	explicit IInputComponent(GLFWwindow* window);
+	explicit IInputComponent();
 	virtual ~IInputComponent();
 
+	void OnKey(int key, int action) override {}
+	void OnMouseScroll(float scroll) override {}
 	virtual void Update(float elapsedTime) = 0;
 };
 
