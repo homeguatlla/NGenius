@@ -19,20 +19,20 @@ DebugInputComponent* DebugInputComponent::DoClone() const
 	return new DebugInputComponent(*this);
 }
 
-void DebugInputComponent::Update(float elapsedTime)
+void DebugInputComponent::OnInputEvent(const InputEvent* event)
 {
 	bool isDirty = false;
 	float angle = 0.0f;
 
 	/*if (glfwGetKey(mWindow, GLFW_KEY_R) == GLFW_PRESS)
 	{
-		isDirty = true;
-		angle = -2.0f;
+	isDirty = true;
+	angle = -2.0f;
 	}
 	else if (glfwGetKey(mWindow, GLFW_KEY_R) == GLFW_PRESS && glfwGetKey(mWindow, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
-		isDirty = true;
-		angle = 2.0f;
+	isDirty = true;
+	angle = 2.0f;
 	}*/
 
 	if (isDirty)

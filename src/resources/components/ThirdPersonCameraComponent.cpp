@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include "../GameEntity.h"
 #include "../camera/PerspectiveCamera.h"
+#include "../../input/InputEvent.h"
 #include "CollisionComponent.h"
 #include "OverWaterComponent.h"
 #include "PlayerInputComponent.h"
@@ -32,6 +33,8 @@ ThirdPersonCameraComponent* ThirdPersonCameraComponent::DoClone() const
 
 void ThirdPersonCameraComponent::Update(float elapsedTime)
 {
+	IInputComponent::Update(elapsedTime);
+
 	glm::vec3 newTarget = mTarget->GetTransformation()->GetPosition();
 	glm::vec3 currentTarget = mCamera->GetTarget();
 	newTarget = currentTarget + (newTarget - currentTarget) * CAMERA_SMOOTH_MOVEMENT_VALUE;
@@ -107,9 +110,9 @@ glm::vec3 ThirdPersonCameraComponent::CalculateCameraPosition(float horizontalDi
 	return newPosition;
 }
 
-void ThirdPersonCameraComponent::OnMouseScroll(float scroll)
+void ThirdPersonCameraComponent::OnInputEvent(const InputEvent* event)
 {
-	UpdateZoomSpeed(scroll);
+	//UpdateZoomSpeed(event->GetKey());
 }
 
 void ThirdPersonCameraComponent::UpdateZoomSpeed(float scroll)

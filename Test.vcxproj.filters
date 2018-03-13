@@ -124,6 +124,18 @@
     <Filter Include="Source Files\input">
       <UniqueIdentifier>{efd1b11c-a485-4365-a1db-39eed7554dea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\input\events">
+      <UniqueIdentifier>{9c3f636f-1c09-4af8-8e3e-20f78d236871}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\input\events">
+      <UniqueIdentifier>{56c80061-9290-4ecb-bd0b-82778dc2d74a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\input\converters">
+      <UniqueIdentifier>{fbac4aca-98b5-4693-b39b-6fd57f6d7868}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\input\converters">
+      <UniqueIdentifier>{308d224c-0ddf-4a32-bb48-245269ed1691}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -456,6 +468,24 @@
     <ClInclude Include="src\input\InputManager.h">
       <Filter>Header Files\input</Filter>
     </ClInclude>
+    <ClInclude Include="src\input\InputEvent.h">
+      <Filter>Header Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\events\BackwardEvent.h">
+      <Filter>Header Files\input\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\events\ForwardEvent.h">
+      <Filter>Header Files\input\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\events\ZoomEvent.h">
+      <Filter>Header Files\input\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\converters\KeyConverter.h">
+      <Filter>Header Files\input\converters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\InputConverter.h">
+      <Filter>Header Files\input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -777,6 +807,24 @@
       <Filter>Source Files\input</Filter>
     </ClCompile>
     <ClCompile Include="src\input\IInputListener.cpp">
+      <Filter>Source Files\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\InputEvent.cpp">
+      <Filter>Source Files\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\events\BackwardEvent.cpp">
+      <Filter>Source Files\input\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\events\ForwardEvent.cpp">
+      <Filter>Source Files\input\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\events\ZoomEvent.cpp">
+      <Filter>Source Files\input\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\converters\KeyConverter.cpp">
+      <Filter>Source Files\input\converters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\InputConverter.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
   </ItemGroup>

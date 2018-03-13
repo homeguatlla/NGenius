@@ -2,6 +2,8 @@
 #include "PlayerInputComponent.h"
 #include "../GameEntity.h"
 #include "../Transformation.h"
+#include "../../input/InputEvent.h"
+#include "../../input/events/ForwardEvent.h"
 
 #include <GLFW/glfw3.h>
 #include <functional>
@@ -72,24 +74,24 @@ void PlayerInputComponent::UpdateTurnSpeed(int key, int action)
 	mHasMoved |= moved;
 }
 
-void PlayerInputComponent::UpdateRunSpeed(int key, int action)
+void PlayerInputComponent::UpdateRunSpeed(bool isForward)
 {
 	bool moved = true;
 	
-	if (key == GLFW_KEY_W)
+	if (isForward)
 	{
 		mCurrentRunSpeed = mRunSpeed;
 	}
-	else if (key == GLFW_KEY_S)
+	else
 	{
 		mCurrentRunSpeed = -mRunSpeed;
 	}
 	
-	if(action == GLFW_RELEASE)
+	/*if(action == GLFW_RELEASE)
 	{
 		mCurrentRunSpeed = 0.0f;
 		moved = false;
-	}
+	}*/
 	
 	mHasMoved |= moved;
 }
@@ -108,22 +110,27 @@ void PlayerInputComponent::UpdateUpwardsSpeed(int action)
 	}
 }
 
-void PlayerInputComponent::OnKey(int key, int action)
+void PlayerInputComponent::OnInputEvent(const InputEvent* event)
 {
-	switch (key)
+	if (event->IsOfType<ForwardEvent>())
+	{
+		UpdateRunSpeed(1);
+	}
+	/*
+	switch (event->GetKey())
 	{
 		case GLFW_KEY_SPACE:
-			UpdateUpwardsSpeed(action);
+			UpdateUpwardsSpeed(event->GetAction());
 			break;
 		case GLFW_KEY_W:
 		case GLFW_KEY_S:
-			UpdateRunSpeed(key, action);
+			UpdateRunSpeed(event->GetKey(), event->GetAction());
 		break;
 		case GLFW_KEY_A:
 		case GLFW_KEY_D:
-			UpdateTurnSpeed(key, action);
+			UpdateTurnSpeed(event->GetKey(), event->GetAction());
 			break;
 		default:
 			break;
-	}
+	}*/
 }

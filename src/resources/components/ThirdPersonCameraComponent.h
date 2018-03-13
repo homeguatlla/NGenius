@@ -1,13 +1,11 @@
 #pragma once
-#include "IComponent.h"
-#include "../../input/IInputListener.h"
-
+#include "IInputComponent.h"
 #include <glm/glm.hpp>
 
 class GameEntity;
 class PerspectiveCamera;
 
-class ThirdPersonCameraComponent : public IComponent, public IInputListener
+class ThirdPersonCameraComponent : public IInputComponent
 {
 	PerspectiveCamera* mCamera;
 	GameEntity* mTarget;
@@ -27,8 +25,7 @@ public:
 	glm::vec3 GetCameraPosition() const;
 
 private:
-	void OnKey(int key, int action) override {};
-	void OnMouseScroll(float scroll) override;
+	void OnInputEvent(const InputEvent* event) override;
 
 	void UpdateZoomSpeed(float scroll);
 	float CalculateHorizontalDistance() const;

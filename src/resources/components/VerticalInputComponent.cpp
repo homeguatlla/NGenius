@@ -20,7 +20,7 @@ VerticalInputComponent* VerticalInputComponent::DoClone() const
 	return new VerticalInputComponent(*this);
 }
 
-void VerticalInputComponent::Update(float elapsedTime)
+void VerticalInputComponent::OnInputEvent(const InputEvent* event)
 {
 	/*
 	if (glfwGetKey(mWindow, GLFW_KEY_S) == GLFW_PRESS)

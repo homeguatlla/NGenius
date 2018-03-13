@@ -21,8 +21,6 @@ public:
 
 	PlayerInputComponent* DoClone() const override;
 
-	void Update(float elapsedTime) {};
-
 	float GetCurrentRunSpeed() const;
 	float GetCurrentTurnSpeed() const;
 	float GetCurrentUpwardsSpeed() const;
@@ -31,10 +29,9 @@ public:
 	bool HasJumped() const;
 
 private:
-	void OnKey(int key, int action) override;
-	void OnMouseScroll(float scroll) override {}
+	void OnInputEvent(const InputEvent* event);
 	void UpdateTurnSpeed(int key, int action);
-	void UpdateRunSpeed(int key, int action);
+	void UpdateRunSpeed(bool isForward);
 	void UpdateUpwardsSpeed(int action);
 };
 

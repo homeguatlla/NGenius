@@ -101,6 +101,11 @@
 #include "src/resources/command/commands/RiseTerrainCommand.h"
 
 #include "src/input/IInputListener.h"
+#include "src/input/converters/KeyConverter.h"
+#include "src/input/events/ForwardEvent.h"
+#include "src/input/events/BackwardEvent.h"
+#include "src/input/events/ZoomEvent.h"
+
 
 using namespace glm;
 using namespace std;
@@ -320,7 +325,7 @@ void CreateSpecificCubes()
 
 void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 {
-	mEngine.OnMouseScroll(yOffset);
+	mEngine.OnMouseScroll(static_cast<float>(yOffset));
 }
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -789,7 +794,11 @@ void CreatePlayer()
 	material->AddEffect(new MaterialEffectShadowProperties());
 	
 	PlayerInputComponent* inputComponent = new PlayerInputComponent(PLAYER_RUN_SPEED, PLAYER_TURN_SPEED, PLAYER_UPWARDS_HEIGHT);
+	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_W, GLFW_PRESS, new ForwardEvent()));
+	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_S, GLFW_PRESS, new BackwardEvent()));
+	//inputComponent->AddConverter(new KeyConverter(GLFW_KEY_W, GLFW_PRESS, new ZoomEvent()));
 	mEngine.RegisterAllEventsInputListener(inputComponent);
+
 
 	Model* model = mEngine.GetModel("enano");
 	IRenderer* renderer = new VertexsRenderer(model, material);

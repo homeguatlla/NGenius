@@ -164,6 +164,12 @@
     <ClInclude Include="src\AABB.h" />
     <ClInclude Include="src\BasicTypes.h" />
     <ClInclude Include="src\BitNumber.h" />
+    <ClInclude Include="src\input\converters\KeyConverter.h" />
+    <ClInclude Include="src\input\events\BackwardEvent.h" />
+    <ClInclude Include="src\input\events\ForwardEvent.h" />
+    <ClInclude Include="src\input\events\ZoomEvent.h" />
+    <ClInclude Include="src\input\InputConverter.h" />
+    <ClInclude Include="src\input\InputEvent.h" />
     <ClInclude Include="src\input\InputManager.h" />
     <ClInclude Include="src\listeners\IInputListener.h" />
     <ClInclude Include="src\loader\FontLoader.h" />
@@ -273,7 +279,13 @@
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="src\AABB.cpp" />
     <ClCompile Include="src\BitNumber.cpp" />
+    <ClCompile Include="src\input\converters\KeyConverter.cpp" />
+    <ClCompile Include="src\input\events\BackwardEvent.cpp" />
+    <ClCompile Include="src\input\events\ForwardEvent.cpp" />
+    <ClCompile Include="src\input\events\ZoomEvent.cpp" />
     <ClCompile Include="src\input\IInputListener.cpp" />
+    <ClCompile Include="src\input\InputConverter.cpp" />
+    <ClCompile Include="src\input\InputEvent.cpp" />
     <ClCompile Include="src\input\InputManager.cpp" />
     <ClCompile Include="src\loader\FontLoader.cpp" />
     <ClCompile Include="src\loader\OBJLoader.cpp" />
