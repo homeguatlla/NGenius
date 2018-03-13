@@ -6,5 +6,7 @@ class ZoomEvent : public InputEvent
 public:
 	ZoomEvent();
 	~ZoomEvent();
+
+	InputEvent* DoClone() const;
 };
 

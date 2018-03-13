@@ -6,5 +6,7 @@ class ForwardEvent : public InputEvent
 public:
 	ForwardEvent();
 	~ForwardEvent();
+
+	InputEvent* DoClone() const override;
 };
 

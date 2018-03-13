@@ -25,8 +25,6 @@ public:
 	glm::vec3 GetCameraPosition() const;
 
 private:
-	void OnInputEvent(const InputEvent* event) override;
-
 	void UpdateZoomSpeed(float scroll);
 	float CalculateHorizontalDistance() const;
 	float CalculateVerticalDistance() const;

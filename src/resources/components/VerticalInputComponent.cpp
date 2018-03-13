@@ -20,9 +20,10 @@ VerticalInputComponent* VerticalInputComponent::DoClone() const
 	return new VerticalInputComponent(*this);
 }
 
+/*
 void VerticalInputComponent::OnInputEvent(const InputEvent* event)
 {
-	/*
+	
 	if (glfwGetKey(mWindow, GLFW_KEY_S) == GLFW_PRESS)
 	{
 		Transformation* transformation = mParent->GetTransformation();
@@ -36,5 +37,5 @@ void VerticalInputComponent::OnInputEvent(const InputEvent* event)
 			lightPosition.y += 0.1f;
 		}
 		transformation->SetPosition(lightPosition);
-	}*/
-}
+	}
+}*/

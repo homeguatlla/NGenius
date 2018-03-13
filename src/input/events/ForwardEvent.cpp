@@ -10,3 +10,8 @@ ForwardEvent::ForwardEvent()
 ForwardEvent::~ForwardEvent()
 {
 }
+
+InputEvent* ForwardEvent::DoClone() const
+{
+	return new ForwardEvent();
+}

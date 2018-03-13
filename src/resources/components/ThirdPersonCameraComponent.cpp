@@ -110,11 +110,6 @@ glm::vec3 ThirdPersonCameraComponent::CalculateCameraPosition(float horizontalDi
 	return newPosition;
 }
 
-void ThirdPersonCameraComponent::OnInputEvent(const InputEvent* event)
-{
-	//UpdateZoomSpeed(event->GetKey());
-}
-
 void ThirdPersonCameraComponent::UpdateZoomSpeed(float scroll)
 {
 	mCurrentZoomSpeed = mZoomSpeed * scroll;

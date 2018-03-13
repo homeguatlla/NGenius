@@ -32,11 +32,6 @@ void IInputComponent::OnMouseScroll(float scroll)
 
 void IInputComponent::Update(float elapsedTime)
 {
-	while (!mEvents.empty())
-	{
-		OnInputEvent(mEvents.front());
-		mEvents.pop();
-	}
 }
 
 void IInputComponent::AddConverter(const InputConverter* converter)
@@ -56,4 +51,18 @@ void IInputComponent::RemoveConverter(const InputConverter* converter)
 	{
 		mConverters.erase(it);
 	}
+}
+
+
+bool IInputComponent::IsInputsEventsEmpty() const
+{
+	return mEvents.empty();
+}
+
+const InputEvent* IInputComponent::ConsumeInputEvent()
+{
+	const InputEvent* event = mEvents.front();
+	mEvents.pop();
+
+	return event;
 }

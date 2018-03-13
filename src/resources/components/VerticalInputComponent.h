@@ -7,8 +7,6 @@ public:
 	explicit VerticalInputComponent();
 	~VerticalInputComponent();
 
-	void OnInputEvent(const InputEvent* event) override;
-
 	VerticalInputComponent* DoClone() const override;
 };
 

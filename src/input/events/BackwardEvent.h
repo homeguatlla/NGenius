@@ -6,5 +6,7 @@ class BackwardEvent : public InputEvent
 public:
 	BackwardEvent();
 	~BackwardEvent();
+
+	InputEvent* DoClone() const;
 };
 

@@ -19,12 +19,13 @@ DebugInputComponent* DebugInputComponent::DoClone() const
 	return new DebugInputComponent(*this);
 }
 
+/*
 void DebugInputComponent::OnInputEvent(const InputEvent* event)
 {
 	bool isDirty = false;
 	float angle = 0.0f;
 
-	/*if (glfwGetKey(mWindow, GLFW_KEY_R) == GLFW_PRESS)
+	if (glfwGetKey(mWindow, GLFW_KEY_R) == GLFW_PRESS)
 	{
 	isDirty = true;
 	angle = -2.0f;
@@ -33,7 +34,7 @@ void DebugInputComponent::OnInputEvent(const InputEvent* event)
 	{
 	isDirty = true;
 	angle = 2.0f;
-	}*/
+	}
 
 	if (isDirty)
 	{
@@ -44,4 +45,4 @@ void DebugInputComponent::OnInputEvent(const InputEvent* event)
 
 		transformation->SetRotation(rotation);
 	}
-}
+}*/

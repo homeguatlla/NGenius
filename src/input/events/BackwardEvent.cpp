@@ -10,3 +10,8 @@ BackwardEvent::BackwardEvent()
 BackwardEvent::~BackwardEvent()
 {
 }
+
+InputEvent* BackwardEvent::DoClone() const
+{
+	return new BackwardEvent();
+}

@@ -10,3 +10,8 @@ ZoomEvent::ZoomEvent()
 ZoomEvent::~ZoomEvent()
 {
 }
+
+InputEvent* ZoomEvent::DoClone() const
+{
+	return new ZoomEvent();
+}

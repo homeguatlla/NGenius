@@ -20,8 +20,10 @@ public:
 
 	void OnKey(int key, int action) override;
 	void OnMouseScroll(float scroll) override;
-	virtual void OnInputEvent(const InputEvent* event) = 0;
 	void Update(float elapsedTime);
+
+	bool IsInputsEventsEmpty() const;
+	const InputEvent* ConsumeInputEvent();
 
 	void AddConverter(const InputConverter* converter);
 	void RemoveConverter(const InputConverter* converter);
