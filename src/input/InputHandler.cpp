@@ -1,25 +1,25 @@
 #include "stdafx.h"
-#include "InputManager.h"
+#include "InputHandler.h"
 #include "IInputListener.h"
 
-InputManager::InputManager() : mWindow(nullptr), mIsInitialized(false)
+InputHandler::InputHandler() : mWindow(nullptr), mIsInitialized(false)
 {
 }
 
 
-InputManager::~InputManager()
+InputHandler::~InputHandler()
 {
 	mListeners.clear();
 	mInputHandler = nullptr;
 }
 
-void InputManager::Init(GLFWwindow* window)
+void InputHandler::Init(GLFWwindow* window)
 {
 	mWindow = window;
 	mIsInitialized = true;
 }
 
-void InputManager::Update(float deltaTime)
+void InputHandler::Update(float deltaTime)
 {
 	if (mIsInitialized)
 	{
@@ -39,7 +39,7 @@ void InputManager::Update(float deltaTime)
 	}
 }
 
-void InputManager::RegisterAllEventsInputListener(IInputListener* listener)
+void InputHandler::RegisterAllEventsInputListener(IInputListener* listener)
 {
 	bool found = std::find(mListeners.begin(), mListeners.end(), listener) != mListeners.end();
 	if (!found)
@@ -48,7 +48,7 @@ void InputManager::RegisterAllEventsInputListener(IInputListener* listener)
 	}
 }
 
-void InputManager::UnRegisterInputListener(IInputListener* listener)
+void InputHandler::UnRegisterInputListener(IInputListener* listener)
 {
 	ListenersIterator it = std::find(mListeners.begin(), mListeners.end(), listener);
 	bool found = it != mListeners.end();
@@ -58,12 +58,12 @@ void InputManager::UnRegisterInputListener(IInputListener* listener)
 	}
 }
 
-void InputManager::RegisterInputHandler(std::function<void(GLFWwindow* window)> callback)
+void InputHandler::RegisterInputHandler(std::function<void(GLFWwindow* window)> callback)
 {
 	mInputHandler = callback;
 }
 
-void InputManager::OnKey(int key, int action)
+void InputHandler::OnKey(int key, int action)
 {
 	for (ListenersIterator it = mListeners.begin(); it != mListeners.end(); ++it)
 	{
@@ -71,7 +71,7 @@ void InputManager::OnKey(int key, int action)
 	}
 }
 
-void InputManager::OnMouseScroll(float scroll)
+void InputHandler::OnMouseScroll(float scroll)
 {
 	for (ListenersIterator it = mListeners.begin(); it != mListeners.end(); ++it)
 	{

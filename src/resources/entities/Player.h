@@ -3,9 +3,10 @@
 
 class IRenderer;
 class Transformation;
-class PlayerInputComponent;
+class InputComponent;
 class CollisionComponent;
 class PhysicsComponent;
+class CharacterComponent;
 
 class Player : public GameEntity
 {
@@ -21,13 +22,14 @@ class Player : public GameEntity
 	State mState;
 
 public:
-	explicit Player(Transformation* transformation, IRenderer* renderer, PlayerInputComponent* playerInputComponent, PhysicsComponent* physicsComponent, CollisionComponent* collisionComponent);
+	explicit Player(Transformation* transformation, IRenderer* renderer, InputComponent* playerInputComponent, CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, CollisionComponent* collisionComponent);
 	virtual ~Player();
 
 	Player* DoClone() const override { return nullptr; }
 	void Update(float elapsedTime) override;
 
 private:
+	void UpdateGameEvents();
 	void UpdateIdle(float elapsedTime);
 	void UpdateMoving(float elapsedTime);
 	void UpdateFlying(float elapsedTime);

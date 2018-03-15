@@ -1,29 +1,30 @@
 #pragma once
-
+#include "../../input/IInputListener.h"
 #include <vector>
-class GameEntity;
-class RenderSystem;
-class PhysicsSystem;
-class InputSystem;
 
-class EntitiesSystem
+class GameEntity;
+class InputHandler;
+
+class InputSystem : public IInputListener
 {
 	std::vector<GameEntity*> mEntities;
 	std::vector<GameEntity*> mNewEntitiesToAdd;
 	std::vector<GameEntity*> mEntitiesToRemove;
 	typedef std::vector<GameEntity*>::iterator GameEntitiesIterator;
 
-	RenderSystem* mRenderSystem;
-	PhysicsSystem* mPhysicsSystem;
-	InputSystem* mInputSystem;
-
 public:
-	EntitiesSystem(RenderSystem* rendererSystem, PhysicsSystem* physicsSystem, InputSystem* inputSystem);
-	~EntitiesSystem();
+	InputSystem(InputHandler* inputHandler);
+	~InputSystem();
 
 	void Update(float elapsedTime);
+
+	void OnKey(int key, int action) override;
+	void OnMouseScroll(float scroll) override;
+
 	void AddEntity(GameEntity* entity);
 	void RemoveEntity(GameEntity* entity);
+
+	bool HasInputComponents(GameEntity* entity) const;
 
 private:
 	void ReleaseEntities(std::vector<GameEntity*>* entities);

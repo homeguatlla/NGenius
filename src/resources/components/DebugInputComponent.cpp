@@ -20,7 +20,7 @@ DebugInputComponent* DebugInputComponent::DoClone() const
 }
 
 /*
-void DebugInputComponent::OnInputEvent(const InputEvent* event)
+void DebugInputComponent::OnInputEvent(const GameEvent* event)
 {
 	bool isDirty = false;
 	float angle = 0.0f;

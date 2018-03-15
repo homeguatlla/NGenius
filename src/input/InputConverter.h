@@ -1,5 +1,5 @@
 #pragma once
-class InputEvent;
+class GameEvent;
 
 class InputConverter
 {
@@ -7,6 +7,6 @@ public:
 	InputConverter();
 	~InputConverter();
 
-	virtual const InputEvent* Convert(int key, int action) const = 0;
+	virtual const GameEvent* Convert(int key, int action) const = 0;
 };
 

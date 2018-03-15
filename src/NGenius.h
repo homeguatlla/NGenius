@@ -9,8 +9,9 @@ class PhysicsSystem;
 class EntitiesSystem;
 class ParticlesSystem;
 class LightsSystem;
+class InputSystem;
 
-class InputManager;
+class InputHandler;
 class IInputListener;
 
 class Model;
@@ -37,7 +38,8 @@ class NGenius
 	EntitiesSystem* mEntitiesSystem;
 	ParticlesSystem* mParticlesSystem;
 	LightsSystem* mLightsSystem;
-	InputManager* mInputManager;
+	InputSystem* mInputSystem;
+	InputHandler* mInputHandler;
 	std::string mApplicationName;
 	float mFPS;
 	

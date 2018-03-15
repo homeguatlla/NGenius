@@ -1,11 +1,11 @@
 #pragma once
-#include "IInputComponent.h"
+#include "InputComponent.h"
 #include <glm/glm.hpp>
 
 class GameEntity;
 class PerspectiveCamera;
 
-class ThirdPersonCameraComponent : public IInputComponent
+class ThirdPersonCameraComponent : public IComponent
 {
 	PerspectiveCamera* mCamera;
 	GameEntity* mTarget;

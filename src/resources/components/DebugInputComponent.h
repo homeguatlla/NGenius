@@ -1,7 +1,7 @@
 #pragma once
-#include "IInputComponent.h"
+#include "InputComponent.h"
 
-class DebugInputComponent :	public IInputComponent
+class DebugInputComponent :	public InputComponent
 {
 public:
 	explicit DebugInputComponent();

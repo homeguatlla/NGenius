@@ -2,14 +2,16 @@
 #include "EntitiesSystem.h"
 #include "renderSystem/RenderSystem.h"
 #include "PhysicsSystem.h"
+#include "InputSystem.h"
 #include "../GameEntity.h"
 #include "../components/LODComponent.h"
 
 #include <algorithm>
 
-EntitiesSystem::EntitiesSystem(RenderSystem* renderSystem, PhysicsSystem* physicsSystem) :
+EntitiesSystem::EntitiesSystem(RenderSystem* renderSystem, PhysicsSystem* physicsSystem, InputSystem* inputSystem) :
 mRenderSystem(renderSystem),
-mPhysicsSystem(physicsSystem)
+mPhysicsSystem(physicsSystem),
+mInputSystem(inputSystem)
 {
 }
 
@@ -52,6 +54,10 @@ void EntitiesSystem::AddNewEntities()
 		{
 			mPhysicsSystem->AddEntity(entity);
 		}
+		if (mInputSystem->HasInputComponents(entity))
+		{
+			mInputSystem->AddEntity(entity);
+		}
 		mEntities.push_back(entity);
 	}
 	mNewEntitiesToAdd.clear();
@@ -63,6 +69,7 @@ void EntitiesSystem::RemoveEntities()
 	{
 		GameEntitiesIterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](GameEntity* a) { return a == entity; });
 		mPhysicsSystem->RemoveEntity(*it);
+		mInputSystem->RemoveEntity(*it);
 		mEntities.erase(it);
 	}
 	mEntitiesToRemove.clear();

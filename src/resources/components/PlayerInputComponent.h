@@ -1,7 +1,7 @@
 #pragma once
-#include "IInputComponent.h"
+#include "InputComponent.h"
 
-class PlayerInputComponent : public IInputComponent
+class PlayerInputComponent : public InputComponent
 {
 	const float mRunSpeed;
 	const float mTurnSpeed;
@@ -29,7 +29,7 @@ public:
 	bool HasJumped() const;
 
 private:
-	void OnInputEvent(const InputEvent* event);
+	void OnInputEvent(const GameEvent* event);
 	void UpdateTurnSpeed(int key, int action);
 	void UpdateRunSpeed(bool isForward);
 	void UpdateUpwardsSpeed(int action);

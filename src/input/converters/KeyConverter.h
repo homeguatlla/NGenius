@@ -1,17 +1,17 @@
 #pragma once
-#include "../InputEvent.h"
+#include "../../resources/GameEvent.h"
 #include "../InputConverter.h"
 
 class KeyConverter : public InputConverter
 {
 	int mKey;
 	int mAction;
-	const InputEvent* mEvent;
+	const GameEvent* mEvent;
 
 public:
-	KeyConverter(int key, int action, const InputEvent* event);
+	KeyConverter(int key, int action, const GameEvent* event);
 	~KeyConverter();
 
-	const InputEvent* Convert(int key, int action) const;
+	const GameEvent* Convert(int key, int action) const;
 };
 

@@ -1,11 +1,11 @@
 #pragma once
-class InputEvent
+class GameEvent
 {
 public:
-	InputEvent();
-	~InputEvent();
+	GameEvent();
+	~GameEvent();
 
-	InputEvent* Clone() const;
+	GameEvent* Clone() const;
 
 	template<typename T>
 	bool IsOfType() const
@@ -14,6 +14,6 @@ public:
 	}
 
 private:
-	virtual InputEvent* DoClone() const = 0;
+	virtual GameEvent* DoClone() const = 0;
 };
 

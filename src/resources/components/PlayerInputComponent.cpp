@@ -2,8 +2,8 @@
 #include "PlayerInputComponent.h"
 #include "../GameEntity.h"
 #include "../Transformation.h"
-#include "../../input/InputEvent.h"
-#include "../../input/events/ForwardEvent.h"
+#include "../GameEvent.h"
+#include "../events/ForwardEvent.h"
 
 #include <GLFW/glfw3.h>
 #include <functional>
@@ -110,7 +110,7 @@ void PlayerInputComponent::UpdateUpwardsSpeed(int action)
 	}
 }
 
-void PlayerInputComponent::OnInputEvent(const InputEvent* event)
+void PlayerInputComponent::OnInputEvent(const GameEvent* event)
 {
 	if (event->IsOfType<ForwardEvent>())
 	{

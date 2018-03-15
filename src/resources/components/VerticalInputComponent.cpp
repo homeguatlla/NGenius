@@ -21,7 +21,7 @@ VerticalInputComponent* VerticalInputComponent::DoClone() const
 }
 
 /*
-void VerticalInputComponent::OnInputEvent(const InputEvent* event)
+void VerticalInputComponent::OnInputEvent(const GameEvent* event)
 {
 	
 	if (glfwGetKey(mWindow, GLFW_KEY_S) == GLFW_PRESS)

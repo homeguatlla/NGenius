@@ -124,17 +124,17 @@
     <Filter Include="Source Files\input">
       <UniqueIdentifier>{efd1b11c-a485-4365-a1db-39eed7554dea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\input\events">
-      <UniqueIdentifier>{9c3f636f-1c09-4af8-8e3e-20f78d236871}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\input\events">
-      <UniqueIdentifier>{56c80061-9290-4ecb-bd0b-82778dc2d74a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\input\converters">
       <UniqueIdentifier>{fbac4aca-98b5-4693-b39b-6fd57f6d7868}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\input\converters">
       <UniqueIdentifier>{308d224c-0ddf-4a32-bb48-245269ed1691}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\events">
+      <UniqueIdentifier>{c124d55b-42ad-40d4-9e1f-14a79ebaa1fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\events">
+      <UniqueIdentifier>{77c502d4-d314-456a-af65-15c5bfa9f2ab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -187,9 +187,6 @@
       <Filter>Header Files\resources\components</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\components\VerticalInputComponent.h">
-      <Filter>Header Files\resources\components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\components\IInputComponent.h">
       <Filter>Header Files\resources\components</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\components\DebugInputComponent.h">
@@ -465,25 +462,34 @@
     <ClInclude Include="src\listeners\IInputListener.h">
       <Filter>Header Files\input</Filter>
     </ClInclude>
-    <ClInclude Include="src\input\InputManager.h">
-      <Filter>Header Files\input</Filter>
-    </ClInclude>
-    <ClInclude Include="src\input\InputEvent.h">
-      <Filter>Header Files\input</Filter>
-    </ClInclude>
-    <ClInclude Include="src\input\events\BackwardEvent.h">
-      <Filter>Header Files\input\events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\input\events\ForwardEvent.h">
-      <Filter>Header Files\input\events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\input\events\ZoomEvent.h">
-      <Filter>Header Files\input\events</Filter>
-    </ClInclude>
     <ClInclude Include="src\input\converters\KeyConverter.h">
       <Filter>Header Files\input\converters</Filter>
     </ClInclude>
     <ClInclude Include="src\input\InputConverter.h">
+      <Filter>Header Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\CharacterComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\GameEvent.h">
+      <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\events\BackwardEvent.h">
+      <Filter>Header Files\resources\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\events\ForwardEvent.h">
+      <Filter>Header Files\resources\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\events\ZoomEvent.h">
+      <Filter>Header Files\resources\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\InputComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\InputSystem.h">
+      <Filter>Header Files\resources\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\InputHandler.h">
       <Filter>Header Files\input</Filter>
     </ClInclude>
   </ItemGroup>
@@ -534,9 +540,6 @@
       <Filter>Source Files\resources\components</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\components\VerticalInputComponent.cpp">
-      <Filter>Source Files\resources\components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\components\IInputComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\components\DebugInputComponent.cpp">
@@ -803,28 +806,37 @@
     <ClCompile Include="src\resources\systems\renderSystem\WaterRenderPassSubSystem.cpp">
       <Filter>Source Files\resources\systems\renderSystem</Filter>
     </ClCompile>
-    <ClCompile Include="src\input\InputManager.cpp">
-      <Filter>Source Files\input</Filter>
-    </ClCompile>
     <ClCompile Include="src\input\IInputListener.cpp">
       <Filter>Source Files\input</Filter>
-    </ClCompile>
-    <ClCompile Include="src\input\InputEvent.cpp">
-      <Filter>Source Files\input</Filter>
-    </ClCompile>
-    <ClCompile Include="src\input\events\BackwardEvent.cpp">
-      <Filter>Source Files\input\events</Filter>
-    </ClCompile>
-    <ClCompile Include="src\input\events\ForwardEvent.cpp">
-      <Filter>Source Files\input\events</Filter>
-    </ClCompile>
-    <ClCompile Include="src\input\events\ZoomEvent.cpp">
-      <Filter>Source Files\input\events</Filter>
     </ClCompile>
     <ClCompile Include="src\input\converters\KeyConverter.cpp">
       <Filter>Source Files\input\converters</Filter>
     </ClCompile>
     <ClCompile Include="src\input\InputConverter.cpp">
+      <Filter>Source Files\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\CharacterComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\GameEvent.cpp">
+      <Filter>Source Files\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\BackwardEvent.cpp">
+      <Filter>Source Files\resources\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\ForwardEvent.cpp">
+      <Filter>Source Files\resources\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\ZoomEvent.cpp">
+      <Filter>Source Files\resources\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\InputComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\InputSystem.cpp">
+      <Filter>Source Files\resources\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\InputHandler.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
   </ItemGroup>

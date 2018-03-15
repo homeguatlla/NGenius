@@ -96,15 +96,18 @@
 #include "src/resources/components/LODComponent.h"
 #include "src/resources/components/BillboardComponent.h"
 #include "src/resources/components/OverWaterComponent.h"
+#include "src/resources/components/CharacterComponent.h"
 
 #include "src/resources/command/ICommand.h"
 #include "src/resources/command/commands/RiseTerrainCommand.h"
 
+#include "src/resources/events/ForwardEvent.h"
+#include "src/resources/events/BackwardEvent.h"
+#include "src/resources/events/ZoomEvent.h"
+
 #include "src/input/IInputListener.h"
 #include "src/input/converters/KeyConverter.h"
-#include "src/input/events/ForwardEvent.h"
-#include "src/input/events/BackwardEvent.h"
-#include "src/input/events/ZoomEvent.h"
+
 
 
 using namespace glm;
@@ -793,22 +796,20 @@ void CreatePlayer()
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectShadowProperties());
 	
-	PlayerInputComponent* inputComponent = new PlayerInputComponent(PLAYER_RUN_SPEED, PLAYER_TURN_SPEED, PLAYER_UPWARDS_HEIGHT);
+	InputComponent* inputComponent = new InputComponent();
 	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_W, GLFW_PRESS, new ForwardEvent()));
 	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_S, GLFW_PRESS, new BackwardEvent()));
-	//inputComponent->AddConverter(new KeyConverter(GLFW_KEY_W, GLFW_PRESS, new ZoomEvent()));
-	mEngine.RegisterAllEventsInputListener(inputComponent);
-
 
 	Model* model = mEngine.GetModel("enano");
 	IRenderer* renderer = new VertexsRenderer(model, material);
 
-	mPlayer = new Player(new Transformation(glm::vec3(0.0f, 4.9f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.03f)),
-		renderer,
-		inputComponent,
-		new PhysicsComponent(false, PhysicsSystem::GRAVITY_VALUE),
-		new CollisionComponent()
-	);
+	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 4.9f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.03f)),
+							renderer,
+							inputComponent,
+							new CharacterComponent(),
+							new PhysicsComponent(false, PhysicsSystem::GRAVITY_VALUE),
+							new CollisionComponent()
+						);
 	mPlayer->AddComponent(new EnergyWallCollisionComponent());
 	mEngine.AddGameEntity(mPlayer);
 }
@@ -819,7 +820,6 @@ void CreateGameCameraEntity()
 		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
 
 	mThirdPersonCameraComponent = new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f, PLAYER_ZOOM_SPEED);
-	mEngine.RegisterAllEventsInputListener(mThirdPersonCameraComponent);
 	mCamera->AddComponent(mThirdPersonCameraComponent);
 	mCamera->AddComponent(new CollisionComponent());
 	

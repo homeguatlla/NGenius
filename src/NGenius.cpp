@@ -10,13 +10,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "input/InputManager.h"
+#include "input/InputHandler.h"
 
 #include "resources/systems/EntitiesSystem.h"
 #include "resources/systems/renderSystem/RenderSystem.h"
 #include "resources/systems/PhysicsSystem.h"
 #include "resources/systems/ParticlesSystem.h"
 #include "resources/systems/LightsSystem.h"
+#include "resources/systems/InputSystem.h"
 
 #include "resources/entities/ParticlesEmitter.h"
 
@@ -40,7 +41,7 @@ NGenius::~NGenius()
 void NGenius::Init(bool isFullscreen)
 {
 	mRenderSystem->Init(mApplicationName, isFullscreen);
-	mInputManager->Init(mRenderSystem->GetGLWindow());
+	mInputHandler->Init(mRenderSystem->GetGLWindow());
 }
 
 void NGenius::Update()
@@ -52,7 +53,7 @@ void NGenius::Update()
 
 	do
 	{
-		mInputManager->Update(elapsedTime / 20.0f);
+		mInputHandler->Update(elapsedTime / 20.0f);
 
 		UpdateSystems(elapsedTime);
 
@@ -86,6 +87,7 @@ void NGenius::Update()
 
 void NGenius::UpdateSystems(float elapsedTime)
 {
+	mInputSystem->Update(elapsedTime);
 	mParticlesSystem->Update(elapsedTime);
 	mEntitiesSystem->Update(elapsedTime);
 	mPhysicsSystem->Update(elapsedTime);
@@ -93,18 +95,19 @@ void NGenius::UpdateSystems(float elapsedTime)
 
 void NGenius::CreateSystems(float screenWidth, float screenHeight)
 {
+	mInputHandler = new InputHandler();
 	mRenderSystem = new RenderSystem(screenWidth, screenHeight);
 	mPhysicsSystem = new PhysicsSystem();
-	mEntitiesSystem = new EntitiesSystem(mRenderSystem, mPhysicsSystem);
+	mInputSystem = new InputSystem(mInputHandler);
+	mEntitiesSystem = new EntitiesSystem(mRenderSystem, mPhysicsSystem, mInputSystem);
 	mParticlesSystem = new ParticlesSystem();
 	mLightsSystem = new LightsSystem(mEntitiesSystem);
-
-	mInputManager = new InputManager();
 }
 
 void NGenius::DestroySystems()
 {
-	delete mInputManager;
+	delete mInputHandler;
+	delete mInputSystem;
 	delete mLightsSystem;
 	delete mParticlesSystem;
 	delete mEntitiesSystem;
@@ -114,17 +117,17 @@ void NGenius::DestroySystems()
 
 void NGenius::RegisterAllEventsInputListener(IInputListener* listener)
 {
-	mInputManager->RegisterAllEventsInputListener(listener);
+	mInputHandler->RegisterAllEventsInputListener(listener);
 }
 
 void NGenius::UnRegisterInputListener(IInputListener* listener)
 {
-	mInputManager->UnRegisterInputListener(listener);
+	mInputHandler->UnRegisterInputListener(listener);
 }
 
 void NGenius::RegisterInputHandler(std::function<void(GLFWwindow* window)> callback)
 {
-	mInputManager->RegisterInputHandler(callback);
+	mInputHandler->RegisterInputHandler(callback);
 }
 
 void NGenius::RegisterUpdateHandler(std::function<void(float elapsedTime)> callback)
@@ -134,12 +137,12 @@ void NGenius::RegisterUpdateHandler(std::function<void(float elapsedTime)> callb
 
 void NGenius::OnKey(int key, int action)
 {
-	mInputManager->OnKey(key, action);
+	mInputHandler->OnKey(key, action);
 }
 
 void NGenius::OnMouseScroll(float scroll)
 {
-	mInputManager->OnMouseScroll(scroll);
+	mInputHandler->OnMouseScroll(scroll);
 }
 
 IShaderProgram* NGenius::GetShader(const std::string& name) const

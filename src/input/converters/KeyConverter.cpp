@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "KeyConverter.h"
-#include "../InputEvent.h"
+#include "../../resources/GameEvent.h"
 
 
-KeyConverter::KeyConverter(int key, int action, const InputEvent* event) : 
+KeyConverter::KeyConverter(int key, int action, const GameEvent* event) : 
 	mKey(key), 
 	mAction(action), 
 	mEvent(event)
@@ -16,7 +16,7 @@ KeyConverter::~KeyConverter()
 	delete mEvent;
 }
 
-const InputEvent* KeyConverter::Convert(int key, int action) const
+const GameEvent* KeyConverter::Convert(int key, int action) const
 {
 	if (mKey == key && mAction == action)
 	{

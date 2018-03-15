@@ -1,17 +1,19 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "../components/PlayerInputComponent.h"
+#include "../components/InputComponent.h"
 #include "../components/CollisionComponent.h"
 #include "../components/PhysicsComponent.h"
+#include "../components/CharacterComponent.h"
 
 #include <iostream>
 
-Player::Player(Transformation* transformation, IRenderer* renderer, PlayerInputComponent* playerInputComponent, PhysicsComponent* physicsComponent, CollisionComponent* collisionComponent) :
+Player::Player(Transformation* transformation, IRenderer* renderer, InputComponent* inputComponent, CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, CollisionComponent* collisionComponent) :
 GameEntity(transformation, renderer), mState(IDLE)
 {
-	AddComponent(playerInputComponent);
+	AddComponent(inputComponent);
 	AddComponent(physicsComponent);
 	AddComponent(collisionComponent);
+	AddComponent(characterComponent);
 }
 
 
@@ -22,6 +24,8 @@ Player::~Player()
 void Player::Update(float elapsedTime)
 {
 	GameEntity::Update(elapsedTime);
+
+	UpdateGameEvents();
 
 	switch (mState)
 	{
@@ -47,8 +51,40 @@ void Player::Update(float elapsedTime)
 	std::cout << "velocity = " << physicsComponent->GetVelocity().y << "\n";*/
 }
 
+void Player::UpdateGameEvents()
+{
+	CharacterComponent* characterComponent = GetComponent<CharacterComponent>();
+	while (characterComponent->HasGameEvents())
+	{
+		const GameEvent* event = characterComponent->ConsumeGameEvent();
+		switch (mState)
+		{
+		case IDLE:
+			//TODO hay que ver como hacemos esto, 
+			//parece que aquí hay que updatear las variables de velocidad etc, según el evento que venga
+			//ismoving, isjumping, etc.. para que los otros updates funcionen bien.
+			break;
+		case MOVING:
+			
+			break;
+		case JUMPING:
+			
+			break;
+		case FLYING:
+			
+			break;
+		case FALLING:
+			
+			break;
+		default:
+			break;
+		}
+	}
+}
+
 void Player::UpdateIdle(float elapsedTime)
 {
+	/*
 	PlayerInputComponent* playerInputComponent = GetComponent<PlayerInputComponent>();
 	bool isMoving = playerInputComponent->HasMoved();
 	bool isOnGround = GetComponent<CollisionComponent>()->IsOnGround();
@@ -70,11 +106,12 @@ void Player::UpdateIdle(float elapsedTime)
 	else if (!isOnGround)
 	{
 		mState = FLYING;
-	}
+	}*/
 }
 
 void Player::UpdateMoving(float elapsedTime)
 {
+	/*
 	PlayerInputComponent* playerInputComponent = GetComponent<PlayerInputComponent>();
 	bool isOnGround = GetComponent<CollisionComponent>()->IsOnGround();
 
@@ -95,7 +132,7 @@ void Player::UpdateMoving(float elapsedTime)
 		glm::vec3 newVelocity = CalculateRunPosition(elapsedTime, transformation, physicsComponent->GetVelocity(), playerInputComponent->GetCurrentRunSpeed());
 		newVelocity = CalculateJumpPosition(elapsedTime, transformation, newVelocity, playerInputComponent->GetCurrentUpwardsSpeed());
 		physicsComponent->SetVelocity(newVelocity);
-	}
+	}*/
 }
 
 void Player::UpdateFlying(float elapsdeTime)
@@ -110,6 +147,7 @@ void Player::UpdateFlying(float elapsdeTime)
 
 void Player::UpdateJumping(float elapsedTime)
 {
+	/*
 	PlayerInputComponent* playerInputComponent = GetComponent<PlayerInputComponent>();
 
 	bool isOnGround = GetComponent<CollisionComponent>()->IsOnGround();
@@ -136,7 +174,7 @@ void Player::UpdateJumping(float elapsedTime)
 			newVelocity = CalculateJumpPosition(elapsedTime, transformation, newVelocity, playerInputComponent->GetCurrentUpwardsSpeed());
 			physicsComponent->SetVelocity(newVelocity);
 		}
-	}
+	}*/
 }
 
 void Player::UpdateFalling(float elapsedTime)

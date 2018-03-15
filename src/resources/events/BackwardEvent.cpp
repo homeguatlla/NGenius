@@ -11,7 +11,7 @@ BackwardEvent::~BackwardEvent()
 {
 }
 
-InputEvent* BackwardEvent::DoClone() const
+GameEvent* BackwardEvent::DoClone() const
 {
 	return new BackwardEvent();
 }

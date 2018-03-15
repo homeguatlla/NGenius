@@ -5,7 +5,7 @@
 struct GLFWwindow;
 class IInputListener;
 
-class InputManager
+class InputHandler
 {
 	typedef std::vector<IInputListener*>::iterator ListenersIterator;
 	std::vector<IInputListener*> mListeners;
@@ -14,8 +14,8 @@ class InputManager
 	bool mIsInitialized;
 
 public:
-	InputManager();
-	~InputManager();
+	InputHandler();
+	~InputHandler();
 
 	void Init(GLFWwindow* window);
 
