@@ -507,6 +507,9 @@
     <ClInclude Include="src\resources\events\characterControllerEvents\JumpEvent.h">
       <Filter>Header Files\resources\events\characterControllerEvents</Filter>
     </ClInclude>
+    <ClInclude Include="src\input\converters\MouseConverter.h">
+      <Filter>Header Files\input\converters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -862,6 +865,9 @@
     </ClCompile>
     <ClCompile Include="src\resources\events\characterControllerEvents\JumpEvent.cpp">
       <Filter>Source Files\resources\events\characterControllerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\converters\MouseConverter.cpp">
+      <Filter>Source Files\input\converters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

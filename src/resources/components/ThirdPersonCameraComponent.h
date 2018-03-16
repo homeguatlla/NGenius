@@ -25,6 +25,7 @@ public:
 	glm::vec3 GetCameraPosition() const;
 
 private:
+	void UpdateGameEvents();
 	void UpdateZoomSpeed(float scroll);
 	float CalculateHorizontalDistance() const;
 	float CalculateVerticalDistance() const;

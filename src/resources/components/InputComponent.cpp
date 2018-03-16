@@ -16,11 +16,25 @@ InputComponent* InputComponent::DoClone() const
 	return new InputComponent(*this);
 }
 
-const GameEvent* InputComponent::Convert(int key, int action) const
+const GameEvent* InputComponent::ConvertKey(int key, int action) const
 {
 	for (const InputConverter* converter : mConverters)
 	{
 		const GameEvent* event = converter->Convert(key, action);
+		if (event != nullptr)
+		{
+			return event;
+		}
+	}
+
+	return nullptr;
+}
+
+const GameEvent* InputComponent::ConvertMouse(int button, float value) const
+{
+	for (const InputConverter* converter : mConverters)
+	{
+		const GameEvent* event = converter->Convert(button, value);
 		if (event != nullptr)
 		{
 			return event;

@@ -77,7 +77,7 @@ public:
 	void RegisterUpdateHandler(std::function<void(float elapsedTime)> callback);
 
 	void OnKey(int key, int action);
-	void OnMouseScroll(float scroll);
+	void OnMouseScroll(int button, float scroll);
 
 	void SetFullScreen(bool isFullScreen);
 	void SetTerrain(const Terrain* terrain);

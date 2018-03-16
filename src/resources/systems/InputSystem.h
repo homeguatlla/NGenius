@@ -19,7 +19,7 @@ public:
 	void Update(float elapsedTime);
 
 	void OnKey(int key, int action) override;
-	void OnMouseScroll(float scroll) override;
+	void OnMouseScroll(int button, float scroll) override;
 
 	void AddEntity(GameEntity* entity);
 	void RemoveEntity(GameEntity* entity);

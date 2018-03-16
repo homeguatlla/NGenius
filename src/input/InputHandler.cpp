@@ -71,10 +71,10 @@ void InputHandler::OnKey(int key, int action)
 	}
 }
 
-void InputHandler::OnMouseScroll(float scroll)
+void InputHandler::OnMouseScroll(int button, float scroll)
 {
 	for (ListenersIterator it = mListeners.begin(); it != mListeners.end(); ++it)
 	{
-		(*it)->OnMouseScroll(scroll);
+		(*it)->OnMouseScroll(button, scroll);
 	}
 }

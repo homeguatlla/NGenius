@@ -5,9 +5,11 @@
 #include "../GameEntity.h"
 #include "../camera/PerspectiveCamera.h"
 #include "../GameEvent.h"
+#include "../events/characterControllerEvents/ZoomEvent.h"
 #include "CollisionComponent.h"
 #include "OverWaterComponent.h"
 #include "PlayerInputComponent.h"
+#include "CharacterComponent.h"
 
 //WARNING!! hay que tener en cuenta que, si subimos este valor la cámara por colisión subirá y no mantendrá el ángulo pitch que le hemos definido.
 //es decir, si vemos que el ángulo de la cámara con el target es demasiado alto (vemos al player desde una posición más alta) hay que tener en cuenta que haya subido por este valor
@@ -32,6 +34,8 @@ ThirdPersonCameraComponent* ThirdPersonCameraComponent::DoClone() const
 
 void ThirdPersonCameraComponent::Update(float elapsedTime)
 {
+	UpdateGameEvents();
+
 	glm::vec3 newTarget = mTarget->GetTransformation()->GetPosition();
 	glm::vec3 currentTarget = mCamera->GetTarget();
 	newTarget = currentTarget + (newTarget - currentTarget) * CAMERA_SMOOTH_MOVEMENT_VALUE;
@@ -64,6 +68,20 @@ void ThirdPersonCameraComponent::Update(float elapsedTime)
 
 	mCamera->SetPosition(newPosition);
 	mParent->GetTransformation()->SetPosition(newPosition);
+}
+
+void ThirdPersonCameraComponent::UpdateGameEvents()
+{
+	CharacterComponent* characterComponent = mParent->GetComponent<CharacterComponent>();
+	while (characterComponent->HasEvents())
+	{
+		const GameEvent* event = characterComponent->ConsumeEvent();
+		if (event->IsOfType<ZoomEvent>())
+		{
+			const ZoomEvent* zoomEvent = static_cast<const ZoomEvent*>(event);
+			UpdateZoomSpeed(zoomEvent->GetZoom());
+		}
+	}
 }
 
 const GameEntity* ThirdPersonCameraComponent::GetTarget() const

@@ -140,9 +140,9 @@ void NGenius::OnKey(int key, int action)
 	mInputHandler->OnKey(key, action);
 }
 
-void NGenius::OnMouseScroll(float scroll)
+void NGenius::OnMouseScroll(int button, float scroll)
 {
-	mInputHandler->OnMouseScroll(scroll);
+	mInputHandler->OnMouseScroll(button, scroll);
 }
 
 IShaderProgram* NGenius::GetShader(const std::string& name) const

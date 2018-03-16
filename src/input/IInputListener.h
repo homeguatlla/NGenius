@@ -6,6 +6,6 @@ public:
 	~IInputListener();
 
 	virtual void OnKey(int key, int action) = 0;
-	virtual void OnMouseScroll(float scroll) = 0;
+	virtual void OnMouseScroll(int button, float scroll) = 0;
 };
 

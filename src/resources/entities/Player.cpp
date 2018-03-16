@@ -4,11 +4,13 @@
 #include "../components/CollisionComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/CharacterComponent.h"
+#include "../components/ThirdPersonCameraComponent.h"
 #include "../GameEvent.h"
 #include "../events/characterControllerEvents/BackwardEvent.h"
 #include "../events/characterControllerEvents/ForwardEvent.h"
 #include "../events/characterControllerEvents/StopEvent.h"
 #include "../events/characterControllerEvents/JumpEvent.h"
+#include "../events/characterControllerEvents/ZoomEvent.h"
 
 #include <iostream>
 

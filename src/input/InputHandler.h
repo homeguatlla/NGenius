@@ -27,6 +27,6 @@ public:
 	void RegisterInputHandler(std::function<void(GLFWwindow* window)> callback);
 
 	void OnKey(int key, int action);
-	void OnMouseScroll(float scroll);
+	void OnMouseScroll(int button, float scroll);
 };
 

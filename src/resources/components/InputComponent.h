@@ -20,7 +20,8 @@ public:
 	void AddConverter(const InputConverter* converter);
 	void RemoveConverter(const InputConverter* converter);
 
-	const GameEvent* Convert(int key, int action) const;
+	const GameEvent* ConvertKey(int key, int action) const;
+	const GameEvent* ConvertMouse(int button, float value) const;
 
 	InputComponent* DoClone() const override;
 };

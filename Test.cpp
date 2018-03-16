@@ -109,6 +109,7 @@
 
 #include "src/input/IInputListener.h"
 #include "src/input/converters/KeyConverter.h"
+#include "src/input/converters/MouseConverter.h"
 
 
 
@@ -330,13 +331,13 @@ void CreateSpecificCubes()
 
 void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 {
-	mEngine.OnMouseScroll(static_cast<float>(yOffset));
+	mEngine.OnMouseScroll(GLFW_MOUSE_BUTTON_MIDDLE, static_cast<float>(yOffset));
 }
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	mEngine.OnKey(key, action);
-	std::cout << "key = " << key << " action = " << action << "\n";
+	//std::cout << "key = " << key << " action = " << action << "\n";
 }
 
 GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string>& models, const std::vector<float>& distances, IMaterial* material, IMaterial* materialNormalmap)
@@ -810,6 +811,8 @@ void CreatePlayer()
 	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_S, GLFW_RELEASE, new StopEvent()));
 	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_SPACE, GLFW_RELEASE, new StopEvent()));
 
+	inputComponent->AddConverter(new MouseConverter(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
+
 	Model* model = mEngine.GetModel("enano");
 	IRenderer* renderer = new VertexsRenderer(model, material);
 
@@ -828,12 +831,18 @@ void CreatePlayer()
 
 void CreateGameCameraEntity()
 {
+	InputComponent* inputComponent = new InputComponent();
+	inputComponent->AddConverter(new MouseConverter(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
+
 	mCamera = new GameEntity(new Transformation(mGameplayCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
 		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
 
 	mThirdPersonCameraComponent = new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f, PLAYER_ZOOM_SPEED);
 	mCamera->AddComponent(mThirdPersonCameraComponent);
 	mCamera->AddComponent(new CollisionComponent());
+
+	mCamera->AddComponent(new CharacterComponent());
+	mCamera->AddComponent(inputComponent);
 	
 	if (mIsWaterEnabled)
 	{

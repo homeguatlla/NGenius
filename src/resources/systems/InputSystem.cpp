@@ -67,7 +67,7 @@ void InputSystem::OnKey(int key, int action)
 		CharacterComponent* characterComponent = entity->GetComponent<CharacterComponent>();
 		if (inputComponent != nullptr && characterComponent != nullptr)
 		{
-			const GameEvent* event = inputComponent->Convert(key, action);
+			const GameEvent* event = inputComponent->ConvertKey(key, action);
 			if (event != nullptr)
 			{
 				characterComponent->OnCharacterControllerEvent(event);
@@ -76,7 +76,19 @@ void InputSystem::OnKey(int key, int action)
 	}
 }
 
-void InputSystem::OnMouseScroll(float scroll)
+void InputSystem::OnMouseScroll(int button, float scroll)
 {
-
+	for (GameEntity* entity : mEntities)
+	{
+		InputComponent* inputComponent = entity->GetComponent<InputComponent>();
+		CharacterComponent* characterComponent = entity->GetComponent<CharacterComponent>();
+		if (inputComponent != nullptr && characterComponent != nullptr)
+		{
+			const GameEvent* event = inputComponent->ConvertMouse(button, scroll);
+			if (event != nullptr)
+			{
+				characterComponent->OnCharacterControllerEvent(event);
+			}
+		}
+	}
 }

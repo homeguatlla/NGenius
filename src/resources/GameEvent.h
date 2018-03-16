@@ -13,6 +13,8 @@ public:
 		return typeid(T) == typeid(*this);
 	}
 
+	virtual void SetFloatValue(float value) {};
+
 private:
 	virtual GameEvent* DoClone() const = 0;
 };
