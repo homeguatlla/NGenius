@@ -27,7 +27,6 @@ public:
 	bool HasInputComponents(GameEntity* entity) const;
 
 private:
-	void ReleaseEntities(std::vector<GameEntity*>* entities);
 	void RemoveEntities();
 	void AddNewEntities();
 };

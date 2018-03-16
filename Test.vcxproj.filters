@@ -136,6 +136,12 @@
     <Filter Include="Source Files\resources\events">
       <UniqueIdentifier>{77c502d4-d314-456a-af65-15c5bfa9f2ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\resources\events\characterControllerEvents">
+      <UniqueIdentifier>{90a5dd70-2da0-4519-be58-4f6eafb6f16c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\events\characterControllerEvents">
+      <UniqueIdentifier>{3c3b38e8-fe4e-4418-a644-430cf8cf502b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -474,15 +480,6 @@
     <ClInclude Include="src\resources\GameEvent.h">
       <Filter>Header Files\resources</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\events\BackwardEvent.h">
-      <Filter>Header Files\resources\events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\events\ForwardEvent.h">
-      <Filter>Header Files\resources\events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\events\ZoomEvent.h">
-      <Filter>Header Files\resources\events</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\components\InputComponent.h">
       <Filter>Header Files\resources\components</Filter>
     </ClInclude>
@@ -491,6 +488,24 @@
     </ClInclude>
     <ClInclude Include="src\input\InputHandler.h">
       <Filter>Header Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\events\characterControllerEvents\BackwardEvent.h">
+      <Filter>Header Files\resources\events\characterControllerEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\events\characterControllerEvents\ForwardEvent.h">
+      <Filter>Header Files\resources\events\characterControllerEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\events\characterControllerEvents\ZoomEvent.h">
+      <Filter>Header Files\resources\events\characterControllerEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\events\CharacterControllerEvent.h">
+      <Filter>Header Files\resources\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\events\characterControllerEvents\StopEvent.h">
+      <Filter>Header Files\resources\events\characterControllerEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\events\characterControllerEvents\JumpEvent.h">
+      <Filter>Header Files\resources\events\characterControllerEvents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -821,15 +836,6 @@
     <ClCompile Include="src\resources\GameEvent.cpp">
       <Filter>Source Files\resources</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\events\BackwardEvent.cpp">
-      <Filter>Source Files\resources\events</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\events\ForwardEvent.cpp">
-      <Filter>Source Files\resources\events</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\events\ZoomEvent.cpp">
-      <Filter>Source Files\resources\events</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\components\InputComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
     </ClCompile>
@@ -838,6 +844,24 @@
     </ClCompile>
     <ClCompile Include="src\input\InputHandler.cpp">
       <Filter>Source Files\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\CharacterControllerEvent.cpp">
+      <Filter>Source Files\resources\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\characterControllerEvents\BackwardEvent.cpp">
+      <Filter>Source Files\resources\events\characterControllerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\characterControllerEvents\ForwardEvent.cpp">
+      <Filter>Source Files\resources\events\characterControllerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\characterControllerEvents\ZoomEvent.cpp">
+      <Filter>Source Files\resources\events\characterControllerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\characterControllerEvents\StopEvent.cpp">
+      <Filter>Source Files\resources\events\characterControllerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\characterControllerEvents\JumpEvent.cpp">
+      <Filter>Source Files\resources\events\characterControllerEvents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

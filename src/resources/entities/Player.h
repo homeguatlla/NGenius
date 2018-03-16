@@ -13,16 +13,24 @@ class Player : public GameEntity
 	enum State
 	{
 		IDLE = 0,
-		MOVING = 1,
-		FLYING = 2,
-		JUMPING = 3,
-		FALLING = 4
+		MOVING,
+		JUMPING,
+		FALLING
 	};
 
 	State mState;
+	const float mRunSpeed;
+	const float mUpwardsSpeed;
+	float mCurrentRunSpeed;
+	float mCurrentUpwardsSpeed;
+
+	bool mHasMoved;
+	bool mHasJumped;
 
 public:
-	explicit Player(Transformation* transformation, IRenderer* renderer, InputComponent* playerInputComponent, CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, CollisionComponent* collisionComponent);
+	explicit Player(Transformation* transformation, IRenderer* renderer, InputComponent* playerInputComponent, 
+					CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, 
+					CollisionComponent* collisionComponent, float runSpeed, float upwardsSpeed);
 	virtual ~Player();
 
 	Player* DoClone() const override { return nullptr; }
@@ -32,7 +40,6 @@ private:
 	void UpdateGameEvents();
 	void UpdateIdle(float elapsedTime);
 	void UpdateMoving(float elapsedTime);
-	void UpdateFlying(float elapsedTime);
 	void UpdateJumping(float elapsedTime);
 	void UpdateFalling(float elapsedTime);
 

@@ -11,7 +11,7 @@ ZoomEvent::~ZoomEvent()
 {
 }
 
-GameEvent* ZoomEvent::DoClone() const
+ZoomEvent* ZoomEvent::DoClone() const
 {
 	return new ZoomEvent();
 }

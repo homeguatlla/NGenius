@@ -101,9 +101,11 @@
 #include "src/resources/command/ICommand.h"
 #include "src/resources/command/commands/RiseTerrainCommand.h"
 
-#include "src/resources/events/ForwardEvent.h"
-#include "src/resources/events/BackwardEvent.h"
-#include "src/resources/events/ZoomEvent.h"
+#include "src/resources/events/characterControllerEvents/ForwardEvent.h"
+#include "src/resources/events/characterControllerEvents/BackwardEvent.h"
+#include "src/resources/events/characterControllerEvents/ZoomEvent.h"
+#include "src/resources/events/characterControllerEvents/StopEvent.h"
+#include "src/resources/events/characterControllerEvents/JumpEvent.h"
 
 #include "src/input/IInputListener.h"
 #include "src/input/converters/KeyConverter.h"
@@ -799,6 +801,14 @@ void CreatePlayer()
 	InputComponent* inputComponent = new InputComponent();
 	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_W, GLFW_PRESS, new ForwardEvent()));
 	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_S, GLFW_PRESS, new BackwardEvent()));
+	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_SPACE, GLFW_PRESS, new JumpEvent()));
+
+	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_W, GLFW_REPEAT, new ForwardEvent()));
+	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_S, GLFW_REPEAT, new BackwardEvent()));
+
+	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_W, GLFW_RELEASE, new StopEvent()));
+	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_S, GLFW_RELEASE, new StopEvent()));
+	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_SPACE, GLFW_RELEASE, new StopEvent()));
 
 	Model* model = mEngine.GetModel("enano");
 	IRenderer* renderer = new VertexsRenderer(model, material);
@@ -808,7 +818,9 @@ void CreatePlayer()
 							inputComponent,
 							new CharacterComponent(),
 							new PhysicsComponent(false, PhysicsSystem::GRAVITY_VALUE),
-							new CollisionComponent()
+							new CollisionComponent(),
+							PLAYER_RUN_SPEED, 
+							PLAYER_UPWARDS_HEIGHT
 						);
 	mPlayer->AddComponent(new EnergyWallCollisionComponent());
 	mEngine.AddGameEntity(mPlayer);

@@ -11,7 +11,7 @@ ForwardEvent::~ForwardEvent()
 {
 }
 
-GameEvent* ForwardEvent::DoClone() const
+ForwardEvent* ForwardEvent::DoClone() const
 {
 	return new ForwardEvent();
 }

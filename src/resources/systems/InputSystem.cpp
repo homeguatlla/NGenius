@@ -14,8 +14,7 @@ InputSystem::InputSystem(InputHandler* inputHandler)
 
 InputSystem::~InputSystem()
 {
-	ReleaseEntities(&mEntities);
-	ReleaseEntities(&mNewEntitiesToAdd);
+	mNewEntitiesToAdd.clear();
 	mEntitiesToRemove.clear();
 	mEntities.clear();
 }
@@ -60,15 +59,6 @@ void InputSystem::RemoveEntities()
 	mEntitiesToRemove.clear();
 }
 
-void InputSystem::ReleaseEntities(std::vector<GameEntity*>* entities)
-{
-	for (GameEntity* entity : *entities)
-	{
-		delete entity;
-	}
-	entities->clear();
-
-}
 void InputSystem::OnKey(int key, int action)
 {
 	for (GameEntity* entity : mEntities)
@@ -78,7 +68,10 @@ void InputSystem::OnKey(int key, int action)
 		if (inputComponent != nullptr && characterComponent != nullptr)
 		{
 			const GameEvent* event = inputComponent->Convert(key, action);
-			characterComponent->OnGameEvent(event);
+			if (event != nullptr)
+			{
+				characterComponent->OnCharacterControllerEvent(event);
+			}
 		}
 	}
 }

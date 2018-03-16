@@ -1,6 +1,5 @@
 #pragma once
 #include "IComponent.h"
-
 #include <queue>
 
 
@@ -14,9 +13,9 @@ public:
 	explicit CharacterComponent();
 	virtual ~CharacterComponent();
 
-	void OnGameEvent(const GameEvent* gameEvent);
-	bool HasGameEvents() const;
-	const GameEvent* ConsumeGameEvent();
+	void OnCharacterControllerEvent(const GameEvent* gameEvent);
+	bool HasEvents() const;
+	const GameEvent* ConsumeEvent();
 
 	CharacterComponent* DoClone() const override;
 };

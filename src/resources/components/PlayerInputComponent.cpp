@@ -3,7 +3,7 @@
 #include "../GameEntity.h"
 #include "../Transformation.h"
 #include "../GameEvent.h"
-#include "../events/ForwardEvent.h"
+#include "../events/characterControllerEvents/ForwardEvent.h"
 
 #include <GLFW/glfw3.h>
 #include <functional>
