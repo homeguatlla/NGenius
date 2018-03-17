@@ -7,6 +7,6 @@ public:
 	JumpEvent();
 	~JumpEvent();
 
-	JumpEvent* DoClone() const override;
+	JumpEvent* DoClone(const void* data) const override;
 };
 

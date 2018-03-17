@@ -21,7 +21,7 @@ public:
 	void RemoveConverter(const InputConverter* converter);
 
 	const GameEvent* ConvertKey(int key, int action) const;
-	const GameEvent* ConvertMouse(int button, float value) const;
+	const GameEvent* ConvertMouse(void* data) const;
 
 	InputComponent* DoClone() const override;
 };

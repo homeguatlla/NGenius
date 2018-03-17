@@ -13,6 +13,14 @@ class InputSystem : public IInputListener
 	typedef std::vector<GameEntity*>::iterator GameEntitiesIterator;
 
 public:
+	typedef struct MouseData
+	{
+		int mButton;
+		int mAction;
+		float mScroll;
+		MouseData(int button, float scroll) : mButton(button), mAction(-1), mScroll(scroll) {};
+	} MouseData;
+
 	InputSystem(InputHandler* inputHandler);
 	~InputSystem();
 

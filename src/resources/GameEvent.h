@@ -5,7 +5,7 @@ public:
 	GameEvent();
 	~GameEvent();
 
-	GameEvent* Clone() const;
+	GameEvent* Clone(const void* data) const;
 
 	template<typename T>
 	bool IsOfType() const
@@ -13,9 +13,7 @@ public:
 		return typeid(T) == typeid(*this);
 	}
 
-	virtual void SetFloatValue(float value) {};
-
 private:
-	virtual GameEvent* DoClone() const = 0;
+	virtual GameEvent* DoClone(const void* data) const = 0;
 };
 

@@ -30,11 +30,11 @@ const GameEvent* InputComponent::ConvertKey(int key, int action) const
 	return nullptr;
 }
 
-const GameEvent* InputComponent::ConvertMouse(int button, float value) const
+const GameEvent* InputComponent::ConvertMouse(void* data) const
 {
 	for (const InputConverter* converter : mConverters)
 	{
-		const GameEvent* event = converter->Convert(button, value);
+		const GameEvent* event = converter->Convert(data);
 		if (event != nullptr)
 		{
 			return event;

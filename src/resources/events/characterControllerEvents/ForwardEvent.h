@@ -7,6 +7,6 @@ public:
 	ForwardEvent();
 	~ForwardEvent();
 
-	ForwardEvent* DoClone() const override;
+	ForwardEvent* DoClone(const void* data) const override;
 };
 

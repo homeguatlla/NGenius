@@ -7,6 +7,6 @@ public:
 	StopEvent();
 	~StopEvent();
 
-	StopEvent* DoClone() const override;
+	StopEvent* DoClone(const void* data) const override;
 };
 

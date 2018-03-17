@@ -6,7 +6,6 @@ class MouseConverter : public InputConverter
 {
 	int mButton;
 	int mAction;
-	float mScroll;
 	const GameEvent* mEvent;
 
 public:
@@ -14,7 +13,6 @@ public:
 	MouseConverter(int button, const GameEvent* event);
 	~MouseConverter();
 
-	const GameEvent* Convert(int button, int action) const;
-	const GameEvent* MouseConverter::Convert(int button, float scroll) const;
+	const GameEvent* Convert(const void* data) const override;
 };
 

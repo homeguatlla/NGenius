@@ -9,9 +9,9 @@ public:
 	ZoomEvent();
 	~ZoomEvent();
 
-	ZoomEvent* DoClone() const override;
-	void SetFloatValue(float value) override;
-
+	ZoomEvent* DoClone(const void* data) const override;
+	
 	float GetZoom() const;
+	void SetZoom(float zoom);
 };
 

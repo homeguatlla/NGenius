@@ -7,6 +7,6 @@ public:
 	BackwardEvent();
 	~BackwardEvent();
 
-	BackwardEvent* DoClone() const;
+	BackwardEvent* DoClone(const void* data) const;
 };
 

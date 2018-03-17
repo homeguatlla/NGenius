@@ -11,7 +11,7 @@ JumpEvent::~JumpEvent()
 {
 }
 
-JumpEvent* JumpEvent::DoClone() const
+JumpEvent* JumpEvent::DoClone(const void* data) const
 {
 	return new JumpEvent();
 }

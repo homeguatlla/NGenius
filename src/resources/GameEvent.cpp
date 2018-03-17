@@ -13,9 +13,9 @@ GameEvent::~GameEvent()
 {
 }
 
-GameEvent* GameEvent::Clone() const
+GameEvent* GameEvent::Clone(const void* data) const
 {
-	GameEvent* clone = DoClone();
+	GameEvent* clone = DoClone(data);
 
 	assert(typeid(*clone) == typeid(*this));
 

@@ -20,7 +20,7 @@ const GameEvent* KeyConverter::Convert(int key, int action) const
 {
 	if (mKey == key && mAction == action)
 	{
-		return mEvent->Clone();
+		return mEvent->Clone(nullptr);
 	}
 	else
 	{
