@@ -145,6 +145,16 @@ void NGenius::OnMouseScroll(int button, float scroll)
 	mInputHandler->OnMouseScroll(button, scroll);
 }
 
+void NGenius::OnMouseButton(int button, int action, int mods)
+{
+	mInputHandler->OnMouseButton(button, action, mods);
+}
+
+void NGenius::OnMouseCursorPos(double x, double y)
+{
+	mInputHandler->OnMouseCursorPos(x, y);
+}
+
 IShaderProgram* NGenius::GetShader(const std::string& name) const
 {
 	assert(mRenderSystem != nullptr);

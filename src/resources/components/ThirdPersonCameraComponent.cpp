@@ -6,6 +6,7 @@
 #include "../camera/PerspectiveCamera.h"
 #include "../GameEvent.h"
 #include "../events/characterControllerEvents/ZoomEvent.h"
+#include "../events/characterControllerEvents/PitchEvent.h"
 #include "CollisionComponent.h"
 #include "OverWaterComponent.h"
 #include "PlayerInputComponent.h"
@@ -16,9 +17,20 @@
 const float CAMERA_HEIGHT_OFFSET_GROUND = 0.2f;
 const float CAMERA_SMOOTH_MOVEMENT_VALUE = 1.0f;
 const float WATER_HEIGHT_OFFSET = 0.1f;
+const float MAX_ZOOM = 3.0f;
+const float MIN_ZOOM = 1.0f;
 
-ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, float distanceFromTarget, float pitch, float zoomSpeed) :
-	mCamera(camera), mTarget(target), mDistanceFromTarget(distanceFromTarget), mPitch(pitch), mAngleAroundTarget(0.0f), mZoomSpeed(zoomSpeed)
+ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed) :
+	mCamera(camera), 
+	mTarget(target), 
+	mTargetOffset(targetOffset),
+	mDistanceFromTarget(distanceFromTarget), 
+	mPitch(pitch),
+	mPitchSpeed(pitchSpeed),
+	mCurrentPitch(pitch),
+	mLastPitch(pitch),
+	mAngleAroundTarget(0.0f), 
+	mZoomSpeed(zoomSpeed)
 {
 	assert(target != nullptr);
 }
@@ -34,9 +46,9 @@ ThirdPersonCameraComponent* ThirdPersonCameraComponent::DoClone() const
 
 void ThirdPersonCameraComponent::Update(float elapsedTime)
 {
-	UpdateGameEvents();
+	UpdateGameEvents(elapsedTime);
 
-	glm::vec3 newTarget = mTarget->GetTransformation()->GetPosition();
+	glm::vec3 newTarget = mTarget->GetTransformation()->GetPosition() + mTargetOffset;
 	glm::vec3 currentTarget = mCamera->GetTarget();
 	newTarget = currentTarget + (newTarget - currentTarget) * CAMERA_SMOOTH_MOVEMENT_VALUE;
 
@@ -70,7 +82,7 @@ void ThirdPersonCameraComponent::Update(float elapsedTime)
 	mParent->GetTransformation()->SetPosition(newPosition);
 }
 
-void ThirdPersonCameraComponent::UpdateGameEvents()
+void ThirdPersonCameraComponent::UpdateGameEvents(float elapsedTime)
 {
 	CharacterComponent* characterComponent = mParent->GetComponent<CharacterComponent>();
 	while (characterComponent->HasEvents())
@@ -79,7 +91,12 @@ void ThirdPersonCameraComponent::UpdateGameEvents()
 		if (event->IsOfType<ZoomEvent>())
 		{
 			const ZoomEvent* zoomEvent = static_cast<const ZoomEvent*>(event);
-			UpdateZoomSpeed(zoomEvent->GetZoom());
+			UpdateZoom(zoomEvent->GetZoom(), elapsedTime);
+		}
+		else if (event->IsOfType<PitchEvent>())
+		{
+			const PitchEvent* pitchEvent = static_cast<const PitchEvent*>(event);
+			UpdatePitch(pitchEvent->GetPitch(), elapsedTime);
 		}
 	}
 }
@@ -102,12 +119,12 @@ glm::vec3 ThirdPersonCameraComponent::GetCameraPosition() const
 
 float ThirdPersonCameraComponent::CalculateHorizontalDistance() const
 {
-	return mDistanceFromTarget * glm::cos(glm::radians(mPitch));
+	return mDistanceFromTarget * glm::cos(glm::radians(mCurrentPitch));
 }
 
 float ThirdPersonCameraComponent::CalculateVerticalDistance() const
 {
-	return mDistanceFromTarget * glm::sin(glm::radians(mPitch));
+	return mDistanceFromTarget * glm::sin(glm::radians(mCurrentPitch));
 }
 
 glm::vec3 ThirdPersonCameraComponent::CalculateCameraPosition(float horizontalDistance, float verticalDistance) const
@@ -125,8 +142,16 @@ glm::vec3 ThirdPersonCameraComponent::CalculateCameraPosition(float horizontalDi
 	return newPosition;
 }
 
-void ThirdPersonCameraComponent::UpdateZoomSpeed(float scroll)
+void ThirdPersonCameraComponent::UpdateZoom(float scroll, float elapsedTime)
 {
-	mCurrentZoomSpeed = mZoomSpeed * scroll;
-	mDistanceFromTarget += mCurrentZoomSpeed;
+	float currentZoomSpeed = mZoomSpeed * scroll * elapsedTime;
+	mDistanceFromTarget += currentZoomSpeed;
+	mDistanceFromTarget = glm::max(MIN_ZOOM, glm::min(MAX_ZOOM, mDistanceFromTarget));
+}
+
+void ThirdPersonCameraComponent::UpdatePitch(float pitch, float elapsedTime)
+{
+	float pitchSpeed = (pitch - mLastPitch) * mPitchSpeed * elapsedTime;
+	mCurrentPitch += pitchSpeed;
+	mLastPitch = pitch;
 }

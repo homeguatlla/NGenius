@@ -1,8 +1,10 @@
 #pragma once
 static const float PLAYER_UPWARDS_HEIGHT = 2.0f;
 static const float PLAYER_RUN_SPEED = 2.0f;
-static const float PLAYER_TURN_SPEED = glm::radians(160.0f);
-static const float PLAYER_ZOOM_SPEED = 0.1f;
+static const float PLAYER_TURN_SPEED = 1.0f;
+static const float PLAYER_ZOOM_SPEED = 10.0f;
+static const float PLAYER_PITCH = 10.0f;
+static const float PLAYER_PITCH_SPEED = 10.0f;
 static const float VIEW_ANGLE = 45.0f;
 static const float FAR_PLANE = 1000.0f;
 static const float NEAR_PLANE = 0.1f;

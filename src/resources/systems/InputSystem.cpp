@@ -51,10 +51,10 @@ void InputSystem::AddNewEntities()
 
 void InputSystem::RemoveEntities()
 {
-	for (GameEntity* entity : mEntitiesToRemove)
+	GameEntitiesIterator it = mEntitiesToRemove.begin();
+	for (it = mEntitiesToRemove.begin(); it != mEntitiesToRemove.end(); ++it)
 	{
-		GameEntitiesIterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](GameEntity* a) { return a == entity; });
-		mEntities.erase(it);
+		it = mEntitiesToRemove.erase(it);
 	}
 	mEntitiesToRemove.clear();
 }
@@ -80,6 +80,25 @@ void InputSystem::OnMouseScroll(int button, float scroll)
 {
 	MouseData data(button, scroll);
 
+	DispatchEvent(data);
+}
+
+void InputSystem::OnMouseButton(int button, int action, int mods)
+{
+	MouseData data(button, action, mods);
+
+	DispatchEvent(data);
+}
+
+void InputSystem::OnMouseCursorPos(double x, double y)
+{
+	MouseData data(x, y);
+
+	DispatchEvent(data);
+}
+
+void InputSystem::DispatchEvent(MouseData& data)
+{
 	for (GameEntity* entity : mEntities)
 	{
 		InputComponent* inputComponent = entity->GetComponent<InputComponent>();

@@ -9,13 +9,17 @@ class ThirdPersonCameraComponent : public IComponent
 {
 	PerspectiveCamera* mCamera;
 	GameEntity* mTarget;
+	glm::vec3 mTargetOffset;
 	float mDistanceFromTarget;
 	float mPitch;
+	float mPitchSpeed;
+	float mCurrentPitch;
+	float mLastPitch;
 	float mAngleAroundTarget;
 	const float mZoomSpeed;
-	float mCurrentZoomSpeed;
+	
 public:
-	explicit ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, float distanceFromTarget, float pitch, float zoomSpeed);
+	explicit ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed);
 	~ThirdPersonCameraComponent();
 
 	ThirdPersonCameraComponent* DoClone() const;
@@ -25,8 +29,9 @@ public:
 	glm::vec3 GetCameraPosition() const;
 
 private:
-	void UpdateGameEvents();
-	void UpdateZoomSpeed(float scroll);
+	void UpdateGameEvents(float elapsedTime);
+	void UpdateZoom(float scroll, float elapsedTime);
+	void UpdatePitch(float pitch, float elapsedTime);
 	float CalculateHorizontalDistance() const;
 	float CalculateVerticalDistance() const;
 	glm::vec3 CalculateCameraPosition(float horizontalDistance, float verticalDistance) const;

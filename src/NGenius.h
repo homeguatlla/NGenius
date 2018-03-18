@@ -78,6 +78,8 @@ public:
 
 	void OnKey(int key, int action);
 	void OnMouseScroll(int button, float scroll);
+	void OnMouseButton(int button, int action, int mods);
+	void OnMouseCursorPos(double x, double y);
 
 	void SetFullScreen(bool isFullScreen);
 	void SetTerrain(const Terrain* terrain);

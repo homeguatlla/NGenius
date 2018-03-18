@@ -32,6 +32,10 @@ const GameEvent* MouseConverter::Convert(const void* data) const
 	{
 		return mEvent->Clone(data);
 	}
+	else if (mButton == -1 && mouseData->mIsCursorMoved)
+	{
+		return mEvent->Clone(data);
+	}
 	else
 	{
 		return nullptr;

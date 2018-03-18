@@ -205,9 +205,13 @@
     <ClInclude Include="src\resources\entities\Water.h" />
     <ClInclude Include="src\resources\events\CharacterControllerEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\BackwardEvent.h" />
+    <ClInclude Include="src\resources\events\characterControllerEvents\ButtonLeftEvent.h" />
+    <ClInclude Include="src\resources\events\characterControllerEvents\ButtonRightEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\ForwardEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\JumpEvent.h" />
+    <ClInclude Include="src\resources\events\characterControllerEvents\PitchEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\StopEvent.h" />
+    <ClInclude Include="src\resources\events\characterControllerEvents\TurnEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\ZoomEvent.h" />
     <ClInclude Include="src\resources\font\FontsLibrary.h" />
     <ClInclude Include="src\resources\font\FontType.h" />
@@ -324,9 +328,13 @@
     <ClCompile Include="src\resources\entities\Water.cpp" />
     <ClCompile Include="src\resources\events\CharacterControllerEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\BackwardEvent.cpp" />
+    <ClCompile Include="src\resources\events\characterControllerEvents\ButtonLeftEvent.cpp" />
+    <ClCompile Include="src\resources\events\characterControllerEvents\ButtonRightEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\ForwardEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\JumpEvent.cpp" />
+    <ClCompile Include="src\resources\events\characterControllerEvents\PitchEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\StopEvent.cpp" />
+    <ClCompile Include="src\resources\events\characterControllerEvents\TurnEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\ZoomEvent.cpp" />
     <ClCompile Include="src\resources\font\FontsLibrary.cpp" />
     <ClCompile Include="src\resources\font\FontType.cpp" />

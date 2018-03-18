@@ -11,17 +11,20 @@
 #include "../events/characterControllerEvents/StopEvent.h"
 #include "../events/characterControllerEvents/JumpEvent.h"
 #include "../events/characterControllerEvents/ZoomEvent.h"
+#include "../events/characterControllerEvents/TurnEvent.h"
 
 #include <iostream>
 
 Player::Player(	Transformation* transformation, IRenderer* renderer, InputComponent* inputComponent, 
 				CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, 
-				CollisionComponent* collisionComponent, float runSpeed, float upwardsSpeed) :
+				CollisionComponent* collisionComponent, float runSpeed, float turnSpeed, float upwardsSpeed) :
 GameEntity(transformation, renderer), 
 mState(IDLE), 
 mRunSpeed(runSpeed), 
+mTurnSpeed(turnSpeed),
 mUpwardsSpeed(upwardsSpeed), 
 mCurrentRunSpeed(0.0f), 
+mCurrentTurnSpeed(0.0f),
 mCurrentUpwardsSpeed(0.0f), 
 mHasMoved(false), 
 mHasJumped(false)
@@ -40,6 +43,8 @@ Player::~Player()
 void Player::Update(float elapsedTime)
 {
 	GameEntity::Update(elapsedTime);
+
+	mCurrentTurnSpeed = 0.0f;
 
 	UpdateGameEvents();
 
@@ -61,7 +66,7 @@ void Player::Update(float elapsedTime)
 			break;
 	}
 	PhysicsComponent* physicsComponent = GetComponent<PhysicsComponent>();
-	std::cout << "state: " << mState << " velocity = " << physicsComponent->GetVelocity().y << "\n";
+	//std::cout << "state: " << mState << " velocity = " << physicsComponent->GetVelocity().y << "\n";
 }
 
 void Player::UpdateGameEvents()
@@ -85,16 +90,24 @@ void Player::UpdateGameEvents()
 				mHasMoved = true;
 				mCurrentRunSpeed = -mRunSpeed;
 			}
+			else if (event->IsOfType<TurnEvent>())
+			{
+				const TurnEvent* turnEvent = static_cast<const TurnEvent*>(event);
+				mHasMoved = true;
+				mCurrentTurnSpeed = mTurnSpeed * (mLastTurnX - turnEvent->GetTurn());
+				mLastTurnX = turnEvent->GetTurn();
+			}
 			else if (event->IsOfType<JumpEvent>())
 			{
 				mHasMoved = false;
 				mHasJumped = true;
 				mCurrentUpwardsSpeed = mUpwardsSpeed;
-			}
+			} 
 			else if(event->IsOfType<StopEvent>())
 			{
 				mHasMoved = false;
 				mCurrentRunSpeed = 0.0f;
+				mCurrentTurnSpeed = 0.0f;
 			}
 		break;
 		default:
@@ -146,6 +159,7 @@ void Player::UpdateMoving(float elapsedTime)
 			Transformation* transformation = GetTransformation();
 			PhysicsComponent* physicsComponent = GetComponent<PhysicsComponent>();
 
+			CalculateTurnPosition(elapsedTime, transformation, mCurrentTurnSpeed);
 			glm::vec3 newVelocity = CalculateRunPosition(elapsedTime, transformation, physicsComponent->GetVelocity(), mCurrentRunSpeed);
 			newVelocity = CalculateJumpPosition(elapsedTime, transformation, newVelocity, mCurrentUpwardsSpeed);
 			physicsComponent->SetVelocity(newVelocity);

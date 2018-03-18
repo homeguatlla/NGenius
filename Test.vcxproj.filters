@@ -510,6 +510,18 @@
     <ClInclude Include="src\input\converters\MouseConverter.h">
       <Filter>Header Files\input\converters</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\events\characterControllerEvents\ButtonLeftEvent.h">
+      <Filter>Header Files\resources\events\characterControllerEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\events\characterControllerEvents\ButtonRightEvent.h">
+      <Filter>Header Files\resources\events\characterControllerEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\events\characterControllerEvents\PitchEvent.h">
+      <Filter>Header Files\resources\events\characterControllerEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\events\characterControllerEvents\TurnEvent.h">
+      <Filter>Header Files\resources\events\characterControllerEvents</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -868,6 +880,18 @@
     </ClCompile>
     <ClCompile Include="src\input\converters\MouseConverter.cpp">
       <Filter>Source Files\input\converters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\characterControllerEvents\ButtonLeftEvent.cpp">
+      <Filter>Source Files\resources\events\characterControllerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\characterControllerEvents\ButtonRightEvent.cpp">
+      <Filter>Source Files\resources\events\characterControllerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\characterControllerEvents\PitchEvent.cpp">
+      <Filter>Source Files\resources\events\characterControllerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\characterControllerEvents\TurnEvent.cpp">
+      <Filter>Source Files\resources\events\characterControllerEvents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

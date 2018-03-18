@@ -20,9 +20,12 @@ class Player : public GameEntity
 
 	State mState;
 	const float mRunSpeed;
+	const float mTurnSpeed;
 	const float mUpwardsSpeed;
 	float mCurrentRunSpeed;
+	float mCurrentTurnSpeed;
 	float mCurrentUpwardsSpeed;
+	float mLastTurnX;
 
 	bool mHasMoved;
 	bool mHasJumped;
@@ -30,7 +33,7 @@ class Player : public GameEntity
 public:
 	explicit Player(Transformation* transformation, IRenderer* renderer, InputComponent* playerInputComponent, 
 					CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, 
-					CollisionComponent* collisionComponent, float runSpeed, float upwardsSpeed);
+					CollisionComponent* collisionComponent, float runSpeed, float turnSpeed, float upwardsSpeed);
 	virtual ~Player();
 
 	Player* DoClone() const override { return nullptr; }

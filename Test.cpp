@@ -106,6 +106,8 @@
 #include "src/resources/events/characterControllerEvents/ZoomEvent.h"
 #include "src/resources/events/characterControllerEvents/StopEvent.h"
 #include "src/resources/events/characterControllerEvents/JumpEvent.h"
+#include "src/resources/events/characterControllerEvents/TurnEvent.h"
+#include "src/resources/events/characterControllerEvents/PitchEvent.h"
 
 #include "src/input/IInputListener.h"
 #include "src/input/converters/KeyConverter.h"
@@ -119,8 +121,6 @@ using namespace std;
 #define and &&
 #define or ||
 
-
-
 enum Configuration
 {
 	DEBUG,
@@ -132,7 +132,7 @@ enum Configuration
 	COLLISIONS,
 	RELEASE
 };
-Configuration mConfiguration = COLLISIONS;
+Configuration mConfiguration = RELEASE;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -338,6 +338,17 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 {
 	mEngine.OnKey(key, action);
 	//std::cout << "key = " << key << " action = " << action << "\n";
+}
+
+void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	mEngine.OnMouseButton(button, action, mods);
+}
+
+void MouseCursorPosCallback(GLFWwindow* window, double xpos, double ypos)
+{
+	mEngine.OnMouseCursorPos(xpos, ypos);
+	//std::cout << "cursor X = " << xpos  << "\n";
 }
 
 GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string>& models, const std::vector<float>& distances, IMaterial* material, IMaterial* materialNormalmap)
@@ -802,11 +813,13 @@ void CreatePlayer()
 	InputComponent* inputComponent = new InputComponent();
 	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_W, GLFW_PRESS, new ForwardEvent()));
 	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_S, GLFW_PRESS, new BackwardEvent()));
+	inputComponent->AddConverter(new MouseConverter(-1, new TurnEvent()));
+
 	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_SPACE, GLFW_PRESS, new JumpEvent()));
 
 	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_W, GLFW_REPEAT, new ForwardEvent()));
 	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_S, GLFW_REPEAT, new BackwardEvent()));
-
+	
 	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_W, GLFW_RELEASE, new StopEvent()));
 	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_S, GLFW_RELEASE, new StopEvent()));
 	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_SPACE, GLFW_RELEASE, new StopEvent()));
@@ -822,7 +835,8 @@ void CreatePlayer()
 							new CharacterComponent(),
 							new PhysicsComponent(false, PhysicsSystem::GRAVITY_VALUE),
 							new CollisionComponent(),
-							PLAYER_RUN_SPEED, 
+							PLAYER_RUN_SPEED,
+							PLAYER_TURN_SPEED,
 							PLAYER_UPWARDS_HEIGHT
 						);
 	mPlayer->AddComponent(new EnergyWallCollisionComponent());
@@ -833,11 +847,19 @@ void CreateGameCameraEntity()
 {
 	InputComponent* inputComponent = new InputComponent();
 	inputComponent->AddConverter(new MouseConverter(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
+	inputComponent->AddConverter(new MouseConverter(-1, new PitchEvent()));
 
 	mCamera = new GameEntity(new Transformation(mGameplayCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
 		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
 
-	mThirdPersonCameraComponent = new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f, PLAYER_ZOOM_SPEED);
+	glm::vec3 targetOffset(0.0f, 0.5f, 0.0f); //head
+	mThirdPersonCameraComponent = new ThirdPersonCameraComponent(	static_cast<PerspectiveCamera*>(mGameplayCamera), 
+																	mPlayer, 
+																	targetOffset, 
+																	1.5f, 
+																	PLAYER_PITCH, 
+																	PLAYER_PITCH_SPEED, 
+																	PLAYER_ZOOM_SPEED);
 	mCamera->AddComponent(mThirdPersonCameraComponent);
 	mCamera->AddComponent(new CollisionComponent());
 
@@ -1061,7 +1083,14 @@ void UpdateInput(GLFWwindow* window)
 		}
 		else
 		{
-			mThirdPersonCameraComponent = new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera), mPlayer, 1.5f, 10.0f, PLAYER_ZOOM_SPEED);
+			glm::vec3 targetOffset(0.0f, 0.5f, 0.0f); //head
+			mThirdPersonCameraComponent = new ThirdPersonCameraComponent(	static_cast<PerspectiveCamera*>(mGameplayCamera), 
+																			mPlayer, 
+																			targetOffset, 
+																			1.5f, 
+																			PLAYER_PITCH, 
+																			PLAYER_PITCH_SPEED, 
+																			PLAYER_ZOOM_SPEED);
 			mCamera->AddComponent(mThirdPersonCameraComponent);
 		}
 
@@ -1299,6 +1328,8 @@ void Initialize()
 
 	glfwSetScrollCallback(mEngine.GetGLWindow(), &ScrollCallback);
 	glfwSetKeyCallback(mEngine.GetGLWindow(), &KeyCallback);
+	glfwSetMouseButtonCallback(mEngine.GetGLWindow(), &MouseButtonCallback);
+	glfwSetCursorPosCallback(mEngine.GetGLWindow(), &MouseCursorPosCallback);
 
 	mFogDensity = mIsFogEnabled ? mFogDensity : 0.0f;
 }

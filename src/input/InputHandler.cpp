@@ -6,7 +6,6 @@ InputHandler::InputHandler() : mWindow(nullptr), mIsInitialized(false)
 {
 }
 
-
 InputHandler::~InputHandler()
 {
 	mListeners.clear();
@@ -76,5 +75,21 @@ void InputHandler::OnMouseScroll(int button, float scroll)
 	for (ListenersIterator it = mListeners.begin(); it != mListeners.end(); ++it)
 	{
 		(*it)->OnMouseScroll(button, scroll);
+	}
+}
+
+void InputHandler::OnMouseButton(int button, int action, int mods)
+{
+	for (ListenersIterator it = mListeners.begin(); it != mListeners.end(); ++it)
+	{
+		(*it)->OnMouseButton(button, action, mods);
+	}
+}
+
+void InputHandler::OnMouseCursorPos(double x, double y)
+{
+	for (ListenersIterator it = mListeners.begin(); it != mListeners.end(); ++it)
+	{
+		(*it)->OnMouseCursorPos(x, y);
 	}
 }
