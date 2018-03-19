@@ -21,8 +21,6 @@ InputSystem::~InputSystem()
 
 void InputSystem::Update(float elapsedTime)
 {
-	RemoveEntities();
-	AddNewEntities();
 }
 
 bool InputSystem::HasInputComponents(GameEntity* entity) const
@@ -32,31 +30,23 @@ bool InputSystem::HasInputComponents(GameEntity* entity) const
 
 void InputSystem::AddEntity(GameEntity* entity)
 {
-	mNewEntitiesToAdd.push_back(entity);
+	mEntities.push_back(entity);
 }
 
 void InputSystem::RemoveEntity(GameEntity* entity)
 {
-	mEntitiesToRemove.push_back(entity);
-}
-
-void InputSystem::AddNewEntities()
-{
-	for (GameEntity* entity : mNewEntitiesToAdd)
+	if (HasInputComponents(entity))
 	{
-		mEntities.push_back(entity);
+		std::vector<GameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](GameEntity* a) { return a == entity; });
+		if (it != mEntities.end())
+		{
+			mEntities.erase(it);
+		}
+		else
+		{
+			assert(false);
+		}
 	}
-	mNewEntitiesToAdd.clear();
-}
-
-void InputSystem::RemoveEntities()
-{
-	GameEntitiesIterator it = mEntitiesToRemove.begin();
-	for (it = mEntitiesToRemove.begin(); it != mEntitiesToRemove.end(); ++it)
-	{
-		it = mEntitiesToRemove.erase(it);
-	}
-	mEntitiesToRemove.clear();
 }
 
 void InputSystem::OnKey(int key, int action)

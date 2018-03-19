@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include "KeyConverter.h"
+#include "KeyToEventBind.h"
 #include "../../resources/GameEvent.h"
 
 
-KeyConverter::KeyConverter(int key, int action, const GameEvent* event) : 
+KeyToEventBind::KeyToEventBind(int key, int action, const GameEvent* event) : 
 	mKey(key), 
 	mAction(action), 
 	mEvent(event)
@@ -11,12 +11,12 @@ KeyConverter::KeyConverter(int key, int action, const GameEvent* event) :
 }
 
 
-KeyConverter::~KeyConverter()
+KeyToEventBind::~KeyToEventBind()
 {
 	delete mEvent;
 }
 
-const GameEvent* KeyConverter::Convert(int key, int action) const
+const GameEvent* KeyToEventBind::Convert(int key, int action) const
 {
 	if (mKey == key && mAction == action)
 	{

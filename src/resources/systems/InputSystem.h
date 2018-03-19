@@ -47,7 +47,5 @@ public:
 
 private:
 	void DispatchEvent(MouseData& data);
-	void RemoveEntities();
-	void AddNewEntities();
 };
 

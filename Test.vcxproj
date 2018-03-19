@@ -164,8 +164,8 @@
     <ClInclude Include="src\AABB.h" />
     <ClInclude Include="src\BasicTypes.h" />
     <ClInclude Include="src\BitNumber.h" />
-    <ClInclude Include="src\input\converters\KeyConverter.h" />
-    <ClInclude Include="src\input\converters\MouseConverter.h" />
+    <ClInclude Include="src\input\bindings\KeyToEventBind.h" />
+    <ClInclude Include="src\input\bindings\MouseToEventBind.h" />
     <ClInclude Include="src\input\InputConverter.h" />
     <ClInclude Include="src\input\InputHandler.h" />
     <ClInclude Include="src\listeners\IInputListener.h" />
@@ -289,8 +289,8 @@
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="src\AABB.cpp" />
     <ClCompile Include="src\BitNumber.cpp" />
-    <ClCompile Include="src\input\converters\KeyConverter.cpp" />
-    <ClCompile Include="src\input\converters\MouseConverter.cpp" />
+    <ClCompile Include="src\input\bindings\KeyToEventBind.cpp" />
+    <ClCompile Include="src\input\bindings\MouseToEventBind.cpp" />
     <ClCompile Include="src\input\IInputListener.cpp" />
     <ClCompile Include="src\input\InputConverter.cpp" />
     <ClCompile Include="src\input\InputHandler.cpp" />

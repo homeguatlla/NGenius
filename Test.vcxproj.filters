@@ -124,12 +124,6 @@
     <Filter Include="Source Files\input">
       <UniqueIdentifier>{efd1b11c-a485-4365-a1db-39eed7554dea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\input\converters">
-      <UniqueIdentifier>{fbac4aca-98b5-4693-b39b-6fd57f6d7868}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\input\converters">
-      <UniqueIdentifier>{308d224c-0ddf-4a32-bb48-245269ed1691}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\resources\events">
       <UniqueIdentifier>{c124d55b-42ad-40d4-9e1f-14a79ebaa1fb}</UniqueIdentifier>
     </Filter>
@@ -141,6 +135,12 @@
     </Filter>
     <Filter Include="Source Files\resources\events\characterControllerEvents">
       <UniqueIdentifier>{3c3b38e8-fe4e-4418-a644-430cf8cf502b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\input\binding">
+      <UniqueIdentifier>{308d224c-0ddf-4a32-bb48-245269ed1691}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\input\bindings">
+      <UniqueIdentifier>{fbac4aca-98b5-4693-b39b-6fd57f6d7868}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -468,9 +468,6 @@
     <ClInclude Include="src\listeners\IInputListener.h">
       <Filter>Header Files\input</Filter>
     </ClInclude>
-    <ClInclude Include="src\input\converters\KeyConverter.h">
-      <Filter>Header Files\input\converters</Filter>
-    </ClInclude>
     <ClInclude Include="src\input\InputConverter.h">
       <Filter>Header Files\input</Filter>
     </ClInclude>
@@ -507,9 +504,6 @@
     <ClInclude Include="src\resources\events\characterControllerEvents\JumpEvent.h">
       <Filter>Header Files\resources\events\characterControllerEvents</Filter>
     </ClInclude>
-    <ClInclude Include="src\input\converters\MouseConverter.h">
-      <Filter>Header Files\input\converters</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\events\characterControllerEvents\ButtonLeftEvent.h">
       <Filter>Header Files\resources\events\characterControllerEvents</Filter>
     </ClInclude>
@@ -521,6 +515,12 @@
     </ClInclude>
     <ClInclude Include="src\resources\events\characterControllerEvents\TurnEvent.h">
       <Filter>Header Files\resources\events\characterControllerEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\bindings\KeyToEventBind.h">
+      <Filter>Header Files\input\bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\bindings\MouseToEventBind.h">
+      <Filter>Header Files\input\bindings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -839,9 +839,6 @@
     <ClCompile Include="src\input\IInputListener.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
-    <ClCompile Include="src\input\converters\KeyConverter.cpp">
-      <Filter>Source Files\input\converters</Filter>
-    </ClCompile>
     <ClCompile Include="src\input\InputConverter.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
@@ -878,9 +875,6 @@
     <ClCompile Include="src\resources\events\characterControllerEvents\JumpEvent.cpp">
       <Filter>Source Files\resources\events\characterControllerEvents</Filter>
     </ClCompile>
-    <ClCompile Include="src\input\converters\MouseConverter.cpp">
-      <Filter>Source Files\input\converters</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\events\characterControllerEvents\ButtonLeftEvent.cpp">
       <Filter>Source Files\resources\events\characterControllerEvents</Filter>
     </ClCompile>
@@ -892,6 +886,12 @@
     </ClCompile>
     <ClCompile Include="src\resources\events\characterControllerEvents\TurnEvent.cpp">
       <Filter>Source Files\resources\events\characterControllerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\bindings\KeyToEventBind.cpp">
+      <Filter>Source Files\input\binding</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\bindings\MouseToEventBind.cpp">
+      <Filter>Source Files\input\binding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

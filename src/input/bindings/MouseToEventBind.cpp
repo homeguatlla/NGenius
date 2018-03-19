@@ -1,17 +1,17 @@
 #include "stdafx.h"
-#include "MouseConverter.h"
+#include "MouseToEventBind.h"
 #include "../../resources/GameEvent.h"
 #include "../../resources/systems/InputSystem.h"
 
 
-MouseConverter::MouseConverter(int button, int action, const GameEvent* event) :
+MouseToEventBind::MouseToEventBind(int button, int action, const GameEvent* event) :
 	mButton(button), 
 	mAction(action),
 	mEvent(event)
 {
 }
 
-MouseConverter::MouseConverter(int button, const GameEvent* event) :
+MouseToEventBind::MouseToEventBind(int button, const GameEvent* event) :
 	mButton(button),
 	mAction(-1),
 	mEvent(event)
@@ -19,12 +19,12 @@ MouseConverter::MouseConverter(int button, const GameEvent* event) :
 
 }
 
-MouseConverter::~MouseConverter()
+MouseToEventBind::~MouseToEventBind()
 {
 	delete mEvent;
 }
 
-const GameEvent* MouseConverter::Convert(const void* data) const
+const GameEvent* MouseToEventBind::Convert(const void* data) const
 {
 	const InputSystem::MouseData* mouseData = reinterpret_cast<const InputSystem::MouseData*>(data);
 

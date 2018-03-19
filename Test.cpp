@@ -110,8 +110,8 @@
 #include "src/resources/events/characterControllerEvents/PitchEvent.h"
 
 #include "src/input/IInputListener.h"
-#include "src/input/converters/KeyConverter.h"
-#include "src/input/converters/MouseConverter.h"
+#include "src/input/bindings/KeyToEventBind.h"
+#include "src/input/bindings/MouseToEventBind.h"
 
 
 
@@ -811,20 +811,20 @@ void CreatePlayer()
 	material->AddEffect(new MaterialEffectShadowProperties());
 	
 	InputComponent* inputComponent = new InputComponent();
-	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_W, GLFW_PRESS, new ForwardEvent()));
-	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_S, GLFW_PRESS, new BackwardEvent()));
-	inputComponent->AddConverter(new MouseConverter(-1, new TurnEvent()));
+	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_W, GLFW_PRESS, new ForwardEvent()));
+	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_S, GLFW_PRESS, new BackwardEvent()));
+	inputComponent->AddConverter(new MouseToEventBind(-1, new TurnEvent()));
 
-	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_SPACE, GLFW_PRESS, new JumpEvent()));
+	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_SPACE, GLFW_PRESS, new JumpEvent()));
 
-	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_W, GLFW_REPEAT, new ForwardEvent()));
-	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_S, GLFW_REPEAT, new BackwardEvent()));
+	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_W, GLFW_REPEAT, new ForwardEvent()));
+	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_S, GLFW_REPEAT, new BackwardEvent()));
 	
-	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_W, GLFW_RELEASE, new StopEvent()));
-	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_S, GLFW_RELEASE, new StopEvent()));
-	inputComponent->AddConverter(new KeyConverter(GLFW_KEY_SPACE, GLFW_RELEASE, new StopEvent()));
+	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_W, GLFW_RELEASE, new StopEvent()));
+	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_S, GLFW_RELEASE, new StopEvent()));
+	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_SPACE, GLFW_RELEASE, new StopEvent()));
 
-	inputComponent->AddConverter(new MouseConverter(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
+	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
 
 	Model* model = mEngine.GetModel("enano");
 	IRenderer* renderer = new VertexsRenderer(model, material);
@@ -846,8 +846,8 @@ void CreatePlayer()
 void CreateGameCameraEntity()
 {
 	InputComponent* inputComponent = new InputComponent();
-	inputComponent->AddConverter(new MouseConverter(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
-	inputComponent->AddConverter(new MouseConverter(-1, new PitchEvent()));
+	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
+	inputComponent->AddConverter(new MouseToEventBind(-1, new PitchEvent()));
 
 	mCamera = new GameEntity(new Transformation(mGameplayCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
 		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
