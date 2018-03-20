@@ -68,6 +68,11 @@ public:
 	~RenderSystem();
 
 	void Init(const std::string& applicationName, bool isFullscreen);
+	//TODO this method will be removed once gameplay camera be created during the init.
+	//init
+	//cameras, 
+	//subsystems pues waterpass necesita de la camera
+	void InitSubsystems();
 	void Render();
 	void AddToRender(IRenderer* renderer);
 	
@@ -105,7 +110,7 @@ private:
 
 	bool InitializeWindowAndOpenGL(const std::string& applicationName, bool isFullscreen);
 	void DisableVSync(bool enable);
-	GLFWmonitor* GetCurrentMonitor(GLFWwindow *window);
+	GLFWmonitor* GetCurrentMonitor(float* screenWidth, float* screenHeight);
 
 	void LoadResources();
 

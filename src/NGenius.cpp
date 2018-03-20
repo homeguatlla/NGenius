@@ -44,6 +44,11 @@ void NGenius::Init(bool isFullscreen)
 	mInputHandler->Init(mRenderSystem->GetGLWindow());
 }
 
+void NGenius::InitSubsystems()
+{
+	mRenderSystem->InitSubsystems();
+}
+
 void NGenius::Update()
 {
 	double lastCurrentTime = glfwGetTime();

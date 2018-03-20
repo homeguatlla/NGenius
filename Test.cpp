@@ -132,7 +132,7 @@ enum Configuration
 	COLLISIONS,
 	RELEASE
 };
-Configuration mConfiguration = RELEASE;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -897,13 +897,17 @@ void CreateSkybox()
 
 void CreateCameras()
 {
+	float screenWidth = static_cast<float>(mEngine.GetScreenWidth());
+	float screenHeight = static_cast<float>(mEngine.GetScreenHeight());
+	float aspectRatio = screenWidth / screenHeight;
+
 	//CAMERA
-	mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
+	mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
 	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 15.0f));
 	mEagleEyeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mEagleEyeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 
-	mGameplayCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
+	mGameplayCamera = new PerspectiveCamera(VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
 	mGameplayCamera->SetPosition(glm::vec3(0.0f, 8.0f, 2.0f));
 	mGameplayCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -1313,23 +1317,25 @@ void Initialize()
 {
 	SetupConfiguration();
 
-	CreateCameras();
-
 	mEngine.RegisterInputHandler(std::bind(&UpdateInput, std::placeholders::_1));
 	mEngine.RegisterUpdateHandler(std::bind(&Update, std::placeholders::_1));
+
+	mEngine.Init(mIsFullScreen);
+
+	CreateCameras();
 
 	mEngine.SetCastingShadowsParameters(mSunLightDirection, 3);
 	mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
 
 	mEngine.SetWaterEnabled(mIsWaterEnabled);
 	mEngine.SetWaterParameters(mGameplayCamera, mWaterHeight);
-	
-	mEngine.Init(mIsFullScreen);
 
 	glfwSetScrollCallback(mEngine.GetGLWindow(), &ScrollCallback);
 	glfwSetKeyCallback(mEngine.GetGLWindow(), &KeyCallback);
 	glfwSetMouseButtonCallback(mEngine.GetGLWindow(), &MouseButtonCallback);
 	glfwSetCursorPosCallback(mEngine.GetGLWindow(), &MouseCursorPosCallback);
+
+	mEngine.InitSubsystems();
 
 	mFogDensity = mIsFogEnabled ? mFogDensity : 0.0f;
 }

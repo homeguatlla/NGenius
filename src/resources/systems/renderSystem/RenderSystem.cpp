@@ -69,9 +69,11 @@ RenderSystem::~RenderSystem()
 	}
 
 	DestroyResourcesLibraries();
-	DestroySubSystems();	
+	DestroySubSystems();
+	glfwDestroyWindow(mWindow);
 }
 
+//Initializing the engine basic stuff. The subsystems which need information apart will be initialized later
 void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 {
 	mIsFullScreen = isFullscreen;
@@ -82,7 +84,10 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 
 	CreateResourcesLibraries();
 	LoadResources();
+}
 
+void RenderSystem::InitSubsystems()
+{
 	mShadowsRenderPass->Init();
 	mWaterRenderPass->Init();
 }
@@ -408,21 +413,16 @@ float RenderSystem::GetScreenHeight() const
 	return mScreenHeight;
 }
 
-GLFWmonitor* RenderSystem::GetCurrentMonitor(GLFWwindow *window)
+GLFWmonitor* RenderSystem::GetCurrentMonitor(float* screenWidth, float* screenHeight)
 {
 	int nmonitors, i;
-	int wx, wy, ww, wh;
 	int mx, my, mw, mh;
-	int overlap, bestoverlap;
 	GLFWmonitor *bestmonitor;
 	GLFWmonitor **monitors;
 	const GLFWvidmode *mode;
 
-	bestoverlap = 0;
 	bestmonitor = NULL;
 
-	glfwGetWindowPos(window, &wx, &wy);
-	glfwGetWindowSize(window, &ww, &wh);
 	monitors = glfwGetMonitors(&nmonitors);
 
 	for (i = 0; i < nmonitors; i++) {
@@ -431,12 +431,10 @@ GLFWmonitor* RenderSystem::GetCurrentMonitor(GLFWwindow *window)
 		mw = mode->width;
 		mh = mode->height;
 
-		overlap =
-			glm::max(0, glm::min(wx + ww, mx + mw) - glm::max(wx, mx)) *
-			glm::max(0, glm::min(wy + wh, my + mh) - glm::max(wy, my));
-
-		if (bestoverlap < overlap) {
-			bestoverlap = overlap;
+		if (*screenWidth < mw && *screenHeight < mh)
+		{
+			*screenWidth = mw;
+			*screenHeight = mh;
 			bestmonitor = monitors[i];
 		}
 	}
@@ -491,7 +489,12 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	// Open a window and create its OpenGL context
-	mWindow = glfwCreateWindow(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight), applicationName.c_str(), NULL, NULL);
+	GLFWmonitor* monitor = NULL;
+	if(isFullscreen)
+	{
+		monitor = GetCurrentMonitor(&mScreenWidth, &mScreenHeight);
+	}
+	mWindow = glfwCreateWindow(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight), applicationName.c_str(), monitor, NULL);
 
 	if (mWindow == NULL) {
 		fprintf(stderr, "Failed to open GLFW window.\n");
@@ -499,6 +502,8 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 		glfwTerminate();
 		return false;
 	}
+	
+	/*
 	if (isFullscreen)
 	{
 		GLFWmonitor* monitor = GetCurrentMonitor(mWindow);
@@ -506,6 +511,7 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 		mScreenWidth = static_cast<float>(mode->width);
 		mScreenHeight = static_cast<float>(mode->height);
 
+		glfwDestroyWindow(mWindow);
 		mWindow = glfwCreateWindow(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight), applicationName.c_str(), monitor, NULL);
 
 		if (mWindow == NULL) {
@@ -514,7 +520,7 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 			glfwTerminate();
 			return false;
 		}
-	}
+	}*/
 
 	glfwMakeContextCurrent(mWindow);
 	glewExperimental = true; // Needed in core profile 
@@ -539,7 +545,7 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 	//glfwSetCursorPos(window, 1024/2, 768/2);
 
 	// Dark blue background
-	glClearColor(0.0f, 0.4f, 0.4f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);

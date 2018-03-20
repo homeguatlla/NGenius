@@ -50,6 +50,8 @@ public:
 	~NGenius();
 
 	void Init(bool isFullscreen);
+	//TODO remove it
+	void InitSubsystems();
 	void Update();
 
 	IShaderProgram* GetShader(const std::string& name) const;
@@ -98,7 +100,6 @@ private:
 	void CreateSystems(float screenWidth, float screenHeight);
 	void DestroySystems();
 	
-	void UpdateInput(float deltaTime);
 	void UpdateSystems(float elapsedTime);
 };
 
