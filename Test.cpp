@@ -132,6 +132,7 @@ enum Configuration
 	COLLISIONS,
 	RELEASE
 };
+
 Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
@@ -492,7 +493,7 @@ void CreateProps()
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(1.5f, 0.0f, 0.0f));
 	rotations.push_back(glm::vec3(0.0f));
-	rotations.push_back(glm::vec3(0.7f, 0.0f, 0.0f));
+	rotations.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
 	rotations.push_back(glm::vec3(0.0f));
 
 	std::string textureName("MedievalDungeonPropsAtlas02_diffuse");
@@ -634,9 +635,13 @@ void CreateHUD()
 	IRenderer* guiRenderer = new IndexesRenderer(mEngine.GetModel("gui_quad"), material);
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
-	GameEntity* quad = new GameEntity(new Transformation(glm::vec3(420.0f, -300.0f, 0.0f), glm::vec3(0.0f), glm::vec3(256.0f)),
-		guiRenderer
-	);
+	float x = mEngine.GetScreenWidth() * 0.5f * 0.90f;
+	float y = -mEngine.GetScreenHeight() * 0.5f * 0.85f;
+	GameEntity* quad = new GameEntity(	new Transformation(glm::vec3(x, y, 0.0f), 
+										glm::vec3(0.0f), 
+										glm::vec3(256.0f)),
+										guiRenderer
+									);
 	mEngine.AddGameEntity(quad);
 
 	/*

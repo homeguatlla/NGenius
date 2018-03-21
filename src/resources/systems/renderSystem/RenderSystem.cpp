@@ -57,8 +57,6 @@ mIsClippingEnabled(false)
 {
 	BitNumber bit;
 	bit.Test();
-
-	CreateSubSystems();
 }
 
 RenderSystem::~RenderSystem()
@@ -84,6 +82,7 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 
 	CreateResourcesLibraries();
 	LoadResources();
+	CreateSubSystems();
 }
 
 void RenderSystem::InitSubsystems()
@@ -433,8 +432,8 @@ GLFWmonitor* RenderSystem::GetCurrentMonitor(float* screenWidth, float* screenHe
 
 		if (*screenWidth < mw && *screenHeight < mh)
 		{
-			*screenWidth = mw;
-			*screenHeight = mh;
+			*screenWidth = static_cast<float>(mw);
+			*screenHeight = static_cast<float>(mh);
 			bestmonitor = monitors[i];
 		}
 	}
@@ -492,6 +491,8 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 	GLFWmonitor* monitor = NULL;
 	if(isFullscreen)
 	{
+		mScreenHeight = 0.0f;
+		mScreenWidth = 0.0f;
 		monitor = GetCurrentMonitor(&mScreenWidth, &mScreenHeight);
 	}
 	mWindow = glfwCreateWindow(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight), applicationName.c_str(), monitor, NULL);
