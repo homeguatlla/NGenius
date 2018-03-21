@@ -3,9 +3,8 @@
 #include "../../resources/GameEvent.h"
 
 
-KeyToEventBind::KeyToEventBind(int key, int action, const GameEvent* event) : 
+KeyToEventBind::KeyToEventBind(int key, const GameEvent* event) : 
 	mKey(key), 
-	mAction(action), 
 	mEvent(event)
 {
 }
@@ -18,9 +17,10 @@ KeyToEventBind::~KeyToEventBind()
 
 const GameEvent* KeyToEventBind::Convert(int key, int action) const
 {
-	if (mKey == key && mAction == action)
+	if (mKey == key)
 	{
-		return mEvent->Clone(nullptr);
+		const int* keyData = reinterpret_cast<const int*>(action);
+		return mEvent->Clone(keyData);
 	}
 	else
 	{

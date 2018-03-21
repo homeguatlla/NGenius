@@ -104,7 +104,6 @@
 #include "src/resources/events/characterControllerEvents/ForwardEvent.h"
 #include "src/resources/events/characterControllerEvents/BackwardEvent.h"
 #include "src/resources/events/characterControllerEvents/ZoomEvent.h"
-#include "src/resources/events/characterControllerEvents/StopEvent.h"
 #include "src/resources/events/characterControllerEvents/JumpEvent.h"
 #include "src/resources/events/characterControllerEvents/TurnEvent.h"
 #include "src/resources/events/characterControllerEvents/PitchEvent.h"
@@ -171,7 +170,7 @@ ThirdPersonCameraComponent* mThirdPersonCameraComponent;
 
 RenderPass* mMapPass;
 //Light* mSunLight;
-glm::vec3 mSunLightDirection(100000.0f, 100000.0f, 100000.0f);
+glm::vec3 mSunLightDirection(-100000.0f, 100000.0f, -100000.0f);
 Terrain* mTerrain;
 Player* mPlayer;
 Water* mWater;
@@ -816,19 +815,10 @@ void CreatePlayer()
 	material->AddEffect(new MaterialEffectShadowProperties());
 	
 	InputComponent* inputComponent = new InputComponent();
-	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_W, GLFW_PRESS, new ForwardEvent()));
-	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_S, GLFW_PRESS, new BackwardEvent()));
+	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_W, new ForwardEvent()));
+	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_S, new BackwardEvent()));
 	inputComponent->AddConverter(new MouseToEventBind(-1, new TurnEvent()));
-
-	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_SPACE, GLFW_PRESS, new JumpEvent()));
-
-	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_W, GLFW_REPEAT, new ForwardEvent()));
-	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_S, GLFW_REPEAT, new BackwardEvent()));
-	
-	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_W, GLFW_RELEASE, new StopEvent()));
-	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_S, GLFW_RELEASE, new StopEvent()));
-	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_SPACE, GLFW_RELEASE, new StopEvent()));
-
+	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_SPACE, new JumpEvent()));
 	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
 
 	Model* model = mEngine.GetModel("enano");

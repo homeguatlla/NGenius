@@ -498,9 +498,6 @@
     <ClInclude Include="src\resources\events\CharacterControllerEvent.h">
       <Filter>Header Files\resources\events</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\events\characterControllerEvents\StopEvent.h">
-      <Filter>Header Files\resources\events\characterControllerEvents</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\events\characterControllerEvents\JumpEvent.h">
       <Filter>Header Files\resources\events\characterControllerEvents</Filter>
     </ClInclude>
@@ -867,9 +864,6 @@
       <Filter>Source Files\resources\events\characterControllerEvents</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\events\characterControllerEvents\ZoomEvent.cpp">
-      <Filter>Source Files\resources\events\characterControllerEvents</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\events\characterControllerEvents\StopEvent.cpp">
       <Filter>Source Files\resources\events\characterControllerEvents</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\events\characterControllerEvents\JumpEvent.cpp">

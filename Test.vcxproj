@@ -210,7 +210,6 @@
     <ClInclude Include="src\resources\events\characterControllerEvents\ForwardEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\JumpEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\PitchEvent.h" />
-    <ClInclude Include="src\resources\events\characterControllerEvents\StopEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\TurnEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\ZoomEvent.h" />
     <ClInclude Include="src\resources\font\FontsLibrary.h" />
@@ -333,7 +332,6 @@
     <ClCompile Include="src\resources\events\characterControllerEvents\ForwardEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\JumpEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\PitchEvent.cpp" />
-    <ClCompile Include="src\resources\events\characterControllerEvents\StopEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\TurnEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\ZoomEvent.cpp" />
     <ClCompile Include="src\resources\font\FontsLibrary.cpp" />

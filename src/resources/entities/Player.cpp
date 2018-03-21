@@ -8,7 +8,6 @@
 #include "../GameEvent.h"
 #include "../events/characterControllerEvents/BackwardEvent.h"
 #include "../events/characterControllerEvents/ForwardEvent.h"
-#include "../events/characterControllerEvents/StopEvent.h"
 #include "../events/characterControllerEvents/JumpEvent.h"
 #include "../events/characterControllerEvents/ZoomEvent.h"
 #include "../events/characterControllerEvents/TurnEvent.h"
@@ -81,14 +80,35 @@ void Player::UpdateGameEvents()
 		case MOVING:
 			if (event->IsOfType<ForwardEvent>())
 			{
-				mHasMoved = true;
-				mCurrentRunSpeed = mRunSpeed;
+				const ForwardEvent* forwardEvent = static_cast<const ForwardEvent*>(event);
+				bool isPressed = forwardEvent->IsPressed();
+				
+				mHasMoved |= isPressed;
 
+				if (isPressed)
+				{
+					mCurrentRunSpeed = mRunSpeed;
+				}
+				else
+				{
+					mCurrentRunSpeed = 0.0f;
+				}
 			}
 			else if (event->IsOfType<BackwardEvent>())
 			{
-				mHasMoved = true;
-				mCurrentRunSpeed = -mRunSpeed;
+				const BackwardEvent* backwardEvent = static_cast<const BackwardEvent*>(event);
+				bool isPressed = backwardEvent->IsPressed();
+
+				mHasMoved |= isPressed;
+
+				if (isPressed)
+				{
+					mCurrentRunSpeed = -mRunSpeed;
+				}
+				else
+				{
+					mCurrentRunSpeed = 0.0f;
+				}
 			}
 			else if (event->IsOfType<TurnEvent>())
 			{
@@ -103,12 +123,6 @@ void Player::UpdateGameEvents()
 				mHasJumped = true;
 				mCurrentUpwardsSpeed = mUpwardsSpeed;
 			} 
-			else if(event->IsOfType<StopEvent>())
-			{
-				mHasMoved = false;
-				mCurrentRunSpeed = 0.0f;
-				mCurrentTurnSpeed = 0.0f;
-			}
 		break;
 		default:
 			break;
