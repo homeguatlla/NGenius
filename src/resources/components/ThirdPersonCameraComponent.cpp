@@ -19,6 +19,9 @@ const float CAMERA_SMOOTH_MOVEMENT_VALUE = 1.0f;
 const float WATER_HEIGHT_OFFSET = 0.1f;
 const float MAX_ZOOM = 3.0f;
 const float MIN_ZOOM = 1.0f;
+const float MAX_PITCH = 89.0f;//degrees
+const float MIN_PITCH = 5.0f;
+
 
 ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed) :
 	mCamera(camera), 
@@ -153,5 +156,6 @@ void ThirdPersonCameraComponent::UpdatePitch(float pitch, float elapsedTime)
 {
 	float pitchSpeed = (pitch - mLastPitch) * mPitchSpeed * elapsedTime;
 	mCurrentPitch += pitchSpeed;
+	mCurrentPitch = glm::max(MIN_PITCH, glm::min(MAX_PITCH, mCurrentPitch));
 	mLastPitch = pitch;
 }
