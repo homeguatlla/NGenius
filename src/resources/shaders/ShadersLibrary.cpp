@@ -13,6 +13,7 @@
 #include "EnergyWallShader.h"
 #include "TextShader.h"
 #include "ShadowShader.h"
+#include "OverdrawShader.h"
 
 ShadersLibrary::ShadersLibrary()
 {
@@ -73,4 +74,8 @@ void ShadersLibrary::Load()
 	program = new ShadowShader();
 	program->Init();
 	AddElement("shadow", program);
+
+	program = new OverdrawShader();
+	program->Init();
+	AddElement("overdraw", program);
 }

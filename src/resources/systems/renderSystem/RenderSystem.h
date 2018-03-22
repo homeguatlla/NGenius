@@ -62,6 +62,7 @@ class RenderSystem
 	int mLastClipPlaneNumberUsed;
 	bool mIsFullScreen;
 	bool mIsClippingEnabled;
+	bool mIsOverdrawEnabled;
 	
 public:
 	RenderSystem(float screenWidth, float screenHeight);
@@ -96,6 +97,7 @@ public:
 	void SetWaterParameters(const ICamera* camera, float waterY);
 
 	void SetFullScreen(bool isFullScreen);
+	void SetOverdrawEnabled(bool isOverdrawEnabled);
 	
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 
@@ -113,6 +115,7 @@ private:
 	GLFWmonitor* GetCurrentMonitor(float* screenWidth, float* screenHeight);
 
 	void LoadResources();
+	void CreateNewResources();
 
 	void Render(RenderPass* renderPass);
 	void UpdateSubsystems();

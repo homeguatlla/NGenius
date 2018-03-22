@@ -254,6 +254,7 @@
     <ClInclude Include="src\resources\shaders\IShaderProgram.h" />
     <ClInclude Include="src\resources\shaders\ModelShader.h" />
     <ClInclude Include="src\resources\shaders\NormalMapShader.h" />
+    <ClInclude Include="src\resources\shaders\OverdrawShader.h" />
     <ClInclude Include="src\resources\shaders\ParticleShader.h" />
     <ClInclude Include="src\resources\shaders\QuadShader.h" />
     <ClInclude Include="src\resources\shaders\ShadersLibrary.h" />
@@ -376,6 +377,7 @@
     <ClCompile Include="src\resources\shaders\IShaderProgram.cpp" />
     <ClCompile Include="src\resources\shaders\ModelShader.cpp" />
     <ClCompile Include="src\resources\shaders\NormalMapShader.cpp" />
+    <ClCompile Include="src\resources\shaders\OverdrawShader.cpp" />
     <ClCompile Include="src\resources\shaders\ParticleShader.cpp" />
     <ClCompile Include="src\resources\shaders\QuadShader.cpp" />
     <ClCompile Include="src\resources\shaders\ShadersLibrary.cpp" />
@@ -418,6 +420,7 @@
     <None Include="data\shaders\fragment\f_gui_quad.cg" />
     <None Include="data\shaders\fragment\f_model.cg" />
     <None Include="data\shaders\fragment\f_model_normalmap.cg" />
+    <None Include="data\shaders\fragment\f_overdraw.cg" />
     <None Include="data\shaders\fragment\f_particle.cg" />
     <None Include="data\shaders\fragment\f_quad.cg" />
     <None Include="data\shaders\fragment\f_shadow.cg" />
@@ -430,6 +433,7 @@
     <None Include="data\shaders\vertex\v_gui_quad.cg" />
     <None Include="data\shaders\vertex\v_model.cg" />
     <None Include="data\shaders\vertex\v_model_normalmap.cg" />
+    <None Include="data\shaders\vertex\v_overdraw.cg" />
     <None Include="data\shaders\vertex\v_particle.cg" />
     <None Include="data\shaders\vertex\v_quad.cg" />
     <None Include="data\shaders\vertex\v_shadow.cg" />

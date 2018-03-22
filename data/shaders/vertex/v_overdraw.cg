@@ -1,0 +1,15 @@
+#version 330 core
+
+in mat4 M;
+in vec3 vertexModelspace;
+
+out vec4 overdrawColor;
+
+uniform mat4 V;
+uniform mat4 P;
+
+void main(void)
+{
+	overdrawColor = vec4(1.0, 0.0, 0.0, 0.2);
+	gl_Position = P * V * M * vec4(vertexModelspace, 1);
+}

@@ -519,6 +519,9 @@
     <ClInclude Include="src\input\bindings\MouseToEventBind.h">
       <Filter>Header Files\input\bindings</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\shaders\OverdrawShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -887,6 +890,9 @@
     <ClCompile Include="src\input\bindings\MouseToEventBind.cpp">
       <Filter>Source Files\input\binding</Filter>
     </ClCompile>
+    <ClCompile Include="src\resources\shaders\OverdrawShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\fragment\f_default.cg">
@@ -959,6 +965,12 @@
       <Filter>Source Files\shaders\fragment</Filter>
     </None>
     <None Include="data\shaders\vertex\v_shadow.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_overdraw.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_overdraw.cg">
       <Filter>Source Files\shaders\vertex</Filter>
     </None>
   </ItemGroup>

@@ -2,9 +2,6 @@
 #include "GameEntity.h"
 #include "renderers/IRenderer.h"
 
-
-#include "components\PhysicsComponent.h"
-
 GameEntity::GameEntity(Transformation* transformation, IRenderer* renderer) :
 mTransformation(transformation),
 mRenderer(renderer),
@@ -43,6 +40,7 @@ Transformation* GameEntity::GetTransformation()
 {
 	return mTransformation;
 }
+
 const Transformation* GameEntity::GetTransformation() const
 {
 	return mTransformation;

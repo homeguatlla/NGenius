@@ -29,5 +29,4 @@ IMaterial* MaterialsLibrary::CreateMaterial(const std::string& name, IShaderProg
 
 void MaterialsLibrary::Load()
 {
-
 }

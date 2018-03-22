@@ -38,6 +38,8 @@
 
 using namespace std;
 
+const char* OVERDRAW_MATERIAL_NAME = "overdraw";
+
 RenderSystem::RenderSystem(float screenWidth, float screenHeight) :
 mScreenWidth(screenWidth),
 mScreenHeight(screenHeight),
@@ -53,7 +55,8 @@ mDiffuseTexture(nullptr),
 mNormalTexture(nullptr),
 mLastClipPlaneNumberUsed(0),
 mIsFullScreen(false),
-mIsClippingEnabled(false)
+mIsClippingEnabled(false),
+mIsOverdrawEnabled(false)
 {
 	BitNumber bit;
 	bit.Test();
@@ -82,6 +85,7 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 
 	CreateResourcesLibraries();
 	LoadResources();
+	CreateNewResources();
 	CreateSubSystems();
 }
 
@@ -110,6 +114,11 @@ void RenderSystem::LoadResources()
 	mFontsLibrary->Load();
 	mTexturesLibrary->Load();
 	mMaterialsLibrary->Load();
+}
+
+void RenderSystem::CreateNewResources()
+{
+	mMaterialsLibrary->CreateMaterial(OVERDRAW_MATERIAL_NAME, mShadersLibrary->GetElement(OVERDRAW_MATERIAL_NAME));
 }
 
 void RenderSystem::UpdateSubsystems()
@@ -273,6 +282,12 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 
 	SelectTextures();
 	
+	if (mIsOverdrawEnabled)
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+
 	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, mCurrentMaterial);
 
 	mCurrentMaterial->UnUse();
@@ -387,7 +402,13 @@ void RenderSystem::SelectTextures()
 void RenderSystem::SelectMaterial(RenderPass* renderPass, IRenderer* renderer)
 {
 	IMaterial* material = renderPass->GetMaterial();
-	if (material == nullptr || !mShadowsRenderPass->IsEnabled())
+
+	if (mIsOverdrawEnabled)
+	{
+		material = GetMaterial(OVERDRAW_MATERIAL_NAME);
+		material->CopyMaterialEffectsValuesFrom(renderer->GetMaterial());
+	}
+	else if (material == nullptr || !mShadowsRenderPass->IsEnabled())
 	{
 		material = renderer->GetMaterial();
 	}
@@ -601,6 +622,11 @@ void RenderSystem::UpdateDistancesToCamera(const ICamera* camera, RenderersList*
 void RenderSystem::SetFullScreen(bool isFullScreen)
 {
 	mIsFullScreen = isFullScreen;
+}
+
+void RenderSystem::SetOverdrawEnabled(bool isOverdrawEnabled)
+{
+	mIsOverdrawEnabled = isOverdrawEnabled;
 }
 
 void RenderSystem::SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter)

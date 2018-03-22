@@ -58,7 +58,7 @@ void NGenius::Update()
 
 	do
 	{
-		mInputHandler->Update(elapsedTime / 20.0f);
+		mInputHandler->Update(elapsedTime);
 
 		UpdateSystems(elapsedTime);
 
@@ -84,7 +84,8 @@ void NGenius::Update()
 		}
 
 	} // Check if the ESC key was pressed or the window was closed
-	while (glfwGetKey(mRenderSystem->GetGLWindow(), GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(mRenderSystem->GetGLWindow()) == 0);
+	while (	glfwGetKey(mRenderSystem->GetGLWindow(), GLFW_KEY_ESCAPE) != GLFW_PRESS && 
+			glfwWindowShouldClose(mRenderSystem->GetGLWindow()) == 0);
 
 	// Close OpenGL window and terminate GLFW
 	glfwTerminate();
@@ -143,6 +144,15 @@ void NGenius::RegisterUpdateHandler(std::function<void(float elapsedTime)> callb
 void NGenius::OnKey(int key, int action)
 {
 	mInputHandler->OnKey(key, action);
+
+	if (key == GLFW_KEY_O && action == GLFW_PRESS)
+	{
+		mRenderSystem->SetOverdrawEnabled(true);
+	}
+	else if (key == GLFW_KEY_P && action == GLFW_PRESS)
+	{
+		mRenderSystem->SetOverdrawEnabled(false);
+	}
 }
 
 void NGenius::OnMouseScroll(int button, float scroll)

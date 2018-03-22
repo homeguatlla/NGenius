@@ -233,22 +233,6 @@ void CreateTerrainNormals(vector<glm::vec3>& vertexs, int numVertexsSide)
 	mEngine.AddGameEntity(entity);
 }
 
-void AddBoundingBoxesFrom(GameEntity* gameEntity)
-{
-	if (mIsDebugModeEnabled)
-	{
-		IRenderer* renderer = gameEntity->GetRenderer();
-		if (renderer != nullptr)
-		{
-			const AABB boundingBox = renderer->GetBoundingBox();
-			IRenderer* cubeRenderer = new CubeRenderer(mEngine.GetShader("default"));
-			cubeRenderer->SetLayer(IRenderer::LAYER_DEBUG);
-			Transformation* transformation = new Transformation(*gameEntity->GetTransformation());
-			mEngine.AddGameEntity(new GameEntity(transformation, cubeRenderer));
-		}
-	}
-}
-
 void CreateShadowPlane()
 {
 	//QUAD
@@ -601,9 +585,9 @@ void CreateParticlesFire()
 	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(	particle,
 																new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.1f)),
 																nullptr,
-																100);
+																150);
 	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 1.0f, 0.25f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));	
-	particlesEmitter->SetScaleValues(0.03f, 0.005f);
+	particlesEmitter->SetScaleValues(0.05f, 0.005f);
 	particlesEmitter->SetVelocity(glm::vec3(0.0f), glm::vec3(0.02f, 0.2f, 0.02f));
 	particlesEmitter->SetSpawnArea(glm::vec3(-0.02f, 0.0f, -0.02f), glm::vec3(0.03f, 0.0f, 0.03f));
 	mEngine.AddGameEntity(particlesEmitter);
