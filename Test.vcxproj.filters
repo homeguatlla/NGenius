@@ -192,9 +192,6 @@
     <ClInclude Include="src\resources\components\IComponent.h">
       <Filter>Header Files\resources\components</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\components\VerticalInputComponent.h">
-      <Filter>Header Files\resources\components</Filter>
-    </ClInclude>
     <ClInclude Include="src\loader\OBJLoader.h">
       <Filter>Header Files\loader</Filter>
     </ClInclude>
@@ -221,9 +218,6 @@
     </ClInclude>
     <ClInclude Include="src\resources\entities\Terrain.h">
       <Filter>Header Files\resources\entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\components\PlayerInputComponent.h">
-      <Filter>Header Files\resources\components</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\components\CollisionComponent.h">
       <Filter>Header Files\resources\components</Filter>
@@ -575,9 +569,6 @@
     <ClCompile Include="src\resources\components\IComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\components\VerticalInputComponent.cpp">
-      <Filter>Source Files\resources\components</Filter>
-    </ClCompile>
     <ClCompile Include="src\loader\OBJLoader.cpp">
       <Filter>Source Files\loader</Filter>
     </ClCompile>
@@ -601,9 +592,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\entities\Terrain.cpp">
       <Filter>Source Files\resources\entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\components\PlayerInputComponent.cpp">
-      <Filter>Source Files\resources\components</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\components\CollisionComponent.cpp">
       <Filter>Source Files\resources\components</Filter>

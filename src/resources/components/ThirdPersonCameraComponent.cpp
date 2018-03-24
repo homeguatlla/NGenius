@@ -9,7 +9,6 @@
 #include "../events/characterControllerEvents/PitchEvent.h"
 #include "CollisionComponent.h"
 #include "OverWaterComponent.h"
-#include "PlayerInputComponent.h"
 #include "CharacterComponent.h"
 
 //WARNING!! hay que tener en cuenta que, si subimos este valor la cámara por colisión subirá y no mantendrá el ángulo pitch que le hemos definido.

@@ -86,8 +86,6 @@
 #include "src/resources/GameEntity.h"
 #include "src/resources/Transformation.h"
 
-#include "src/resources/components/VerticalInputComponent.h"
-#include "src/resources/components/PlayerInputComponent.h"
 #include "src/resources/components/PhysicsComponent.h"
 #include "src/resources/components/CollisionComponent.h"
 #include "src/resources/components/EnergyWallCollisionComponent.h"
@@ -135,7 +133,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = FLAT;
+Configuration mConfiguration = RELEASE;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };

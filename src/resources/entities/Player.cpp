@@ -147,6 +147,12 @@ void Player::UpdateIdle(float elapsedTime)
 		{
 			mState = MOVING;
 		}
+		else
+		{
+			mCurrentRunSpeed = 0.0f;
+			mCurrentTurnSpeed = 0.0f;
+			mCurrentUpwardsSpeed = 0.0f;
+		}
 	}
 	else if (!isOnGround)
 	{
