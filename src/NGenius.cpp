@@ -29,7 +29,8 @@ mRenderSystem(nullptr),
 mPhysicsSystem(nullptr),
 mEntitiesSystem(nullptr),
 mParticlesSystem(nullptr),
-mApplicationName(applicationName)
+mApplicationName(applicationName),
+mIsDebugModeEnabled(false)
 {
 	CreateSystems(screenWidth, screenHeight);
 }
@@ -45,9 +46,10 @@ void NGenius::Init(bool isFullscreen)
 	mInputHandler->Init(mRenderSystem->GetGLWindow());
 }
 
-void NGenius::InitSubsystems()
+void NGenius::PostInit()
 {
-	mRenderSystem->InitSubsystems();
+	mRenderSystem->PostInit();
+	mDebugSystem->SetDebugModeEnabled(mIsDebugModeEnabled);
 }
 
 void NGenius::Update()
@@ -302,4 +304,9 @@ void NGenius::SetCastingShadowsTarget(const GameEntity* target)
 {
 	assert(mRenderSystem != nullptr);
 	mRenderSystem->SetCastingShadowsTarget(target);
+}
+
+void NGenius::SetDebugModeEnabled(bool enabled)
+{
+	mIsDebugModeEnabled = enabled;
 }

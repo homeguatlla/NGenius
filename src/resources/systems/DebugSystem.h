@@ -11,7 +11,7 @@ class DebugSystem : public IInputListener
 	std::vector<GameEntity*> mEntities;
 	typedef std::vector<GameEntity*>::iterator GameEntitiesIterator;
 
-
+	bool mIsDebugModeEnabled;
 	bool mIsBoundingBoxVisible;
 	InputHandler* mInputHandler;
 	RenderSystem* mRenderSystem;
@@ -32,5 +32,7 @@ public:
 	void RemoveEntity(GameEntity* entity);
 
 	bool HasDebugComponents(GameEntity* entity) const;
+
+	void SetDebugModeEnabled(bool enable);
 };
 

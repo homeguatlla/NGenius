@@ -1330,12 +1330,14 @@ void Initialize()
 	mEngine.SetWaterEnabled(mIsWaterEnabled);
 	mEngine.SetWaterParameters(mGameplayCamera, mWaterHeight);
 
+	mEngine.SetDebugModeEnabled(mIsDebugModeEnabled);
+
 	glfwSetScrollCallback(mEngine.GetGLWindow(), &ScrollCallback);
 	glfwSetKeyCallback(mEngine.GetGLWindow(), &KeyCallback);
 	glfwSetMouseButtonCallback(mEngine.GetGLWindow(), &MouseButtonCallback);
 	glfwSetCursorPosCallback(mEngine.GetGLWindow(), &MouseCursorPosCallback);
 
-	mEngine.InitSubsystems();
+	mEngine.PostInit();
 
 	mFogDensity = mIsFogEnabled ? mFogDensity : 0.0f;
 }

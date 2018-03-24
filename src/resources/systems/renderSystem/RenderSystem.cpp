@@ -90,7 +90,7 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 	CreateSubSystems();
 }
 
-void RenderSystem::InitSubsystems()
+void RenderSystem::PostInit()
 {
 	mShadowsRenderPass->Init();
 	mWaterRenderPass->Init();
@@ -284,10 +284,15 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 
 	SelectTextures();
 	
+	//TODO esto se tiene que mejorar. Sinó estamos haciendo una llamada a blend que igual no hace falta
 	if (mIsOverdrawEnabled)
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+	else 
+	{
+		glDisable(GL_BLEND);
 	}
 
 	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, mCurrentMaterial);

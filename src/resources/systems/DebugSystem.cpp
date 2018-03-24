@@ -8,6 +8,7 @@
 #include <algorithm>
 
 DebugSystem::DebugSystem(RenderSystem* renderSystem, InputHandler* inputHandler) :
+	mIsDebugModeEnabled(false),
 	mIsBoundingBoxVisible(false),
 	mInputHandler(inputHandler),
 	mRenderSystem(renderSystem)
@@ -23,12 +24,15 @@ DebugSystem::~DebugSystem()
 
 void DebugSystem::Update(float elapsedTime)
 {
-	for (GameEntity* entity : mEntities)
+	if (mIsDebugModeEnabled)
 	{
-		entity->Update(elapsedTime);
-		DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
-		IRenderer* renderer = debugComponent->GetBoundingBoxRenderer();
-		mRenderSystem->AddToRender(renderer);
+		for (GameEntity* entity : mEntities)
+		{
+			entity->Update(elapsedTime);
+			DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
+			IRenderer* renderer = debugComponent->GetBoundingBoxRenderer();
+			mRenderSystem->AddToRender(renderer);
+		}
 	}
 }
 
@@ -90,4 +94,9 @@ void DebugSystem::OnKey(int key, int action)
 	{ 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
+}
+
+void DebugSystem::SetDebugModeEnabled(bool enable)
+{
+	mIsDebugModeEnabled = enable;
 }

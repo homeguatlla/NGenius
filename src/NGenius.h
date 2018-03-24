@@ -44,6 +44,7 @@ class NGenius
 	InputHandler* mInputHandler;
 	std::string mApplicationName;
 	float mFPS;
+	bool mIsDebugModeEnabled;
 	
 	std::function<void(float elapsedTime)> mUpdateHandler;
 
@@ -53,7 +54,7 @@ public:
 
 	void Init(bool isFullscreen);
 	//TODO remove it
-	void InitSubsystems();
+	void PostInit();
 	void Update();
 
 	IShaderProgram* GetShader(const std::string& name) const;
@@ -97,6 +98,9 @@ public:
 	//water
 	void SetWaterEnabled(bool enabled);
 	void SetWaterParameters(const ICamera* camera, float waterY);
+
+	//debug
+	void SetDebugModeEnabled(bool enabled);
 
 private:
 	void CreateSystems(float screenWidth, float screenHeight);

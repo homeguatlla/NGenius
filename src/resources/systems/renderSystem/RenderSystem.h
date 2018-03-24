@@ -76,7 +76,7 @@ public:
 	//init
 	//cameras, 
 	//subsystems pues waterpass necesita de la camera
-	void InitSubsystems();
+	void PostInit();
 	void Render();
 	void AddToRender(IRenderer* renderer);
 	
