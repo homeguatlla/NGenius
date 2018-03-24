@@ -22,6 +22,7 @@
 #include "GameConstants.h"
 #include "src/NGenius.h"
 #include "src/resources/systems/PhysicsSystem.h"
+#include "src/resources/systems/renderSystem/RenderSystem.h"
 
 #include "src/TerrainGrid.h"
 
@@ -29,6 +30,7 @@
 #include "src/resources/renderers/VertexsRenderer.h"
 #include "src/resources/renderers/IndexesRenderer.h"
 #include "src/resources/renderers/SkyBoxRenderer.h"
+#include "src/resources/renderers/WireframeRenderer.h"
 
 #include "src/resources/systems/renderSystem/RenderPass.h"
 #include "src/resources/systems/renderSystem/IFrameBuffer.h"
@@ -96,6 +98,7 @@
 #include "src/resources/components/BillboardComponent.h"
 #include "src/resources/components/OverWaterComponent.h"
 #include "src/resources/components/CharacterComponent.h"
+#include "src/resources/components/DebugComponent.h"
 
 #include "src/resources/command/ICommand.h"
 #include "src/resources/command/commands/RiseTerrainCommand.h"
@@ -128,10 +131,11 @@ enum Configuration
 	PARTICLES,
 	PROPS,
 	COLLISIONS,
+	FLAT,
 	RELEASE
 };
 
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = FLAT;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -374,6 +378,9 @@ GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, const
 
 	modelEntity->AddComponent(new PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE));
 	modelEntity->AddComponent(new CollisionComponent());
+
+	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(RenderSystem::WIREFRAME_MATERIAL_NAME));
+	modelEntity->AddComponent(new DebugComponent(boundingBoxRenderer));
 
 	return modelEntity;
 }
@@ -851,7 +858,7 @@ void CreateGameCameraEntity()
 	mEngine.AddGameEntity(mCamera);
 }
 
-void CreateSkybox()
+void CreateCube()
 {
 	//SKYBOX the last
 	if (mIsSkyboxEnabled)
@@ -933,7 +940,7 @@ void CreateEntities()
 
 	if (mIsSkyboxEnabled)
 	{
-		CreateSkybox();
+		CreateCube();
 	}
 }
 
@@ -1270,6 +1277,22 @@ void SetupConfiguration()
 		mIsStatisticsVisible = false;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = true;
+		break;
+	case FLAT:
+		mIsDebugModeEnabled = true;
+		mIsWaterEnabled = false;
+		mIsGameplayCameraEnabled = true;
+		mIsFogEnabled = true;
+		mIsVegetationEnabled = false;
+		mIsPropsEnabled = true;
+		mIsEnergyWallEnabled = false;
+		mIsSkyboxEnabled = true;
+		mIsTerrainFlat = true;
+		mIsTextEnabled = false;
+		mIsStatisticsVisible = true;
+		mIsParticlesEnabled = false;
+		mIsShadowEnabled = false;
+		mIsFullScreen = false;
 		break;
 	case RELEASE:
 		mIsDebugModeEnabled = false;

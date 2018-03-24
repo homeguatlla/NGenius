@@ -23,18 +23,6 @@ void InputHandler::Update(float deltaTime)
 	if (mIsInitialized)
 	{
 		mInputHandler(mWindow);
-		/*
-		if (glfwGetKey(mWindow, GLFW_KEY_F) == GLFW_PRESS)
-		{
-			if (glfwGetKey(mWindow, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-			{
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			}
-			else
-			{
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			}
-		}*/
 	}
 }
 

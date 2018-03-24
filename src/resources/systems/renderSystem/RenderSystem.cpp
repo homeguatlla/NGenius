@@ -38,7 +38,8 @@
 
 using namespace std;
 
-const char* OVERDRAW_MATERIAL_NAME = "overdraw";
+const char* RenderSystem::OVERDRAW_MATERIAL_NAME = "overdraw";
+const char* RenderSystem::WIREFRAME_MATERIAL_NAME = "wireframe";
 
 RenderSystem::RenderSystem(float screenWidth, float screenHeight) :
 mScreenWidth(screenWidth),
@@ -119,6 +120,7 @@ void RenderSystem::LoadResources()
 void RenderSystem::CreateNewResources()
 {
 	mMaterialsLibrary->CreateMaterial(OVERDRAW_MATERIAL_NAME, mShadersLibrary->GetElement(OVERDRAW_MATERIAL_NAME));
+	mMaterialsLibrary->CreateMaterial(WIREFRAME_MATERIAL_NAME, mShadersLibrary->GetElement("default"));
 }
 
 void RenderSystem::UpdateSubsystems()

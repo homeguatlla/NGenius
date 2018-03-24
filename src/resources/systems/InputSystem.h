@@ -8,9 +8,9 @@ class InputHandler;
 class InputSystem : public IInputListener
 {
 	std::vector<GameEntity*> mEntities;
-	std::vector<GameEntity*> mNewEntitiesToAdd;
-	std::vector<GameEntity*> mEntitiesToRemove;
 	typedef std::vector<GameEntity*>::iterator GameEntitiesIterator;
+
+	InputHandler* mInputHandler;
 
 public:
 	typedef struct MouseData

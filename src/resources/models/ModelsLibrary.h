@@ -17,7 +17,8 @@ public:
 
 private:
 	void LoadModel(const std::string& name, const std::string& filename, bool calculateNormals, bool calculateTangents);
-	void CreateSkybox();
+	void CreateCube();
+	void CreateSkyBox();
 	void CreateQuad(const std::string& name);
 };
 

@@ -95,6 +95,7 @@ void NGenius::Update()
 void NGenius::UpdateSystems(float elapsedTime)
 {
 	mInputSystem->Update(elapsedTime);
+	mDebugSystem->Update(elapsedTime);
 	mParticlesSystem->Update(elapsedTime);
 	mEntitiesSystem->Update(elapsedTime);
 	mPhysicsSystem->Update(elapsedTime);
@@ -106,7 +107,7 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 	mRenderSystem = new RenderSystem(screenWidth, screenHeight);
 	mPhysicsSystem = new PhysicsSystem();
 	mInputSystem = new InputSystem(mInputHandler);
-	mDebugSystem = new DebugSystem(mInputHandler);
+	mDebugSystem = new DebugSystem(mRenderSystem, mInputHandler);
 	mEntitiesSystem = new EntitiesSystem(mRenderSystem, mPhysicsSystem, mInputSystem, mDebugSystem);
 	mParticlesSystem = new ParticlesSystem();
 	mLightsSystem = new LightsSystem(mEntitiesSystem);
@@ -114,7 +115,6 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 
 void NGenius::DestroySystems()
 {
-	delete mInputHandler;
 	delete mDebugSystem;
 	delete mInputSystem;
 	delete mLightsSystem;
@@ -122,6 +122,7 @@ void NGenius::DestroySystems()
 	delete mEntitiesSystem;
 	delete mPhysicsSystem;
 	delete mRenderSystem;
+	delete mInputHandler;
 }
 
 void NGenius::RegisterAllEventsInputListener(IInputListener* listener)
@@ -147,15 +148,6 @@ void NGenius::RegisterUpdateHandler(std::function<void(float elapsedTime)> callb
 void NGenius::OnKey(int key, int action)
 {
 	mInputHandler->OnKey(key, action);
-
-	if (key == GLFW_KEY_O && action == GLFW_PRESS)
-	{
-		mRenderSystem->SetOverdrawEnabled(true);
-	}
-	else if (key == GLFW_KEY_P && action == GLFW_PRESS)
-	{
-		mRenderSystem->SetOverdrawEnabled(false);
-	}
 }
 
 void NGenius::OnMouseScroll(int button, float scroll)

@@ -248,6 +248,7 @@
     <ClInclude Include="src\resources\renderers\VertexsRenderer.h" />
     <ClInclude Include="src\resources\renderers\IndexesRenderer.h" />
     <ClInclude Include="src\resources\renderers\IRenderer.h" />
+    <ClInclude Include="src\resources\renderers\WireframeRenderer.h" />
     <ClInclude Include="src\resources\shaders\DefaultShader.h" />
     <ClInclude Include="src\resources\shaders\EnergyWallShader.h" />
     <ClInclude Include="src\resources\shaders\GUIShader.h" />
@@ -372,6 +373,7 @@
     <ClCompile Include="src\resources\renderers\VertexsRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\IndexesRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\IRenderer.cpp" />
+    <ClCompile Include="src\resources\renderers\WireframeRenderer.cpp" />
     <ClCompile Include="src\resources\shaders\DefaultShader.cpp" />
     <ClCompile Include="src\resources\shaders\EnergyWallShader.cpp" />
     <ClCompile Include="src\resources\shaders\GUIShader.cpp" />

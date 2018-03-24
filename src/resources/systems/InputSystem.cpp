@@ -7,16 +7,16 @@
 
 #include <algorithm>
 
-InputSystem::InputSystem(InputHandler* inputHandler)
+InputSystem::InputSystem(InputHandler* inputHandler) :
+	mInputHandler(inputHandler)
 {
-	inputHandler->RegisterAllEventsInputListener(this);
+	mInputHandler->RegisterAllEventsInputListener(this);
 }
 
 InputSystem::~InputSystem()
 {
-	mNewEntitiesToAdd.clear();
-	mEntitiesToRemove.clear();
 	mEntities.clear();
+	mInputHandler->UnRegisterInputListener(this);
 }
 
 void InputSystem::Update(float elapsedTime)

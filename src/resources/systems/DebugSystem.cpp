@@ -3,22 +3,33 @@
 #include "../GameEntity.h"
 #include "../../input/InputHandler.h"
 #include "../components/DebugComponent.h"
+#include "renderSystem/RenderSystem.h"
 #include "GLFW/glfw3.h"
 #include <algorithm>
 
-DebugSystem::DebugSystem(InputHandler* inputHandler) :
-	mIsBoundingBoxVisible(false)
+DebugSystem::DebugSystem(RenderSystem* renderSystem, InputHandler* inputHandler) :
+	mIsBoundingBoxVisible(false),
+	mInputHandler(inputHandler),
+	mRenderSystem(renderSystem)
 {
-	inputHandler->RegisterAllEventsInputListener(this);
+	mInputHandler->RegisterAllEventsInputListener(this);
 }
 
 DebugSystem::~DebugSystem()
 {
 	mEntities.clear();
+	mInputHandler->UnRegisterInputListener(this);
 }
 
 void DebugSystem::Update(float elapsedTime)
 {
+	for (GameEntity* entity : mEntities)
+	{
+		entity->Update(elapsedTime);
+		DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
+		IRenderer* renderer = debugComponent->GetBoundingBoxRenderer();
+		mRenderSystem->AddToRender(renderer);
+	}
 }
 
 bool DebugSystem::HasDebugComponents(GameEntity* entity) const
@@ -60,5 +71,23 @@ void DebugSystem::OnKey(int key, int action)
 				component->SetBoundingBoxVisibility(mIsBoundingBoxVisible);
 			}
 		}
+	}
+
+	if (key == GLFW_KEY_O && action == GLFW_PRESS)
+	{
+		mRenderSystem->SetOverdrawEnabled(true);
+	}
+	else if (key == GLFW_KEY_P && action == GLFW_PRESS)
+	{
+		mRenderSystem->SetOverdrawEnabled(false);
+	}
+
+	if (key == GLFW_KEY_F && action == GLFW_PRESS)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+	else if(key == GLFW_KEY_G && action == GLFW_PRESS)
+	{ 
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 }

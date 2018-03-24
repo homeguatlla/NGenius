@@ -65,6 +65,9 @@ class RenderSystem
 	bool mIsOverdrawEnabled;
 	
 public:
+	static const char* OVERDRAW_MATERIAL_NAME;
+	static const char* WIREFRAME_MATERIAL_NAME;
+
 	RenderSystem(float screenWidth, float screenHeight);
 	~RenderSystem();
 

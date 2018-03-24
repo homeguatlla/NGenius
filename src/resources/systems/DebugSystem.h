@@ -4,17 +4,21 @@
 
 class GameEntity;
 class InputHandler;
+class RenderSystem;
 
 class DebugSystem : public IInputListener
 {
 	std::vector<GameEntity*> mEntities;
 	typedef std::vector<GameEntity*>::iterator GameEntitiesIterator;
 
+
 	bool mIsBoundingBoxVisible;
+	InputHandler* mInputHandler;
+	RenderSystem* mRenderSystem;
 
 public:
 
-	DebugSystem(InputHandler* inputHandler);
+	DebugSystem(RenderSystem* renderSystem, InputHandler* inputHandler);
 	~DebugSystem();
 
 	void Update(float elapsedTime);

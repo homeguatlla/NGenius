@@ -525,6 +525,9 @@
     <ClInclude Include="src\resources\systems\DebugSystem.h">
       <Filter>Header Files\resources\systems</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\renderers\WireframeRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -898,6 +901,9 @@
     </ClCompile>
     <ClCompile Include="src\resources\components\DebugComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\WireframeRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

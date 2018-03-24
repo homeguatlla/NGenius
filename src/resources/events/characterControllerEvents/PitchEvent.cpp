@@ -16,7 +16,7 @@ PitchEvent* PitchEvent::DoClone(const void* data) const
 	const InputSystem::MouseData* mouseData = reinterpret_cast<const InputSystem::MouseData*>(data);
 
 	PitchEvent* pitchEvent = new PitchEvent();
-	pitchEvent->SetPitch(mouseData->mCursorY);
+	pitchEvent->SetPitch(static_cast<float>(mouseData->mCursorY));
 
 	return pitchEvent;
 }

@@ -16,7 +16,7 @@ TurnEvent* TurnEvent::DoClone(const void* data) const
 	const InputSystem::MouseData* mouseData = reinterpret_cast<const InputSystem::MouseData*>(data);
 
 	TurnEvent* turnEvent = new TurnEvent();
-	turnEvent->SetTurn(mouseData->mCursorX);
+	turnEvent->SetTurn(static_cast<float>(mouseData->mCursorX));
 
 	return turnEvent;
 }

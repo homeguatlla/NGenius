@@ -17,7 +17,8 @@ ModelsLibrary::~ModelsLibrary()
 
 void ModelsLibrary::Load()
 {
-	CreateSkybox();
+	CreateCube();
+	CreateSkyBox();
 	CreateQuad("quad");
 	//necesitamos un gui_quad porque sino, cuando se construye (build) 
 	//buscará el atributo color_gradient. Si no lo tiene, que para el shader_gui no lo tiene, 
@@ -90,7 +91,7 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 	}
 }
 
-void ModelsLibrary::CreateSkybox()
+void ModelsLibrary::CreateSkyBox()
 {
 	float size = 0.5;
 	std::vector<glm::vec3> vertexs;
@@ -153,12 +154,71 @@ void ModelsLibrary::CreateSkybox()
 	indexes.push_back(1);
 	indexes.push_back(3);
 	indexes.push_back(7);
-	
+
 	std::vector<glm::vec2> uv;
 	Mesh* mMesh = new Mesh(vertexs, uv, indexes);
 	Model* model = new Model(mMesh);
 
 	AddElement("skybox", model);
+}
+
+void ModelsLibrary::CreateCube()
+{
+	float size = 0.5;
+	std::vector<glm::vec3> vertexs;
+
+	vertexs.push_back(glm::vec3(-size, -size, -size));
+	vertexs.push_back(glm::vec3(-size, size, -size));
+	vertexs.push_back(glm::vec3(size, -size, -size));
+	vertexs.push_back(glm::vec3(size, size, -size));
+	vertexs.push_back(glm::vec3(size, -size, size));
+	vertexs.push_back(glm::vec3(size, size, size));
+	vertexs.push_back(glm::vec3(-size, -size, size));
+	vertexs.push_back(glm::vec3(-size, size, size));
+
+	std::vector<unsigned int> indexes;
+
+	indexes.push_back(0);
+	indexes.push_back(1);
+
+	indexes.push_back(1);
+	indexes.push_back(3);
+	
+	indexes.push_back(3);
+	indexes.push_back(2);
+	
+	indexes.push_back(2);
+	indexes.push_back(4);
+	
+	indexes.push_back(4);
+	indexes.push_back(6);
+	
+	indexes.push_back(6);
+	indexes.push_back(0); 
+	
+	indexes.push_back(6);
+	indexes.push_back(7);
+	
+	indexes.push_back(7);
+	indexes.push_back(1);
+
+	indexes.push_back(7);
+	indexes.push_back(5);
+
+	indexes.push_back(5);
+	indexes.push_back(3);
+
+	indexes.push_back(5);
+	indexes.push_back(4);
+
+	indexes.push_back(0);
+	indexes.push_back(2);
+
+	std::vector<glm::vec2> uv;
+	Mesh* mMesh = new Mesh(vertexs, uv, indexes);
+	Model* model = new Model(mMesh);
+
+	AddElement("cube", model);
 }
 
 void ModelsLibrary::CreateQuad(const std::string& name)
