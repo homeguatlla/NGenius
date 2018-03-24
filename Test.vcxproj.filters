@@ -195,9 +195,6 @@
     <ClInclude Include="src\resources\components\VerticalInputComponent.h">
       <Filter>Header Files\resources\components</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\components\DebugInputComponent.h">
-      <Filter>Header Files\resources\components</Filter>
-    </ClInclude>
     <ClInclude Include="src\loader\OBJLoader.h">
       <Filter>Header Files\loader</Filter>
     </ClInclude>
@@ -522,6 +519,12 @@
     <ClInclude Include="src\resources\shaders\OverdrawShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\components\DebugComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\DebugSystem.h">
+      <Filter>Header Files\resources\systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -570,9 +573,6 @@
       <Filter>Source Files\resources\components</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\components\VerticalInputComponent.cpp">
-      <Filter>Source Files\resources\components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\components\DebugInputComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
     </ClCompile>
     <ClCompile Include="src\loader\OBJLoader.cpp">
@@ -892,6 +892,12 @@
     </ClCompile>
     <ClCompile Include="src\resources\shaders\OverdrawShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\DebugSystem.cpp">
+      <Filter>Source Files\resources\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\DebugComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

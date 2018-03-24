@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "ParticlesEmitter.h"
 #include "Particle.h"
-#include "../../renderer/ParticleRenderer.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/CollisionComponent.h"
 #include "../systems/PhysicsSystem.h"

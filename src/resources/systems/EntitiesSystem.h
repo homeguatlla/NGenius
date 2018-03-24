@@ -5,6 +5,7 @@ class GameEntity;
 class RenderSystem;
 class PhysicsSystem;
 class InputSystem;
+class DebugSystem;
 
 class EntitiesSystem
 {
@@ -16,9 +17,10 @@ class EntitiesSystem
 	RenderSystem* mRenderSystem;
 	PhysicsSystem* mPhysicsSystem;
 	InputSystem* mInputSystem;
+	DebugSystem* mDebugSystem;
 
 public:
-	EntitiesSystem(RenderSystem* rendererSystem, PhysicsSystem* physicsSystem, InputSystem* inputSystem);
+	EntitiesSystem(RenderSystem* rendererSystem, PhysicsSystem* physicsSystem, InputSystem* inputSystem, DebugSystem* debugSystem);
 	~EntitiesSystem();
 
 	void Update(float elapsedTime);

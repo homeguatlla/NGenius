@@ -10,6 +10,7 @@ class EntitiesSystem;
 class ParticlesSystem;
 class LightsSystem;
 class InputSystem;
+class DebugSystem;
 
 class InputHandler;
 class IInputListener;
@@ -39,6 +40,7 @@ class NGenius
 	ParticlesSystem* mParticlesSystem;
 	LightsSystem* mLightsSystem;
 	InputSystem* mInputSystem;
+	DebugSystem* mDebugSystem;
 	InputHandler* mInputHandler;
 	std::string mApplicationName;
 	float mFPS;

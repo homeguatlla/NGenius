@@ -18,6 +18,7 @@
 #include "resources/systems/ParticlesSystem.h"
 #include "resources/systems/LightsSystem.h"
 #include "resources/systems/InputSystem.h"
+#include "resources/systems/DebugSystem.h"
 
 #include "resources/entities/ParticlesEmitter.h"
 
@@ -105,7 +106,8 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 	mRenderSystem = new RenderSystem(screenWidth, screenHeight);
 	mPhysicsSystem = new PhysicsSystem();
 	mInputSystem = new InputSystem(mInputHandler);
-	mEntitiesSystem = new EntitiesSystem(mRenderSystem, mPhysicsSystem, mInputSystem);
+	mDebugSystem = new DebugSystem(mInputHandler);
+	mEntitiesSystem = new EntitiesSystem(mRenderSystem, mPhysicsSystem, mInputSystem, mDebugSystem);
 	mParticlesSystem = new ParticlesSystem();
 	mLightsSystem = new LightsSystem(mEntitiesSystem);
 }
@@ -113,6 +115,7 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 void NGenius::DestroySystems()
 {
 	delete mInputHandler;
+	delete mDebugSystem;
 	delete mInputSystem;
 	delete mLightsSystem;
 	delete mParticlesSystem;

@@ -85,7 +85,6 @@
 #include "src/resources/Transformation.h"
 
 #include "src/resources/components/VerticalInputComponent.h"
-#include "src/resources/components/DebugInputComponent.h"
 #include "src/resources/components/PlayerInputComponent.h"
 #include "src/resources/components/PhysicsComponent.h"
 #include "src/resources/components/CollisionComponent.h"
@@ -778,7 +777,6 @@ void CreateTerrain()
 							static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")),
 							scale);
 
-	mTerrain->AddComponent(new DebugInputComponent());
 	mTerrain->SetFlat(mIsTerrainFlat);
 			
 	mEngine.AddGameEntity(mTerrain);	
