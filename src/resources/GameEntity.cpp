@@ -36,6 +36,14 @@ GameEntity::~GameEntity()
 	}
 }
 
+void GameEntity::Init()
+{
+	for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
+	{
+		it->second->Init();
+	}
+}
+
 Transformation* GameEntity::GetTransformation()
 {
 	return mTransformation;

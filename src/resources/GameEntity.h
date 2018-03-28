@@ -8,10 +8,11 @@ class IRenderer;
 
 class GameEntity
 {
-	Transformation* mTransformation;
-	IRenderer* mRenderer;
 	typedef std::map<const std::type_info*, IComponent*> ComponentsMap;
 	typedef ComponentsMap::iterator IComponentsIterator;
+
+	Transformation* mTransformation;
+	IRenderer* mRenderer;
 	ComponentsMap mComponents;
 	bool mIsEnabled;
 
@@ -24,6 +25,7 @@ public:
 	explicit GameEntity(Transformation* transformation);
 	virtual ~GameEntity();
 
+	void Init();
 	IRenderer* GetRenderer() const;
 	void SetRenderer(IRenderer* renderer);
 	Transformation* GetTransformation();

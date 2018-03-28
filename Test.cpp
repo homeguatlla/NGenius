@@ -345,6 +345,8 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 
 	modelEntity->AddComponent(new PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE));
 	modelEntity->AddComponent(new CollisionComponent());
+	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(RenderSystem::WIREFRAME_MATERIAL_NAME));
+	modelEntity->AddComponent(new DebugComponent(boundingBoxRenderer));
 
 	LODComponent* lodComponent = new LODComponent(mGameplayCamera);
 	modelEntity->AddComponent(lodComponent);
@@ -472,8 +474,7 @@ void CreateProps()
 	positions.push_back(glm::vec3(1.1f, 0.0f, -2.3f));
 	positions.push_back(glm::vec3(2.5f, 0.0f, -2.7f));
 	positions.push_back(glm::vec3(-2.0f, 0.0f, 2.0f));
-	positions.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
-	
+	positions.push_back(glm::vec3(0.0f, 0.0f, 0.0f));	
 
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(0.0f));
@@ -822,6 +823,8 @@ void CreatePlayer()
 							PLAYER_UPWARDS_HEIGHT
 						);
 	mPlayer->AddComponent(new EnergyWallCollisionComponent());
+	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(RenderSystem::WIREFRAME_MATERIAL_NAME));
+	mPlayer->AddComponent(new DebugComponent(boundingBoxRenderer));
 	mEngine.AddGameEntity(mPlayer);
 }
 
@@ -1293,7 +1296,7 @@ void SetupConfiguration()
 		mIsFullScreen = false;
 		break;
 	case RELEASE:
-		mIsDebugModeEnabled = false;
+		mIsDebugModeEnabled = true;
 		mIsWaterEnabled = true;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;

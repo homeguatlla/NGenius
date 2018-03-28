@@ -4,6 +4,7 @@
 #include "../../BitNumber.h"
 #include "../../VertexBuffersManager.h"
 #include "../../AABB.h"
+#include "../Transformation.h"
 
 
 class ICamera;
@@ -31,7 +32,8 @@ protected:
 	Model* mModel;
 	std::vector<IRenderer*> mInstances;
 	IMaterial* mMaterial;
-
+	Transformation mTransformation;
+	bool mHasTransformation;
 	bool mIsPrerendered;
 	bool mIsInstancingEnabled;
 	
@@ -59,6 +61,10 @@ public:
 	IMaterial* GetMaterial();
 	Model* GetModel();
 
+	bool HasTransformation() const;
+	void SetTransformation(Transformation& transformation);
+	Transformation GetTransformation() const;
+
 	void Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager, IMaterial* material);
 	
 	const BitNumber& GetBitRendererInformation() const;
@@ -76,7 +82,7 @@ public:
 
 	virtual bool IsInstancingAllowed() const = 0;
 	void EnableInstancing(bool enable);
-	void SetInstances(std::vector<IRenderer*> instances);
+	void SetInstances(std::vector<IRenderer*>& instances);
 	
 	void SetBillboard(bool billboard);
 

@@ -10,6 +10,8 @@
 DebugSystem::DebugSystem(RenderSystem* renderSystem, InputHandler* inputHandler) :
 	mIsDebugModeEnabled(false),
 	mIsBoundingBoxVisible(false),
+	mIsOverdrawEnabled(false),
+	mIsWireframeEnabled(false),
 	mInputHandler(inputHandler),
 	mRenderSystem(renderSystem)
 {
@@ -79,20 +81,15 @@ void DebugSystem::OnKey(int key, int action)
 
 	if (key == GLFW_KEY_O && action == GLFW_PRESS)
 	{
-		mRenderSystem->SetOverdrawEnabled(true);
-	}
-	else if (key == GLFW_KEY_P && action == GLFW_PRESS)
-	{
-		mRenderSystem->SetOverdrawEnabled(false);
+		mIsOverdrawEnabled = !mIsOverdrawEnabled;
+		mRenderSystem->SetOverdrawEnabled(mIsOverdrawEnabled);
 	}
 
 	if (key == GLFW_KEY_F && action == GLFW_PRESS)
 	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-	else if(key == GLFW_KEY_G && action == GLFW_PRESS)
-	{ 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		mIsWireframeEnabled = !mIsWireframeEnabled;
+
+		glPolygonMode(GL_FRONT_AND_BACK, mIsWireframeEnabled ? GL_LINE : GL_FILL);
 	}
 }
 

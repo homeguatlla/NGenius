@@ -13,6 +13,8 @@ class DebugSystem : public IInputListener
 
 	bool mIsDebugModeEnabled;
 	bool mIsBoundingBoxVisible;
+	bool mIsOverdrawEnabled;
+	bool mIsWireframeEnabled;
 	InputHandler* mInputHandler;
 	RenderSystem* mRenderSystem;
 

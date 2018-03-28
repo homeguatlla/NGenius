@@ -40,6 +40,7 @@ void EntitiesSystem::Update(float elapsedTime)
 
 void EntitiesSystem::AddEntity(GameEntity* entity)
 {
+	entity->Init();
 	mNewEntitiesToAdd.push_back(entity);
 }
 

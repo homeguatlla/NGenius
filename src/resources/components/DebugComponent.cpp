@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "DebugComponent.h"
 #include "../renderers/IRenderer.h"
+#include "../../AABB.h"
+#include "../GameEntity.h"
 
 DebugComponent::DebugComponent(IRenderer* renderer) :
-mBoundingBoxRenderer(renderer),
-mIsBoundingBoxVisible(false)
+mBoundingBoxRenderer(renderer)
 {
 	assert(mBoundingBoxRenderer != nullptr);
-	UpdateBoundingBox();
 }
 
 
@@ -20,6 +20,22 @@ DebugComponent* DebugComponent::DoClone() const
 	return new DebugComponent(*this);
 }
 
+void DebugComponent::Init()
+{
+	//boundingboxrenderer is of dimensions 1x1x1 and centered in origin in order the 
+	//next transformation works
+	mBoundingBoxRenderer->SetParent(mParent);
+	glm::vec3 min = mParent->GetRenderer()->GetAABB().GetVertexMin();
+	glm::vec3 max = mParent->GetRenderer()->GetAABB().GetVertexMax();
+
+	glm::vec3 scale = max - min;
+
+	Transformation transformation(min + scale * 0.5f, glm::vec3(0.0f), scale);
+	mBoundingBoxRenderer->SetTransformation(transformation);
+	mBoundingBoxRenderer->SetLayer(IRenderer::LAYER_DEBUG);
+	SetBoundingBoxVisibility(false);
+}
+
 IRenderer* DebugComponent::GetBoundingBoxRenderer()
 {
 	return mBoundingBoxRenderer;
@@ -27,21 +43,10 @@ IRenderer* DebugComponent::GetBoundingBoxRenderer()
 
 bool DebugComponent::IsBoundingBoxVisible() const
 {
-	return mIsBoundingBoxVisible;
+	return mBoundingBoxRenderer->IsVisible();
 }
 
 void DebugComponent::SetBoundingBoxVisibility(bool visible)
 {
-	mIsBoundingBoxVisible = visible;
-	UpdateBoundingBox();
-}
-
-void DebugComponent::UpdateBoundingBox()
-{
-	//TODO esto es un poco feo, cuando se crea el componente no tiene el padre asignado todavía
-	if (mBoundingBoxRenderer->GetParent() == nullptr)
-	{
-		mBoundingBoxRenderer->SetParent(mParent);
-	}
-	mBoundingBoxRenderer->SetVisibility(mIsBoundingBoxVisible);
+	mBoundingBoxRenderer->SetVisibility(visible);
 }

@@ -21,10 +21,12 @@
 IRenderer::IRenderer(Model* model, IMaterial* material) :
 mParent(nullptr),
 mModel(model),
+mHasTransformation(false),
 mIsPrerendered(false),
 mIsInstancingEnabled(false),
 mLayer(LAYER_OTHER),
 mMaterial(material),
+mTransformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 mIsVisible(true),
 mIsBillboard(false)
 {
@@ -45,11 +47,6 @@ bool IRenderer::IsPrerendered() const
 {
 	return mIsPrerendered;
 }
-/*
-void IRenderer::PreRender(VertexBuffersManager& vertexBufferManager)
-{
-	
-}*/
 
 void IRenderer::SetParent(GameEntity* parent)
 {
@@ -71,6 +68,22 @@ Model* IRenderer::GetModel()
 	return mModel;
 }
 
+bool IRenderer::HasTransformation() const
+{
+	return mHasTransformation;
+}
+
+void IRenderer::SetTransformation(Transformation& transformation)
+{
+	mTransformation = transformation;
+	mHasTransformation = true;
+}
+
+Transformation IRenderer::GetTransformation() const
+{
+	return mTransformation;
+}
+
 void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBufferManager, IMaterial* material)
 {
 	glBindVertexArray(mModel->GetVAOID());
@@ -87,10 +100,18 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 		for (IRenderer* renderer : mInstances)
 		{
 			Transformation* transformation = renderer->GetParent()->GetTransformation();
-			
-			glm::mat4 modelMatrix = transformation->GetModelMatrix();
 			glm::vec3 scale = transformation->GetScale();
 			float angleZ = transformation->GetRotation().z;
+			glm::mat4 modelMatrix = transformation->GetModelMatrix();
+
+			if (renderer->HasTransformation())
+			{
+				Transformation rendererTransformation = renderer->GetTransformation();
+				modelMatrix *= rendererTransformation.GetModelMatrix();
+				scale *= rendererTransformation.GetScale();
+				angleZ *= rendererTransformation.GetRotation().z;
+			}
+			
 			ModifyModelMatrixToAvoidRotations(viewMatrix, scale, angleZ, modelMatrix);
 			
 			matrices.push_back(modelMatrix);
@@ -105,12 +126,19 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 		for (IRenderer* renderer : mInstances)
 		{
 			Transformation* transformation = renderer->GetParent()->GetTransformation();
-
+			glm::vec3 scale = transformation->GetScale();
+			float angleZ = transformation->GetRotation().z;
 			glm::mat4 modelMatrix = transformation->GetModelMatrix();
+
+			if (renderer->HasTransformation())
+			{
+				Transformation rendererTransformation = renderer->GetTransformation();
+				modelMatrix *= rendererTransformation.GetModelMatrix();
+				scale *= rendererTransformation.GetScale();
+				angleZ *= rendererTransformation.GetRotation().z;
+			}
 			if (mIsBillboard)
 			{
-				glm::vec3 scale = transformation->GetScale();
-				float angleZ = transformation->GetRotation().z;
 				ModifyModelMatrixToAvoidRotations(viewMatrix, scale, angleZ, modelMatrix);
 			}
 			matrices.push_back(modelMatrix);
@@ -184,7 +212,7 @@ void IRenderer::EnableInstancing(bool enable)
 	mIsInstancingEnabled = enable;
 }
 
-void IRenderer::SetInstances(std::vector<IRenderer*> instances)
+void IRenderer::SetInstances(std::vector<IRenderer*>& instances)
 {
 	mInstances = instances;
 }
