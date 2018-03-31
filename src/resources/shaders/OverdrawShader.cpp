@@ -35,6 +35,7 @@ void OverdrawShader::BindAttributes()
 
 void OverdrawShader::GetAllUniformLocations()
 {
+	mLocationM = GetAttributeLocation(ATTRIBUTE_MODEL_MATRIX);
 	mLocationP = GetUniformLocation(ATTRIBUTE_PROJECTION_MATRIX);
 	mLocationV = GetUniformLocation(ATTRIBUTE_VIEW_MATRIX);
 }

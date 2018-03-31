@@ -1,5 +1,6 @@
 #version 330 core
 
+in mat4 M;
 in vec3 vertexModelspace;
 in vec2 textureCoordsModelspace;
 
@@ -15,7 +16,6 @@ out vec4 shadowCoords;
 
 uniform sampler2D heightMap;
 
-uniform mat4 M;
 uniform mat4 MVP;
 uniform vec3 lightPositionWorldspace;
 uniform vec3 cameraPosition;

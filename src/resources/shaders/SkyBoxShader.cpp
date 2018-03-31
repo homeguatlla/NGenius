@@ -56,12 +56,13 @@ void SkyBoxShader::LoadData(const ICamera* camera, const Transformation* transfo
 
 void SkyBoxShader::BindAttributes()
 {
-
+	BindAttribute(mLocationModelMatrix, ATTRIBUTE_MODEL_MATRIX);
 }
 
 void SkyBoxShader::GetAllUniformLocations()
 {
-	mLocationModelMatrix = GetUniformLocation(ATTRIBUTE_MODEL_MATRIX);
+	mLocationModelMatrix = GetAttributeLocation(ATTRIBUTE_MODEL_MATRIX);
+
 	mLocationProjectionMatrix = GetUniformLocation(ATTRIBUTE_PROJECTION_MATRIX);
 	mLocationViewMatrix = GetUniformLocation(ATTRIBUTE_VIEW_MATRIX);
 	mLocationCubemapTexture = GetUniformLocation(ATTRIBUTE_CUBEMAP_TEXTURE);

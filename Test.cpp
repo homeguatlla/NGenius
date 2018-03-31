@@ -133,7 +133,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = RELEASE;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -902,7 +902,7 @@ void CreateEntities()
 {
 	const Texture* texture = static_cast<const Texture*>(mEngine.CreateDepthTexture("depth_texture", glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
 
-	CreateHUD();
+	//CreateHUD();
 
 	CreatePlayer();
 
@@ -1281,14 +1281,14 @@ void SetupConfiguration()
 		break;
 	case FLAT:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
+		mIsWaterEnabled = true;
 		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = true;
+		mIsFogEnabled = false;
 		mIsVegetationEnabled = false;
-		mIsPropsEnabled = true;
+		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = true;
-		mIsTerrainFlat = true;
+		mIsSkyboxEnabled = false;
+		mIsTerrainFlat = false;
 		mIsTextEnabled = false;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;

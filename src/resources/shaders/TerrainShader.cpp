@@ -69,12 +69,11 @@ TerrainShader::~TerrainShader()
 
 void TerrainShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
+	LoadMatrix4(mLocationModelMatrix, const_cast<Transformation*>(transformation)->GetModelMatrix());
 	glm::mat4 MVP = camera->GetProjectionMatrix() * 
 					const_cast<ICamera*>(camera)->GetViewMatrix() * 
 					const_cast<Transformation*>(transformation)->GetModelMatrix();
 	LoadMatrix4(mLocationMVPMatrix, MVP);
-	LoadMatrix4(mLocationModelMatrix, const_cast<Transformation*>(transformation)->GetModelMatrix());
-
 	LoadVector3(mLocationCameraPosition, camera->GetPosition());
 
 	MaterialEffectFloat* effect = material->GetEffect<MaterialEffectFloat>();
@@ -136,13 +135,15 @@ void TerrainShader::LoadData(const ICamera* camera, const Transformation* transf
 void TerrainShader::BindAttributes()
 {
 	BindAttribute(mLocationTextureCoords, ATTRIBUTE_TEXTURE_COORDS);
+	BindAttribute(mLocationModelMatrix, ATTRIBUTE_MODEL_MATRIX);
 }
 
 void TerrainShader::GetAllUniformLocations()
 {
+	mLocationModelMatrix = GetAttributeLocation(ATTRIBUTE_MODEL_MATRIX); 
 	mLocationTextureCoords = GetAttributeLocation(ATTRIBUTE_TEXTURE_COORDS);
+	
 	mLocationMVPMatrix = GetUniformLocation(ATTRIBUTE_MVP_MATRIX);
-	mLocationModelMatrix = GetUniformLocation(ATTRIBUTE_MODEL_MATRIX);
 	mLocationLightPosition = GetUniformLocation(ATTRIBUTE_LIGHT_POSITION);
 	mLocationLightColor = GetUniformLocation(ATTRIBUTE_LIGHT_COLOR);
 	mLocationCameraPosition = GetUniformLocation(ATTRIBUTE_CAMERA_POSITION);
