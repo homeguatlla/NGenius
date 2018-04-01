@@ -157,7 +157,7 @@ typedef gz_header FAR *gz_headerp;
    any allocation of 64K objects, at the expense of compression ratio, compile
    the library with -DMAX_WBITS=14 (see zconf.h).
 
-     The fields total_in and total_out can be used for statistics or progress
+     The fields total_in and total_out can be used for Statistics or progress
    reports.  After compression, total_in holds the total size of the
    uncompressed data and may be saved for use by the decompressor (particularly
    if the decompressor wants to decompress everything in a single step).

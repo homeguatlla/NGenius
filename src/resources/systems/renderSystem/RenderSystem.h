@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include "../../../VertexBuffersManager.h"
 #include "../../renderers/IRenderer.h"
+#include "../../../visitor/BaseVisitable.h"
 
 class ICamera;
 class RenderPass;
@@ -29,7 +30,7 @@ struct GLFWmonitor;
 class ShadowsRenderPassSubSystem;
 class WaterRenderPassSubSystem;
 
-class RenderSystem
+class RenderSystem : public BaseVisitable<>
 {
 	typedef std::vector<IRenderer*> RenderersList;
 	typedef std::vector<RenderPass*>::iterator RenderPassesIterator;
@@ -105,6 +106,8 @@ public:
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 
 	ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
+
+	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
 private:
 	void CreateResourcesLibraries();

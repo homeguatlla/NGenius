@@ -11,6 +11,7 @@ class ParticlesSystem;
 class LightsSystem;
 class InputSystem;
 class DebugSystem;
+class Statistics;
 
 class InputHandler;
 class IInputListener;
@@ -42,6 +43,7 @@ class NGenius
 	InputSystem* mInputSystem;
 	DebugSystem* mDebugSystem;
 	InputHandler* mInputHandler;
+	Statistics* mStatistics;
 	std::string mApplicationName;
 	float mFPS;
 	bool mIsDebugModeEnabled;

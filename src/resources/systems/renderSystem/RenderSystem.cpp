@@ -683,3 +683,8 @@ void RenderSystem::CheckGLError()
 		std::cout << "OpenGL error: " << err << std::endl;
 	}
 }
+
+BaseVisitable<>::ReturnType RenderSystem::Accept(BaseVisitor& guest)
+{
+	return AcceptImpl(*this, guest);
+}

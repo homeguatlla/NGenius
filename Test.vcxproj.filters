@@ -142,6 +142,18 @@
     <Filter Include="Header Files\input\bindings">
       <UniqueIdentifier>{fbac4aca-98b5-4693-b39b-6fd57f6d7868}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\visitor">
+      <UniqueIdentifier>{c1b358c2-6738-4e35-a081-803212b4362e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\visitor">
+      <UniqueIdentifier>{43b55c1d-5ea9-41bd-9290-318b3aab8e63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\statitstics">
+      <UniqueIdentifier>{5a2c008d-a84c-4949-9023-221ab20407c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\statitstics">
+      <UniqueIdentifier>{01265b97-e940-4a89-bcc7-89a9d6f51b6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -522,6 +534,15 @@
     <ClInclude Include="src\resources\renderers\WireframeRenderer.h">
       <Filter>Header Files\resources\renderers</Filter>
     </ClInclude>
+    <ClInclude Include="src\visitor\BaseVisitable.h">
+      <Filter>Header Files\visitor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\visitor\BaseVisitor.h">
+      <Filter>Header Files\visitor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\statistics\Statistics.h">
+      <Filter>Header Files\statitstics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -892,6 +913,15 @@
     </ClCompile>
     <ClCompile Include="src\resources\renderers\WireframeRenderer.cpp">
       <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\visitor\BaseVisitable.cpp">
+      <Filter>Source Files\visitor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\visitor\BaseVisitor.cpp">
+      <Filter>Source Files\visitor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\statistics\Statistics.cpp">
+      <Filter>Source Files\statitstics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

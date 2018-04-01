@@ -279,9 +279,12 @@
     <ClInclude Include="src\resources\textures\TextureCubemap.h" />
     <ClInclude Include="src\resources\textures\TexturesLibrary.h" />
     <ClInclude Include="src\resources\Transformation.h" />
+    <ClInclude Include="src\statistics\Statistics.h" />
     <ClInclude Include="src\TerrainGrid.h" />
     <ClInclude Include="src\TextureGenerator.h" />
     <ClInclude Include="src\VertexBuffersManager.h" />
+    <ClInclude Include="src\visitor\BaseVisitable.h" />
+    <ClInclude Include="src\visitor\BaseVisitor.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -405,8 +408,11 @@
     <ClCompile Include="src\resources\textures\TextureGenerator.cpp" />
     <ClCompile Include="src\resources\textures\TexturesLibrary.cpp" />
     <ClCompile Include="src\resources\Transformation.cpp" />
+    <ClCompile Include="src\statistics\Statistics.cpp" />
     <ClCompile Include="src\TerrainGrid.cpp" />
     <ClCompile Include="src\VertexBuffersManager.cpp" />
+    <ClCompile Include="src\visitor\BaseVisitable.cpp" />
+    <ClCompile Include="src\visitor\BaseVisitor.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -19,6 +19,7 @@
 #include "resources/systems/LightsSystem.h"
 #include "resources/systems/InputSystem.h"
 #include "resources/systems/DebugSystem.h"
+#include "statistics/Statistics.h"
 
 #include "resources/entities/ParticlesEmitter.h"
 
@@ -72,6 +73,7 @@ void NGenius::Update()
 
 		mRenderSystem->Render();
 
+		mRenderSystem->Accept(*mStatistics);
 		double currentTime = glfwGetTime();
 		elapsedTime = static_cast<float>(currentTime - lastCurrentTime);
 		lastCurrentTime = currentTime;
@@ -105,6 +107,7 @@ void NGenius::UpdateSystems(float elapsedTime)
 
 void NGenius::CreateSystems(float screenWidth, float screenHeight)
 {
+	mStatistics = new Statistics();
 	mInputHandler = new InputHandler();
 	mRenderSystem = new RenderSystem(screenWidth, screenHeight);
 	mPhysicsSystem = new PhysicsSystem();
@@ -125,6 +128,7 @@ void NGenius::DestroySystems()
 	delete mPhysicsSystem;
 	delete mRenderSystem;
 	delete mInputHandler;
+	delete mStatistics;
 }
 
 void NGenius::RegisterAllEventsInputListener(IInputListener* listener)
