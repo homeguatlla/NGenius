@@ -238,8 +238,10 @@
     <ClInclude Include="src\resources\models\Mesh.h" />
     <ClInclude Include="src\resources\models\Model.h" />
     <ClInclude Include="src\resources\models\ModelsLibrary.h" />
+    <ClInclude Include="src\resources\postprocesseffects\PostProcessEffect.h" />
     <ClInclude Include="src\resources\renderers\EnergyWallRenderer.h" />
     <ClInclude Include="src\resources\renderers\GUITextRenderer.h" />
+    <ClInclude Include="src\resources\renderers\ImageRenderer.h" />
     <ClInclude Include="src\resources\renderers\ParticleRenderer.h" />
     <ClInclude Include="src\resources\renderers\SkyBoxRenderer.h" />
     <ClInclude Include="src\resources\renderers\TextRenderer.h" />
@@ -269,6 +271,7 @@
     <ClInclude Include="src\resources\systems\ParticlesSystem.h" />
     <ClInclude Include="src\resources\systems\PhysicsSystem.h" />
     <ClInclude Include="src\resources\systems\renderSystem\IFrameBuffer.h" />
+    <ClInclude Include="src\resources\systems\renderSystem\PostProcessSubSystem.h" />
     <ClInclude Include="src\resources\systems\renderSystem\RenderPass.h" />
     <ClInclude Include="src\resources\systems\renderSystem\RenderSystem.h" />
     <ClInclude Include="src\resources\systems\renderSystem\ShadowsRenderPassSubsystem.h" />
@@ -364,8 +367,10 @@
     <ClCompile Include="src\resources\models\Mesh.cpp" />
     <ClCompile Include="src\resources\models\Model.cpp" />
     <ClCompile Include="src\resources\models\ModelsLibrary.cpp" />
+    <ClCompile Include="src\resources\postprocesseffects\PostProcessEffect.cpp" />
     <ClCompile Include="src\resources\renderers\EnergyWallRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\GUITextRenderer.cpp" />
+    <ClCompile Include="src\resources\renderers\ImageRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\ParticleRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\SkyBoxRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\TextRenderer.cpp" />
@@ -395,6 +400,7 @@
     <ClCompile Include="src\resources\systems\ParticlesSystem.cpp" />
     <ClCompile Include="src\resources\systems\PhysicsSystem.cpp" />
     <ClCompile Include="src\resources\systems\renderSystem\IFrameBuffer.cpp" />
+    <ClCompile Include="src\resources\systems\renderSystem\PostProcessSubSystem.cpp" />
     <ClCompile Include="src\resources\systems\renderSystem\RenderPass.cpp" />
     <ClCompile Include="src\resources\systems\renderSystem\RenderSystem.cpp" />
     <ClCompile Include="src\resources\systems\renderSystem\ShadowsRenderPassSubSystem.cpp" />

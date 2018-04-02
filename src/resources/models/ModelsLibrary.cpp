@@ -32,8 +32,8 @@ void ModelsLibrary::Load()
 	LoadModel("mazo", "data/models/mazo/mazo.obj", false, true);
 
 	LoadModel("barrel", "data/models/props/barrel.obj", true, true);
-	LoadModel("chest", "data/models/props/chest.obj", false, true);
-	LoadModel("brazier", "data/models/props/brazier.obj", false, true);
+	LoadModel("chest", "data/models/props/chest.obj", true, true);
+	LoadModel("brazier", "data/models/props/brazier.obj", true, true);
 	LoadModel("stall", "data/models/stall/stall.obj", false, true);
 	LoadModel("cube3", "data/models/props/cube.obj", false, true);
 	LoadModel("crate", "data/models/props/crate.obj", true, true);

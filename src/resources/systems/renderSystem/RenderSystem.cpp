@@ -2,6 +2,9 @@
 #include "RenderSystem.h"
 #include "ShadowsRenderPassSubSystem.h"
 #include "WaterRenderPassSubSystem.h"
+
+#include "PostProcessSubSystem.h"
+
 #include "../../GameEntity.h"
 #include "../../camera/ICamera.h"
 
@@ -51,6 +54,7 @@ mFontsLibrary(nullptr),
 mWindow(nullptr),
 mShadowsRenderPass(nullptr),
 mWaterRenderPass(nullptr),
+mPostProcessSubsystem(nullptr),
 mCurrentMaterial(nullptr),
 mDiffuseTexture(nullptr),
 mNormalTexture(nullptr),
@@ -92,22 +96,26 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 	CreateSubSystems();
 }
 
-void RenderSystem::PostInit()
+void RenderSystem::Start()
 {
 	mShadowsRenderPass->Init();
 	mWaterRenderPass->Init();
+	mPostProcessSubsystem->Init();
 }
 
 void RenderSystem::CreateSubSystems()
 {
 	mShadowsRenderPass = new ShadowsRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
 	mWaterRenderPass = new WaterRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
+
+	mPostProcessSubsystem = new PostProcessSubSystem(this);
 }
 
 void RenderSystem::DestroySubSystems()
 {
-	delete mShadowsRenderPass;
+	delete mPostProcessSubsystem;
 	delete mWaterRenderPass;
+	delete mShadowsRenderPass;
 }
 
 void RenderSystem::LoadResources()
@@ -157,6 +165,8 @@ void RenderSystem::Render()
 			}
 		}
 	}
+
+	mPostProcessSubsystem->Render();
 
 	// Swap buffers
 	glfwSwapBuffers(mWindow);

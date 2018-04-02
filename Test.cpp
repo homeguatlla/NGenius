@@ -1346,7 +1346,7 @@ void Initialize()
 	glfwSetMouseButtonCallback(mEngine.GetGLWindow(), &MouseButtonCallback);
 	glfwSetCursorPosCallback(mEngine.GetGLWindow(), &MouseCursorPosCallback);
 
-	mEngine.PostInit();
+	mEngine.Start();
 
 	mFogDensity = mIsFogEnabled ? mFogDensity : 0.0f;
 }

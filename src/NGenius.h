@@ -56,7 +56,7 @@ public:
 
 	void Init(bool isFullscreen);
 	//TODO remove it
-	void PostInit();
+	void Start();
 	void Update();
 
 	IShaderProgram* GetShader(const std::string& name) const;

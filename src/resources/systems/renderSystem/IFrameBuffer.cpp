@@ -95,7 +95,6 @@ void IFrameBuffer::CopyBuffer() const
 	}
 }
 
-
 void IFrameBuffer::SetColorTextureAttachment(unsigned int colorAttachmentNumber, Texture* texture)
 {
 	mColorAttachmentNumber = colorAttachmentNumber;
@@ -161,7 +160,6 @@ void IFrameBuffer::SetCopyDepthBufferToTexture(Texture* texture,  int x, int y, 
 	mCopyBufferY = y;
 	mCopyBufferTexture = texture;
 }
-
 
 void IFrameBuffer::CopyDepthBufferIntoTexture(Texture* texture, int x, int y, int imageWidth, int imageHeight) const
 {

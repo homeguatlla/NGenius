@@ -29,6 +29,7 @@ struct GLFWmonitor;
 
 class ShadowsRenderPassSubSystem;
 class WaterRenderPassSubSystem;
+class PostProcessSubSystem;
 
 class RenderSystem : public BaseVisitable<>
 {
@@ -55,6 +56,8 @@ class RenderSystem : public BaseVisitable<>
 	ShadowsRenderPassSubSystem* mShadowsRenderPass;
 	WaterRenderPassSubSystem* mWaterRenderPass;
 
+	PostProcessSubSystem* mPostProcessSubsystem;
+
 	IMaterial* mCurrentMaterial;
 
 	ITexture* mDiffuseTexture;
@@ -80,7 +83,7 @@ public:
 	//init
 	//cameras, 
 	//subsystems pues waterpass necesita de la camera
-	void PostInit();
+	void Start();
 	void Render();
 	void AddToRender(IRenderer* renderer);
 	

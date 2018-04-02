@@ -44,7 +44,6 @@ public:
 	void BindBuffer() const;
 	void UnbindBuffer() const;
 	void CopyBuffer() const;
-	unsigned int GetColorTextureAttachment() const;
 
 private:
 	void CreateBuffer();

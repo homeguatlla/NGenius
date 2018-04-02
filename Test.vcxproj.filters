@@ -154,6 +154,12 @@
     <Filter Include="Source Files\statitstics">
       <UniqueIdentifier>{01265b97-e940-4a89-bcc7-89a9d6f51b6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\resources\postprocesseffects">
+      <UniqueIdentifier>{d1e892e1-d476-4e2d-8e58-fb23f21aa45e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\postprocesseffects">
+      <UniqueIdentifier>{3df2f632-9d5c-4ad7-8b80-3d2caf296409}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -543,6 +549,15 @@
     <ClInclude Include="src\statistics\Statistics.h">
       <Filter>Header Files\statitstics</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\postprocesseffects\PostProcessEffect.h">
+      <Filter>Header Files\resources\postprocesseffects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\renderSystem\PostProcessSubSystem.h">
+      <Filter>Header Files\resources\systems\renderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\ImageRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -922,6 +937,15 @@
     </ClCompile>
     <ClCompile Include="src\statistics\Statistics.cpp">
       <Filter>Source Files\statitstics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\postprocesseffects\PostProcessEffect.cpp">
+      <Filter>Source Files\resources\postprocesseffects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\renderSystem\PostProcessSubSystem.cpp">
+      <Filter>Source Files\resources\systems\renderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\ImageRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

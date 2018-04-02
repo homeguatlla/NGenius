@@ -6,7 +6,6 @@
 #include "ModelShader.h"
 #include "NormalMapShader.h"
 #include "SkyBoxShader.h"
-#include "QuadShader.h"
 #include "GUIShader.h"
 #include "WaterShader.h"
 #include "ParticleShader.h"
@@ -46,10 +45,6 @@ void ShadersLibrary::Load()
 	program = new SkyBoxShader();
 	program->Init();
 	AddElement("skybox", program);
-
-	program = new QuadShader();
-	program->Init();
-	AddElement("quad", program);
 
 	program = new GUIShader();
 	program->Init();

@@ -46,9 +46,9 @@ void NGenius::Init(bool isFullscreen)
 	mInputHandler->Init(mRenderSystem->GetGLWindow());
 }
 
-void NGenius::PostInit()
+void NGenius::Start()
 {
-	mRenderSystem->PostInit();
+	mRenderSystem->Start();
 }
 
 void NGenius::Update()
