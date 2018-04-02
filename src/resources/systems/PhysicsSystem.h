@@ -1,11 +1,12 @@
 #pragma once
 #include <glm/glm.hpp>
+#include "../../visitor/BaseVisitable.h"
 #include <vector>
 
 class GameEntity;
 class Terrain;
 
-class PhysicsSystem
+class PhysicsSystem : public BaseVisitable<>
 {
 	std::vector<GameEntity*> mEntities;
 	const Terrain* mTerrain;
@@ -23,9 +24,13 @@ public:
 	void RemoveEntity(GameEntity* entity);
 	bool HasPhysicsComponents(GameEntity* entity) const;
 
+	unsigned int GetNumberGameEntities() const;
+
 	//TODO eliminar este método cuando no haga falta
 	void SetTerrain(const Terrain* terrain);
 	void SetEnergyWall(const glm::vec3& position, float radius);
+
+	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
 private:
 	void ApplyMRU(float deltaTime, GameEntity* entity);

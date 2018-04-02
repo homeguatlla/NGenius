@@ -16,6 +16,7 @@ public:
 	void Draw();
 
 	WireframeRenderer* DoClone() const override { return nullptr; }
+	unsigned int GetNumberTrianglesRendered() const override;
 
 private:
 	bool IsInstancingAllowed() const override;

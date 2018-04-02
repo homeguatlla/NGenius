@@ -74,10 +74,7 @@
 #include "src/resources/entities/ParticlesEmitter.h"
 #include "src/resources/entities/EnergyWall.h"
 
-/*
-#include "src/resources/entities/Light.h"
-
-*/
+#include "src/statistics/Statistics.h"
 
 #include "src/resources/camera/ICamera.h"
 #include "src/resources/camera/PerspectiveCamera.h"
@@ -178,8 +175,8 @@ Water* mWater;
 GameEntity* mCamera;
 
 EnergyWall* mEnergyWall;
-Text* mFPSText;
-IMaterial* materialFPSText;
+Text* mText[5];
+IMaterial* materialText;
 
 float mFogDensity = 0.04f;
 const float mFogGradient = 1.5f;
@@ -187,6 +184,8 @@ glm::vec3 mFogColor = vec3(89.0f, 120.0f, 143.0f) / 255.0f;
 //red glm::vec3 mFogColor = vec3(218.0f, 74.0f, 43.0f) / 255.0f; 
 float mEnergyWallRadius = 22.0f;
 glm::vec3 mEnergyWallPosition(0.0f, 0.0f, 0.0f);
+
+std::vector<std::string> texts = { "FPS: ", "Triangles: ", "Drawcalls: ", "GameEntities: ", "GEWithPhysics: "};
 
 ICommand* mCurrentCommand = nullptr;
 
@@ -705,9 +704,9 @@ void CreateTextTest()
 {
 	FontType* font = mEngine.GetFont("OCR A Extended");
 
-	materialFPSText = mEngine.CreateMaterial("text", mEngine.GetShader("text"));
-	materialFPSText->AddEffect(new MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
-	materialFPSText->AddEffect(new MaterialEffectText(	glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+	materialText = mEngine.CreateMaterial("text", mEngine.GetShader("text"));
+	materialText->AddEffect(new MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
+	materialText->AddEffect(new MaterialEffectText(	glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 													glm::vec4(1.0f, 1.0f, 1.0f, 0.0f),
 													0.4f,
 													0.1f,
@@ -715,15 +714,17 @@ void CreateTextTest()
 													0.0f,
 													glm::vec2(0.0f)));
 
-	mFPSText = new Text(new Transformation(
-									glm::vec3(-mEngine.GetScreenWidth() * 0.5f, mEngine.GetScreenHeight() * 0.5f, 0.0f),
-									glm::vec3(0.0f),
-									glm::vec3(0.70f)
+	for (unsigned int i = 0; i < texts.size(); ++i)
+	{
+		mText[i] = new Text(
+			new Transformation(	glm::vec3(-mEngine.GetScreenWidth() * 0.5f, mEngine.GetScreenHeight() * 0.5f - i * 20.0f, 0.0f),
+								glm::vec3(0.0f),
+								glm::vec3(0.70f)
 							),
-						materialFPSText, font,
-						"FPS:", false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
-	mEngine.AddGameEntity(mFPSText);
-
+			materialText, font,
+			texts[i], false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
+		mEngine.AddGameEntity(mText[i]);
+	}
 	float x = 0.0f;
 	float z = 0.0f;
 	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
@@ -1123,8 +1124,10 @@ void UpdateEnergyWallCollisions(float elapsedTime)
 
 void UpdateStatitstics()
 {
-	MaterialEffectText* effect = materialFPSText->GetEffect<MaterialEffectText>();
-	int fps = static_cast<int>(mEngine.GetFPS());
+	const Statistics* statistics = mEngine.GetStatistics();
+
+	MaterialEffectText* effect = materialText->GetEffect<MaterialEffectText>();
+	int fps = static_cast<int>(statistics->GetNumberFPS());
 	if (fps < MIN_FPS_ALLOWED)
 	{
 		effect->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
@@ -1133,7 +1136,12 @@ void UpdateStatitstics()
 	{
 		effect->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	}
-	mFPSText->UpdateText("FPS: " +std::to_string(fps));
+
+	mText[0]->UpdateText(texts[0] + std::to_string(fps));
+	mText[1]->UpdateText(texts[1] + std::to_string(statistics->GetNumberTrianglesRendered()));
+	mText[2]->UpdateText(texts[2] + std::to_string(statistics->GetNumberDrawCalls()));
+	mText[3]->UpdateText(texts[3] + std::to_string(statistics->GetNumberGameEntities()));
+	mText[4]->UpdateText(texts[4] + std::to_string(statistics->GetNumberGameEntitiesWithPhysics()));
 }
 
 void UpdateCommand(float elapsedTime)

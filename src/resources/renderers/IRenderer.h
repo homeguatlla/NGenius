@@ -88,6 +88,8 @@ public:
 
 	const AABB& GetAABB() const;
 
+	virtual unsigned int GetNumberTrianglesRendered() const;
+
 	virtual IRenderer* Clone() const;
 
 protected:

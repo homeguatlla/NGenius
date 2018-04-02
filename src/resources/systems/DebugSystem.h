@@ -36,5 +36,6 @@ public:
 	bool HasDebugComponents(GameEntity* entity) const;
 
 	void SetDebugModeEnabled(bool enable);
+	bool IsDebugModeEnabled() const;
 };
 

@@ -36,3 +36,8 @@ bool VertexsRenderer::IsInstancingAllowed() const
 {
 	return true;
 }
+
+unsigned int VertexsRenderer::GetNumberTrianglesRendered() const
+{
+	return mInstances.size() * mModel->GetNumberOfVertexs() / 3;
+}

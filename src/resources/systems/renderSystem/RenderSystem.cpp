@@ -57,7 +57,9 @@ mNormalTexture(nullptr),
 mLastClipPlaneNumberUsed(0),
 mIsFullScreen(false),
 mIsClippingEnabled(false),
-mIsOverdrawEnabled(false)
+mIsOverdrawEnabled(false),
+mNumberTrianglesRendered(0),
+mNumberDrawCalls(0)
 {
 	BitNumber bit;
 	bit.Test();
@@ -135,6 +137,9 @@ void RenderSystem::Render()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	mNumberDrawCalls = 0;
+	mNumberTrianglesRendered = 0;
+
 	for (RenderPass* pass : mRenderPasses)
 	{
 		if (pass->IsEnabled())
@@ -162,60 +167,67 @@ void RenderSystem::Render(RenderPass* renderPass)
 {
 	RenderersList renderers = mRenderersPerPass[renderPass->GetLayersMask()];
 
-	//STEP 1 CALUCLATE DISTANCE TO CAMERA FOR EACH RENDERER
-	if (renderPass->HasToCalculateDistanceToCamera() && renderPass->GetCamera() != nullptr)
+	if (renderers.size() > 0)
 	{
-		UpdateDistancesToCamera(renderPass->GetCamera(), &renderers);
-	}
-
-	//STEP 2 ORDER RENDERERS FOLLOWING THE BITRENDERERINFORMATION
-	//double time = glfwGetTime();
-	sort(renderers.begin(), renderers.end(), [](IRenderer* a, IRenderer* b)
-	{
-		assert(a != nullptr && b != nullptr);
-		return a->GetBitRendererInformation().GetValue() > b->GetBitRendererInformation().GetValue();
-	});
-	
-	//cout << "sort time: " << (glfwGetTime() - time) * 1000.0f << "\n";
-
-	//STEP 3 JOIN ALL RENDERERS WITH THE SAME BITRENDERINFORMATION TO USE INSTANCING
-	unsigned int i = 0;
-	while (i < renderers.size())
-	{
-		mInstances.clear();
-		if (renderers[i]->IsVisible())
+		//STEP 1 CALUCLATE DISTANCE TO CAMERA FOR EACH RENDERER
+		if (renderPass->HasToCalculateDistanceToCamera() && renderPass->GetCamera() != nullptr)
 		{
-			mInstances.push_back(renderers[i]);
-			//std::cout << mInstances.front()->GetBitRendererInformation().GetValue() << " : " << mInstances.front()->GetBitRendererInformation().GetString() << "\n";
-			++i;
+			UpdateDistancesToCamera(renderPass->GetCamera(), &renderers);
+		}
 
-			while (i < renderers.size() &&
-				mInstances.front()->IsInstancingAllowed() &&
-				mInstances.front()->GetBitRendererInformation().GetValueWithoutDistance() == renderers[i]->GetBitRendererInformation().GetValueWithoutDistance())
+		//STEP 2 ORDER RENDERERS FOLLOWING THE BITRENDERERINFORMATION
+		//double time = glfwGetTime();
+		sort(renderers.begin(), renderers.end(), [](IRenderer* a, IRenderer* b)
+		{
+			assert(a != nullptr && b != nullptr);
+			return a->GetBitRendererInformation().GetValue() > b->GetBitRendererInformation().GetValue();
+		});
+
+		//cout << "sort time: " << (glfwGetTime() - time) * 1000.0f << "\n";
+
+		//STEP 3 JOIN ALL RENDERERS WITH THE SAME BITRENDERINFORMATION TO USE INSTANCING
+		unsigned int i = 0;
+		while (i < renderers.size())
+		{
+			mInstances.clear();
+			if (renderers[i]->IsVisible())
 			{
-				if (renderers[i]->IsVisible())
+				mInstances.push_back(renderers[i]);
+				//std::cout << mInstances.front()->GetBitRendererInformation().GetValue() << " : " << mInstances.front()->GetBitRendererInformation().GetString() << "\n";
+				++i;
+
+				while (i < renderers.size() &&
+					mInstances.front()->IsInstancingAllowed() &&
+					mInstances.front()->GetBitRendererInformation().GetValueWithoutDistance() == renderers[i]->GetBitRendererInformation().GetValueWithoutDistance())
 				{
-					if (renderers[i]->IsPrerendered())
+					if (renderers[i]->IsVisible())
 					{
-						mInstances.insert(mInstances.begin(), renderers[i]);
+						if (renderers[i]->IsPrerendered())
+						{
+							mInstances.insert(mInstances.begin(), renderers[i]);
+						}
+						else
+						{
+							mInstances.push_back(renderers[i]);
+						}
 					}
-					else
-					{
-						mInstances.push_back(renderers[i]);
-					}
+					++i;
 				}
+				RenderInstances(renderPass, mInstances[0], mInstances);
+			}
+			else
+			{
 				++i;
 			}
-			RenderInstances(renderPass, mInstances[0], mInstances);
 		}
-		else
-		{
-			++i;
-		}
-	}
 
-	mInstances.clear();
-	mRenderersPerPass[renderPass->GetLayersMask()].clear();
+		mInstances.clear();
+		mRenderersPerPass[renderPass->GetLayersMask()].clear();
+	}
+	else
+	{
+		assert(mInstances.size() == 0);
+	}
 }
 
 void RenderSystem::AddRenderPass(RenderPass* renderPass)
@@ -298,6 +310,9 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, mCurrentMaterial);
 
 	mCurrentMaterial->UnUse();
+
+	mNumberDrawCalls++;
+	mNumberTrianglesRendered += renderer->GetNumberTrianglesRendered();
 }
 
 void RenderSystem::ApplyShadows(IRenderer* renderer)
@@ -438,6 +453,16 @@ float RenderSystem::GetScreenWidth() const
 float RenderSystem::GetScreenHeight() const
 {
 	return mScreenHeight;
+}
+
+unsigned int RenderSystem::GetNumberTrianglesRendered() const
+{
+	return mNumberTrianglesRendered;
+}
+
+unsigned int RenderSystem::GetNumberDrawCalls() const
+{
+	return mNumberDrawCalls;
 }
 
 GLFWmonitor* RenderSystem::GetCurrentMonitor(float* screenWidth, float* screenHeight)

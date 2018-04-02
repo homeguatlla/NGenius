@@ -3,6 +3,7 @@
 #include <string>
 #include <functional>
 #include <glm/glm.hpp>
+#include "visitor/BaseVisitable.h"
 
 class RenderSystem;
 class PhysicsSystem;
@@ -33,7 +34,7 @@ class ICamera;
 
 struct GLFWwindow;
 
-class NGenius
+class NGenius : public BaseVisitable<>
 {
 	RenderSystem* mRenderSystem;
 	PhysicsSystem* mPhysicsSystem;
@@ -45,8 +46,7 @@ class NGenius
 	InputHandler* mInputHandler;
 	Statistics* mStatistics;
 	std::string mApplicationName;
-	float mFPS;
-	bool mIsDebugModeEnabled;
+	float mNumberFPS;
 	
 	std::function<void(float elapsedTime)> mUpdateHandler;
 
@@ -66,7 +66,8 @@ public:
 	IMaterial* GetMaterial(const std::string& name) const;
 
 	FontType* GetFont(const std::string& name) const;
-	float GetFPS() const;
+	float GetNumberFPS() const;
+	const Statistics* GetStatistics() const;
 	float GetScreenWidth() const;
 	float GetScreenHeight() const;
 	GLFWwindow* GetGLWindow() const;
@@ -104,10 +105,14 @@ public:
 	//debug
 	void SetDebugModeEnabled(bool enabled);
 
+	//statistics
+	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
+
 private:
 	void CreateSystems(float screenWidth, float screenHeight);
 	void DestroySystems();
 	
 	void UpdateSystems(float elapsedTime);
+	void AcceptStatistics();
 };
 

@@ -202,6 +202,7 @@ void main() {
 	vec4 blendmapColor = texture(blendMap, textureCoords.xy);
 	vec2 tiledTextureCoords = textureCoords * tile;
 	
+
 	vec4 rTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 0)) * blendmapColor.r;
 	vec4 gTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 1)) * blendmapColor.g;
 	vec4 bTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 2)) * blendmapColor.b;

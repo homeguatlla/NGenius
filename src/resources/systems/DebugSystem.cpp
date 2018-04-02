@@ -26,7 +26,7 @@ DebugSystem::~DebugSystem()
 
 void DebugSystem::Update(float elapsedTime)
 {
-	if (mIsDebugModeEnabled)
+	if (mIsDebugModeEnabled && mIsBoundingBoxVisible)
 	{
 		for (GameEntity* entity : mEntities)
 		{
@@ -96,4 +96,9 @@ void DebugSystem::OnKey(int key, int action)
 void DebugSystem::SetDebugModeEnabled(bool enable)
 {
 	mIsDebugModeEnabled = enable;
+}
+
+bool DebugSystem::IsDebugModeEnabled() const
+{
+	return mIsDebugModeEnabled;
 }

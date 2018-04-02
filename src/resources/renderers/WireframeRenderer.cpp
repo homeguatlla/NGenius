@@ -28,3 +28,8 @@ bool WireframeRenderer::IsInstancingAllowed() const
 {
 	return true;
 }
+
+unsigned int WireframeRenderer::GetNumberTrianglesRendered() const
+{
+	return 0;
+}

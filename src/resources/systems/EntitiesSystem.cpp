@@ -17,7 +17,6 @@ mDebugSystem(debugSystem)
 {
 }
 
-
 EntitiesSystem::~EntitiesSystem()
 {
 	ReleaseEntities(&mEntities);
@@ -36,6 +35,11 @@ void EntitiesSystem::Update(float elapsedTime)
 		IRenderer* renderer = entity->GetRenderer();
 		mRenderSystem->AddToRender(renderer);
 	}
+}
+
+unsigned int EntitiesSystem::GetNumberGameEntities() const
+{
+	return mEntities.size();
 }
 
 void EntitiesSystem::AddEntity(GameEntity* entity)
@@ -90,4 +94,9 @@ void EntitiesSystem::ReleaseEntities(std::vector<GameEntity*>* entities)
 		delete entity;
 	}
 	entities->clear();
+}
+
+BaseVisitable<>::ReturnType EntitiesSystem::Accept(BaseVisitor& guest)
+{
+	return AcceptImpl(*this, guest);
 }

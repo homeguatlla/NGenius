@@ -30,8 +30,7 @@ mRenderSystem(nullptr),
 mPhysicsSystem(nullptr),
 mEntitiesSystem(nullptr),
 mParticlesSystem(nullptr),
-mApplicationName(applicationName),
-mIsDebugModeEnabled(false)
+mApplicationName(applicationName)
 {
 	CreateSystems(screenWidth, screenHeight);
 }
@@ -50,7 +49,6 @@ void NGenius::Init(bool isFullscreen)
 void NGenius::PostInit()
 {
 	mRenderSystem->PostInit();
-	mDebugSystem->SetDebugModeEnabled(mIsDebugModeEnabled);
 }
 
 void NGenius::Update()
@@ -73,7 +71,6 @@ void NGenius::Update()
 
 		mRenderSystem->Render();
 
-		mRenderSystem->Accept(*mStatistics);
 		double currentTime = glfwGetTime();
 		elapsedTime = static_cast<float>(currentTime - lastCurrentTime);
 		lastCurrentTime = currentTime;
@@ -82,11 +79,13 @@ void NGenius::Update()
 		accumulatedTime += elapsedTime;
 		if (accumulatedTime > 1.0f)
 		{
-			mFPS = frames / accumulatedTime;
-			//std::cout << "fps: " << mFPS << "\n";
+			mNumberFPS = frames / accumulatedTime;
+			//std::cout << "fps: " << mNumberFPS << "\n";
 			accumulatedTime = 0.0f;
 			frames = 0;
 		}
+
+		AcceptStatistics();
 
 	} // Check if the ESC key was pressed or the window was closed
 	while (	glfwGetKey(mRenderSystem->GetGLWindow(), GLFW_KEY_ESCAPE) != GLFW_PRESS && 
@@ -94,6 +93,17 @@ void NGenius::Update()
 
 	// Close OpenGL window and terminate GLFW
 	glfwTerminate();
+}
+
+void NGenius::AcceptStatistics()
+{
+	if (mDebugSystem->IsDebugModeEnabled())
+	{
+		mRenderSystem->Accept(*mStatistics);
+		mEntitiesSystem->Accept(*mStatistics);
+		mPhysicsSystem->Accept(*mStatistics);
+		this->Accept(*mStatistics);
+	}
 }
 
 void NGenius::UpdateSystems(float elapsedTime)
@@ -207,9 +217,14 @@ GLFWwindow* NGenius::GetGLWindow() const
 	return mRenderSystem->GetGLWindow();
 }
 
-float NGenius::GetFPS() const
+float NGenius::GetNumberFPS() const
 {
-	return mFPS;
+	return mNumberFPS;
+}
+
+const Statistics* NGenius::GetStatistics() const
+{
+	return mStatistics;
 }
 
 float NGenius::GetScreenWidth() const
@@ -312,5 +327,10 @@ void NGenius::SetCastingShadowsTarget(const GameEntity* target)
 
 void NGenius::SetDebugModeEnabled(bool enabled)
 {
-	mIsDebugModeEnabled = enabled;
+	mDebugSystem->SetDebugModeEnabled(enabled);
+}
+
+BaseVisitable<>::ReturnType NGenius::Accept(BaseVisitor& guest)
+{
+	return AcceptImpl(*this, guest);
 }

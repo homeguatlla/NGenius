@@ -23,6 +23,11 @@ PhysicsSystem::~PhysicsSystem()
 	mEntities.clear();
 }
 
+unsigned int PhysicsSystem::GetNumberGameEntities() const
+{
+	return mEntities.size() + 1; //+1 terrain
+}
+
 void PhysicsSystem::Update(float deltaTime)
 {
 	for (GameEntity* entity : mEntities)
@@ -234,4 +239,9 @@ bool PhysicsSystem::ApplyEnergyWallCollision(GameEntity *entity, glm::vec3& coll
 
 	//is colliding
 	return isColliding;
+}
+
+BaseVisitable<>::ReturnType PhysicsSystem::Accept(BaseVisitor& guest)
+{
+	return AcceptImpl(*this, guest);
 }

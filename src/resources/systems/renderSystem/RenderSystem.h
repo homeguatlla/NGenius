@@ -64,6 +64,9 @@ class RenderSystem : public BaseVisitable<>
 	bool mIsFullScreen;
 	bool mIsClippingEnabled;
 	bool mIsOverdrawEnabled;
+
+	unsigned int mNumberTrianglesRendered;
+	unsigned int mNumberDrawCalls;
 	
 public:
 	static const char* OVERDRAW_MATERIAL_NAME;
@@ -86,6 +89,10 @@ public:
 
 	float GetScreenWidth() const;
 	float GetScreenHeight() const;
+
+	unsigned int GetNumberTrianglesRendered() const;
+	unsigned int GetNumberDrawCalls() const;
+
 	GLFWwindow* GetGLWindow() const;
 	IShaderProgram* GetShader(const std::string& name) const;
 	Model* GetModel(const std::string& name) const;

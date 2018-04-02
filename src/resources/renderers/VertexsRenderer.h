@@ -19,6 +19,7 @@ public:
 	//const std::string GetName() const override;
 	void Draw() override;
 
+	unsigned int GetNumberTrianglesRendered() const override;
 private:
 	bool IsInstancingAllowed() const override;
 };

@@ -155,7 +155,7 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 	
 	Draw();
 
-	glBindVertexArray(0);
+	glBindVertexArray(0); 
 }
 
 void IRenderer::Draw()
@@ -220,6 +220,11 @@ void IRenderer::SetInstances(std::vector<IRenderer*>& instances)
 void IRenderer::SetBillboard(bool billboard)
 {
 	mIsBillboard = billboard;
+}
+
+unsigned int IRenderer::GetNumberTrianglesRendered() const
+{
+	return mInstances.size() * mModel->GetNumberOfIndexes() / 3;
 }
 
 IRenderer* IRenderer::Clone() const
