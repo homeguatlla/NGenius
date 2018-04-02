@@ -16,7 +16,7 @@ public:
 	~PostProcessSubSystem();
 
 	void Init();
-	void Render();
+	void Render(unsigned int textureId);
 
 	void AddPostProcessEffect(PostProcessEffect* postProcessEffect);
 	void RemovePostProcessEffect(PostProcessEffect* postProcessEffect);

@@ -260,10 +260,10 @@ void NGenius::AddParticleEmitter(ParticlesEmitter* emitter)
 	mParticlesSystem->AddParticleEmitter(emitter);
 }
 
-void NGenius::AddRenderPass(RenderPass* renderPass)
+void NGenius::AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing)
 {
 	assert(mRenderSystem != nullptr);
-	mRenderSystem->AddRenderPass(renderPass);
+	mRenderSystem->AddRenderPass(renderPass, addAfterPostProcessing);
 }
 
 void NGenius::AddLight(Light* light)

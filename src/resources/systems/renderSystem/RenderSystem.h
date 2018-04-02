@@ -41,6 +41,7 @@ class RenderSystem : public BaseVisitable<>
 	std::map<char, RenderersList> mRenderersPerPass;
 	std::vector<IRenderer*> mInstances;
 	std::vector<RenderPass*> mRenderPasses;
+	std::vector<RenderPass*> mRenderPassesAfterPostProcessing;
 	
 	float mScreenWidth;
 	float mScreenHeight;
@@ -87,7 +88,7 @@ public:
 	void Render();
 	void AddToRender(IRenderer* renderer);
 	
-	void AddRenderPass(RenderPass* renderPass);
+	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing = false);
 	void RemoveRenderPass(RenderPass* renderPass);
 
 	float GetScreenWidth() const;
@@ -102,7 +103,10 @@ public:
 	ITexture* GetTexture(const std::string& name) const;
 	FontType* GetFont(const std::string& name) const;
 	IMaterial* GetMaterial(const std::string& name) const;
-		
+
+	//esto no me gusta...
+	VertexBuffersManager& GetVertexBufferManager();
+
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
 	void SetCastingShadowsTarget(const GameEntity* target);
 	void SetCastingShadowsEnabled(bool enabled);
@@ -133,7 +137,11 @@ private:
 	void LoadResources();
 	void CreateNewResources();
 
+	void AddToRender(IRenderer* renderer, std::vector<RenderPass*>& renderPasses);
+
 	void Render(RenderPass* renderPass);
+	void RenderPasses(std::vector<RenderPass*>& renderPasses);
+
 	void UpdateSubsystems();
 	void UpdateDistancesToCamera(const ICamera* camera, RenderersList* renderers);
 	void RenderInstances(RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances);

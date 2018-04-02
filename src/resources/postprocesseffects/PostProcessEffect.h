@@ -1,16 +1,23 @@
 #pragma once
 
+#include "../Transformation.h"
+
 class IMaterial;
 class ImageRenderer;
+class IFrameBuffer;
+class Texture;
 
 class PostProcessEffect
 {
 	unsigned int mWidth;
 	unsigned int mHeight;
-	ImageRenderer* mRenderer;
+	Transformation mTransformation;
+	IFrameBuffer* mFrameBuffer;
+	Texture* mTexture;
+	ImageRenderer* mRenderer;	
 
 public:
-	PostProcessEffect(ImageRenderer* imageRenderer, unsigned int width, unsigned int height);
+	PostProcessEffect(Texture* texture, ImageRenderer* imageRenderer, unsigned int width, unsigned int height);
 	virtual ~PostProcessEffect();
 
 	void Init();

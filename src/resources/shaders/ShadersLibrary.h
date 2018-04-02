@@ -11,5 +11,8 @@ public:
 	~ShadersLibrary();
 
 	void Load();
+
+private:
+	void AddShader(char* name, IShaderProgram* shader);
 };
 

@@ -19,9 +19,9 @@ mDebugSystem(debugSystem)
 
 EntitiesSystem::~EntitiesSystem()
 {
+	mEntitiesToRemove.clear(); //these entities were removed when releasing mEntities.
 	ReleaseEntities(&mEntities);
 	ReleaseEntities(&mNewEntitiesToAdd);	
-	mEntitiesToRemove.clear(); //these entities were removed when releasing mEntities.
 }
 
 void EntitiesSystem::Update(float elapsedTime)

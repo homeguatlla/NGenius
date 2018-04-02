@@ -13,6 +13,7 @@
 #include "TextShader.h"
 #include "ShadowShader.h"
 #include "OverdrawShader.h"
+#include "ContrastShader.h"
 
 ShadersLibrary::ShadersLibrary()
 {
@@ -25,52 +26,24 @@ ShadersLibrary::~ShadersLibrary()
 void ShadersLibrary::Load()
 {
 	//TODO igual podría haber una fase de init o algo por el estilo.
-	IShaderProgram* program = new TerrainShader();
-	program->Init();
-	AddElement("terrain", program); 
-	
-	program = new DefaultShader();
-	program->Init();
-	AddElement("default", program);
+	AddShader("terrain", new TerrainShader());
+	AddShader("default", new DefaultShader());
+	AddShader("model", new ModelShader());
+	AddShader("normalmap", new NormalMapShader());
+	AddShader("skybox", new SkyBoxShader());
+	AddShader("particle", new ParticleShader());
+	AddShader("gui", new GUIShader());
+	AddShader("water", new WaterShader());
+	AddShader("skybox", new ParticleShader());
+	AddShader("energy_wall", new EnergyWallShader());
+	AddShader("text", new TextShader());
+	AddShader("shadow", new ShadowShader());
+	AddShader("overdraw", new OverdrawShader());
+	AddShader("contrast", new ContrastShader());
+}
 
-	program = new ModelShader();
-	program->Init();
-	AddElement("model", program);
-
-	program = new NormalMapShader();
-	program->Init();
-	AddElement("normalmap", program);
-
-	AddElement("model", program);
-	program = new SkyBoxShader();
-	program->Init();
-	AddElement("skybox", program);
-
-	program = new GUIShader();
-	program->Init();
-	AddElement("gui", program);
-
-	program = new WaterShader();
-	program->Init();
-	AddElement("water", program);
-
-	program = new ParticleShader();
-	program->Init();
-	AddElement("particle", program);
-
-	program = new EnergyWallShader();
-	program->Init();
-	AddElement("energy_wall", program);
-
-	program = new TextShader();
-	program->Init();
-	AddElement("text", program);
-
-	program = new ShadowShader();
-	program->Init();
-	AddElement("shadow", program);
-
-	program = new OverdrawShader();
-	program->Init();
-	AddElement("overdraw", program);
+void ShadersLibrary::AddShader(char* name, IShaderProgram* shader)
+{
+	shader->Init();
+	AddElement(name, shader);
 }

@@ -1,12 +1,17 @@
 #include "stdafx.h"
 #include "PostProcessSubSystem.h"
 #include "../../postprocesseffects/PostProcessEffect.h"
+#include "../renderSystem/RenderSystem.h"
+#include "../../renderers/ImageRenderer.h"
+#include "../../models/Model.h"
+#include "../../textures/Texture.h"
+
+#include <GL/glew.h>
 
 PostProcessSubSystem::PostProcessSubSystem(RenderSystem* renderSystem) :
 	mRenderSystem(renderSystem)
 {
 }
-
 
 PostProcessSubSystem::~PostProcessSubSystem()
 {
@@ -14,12 +19,37 @@ PostProcessSubSystem::~PostProcessSubSystem()
 
 void PostProcessSubSystem::Init()
 {
+	//test
+	IMaterial* material = mRenderSystem->CreateMaterial("contrast", mRenderSystem->GetShader("contrast"));
+	Model* model = mRenderSystem->GetModel("quad");
+	if (!model->IsBuilt())
+	{
+		model->Build(mRenderSystem->GetVertexBufferManager(), material);
+	}
 
+	Texture* texture = static_cast<Texture*>(mRenderSystem->GetTexture("postprocess"));
+	ImageRenderer* renderer = new ImageRenderer(model, material);
+	PostProcessEffect* postProcessEffect = new PostProcessEffect(	texture,
+																	renderer, 
+																	static_cast<unsigned int>(mRenderSystem->GetScreenWidth()), 
+																	static_cast<unsigned int>(mRenderSystem->GetScreenHeight()));
+	AddPostProcessEffect(postProcessEffect);
+	//test
+
+	for (PostProcessEffect* postProcessEffect : mEffects)
+	{
+		postProcessEffect->Init();
+	}
 }
 
-void PostProcessSubSystem::Render()
+void PostProcessSubSystem::Render(unsigned int textureId)
 {
-
+	glDisable(GL_DEPTH_TEST);
+	for (PostProcessEffect* postProcessEffect : mEffects)
+	{
+		textureId = postProcessEffect->Render(textureId);
+	}
+	glEnable(GL_DEPTH_TEST);
 }
 
 void PostProcessSubSystem::AddPostProcessEffect(PostProcessEffect* postProcessEffect)

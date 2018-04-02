@@ -148,7 +148,20 @@ void RenderSystem::Render()
 	mNumberDrawCalls = 0;
 	mNumberTrianglesRendered = 0;
 
-	for (RenderPass* pass : mRenderPasses)
+	RenderPasses(mRenderPasses);
+
+	mPostProcessSubsystem->Render(0);
+
+	RenderPasses(mRenderPassesAfterPostProcessing);
+
+	// Swap buffers
+	glfwSwapBuffers(mWindow);
+	glfwPollEvents();
+}
+
+void RenderSystem::RenderPasses(std::vector<RenderPass*>& renderPasses)
+{
+	for (RenderPass* pass : renderPasses)
 	{
 		if (pass->IsEnabled())
 		{
@@ -165,12 +178,6 @@ void RenderSystem::Render()
 			}
 		}
 	}
-
-	mPostProcessSubsystem->Render();
-
-	// Swap buffers
-	glfwSwapBuffers(mWindow);
-	glfwPollEvents();
 }
 
 void RenderSystem::Render(RenderPass* renderPass)
@@ -240,14 +247,26 @@ void RenderSystem::Render(RenderPass* renderPass)
 	}
 }
 
-void RenderSystem::AddRenderPass(RenderPass* renderPass)
+void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing)
 {
 	assert(renderPass != nullptr);
 	assert(renderPass->GetCamera() != nullptr);
-	bool found = std::find(mRenderPasses.begin(), mRenderPasses.end(), renderPass) != mRenderPasses.end();
-	if (!found)
+
+	if (addAfterPostProcessing)
 	{
-		mRenderPasses.push_back(renderPass);
+		bool found = std::find(mRenderPassesAfterPostProcessing.begin(), mRenderPassesAfterPostProcessing.end(), renderPass) != mRenderPassesAfterPostProcessing.end();
+		if (!found)
+		{
+			mRenderPassesAfterPostProcessing.push_back(renderPass);
+		}
+	}
+	else
+	{
+		bool found = std::find(mRenderPasses.begin(), mRenderPasses.end(), renderPass) != mRenderPasses.end();
+		if (!found)
+		{
+			mRenderPasses.push_back(renderPass);
+		}
 	}
 }
 
@@ -259,6 +278,15 @@ void RenderSystem::RemoveRenderPass(RenderPass* renderPass)
 	{
 		mRenderPasses.erase(it);
 	}
+	else
+	{
+		RenderPassesIterator it = std::find(mRenderPassesAfterPostProcessing.begin(), mRenderPassesAfterPostProcessing.end(), renderPass);
+		bool found = it != mRenderPassesAfterPostProcessing.end();
+		if (found)
+		{
+			mRenderPassesAfterPostProcessing.erase(it);
+		}
+	}
 }
 
 void RenderSystem::AddToRender(IRenderer* renderer)
@@ -266,14 +294,21 @@ void RenderSystem::AddToRender(IRenderer* renderer)
 	//assert(renderer != nullptr);
 	if (renderer != nullptr)
 	{
-		char layer = renderer->GetLayer();
-		for (const RenderPass* pass : mRenderPasses)
+		AddToRender(renderer, mRenderPasses);
+		AddToRender(renderer, mRenderPassesAfterPostProcessing);
+	}
+}
+
+void RenderSystem::AddToRender(IRenderer* renderer, std::vector<RenderPass*>& renderPasses)
+{
+	char layer = renderer->GetLayer();
+		
+	for (const RenderPass* pass : renderPasses)
+	{
+		char result = pass->GetLayersMask() & layer;
+		if (result != 0)
 		{
-			char result = pass->GetLayersMask() & layer;
-			if ( result != 0)
-			{
-				mRenderersPerPass[pass->GetLayersMask()].push_back(renderer);
-			}
+			mRenderersPerPass[pass->GetLayersMask()].push_back(renderer);
 		}
 	}
 }
@@ -532,6 +567,11 @@ ITexture* RenderSystem::GetTexture(const std::string& name) const
 IMaterial* RenderSystem::GetMaterial(const std::string& name) const
 {
 	return mMaterialsLibrary->GetElement(name);
+}
+
+VertexBuffersManager& RenderSystem::GetVertexBufferManager()
+{
+	return mVertexsBuffersManager;
 }
 
 bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName, bool isFullscreen)

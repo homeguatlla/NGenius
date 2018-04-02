@@ -95,6 +95,10 @@ void TexturesLibrary::Load()
 	texture->Load("data/models/stall/stall.png", ++mCurrentTextureUnit, false, false);
 	AddElement("stall", texture);
 
+	texture = new Texture();
+	texture->CreateTexture(++mCurrentTextureUnit, 320 * 2, 240 * 2);
+	AddElement("postprocess", texture);
+
 	LoadTexturesPendingToLoad();
 }
 

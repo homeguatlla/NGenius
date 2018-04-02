@@ -130,7 +130,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = PROPS;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -993,7 +993,7 @@ void CreateHudMapRenderPass()
 	frameBuffer->Init();
 	mMapPass->SetFrameBufferOutput(frameBuffer);
 	mMapPass->EnableFog(false);
-	mEngine.AddRenderPass(mMapPass);
+	mEngine.AddRenderPass(mMapPass, false);
 }
 
 void CreateGUIRenderPass()
@@ -1004,7 +1004,7 @@ void CreateGUIRenderPass()
 	mGuiCamera->SetTarget(glm::vec3(0.0f, 0.0f, -50.0f));
 	mGuiCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 	RenderPass *guiPass = new RenderPass(static_cast<ICamera*>(mGuiCamera), IRenderer::LAYER_GUI);
-	mEngine.AddRenderPass(guiPass);
+	mEngine.AddRenderPass(guiPass, true);
 }
 
 void CreateGameplayRenderPass()
@@ -1021,14 +1021,14 @@ void CreateGameplayRenderPass()
 	//material->AddEffect(new MaterialEffectDiffuseTexture(mEngine.GetTexture("tree_foliage_diffuse"), glm::vec3(0.0f), 1.0f));
 	//gameplayPass->SetMaterial(material);
 
-	mEngine.AddRenderPass(gameplayPass);
+	mEngine.AddRenderPass(gameplayPass, false);
 }
 
 void CreateTerrainRenderPass()
 {
 	//RENDER PASS GAMEPLAY
 	RenderPass *terrainPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TERRAIN);
-	mEngine.AddRenderPass(terrainPass);
+	mEngine.AddRenderPass(terrainPass, false);
 }
 
 void CreateParticlesRenderPass()
@@ -1036,7 +1036,7 @@ void CreateParticlesRenderPass()
 	//RENDER PASS PARTICLES
 	RenderPass *particlesPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_PARTICLES);
 	particlesPass->SetCalculateDistanceToCamera(true);
-	mEngine.AddRenderPass(particlesPass);
+	mEngine.AddRenderPass(particlesPass, false);
 }
 
 void CreateSubSystems()

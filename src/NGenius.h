@@ -74,7 +74,7 @@ public:
 
 	void AddGameEntity(GameEntity* entity);
 	void AddParticleEmitter(ParticlesEmitter* emitter);
-	void AddRenderPass(RenderPass* renderPass);
+	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing);
 	void AddLight(Light* light);
 
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
