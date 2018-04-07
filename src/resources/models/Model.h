@@ -29,6 +29,7 @@ public:
 	int GetNumberOfVertexs() const;
 	int GetNumberOfIndexes() const;
 
+	void Apply(const glm::mat4& matrix);
 	void Apply(const std::vector<glm::mat4>& matrices);
 	void Apply(const std::vector<glm::vec4>& colors);
 

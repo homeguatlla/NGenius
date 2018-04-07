@@ -13,7 +13,7 @@ public:
 	ImageRenderer(Model* model, IMaterial* material);
 	~ImageRenderer();
 	
-	void Render();
+	void Render();	
 
 	ImageRenderer* DoClone() const override { return nullptr; }
 	

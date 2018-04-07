@@ -57,6 +57,13 @@ int Model::GetNumberOfIndexes() const
 	return mMesh->GetNumberOfIndexes();
 }
 
+void Model::Apply(const glm::mat4& matrix)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4), &matrix, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void Model::Apply(const std::vector<glm::mat4>& matrices)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);

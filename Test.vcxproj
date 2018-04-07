@@ -258,7 +258,6 @@
     <ClInclude Include="src\resources\shaders\NormalMapShader.h" />
     <ClInclude Include="src\resources\shaders\OverdrawShader.h" />
     <ClInclude Include="src\resources\shaders\ParticleShader.h" />
-    <ClInclude Include="src\resources\shaders\QuadShader.h" />
     <ClInclude Include="src\resources\shaders\ShadersLibrary.h" />
     <ClInclude Include="src\resources\shaders\ShadowShader.h" />
     <ClInclude Include="src\resources\shaders\SkyBoxShader.h" />
@@ -388,7 +387,6 @@
     <ClCompile Include="src\resources\shaders\NormalMapShader.cpp" />
     <ClCompile Include="src\resources\shaders\OverdrawShader.cpp" />
     <ClCompile Include="src\resources\shaders\ParticleShader.cpp" />
-    <ClCompile Include="src\resources\shaders\QuadShader.cpp" />
     <ClCompile Include="src\resources\shaders\ShadersLibrary.cpp" />
     <ClCompile Include="src\resources\shaders\ShadowShader.cpp" />
     <ClCompile Include="src\resources\shaders\SkyBoxShader.cpp" />

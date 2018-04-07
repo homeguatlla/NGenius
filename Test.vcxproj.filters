@@ -258,9 +258,6 @@
     <ClInclude Include="src\resources\textures\ITexture.h">
       <Filter>Header Files\resources\textures</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\shaders\QuadShader.h">
-      <Filter>Header Files\resources\shaders</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\camera\OrthogonalCamera.h">
       <Filter>Header Files\resources\camera</Filter>
     </ClInclude>
@@ -652,9 +649,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\textures\ITexture.cpp">
       <Filter>Source Files\resources\textures</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\shaders\QuadShader.cpp">
-      <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\camera\ICamera.cpp">
       <Filter>Source Files\resources\camera</Filter>

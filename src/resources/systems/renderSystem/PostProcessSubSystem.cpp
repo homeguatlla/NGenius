@@ -30,8 +30,8 @@ void PostProcessSubSystem::Init()
 	Texture* texture = static_cast<Texture*>(mRenderSystem->GetTexture("postprocess"));
 	ImageRenderer* renderer = new ImageRenderer(model, material);
 	PostProcessEffect* postProcessEffect = new PostProcessEffect(	texture,
-																	renderer, 
-																	static_cast<unsigned int>(mRenderSystem->GetScreenWidth()), 
+																	renderer,
+																	static_cast<unsigned int>(mRenderSystem->GetScreenWidth()),
 																	static_cast<unsigned int>(mRenderSystem->GetScreenHeight()));
 	AddPostProcessEffect(postProcessEffect);
 	//test

@@ -19,6 +19,6 @@ private:
 	void LoadModel(const std::string& name, const std::string& filename, bool calculateNormals, bool calculateTangents);
 	void CreateCube();
 	void CreateSkyBox();
-	void CreateQuad(const std::string& name);
+	void CreateQuad(const std::string& name, float width, float height);
 };
 

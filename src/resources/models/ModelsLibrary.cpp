@@ -19,13 +19,13 @@ void ModelsLibrary::Load()
 {
 	CreateCube();
 	CreateSkyBox();
-	CreateQuad("quad");
+	CreateQuad("quad", 1.0f, 1.0f);
 	//necesitamos un gui_quad porque sino, cuando se construye (build) 
 	//buscará el atributo color_gradient. Si no lo tiene, que para el shader_gui no lo tiene, 
 	//después para las partículas no lo asignará y no les funcionará el color_gradient.
 	//creando tres quads, ya es diferente la cosa.
-	CreateQuad("gui_quad");
-	CreateQuad("particle_quad");
+	CreateQuad("gui_quad", 0.5f, 0.5f);
+	CreateQuad("particle_quad", 0.5f, 0.5f);
 
 	LoadModel("cube2", "data/models/cube/cube.obj", false, true);
 	LoadModel("enano", "data/models/enano/enano.obj", false, true);
@@ -221,13 +221,13 @@ void ModelsLibrary::CreateCube()
 	AddElement("cube", model);
 }
 
-void ModelsLibrary::CreateQuad(const std::string& name)
+void ModelsLibrary::CreateQuad(const std::string& name, float width, float height)
 {
 	std::vector<glm::vec3> vertexs;
-	vertexs.push_back(glm::vec3(-0.5, 0.5, 0.0f));
-	vertexs.push_back(glm::vec3(0.5, 0.5, 0.0f));
-	vertexs.push_back(glm::vec3(0.5, -0.5, 0.0f));
-	vertexs.push_back(glm::vec3(-0.5, -0.5, 0.0f));
+	vertexs.push_back(glm::vec3(-width, height, 0.0f));
+	vertexs.push_back(glm::vec3(width, height, 0.0f));
+	vertexs.push_back(glm::vec3(width, -height, 0.0f));
+	vertexs.push_back(glm::vec3(-width, -height, 0.0f));
 
 	std::vector<glm::vec2> uv;
 	uv.push_back(glm::vec2(0.0f, 1.0f));

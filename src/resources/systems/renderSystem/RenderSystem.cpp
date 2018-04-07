@@ -150,7 +150,7 @@ void RenderSystem::Render()
 
 	RenderPasses(mRenderPasses);
 
-	//mPostProcessSubsystem->Render(0);
+	mPostProcessSubsystem->Render(0);
 
 	RenderPasses(mRenderPassesAfterPostProcessing);
 

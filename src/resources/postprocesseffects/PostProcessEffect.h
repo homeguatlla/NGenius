@@ -11,7 +11,6 @@ class PostProcessEffect
 {
 	unsigned int mWidth;
 	unsigned int mHeight;
-	Transformation mTransformation;
 	IFrameBuffer* mFrameBuffer;
 	Texture* mTexture;
 	ImageRenderer* mRenderer;	
