@@ -68,6 +68,7 @@ class RenderSystem : public BaseVisitable<>
 	bool mIsFullScreen;
 	bool mIsClippingEnabled;
 	bool mIsOverdrawEnabled;
+	bool mIsPostprocessEnabled;
 
 	unsigned int mNumberTrianglesRendered;
 	unsigned int mNumberDrawCalls;
@@ -116,6 +117,7 @@ public:
 
 	void SetFullScreen(bool isFullScreen);
 	void SetOverdrawEnabled(bool isOverdrawEnabled);
+	void SetPostProcessEnabled(bool isPostProcessEnabled);
 	
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 

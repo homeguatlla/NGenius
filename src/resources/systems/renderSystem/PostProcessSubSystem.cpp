@@ -52,10 +52,10 @@ void PostProcessSubSystem::Init()
 	*/
 	AddPostProcessEffect(postProcessEffect);
 	//test
-	
-	mFrameBuffer = new IFrameBuffer(mRenderSystem->GetScreenWidth(), mRenderSystem->GetScreenHeight());
-	mFrameBuffer->SetCopyBufferToTexture(texture, 0, 0, static_cast<unsigned int>(mRenderSystem->GetScreenWidth()),
-											static_cast<unsigned int>(mRenderSystem->GetScreenHeight()));
+	unsigned int screenWidth = static_cast<unsigned int>(mRenderSystem->GetScreenWidth());
+	unsigned int screenHeight = static_cast<unsigned int>(mRenderSystem->GetScreenHeight());
+	mFrameBuffer = new IFrameBuffer(screenWidth, screenHeight);
+	mFrameBuffer->SetCopyBufferToTexture(texture, 0, 0, screenWidth, screenHeight);
 	//mFrameBuffer->Init();
 	
 	for (PostProcessEffect* postProcessEffect : mEffects)

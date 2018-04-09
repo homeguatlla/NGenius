@@ -62,6 +62,7 @@ mLastClipPlaneNumberUsed(0),
 mIsFullScreen(false),
 mIsClippingEnabled(false),
 mIsOverdrawEnabled(false),
+mIsPostprocessEnabled(true),
 mNumberTrianglesRendered(0),
 mNumberDrawCalls(0)
 {
@@ -150,7 +151,10 @@ void RenderSystem::Render()
 
 	RenderPasses(mRenderPasses);
 
-	mPostProcessSubsystem->Render(nullptr);
+	if (mIsPostprocessEnabled)
+	{
+		mPostProcessSubsystem->Render(nullptr);
+	}
 
 	RenderPasses(mRenderPassesAfterPostProcessing);
 
@@ -709,6 +713,11 @@ void RenderSystem::SetFullScreen(bool isFullScreen)
 void RenderSystem::SetOverdrawEnabled(bool isOverdrawEnabled)
 {
 	mIsOverdrawEnabled = isOverdrawEnabled;
+}
+
+void RenderSystem::SetPostProcessEnabled(bool isPostProcessEnabled)
+{
+	mIsPostprocessEnabled = isPostProcessEnabled;
 }
 
 void RenderSystem::SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter)

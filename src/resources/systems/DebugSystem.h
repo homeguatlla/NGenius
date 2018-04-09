@@ -15,6 +15,7 @@ class DebugSystem : public IInputListener
 	bool mIsBoundingBoxVisible;
 	bool mIsOverdrawEnabled;
 	bool mIsWireframeEnabled;
+	bool mIsPostProcessEnabled;
 	InputHandler* mInputHandler;
 	RenderSystem* mRenderSystem;
 

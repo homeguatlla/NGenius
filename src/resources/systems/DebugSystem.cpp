@@ -12,6 +12,7 @@ DebugSystem::DebugSystem(RenderSystem* renderSystem, InputHandler* inputHandler)
 	mIsBoundingBoxVisible(false),
 	mIsOverdrawEnabled(false),
 	mIsWireframeEnabled(false),
+	mIsPostProcessEnabled(true),
 	mInputHandler(inputHandler),
 	mRenderSystem(renderSystem)
 {
@@ -90,6 +91,12 @@ void DebugSystem::OnKey(int key, int action)
 		mIsWireframeEnabled = !mIsWireframeEnabled;
 
 		glPolygonMode(GL_FRONT_AND_BACK, mIsWireframeEnabled ? GL_LINE : GL_FILL);
+	}
+
+	if (key == GLFW_KEY_P && action == GLFW_PRESS)
+	{
+		mIsPostProcessEnabled = !mIsPostProcessEnabled;
+		mRenderSystem->SetPostProcessEnabled(mIsPostProcessEnabled);
 	}
 }
 
