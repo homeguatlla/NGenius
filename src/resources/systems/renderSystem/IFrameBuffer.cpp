@@ -87,11 +87,29 @@ void IFrameBuffer::UnbindBuffer() const
 	}
 }
 
-void IFrameBuffer::CopyBuffer() const
+Texture* IFrameBuffer::CopyDepthBuffer()
 {
 	if (mCopyBufferTexture != nullptr)
 	{
 		CopyDepthBufferIntoTexture(mCopyBufferTexture, mCopyBufferX, mCopyBufferY, mCopyBufferWidth, mCopyBufferHeight);
+		return mCopyBufferTexture;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+Texture* IFrameBuffer::CopyColorBuffer()
+{
+	if (mCopyBufferTexture != nullptr)
+	{
+		CopyColorBufferIntoTexture(mCopyBufferTexture, mCopyBufferX, mCopyBufferY, mCopyBufferWidth, mCopyBufferHeight);
+		return mCopyBufferTexture;
+	}
+	else
+	{
+		return nullptr;
 	}
 }
 
@@ -147,12 +165,12 @@ void IFrameBuffer::CreateBuffer()
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mDepthBufferID);
 	}
 	GLenum result = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
+	assert(result == GL_FRAMEBUFFER_COMPLETE);
 
 	UnbindBuffer();
 }
 
-void IFrameBuffer::SetCopyDepthBufferToTexture(Texture* texture,  int x, int y, int imageWidth, int imageHeight)
+void IFrameBuffer::SetCopyBufferToTexture(Texture* texture,  int x, int y, int imageWidth, int imageHeight)
 {
 	mCopyBufferHeight = imageHeight;
 	mCopyBufferWidth = imageWidth;
@@ -169,6 +187,14 @@ void IFrameBuffer::CopyDepthBufferIntoTexture(Texture* texture, int x, int y, in
 	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, x, y, imageWidth, imageHeight, 0);
 }
 
+void IFrameBuffer::CopyColorBufferIntoTexture(Texture* texture, int x, int y, int imageWidth, int imageHeight) const
+{
+	texture->SetActive(true);
+
+	glReadBuffer(GL_BACK); // Ensure we are reading from the back buffer.
+	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, imageWidth, imageHeight, 0);
+}
+
 void IFrameBuffer::PrintFrameBufferInfo(unsigned int target, unsigned int fbo) const
 {
 
@@ -182,15 +208,11 @@ void IFrameBuffer::PrintFrameBufferInfo(unsigned int target, unsigned int fbo) c
 
 		if (buffer != GL_NONE) {
 
-			printf("Shader Output Location %d - color attachment %d",
-				i, buffer - GL_COLOR_ATTACHMENT0);
+			printf("Shader Output Location %d - color attachment %d", i, buffer - GL_COLOR_ATTACHMENT0);
 
-			glGetFramebufferAttachmentParameteriv(target, buffer,
-				GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE, &res);
-			printf("\tAttachment Type: %s",
-				res == GL_TEXTURE ? "Texture" : "Render Buffer");
-			glGetFramebufferAttachmentParameteriv(target, buffer,
-				GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME, &res);
+			glGetFramebufferAttachmentParameteriv(target, buffer, GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE, &res);
+			printf("\tAttachment Type: %s",	res == GL_TEXTURE ? "Texture" : "Render Buffer");
+			glGetFramebufferAttachmentParameteriv(target, buffer, GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME, &res);
 			printf("\tAttachment object name: %d\n", res);
 		}
 		++i;

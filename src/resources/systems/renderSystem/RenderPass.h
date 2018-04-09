@@ -4,12 +4,13 @@
 class ICamera;
 class IFrameBuffer;
 class IMaterial;
+class Texture;
 
 class RenderPass
 {
 	char mLayersMask;
 	const ICamera* mCamera;
-	const IFrameBuffer* mFrameBufferOutput;
+	IFrameBuffer* mFrameBufferOutput;
 	bool mIsEnabled;
 	bool mIsFogEnabled;
 	bool mIsClippingEnabled;
@@ -23,10 +24,10 @@ public:
 	~RenderPass();
 
 	bool HasFrameBufferOutput() const;
-	void SetFrameBufferOutput(const IFrameBuffer* output);
+	void SetFrameBufferOutput(IFrameBuffer* output);
 	void BindOutput() const;
 	void UnbindOutput() const;
-	void CopyBuffer() const;
+	Texture* CopyDepthBuffer();
 
 	const ICamera* GetCamera() const;
 	char GetLayersMask() const;

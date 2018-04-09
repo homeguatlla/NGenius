@@ -40,14 +40,16 @@ public:
 	void SetColorTextureAttachment(unsigned int colorAttachmentNumber, Texture* texture);
 	void SetDepthTextureAttachment(Texture* texture);
 	void SetDepthAttachment(unsigned int width, unsigned int height);
-	void SetCopyDepthBufferToTexture(Texture* texture, int x, int y, int imageWidth, int imageHeight);
+	void SetCopyBufferToTexture(Texture* texture, int x, int y, int imageWidth, int imageHeight);
 	void BindBuffer() const;
 	void UnbindBuffer() const;
-	void CopyBuffer() const;
+	Texture* CopyDepthBuffer();
+	Texture* CopyColorBuffer();
 
 private:
 	void CreateBuffer();
 	void CopyDepthBufferIntoTexture(Texture* texture, int x, int y, int imageWidth, int imageHeight) const;
+	void CopyColorBufferIntoTexture(Texture* texture, int x, int y, int imageWidth, int imageHeight) const;
 	void PrintFrameBufferInfo(unsigned int target, unsigned int fbo) const;
 };
 

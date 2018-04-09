@@ -150,7 +150,7 @@ void RenderSystem::Render()
 
 	RenderPasses(mRenderPasses);
 
-	mPostProcessSubsystem->Render(0);
+	mPostProcessSubsystem->Render(nullptr);
 
 	RenderPasses(mRenderPassesAfterPostProcessing);
 
@@ -170,7 +170,7 @@ void RenderSystem::RenderPasses(std::vector<RenderPass*>& renderPasses)
 				pass->BindOutput();
 				Render(pass);
 				pass->UnbindOutput();
-				pass->CopyBuffer();
+				pass->CopyDepthBuffer();
 			}
 			else
 			{

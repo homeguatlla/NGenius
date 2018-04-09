@@ -30,7 +30,7 @@ bool RenderPass::HasFrameBufferOutput() const
 	return mFrameBufferOutput != nullptr;
 }
 
-void RenderPass::SetFrameBufferOutput(const IFrameBuffer* output)
+void RenderPass::SetFrameBufferOutput(IFrameBuffer* output)
 {
 	mFrameBufferOutput = output;
 }
@@ -45,9 +45,9 @@ void RenderPass::UnbindOutput() const
 	mFrameBufferOutput->UnbindBuffer();
 }
 
-void RenderPass::CopyBuffer() const
+Texture* RenderPass::CopyDepthBuffer()
 {
-	mFrameBufferOutput->CopyBuffer();
+	return mFrameBufferOutput->CopyDepthBuffer();
 }
 
 const ICamera* RenderPass::GetCamera() const

@@ -5,22 +5,36 @@
 #include "../../renderers/ImageRenderer.h"
 #include "../../models/Model.h"
 #include "../../textures/Texture.h"
+#include "../../materials/IMaterial.h"
+#include "../../materials/effects/MaterialEffectDiffuseTexture.h"
+#include "../../systems/renderSystem/IFrameBuffer.h"
 
 #include <GL/glew.h>
 
 PostProcessSubSystem::PostProcessSubSystem(RenderSystem* renderSystem) :
-	mRenderSystem(renderSystem)
+	mRenderSystem(renderSystem),
+	mFrameBuffer(nullptr)
 {
 }
 
 PostProcessSubSystem::~PostProcessSubSystem()
 {
+	if (mFrameBuffer != nullptr)
+	{
+		delete mFrameBuffer;
+	}
+	for (PostProcessEffect* effect : mEffects)
+	{
+		delete effect;
+	}
+	mEffects.clear();
 }
 
 void PostProcessSubSystem::Init()
 {
 	//test
 	IMaterial* material = mRenderSystem->CreateMaterial("contrast", mRenderSystem->GetShader("contrast"));
+	
 	Model* model = mRenderSystem->GetModel("quad");
 	if (!model->IsBuilt())
 	{
@@ -29,25 +43,34 @@ void PostProcessSubSystem::Init()
 
 	Texture* texture = static_cast<Texture*>(mRenderSystem->GetTexture("postprocess"));
 	ImageRenderer* renderer = new ImageRenderer(model, material);
-	PostProcessEffect* postProcessEffect = new PostProcessEffect(	texture,
-																	renderer,
-																	static_cast<unsigned int>(mRenderSystem->GetScreenWidth()),
-																	static_cast<unsigned int>(mRenderSystem->GetScreenHeight()));
+	PostProcessEffect* postProcessEffect = new PostProcessEffect(	PostProcessEffect::PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER,
+																	texture,
+																	renderer);
+	/*
+	postProcessEffect->SetBufferSize(	static_cast<unsigned int>(mRenderSystem->GetScreenWidth()),
+										static_cast<unsigned int>(mRenderSystem->GetScreenHeight()));
+	*/
 	AddPostProcessEffect(postProcessEffect);
 	//test
-
+	
+	mFrameBuffer = new IFrameBuffer(mRenderSystem->GetScreenWidth(), mRenderSystem->GetScreenHeight());
+	mFrameBuffer->SetCopyBufferToTexture(texture, 0, 0, static_cast<unsigned int>(mRenderSystem->GetScreenWidth()),
+											static_cast<unsigned int>(mRenderSystem->GetScreenHeight()));
+	//mFrameBuffer->Init();
+	
 	for (PostProcessEffect* postProcessEffect : mEffects)
 	{
 		postProcessEffect->Init();
 	}
 }
 
-void PostProcessSubSystem::Render(unsigned int textureId)
+void PostProcessSubSystem::Render(ITexture* texture)
 {
+	texture = mFrameBuffer->CopyColorBuffer();
 	glDisable(GL_DEPTH_TEST);
 	for (PostProcessEffect* postProcessEffect : mEffects)
 	{
-		textureId = postProcessEffect->Render(textureId);
+		texture = postProcessEffect->Render(texture);
 	}
 	glEnable(GL_DEPTH_TEST);
 }

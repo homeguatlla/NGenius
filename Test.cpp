@@ -130,7 +130,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = FLAT;
+Configuration mConfiguration = RELEASE;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -1009,12 +1009,14 @@ void CreateGUIRenderPass()
 
 void CreateGameplayRenderPass()
 {
+	int screenWidth = static_cast<int>(mEngine.GetScreenWidth());
+	int screenHeight = static_cast<int>(mEngine.GetScreenHeight());
 	//RENDER PASS GAMEPLAY	
 	RenderPass *gameplayPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
 	
-	IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
+	IFrameBuffer* frameBuffer = new IFrameBuffer(screenWidth, screenHeight);
 	Texture* depthTexture = static_cast<Texture*>(mEngine.GetTexture("depth_texture"));
-	frameBuffer->SetCopyDepthBufferToTexture(depthTexture, 0, 0, static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
+	frameBuffer->SetCopyBufferToTexture(depthTexture, 0, 0, screenWidth, screenHeight);
 	gameplayPass->SetFrameBufferOutput(frameBuffer);
 	
 	//IMaterial* material = mEngine.GetMaterial("shadow");
