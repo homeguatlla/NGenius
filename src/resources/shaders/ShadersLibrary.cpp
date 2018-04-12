@@ -14,6 +14,8 @@
 #include "ShadowShader.h"
 #include "OverdrawShader.h"
 #include "ContrastShader.h"
+#include "HorizontalBlurShader.h"
+#include "VerticalBlurShader.h"
 
 ShadersLibrary::ShadersLibrary()
 {
@@ -40,6 +42,8 @@ void ShadersLibrary::Load()
 	AddShader("shadow", new ShadowShader());
 	AddShader("overdraw", new OverdrawShader());
 	AddShader("contrast", new ContrastShader());
+	AddShader("horizontal_blur", new HorizontalBlurShader());
+	AddShader("vertical_blur", new VerticalBlurShader());
 }
 
 void ShadersLibrary::AddShader(char* name, IShaderProgram* shader)

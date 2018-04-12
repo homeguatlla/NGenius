@@ -558,6 +558,12 @@
     <ClInclude Include="src\resources\shaders\ContrastShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\shaders\HorizontalBlurShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\VerticalBlurShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -947,6 +953,12 @@
     <ClCompile Include="src\resources\shaders\ContrastShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
+    <ClCompile Include="src\resources\shaders\HorizontalBlurShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\VerticalBlurShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\fragment\f_default.cg">
@@ -1032,6 +1044,15 @@
     </None>
     <None Include="data\shaders\vertex\v_contrast.cg">
       <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_horizontal_blur.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_vertical_blur.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_blur.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
     </None>
   </ItemGroup>
 </Project>

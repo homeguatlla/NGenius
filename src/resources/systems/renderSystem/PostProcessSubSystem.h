@@ -6,6 +6,8 @@ class RenderSystem;
 class PostProcessEffect;
 class IFrameBuffer;
 class ITexture;
+class Model;
+class Texture;
 
 class PostProcessSubSystem
 {
@@ -23,5 +25,11 @@ public:
 
 	void AddPostProcessEffect(PostProcessEffect* postProcessEffect);
 	void RemovePostProcessEffect(PostProcessEffect* postProcessEffect);
+
+private:
+	void Load();
+	void LoadContrastPostProcess(Model* model, Texture* texture);
+	void LoadHorizontalBlurPostProcess(Model* model, Texture* texture, float width);
+	void LoadVerticalBlurPostProcess(Model* model, Texture* texture, float height);
 };
 

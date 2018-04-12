@@ -20,17 +20,9 @@ TexturesLibrary::~TexturesLibrary()
 
 void TexturesLibrary::Load()
 {
-	Texture* texture = new Texture();
-	texture->Load("data/models/stone/diffuse.png", mCurrentTextureUnit++, true, false);
-	AddElement("stone", texture);
-
-	texture = new Texture();
-	texture->Load("data/textures/terrain_heightmap_1024.png", ++mCurrentTextureUnit, false, false);
-	AddElement("terrain_heightmap", texture);
-
-	texture = new Texture();
-	texture->Load("data/textures/terrain_blendmap_1024.png", ++mCurrentTextureUnit, false, false);
-	AddElement("terrain_blendmap", texture);
+	LoadTexture("stone", "data/models/stone/diffuse.png", true, false);
+	LoadTexture("terrain_heightmap", "data/textures/terrain_heightmap_1024.png", false, false);
+	LoadTexture("terrain_blendmap", "data/textures/terrain_blendmap_1024.png", false, false);
 
 	std::vector<std::string> filenames;
 
@@ -55,51 +47,45 @@ void TexturesLibrary::Load()
 	cubemap->Load(filenames, ++mCurrentTextureUnit);
 	AddElement("cubemap", cubemap);
 
-	texture = new Texture();
-	texture->Load("data/ui/hud/hud_map.png", ++mCurrentTextureUnit, false, false);
-	AddElement("hud_map", texture);
-	
-	texture = new Texture();
-	texture->CreateTexture(++mCurrentTextureUnit, 256, 256);
-	AddElement("map", texture);
+	LoadTexture("hud_map", "data/ui/hud/hud_map.png", false, false);
 
-	texture = new Texture();
-	texture->CreateTexture(++mCurrentTextureUnit, 320 * 2, 240 * 2);
-	AddElement("reflection_water", texture);
+	CreateTexture("map", 256, 256);
+	CreateTexture("reflection_water", 320 * 2, 240 * 2);
+	CreateTexture("refraction_water", 320 * 2, 240 * 2);
 
-	texture = new Texture();
-	texture->CreateTexture(++mCurrentTextureUnit, 320 * 2, 240 * 2);
-	AddElement("refraction_water", texture);
+	LoadTexture("distorsion_water", "data/textures/waterDUDV.png", false, true);
+	LoadTexture("normal_water", "data/textures/normal_water.png", false, true);
 
-	texture = new Texture();
-	texture->Load("data/textures/waterDUDV.png", ++mCurrentTextureUnit, false, true);
-	AddElement("distorsion_water", texture);
+	CreateDepthTexture("refraction_depth_water", 320 * 2, 240 * 2);
 
-	texture = new Texture();
-	texture->Load("data/textures/normal_water.png", ++mCurrentTextureUnit, false, true);
-	AddElement("normal_water", texture);
+	LoadTexture("smoke", "data/textures/smoke_64_.png", false, false);
+	LoadTexture("yellow_grid", "data/textures/grid_64.png", false, true);
+	LoadTexture("stall", "data/models/stall/stall.png", false, false);
 
-	texture = new Texture();
-	texture->CreateDepthTexture(++mCurrentTextureUnit, 320 * 2, 240 * 2);
-	AddElement("refraction_depth_water", texture);	
-
-	texture = new Texture();
-	texture->Load("data/textures/smoke_64_.png", ++mCurrentTextureUnit, false, false);
-	AddElement("smoke", texture);
-
-	texture = new Texture();
-	texture->Load("data/textures/grid_64.png", ++mCurrentTextureUnit, false, true);
-	AddElement("yellow_grid", texture);
-
-	texture = new Texture();
-	texture->Load("data/models/stall/stall.png", ++mCurrentTextureUnit, false, false);
-	AddElement("stall", texture);
-
-	texture = new Texture();
-	texture->CreateTexture(++mCurrentTextureUnit, 320 * 2, 240 * 2);
-	AddElement("postprocess", texture);
+	CreateTexture("postprocess", 320 * 2, 240 * 2);
 
 	LoadTexturesPendingToLoad();
+}
+
+void TexturesLibrary::LoadTexture(std::string name, std::string filename, bool hasMipmapping, bool hasWrapping)
+{
+	Texture* texture = new Texture();
+	texture->Load(filename, ++mCurrentTextureUnit, hasMipmapping, hasWrapping);
+	AddElement(name, texture);
+}
+
+void TexturesLibrary::CreateTexture(std::string name, unsigned int width, unsigned int height)
+{
+	Texture* texture = new Texture();
+	texture->CreateTexture(++mCurrentTextureUnit, width, height);
+	AddElement(name, texture);
+}
+
+void TexturesLibrary::CreateDepthTexture(std::string name, unsigned int width, unsigned int height)
+{
+	Texture* texture = new Texture();
+	texture->CreateDepthTexture(++mCurrentTextureUnit, width, height);
+	AddElement(name, texture);
 }
 
 ITexture* TexturesLibrary::CreateDepthTexture(const std::string& name, const glm::ivec2& size)

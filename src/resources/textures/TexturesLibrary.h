@@ -25,6 +25,9 @@ public:
 	ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
 
 private:
+	void LoadTexture(std::string name, std::string filename, bool hasMipmapping, bool hasWrapping);
+	void CreateTexture(std::string name, unsigned int width, unsigned int height);
+	void CreateDepthTexture(std::string name, unsigned int width, unsigned int height);
 	void LoadTexturesPendingToLoad();
 };
 

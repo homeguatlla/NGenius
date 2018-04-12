@@ -1,0 +1,18 @@
+#version 330 core
+
+in vec3 vertexModelspace;
+out vec2 textureCoords[11];
+
+uniform float height;
+
+void main(void)
+{
+	gl_Position =  vec4(vertexModelspace.xy, 0.0f, 1.0f);
+	vec2 centerTextureCoords = vec2(vertexModelspace.x, vertexModelspace.y) * 0.5 + 0.5;
+	float pixelSize = 1.0 / height;
+
+	for(int i = -5; i <= 5 ; ++i)
+	{
+		textureCoords[i + 5] = centerTextureCoords + vec2(0.0, pixelSize * i); 
+	}
+}

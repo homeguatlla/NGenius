@@ -253,6 +253,7 @@
     <ClInclude Include="src\resources\shaders\DefaultShader.h" />
     <ClInclude Include="src\resources\shaders\EnergyWallShader.h" />
     <ClInclude Include="src\resources\shaders\GUIShader.h" />
+    <ClInclude Include="src\resources\shaders\HorizontalBlurShader.h" />
     <ClInclude Include="src\resources\shaders\IShaderProgram.h" />
     <ClInclude Include="src\resources\shaders\ModelShader.h" />
     <ClInclude Include="src\resources\shaders\NormalMapShader.h" />
@@ -263,6 +264,7 @@
     <ClInclude Include="src\resources\shaders\SkyBoxShader.h" />
     <ClInclude Include="src\resources\shaders\TerrainShader.h" />
     <ClInclude Include="src\resources\shaders\TextShader.h" />
+    <ClInclude Include="src\resources\shaders\VerticalBlurShader.h" />
     <ClInclude Include="src\resources\shaders\WaterShader.h" />
     <ClInclude Include="src\resources\systems\DebugSystem.h" />
     <ClInclude Include="src\resources\systems\EntitiesSystem.h" />
@@ -382,6 +384,7 @@
     <ClCompile Include="src\resources\shaders\DefaultShader.cpp" />
     <ClCompile Include="src\resources\shaders\EnergyWallShader.cpp" />
     <ClCompile Include="src\resources\shaders\GUIShader.cpp" />
+    <ClCompile Include="src\resources\shaders\HorizontalBlurShader.cpp" />
     <ClCompile Include="src\resources\shaders\IShaderProgram.cpp" />
     <ClCompile Include="src\resources\shaders\ModelShader.cpp" />
     <ClCompile Include="src\resources\shaders\NormalMapShader.cpp" />
@@ -392,6 +395,7 @@
     <ClCompile Include="src\resources\shaders\SkyBoxShader.cpp" />
     <ClCompile Include="src\resources\shaders\TerrainShader.cpp" />
     <ClCompile Include="src\resources\shaders\TextShader.cpp" />
+    <ClCompile Include="src\resources\shaders\VerticalBlurShader.cpp" />
     <ClCompile Include="src\resources\shaders\WaterShader.cpp" />
     <ClCompile Include="src\resources\systems\DebugSystem.cpp" />
     <ClCompile Include="src\resources\systems\EntitiesSystem.cpp" />
@@ -428,6 +432,7 @@
     <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="data\shaders\fragment\f_blur.cg" />
     <None Include="data\shaders\fragment\f_contrast.cg" />
     <None Include="data\shaders\fragment\f_default.cg" />
     <None Include="data\shaders\fragment\f_gui_quad.cg" />
@@ -445,6 +450,7 @@
     <None Include="data\shaders\vertex\v_contrast.cg" />
     <None Include="data\shaders\vertex\v_default.cg" />
     <None Include="data\shaders\vertex\v_gui_quad.cg" />
+    <None Include="data\shaders\vertex\v_horizontal_blur.cg" />
     <None Include="data\shaders\vertex\v_model.cg" />
     <None Include="data\shaders\vertex\v_model_normalmap.cg" />
     <None Include="data\shaders\vertex\v_overdraw.cg" />
@@ -454,6 +460,7 @@
     <None Include="data\shaders\vertex\v_skybox.cg" />
     <None Include="data\shaders\vertex\v_test_terrain_1.cg" />
     <None Include="data\shaders\vertex\v_text.cg" />
+    <None Include="data\shaders\vertex\v_vertical_blur.cg" />
     <None Include="data\shaders\vertex\v_water.cg" />
     <None Include="data\shaders\vertex\v_energy_wall.cg" />
   </ItemGroup>

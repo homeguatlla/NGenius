@@ -1,0 +1,19 @@
+#version 330 core
+
+in vec2 textureCoords[11];
+
+out vec4 color;
+ 
+uniform sampler2D texture;
+
+const float blurValues[11] = float[](0.0093, 0.028002, 0.065984, 0.121703, 0.175713, 0.198596, 0.175713, 0.121703, 0.065984, 0.028002, 0.0093 );
+
+void main()
+{
+	color = vec4(0.0, 0.0, 0.0, 1.0);
+
+	for(int i = 0; i < 11; ++i)
+	{
+		color += texture2D(texture, textureCoords[i]) * blurValues[i];
+	}
+}

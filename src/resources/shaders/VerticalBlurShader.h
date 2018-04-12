@@ -1,14 +1,14 @@
 #pragma once
 #include "IShaderProgram.h"
 
-class ContrastShader : public IShaderProgram
+class VerticalBlurShader : public IShaderProgram
 {
 	static const std::string VERTEX_FILE;
 	static const std::string FRAGMENT_FILE;
 
 public:
-	ContrastShader();
-	~ContrastShader();
+	VerticalBlurShader();
+	~VerticalBlurShader();
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 	
@@ -16,7 +16,8 @@ public:
 	void GetAllUniformLocations() override;
 
 private:
+
 	int mLocationTexture;
-	int mLocationContrast;
+	int mLocationHeight;
 };
 

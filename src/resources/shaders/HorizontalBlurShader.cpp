@@ -1,50 +1,49 @@
 #include "stdafx.h"
-#include "ContrastShader.h"
+#include "HorizontalBlurShader.h"
 #include "../camera/ICamera.h"
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectDiffuseTexture.h"
 #include "../materials/effects/MaterialEffectFloat.h"
 #include "../textures/ITexture.h"
 
-const std::string ContrastShader::VERTEX_FILE = "data/shaders/vertex/v_contrast.cg";
-const std::string ContrastShader::FRAGMENT_FILE = "data/shaders/fragment/f_contrast.cg";
+const std::string HorizontalBlurShader::VERTEX_FILE = "data/shaders/vertex/v_horizontal_blur.cg";
+const std::string HorizontalBlurShader::FRAGMENT_FILE = "data/shaders/fragment/f_blur.cg";
 
 const std::string ATTRIBUTE_TEXTURE("texture");
-const std::string ATTRIBUTE_CONTRAST("contrast");
+const std::string ATTRIBUTE_WIDTH("width");
 
-ContrastShader::ContrastShader() :
+HorizontalBlurShader::HorizontalBlurShader() :
 IShaderProgram(VERTEX_FILE, FRAGMENT_FILE),
 mLocationTexture(-1),
-mLocationContrast(-1)
+mLocationWidth(-1)
 {
 }
 
 
-ContrastShader::~ContrastShader()
+HorizontalBlurShader::~HorizontalBlurShader()
 {
 }
 
-void ContrastShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
+void HorizontalBlurShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	MaterialEffectDiffuseTexture* effectDiffuse = material->GetEffect<MaterialEffectDiffuseTexture>();
 	if (effectDiffuse != nullptr)
 	{
 		LoadTexture(mLocationTexture, effectDiffuse->GetDiffuseTexture()->GetUnit());
 	}
-
 	MaterialEffectFloat* effectFloat = material->GetEffect<MaterialEffectFloat>();
 	if (effectFloat != nullptr)
 	{
-		LoadFloat(mLocationContrast, effectFloat->GetValue());
+		LoadFloat(mLocationWidth, effectFloat->GetValue());
 	}
 }
 
-void ContrastShader::BindAttributes()
+void HorizontalBlurShader::BindAttributes()
 {
 }
 
-void ContrastShader::GetAllUniformLocations()
+void HorizontalBlurShader::GetAllUniformLocations()
 {
 	mLocationTexture = GetUniformLocation(ATTRIBUTE_TEXTURE);
-	mLocationContrast = GetUniformLocation(ATTRIBUTE_CONTRAST);
+	mLocationWidth = GetUniformLocation(ATTRIBUTE_WIDTH);
 }
