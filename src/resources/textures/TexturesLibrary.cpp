@@ -50,13 +50,9 @@ void TexturesLibrary::Load()
 	LoadTexture("hud_map", "data/ui/hud/hud_map.png", false, false);
 
 	CreateColorTexture("map", glm::vec2(256, 256));
-	CreateColorTexture("reflection_water", glm::vec2(320 * 2, 240 * 2));
-	CreateColorTexture("refraction_water", glm::vec2(320 * 2, 240 * 2));
 
 	LoadTexture("distorsion_water", "data/textures/waterDUDV.png", false, true);
 	LoadTexture("normal_water", "data/textures/normal_water.png", false, true);
-
-	CreateDepthTexture("refraction_depth_water", 320 * 2, 240 * 2);
 
 	LoadTexture("smoke", "data/textures/smoke_64_.png", false, false);
 	LoadTexture("yellow_grid", "data/textures/grid_64.png", false, true);

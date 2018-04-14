@@ -85,15 +85,11 @@ RenderPass* WaterRenderPassSubSystem::CreateRefractionRenderPass()
 {
 	//REFRACTION	
 	ApplyRefractionCameras(mGameplayCamera, mRefractionCamera);
-
-	/*mWaterRefractionCameraEntity = new GameEntity(new Transformation(mRefractionWaterCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
-		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
-	mEngine.AddGameEntity(mWaterRefractionCameraEntity);
-	*/
+	
+	Texture* refractionTexture = static_cast<Texture*>(mRenderSystem->CreateColorTexture("refraction_water", glm::vec2(320 * 2, 240 * 2)));
+	Texture* refractionDepthTexture = static_cast<Texture*>(mRenderSystem->CreateDepthTexture("refraction_depth_water", glm::vec2(320 * 2, 240 * 2)));
 	
 	IFrameBuffer* frameRefractionBuffer = new IFrameBuffer(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight));
-	Texture* refractionTexture = static_cast<Texture*>(mRenderSystem->GetTexture("refraction_water"));
-	Texture* refractionDepthTexture = static_cast<Texture*>(mRenderSystem->GetTexture("refraction_depth_water"));
 	frameRefractionBuffer->SetColorTextureAttachment(0, refractionTexture);
 	frameRefractionBuffer->SetDepthTextureAttachment(refractionDepthTexture);
 	frameRefractionBuffer->Init();
@@ -117,14 +113,9 @@ RenderPass* WaterRenderPassSubSystem::CreateReflectionRenderPass()
 	//WATER RENDER PASS	
 	ApplyReflectionCameras(mWaterY, mGameplayCamera, mReflectionCamera);
 
-	/*mWaterReflectionCameraEntity = new GameEntity(new Transformation(mReflectionWaterCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
-		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
-	mEngine.AddGameEntity(mWaterReflectionCameraEntity);
-	*/
-
 	//REFLECTION
+	Texture* reflectionTexture = static_cast<Texture*>(mRenderSystem->CreateColorTexture("reflection_water", glm::vec2(320 * 2, 240 * 2)));
 	IFrameBuffer* frameReflectionBuffer = new IFrameBuffer(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight));
-	Texture* reflectionTexture = static_cast<Texture*>(mRenderSystem->GetTexture("reflection_water"));
 	frameReflectionBuffer->SetColorTextureAttachment(0, reflectionTexture);
 	frameReflectionBuffer->SetDepthAttachment(reflectionTexture->GetWidth(), reflectionTexture->GetHeight());
 
