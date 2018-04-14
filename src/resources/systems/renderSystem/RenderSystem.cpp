@@ -755,6 +755,12 @@ ITexture* RenderSystem::CreateDepthTexture(const std::string& name, const glm::i
 	return mTexturesLibrary->CreateDepthTexture(name, size);
 }
 
+ITexture* RenderSystem::CreateColorTexture(const std::string& name, const glm::ivec2& size)
+{
+	assert(mTexturesLibrary != nullptr);
+	return mTexturesLibrary->CreateColorTexture(name, size);
+}
+
 IMaterial* RenderSystem::CreateMaterial(const std::string& name, IShaderProgram* shader)
 {
 	return mMaterialsLibrary->CreateMaterial(name, shader);

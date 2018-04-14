@@ -130,7 +130,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = RELEASE;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };

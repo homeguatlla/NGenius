@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "PostProcessSubSystem.h"
-#include "../../postprocesseffects/PostProcessEffect.h"
 #include "../renderSystem/RenderSystem.h"
 #include "../../renderers/ImageRenderer.h"
 #include "../../models/Model.h"
@@ -41,74 +40,65 @@ void PostProcessSubSystem::Init()
 	}
 }
 
-void PostProcessSubSystem::LoadContrastPostProcess(Model* model, Texture* texture)
+void PostProcessSubSystem::LoadContrastPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, unsigned int width, unsigned int height)
 {
 	IMaterial* material = mRenderSystem->CreateMaterial("contrast", mRenderSystem->GetShader("contrast"));
 	material->AddEffect(new MaterialEffectFloat(0.3f));
 
 	ImageRenderer* renderer = new ImageRenderer(model, material);
-	PostProcessEffect* postProcessEffect = new PostProcessEffect(	PostProcessEffect::PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER,
-																	texture,
-																	renderer);
-	/*
-	postProcessEffect->SetBufferSize(	static_cast<unsigned int>(mRenderSystem->GetScreenWidth()),
-	static_cast<unsigned int>(mRenderSystem->GetScreenHeight()));
-	*/
+	PostProcessEffect* postProcessEffect = new PostProcessEffect(type, texture,	renderer);
+
+	postProcessEffect->SetBufferSize(width, height);
 	AddPostProcessEffect(postProcessEffect);
 }
 
-void PostProcessSubSystem::LoadHorizontalBlurPostProcess(Model* model, Texture* texture, float width)
+void PostProcessSubSystem::LoadHorizontalBlurPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, float blurGranularity, unsigned int width, unsigned int height)
 {
 	IMaterial* material = mRenderSystem->CreateMaterial("horizontal_blur", mRenderSystem->GetShader("horizontal_blur"));
-	material->AddEffect(new MaterialEffectFloat(width));
+	material->AddEffect(new MaterialEffectFloat(blurGranularity));
 
 	ImageRenderer* renderer = new ImageRenderer(model, material);
-	PostProcessEffect* postProcessEffect = new PostProcessEffect(PostProcessEffect::PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER,
-		texture,
-		renderer);
-	/*
-	postProcessEffect->SetBufferSize(	static_cast<unsigned int>(mRenderSystem->GetScreenWidth()),
-	static_cast<unsigned int>(mRenderSystem->GetScreenHeight()));
-	*/
+	PostProcessEffect* postProcessEffect = new PostProcessEffect(type, texture, renderer);
+	postProcessEffect->SetBufferSize(width, height);
 	AddPostProcessEffect(postProcessEffect);
 }
 
-void PostProcessSubSystem::LoadVerticalBlurPostProcess(Model* model, Texture* texture, float height)
+void PostProcessSubSystem::LoadVerticalBlurPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, float blurGranularity, unsigned int width, unsigned int height)
 {
 	IMaterial* material = mRenderSystem->CreateMaterial("vertical_blur", mRenderSystem->GetShader("vertical_blur"));
-	material->AddEffect(new MaterialEffectFloat(height));
+	material->AddEffect(new MaterialEffectFloat(blurGranularity));
 
 	ImageRenderer* renderer = new ImageRenderer(model, material);
-	PostProcessEffect* postProcessEffect = new PostProcessEffect(PostProcessEffect::PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER,
-		texture,
-		renderer);
-	/*
-	postProcessEffect->SetBufferSize(	static_cast<unsigned int>(mRenderSystem->GetScreenWidth()),
-	static_cast<unsigned int>(mRenderSystem->GetScreenHeight()));
-	*/
+	PostProcessEffect* postProcessEffect = new PostProcessEffect(type, texture,	renderer);
+	postProcessEffect->SetBufferSize(width, height);
 	AddPostProcessEffect(postProcessEffect);
 }
 
 void PostProcessSubSystem::Load()
 {
-	Texture* texture = static_cast<Texture*>(mRenderSystem->GetTexture("postprocess"));
+	unsigned int screenWidth = static_cast<unsigned int>(mRenderSystem->GetScreenWidth());
+	unsigned int screenHeight = static_cast<unsigned int>(mRenderSystem->GetScreenHeight());
+
+	Texture* texture = static_cast<Texture*>(mRenderSystem->CreateColorTexture("postprocess", glm::vec2(screenWidth, screenHeight)));
+	Texture* texture2 = static_cast<Texture*>(mRenderSystem->CreateColorTexture("postprocess2", glm::vec2(screenWidth, screenHeight)));
+	
 	Model* model = mRenderSystem->GetModel("quad");
 	
-	//LoadContrastPostProcess(model, texture);
-	//LoadHorizontalBlurPostProcess(model, texture, 1024.0f);
-	LoadVerticalBlurPostProcess(model, texture, 768.0f);
+	LoadContrastPostProcess(model, texture2, PostProcessEffect::PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER, screenWidth, screenHeight);
+	LoadHorizontalBlurPostProcess(model, texture, PostProcessEffect::PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER, screenWidth / 2.0f, screenWidth, screenHeight);
+	LoadVerticalBlurPostProcess(model, texture2, PostProcessEffect::PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER, screenHeight/ 2.0f, screenWidth, screenHeight);
+	LoadHorizontalBlurPostProcess(model, texture, PostProcessEffect::PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER, screenWidth / 4.0f, screenWidth, screenHeight);
+	LoadVerticalBlurPostProcess(model, texture2, PostProcessEffect::PostProcessEffectType::POSTPROCESS_TO_SCREEN, screenHeight / 4.0f, screenWidth, screenHeight);
 
 	if (!model->IsBuilt())
 	{
 		//TODO esto se puede hacer con un material por defecto en lugar de este
-		model->Build(mRenderSystem->GetVertexBufferManager(), mRenderSystem->GetMaterial("vertical_blur"));
+		model->Build(mRenderSystem->GetVertexBufferManager(), mRenderSystem->GetMaterial("contrast"));
 	}
 
 	//creating frame buffer
-	unsigned int screenWidth = static_cast<unsigned int>(mRenderSystem->GetScreenWidth());
-	unsigned int screenHeight = static_cast<unsigned int>(mRenderSystem->GetScreenHeight());
 	mFrameBuffer = new IFrameBuffer(screenWidth, screenHeight);
-	mFrameBuffer->SetCopyBufferToTexture(texture, 0, 0, screenWidth, screenHeight);
+	mFrameBuffer->SetCopyBufferToTexture(texture, 0, 0, texture->GetWidth(), texture->GetHeight());
 	//mFrameBuffer->Init();
 }
 

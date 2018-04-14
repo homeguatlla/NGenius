@@ -122,6 +122,7 @@ public:
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 
 	ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
+	ITexture* CreateColorTexture(const std::string& name, const glm::ivec2& size);
 
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 

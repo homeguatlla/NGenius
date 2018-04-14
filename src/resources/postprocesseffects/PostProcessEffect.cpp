@@ -6,15 +6,17 @@
 #include "../materials/effects/MaterialEffectDiffuseTexture.h"
 #include "../textures/Texture.h"
 
-PostProcessEffect::PostProcessEffect(PostProcessEffectType type, Texture* texture, ImageRenderer* imageRenderer) :
+#include <GL\glew.h>
+
+PostProcessEffect::PostProcessEffect(PostProcessEffectType type, Texture* outTexture, ImageRenderer* imageRenderer) :
 	mType(type),
 	mWidth(0),
 	mHeight(0),
 	mFrameBuffer(nullptr),
-	mTexture(texture),
+	mOutTexture(outTexture),
 	mRenderer(imageRenderer)
 {
-	assert(texture != nullptr);
+	assert(outTexture != nullptr);
 	assert(imageRenderer != nullptr);
 }
 
@@ -25,16 +27,23 @@ PostProcessEffect::~PostProcessEffect()
 
 void PostProcessEffect::Init()
 {
-	if (mType == PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER)
+	switch (mType)
 	{
-		/*mFrameBuffer = new IFrameBuffer(mWidth, mHeight);
-		mFrameBuffer->SetColorTextureAttachment(0, mTexture);
-		mFrameBuffer->Init();*/
-
-		IMaterial* material = mRenderer->GetMaterial();
-		mMaterialEffectDiffuseTexture = new MaterialEffectDiffuseTexture(mTexture, glm::vec3(0.0f), 0);
-		material->AddEffect(mMaterialEffectDiffuseTexture);
+		case PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER:
+			mFrameBuffer = new IFrameBuffer(mWidth, mHeight);
+			mFrameBuffer->SetColorTextureAttachment(0, mOutTexture);
+			mFrameBuffer->Init();
+			break;
+		case PostProcessEffectType::POSTPROCESS_TO_SCREEN:
+			break;
+		default:
+			break;
 	}
+
+	//Creating the materialEffectDiffuse with the Input Texture equal to the Output Texture only because of creation
+	IMaterial* material = mRenderer->GetMaterial();
+	mMaterialEffectDiffuseTexture = new MaterialEffectDiffuseTexture(mOutTexture, glm::vec3(0.0f), 0);
+	material->AddEffect(mMaterialEffectDiffuseTexture);
 }
 
 void PostProcessEffect::SetBufferSize(unsigned int width, unsigned int height)
@@ -48,19 +57,22 @@ bool PostProcessEffect::HasFrameBuffer()
 	return mType == PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER;
 }
 
-ITexture* PostProcessEffect::Render(ITexture* texture)
+ITexture* PostProcessEffect::Render(ITexture* inTexture)
 {
+	mMaterialEffectDiffuseTexture->SetDiffuseTexture(inTexture);
+
 	if (HasFrameBuffer())
 	{
-		//mFrameBuffer->BindBuffer();
-		//mMaterialEffectDiffuseTexture->SetDiffuseTexture(texture);
+		mFrameBuffer->BindBuffer();
 		mRenderer->Render();
-		//mFrameBuffer->UnbindBuffer();
+		mFrameBuffer->UnbindBuffer();
 	}
 	else
 	{
+		glDrawBuffer(GL_BACK);
+		glViewport(0, 0, mWidth, mHeight);
 		mRenderer->Render();
 	}
 	
-	return texture;
+	return mOutTexture;
 }

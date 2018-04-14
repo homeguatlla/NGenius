@@ -1,5 +1,5 @@
 #pragma once
-
+#include "../../postprocesseffects/PostProcessEffect.h"
 #include <vector>
 
 class RenderSystem;
@@ -28,8 +28,8 @@ public:
 
 private:
 	void Load();
-	void LoadContrastPostProcess(Model* model, Texture* texture);
-	void LoadHorizontalBlurPostProcess(Model* model, Texture* texture, float width);
-	void LoadVerticalBlurPostProcess(Model* model, Texture* texture, float height);
+	void LoadContrastPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, unsigned int width, unsigned int height);
+	void LoadHorizontalBlurPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, float blurGranularity, unsigned int width, unsigned int height);
+	void LoadVerticalBlurPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, float blurGranularity, unsigned int width, unsigned int height);
 };
 

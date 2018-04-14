@@ -49,9 +49,9 @@ void TexturesLibrary::Load()
 
 	LoadTexture("hud_map", "data/ui/hud/hud_map.png", false, false);
 
-	CreateTexture("map", 256, 256);
-	CreateTexture("reflection_water", 320 * 2, 240 * 2);
-	CreateTexture("refraction_water", 320 * 2, 240 * 2);
+	CreateColorTexture("map", glm::vec2(256, 256));
+	CreateColorTexture("reflection_water", glm::vec2(320 * 2, 240 * 2));
+	CreateColorTexture("refraction_water", glm::vec2(320 * 2, 240 * 2));
 
 	LoadTexture("distorsion_water", "data/textures/waterDUDV.png", false, true);
 	LoadTexture("normal_water", "data/textures/normal_water.png", false, true);
@@ -61,8 +61,6 @@ void TexturesLibrary::Load()
 	LoadTexture("smoke", "data/textures/smoke_64_.png", false, false);
 	LoadTexture("yellow_grid", "data/textures/grid_64.png", false, true);
 	LoadTexture("stall", "data/models/stall/stall.png", false, false);
-
-	CreateTexture("postprocess", 320 * 2, 240 * 2);
 
 	LoadTexturesPendingToLoad();
 }
@@ -74,11 +72,13 @@ void TexturesLibrary::LoadTexture(std::string name, std::string filename, bool h
 	AddElement(name, texture);
 }
 
-void TexturesLibrary::CreateTexture(std::string name, unsigned int width, unsigned int height)
+ITexture* TexturesLibrary::CreateColorTexture(std::string name, const glm::vec2& size)
 {
 	Texture* texture = new Texture();
-	texture->CreateTexture(++mCurrentTextureUnit, width, height);
+	texture->CreateTexture(++mCurrentTextureUnit, size.x, size.y);
 	AddElement(name, texture);
+
+	return texture;
 }
 
 void TexturesLibrary::CreateDepthTexture(std::string name, unsigned int width, unsigned int height)

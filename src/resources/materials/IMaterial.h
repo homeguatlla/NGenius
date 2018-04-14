@@ -38,6 +38,7 @@ public:
 
 	template<typename T> void AddEffect(T* effect)
 	{
+		static_assert(std::is_base_of<IMaterialEffect, T>::value, "The type must inherit from IMaterialEffect");
 		assert(effect != nullptr);
 		if (mEffects.count(&typeid(T)) == 0)
 		{
@@ -52,6 +53,7 @@ public:
 
 	template<typename T> void RemoveEffect()
 	{
+		static_assert(std::is_base_of<IMaterialEffect, T>::value, "The type must inherit from IMaterialEffect");
 		if (HasEffect<T>())
 		{
 			T* effect = static_cast<T*>(mEffects[&typeid(T)]);
@@ -62,11 +64,13 @@ public:
 
 	template<typename T> bool HasEffect()
 	{
+		static_assert(std::is_base_of<IMaterialEffect, T>::value, "The type must inherit from IMaterialEffect");
 		return mEffects.count(&typeid(T)) != 0;
 	}
 
 	template<typename T> T* GetEffect()
 	{
+		static_assert(std::is_base_of<IMaterialEffect, T>::value, "The type must inherit from IMaterialEffect");
 		if (HasEffect<T>())
 		{
 			return static_cast<T*>(mEffects[&typeid(T)]);
@@ -82,6 +86,7 @@ protected:
 private:
 	template<typename T> void AddEffect(const std::type_info* type, T* effect)
 	{
+		static_assert(std::is_base_of<IMaterialEffect, T>::value, "The type must inherit from IMaterialEffect");
 		assert(effect != nullptr);
 		if (mEffects.count(type) == 0)
 		{

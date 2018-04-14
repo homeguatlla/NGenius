@@ -39,6 +39,7 @@ public:
 
 	template<typename T> void AddComponent(T* component)
 	{
+		static_assert(std::is_base_of<IComponent, T>::value, "The type must inherit from IComponent");
 		assert(component != nullptr);
 		if (mComponents.count(&typeid(T)) == 0)
 		{
@@ -53,6 +54,7 @@ public:
 
 	template<typename T> void RemoveComponent()
 	{
+		static_assert(std::is_base_of<IComponent, T>::value, "The type must inherit from IComponent");
 		if (HasComponent<T>())
 		{ 
 			T* component = static_cast<T*>(mComponents[&typeid(T)]);
@@ -63,11 +65,13 @@ public:
 
 	template<typename T> bool HasComponent()
 	{
+		static_assert(std::is_base_of<IComponent, T>::value, "The type must inherit from IComponent");
 		return mComponents.count(&typeid(T)) != 0;
 	}
 
 	template<typename T> T* GetComponent()
 	{
+		static_assert(std::is_base_of<IComponent, T>::value, "The type must inherit from IComponent");
 		if (HasComponent<T>())
 		{
 			return static_cast<T*>(mComponents[&typeid(T)]);
@@ -81,6 +85,7 @@ public:
 private:
 	template<typename T> void AddComponent(const std::type_info* type, T* component)
 	{
+		static_assert(std::is_base_of<IComponent, T>::value, "The type must inherit from IComponent");
 		assert(component != nullptr);
 		if (mComponents.count(type) == 0)
 		{

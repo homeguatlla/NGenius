@@ -22,18 +22,18 @@ private:
 	unsigned int mWidth;
 	unsigned int mHeight;
 	IFrameBuffer* mFrameBuffer;
-	Texture* mTexture;
+	Texture* mOutTexture;
 	MaterialEffectDiffuseTexture* mMaterialEffectDiffuseTexture;
 	ImageRenderer* mRenderer;
 	PostProcessEffectType mType;
 
 public:
-	PostProcessEffect(PostProcessEffectType type, Texture* texture, ImageRenderer* imageRenderer);
+	PostProcessEffect(PostProcessEffectType type, Texture* outTexture, ImageRenderer* imageRenderer);
 	virtual ~PostProcessEffect();
 
 	void Init();
 	void SetBufferSize(unsigned int width, unsigned int height);
-	ITexture* Render(ITexture* texture);
+	ITexture* Render(ITexture* inTexture);
 	bool HasFrameBuffer();
 };
 
