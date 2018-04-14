@@ -16,6 +16,8 @@
 #include "ContrastShader.h"
 #include "HorizontalBlurShader.h"
 #include "VerticalBlurShader.h"
+#include "BrightShader.h"
+#include "BloomShader.h"
 
 ShadersLibrary::ShadersLibrary()
 {
@@ -44,6 +46,8 @@ void ShadersLibrary::Load()
 	AddShader("contrast", new ContrastShader());
 	AddShader("horizontal_blur", new HorizontalBlurShader());
 	AddShader("vertical_blur", new VerticalBlurShader());
+	AddShader("bright", new BrightShader());
+	AddShader("bloom", new BloomShader());
 }
 
 void ShadersLibrary::AddShader(char* name, IShaderProgram* shader)

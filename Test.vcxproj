@@ -249,6 +249,8 @@
     <ClInclude Include="src\resources\renderers\IndexesRenderer.h" />
     <ClInclude Include="src\resources\renderers\IRenderer.h" />
     <ClInclude Include="src\resources\renderers\WireframeRenderer.h" />
+    <ClInclude Include="src\resources\shaders\BloomShader.h" />
+    <ClInclude Include="src\resources\shaders\BrightShader.h" />
     <ClInclude Include="src\resources\shaders\ContrastShader.h" />
     <ClInclude Include="src\resources\shaders\DefaultShader.h" />
     <ClInclude Include="src\resources\shaders\EnergyWallShader.h" />
@@ -380,6 +382,8 @@
     <ClCompile Include="src\resources\renderers\IndexesRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\IRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\WireframeRenderer.cpp" />
+    <ClCompile Include="src\resources\shaders\BloomShader.cpp" />
+    <ClCompile Include="src\resources\shaders\BrightShader.cpp" />
     <ClCompile Include="src\resources\shaders\ContrastShader.cpp" />
     <ClCompile Include="src\resources\shaders\DefaultShader.cpp" />
     <ClCompile Include="src\resources\shaders\EnergyWallShader.cpp" />
@@ -432,7 +436,9 @@
     <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="data\shaders\fragment\f_bloom.cg" />
     <None Include="data\shaders\fragment\f_blur.cg" />
+    <None Include="data\shaders\fragment\f_bright.cg" />
     <None Include="data\shaders\fragment\f_contrast.cg" />
     <None Include="data\shaders\fragment\f_default.cg" />
     <None Include="data\shaders\fragment\f_gui_quad.cg" />
@@ -447,6 +453,8 @@
     <None Include="data\shaders\fragment\f_text.cg" />
     <None Include="data\shaders\fragment\f_water.cg" />
     <None Include="data\shaders\fragment\f_energy_wall.cg" />
+    <None Include="data\shaders\vertex\v_bloom.cg" />
+    <None Include="data\shaders\vertex\v_bright.cg" />
     <None Include="data\shaders\vertex\v_contrast.cg" />
     <None Include="data\shaders\vertex\v_default.cg" />
     <None Include="data\shaders\vertex\v_gui_quad.cg" />

@@ -564,6 +564,12 @@
     <ClInclude Include="src\resources\shaders\VerticalBlurShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\shaders\BrightShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\BloomShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -959,6 +965,12 @@
     <ClCompile Include="src\resources\shaders\VerticalBlurShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
+    <ClCompile Include="src\resources\shaders\BrightShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\BloomShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\fragment\f_default.cg">
@@ -1053,6 +1065,18 @@
     </None>
     <None Include="data\shaders\fragment\f_blur.cg">
       <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_bright.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_bright.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_bloom.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_bloom.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
     </None>
   </ItemGroup>
 </Project>

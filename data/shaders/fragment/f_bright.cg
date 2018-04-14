@@ -1,0 +1,16 @@
+#version 330 core
+
+in vec2 textureCoords;
+
+out vec4 color;
+ 
+uniform sampler2D texture;
+uniform vec3 bright;
+
+void main()
+{
+	vec4 textureColor = texture2D(texture, textureCoords);
+	vec3 brightColor = textureColor.rgb * bright;
+	float brightness = brightColor.r + brightColor.g + brightColor.b;
+	color = textureColor * brightness;
+}

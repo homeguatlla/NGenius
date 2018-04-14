@@ -21,7 +21,7 @@ public:
 	~PostProcessSubSystem();
 
 	void Init();
-	void Render(ITexture* texture);
+	void Render();
 
 	void AddPostProcessEffect(PostProcessEffect* postProcessEffect);
 	void RemovePostProcessEffect(PostProcessEffect* postProcessEffect);
@@ -29,7 +29,9 @@ public:
 private:
 	void Load();
 	void LoadContrastPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, unsigned int width, unsigned int height);
+	void LoadBrightPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, const glm::vec3& bright, unsigned int width, unsigned int height);
 	void LoadHorizontalBlurPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, float blurGranularity, unsigned int width, unsigned int height);
 	void LoadVerticalBlurPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, float blurGranularity, unsigned int width, unsigned int height);
+	void LoadBloomPostProcess(Model* model, Texture* texture, Texture* bright, PostProcessEffect::PostProcessEffectType type, unsigned int width, unsigned int height);
 };
 

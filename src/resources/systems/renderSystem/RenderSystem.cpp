@@ -153,7 +153,7 @@ void RenderSystem::Render()
 
 	if (mIsPostprocessEnabled)
 	{
-		mPostProcessSubsystem->Render(nullptr);
+		mPostProcessSubsystem->Render();
 	}
 
 	RenderPasses(mRenderPassesAfterPostProcessing);
