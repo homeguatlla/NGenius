@@ -249,6 +249,9 @@
     <ClInclude Include="src\resources\renderers\IndexesRenderer.h" />
     <ClInclude Include="src\resources\renderers\IRenderer.h" />
     <ClInclude Include="src\resources\renderers\WireframeRenderer.h" />
+    <ClInclude Include="src\resources\scene\GameScene.h" />
+    <ClInclude Include="src\resources\scene\quadtree\QuadTree.h" />
+    <ClInclude Include="src\resources\scene\quadtree\QuadTreeNode.h" />
     <ClInclude Include="src\resources\shaders\BloomShader.h" />
     <ClInclude Include="src\resources\shaders\BrightShader.h" />
     <ClInclude Include="src\resources\shaders\ContrastShader.h" />
@@ -382,6 +385,9 @@
     <ClCompile Include="src\resources\renderers\IndexesRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\IRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\WireframeRenderer.cpp" />
+    <ClCompile Include="src\resources\scene\GameScene.cpp" />
+    <ClCompile Include="src\resources\scene\quadtree\QuadTree.cpp" />
+    <ClCompile Include="src\resources\scene\quadtree\QuadTreeNode.cpp" />
     <ClCompile Include="src\resources\shaders\BloomShader.cpp" />
     <ClCompile Include="src\resources\shaders\BrightShader.cpp" />
     <ClCompile Include="src\resources\shaders\ContrastShader.cpp" />

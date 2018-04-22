@@ -160,6 +160,18 @@
     <Filter Include="Source Files\resources\postprocesseffects">
       <UniqueIdentifier>{3df2f632-9d5c-4ad7-8b80-3d2caf296409}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\resources\scene">
+      <UniqueIdentifier>{d2152274-4013-4fea-ab4b-3dc79860cbdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\scene\quadtree">
+      <UniqueIdentifier>{da3198ff-8830-4dda-8847-3c8abffc6587}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\scene">
+      <UniqueIdentifier>{f54ed909-a650-481d-b2c5-c6b3410faa42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\scene\quadtree">
+      <UniqueIdentifier>{c71a864c-9da3-442e-95ef-c2e992c07d1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -570,6 +582,15 @@
     <ClInclude Include="src\resources\shaders\BloomShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\scene\GameScene.h">
+      <Filter>Header Files\resources\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\scene\quadtree\QuadTree.h">
+      <Filter>Header Files\resources\scene\quadtree</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\scene\quadtree\QuadTreeNode.h">
+      <Filter>Header Files\resources\scene\quadtree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -970,6 +991,15 @@
     </ClCompile>
     <ClCompile Include="src\resources\shaders\BloomShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\scene\GameScene.cpp">
+      <Filter>Source Files\resources\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\scene\quadtree\QuadTree.cpp">
+      <Filter>Source Files\resources\scene\quadtree</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\scene\quadtree\QuadTreeNode.cpp">
+      <Filter>Source Files\resources\scene\quadtree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -30,6 +30,7 @@ class ParticlesEmitter;
 class RenderPass;
 class Terrain;
 class ICamera;
+class GameScene;
 
 
 struct GLFWwindow;
@@ -72,7 +73,7 @@ public:
 	float GetScreenHeight() const;
 	GLFWwindow* GetGLWindow() const;
 
-	void AddGameEntity(GameEntity* entity);
+	GameScene* CreateGameScene(const std::string& name);
 	void AddParticleEmitter(ParticlesEmitter* emitter);
 	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing);
 	void AddLight(Light* light);

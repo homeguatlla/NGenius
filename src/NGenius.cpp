@@ -19,6 +19,9 @@
 #include "resources/systems/LightsSystem.h"
 #include "resources/systems/InputSystem.h"
 #include "resources/systems/DebugSystem.h"
+
+#include "resources/scene/GameScene.h"
+
 #include "statistics/Statistics.h"
 
 #include "resources/entities/ParticlesEmitter.h"
@@ -245,10 +248,12 @@ void NGenius::SetFullScreen(bool isFullScreen)
 	mRenderSystem->SetFullScreen(isFullScreen);
 }
 
-void NGenius::AddGameEntity(GameEntity* entity)
+GameScene* NGenius::CreateGameScene(const std::string& name)
 {
 	assert(mEntitiesSystem != nullptr);
-	mEntitiesSystem->AddEntity(entity);
+	assert(mRenderSystem != nullptr);
+
+	return new GameScene(name, mEntitiesSystem, mRenderSystem);
 }
 
 void NGenius::AddParticleEmitter(ParticlesEmitter* emitter)

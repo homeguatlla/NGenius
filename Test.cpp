@@ -74,6 +74,8 @@
 #include "src/resources/entities/ParticlesEmitter.h"
 #include "src/resources/entities/EnergyWall.h"
 
+#include "src/resources/scene/GameScene.h"
+
 #include "src/statistics/Statistics.h"
 
 #include "src/resources/camera/ICamera.h"
@@ -173,6 +175,7 @@ Terrain* mTerrain;
 Player* mPlayer;
 Water* mWater;
 GameEntity* mCamera;
+GameScene* mScene;
 
 EnergyWall* mEnergyWall;
 Text* mText[5];
@@ -230,7 +233,7 @@ void CreateTerrainNormals(vector<glm::vec3>& vertexs, int numVertexsSide)
 	//normalRenderer->SetNormals(normals);
 	normalRenderer->Create();
 
-	mEngine.AddGameEntity(entity);
+	mScene->AddGameEntity(entity);
 }
 
 void CreateShadowPlane()
@@ -244,7 +247,7 @@ void CreateShadowPlane()
 	GameEntity* quadShadow = new GameEntity(	new Transformation(glm::vec3(0.0f, -300.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 												guiShadowRenderer
 											);
-	mEngine.AddGameEntity(quadShadow);
+	mScene->AddGameEntity(quadShadow);
 }
 
 void CreateWaterHudPlanes()
@@ -258,7 +261,7 @@ void CreateWaterHudPlanes()
 	GameEntity* quadReflection = new GameEntity(	new Transformation(glm::vec3(420.0f, -300.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 		guiReflectionRenderer
 												);
-	mEngine.AddGameEntity(quadReflection);
+	mScene->AddGameEntity(quadReflection);
 
 	IRenderer* guiRefractionRenderer = new GUIRenderer(mEngine.GetShader("gui"),
 															static_cast<Texture*>(mEngine.GetTexture("refraction_depth_water")),
@@ -268,7 +271,7 @@ void CreateWaterHudPlanes()
 	GameEntity* guiRefraction = new GameEntity(	new Transformation(glm::vec3(-320.0f, -300.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 													guiRefractionRenderer
 												);
-	mEngine.AddGameEntity(guiRefraction);
+	mScene->AddGameEntity(guiRefraction);
 }
 
 
@@ -308,7 +311,7 @@ void CreateSpecificCubes()
 		//modelEntity->AddComponent(new BillboardComponent(mGameplayCamera));
 
 		//AddBoundingBoxesFrom(modelEntity);
-		mEngine.AddGameEntity(modelEntity);
+		mScene->AddGameEntity(modelEntity);
 	}
 }
 */
@@ -441,10 +444,10 @@ void CreateTrees()
 	for (unsigned long i = 0; i < positions.size(); i++)
 	{
 		GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], modelsFoliage, distances, materialFoliage, nullptr);
-		mEngine.AddGameEntity(entity);
+		mScene->AddGameEntity(entity);
 		
 		entity = CreateModelWithLod(positions[i], sizes[i], modelsTrunk, distances, materialTrunk, materialTrunkNormalmap);
-		mEngine.AddGameEntity(entity);
+		mScene->AddGameEntity(entity);
 	}
 }
 
@@ -515,7 +518,7 @@ void CreateProps()
 			Model* model = mEngine.GetModel(modelName);
 
 			GameEntity* entity = CreateModel(position, scale, rotation, model, material);
-			mEngine.AddGameEntity(entity);
+			mScene->AddGameEntity(entity);
 		}
 	}
 }
@@ -548,7 +551,7 @@ void CreateWater()
 								50.0f,
 								waterSpeed
 							);
-		mEngine.AddGameEntity(mWater);
+		mScene->AddGameEntity(mWater);
 	}
 }
 
@@ -594,7 +597,7 @@ void CreateParticlesFire()
 	particlesEmitter->SetScaleValues(0.05f, 0.005f);
 	particlesEmitter->SetVelocity(glm::vec3(0.0f), glm::vec3(0.02f, 0.2f, 0.02f));
 	particlesEmitter->SetSpawnArea(glm::vec3(-0.02f, 0.0f, -0.02f), glm::vec3(0.03f, 0.0f, 0.03f));
-	mEngine.AddGameEntity(particlesEmitter);
+	mScene->AddGameEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);
 }
 
@@ -610,7 +613,7 @@ void CreateEnergyWall()
 									mEngine.GetModel("sphere"),
 									2.0f
 								);
-	mEngine.AddGameEntity(mEnergyWall);
+	mScene->AddGameEntity(mEnergyWall);
 	mEngine.SetEnergyWall(mEnergyWallPosition, mEnergyWallRadius);
 }
 
@@ -629,7 +632,7 @@ void CreateHUD()
 										glm::vec3(256.0f)),
 										guiRenderer
 									);
-	mEngine.AddGameEntity(quad);
+	mScene->AddGameEntity(quad);
 
 	/*
 	IRenderer* mapRenderer = new GUIRenderer(mEngine.GetShader("gui"),
@@ -640,7 +643,7 @@ void CreateHUD()
 	GameEntity* map = new GameEntity(new Transformation(glm::vec3(420.0f, -300.0f, -1.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 		mapRenderer
 	);
-	mEngine.AddGameEntity(map);*/
+	mScene->AddGameEntity(map);*/
 }
 
 /*
@@ -658,7 +661,7 @@ void CreateParticlesSparkles()
 	particlesEmitter->SetScaleValues(0.003f, 0.001f);
 	particlesEmitter->SetVelocity(glm::vec3(-0.7f), glm::vec3(0.7f));
 	particlesEmitter->SetSpawnArea(glm::vec3(0.0f), glm::vec3(0.01f, 0.01f, 0.01f));
-	mEngine.AddGameEntity(particlesEmitter);
+	mScene->AddGameEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);
 }
 
@@ -679,7 +682,7 @@ void CreateParticlesTest()
 	particlesEmitter->SetColorGradientValues(glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec4(0.6f, 0.0f, 0.6f, 0.0f));
 	particlesEmitter->SetScaleValues(0.03f, 0.4f + (rand() % 4) / 10.0f);
 	particlesEmitter->SetVelocity(glm::vec3(0.0f, 0.2f, 0.0f), glm::vec3(0.0f, 0.5f, 0.0f));
-	mEngine.AddGameEntity(particlesEmitter);
+	mScene->AddGameEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);	
 
 	particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
@@ -695,7 +698,7 @@ void CreateParticlesTest()
 	particlesEmitter->SetColorGradientValues(glm::vec4(0.0f, 0.8f, 0.0f, 1.0f), glm::vec4(0.0f, 0.6f, 0.6f, 0.0f));
 	particlesEmitter->SetScaleValues(0.03f, 0.4f + (rand() % 4) / 10.0f);
 	particlesEmitter->SetVelocity(glm::vec3(0.0f, 0.2f, 0.0f), glm::vec3(0.0f, 0.5f, 0.0f));
-	mEngine.AddGameEntity(particlesEmitter);
+	mScene->AddGameEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);
 }
 */
@@ -723,7 +726,7 @@ void CreateTextTest()
 							),
 			materialText, font,
 			texts[i], false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
-		mEngine.AddGameEntity(mText[i]);
+		mScene->AddGameEntity(mText[i]);
 	}
 	float x = 0.0f;
 	float z = 0.0f;
@@ -742,7 +745,7 @@ void CreateTextTest()
 	Text* mTestText = new Text(	new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.01f)),
 								material3D, font,
 								"Origin", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
-	mEngine.AddGameEntity(mTestText);
+	mScene->AddGameEntity(mTestText);
 	/*
 	x = 10.0f;
 	z = 10.0f;
@@ -754,7 +757,7 @@ void CreateTextTest()
 	mTestText->SetOutlineColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.8f));
 	mTestText->SetBorderParameters(0.5f, 0.1f, 0.5f, 0.4f);
 	mTestText->SetShadow(glm::vec2(0.002f, 0.002f));
-	mEngine.AddGameEntity(mTestText);*/
+	mScene->AddGameEntity(mTestText);*/
 }
 
 void CreateTerrain()
@@ -786,7 +789,7 @@ void CreateTerrain()
 
 	mTerrain->SetFlat(mIsTerrainFlat);
 			
-	mEngine.AddGameEntity(mTerrain);	
+	mScene->AddGameEntity(mTerrain);	
 	mEngine.SetTerrain(mTerrain);
 
 	//TERRAIN NORMALS ENTITY
@@ -826,7 +829,7 @@ void CreatePlayer()
 	mPlayer->AddComponent(new EnergyWallCollisionComponent());
 	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(RenderSystem::WIREFRAME_MATERIAL_NAME));
 	mPlayer->AddComponent(new DebugComponent(boundingBoxRenderer));
-	mEngine.AddGameEntity(mPlayer);
+	mScene->AddGameEntity(mPlayer);
 }
 
 void CreateGameCameraEntity()
@@ -857,7 +860,7 @@ void CreateGameCameraEntity()
 		mCamera->AddComponent(new OverWaterComponent(mWaterHeight));
 	}
 
-	mEngine.AddGameEntity(mCamera);
+	mScene->AddGameEntity(mCamera);
 }
 
 void CreateCube()
@@ -877,7 +880,7 @@ void CreateCube()
 			skyboxRenderer
 		);
 		skyBox->AddComponent(new RotationComponent(glm::vec3(0.0f, 1.0f, 0.0f), SKYBOX_ROTATION_SPEED));
-		mEngine.AddGameEntity(skyBox);
+		mScene->AddGameEntity(skyBox);
 	}
 }
 
@@ -903,6 +906,7 @@ void CreateEntities()
 {
 	const Texture* texture = static_cast<const Texture*>(mEngine.CreateDepthTexture("depth_texture", glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
 
+	mScene = mEngine.CreateGameScene("mainScene");
 	//CreateHUD();
 
 	CreatePlayer();
@@ -956,7 +960,7 @@ void CreateEntities2()
 	mSunLight->AddComponent(new VerticalInputComponent(mEngine.GetGLWindow()));
 	mSunLight->GetTransformation()->SetScale(glm::vec3(0.05f));
 
-	mEngine.AddGameEntity(mSunLight);
+	mScene->AddGameEntity(mSunLight);
 
 	//CreateSpecificCubes();
 
