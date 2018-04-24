@@ -591,6 +591,12 @@
     <ClInclude Include="src\resources\scene\quadtree\QuadTreeNode.h">
       <Filter>Header Files\resources\scene\quadtree</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\scene\quadtree\GameEntityQuadTree.h">
+      <Filter>Header Files\resources\scene\quadtree</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\scene\ISpacePartition.h">
+      <Filter>Header Files\resources\scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -999,6 +1005,12 @@
       <Filter>Source Files\resources\scene\quadtree</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\scene\quadtree\QuadTreeNode.cpp">
+      <Filter>Source Files\resources\scene\quadtree</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\scene\ISceneGraph.cpp">
+      <Filter>Source Files\resources\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\scene\quadtree\GameEntityQuadTree.cpp">
       <Filter>Source Files\resources\scene\quadtree</Filter>
     </ClCompile>
   </ItemGroup>
