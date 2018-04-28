@@ -3,7 +3,7 @@
 #include <vector>
 
 class Light;
-class EntitiesSystem;
+class GameScene;
 
 class LightsSystem
 {
@@ -11,10 +11,10 @@ class LightsSystem
 	std::vector<Light*> mNewLightsToAdd;
 	std::vector<Light*> mLightsToRemove;
 	typedef std::vector<Light*>::iterator GameLightIterator;
-	EntitiesSystem* mEntitiesSystem;
+	GameScene* mGameScene;
 
 public:
-	LightsSystem(EntitiesSystem* entitiesSystem);
+	LightsSystem(GameScene* gameScene);
 	~LightsSystem();
 
 	void Update(float elapsedTime);

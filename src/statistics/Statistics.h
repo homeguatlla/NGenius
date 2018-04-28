@@ -3,14 +3,14 @@
 #include "../visitor/BaseVisitor.h"
 #include "../NGenius.h"
 #include "../resources/systems/renderSystem/RenderSystem.h"
-#include "../resources/systems/EntitiesSystem.h"
 #include "../resources/systems/PhysicsSystem.h"
+#include "../resources/scene/GameScene.h"
 
 class Statistics : 
 	public BaseVisitor, 
 	public Visitor<NGenius>, 
 	public Visitor<RenderSystem>,
-	public Visitor<EntitiesSystem>,
+	public Visitor<GameScene>,
 	public Visitor<PhysicsSystem>
 {
 	float mNumberFPS;
@@ -25,7 +25,7 @@ public:
 	
 	void Visit(NGenius& nGenius);
 	void Visit(RenderSystem& renderSystem);
-	void Visit(EntitiesSystem& entitiesSystem);
+	void Visit(GameScene& gameScene);
 	void Visit(PhysicsSystem& physicsSystem);
 
 	unsigned int GetNumberTrianglesRendered() const;

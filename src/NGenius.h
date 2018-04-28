@@ -46,6 +46,7 @@ class NGenius : public BaseVisitable<>
 	DebugSystem* mDebugSystem;
 	InputHandler* mInputHandler;
 	Statistics* mStatistics;
+	GameScene* mGameScene;
 	std::string mApplicationName;
 	float mNumberFPS;
 	
@@ -115,5 +116,7 @@ private:
 	
 	void UpdateSystems(float elapsedTime);
 	void AcceptStatistics();
+
+	void Render();
 };
 

@@ -27,9 +27,9 @@ void Statistics::Visit(RenderSystem& renderSystem)
 	//std::cout << "triangles: " << mNumberTrianglesRendered << " calls: " << mNumberDrawCalls << "\n";
 }
 
-void Statistics::Visit(EntitiesSystem& entitiesSystem)
+void Statistics::Visit(GameScene& gameScene)
 {
-	mNumberGameEntities = entitiesSystem.GetNumberGameEntities();
+	mNumberGameEntities = gameScene.GetNumberGameEntities();
 }
 
 void Statistics::Visit(PhysicsSystem& physicsSystem)

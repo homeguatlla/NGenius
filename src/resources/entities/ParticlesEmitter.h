@@ -6,7 +6,7 @@
 class Texture;
 class IShaderProgram;
 class Particle;
-class EntitiesSystem;
+class GameScene;
 
 class ParticlesEmitter : public GameEntity
 {
@@ -34,7 +34,7 @@ class ParticlesEmitter : public GameEntity
 	int mMaxParticlesUpdate;
 
 	//from global
-	EntitiesSystem* mEntitiesSystem;
+	GameScene* mGameScene;
 
 public:
 	ParticlesEmitter(Particle* particle, Transformation* transformation, IRenderer* renderer, float spawnRate);
@@ -42,7 +42,7 @@ public:
 
 	ParticlesEmitter* DoClone() const override { return nullptr; }
 
-	void SetEntitiesSystem(EntitiesSystem* entitiesSystem);
+	void SetGameScene(GameScene* gameScene);
 
 	void Update(float elapsedTime) override;
 	void SetColorGradientValues(const glm::vec4& origin, const glm::vec4& destination);

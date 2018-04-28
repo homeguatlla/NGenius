@@ -2,12 +2,12 @@
 #include "LightsSystem.h"
 #include "../GameEntity.h"
 #include "../entities/Light.h"
-#include "EntitiesSystem.h"
+#include "../scene/GameScene.h"
 
 #include <algorithm>
 
-LightsSystem::LightsSystem(EntitiesSystem* entitiesSystem) :
-mEntitiesSystem(entitiesSystem)
+LightsSystem::LightsSystem(GameScene* gameScene) :
+mGameScene(gameScene)
 {
 }
 
@@ -42,7 +42,7 @@ void LightsSystem::AddNewLights()
 		mLights.push_back(light);
 		if (light->GetRenderer() != nullptr)
 		{
-			mEntitiesSystem->AddEntity(light);
+			mGameScene->AddEntity(light);
 		}
 	}
 	mNewLightsToAdd.clear();
@@ -53,7 +53,7 @@ void LightsSystem::RemoveLights()
 	for (Light* light : mLightsToRemove)
 	{
 		GameLightIterator it = std::find_if(mLights.begin(), mLights.end(), [&](Light* a) { return a == light; });
-		mEntitiesSystem->RemoveEntity(light);
+		mGameScene->RemoveEntity(light);
 		mLights.erase(it);
 	}
 	mLightsToRemove.clear();

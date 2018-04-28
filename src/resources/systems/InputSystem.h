@@ -1,11 +1,12 @@
 #pragma once
 #include "../../input/IInputListener.h"
+#include "../scene/IGameSceneListener.h"
 #include <vector>
 
 class GameEntity;
 class InputHandler;
 
-class InputSystem : public IInputListener
+class InputSystem : public IInputListener, public IGameSceneListener
 {
 	std::vector<GameEntity*> mEntities;
 	typedef std::vector<GameEntity*>::iterator GameEntitiesIterator;
@@ -40,12 +41,13 @@ public:
 	void OnMouseButton(int button, int action, int mods) override;
 	void OnMouseCursorPos(double x, double y) override;
 
+private:
+	bool HasInputComponents(const GameEntity* entity) const;
 	void AddEntity(GameEntity* entity);
 	void RemoveEntity(GameEntity* entity);
-
-	bool HasInputComponents(GameEntity* entity) const;
-
-private:
 	void DispatchEvent(MouseData& data);
+
+	void OnGameEntityAdded(GameEntity* entity) override;
+	void OnGameEntityRemoved(GameEntity* entity) override;
 };
 

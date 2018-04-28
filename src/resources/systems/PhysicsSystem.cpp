@@ -157,12 +157,28 @@ bool PhysicsSystem::IsInsideTerrain(GameEntity *entity)
 	return mTerrain->IsPointInside(glm::vec2(position.x, position.z));
 }
 
-bool PhysicsSystem::HasPhysicsComponents(GameEntity* entity) const
+bool PhysicsSystem::HasPhysicsComponents(const GameEntity* entity) const
 {
 	return entity != nullptr && (	entity->HasComponent<CollisionComponent>() ||
 									entity->HasComponent<PhysicsComponent>() ||
 									entity->HasComponent<EnergyWallCollisionComponent>()
 								);
+}
+
+void PhysicsSystem::OnGameEntityAdded(GameEntity* entity)
+{
+	if (HasPhysicsComponents(entity))
+	{
+		AddEntity(entity);
+	}
+}
+
+void PhysicsSystem::OnGameEntityRemoved(GameEntity* entity)
+{
+	if (HasPhysicsComponents(entity))
+	{
+		RemoveEntity(entity);
+	}
 }
 
 bool PhysicsSystem::ApplyCollisions(GameEntity *entity, float *groundHeight)

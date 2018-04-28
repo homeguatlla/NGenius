@@ -3,12 +3,13 @@
 #include "../../GameEntity.h"
 #include "../../renderers/IRenderer.h"
 
+const int MAX_QUADTREE_LEVELS = 8;
 
 GameEntityQuadTree::GameEntityQuadTree(const AABB& boundingBox)
 {
 	glm::vec2 regionMin(boundingBox.GetVertexMin().x, boundingBox.GetVertexMin().z);
 	glm::vec2 regionMax(boundingBox.GetVertexMax().x, boundingBox.GetVertexMax().z);
-	mQuadTree = new QuadTree<const GameEntity*>(regionMin, regionMax, 8);
+	mQuadTree = new QuadTree<const GameEntity*>(regionMin, regionMax, MAX_QUADTREE_LEVELS);
 }
 
 

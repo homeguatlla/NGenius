@@ -23,9 +23,25 @@ void InputSystem::Update(float elapsedTime)
 {
 }
 
-bool InputSystem::HasInputComponents(GameEntity* entity) const
+bool InputSystem::HasInputComponents(const GameEntity* entity) const
 {
 	return entity != nullptr && entity->HasComponent<InputComponent>() && entity->HasComponent<CharacterComponent>();
+}
+
+void InputSystem::OnGameEntityAdded(GameEntity* entity)
+{
+	if (HasInputComponents(entity))
+	{
+		AddEntity(entity);
+	}
+}
+
+void InputSystem::OnGameEntityRemoved(GameEntity* entity)
+{
+	if (HasInputComponents(entity))
+	{
+		RemoveEntity(entity);
+	}
 }
 
 void InputSystem::AddEntity(GameEntity* entity)

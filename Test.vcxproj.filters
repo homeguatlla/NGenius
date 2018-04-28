@@ -306,9 +306,6 @@
     <ClInclude Include="src\resources\shaders\ParticleShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\systems\EntitiesSystem.h">
-      <Filter>Header Files\resources\systems</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\components\BillboardComponent.h">
       <Filter>Header Files\resources\components</Filter>
     </ClInclude>
@@ -582,9 +579,6 @@
     <ClInclude Include="src\resources\shaders\BloomShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\scene\GameScene.h">
-      <Filter>Header Files\resources\scene</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\scene\quadtree\QuadTree.h">
       <Filter>Header Files\resources\scene\quadtree</Filter>
     </ClInclude>
@@ -595,6 +589,12 @@
       <Filter>Header Files\resources\scene\quadtree</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\scene\ISpacePartition.h">
+      <Filter>Header Files\resources\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\scene\GameScene.h">
+      <Filter>Header Files\resources\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\scene\IGameSceneListener.h">
       <Filter>Header Files\resources\scene</Filter>
     </ClInclude>
   </ItemGroup>
@@ -724,9 +724,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\shaders\ParticleShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\systems\EntitiesSystem.cpp">
-      <Filter>Source Files\resources\systems</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\components\BillboardComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
@@ -998,20 +995,23 @@
     <ClCompile Include="src\resources\shaders\BloomShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\scene\GameScene.cpp">
-      <Filter>Source Files\resources\scene</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\scene\quadtree\QuadTree.cpp">
       <Filter>Source Files\resources\scene\quadtree</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\scene\quadtree\QuadTreeNode.cpp">
       <Filter>Source Files\resources\scene\quadtree</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\scene\ISceneGraph.cpp">
-      <Filter>Source Files\resources\scene</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\scene\quadtree\GameEntityQuadTree.cpp">
       <Filter>Source Files\resources\scene\quadtree</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\scene\GameScene.cpp">
+      <Filter>Source Files\resources\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\scene\IGameSceneListener.cpp">
+      <Filter>Source Files\resources\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\scene\ISpacePartition.cpp">
+      <Filter>Source Files\resources\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

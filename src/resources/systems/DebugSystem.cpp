@@ -39,7 +39,7 @@ void DebugSystem::Update(float elapsedTime)
 	}
 }
 
-bool DebugSystem::HasDebugComponents(GameEntity* entity) const
+bool DebugSystem::HasDebugComponents(const GameEntity* entity) const
 {
 	return entity != nullptr && entity->HasComponent<DebugComponent>();
 }
@@ -108,4 +108,20 @@ void DebugSystem::SetDebugModeEnabled(bool enable)
 bool DebugSystem::IsDebugModeEnabled() const
 {
 	return mIsDebugModeEnabled;
+}
+
+void DebugSystem::OnGameEntityAdded(GameEntity* entity)
+{
+	if (HasDebugComponents(entity))
+	{
+		AddEntity(entity);
+	}
+}
+
+void DebugSystem::OnGameEntityRemoved(GameEntity* entity)
+{
+	if (HasDebugComponents(entity))
+	{
+		RemoveEntity(entity);
+	}
 }

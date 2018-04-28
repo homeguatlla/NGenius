@@ -12,20 +12,17 @@
 
 #include "input/InputHandler.h"
 
-#include "resources/systems/EntitiesSystem.h"
 #include "resources/systems/renderSystem/RenderSystem.h"
 #include "resources/systems/PhysicsSystem.h"
 #include "resources/systems/ParticlesSystem.h"
 #include "resources/systems/LightsSystem.h"
 #include "resources/systems/InputSystem.h"
 #include "resources/systems/DebugSystem.h"
-
 #include "resources/scene/GameScene.h"
 
 #include "statistics/Statistics.h"
 
 #include "resources/entities/ParticlesEmitter.h"
-
 #include "resources/textures/Texture.h"
 
 NGenius::NGenius(std::string applicationName, float screenWidth, float screenHeight) :
@@ -33,6 +30,7 @@ mRenderSystem(nullptr),
 mPhysicsSystem(nullptr),
 mEntitiesSystem(nullptr),
 mParticlesSystem(nullptr),
+mGameScene(nullptr),
 mApplicationName(applicationName)
 {
 	CreateSystems(screenWidth, screenHeight);
@@ -40,6 +38,10 @@ mApplicationName(applicationName)
 
 NGenius::~NGenius()
 {
+	if (mGameScene != nullptr)
+	{
+		delete mGameScene;
+	}
 	DestroySystems();
 }
 
@@ -72,7 +74,7 @@ void NGenius::Update()
 			mUpdateHandler(elapsedTime);
 		}
 
-		mRenderSystem->Render();
+		Render();
 
 		double currentTime = glfwGetTime();
 		elapsedTime = static_cast<float>(currentTime - lastCurrentTime);
@@ -98,12 +100,18 @@ void NGenius::Update()
 	glfwTerminate();
 }
 
+void NGenius::Render()
+{
+	mGameScene->Render(mRenderSystem);
+	mRenderSystem->Render();
+}
+
 void NGenius::AcceptStatistics()
 {
 	if (mDebugSystem->IsDebugModeEnabled())
 	{
 		mRenderSystem->Accept(*mStatistics);
-		mEntitiesSystem->Accept(*mStatistics);
+		mGameScene->Accept(*mStatistics);
 		mPhysicsSystem->Accept(*mStatistics);
 		this->Accept(*mStatistics);
 	}
@@ -114,7 +122,7 @@ void NGenius::UpdateSystems(float elapsedTime)
 	mInputSystem->Update(elapsedTime);
 	mDebugSystem->Update(elapsedTime);
 	mParticlesSystem->Update(elapsedTime);
-	mEntitiesSystem->Update(elapsedTime);
+	mGameScene->Update(elapsedTime);
 	mPhysicsSystem->Update(elapsedTime);
 }
 
@@ -126,9 +134,7 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 	mPhysicsSystem = new PhysicsSystem();
 	mInputSystem = new InputSystem(mInputHandler);
 	mDebugSystem = new DebugSystem(mRenderSystem, mInputHandler);
-	mEntitiesSystem = new EntitiesSystem(mRenderSystem, mPhysicsSystem, mInputSystem, mDebugSystem);
 	mParticlesSystem = new ParticlesSystem();
-	mLightsSystem = new LightsSystem(mEntitiesSystem);
 }
 
 void NGenius::DestroySystems()
@@ -137,7 +143,6 @@ void NGenius::DestroySystems()
 	delete mInputSystem;
 	delete mLightsSystem;
 	delete mParticlesSystem;
-	delete mEntitiesSystem;
 	delete mPhysicsSystem;
 	delete mRenderSystem;
 	delete mInputHandler;
@@ -250,18 +255,24 @@ void NGenius::SetFullScreen(bool isFullScreen)
 
 GameScene* NGenius::CreateGameScene(const std::string& name)
 {
-	assert(mEntitiesSystem != nullptr);
-	assert(mRenderSystem != nullptr);
+	mGameScene = new GameScene(name);
+	
+	//TODO ojo que esto es horrible, tener que crear el lightsystem cuando la escena se crea...no sé
+	mLightsSystem = new LightsSystem(mGameScene);
+	
+	mGameScene->RegisterGameSceneListener(mDebugSystem);
+	mGameScene->RegisterGameSceneListener(mInputSystem);
+	mGameScene->RegisterGameSceneListener(mPhysicsSystem);
 
-	return new GameScene(name, mEntitiesSystem, mRenderSystem);
+	return mGameScene;
 }
 
 void NGenius::AddParticleEmitter(ParticlesEmitter* emitter)
 {
 	assert(mParticlesSystem != nullptr);
-	assert(mEntitiesSystem != nullptr);
+	assert(mGameScene != nullptr);
 
-	emitter->SetEntitiesSystem(mEntitiesSystem);
+	emitter->SetGameScene(mGameScene);
 	mParticlesSystem->AddParticleEmitter(emitter);
 }
 

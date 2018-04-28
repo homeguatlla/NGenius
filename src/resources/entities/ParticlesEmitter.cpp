@@ -5,10 +5,9 @@
 #include "../components/CollisionComponent.h"
 #include "../systems/PhysicsSystem.h"
 #include "../systems/ParticlesSystem.h"
-#include "../systems/EntitiesSystem.h"
 #include "../textures/Texture.h"
 #include "../shaders/IShaderProgram.h"
-
+#include "../scene/GameScene.h"
 
 #include <iostream>
 
@@ -26,7 +25,7 @@ mSpawnAreaMin(0.0f),
 mSpawnAreaMax(0.0f),
 mRotationSpeedMin(0.0f),
 mRotationSpeedMax(0.0f),
-mEntitiesSystem(nullptr),
+mGameScene(nullptr),
 mMaxParticlesUpdate(MAX_PARTICLES)
 {
 	mParticles.reserve(MAX_PARTICLES);
@@ -81,7 +80,7 @@ void ParticlesEmitter::RemoveDeadParticles()
 
 void ParticlesEmitter::SpawnNewParticles(float elapsedTime)
 {
-	assert(mEntitiesSystem != nullptr);
+	assert(mGameScene != nullptr);
 
 	mParticlesToSpawn += mSpawnRate * elapsedTime;
 
@@ -92,7 +91,7 @@ void ParticlesEmitter::SpawnNewParticles(float elapsedTime)
 	{
 		Particle* particle = CreateParticle();
 		mParticles.push_back(particle);
-		mEntitiesSystem->AddEntity(particle);
+		mGameScene->AddEntity(particle);
 	}
 
 	mParticlesToSpawn -= particles;
@@ -115,9 +114,9 @@ bool ParticlesEmitter::CanCreateParticle() const
 
 void ParticlesEmitter::RemoveParticle(unsigned long index)
 {
-	assert(mEntitiesSystem != nullptr);
+	assert(mGameScene != nullptr);
 	
-	mEntitiesSystem->RemoveEntity(mParticles[index]);
+	mGameScene->RemoveEntity(mParticles[index]);
 	mParticlesPool.push_back(mParticles[index]);
 	std::swap(mParticles[index], mParticles.back());
 	mParticles.pop_back();
@@ -174,9 +173,9 @@ Particle* ParticlesEmitter::CreateParticle()
 	return particle;
 }
 
-void ParticlesEmitter::SetEntitiesSystem(EntitiesSystem* entitiesSystem)
+void ParticlesEmitter::SetGameScene(GameScene* gameScene)
 {
-	mEntitiesSystem = entitiesSystem;
+	mGameScene = gameScene;
 }
 
 void ParticlesEmitter::SetColorGradientValues(const glm::vec4& origin, const glm::vec4& destination)

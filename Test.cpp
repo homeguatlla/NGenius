@@ -132,7 +132,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = RELEASE;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -444,10 +444,10 @@ void CreateTrees()
 	for (unsigned long i = 0; i < positions.size(); i++)
 	{
 		GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], modelsFoliage, distances, materialFoliage, nullptr);
-		mScene->AddGameEntity(entity);
+		mScene->AddEntity(entity);
 		
 		entity = CreateModelWithLod(positions[i], sizes[i], modelsTrunk, distances, materialTrunk, materialTrunkNormalmap);
-		mScene->AddGameEntity(entity);
+		mScene->AddEntity(entity);
 	}
 }
 
@@ -518,7 +518,7 @@ void CreateProps()
 			Model* model = mEngine.GetModel(modelName);
 
 			GameEntity* entity = CreateModel(position, scale, rotation, model, material);
-			mScene->AddGameEntity(entity);
+			mScene->AddEntity(entity);
 		}
 	}
 }
@@ -551,7 +551,7 @@ void CreateWater()
 								50.0f,
 								waterSpeed
 							);
-		mScene->AddGameEntity(mWater);
+		mScene->AddEntity(mWater);
 	}
 }
 
@@ -597,7 +597,7 @@ void CreateParticlesFire()
 	particlesEmitter->SetScaleValues(0.05f, 0.005f);
 	particlesEmitter->SetVelocity(glm::vec3(0.0f), glm::vec3(0.02f, 0.2f, 0.02f));
 	particlesEmitter->SetSpawnArea(glm::vec3(-0.02f, 0.0f, -0.02f), glm::vec3(0.03f, 0.0f, 0.03f));
-	mScene->AddGameEntity(particlesEmitter);
+	mScene->AddEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);
 }
 
@@ -613,7 +613,7 @@ void CreateEnergyWall()
 									mEngine.GetModel("sphere"),
 									2.0f
 								);
-	mScene->AddGameEntity(mEnergyWall);
+	mScene->AddEntity(mEnergyWall);
 	mEngine.SetEnergyWall(mEnergyWallPosition, mEnergyWallRadius);
 }
 
@@ -632,7 +632,7 @@ void CreateHUD()
 										glm::vec3(256.0f)),
 										guiRenderer
 									);
-	mScene->AddGameEntity(quad);
+	mScene->AddEntity(quad);
 
 	/*
 	IRenderer* mapRenderer = new GUIRenderer(mEngine.GetShader("gui"),
@@ -726,7 +726,7 @@ void CreateTextTest()
 							),
 			materialText, font,
 			texts[i], false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
-		mScene->AddGameEntity(mText[i]);
+		mScene->AddEntity(mText[i]);
 	}
 	float x = 0.0f;
 	float z = 0.0f;
@@ -745,7 +745,7 @@ void CreateTextTest()
 	Text* mTestText = new Text(	new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.01f)),
 								material3D, font,
 								"Origin", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
-	mScene->AddGameEntity(mTestText);
+	mScene->AddEntity(mTestText);
 	/*
 	x = 10.0f;
 	z = 10.0f;
@@ -789,7 +789,7 @@ void CreateTerrain()
 
 	mTerrain->SetFlat(mIsTerrainFlat);
 			
-	mScene->AddGameEntity(mTerrain);	
+	mScene->AddEntity(mTerrain);
 	mEngine.SetTerrain(mTerrain);
 
 	//TERRAIN NORMALS ENTITY
@@ -829,7 +829,7 @@ void CreatePlayer()
 	mPlayer->AddComponent(new EnergyWallCollisionComponent());
 	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(RenderSystem::WIREFRAME_MATERIAL_NAME));
 	mPlayer->AddComponent(new DebugComponent(boundingBoxRenderer));
-	mScene->AddGameEntity(mPlayer);
+	mScene->AddEntity(mPlayer);
 }
 
 void CreateGameCameraEntity()
@@ -860,7 +860,7 @@ void CreateGameCameraEntity()
 		mCamera->AddComponent(new OverWaterComponent(mWaterHeight));
 	}
 
-	mScene->AddGameEntity(mCamera);
+	mScene->AddEntity(mCamera);
 }
 
 void CreateCube()
@@ -880,7 +880,7 @@ void CreateCube()
 			skyboxRenderer
 		);
 		skyBox->AddComponent(new RotationComponent(glm::vec3(0.0f, 1.0f, 0.0f), SKYBOX_ROTATION_SPEED));
-		mScene->AddGameEntity(skyBox);
+		mScene->AddEntity(skyBox);
 	}
 }
 
@@ -1372,7 +1372,6 @@ int main(void)
 
 	return 0;
 }
-
 
 /*
 float hL = 0.0f;

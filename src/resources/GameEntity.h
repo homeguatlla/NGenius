@@ -63,7 +63,7 @@ public:
 		}
 	}
 
-	template<typename T> bool HasComponent()
+	template<typename T> bool HasComponent() const
 	{
 		static_assert(std::is_base_of<IComponent, T>::value, "The type must inherit from IComponent");
 		return mComponents.count(&typeid(T)) != 0;

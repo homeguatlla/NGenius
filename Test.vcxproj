@@ -250,6 +250,7 @@
     <ClInclude Include="src\resources\renderers\IRenderer.h" />
     <ClInclude Include="src\resources\renderers\WireframeRenderer.h" />
     <ClInclude Include="src\resources\scene\GameScene.h" />
+    <ClInclude Include="src\resources\scene\IGameSceneListener.h" />
     <ClInclude Include="src\resources\scene\ISpacePartition.h" />
     <ClInclude Include="src\resources\scene\quadtree\GameEntityQuadTree.h" />
     <ClInclude Include="src\resources\scene\quadtree\QuadTree.h" />
@@ -274,7 +275,6 @@
     <ClInclude Include="src\resources\shaders\VerticalBlurShader.h" />
     <ClInclude Include="src\resources\shaders\WaterShader.h" />
     <ClInclude Include="src\resources\systems\DebugSystem.h" />
-    <ClInclude Include="src\resources\systems\EntitiesSystem.h" />
     <ClInclude Include="src\resources\systems\InputSystem.h" />
     <ClInclude Include="src\resources\systems\LightsSystem.h" />
     <ClInclude Include="src\resources\systems\ParticlesSystem.h" />
@@ -388,7 +388,8 @@
     <ClCompile Include="src\resources\renderers\IRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\WireframeRenderer.cpp" />
     <ClCompile Include="src\resources\scene\GameScene.cpp" />
-    <ClCompile Include="src\resources\scene\ISceneGraph.cpp" />
+    <ClCompile Include="src\resources\scene\IGameSceneListener.cpp" />
+    <ClCompile Include="src\resources\scene\ISpacePartition.cpp" />
     <ClCompile Include="src\resources\scene\quadtree\GameEntityQuadTree.cpp" />
     <ClCompile Include="src\resources\scene\quadtree\QuadTree.cpp" />
     <ClCompile Include="src\resources\scene\quadtree\QuadTreeNode.cpp" />
@@ -412,7 +413,6 @@
     <ClCompile Include="src\resources\shaders\VerticalBlurShader.cpp" />
     <ClCompile Include="src\resources\shaders\WaterShader.cpp" />
     <ClCompile Include="src\resources\systems\DebugSystem.cpp" />
-    <ClCompile Include="src\resources\systems\EntitiesSystem.cpp" />
     <ClCompile Include="src\resources\systems\InputSystem.cpp" />
     <ClCompile Include="src\resources\systems\LightsSystem.cpp" />
     <ClCompile Include="src\resources\systems\ParticlesSystem.cpp" />

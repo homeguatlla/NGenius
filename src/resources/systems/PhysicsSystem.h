@@ -1,12 +1,13 @@
 #pragma once
 #include <glm/glm.hpp>
 #include "../../visitor/BaseVisitable.h"
+#include "../scene/IGameSceneListener.h"
 #include <vector>
 
 class GameEntity;
 class Terrain;
 
-class PhysicsSystem : public BaseVisitable<>
+class PhysicsSystem : public BaseVisitable<>, public IGameSceneListener
 {
 	std::vector<GameEntity*> mEntities;
 	const Terrain* mTerrain;
@@ -20,10 +21,7 @@ public:
 	~PhysicsSystem();
 
 	void Update(float deltaTime);
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
-	bool HasPhysicsComponents(GameEntity* entity) const;
-
+	
 	unsigned int GetNumberGameEntities() const;
 
 	//TODO eliminar este método cuando no haga falta
@@ -33,6 +31,13 @@ public:
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
 private:
+	void AddEntity(GameEntity* entity);
+	void RemoveEntity(GameEntity* entity);
+	bool HasPhysicsComponents(const GameEntity* entity) const;
+
+	void OnGameEntityAdded(GameEntity* entity) override;
+	void OnGameEntityRemoved(GameEntity* entity) override;
+
 	void ApplyMRU(float deltaTime, GameEntity* entity);
 	bool ApplyCollisions(GameEntity* entity, float *groundHeight);
 	bool ApplyEnergyWallCollision(GameEntity *entity, glm::vec3& collisionPoint);
