@@ -129,10 +129,11 @@ enum Configuration
 	PROPS,
 	COLLISIONS,
 	FLAT,
+	QUADTREE,
 	RELEASE
 };
 
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = QUADTREE;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -1308,6 +1309,21 @@ void SetupConfiguration()
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = false;
 		mIsFullScreen = false;
+		break;
+	case QUADTREE:
+		mIsDebugModeEnabled = true;
+		mIsWaterEnabled = false;
+		mIsGameplayCameraEnabled = true;
+		mIsFogEnabled = false;
+		mIsVegetationEnabled = false;
+		mIsPropsEnabled = true;
+		mIsEnergyWallEnabled = false;
+		mIsSkyboxEnabled = false;
+		mIsTerrainFlat = true;
+		mIsTextEnabled = false;
+		mIsStatisticsVisible = false;
+		mIsParticlesEnabled = false;
+		mIsShadowEnabled = false;
 		break;
 	case RELEASE:
 		mIsDebugModeEnabled = true;

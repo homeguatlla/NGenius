@@ -23,13 +23,8 @@ void GameEntityQuadTree::AddGameEntity(GameEntity* entity)
 {
 	IRenderer* renderer = entity->GetRenderer();
 	const AABB boundingBox = renderer->GetAABB();
-	Transformation* transformation = entity->GetTransformation();
-	glm::mat4 matrix = transformation->GetModelMatrix();
 	glm::vec3 min = boundingBox.GetVertexMin();
 	glm::vec3 max = boundingBox.GetVertexMax();
-
-	min = matrix * glm::vec4(min, 1.0f);
-	max = matrix * glm::vec4(max, 1.0f);
 
 	mQuadTree->Add(	glm::vec2(min.x, min.z), 
 					glm::vec2(max.x, max.z), entity);

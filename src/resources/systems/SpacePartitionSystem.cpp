@@ -39,7 +39,7 @@ void SpacePartitionSystem::RemoveEntity(GameEntity* entity)
 
 bool SpacePartitionSystem::HasSpacePartitionComponents(const GameEntity* entity)
 {
-	return true;
+	return entity->GetRenderer() != nullptr;
 }
 
 void SpacePartitionSystem::OnGameEntityAdded(GameEntity* entity)

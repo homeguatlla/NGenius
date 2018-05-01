@@ -245,9 +245,23 @@ void IRenderer::CheckError()
 	}*/
 }
 
-const AABB& IRenderer::GetAABB() const
+const AABB& IRenderer::GetModelAABB() const
 {
 	return mModel->GetAABB();
+}
+
+const AABB IRenderer::GetAABB() const
+{
+	const AABB boundingBox = GetModelAABB();
+	Transformation* transformation = mParent->GetTransformation();
+	glm::mat4 matrix = transformation->GetModelMatrix();
+	glm::vec3 min = boundingBox.GetVertexMin();
+	glm::vec3 max = boundingBox.GetVertexMax();
+
+	min = matrix * glm::vec4(min, 1.0f);
+	max = matrix * glm::vec4(max, 1.0f);
+
+	return AABB(min, max);
 }
 
 void IRenderer::ModifyModelMatrixToAvoidRotations(const glm::mat4& viewMatrix, const glm::vec3& scale, float angleZ, glm::mat4& modelMatrix)

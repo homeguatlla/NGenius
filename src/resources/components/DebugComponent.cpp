@@ -25,8 +25,8 @@ void DebugComponent::Init()
 	//boundingboxrenderer is of dimensions 1x1x1 and centered in origin in order the 
 	//next transformation works
 	mBoundingBoxRenderer->SetParent(mParent);
-	glm::vec3 min = mParent->GetRenderer()->GetAABB().GetVertexMin();
-	glm::vec3 max = mParent->GetRenderer()->GetAABB().GetVertexMax();
+	glm::vec3 min = mParent->GetRenderer()->GetModelAABB().GetVertexMin();
+	glm::vec3 max = mParent->GetRenderer()->GetModelAABB().GetVertexMax();
 
 	glm::vec3 scale = max - min;
 

@@ -55,7 +55,7 @@ const AABB AABB::Merge(const AABB& aabb) const
 					glm::min(mMin.y, aabb.GetVertexMin().y),
 					glm::min(mMin.z, aabb.GetVertexMin().z));
 
-	glm::vec3 max(	glm::min(mMax.x, aabb.GetVertexMax().x),
+	glm::vec3 max(	glm::max(mMax.x, aabb.GetVertexMax().x),
 					glm::max(mMax.y, aabb.GetVertexMax().y),
 					glm::max(mMax.z, aabb.GetVertexMax().z));
 

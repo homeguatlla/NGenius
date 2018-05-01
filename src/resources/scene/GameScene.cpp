@@ -10,7 +10,7 @@
 
 GameScene::GameScene(const std::string& name) :
 mName(name),
-mAABB(glm::vec3(std::numeric_limits<float>::max()), glm::vec3(std::numeric_limits<float>::min()))
+mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limits<float>::max()))
 {
 }
 

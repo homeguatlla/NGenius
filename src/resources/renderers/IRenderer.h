@@ -86,7 +86,8 @@ public:
 	
 	void SetBillboard(bool billboard);
 
-	const AABB& GetAABB() const;
+	const AABB& GetModelAABB() const;
+	const AABB GetAABB() const;
 
 	virtual unsigned int GetNumberTrianglesRendered() const;
 

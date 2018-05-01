@@ -191,8 +191,8 @@ bool PhysicsSystem::ApplyCollisions(GameEntity *entity, float *groundHeight)
 	IRenderer* renderer = entity->GetRenderer();
 	if (renderer != nullptr)
 	{
-		glm::vec3 max = renderer->GetAABB().GetVertexMax();
-		glm::vec3 min = renderer->GetAABB().GetVertexMin();
+		glm::vec3 max = renderer->GetModelAABB().GetVertexMax();
+		glm::vec3 min = renderer->GetModelAABB().GetVertexMin();
 		glm::mat3 matrix = glm::mat3(transformation->GetModelMatrix());
 		max = max * matrix;
 		min = min * matrix;
@@ -215,7 +215,7 @@ bool PhysicsSystem::ApplyEnergyWallCollision(GameEntity *entity, glm::vec3& coll
 	if (renderer != nullptr)
 	{
 		glm::vec3 side = renderer->GetAABB().GetVertexMax() - renderer->GetAABB().GetVertexMin();
-		side *= transformation->GetScale();
+		//side *= transformation->GetScale();
 
 		float maxSide = glm::max(side.x, glm::max(side.y, side.z));
 		entityRadius = maxSide * 0.5f;

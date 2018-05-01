@@ -43,7 +43,7 @@ public:
 
 		mRegionMin = regionMin;
 		mRegionSize = regionMax - regionMin;
-		mConversionFactor = glm::pow(2, mMaxLevels - 1);
+		mConversionFactor = static_cast<float>(glm::pow(2, mMaxLevels));
 
 		mRoot = new QuadTreeNode(glm::uvec2(0), maxLevels - 1, nullptr);
 	}
@@ -60,17 +60,17 @@ public:
 		unsigned int yDiff = locationCode1.y ^ locationCode2.y;
 
 		QuadTreeNode* node = mRoot;
-		for(int level = mMaxLevels; level >= 0; level--)
+		for(int level = mMaxLevels - 2; level >= 0; level--)
 		{
 			unsigned int levelMask = 1 << level;
 			unsigned int childIndex = ((xDiff & levelMask) >> level) + ((yDiff & levelMask) >> level);
 			if (node->mChildren[childIndex] == nullptr)
 			{
-				node->AddChildren(childIndex, new QuadTreeNode(glm::uvec2(0), level, node));
+				node->AddChildren(childIndex, new QuadTreeNode(glm::uvec2(xDiff, yDiff), level, node));
 			}
 			node = node->mChildren[childIndex];
 		}
-		//node->mData.push_back(data);
+		node->mData.push_back(data);
 	}
 	template<class T>
 	void Remove(T data)
