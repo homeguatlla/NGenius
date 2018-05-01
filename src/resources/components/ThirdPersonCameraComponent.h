@@ -24,7 +24,7 @@ public:
 
 	ThirdPersonCameraComponent* DoClone() const;
 
-	void Update(float elapsedTime) override;
+	void UpdateInternal(float elapsedTime) override;
 	const GameEntity* GetTarget() const;
 	glm::vec3 GetCameraPosition() const;
 

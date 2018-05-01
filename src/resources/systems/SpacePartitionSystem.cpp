@@ -27,6 +27,11 @@ void SpacePartitionSystem::Update(float elapsedTime)
 	AddNewEntities();
 }
 
+std::vector<GameEntity*>& SpacePartitionSystem::Query(const AABB& aabb) const
+{
+	return mQuadTree->Query(aabb);
+}
+
 void SpacePartitionSystem::AddEntity(GameEntity* entity)
 {
 	mNewEntitiesToAdd.push_back(entity);

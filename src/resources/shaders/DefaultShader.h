@@ -20,5 +20,6 @@ private:
 	int mLocationM;
 	int mLocationV;
 	int mLocationP;
+	int mLocationColor;
 };
 

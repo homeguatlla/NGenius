@@ -45,6 +45,11 @@ unsigned int GameScene::GetNumberGameEntities() const
 	return mEntities.size();
 }
 
+std::vector<GameEntity*>& GameScene::GetAllGameEntities()
+{
+	return mEntities;
+}
+
 void GameScene::AddEntity(GameEntity* entity)
 {
 	entity->Init();

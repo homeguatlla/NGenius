@@ -270,7 +270,7 @@ GameScene* NGenius::CreateGameScene(const std::string& name)
 	mGameScene->RegisterGameSceneListener(mDebugSystem);
 	mGameScene->RegisterGameSceneListener(mInputSystem);
 	mGameScene->RegisterGameSceneListener(mPhysicsSystem);
-	mGameScene->RegisterGameSceneListener(mSpacePartitionSystem);
+	//mGameScene->RegisterGameSceneListener(mSpacePartitionSystem);
 
 	return mGameScene;
 }
@@ -357,4 +357,9 @@ void NGenius::SetDebugModeEnabled(bool enabled)
 BaseVisitable<>::ReturnType NGenius::Accept(BaseVisitor& guest)
 {
 	return AcceptImpl(*this, guest);
+}
+
+std::vector<GameEntity*>& NGenius::Query(const AABB& aabb)
+{
+	return mSpacePartitionSystem->Query(aabb);
 }

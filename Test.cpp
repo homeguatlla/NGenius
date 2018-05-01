@@ -75,6 +75,7 @@
 #include "src/resources/entities/EnergyWall.h"
 
 #include "src/resources/scene/GameScene.h"
+#include "src/resources/scene/quadtree/GameEntityQuadTree.h"
 
 #include "src/statistics/Statistics.h"
 
@@ -176,6 +177,7 @@ Terrain* mTerrain;
 Player* mPlayer;
 Water* mWater;
 GameEntity* mCamera;
+GameEntity* mQuadTreeBox;
 GameScene* mScene;
 
 EnergyWall* mEnergyWall;
@@ -192,6 +194,12 @@ glm::vec3 mEnergyWallPosition(0.0f, 0.0f, 0.0f);
 std::vector<std::string> texts = { "FPS: ", "Triangles: ", "Drawcalls: ", "GameEntities: ", "GEWithPhysics: "};
 
 ICommand* mCurrentCommand = nullptr;
+
+//for QUADTREE setup
+float aabbSize = 2.0f;
+const AABB mAABB(glm::vec3(-aabbSize, 0.0f, -aabbSize), glm::vec3(aabbSize, 0.0f, aabbSize));
+GameEntityQuadTree mQuadTree(mAABB);
+
 
 double aleatori()
 {
@@ -893,14 +901,48 @@ void CreateCameras()
 
 	//CAMERA
 	mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
-	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 15.0f));
+	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 0.0f));
 	mEagleEyeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
-	mEagleEyeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	mEagleEyeCamera->SetUp(glm::vec3(1.0f, 0.0f, 0.0f));
 
 	mGameplayCamera = new PerspectiveCamera(VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
 	mGameplayCamera->SetPosition(glm::vec3(0.0f, 8.0f, 2.0f));
 	mGameplayCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+}
+
+GameEntity* CreateQuadTreeBoxEntity(float size, glm::vec3 position, glm::vec3 color)
+{
+	IMaterial* material = mEngine.CreateMaterial("quadtree", mEngine.GetShader("default"));
+	material->AddEffect(new MaterialEffectFloat3(color));
+
+	IRenderer* renderer = new WireframeRenderer(mEngine.GetModel("cube"), material);
+	GameEntity* quad = new GameEntity(
+										new Transformation(position, glm::vec3(0.0f), glm::vec3(size * 2.0f)),
+										renderer
+									);
+	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(RenderSystem::WIREFRAME_MATERIAL_NAME));
+	quad->AddComponent(new DebugComponent(boundingBoxRenderer));
+
+	mScene->AddEntity(quad);
+	return quad;
+}
+
+void CreateQuads()
+{
+	mQuadTreeBox = CreateQuadTreeBoxEntity(aabbSize, glm::vec3(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	GameEntity* entity = CreateQuadTreeBoxEntity(0.1f, glm::vec3(-1.5f, 0.0f, -1.5f), glm::vec3(0.0f, 1.0f, 1.0f));
+	mQuadTree.AddGameEntity(entity);
+
+	entity = CreateQuadTreeBoxEntity(0.1f, glm::vec3(-1.5f, 0.0f, 1.5f), glm::vec3(0.0f, 1.0f, 1.0f));
+	mQuadTree.AddGameEntity(entity);
+
+	entity = CreateQuadTreeBoxEntity(0.1f, glm::vec3(1.5f, 0.0f, -1.5f), glm::vec3(0.0f, 1.0f, 1.0f));
+	mQuadTree.AddGameEntity(entity);
+
+	entity = CreateQuadTreeBoxEntity(0.1f, glm::vec3(1.5f, 0.0f, 1.5f), glm::vec3(0.0f, 1.0f, 1.0f));
+	mQuadTree.AddGameEntity(entity);
 }
 
 void CreateEntities()
@@ -948,6 +990,11 @@ void CreateEntities()
 	if (mIsSkyboxEnabled)
 	{
 		CreateCube();
+	}
+
+	if (mConfiguration == QUADTREE)
+	{
+		CreateQuads();
 	}
 }
 
@@ -1167,6 +1214,31 @@ void UpdateCommand(float elapsedTime)
 	}
 }
 
+void UpdateQuadTreeBox()
+{
+	std::vector<GameEntity*>& entities = mScene->GetAllGameEntities();
+	for (GameEntity* entity : entities)
+	{
+		DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
+		if (debugComponent != nullptr)
+		{
+			//debugComponent->SetEnabled(false);
+		}
+	}
+
+	//std::vector<GameEntity*> result = mEngine.Query(mQuadTreeBox->GetRenderer()->GetAABB());
+	std::vector<GameEntity*> result = mQuadTree.Query(mQuadTreeBox->GetRenderer()->GetAABB());
+
+	for (GameEntity* entity : result)
+	{
+		DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
+		if (debugComponent != nullptr)
+		{
+			debugComponent->SetEnabled(true);
+		}
+	}
+}
+
 void Update(float elapsedTime)
 {
 	UpdateCommand(elapsedTime);
@@ -1178,6 +1250,11 @@ void Update(float elapsedTime)
 	if (mIsStatisticsVisible && mIsTextEnabled)
 	{
 		UpdateStatitstics();
+	}
+
+	if (mConfiguration == QUADTREE)
+	{
+		UpdateQuadTreeBox();
 	}
 }
 
@@ -1316,7 +1393,7 @@ void SetupConfiguration()
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
 		mIsVegetationEnabled = false;
-		mIsPropsEnabled = true;
+		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;

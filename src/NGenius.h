@@ -1,9 +1,11 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <functional>
 #include <glm/glm.hpp>
 #include "visitor/BaseVisitable.h"
+#include "AABB.h"
 
 class RenderSystem;
 class PhysicsSystem;
@@ -111,6 +113,9 @@ public:
 
 	//statistics
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
+
+	//spatial partition
+	std::vector<GameEntity*>& Query(const AABB& aabb);
 
 private:
 	

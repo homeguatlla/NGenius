@@ -13,6 +13,6 @@ public:
 	~RotationComponent();
 
 	RotationComponent* DoClone() const override;
-	void Update(float elapsedTime) override;
+	void UpdateInternal(float elapsedTime) override;
 };
 

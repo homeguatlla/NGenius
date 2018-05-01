@@ -27,7 +27,7 @@ IComponent* LODComponent::DoClone() const
 	return new LODComponent(*this);
 }
 
-void LODComponent::Update(float elapsedTime)
+void LODComponent::UpdateInternal(float elapsedTime)
 {
 	int lod = -1;
 	float distance = glm::length2(mParent->GetTransformation()->GetPosition() - mCamera->GetPosition());

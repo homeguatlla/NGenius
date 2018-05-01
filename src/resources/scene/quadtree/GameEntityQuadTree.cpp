@@ -4,13 +4,13 @@
 #include "../../renderers/IRenderer.h"
 #include "../../Transformation.h"
 
-const int MAX_QUADTREE_LEVELS = 8;
+const int MAX_QUADTREE_LEVELS = 3;
 
 GameEntityQuadTree::GameEntityQuadTree(const AABB& boundingBox)
 {
 	glm::vec2 regionMin(boundingBox.GetVertexMin().x, boundingBox.GetVertexMin().z);
 	glm::vec2 regionMax(boundingBox.GetVertexMax().x, boundingBox.GetVertexMax().z);
-	mQuadTree = new QuadTree<const GameEntity*>(regionMin, regionMax, MAX_QUADTREE_LEVELS);
+	mQuadTree = new QuadTree<GameEntity*>(regionMin, regionMax, MAX_QUADTREE_LEVELS);
 }
 
 
@@ -35,11 +35,8 @@ void GameEntityQuadTree::RemoveGameEntity(GameEntity* entity)
 	//mQuadTree->Remove(entity);
 }
 
-std::vector<const GameEntity*> GameEntityQuadTree::Query(const AABB& aabb)
+std::vector<GameEntity*>& GameEntityQuadTree::Query(const AABB& aabb)
 {
-/*	return mQuadTree->Query(glm::vec2(aabb.GetVertexMin().x, aabb.GetVertexMin().z),
+	return mQuadTree->Query(glm::vec2(aabb.GetVertexMin().x, aabb.GetVertexMin().z),
 							glm::vec2(aabb.GetVertexMax().x, aabb.GetVertexMax().z));
-							*/
-
-	return std::vector<const GameEntity*>();
 }

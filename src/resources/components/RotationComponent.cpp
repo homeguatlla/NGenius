@@ -18,7 +18,7 @@ RotationComponent* RotationComponent::DoClone() const
 	return new RotationComponent(*this);
 }
 
-void RotationComponent::Update(float elapsedTime)
+void RotationComponent::UpdateInternal(float elapsedTime)
 {
 	mCurrentAngle += mSpeed * elapsedTime;
 	glm::vec3 rotation = mRotation * mCurrentAngle;

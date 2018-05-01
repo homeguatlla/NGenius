@@ -46,7 +46,7 @@ ThirdPersonCameraComponent* ThirdPersonCameraComponent::DoClone() const
 	return new ThirdPersonCameraComponent(*this);
 }
 
-void ThirdPersonCameraComponent::Update(float elapsedTime)
+void ThirdPersonCameraComponent::UpdateInternal(float elapsedTime)
 {
 	UpdateGameEvents(elapsedTime);
 

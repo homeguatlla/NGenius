@@ -20,7 +20,7 @@ BillboardComponent* BillboardComponent::DoClone() const
 	return new BillboardComponent(*this);
 }
 
-void BillboardComponent::Update(float elapsedTime)
+void BillboardComponent::UpdateInternal(float elapsedTime)
 {
 	const glm::mat4 viewMatrix = const_cast<ICamera*>(mCamera)->GetViewMatrix();
 	glm::mat4 modelMatrix = mParent->GetTransformation()->GetModelMatrix();

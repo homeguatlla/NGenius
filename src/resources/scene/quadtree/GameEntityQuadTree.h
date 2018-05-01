@@ -7,13 +7,13 @@ class GameEntity;
 
 class GameEntityQuadTree : public ISpacePartition
 {
-	QuadTree<const GameEntity*>* mQuadTree;
+	QuadTree<GameEntity*>* mQuadTree;
 public:
 	GameEntityQuadTree(const AABB& boundingBox);
 	virtual ~GameEntityQuadTree();
 
 	void AddGameEntity(GameEntity* entity) override;
 	void RemoveGameEntity(GameEntity* entity) override;
-	std::vector<const GameEntity*> Query(const AABB& aabb) override;
+	std::vector<GameEntity*>& Query(const AABB& aabb) override;
 };
 

@@ -30,6 +30,8 @@ public:
 
 	void Render(RenderSystem* renderSystem);
 	unsigned int GetNumberGameEntities() const;
+	
+	std::vector<GameEntity*>& GetAllGameEntities();
 
 	const AABB& GetAABB() const;
 

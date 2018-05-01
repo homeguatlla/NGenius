@@ -33,8 +33,11 @@ void DebugSystem::Update(float elapsedTime)
 		{
 			entity->Update(elapsedTime);
 			DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
-			IRenderer* renderer = debugComponent->GetBoundingBoxRenderer();
-			mRenderSystem->AddToRender(renderer);
+			if(debugComponent->IsEnabled())
+			{
+				IRenderer* renderer = debugComponent->GetBoundingBoxRenderer();
+				mRenderSystem->AddToRender(renderer);
+			}
 		}
 	}
 }
