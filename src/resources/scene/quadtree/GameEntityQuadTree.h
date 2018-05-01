@@ -12,7 +12,8 @@ public:
 	GameEntityQuadTree(const AABB& boundingBox);
 	virtual ~GameEntityQuadTree();
 
-	void AddGameEntity(const GameEntity* entity);
-	void RemoveGameEntity(const GameEntity* entity);
+	void AddGameEntity(GameEntity* entity) override;
+	void RemoveGameEntity(GameEntity* entity) override;
+	std::vector<const GameEntity*> Query(const AABB& aabb) override;
 };
 

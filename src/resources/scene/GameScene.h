@@ -31,6 +31,8 @@ public:
 	void Render(RenderSystem* renderSystem);
 	unsigned int GetNumberGameEntities() const;
 
+	const AABB& GetAABB() const;
+
 	void RegisterGameSceneListener(IGameSceneListener* listener);
 	void UnRegisterGameSceneListener(IGameSceneListener* listener);
 

@@ -60,6 +60,11 @@ void GameScene::RemoveEntity(GameEntity* entity)
 	mEntitiesToRemove.push_back(entity);
 }
 
+const AABB& GameScene::GetAABB() const
+{
+	return mAABB;
+}
+
 void GameScene::RegisterGameSceneListener(IGameSceneListener* listener)
 {
 	bool found = std::find(mListeners.begin(), mListeners.end(), listener) != mListeners.end();

@@ -12,6 +12,7 @@ class ParticlesSystem;
 class LightsSystem;
 class InputSystem;
 class DebugSystem;
+class SpacePartitionSystem;
 class Statistics;
 
 class InputHandler;
@@ -43,12 +44,14 @@ class NGenius : public BaseVisitable<>
 	ParticlesSystem* mParticlesSystem;
 	LightsSystem* mLightsSystem;
 	InputSystem* mInputSystem;
+	SpacePartitionSystem* mSpacePartitionSystem;
 	DebugSystem* mDebugSystem;
 	InputHandler* mInputHandler;
 	Statistics* mStatistics;
 	GameScene* mGameScene;
 	std::string mApplicationName;
 	float mNumberFPS;
+	
 	
 	std::function<void(float elapsedTime)> mUpdateHandler;
 
@@ -57,9 +60,8 @@ public:
 	~NGenius();
 
 	void Init(bool isFullscreen);
-	//TODO remove it
 	void Start();
-	void Update();
+	void Run();
 
 	IShaderProgram* GetShader(const std::string& name) const;
 	Model* GetModel(const std::string& name) const;
@@ -111,6 +113,7 @@ public:
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
 private:
+	
 	void CreateSystems(float screenWidth, float screenHeight);
 	void DestroySystems();
 	

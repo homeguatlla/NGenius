@@ -1352,9 +1352,8 @@ void Initialize()
 	glfwSetMouseButtonCallback(mEngine.GetGLWindow(), &MouseButtonCallback);
 	glfwSetCursorPosCallback(mEngine.GetGLWindow(), &MouseCursorPosCallback);
 
-	mEngine.Start();
-
 	mFogDensity = mIsFogEnabled ? mFogDensity : 0.0f;
+	mEngine.Start();
 }
 
 int main(void)
@@ -1366,7 +1365,7 @@ int main(void)
 
 	mEngine.SetCastingShadowsTarget(mPlayer);
 
-	mEngine.Update();
+	mEngine.Run();
 
 	DeleteEntities();
 

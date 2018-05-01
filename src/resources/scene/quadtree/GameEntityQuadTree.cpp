@@ -2,6 +2,7 @@
 #include "GameEntityQuadTree.h"
 #include "../../GameEntity.h"
 #include "../../renderers/IRenderer.h"
+#include "../../Transformation.h"
 
 const int MAX_QUADTREE_LEVELS = 8;
 
@@ -18,15 +19,32 @@ GameEntityQuadTree::~GameEntityQuadTree()
 	delete mQuadTree;
 }
 
-void GameEntityQuadTree::AddGameEntity(const GameEntity* entity)
+void GameEntityQuadTree::AddGameEntity(GameEntity* entity)
 {
 	IRenderer* renderer = entity->GetRenderer();
 	const AABB boundingBox = renderer->GetAABB();
-	mQuadTree->Add(	glm::vec2(boundingBox.GetVertexMin().x, boundingBox.GetVertexMin().z), 
-					glm::vec2(boundingBox.GetVertexMax().x, boundingBox.GetVertexMax().z), entity);
+	Transformation* transformation = entity->GetTransformation();
+	glm::mat4 matrix = transformation->GetModelMatrix();
+	glm::vec3 min = boundingBox.GetVertexMin();
+	glm::vec3 max = boundingBox.GetVertexMax();
+
+	min = matrix * glm::vec4(min, 1.0f);
+	max = matrix * glm::vec4(max, 1.0f);
+
+	mQuadTree->Add(	glm::vec2(min.x, min.z), 
+					glm::vec2(max.x, max.z), entity);
 }
 
-void GameEntityQuadTree::RemoveGameEntity(const GameEntity* entity)
+void GameEntityQuadTree::RemoveGameEntity(GameEntity* entity)
 {
-	mQuadTree->Remove(entity);
+	//mQuadTree->Remove(entity);
+}
+
+std::vector<const GameEntity*> GameEntityQuadTree::Query(const AABB& aabb)
+{
+/*	return mQuadTree->Query(glm::vec2(aabb.GetVertexMin().x, aabb.GetVertexMin().z),
+							glm::vec2(aabb.GetVertexMax().x, aabb.GetVertexMax().z));
+							*/
+
+	return std::vector<const GameEntity*>();
 }
