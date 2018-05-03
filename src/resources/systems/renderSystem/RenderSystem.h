@@ -74,9 +74,7 @@ class RenderSystem : public BaseVisitable<>
 	unsigned int mNumberDrawCalls;
 	
 public:
-	static const char* OVERDRAW_MATERIAL_NAME;
-	static const char* WIREFRAME_MATERIAL_NAME;
-
+	
 	RenderSystem(float screenWidth, float screenHeight);
 	~RenderSystem();
 

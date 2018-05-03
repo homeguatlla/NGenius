@@ -41,9 +41,6 @@
 
 using namespace std;
 
-const char* RenderSystem::OVERDRAW_MATERIAL_NAME = "overdraw";
-const char* RenderSystem::WIREFRAME_MATERIAL_NAME = "wireframe";
-
 RenderSystem::RenderSystem(float screenWidth, float screenHeight) :
 mScreenWidth(screenWidth),
 mScreenHeight(screenHeight),
@@ -93,7 +90,6 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 
 	CreateResourcesLibraries();
 	LoadResources();
-	CreateNewResources();
 	CreateSubSystems();
 }
 
@@ -126,12 +122,6 @@ void RenderSystem::LoadResources()
 	mFontsLibrary->Load();
 	mTexturesLibrary->Load();
 	mMaterialsLibrary->Load();
-}
-
-void RenderSystem::CreateNewResources()
-{
-	mMaterialsLibrary->CreateMaterial(OVERDRAW_MATERIAL_NAME, mShadersLibrary->GetElement(OVERDRAW_MATERIAL_NAME));
-	mMaterialsLibrary->CreateMaterial(WIREFRAME_MATERIAL_NAME, mShadersLibrary->GetElement("default"));
 }
 
 void RenderSystem::UpdateSubsystems()
@@ -476,7 +466,7 @@ void RenderSystem::SelectMaterial(RenderPass* renderPass, IRenderer* renderer)
 
 	if (mIsOverdrawEnabled)
 	{
-		material = GetMaterial(OVERDRAW_MATERIAL_NAME);
+		material = GetMaterial(MaterialsLibrary::OVERDRAW_MATERIAL_NAME);
 		material->CopyMaterialEffectsValuesFrom(renderer->GetMaterial());
 	}
 	else if (material == nullptr || !mShadowsRenderPass->IsEnabled())
@@ -681,7 +671,7 @@ void RenderSystem::CreateResourcesLibraries()
 	mTexturesLibrary = new TexturesLibrary();
 	mModelsLibrary = new ModelsLibrary(mTexturesLibrary);
 	mFontsLibrary = new FontsLibrary(mTexturesLibrary);
-	mMaterialsLibrary = new MaterialsLibrary();
+	mMaterialsLibrary = new MaterialsLibrary(mShadersLibrary);
 }
 
 void RenderSystem::DestroyResourcesLibraries()
