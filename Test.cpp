@@ -203,6 +203,7 @@ GameEntityQuadTree mQuadTree(mAABB);
 glm::vec3 mQuadMovingPosition(0.0f);
 glm::vec3 mQuadMovingScale(1.0f);
 GameEntity* mQuadTreeMovedEntity;
+std::vector<GameEntity*> mQuadTreeEntities;
 
 double aleatori()
 {
@@ -955,18 +956,23 @@ void CreateQuads()
 
 	GameEntity* entity = CreateQuadTreeBoxEntity(1.3f, glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
 	mQuadTree.AddGameEntity(entity);
+	mQuadTreeEntities.push_back(entity);
 
 	entity = CreateQuadTreeBoxEntity(0.05f, glm::vec3(1.7f, 0.0f, 1.7f), glm::vec3(0.0f, 1.0f, 1.0f));
 	mQuadTree.AddGameEntity(entity);
+	mQuadTreeEntities.push_back(entity);
 
 	entity = CreateQuadTreeBoxEntity(0.1f, glm::vec3(-1.5f, 0.0f, -1.5f), glm::vec3(0.0f, 1.0f, 1.0f));
 	mQuadTree.AddGameEntity(entity);
+	mQuadTreeEntities.push_back(entity);
 
 	entity = CreateQuadTreeBoxEntity(0.8f, glm::vec3(-0.9f, 0.0f, 1.1f), glm::vec3(0.0f, 1.0f, 1.0f));
 	mQuadTree.AddGameEntity(entity);
+	mQuadTreeEntities.push_back(entity);
 
-	mQuadTreeMovedEntity = CreateQuadTreeBoxEntity(mQuadMovingScale.x, mQuadMovingPosition, glm::vec3(1.0f, 0.0f, 1.0f));
-	mQuadTree.AddGameEntity(mQuadTreeMovedEntity);
+	//quad reference for move and scale, different color no debug component
+	mQuadTreeMovedEntity = CreateQuadTreeBoxEntity(mQuadMovingScale.x, mQuadMovingPosition, glm::vec3(1.0f, 1.0f, 0.0f));
+	mQuadTreeMovedEntity->RemoveComponent<DebugComponent>();
 }
 
 void CreateEntities()
@@ -1193,14 +1199,15 @@ void UpdateCommand(float elapsedTime)
 
 void UpdateQuadTreeBox()
 {
+	
 	glm::vec3 position = mQuadTreeMovedEntity->GetTransformation()->GetPosition();
 	glm::vec3 scale = mQuadTreeMovedEntity->GetTransformation()->GetScale();
 
-	std::cout << "anterior: \n";
-	std::cout << "pos: " << position.x << ", " << position.y << ", " << position.z << "\n";
-	std::cout << "scale: " << scale.x << ", " << scale.y << ", " << scale.z << "\n";
+	//std::cout << "anterior: \n";
+	//std::cout << "pos: " << position.x << ", " << position.y << ", " << position.z << "\n";
+	//std::cout << "scale: " << scale.x << ", " << scale.y << ", " << scale.z << "\n";
 
-	mQuadTree.RemoveGameEntity(mQuadTreeMovedEntity);
+	//mQuadTree.RemoveGameEntity(mQuadTreeMovedEntity);
 
 	scale.x = mQuadMovingScale.x * 2.0f;
 	scale.y = mQuadMovingScale.x * 2.0f;
@@ -1211,34 +1218,33 @@ void UpdateQuadTreeBox()
 
 	position = mQuadTreeMovedEntity->GetTransformation()->GetPosition();
 	scale = mQuadTreeMovedEntity->GetTransformation()->GetScale();
-	std::cout << "actual: \n";
-	std::cout << "pos: " << position.x << ", " << position.y << ", " << position.z << "\n";
-	std::cout << "scale: " << scale.x << ", " << scale.y << ", " << scale.z << "\n";
-	mQuadTree.AddGameEntity(mQuadTreeMovedEntity);
+	//std::cout << "actual: \n";
+	//std::cout << "pos: " << position.x << ", " << position.y << ", " << position.z << "\n";
+	//std::cout << "scale: " << scale.x << ", " << scale.y << ", " << scale.z << "\n";
+	//mQuadTree.AddGameEntity(mQuadTreeMovedEntity);
 
 	std::cout << "num elements in quadtree: " << mQuadTree.GetNumEntities() << "\n";
 
-	/*std::vector<GameEntity*>& entities = mScene->GetAllGameEntities();
-	for (GameEntity* entity : entities)
-	{
-		DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
-		if (debugComponent != nullptr)
-		{
-			//debugComponent->SetEnabled(false);
-		}
-	}
-
-	//std::vector<GameEntity*> result = mEngine.Query(mQuadTreeBox->GetRenderer()->GetAABB());
-	std::vector<GameEntity*> result = mQuadTree.Query(mQuadTreeBox->GetRenderer()->GetAABB());
-
-	for (GameEntity* entity : result)
+	for (GameEntity* entity : mQuadTreeEntities)
 	{
 		DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
 		if (debugComponent != nullptr)
 		{
 			debugComponent->SetEnabled(true);
 		}
-	}*/
+	}
+
+	std::vector<GameEntity*> result;
+	mQuadTree.Query(mQuadTreeMovedEntity->GetRenderer()->GetAABB(), result);
+
+	for (GameEntity* entity : result)
+	{
+		DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
+		if (debugComponent != nullptr)
+		{
+			debugComponent->SetEnabled(false);
+		}
+	}
 }
 
 void UpdateInput(GLFWwindow* window)

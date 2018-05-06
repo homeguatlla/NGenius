@@ -115,7 +115,7 @@ public:
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
 	//spatial partition
-	std::vector<GameEntity*>& Query(const AABB& aabb);
+	void Query(const AABB& aabb, std::vector<GameEntity*>& result);
 
 private:
 	

@@ -20,7 +20,7 @@ public:
 	void Start(const GameScene& gameScene);
 	void Update(float elapsedTime);
 
-	std::vector<GameEntity*>& Query(const AABB& aabb) const;
+	void Query(const AABB& aabb, std::vector<GameEntity*>& result) const;
 	
 private:
 	bool HasSpacePartitionComponents(const GameEntity* entity);

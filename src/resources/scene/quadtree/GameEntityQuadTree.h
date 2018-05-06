@@ -16,7 +16,7 @@ public:
 
 	void AddGameEntity(GameEntity* entity) override;
 	void RemoveGameEntity(GameEntity* entity) override;
-	std::vector<GameEntity*>& Query(const AABB& aabb) override;
+	void Query(const AABB& aabb, std::vector<GameEntity*>& result) override;
 	unsigned int GetNumEntities() const override;
 };
 

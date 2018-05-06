@@ -46,8 +46,8 @@ void GameEntityQuadTree::RemoveGameEntity(GameEntity* entity)
 						glm::vec2(max.x, max.z), entity);
 }
 
-std::vector<GameEntity*>& GameEntityQuadTree::Query(const AABB& aabb)
+void GameEntityQuadTree::Query(const AABB& aabb, std::vector<GameEntity*>& result)
 {
-	return mQuadTree->Query(glm::vec2(aabb.GetVertexMin().x, aabb.GetVertexMin().z),
-							glm::vec2(aabb.GetVertexMax().x, aabb.GetVertexMax().z));
+	mQuadTree->Query(glm::vec2(aabb.GetVertexMin().x, aabb.GetVertexMin().z),
+					glm::vec2(aabb.GetVertexMax().x, aabb.GetVertexMax().z), result);
 }

@@ -359,7 +359,7 @@ BaseVisitable<>::ReturnType NGenius::Accept(BaseVisitor& guest)
 	return AcceptImpl(*this, guest);
 }
 
-std::vector<GameEntity*>& NGenius::Query(const AABB& aabb)
+void NGenius::Query(const AABB& aabb, std::vector<GameEntity*>& result)
 {
-	return mSpacePartitionSystem->Query(aabb);
+	mSpacePartitionSystem->Query(aabb, result);
 }
