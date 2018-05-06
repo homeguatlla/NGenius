@@ -48,6 +48,7 @@
 
 #include "src/resources/models/Model.h"
 
+#include "src/resources/materials/MaterialsLibrary.h"
 #include "src/resources/materials/IMaterial.h"
 #include "src/resources/materials/effects/MaterialEffectDiffuseTexture.h"
 #include "src/resources/materials/effects/MaterialEffectNormalTexture.h"
@@ -199,7 +200,9 @@ ICommand* mCurrentCommand = nullptr;
 float aabbSize = 2.0f;
 const AABB mAABB(glm::vec3(-aabbSize, 0.0f, -aabbSize), glm::vec3(aabbSize, 0.0f, aabbSize));
 GameEntityQuadTree mQuadTree(mAABB);
-
+glm::vec3 mQuadMovingPosition(0.0f);
+glm::vec3 mQuadMovingScale(1.0f);
+GameEntity* mQuadTreeMovedEntity;
 
 double aleatori()
 {
@@ -356,7 +359,7 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 
 	modelEntity->AddComponent(new PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE));
 	modelEntity->AddComponent(new CollisionComponent());
-	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(RenderSystem::WIREFRAME_MATERIAL_NAME));
+	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	modelEntity->AddComponent(new DebugComponent(boundingBoxRenderer));
 
 	LODComponent* lodComponent = new LODComponent(mGameplayCamera);
@@ -390,7 +393,7 @@ GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, const
 	modelEntity->AddComponent(new PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE));
 	modelEntity->AddComponent(new CollisionComponent());
 
-	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(RenderSystem::WIREFRAME_MATERIAL_NAME));
+	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	modelEntity->AddComponent(new DebugComponent(boundingBoxRenderer));
 
 	return modelEntity;
@@ -836,7 +839,7 @@ void CreatePlayer()
 							PLAYER_UPWARDS_HEIGHT
 						);
 	mPlayer->AddComponent(new EnergyWallCollisionComponent());
-	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(RenderSystem::WIREFRAME_MATERIAL_NAME));
+	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	mPlayer->AddComponent(new DebugComponent(boundingBoxRenderer));
 	mScene->AddEntity(mPlayer);
 }
@@ -900,7 +903,8 @@ void CreateCameras()
 	float aspectRatio = screenWidth / screenHeight;
 
 	//CAMERA
-	mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
+	//mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
+	mEagleEyeCamera = new OrthogonalCamera(screenWidth/100, screenHeight/100, NEAR_PLANE, FAR_PLANE);
 	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 0.0f));
 	mEagleEyeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mEagleEyeCamera->SetUp(glm::vec3(1.0f, 0.0f, 0.0f));
@@ -921,28 +925,48 @@ GameEntity* CreateQuadTreeBoxEntity(float size, glm::vec3 position, glm::vec3 co
 										new Transformation(position, glm::vec3(0.0f), glm::vec3(size * 2.0f)),
 										renderer
 									);
-	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(RenderSystem::WIREFRAME_MATERIAL_NAME));
+	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	quad->AddComponent(new DebugComponent(boundingBoxRenderer));
 
 	mScene->AddEntity(quad);
 	return quad;
 }
 
+void CreateQuadTreeGrid(int levels, int maxWidth, const glm::vec3 color)
+{
+	int numQuads = static_cast<int>(pow(2, levels - 1));
+	float size = static_cast<float>(maxWidth) / static_cast<float>(numQuads);
+	glm::vec3 origin(-size * (numQuads - 1), 0.0f, -size * (numQuads - 1));
+
+	for (int x = 0; x < numQuads; ++x)
+	{
+		for (int z = 0; z < numQuads; ++z)
+		{
+			glm::vec3 position(x * size * 2.0f, 0.0f, z * size * 2.0f);
+
+			CreateQuadTreeBoxEntity(size, origin + position, color);
+		}
+	}
+}
+
 void CreateQuads()
 {
 	mQuadTreeBox = CreateQuadTreeBoxEntity(aabbSize, glm::vec3(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-	GameEntity* entity = CreateQuadTreeBoxEntity(0.1f, glm::vec3(-1.5f, 0.0f, -1.5f), glm::vec3(0.0f, 1.0f, 1.0f));
+	GameEntity* entity = CreateQuadTreeBoxEntity(1.3f, glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
 	mQuadTree.AddGameEntity(entity);
 
-	entity = CreateQuadTreeBoxEntity(0.1f, glm::vec3(-1.5f, 0.0f, 1.5f), glm::vec3(0.0f, 1.0f, 1.0f));
+	entity = CreateQuadTreeBoxEntity(0.05f, glm::vec3(1.7f, 0.0f, 1.7f), glm::vec3(0.0f, 1.0f, 1.0f));
 	mQuadTree.AddGameEntity(entity);
 
-	entity = CreateQuadTreeBoxEntity(0.1f, glm::vec3(1.5f, 0.0f, -1.5f), glm::vec3(0.0f, 1.0f, 1.0f));
+	entity = CreateQuadTreeBoxEntity(0.1f, glm::vec3(-1.5f, 0.0f, -1.5f), glm::vec3(0.0f, 1.0f, 1.0f));
 	mQuadTree.AddGameEntity(entity);
 
-	entity = CreateQuadTreeBoxEntity(0.1f, glm::vec3(1.5f, 0.0f, 1.5f), glm::vec3(0.0f, 1.0f, 1.0f));
+	entity = CreateQuadTreeBoxEntity(0.8f, glm::vec3(-0.9f, 0.0f, 1.1f), glm::vec3(0.0f, 1.0f, 1.0f));
 	mQuadTree.AddGameEntity(entity);
+
+	mQuadTreeMovedEntity = CreateQuadTreeBoxEntity(mQuadMovingScale.x, mQuadMovingPosition, glm::vec3(1.0f, 0.0f, 1.0f));
+	mQuadTree.AddGameEntity(mQuadTreeMovedEntity);
 }
 
 void CreateEntities()
@@ -994,6 +1018,7 @@ void CreateEntities()
 
 	if (mConfiguration == QUADTREE)
 	{
+		CreateQuadTreeGrid(GameEntityQuadTree::MAX_QUADTREE_LEVELS, static_cast<int>(aabbSize), glm::vec3(0.0f, 1.0f, 0.0f));
 		CreateQuads();
 	}
 }
@@ -1111,54 +1136,6 @@ void DeleteEntities()
 	delete mEagleEyeCamera;
 }
 
-void UpdateInput(GLFWwindow* window)
-{
-	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-	{
-		PerspectiveCamera* gameplayCamera = static_cast<PerspectiveCamera*>(mGameplayCamera);
-		PerspectiveCamera* eagleEyeCamera = static_cast<PerspectiveCamera*>(mEagleEyeCamera);
-		std::swap(*gameplayCamera, *eagleEyeCamera);
-		if (mIsGameplayCameraEnabled)
-		{
-			if (mCamera->HasComponent<ThirdPersonCameraComponent>())
-			{
-				mCamera->RemoveComponent<ThirdPersonCameraComponent>();
-			}
-		}
-		else
-		{
-			glm::vec3 targetOffset(0.0f, 0.5f, 0.0f); //head
-			mThirdPersonCameraComponent = new ThirdPersonCameraComponent(	static_cast<PerspectiveCamera*>(mGameplayCamera), 
-																			mPlayer, 
-																			targetOffset, 
-																			1.5f, 
-																			PLAYER_PITCH, 
-																			PLAYER_PITCH_SPEED, 
-																			PLAYER_ZOOM_SPEED);
-			mCamera->AddComponent(mThirdPersonCameraComponent);
-		}
-
-		mIsGameplayCameraEnabled = !mIsGameplayCameraEnabled;
-	}
-	else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-	{
-		mIsShadowEnabled = !mIsShadowEnabled;
-		mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
-	}
-	else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-	{
-		if (mCurrentCommand == nullptr)
-		{
-			mCurrentCommand = new RiseTerrainCommand(mTerrain);
-		}
-	}
-
-	if (mCurrentCommand != nullptr)
-	{
-		mCurrentCommand->Execute();
-	}
-}
-
 void UpdateEnergyWallCollisions(float elapsedTime)
 {
 	EnergyWallCollisionComponent* component = mPlayer->GetComponent<EnergyWallCollisionComponent>();
@@ -1216,7 +1193,32 @@ void UpdateCommand(float elapsedTime)
 
 void UpdateQuadTreeBox()
 {
-	std::vector<GameEntity*>& entities = mScene->GetAllGameEntities();
+	glm::vec3 position = mQuadTreeMovedEntity->GetTransformation()->GetPosition();
+	glm::vec3 scale = mQuadTreeMovedEntity->GetTransformation()->GetScale();
+
+	std::cout << "anterior: \n";
+	std::cout << "pos: " << position.x << ", " << position.y << ", " << position.z << "\n";
+	std::cout << "scale: " << scale.x << ", " << scale.y << ", " << scale.z << "\n";
+
+	mQuadTree.RemoveGameEntity(mQuadTreeMovedEntity);
+
+	scale.x = mQuadMovingScale.x * 2.0f;
+	scale.y = mQuadMovingScale.x * 2.0f;
+	scale.z = mQuadMovingScale.x * 2.0f;
+
+	mQuadTreeMovedEntity->GetTransformation()->SetScale(scale);
+	mQuadTreeMovedEntity->GetTransformation()->SetPosition(mQuadMovingPosition);
+
+	position = mQuadTreeMovedEntity->GetTransformation()->GetPosition();
+	scale = mQuadTreeMovedEntity->GetTransformation()->GetScale();
+	std::cout << "actual: \n";
+	std::cout << "pos: " << position.x << ", " << position.y << ", " << position.z << "\n";
+	std::cout << "scale: " << scale.x << ", " << scale.y << ", " << scale.z << "\n";
+	mQuadTree.AddGameEntity(mQuadTreeMovedEntity);
+
+	std::cout << "num elements in quadtree: " << mQuadTree.GetNumEntities() << "\n";
+
+	/*std::vector<GameEntity*>& entities = mScene->GetAllGameEntities();
 	for (GameEntity* entity : entities)
 	{
 		DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
@@ -1236,6 +1238,89 @@ void UpdateQuadTreeBox()
 		{
 			debugComponent->SetEnabled(true);
 		}
+	}*/
+}
+
+void UpdateInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+	{
+		PerspectiveCamera* gameplayCamera = static_cast<PerspectiveCamera*>(mGameplayCamera);
+		PerspectiveCamera* eagleEyeCamera = static_cast<PerspectiveCamera*>(mEagleEyeCamera);
+		std::swap(*gameplayCamera, *eagleEyeCamera);
+		if (mIsGameplayCameraEnabled)
+		{
+			if (mCamera->HasComponent<ThirdPersonCameraComponent>())
+			{
+				mCamera->RemoveComponent<ThirdPersonCameraComponent>();
+			}
+		}
+		else
+		{
+			glm::vec3 targetOffset(0.0f, 0.5f, 0.0f); //head
+			mThirdPersonCameraComponent = new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera),
+				mPlayer,
+				targetOffset,
+				1.5f,
+				PLAYER_PITCH,
+				PLAYER_PITCH_SPEED,
+				PLAYER_ZOOM_SPEED);
+			mCamera->AddComponent(mThirdPersonCameraComponent);
+		}
+
+		mIsGameplayCameraEnabled = !mIsGameplayCameraEnabled;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+	{
+		mIsShadowEnabled = !mIsShadowEnabled;
+		mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
+	}
+	else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+	{
+		if (mCurrentCommand == nullptr)
+		{
+			mCurrentCommand = new RiseTerrainCommand(mTerrain);
+		}
+	}
+
+	if (mConfiguration == QUADTREE)
+	{
+		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		{
+			mQuadMovingPosition.x += 0.01f;
+			UpdateQuadTreeBox();
+		}
+		else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		{
+			mQuadMovingPosition.x -= 0.01f;
+			UpdateQuadTreeBox();
+		}
+		else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		{
+			mQuadMovingPosition.z += 0.01f;
+			UpdateQuadTreeBox();
+		}
+		else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		{
+			mQuadMovingPosition.z -= 0.01f;
+			UpdateQuadTreeBox();
+		}
+		else if (glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_PRESS)
+		{
+			mQuadMovingScale.x += 0.01f;
+			UpdateQuadTreeBox();
+		}
+		else if (glfwGetKey(window, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS)
+		{
+			mQuadMovingScale.x -= 0.01f;
+			UpdateQuadTreeBox();
+		}
+	}
+	
+
+	if (mCurrentCommand != nullptr)
+	{
+		mCurrentCommand->Execute();
 	}
 }
 
@@ -1254,7 +1339,7 @@ void Update(float elapsedTime)
 
 	if (mConfiguration == QUADTREE)
 	{
-		UpdateQuadTreeBox();
+		//UpdateQuadTreeBox();
 	}
 }
 
