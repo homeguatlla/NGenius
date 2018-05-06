@@ -135,7 +135,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = QUADTREE;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -954,7 +954,7 @@ void CreateQuads()
 {
 	mQuadTreeBox = CreateQuadTreeBoxEntity(aabbSize, glm::vec3(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-	GameEntity* entity = CreateQuadTreeBoxEntity(1.3f, glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
+	/*GameEntity* entity = CreateQuadTreeBoxEntity(1.3f, glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
 	mQuadTree.AddGameEntity(entity);
 	mQuadTreeEntities.push_back(entity);
 
@@ -968,10 +968,22 @@ void CreateQuads()
 
 	entity = CreateQuadTreeBoxEntity(0.8f, glm::vec3(-0.9f, 0.0f, 1.1f), glm::vec3(0.0f, 1.0f, 1.0f));
 	mQuadTree.AddGameEntity(entity);
-	mQuadTreeEntities.push_back(entity);
+	mQuadTreeEntities.push_back(entity);*/
+
+
+	int maxBoxes = 50;
+	for (int i = 0; i < maxBoxes; ++i)
+	{
+		float size = (rand() % 100) * 0.005f + 0.02f;
+		glm::vec3 position((rand()%400)* 0.01f - 2.0f, 0.0f, (rand() % 400)* 0.01f - 2.0f);
+		GameEntity* entity = CreateQuadTreeBoxEntity(size, position, glm::vec3(0.0f, 1.0f, 1.0f));
+		mQuadTree.AddGameEntity(entity);
+		mQuadTreeEntities.push_back(entity);
+	}
 
 	//quad reference for move and scale, different color no debug component
 	mQuadTreeMovedEntity = CreateQuadTreeBoxEntity(mQuadMovingScale.x, mQuadMovingPosition, glm::vec3(1.0f, 1.0f, 0.0f));
+	//mQuadTree.AddGameEntity(mQuadTreeMovedEntity);
 	mQuadTreeMovedEntity->RemoveComponent<DebugComponent>();
 }
 
@@ -1028,31 +1040,6 @@ void CreateEntities()
 		CreateQuads();
 	}
 }
-
-/*
-void CreateEntities2()
-{
-	const Texture* texture = static_cast<const Texture*>(mEngine.CreateDepthTexture("depth_texture", glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
-
-	//LIGHT GAME ENTITY
-	mSunLight = new Light(mSunLightDirection, glm::vec3(1, 1, 1), nullptr);// new CubeRenderer(mEngine.GetShader("default")));
-	mSunLight->AddComponent(new VerticalInputComponent(mEngine.GetGLWindow()));
-	mSunLight->GetTransformation()->SetScale(glm::vec3(0.05f));
-
-	mScene->AddGameEntity(mSunLight);
-
-	//CreateSpecificCubes();
-
-	//CreateHUD();
-
-	//CreateWaterHudPlanes();
-
-	if (mIsShadowEnabled)
-	{
-		//CreateShadowPlane();
-	}
-}
-*/
 
 void DisableRenderPasses()
 {
@@ -1224,7 +1211,7 @@ void UpdateQuadTreeBox()
 	//mQuadTree.AddGameEntity(mQuadTreeMovedEntity);
 
 	std::cout << "num elements in quadtree: " << mQuadTree.GetNumEntities() << "\n";
-
+	
 	for (GameEntity* entity : mQuadTreeEntities)
 	{
 		DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
@@ -1341,11 +1328,6 @@ void Update(float elapsedTime)
 	if (mIsStatisticsVisible && mIsTextEnabled)
 	{
 		UpdateStatitstics();
-	}
-
-	if (mConfiguration == QUADTREE)
-	{
-		//UpdateQuadTreeBox();
 	}
 }
 

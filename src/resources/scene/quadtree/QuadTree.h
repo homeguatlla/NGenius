@@ -146,7 +146,22 @@ public:
 
 		if (node != nullptr)
 		{
+			//from node to the leaves
 			Query(node, regionMin, regionMax, result);
+
+			//from node to the parent
+			node = node->mParent;
+			while (node != nullptr)
+			{
+				for (Element* element : node->mData)
+				{
+					if (Contains(regionMin, regionMax, element->regionMin, element->regionMax))
+					{
+						result.push_back(element->data);
+					}
+				}
+				node = node->mParent;
+			}
 		}
 	}
 
