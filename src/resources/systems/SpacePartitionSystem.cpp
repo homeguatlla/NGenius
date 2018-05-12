@@ -1,14 +1,16 @@
 #include "stdafx.h"
 #include "SpacePartitionSystem.h"
+#include "renderSystem/RenderSystem.h"
 #include "../scene/quadtree/GameEntityQuadTree.h"
 #include "../GameEntity.h"
+#include "../camera/ICamera.h"
+#include "../components/SpacePartitionComponent.h"
 
 #include <algorithm>
 
 SpacePartitionSystem::SpacePartitionSystem()
 {
 }
-
 
 SpacePartitionSystem::~SpacePartitionSystem()
 {
@@ -18,13 +20,33 @@ SpacePartitionSystem::~SpacePartitionSystem()
 
 void SpacePartitionSystem::Start(const GameScene& gameScene)
 {
-	mQuadTree = new GameEntityQuadTree(gameScene.GetAABB());
+	AABB aabb = gameScene.GetAABB();
+	aabb.Expand(glm::vec3(1.0f));
+	mQuadTree = new GameEntityQuadTree(aabb);
 }
 
 void SpacePartitionSystem::Update(float elapsedTime)
 {
 	RemoveEntities();
 	AddNewEntities();
+}
+
+void SpacePartitionSystem::Render(RenderSystem* renderSystem)
+{
+	const ICamera* camera = renderSystem->GetCamera("gameplay_camera");
+	assert(camera != nullptr);
+
+	if (camera != nullptr)
+	{
+		const AABB aabb = camera->GetAABB();
+		std::vector<GameEntity*> entities;
+		Query(aabb, entities);
+
+		for (GameEntity* entity : entities)
+		{
+			renderSystem->AddToRender(entity->GetRenderer());
+		}
+	}
 }
 
 void SpacePartitionSystem::Query(const AABB& aabb, std::vector<GameEntity*>& result) const
@@ -44,7 +66,7 @@ void SpacePartitionSystem::RemoveEntity(GameEntity* entity)
 
 bool SpacePartitionSystem::HasSpacePartitionComponents(const GameEntity* entity)
 {
-	return entity->GetRenderer() != nullptr;
+	return entity->GetRenderer() != nullptr && entity->HasComponent<SpacePartitionComponent>();
 }
 
 void SpacePartitionSystem::OnGameEntityAdded(GameEntity* entity)

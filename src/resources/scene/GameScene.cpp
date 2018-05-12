@@ -5,6 +5,7 @@
 #include "../systems/renderSystem/RenderSystem.h"
 #include "../renderers/IRenderer.h"
 #include "../components/LODComponent.h"
+#include "../components/SpacePartitionComponent.h"
 
 #include <algorithm>
 
@@ -17,6 +18,7 @@ mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limi
 GameScene::~GameScene()
 {
 	mEntitiesToRemove.clear(); //these entities were removed when releasing mEntities.
+	mEntitiesOutsideSpacePartition.clear();
 	ReleaseEntities(&mEntities);
 	ReleaseEntities(&mNewEntitiesToAdd);	
 }
@@ -40,9 +42,22 @@ void GameScene::Render(RenderSystem* renderSystem)
 	}
 }
 
+void GameScene::RenderOutsideSpacePartition(RenderSystem* renderSystem)
+{
+	for (GameEntity* entity : mEntitiesOutsideSpacePartition)
+	{
+		renderSystem->AddToRender(entity->GetRenderer());
+	}
+}
+
 unsigned int GameScene::GetNumberGameEntities() const
 {
 	return mEntities.size();
+}
+
+unsigned int GameScene::GetNumberGameEntitiesOutsideSpacePartition() const
+{
+	return mEntitiesOutsideSpacePartition.size();
 }
 
 std::vector<GameEntity*>& GameScene::GetAllGameEntities()
@@ -93,6 +108,10 @@ void GameScene::AddNewEntities()
 {
 	for (GameEntity* entity : mNewEntitiesToAdd)
 	{
+		if (!entity->HasComponent<SpacePartitionComponent>())
+		{
+			mEntitiesOutsideSpacePartition.push_back(entity);
+		}
 		mEntities.push_back(entity);
 		NotifyEntityAdded(entity);
 	}
@@ -119,8 +138,14 @@ void GameScene::RemoveEntities()
 {
 	for (GameEntity* entity : mEntitiesToRemove)
 	{
+		if (!entity->HasComponent<SpacePartitionComponent>())
+		{
+			GameEntitiesIterator itOutside = std::find_if(mEntitiesOutsideSpacePartition.begin(), mEntitiesOutsideSpacePartition.end(), [&](GameEntity* a) { return a == entity; });
+			mEntitiesOutsideSpacePartition.erase(itOutside);
+		}
 		GameEntitiesIterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](GameEntity* a) { return a == entity; });
 		NotifyEntityRemoved(*it);
+		
 		mEntities.erase(it);
 	}
 	mEntitiesToRemove.clear();

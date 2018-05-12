@@ -13,6 +13,7 @@ mSpeed(speed)
 RotationComponent::~RotationComponent()
 {
 }
+
 RotationComponent* RotationComponent::DoClone() const
 {
 	return new RotationComponent(*this);

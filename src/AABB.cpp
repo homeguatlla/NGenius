@@ -61,3 +61,9 @@ const AABB AABB::Merge(const AABB& aabb) const
 
 	return AABB(min, max);
 }
+
+void AABB::Expand(const glm::vec3& size)
+{
+	mMin -= size;
+	mMax += size;
+}

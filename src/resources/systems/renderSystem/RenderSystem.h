@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <glm/glm.hpp>
 #include "../../../VertexBuffersManager.h"
@@ -38,11 +38,14 @@ class RenderSystem : public BaseVisitable<>
 
 	VertexBuffersManager mVertexsBuffersManager;
 
-	std::map<char, RenderersList> mRenderersPerPass;
+	std::unordered_map<char, RenderersList> mRenderersPerPass;
 	std::vector<IRenderer*> mInstances;
 	std::vector<RenderPass*> mRenderPasses;
 	std::vector<RenderPass*> mRenderPassesAfterPostProcessing;
 	
+	typedef std::map<const std::string, const ICamera*>::iterator CamerasListIterator;
+	std::map<const std::string, const ICamera*> mCamerasList;
+
 	float mScreenWidth;
 	float mScreenHeight;
 
@@ -89,6 +92,9 @@ public:
 	
 	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing = false);
 	void RemoveRenderPass(RenderPass* renderPass);
+
+	void AddCamera(const ICamera* camera);
+	const ICamera* GetCamera(const std::string name) const;
 
 	float GetScreenWidth() const;
 	float GetScreenHeight() const;
@@ -151,6 +157,8 @@ private:
 	void SelectTextures();
 	void SelectClippingPlane(RenderPass* renderPass);
 	void ApplyShadows(IRenderer* renderer);
+
+	void DestroyCameras();
 
 	void CheckGLError();
 };

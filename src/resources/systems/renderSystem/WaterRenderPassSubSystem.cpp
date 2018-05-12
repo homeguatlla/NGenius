@@ -36,8 +36,6 @@ mIsInitialized(false)
 
 WaterRenderPassSubSystem::~WaterRenderPassSubSystem()
 {
-	delete mReflectionCamera;
-	delete mRefractionCamera;
 }
 
 void WaterRenderPassSubSystem::Init()
@@ -45,7 +43,9 @@ void WaterRenderPassSubSystem::Init()
 	if (mIsWaterEnabled)
 	{
 		mReflectionCamera = CreateReflectionCamera();
+		mRenderSystem->AddCamera(mReflectionCamera);
 		mRefractionCamera = CreateRefractionCamera();
+		mRenderSystem->AddCamera(mRefractionCamera);
 		mReflectionRenderPass = CreateReflectionRenderPass();
 		mRefractionRenderPass = CreateRefractionRenderPass();
 		mRenderSystem->AddRenderPass(mReflectionRenderPass);
@@ -73,12 +73,12 @@ void WaterRenderPassSubSystem::SetWaterParameters(const ICamera* gameplayCamera,
 
 ICamera* WaterRenderPassSubSystem::CreateReflectionCamera()
 {
-	return new PerspectiveCamera(VIEW_ANGLE, mScreenWidth / mScreenHeight, NEAR_PLANE, FAR_PLANE);
+	return new PerspectiveCamera("reflection_camera", VIEW_ANGLE, mScreenWidth / mScreenHeight, NEAR_PLANE, FAR_PLANE);
 }
 
 ICamera* WaterRenderPassSubSystem::CreateRefractionCamera()
 {
-	return new PerspectiveCamera(VIEW_ANGLE, mScreenWidth / mScreenHeight, NEAR_PLANE, FAR_PLANE);
+	return new PerspectiveCamera("refraction_camera", VIEW_ANGLE, mScreenWidth / mScreenHeight, NEAR_PLANE, FAR_PLANE);
 }
 
 RenderPass* WaterRenderPassSubSystem::CreateRefractionRenderPass()

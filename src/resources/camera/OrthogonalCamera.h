@@ -3,8 +3,9 @@
 class OrthogonalCamera : public ICamera
 {
 public:
-	OrthogonalCamera(float screenWidth, float screenHeight, float nearPlane, float farPlane);
+	OrthogonalCamera(std::string name, float screenWidth, float screenHeight, float nearPlane, float farPlane);
 	~OrthogonalCamera();
+	AABB GetAABB() const override;
 
 private:
 	void CreateViewMatrix() override;

@@ -40,6 +40,7 @@ void ShadowsRenderPassSubSystem::Init()
 		assert(mShadowMapTexture != nullptr);
 
 		mShadowCastCamera = CreateShadowCastCamera(mDirectionalLightDirection);
+		mRenderSystem->AddCamera(mShadowCastCamera);
 		mRenderPass = CreateShadowRenderPass();
 		mRenderSystem->AddRenderPass(mRenderPass);
 		mIsInitialized = true;
@@ -133,7 +134,7 @@ glm::mat4 ShadowsRenderPassSubSystem::CalculateShadowMapMatrix(const ICamera* ca
 
 ICamera* ShadowsRenderPassSubSystem::CreateShadowCastCamera(const glm::vec3& directionalLightDirection)
 {
-	ICamera* camera = new OrthogonalCamera(mScreenWidth * 0.01f, mScreenHeight * 0.01f, -10.0f, 20.0f);
+	ICamera* camera = new OrthogonalCamera("shadow_camera", mScreenWidth * 0.01f, mScreenHeight * 0.01f, -10.0f, 20.0f);
 
 	return camera;
 }

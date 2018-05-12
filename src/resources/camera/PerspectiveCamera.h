@@ -4,8 +4,9 @@
 class PerspectiveCamera : public ICamera
 {
 public:
-	explicit PerspectiveCamera(float fov, float aspectRatio, float nearPlane, float farPlane);
+	explicit PerspectiveCamera(std::string name, float fov, float aspectRatio, float nearPlane, float farPlane);
 	~PerspectiveCamera();
+	AABB GetAABB() const override;
 
 private:
 	void CreateViewMatrix() override;

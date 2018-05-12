@@ -91,6 +91,7 @@ public:
 		unsigned int yDiff = locationCode1.y ^ locationCode2.y;
 
 		unsigned int minLevel = FindMinLevel(xDiff, yDiff);
+
 		//std::cout << "diff(" << xDiff << " , " << yDiff << ")" << " level:" << minLevel << " ";
 		//std::cout << " code: " << locationCode1.x << ", " << locationCode1.y << "\n";
 
@@ -122,7 +123,7 @@ public:
 			}
 			else
 			{
-				assert(false);
+				//assert(false);
 			}
 		}
 	}
@@ -185,7 +186,7 @@ public:
 			return minLevel + 1;
 		}
 		
-		QuadTreeNode*  TraverseToLevelFromRootCreatingNewNodes(unsigned int nextLevel, const glm::uvec2& locationCode, unsigned int level)
+		QuadTreeNode* TraverseToLevelFromRootCreatingNewNodes(unsigned int nextLevel, const glm::uvec2& locationCode, unsigned int level)
 		{
 			QuadTreeNode* finalNode = mRoot;
 			unsigned int n = nextLevel - level + 1;

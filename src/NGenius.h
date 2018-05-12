@@ -53,7 +53,7 @@ class NGenius : public BaseVisitable<>
 	GameScene* mGameScene;
 	std::string mApplicationName;
 	float mNumberFPS;
-	
+	bool mIsSpacePartitionEnabled;
 	
 	std::function<void(float elapsedTime)> mUpdateHandler;
 
@@ -82,6 +82,7 @@ public:
 	void AddParticleEmitter(ParticlesEmitter* emitter);
 	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing);
 	void AddLight(Light* light);
+	void AddCamera(ICamera* camera);
 
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 
@@ -116,6 +117,7 @@ public:
 
 	//spatial partition
 	void Query(const AABB& aabb, std::vector<GameEntity*>& result);
+	void SetIsSpacePartitionEnabled(bool enable);
 
 private:
 	

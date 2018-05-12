@@ -40,6 +40,11 @@ void ICamera::SetUp(const glm::vec3& up)
 	mIsDirty = true;
 }
 
+void ICamera::SetName(const std::string& name)
+{
+	mName = name;
+}
+
 glm::vec3 ICamera::GetPosition() const
 {
 	return mPosition;
@@ -53,6 +58,11 @@ glm::vec3 ICamera::GetTarget() const
 glm::vec3 ICamera::GetUp() const
 {
 	return mUp;
+}
+
+const std::string& ICamera::GetName() const
+{
+	return mName;
 }
 
 void ICamera::Move(float speed)

@@ -19,12 +19,14 @@
 #include "resources/systems/InputSystem.h"
 #include "resources/systems/DebugSystem.h"
 #include "resources/systems/SpacePartitionSystem.h"
+
 #include "resources/scene/GameScene.h"
+#include "resources/entities/ParticlesEmitter.h"
+#include "resources/textures/Texture.h"
 
 #include "statistics/Statistics.h"
 
-#include "resources/entities/ParticlesEmitter.h"
-#include "resources/textures/Texture.h"
+
 
 NGenius::NGenius(std::string applicationName, float screenWidth, float screenHeight) :
 mRenderSystem(nullptr),
@@ -33,7 +35,8 @@ mEntitiesSystem(nullptr),
 mParticlesSystem(nullptr),
 mSpacePartitionSystem(nullptr),
 mGameScene(nullptr),
-mApplicationName(applicationName)
+mApplicationName(applicationName),
+mIsSpacePartitionEnabled(false)
 {
 	CreateSystems(screenWidth, screenHeight);
 }
@@ -106,7 +109,17 @@ void NGenius::Run()
 
 void NGenius::Render()
 {
-	mGameScene->Render(mRenderSystem);
+	//render all entities
+	if (mIsSpacePartitionEnabled)
+	{
+		mSpacePartitionSystem->Render(mRenderSystem);
+		mGameScene->RenderOutsideSpacePartition(mRenderSystem);
+	}
+	else
+	{
+		mGameScene->Render(mRenderSystem);
+	}
+
 	mRenderSystem->Render();
 }
 
@@ -270,7 +283,7 @@ GameScene* NGenius::CreateGameScene(const std::string& name)
 	mGameScene->RegisterGameSceneListener(mDebugSystem);
 	mGameScene->RegisterGameSceneListener(mInputSystem);
 	mGameScene->RegisterGameSceneListener(mPhysicsSystem);
-	//mGameScene->RegisterGameSceneListener(mSpacePartitionSystem);
+	mGameScene->RegisterGameSceneListener(mSpacePartitionSystem);
 
 	return mGameScene;
 }
@@ -293,6 +306,11 @@ void NGenius::AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing)
 void NGenius::AddLight(Light* light)
 {
 	mLightsSystem->AddLight(light);
+}
+
+void NGenius::AddCamera(ICamera* camera)
+{
+	mRenderSystem->AddCamera(camera);
 }
 
 void NGenius::SetTerrain(const Terrain* terrain)
@@ -362,4 +380,9 @@ BaseVisitable<>::ReturnType NGenius::Accept(BaseVisitor& guest)
 void NGenius::Query(const AABB& aabb, std::vector<GameEntity*>& result)
 {
 	mSpacePartitionSystem->Query(aabb, result);
+}
+
+void NGenius::SetIsSpacePartitionEnabled(bool enable)
+{
+	mIsSpacePartitionEnabled = enable;
 }

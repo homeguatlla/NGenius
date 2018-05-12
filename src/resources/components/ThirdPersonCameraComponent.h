@@ -27,6 +27,7 @@ public:
 	void UpdateInternal(float elapsedTime) override;
 	const GameEntity* GetTarget() const;
 	glm::vec3 GetCameraPosition() const;
+	float GetCameraPitch() const;
 
 private:
 	void UpdateGameEvents(float elapsedTime);

@@ -7,18 +7,25 @@ static const int NEAR_PLANE = 0;
 static const int SCREEN_WIDTH = 1024;
 static const int SCREEN_HEIGHT = 768;
 
-OrthogonalCamera::OrthogonalCamera(float screenWidth, float screenHeight, float nearPlane, float farPlane) :
+OrthogonalCamera::OrthogonalCamera(std::string name, float screenWidth, float screenHeight, float nearPlane, float farPlane) :
 mScreenWidth(screenWidth),
 mScreenHeight(screenHeight),
 mNearPlane(nearPlane),
 mFarPlane(farPlane)
 {
+	SetName(name);
 	mIsDirty = true;
 	CreateProjectionMatrix();
 }
 
 OrthogonalCamera::~OrthogonalCamera()
 {
+}
+
+AABB OrthogonalCamera::GetAABB() const
+{
+	AABB aabb;
+	return aabb;
 }
 
 void OrthogonalCamera::CreateViewMatrix()

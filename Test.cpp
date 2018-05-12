@@ -98,6 +98,7 @@
 #include "src/resources/components/OverWaterComponent.h"
 #include "src/resources/components/CharacterComponent.h"
 #include "src/resources/components/DebugComponent.h"
+#include "src/resources/components/SpacePartitionComponent.h"
 
 #include "src/resources/command/ICommand.h"
 #include "src/resources/command/commands/RiseTerrainCommand.h"
@@ -132,6 +133,7 @@ enum Configuration
 	COLLISIONS,
 	FLAT,
 	QUADTREE,
+	QUADTREE_WITH_CAMERA,
 	RELEASE
 };
 
@@ -164,11 +166,12 @@ bool mIsParticlesEnabled = false;
 bool mIsFullScreen = false;
 bool mIsPropsEnabled = false;
 
+bool mIsSpacePartitionEnabled = false;
+
 NGenius mEngine("Demo", SCREEN_WIDTH, SCREEN_HEIGHT);
 ICamera* mGameplayCamera;
-ICamera* mGuiCamera;
-ICamera* mMapCamera;
 ICamera* mEagleEyeCamera;
+ICamera* mCameraTest;
 ThirdPersonCameraComponent* mThirdPersonCameraComponent;
 
 RenderPass* mMapPass;
@@ -196,6 +199,10 @@ std::vector<std::string> texts = { "FPS: ", "Triangles: ", "Drawcalls: ", "GameE
 
 ICommand* mCurrentCommand = nullptr;
 
+//camera bounding box
+GameEntity* mCameraAABBEntity;
+GameEntity* mCameraTargetEntity;
+
 //for QUADTREE setup
 float aabbSize = 2.0f;
 const AABB mAABB(glm::vec3(-aabbSize, 0.0f, -aabbSize), glm::vec3(aabbSize, 0.0f, aabbSize));
@@ -204,6 +211,8 @@ glm::vec3 mQuadMovingPosition(0.0f);
 glm::vec3 mQuadMovingScale(1.0f);
 GameEntity* mQuadTreeMovedEntity;
 std::vector<GameEntity*> mQuadTreeEntities;
+
+
 
 double aleatori()
 {
@@ -360,6 +369,7 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 
 	modelEntity->AddComponent(new PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE));
 	modelEntity->AddComponent(new CollisionComponent());
+	modelEntity->AddComponent(new SpacePartitionComponent());
 	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	modelEntity->AddComponent(new DebugComponent(boundingBoxRenderer));
 
@@ -393,6 +403,7 @@ GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, const
 
 	modelEntity->AddComponent(new PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE));
 	modelEntity->AddComponent(new CollisionComponent());
+	modelEntity->AddComponent(new SpacePartitionComponent());
 
 	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	modelEntity->AddComponent(new DebugComponent(boundingBoxRenderer));
@@ -412,6 +423,7 @@ void CreateTrees()
 		float x = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
 		float z = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
 		float height = mTerrain->GetHeight(glm::vec2(x, z));
+		
 		if (height > mWaterHeight + 0.2f)
 		{
 			positions.push_back(glm::vec3(x, height, z));
@@ -862,7 +874,7 @@ void CreateGameCameraEntity()
 																	PLAYER_PITCH, 
 																	PLAYER_PITCH_SPEED, 
 																	PLAYER_ZOOM_SPEED);
-	mCamera->AddComponent(mThirdPersonCameraComponent);
+	//mCamera->AddComponent(mThirdPersonCameraComponent);
 	mCamera->AddComponent(new CollisionComponent());
 
 	mCamera->AddComponent(new CharacterComponent());
@@ -905,15 +917,36 @@ void CreateCameras()
 
 	//CAMERA
 	//mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
-	mEagleEyeCamera = new OrthogonalCamera(screenWidth/100, screenHeight/100, NEAR_PLANE, FAR_PLANE);
+	float factor = 1.0f;
+	if (mConfiguration != QUADTREE)
+	{
+		factor = 20.0f;
+	}
+	else
+	{
+		factor = 100.0f;
+	}
+	mEagleEyeCamera = new OrthogonalCamera("eagle_camera", screenWidth/factor, screenHeight/factor, NEAR_PLANE, FAR_PLANE);
 	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 0.0f));
 	mEagleEyeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mEagleEyeCamera->SetUp(glm::vec3(1.0f, 0.0f, 0.0f));
 
-	mGameplayCamera = new PerspectiveCamera(VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
-	mGameplayCamera->SetPosition(glm::vec3(0.0f, 8.0f, 2.0f));
+	mEngine.AddCamera(mEagleEyeCamera);
+
+	mGameplayCamera = new PerspectiveCamera("gameplay_camera", VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
+	mGameplayCamera->SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
 	mGameplayCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	mEngine.AddCamera(mGameplayCamera);
+
+	if (mConfiguration == QUADTREE_WITH_CAMERA)
+	{
+		mCameraTest = new PerspectiveCamera("gameplay_test", VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
+		mCameraTest->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+		mCameraTest->SetTarget(glm::vec3(0.0f, 0.0f, 10.0f));
+		mCameraTest->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+		mEngine.AddCamera(mCameraTest);
+	}
 }
 
 GameEntity* CreateQuadTreeBoxEntity(float size, glm::vec3 position, glm::vec3 color)
@@ -971,7 +1004,7 @@ void CreateQuads()
 	mQuadTreeEntities.push_back(entity);*/
 
 
-	int maxBoxes = 50;
+	int maxBoxes = 20;
 	for (int i = 0; i < maxBoxes; ++i)
 	{
 		float size = (rand() % 100) * 0.005f + 0.02f;
@@ -981,10 +1014,24 @@ void CreateQuads()
 		mQuadTreeEntities.push_back(entity);
 	}
 
+	GameEntity* entity = CreateQuadTreeBoxEntity(1.9f, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 1.0f));
+	mQuadTree.AddGameEntity(entity);
+	mQuadTreeEntities.push_back(entity);
+
+
 	//quad reference for move and scale, different color no debug component
 	mQuadTreeMovedEntity = CreateQuadTreeBoxEntity(mQuadMovingScale.x, mQuadMovingPosition, glm::vec3(1.0f, 1.0f, 0.0f));
 	//mQuadTree.AddGameEntity(mQuadTreeMovedEntity);
 	mQuadTreeMovedEntity->RemoveComponent<DebugComponent>();
+}
+
+void CreateCameraAABBEntity()
+{
+	AABB aabb = mCameraTest->GetAABB();
+	mCameraAABBEntity = CreateQuadTreeBoxEntity(1.0f, aabb.GetCenter(), glm::vec3(1.0f, 1.0f, 0.0f));
+	mCameraAABBEntity->RemoveComponent<DebugComponent>();
+
+	mCameraTargetEntity = CreateQuadTreeBoxEntity(0.3f, glm::vec3(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 }
 
 void CreateEntities()
@@ -1039,6 +1086,11 @@ void CreateEntities()
 		CreateQuadTreeGrid(GameEntityQuadTree::MAX_QUADTREE_LEVELS, static_cast<int>(aabbSize), glm::vec3(0.0f, 1.0f, 0.0f));
 		CreateQuads();
 	}
+
+	if (mConfiguration == QUADTREE_WITH_CAMERA)
+	{
+		CreateCameraAABBEntity();
+	}
 }
 
 void DisableRenderPasses()
@@ -1052,11 +1104,12 @@ void DisableRenderPasses()
 void CreateHudMapRenderPass()
 {
 	//HUD MAP RENDER PASS
-	mMapCamera = new PerspectiveCamera(VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	mMapCamera->SetPosition(glm::vec3(0.0f, 100.0f, 0.0f));
-	mMapCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
-	mMapCamera->SetUp(glm::vec3(1.0f, 0.0f, 0.0f));
-	mMapPass = new RenderPass(static_cast<ICamera*>(mMapCamera), IRenderer::LAYER_OTHER);
+	ICamera* camera = new PerspectiveCamera("map_camera", VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
+	camera->SetPosition(glm::vec3(0.0f, 100.0f, 0.0f));
+	camera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
+	camera->SetUp(glm::vec3(1.0f, 0.0f, 0.0f));
+	mMapPass = new RenderPass(camera, IRenderer::LAYER_OTHER);
+	mEngine.AddCamera(camera);
 	
 	IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(mEngine.GetScreenWidth()), static_cast<int>(mEngine.GetScreenHeight()));
 	frameBuffer->SetColorTextureAttachment(0, static_cast<Texture*>(mEngine.GetTexture("map")));
@@ -1069,12 +1122,13 @@ void CreateHudMapRenderPass()
 void CreateGUIRenderPass()
 {
 	//RENDER PASS GUI
-	mGuiCamera = new OrthogonalCamera(mEngine.GetScreenWidth(), mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	mGuiCamera->SetPosition(glm::vec3(0.0f, 0.0f, 40.0f));
-	mGuiCamera->SetTarget(glm::vec3(0.0f, 0.0f, -50.0f));
-	mGuiCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
-	RenderPass *guiPass = new RenderPass(static_cast<ICamera*>(mGuiCamera), IRenderer::LAYER_GUI);
+	ICamera* camera = new OrthogonalCamera("gui_camera", mEngine.GetScreenWidth(), mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
+	camera->SetPosition(glm::vec3(0.0f, 0.0f, 40.0f));
+	camera->SetTarget(glm::vec3(0.0f, 0.0f, -50.0f));
+	camera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	RenderPass *guiPass = new RenderPass(static_cast<ICamera*>(camera), IRenderer::LAYER_GUI);
 	mEngine.AddRenderPass(guiPass, true);
+	mEngine.AddCamera(camera);
 }
 
 void CreateGameplayRenderPass()
@@ -1126,7 +1180,6 @@ void CreateSubSystems()
 
 void DeleteEntities()
 {
-	delete mEagleEyeCamera;
 }
 
 void UpdateEnergyWallCollisions(float elapsedTime)
@@ -1190,10 +1243,6 @@ void UpdateQuadTreeBox()
 	glm::vec3 position = mQuadTreeMovedEntity->GetTransformation()->GetPosition();
 	glm::vec3 scale = mQuadTreeMovedEntity->GetTransformation()->GetScale();
 
-	//std::cout << "anterior: \n";
-	//std::cout << "pos: " << position.x << ", " << position.y << ", " << position.z << "\n";
-	//std::cout << "scale: " << scale.x << ", " << scale.y << ", " << scale.z << "\n";
-
 	//mQuadTree.RemoveGameEntity(mQuadTreeMovedEntity);
 
 	scale.x = mQuadMovingScale.x * 2.0f;
@@ -1203,13 +1252,7 @@ void UpdateQuadTreeBox()
 	mQuadTreeMovedEntity->GetTransformation()->SetScale(scale);
 	mQuadTreeMovedEntity->GetTransformation()->SetPosition(mQuadMovingPosition);
 
-	position = mQuadTreeMovedEntity->GetTransformation()->GetPosition();
-	scale = mQuadTreeMovedEntity->GetTransformation()->GetScale();
-	//std::cout << "actual: \n";
-	//std::cout << "pos: " << position.x << ", " << position.y << ", " << position.z << "\n";
-	//std::cout << "scale: " << scale.x << ", " << scale.y << ", " << scale.z << "\n";
 	//mQuadTree.AddGameEntity(mQuadTreeMovedEntity);
-
 	std::cout << "num elements in quadtree: " << mQuadTree.GetNumEntities() << "\n";
 	
 	for (GameEntity* entity : mQuadTreeEntities)
@@ -1232,6 +1275,32 @@ void UpdateQuadTreeBox()
 			debugComponent->SetEnabled(false);
 		}
 	}
+}
+
+void UpdateCameraAABB()
+{
+	glm::vec3 position(0.0f);
+	glm::vec3 rotation(0.0f);
+	glm::vec3 scale(1.0f);
+
+	rotation = mPlayer->GetTransformation()->GetRotation();
+	glm::mat4 matrix(1.0f);
+	matrix = glm::rotate(matrix, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	matrix = glm::rotate(matrix, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	matrix = glm::rotate(matrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+	glm::vec3 targetPos = mPlayer->GetTransformation()->GetPosition();
+	glm::vec3 forward = matrix * glm::vec4(0.0f, 0.0f, 10.0f, 0.0f);
+	forward.y = 0.0f;
+	mCameraTargetEntity->GetTransformation()->SetPosition(targetPos + forward);
+	
+	mCameraTest->SetTarget(targetPos + forward);
+	mCameraTest->SetPosition(targetPos);
+	
+	AABB aabb = mCameraTest->GetAABB();
+	position = aabb.GetCenter();
+	mCameraAABBEntity->GetTransformation()->SetPosition(aabb.GetCenter());
+	mCameraAABBEntity->GetTransformation()->SetScale(aabb.GetSize());
 }
 
 void UpdateInput(GLFWwindow* window)
@@ -1274,6 +1343,11 @@ void UpdateInput(GLFWwindow* window)
 		{
 			mCurrentCommand = new RiseTerrainCommand(mTerrain);
 		}
+	} 
+	else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+	{
+		mIsSpacePartitionEnabled = !mIsSpacePartitionEnabled;
+		mEngine.SetIsSpacePartitionEnabled(mIsSpacePartitionEnabled);
 	}
 
 	if (mConfiguration == QUADTREE)
@@ -1309,7 +1383,6 @@ void UpdateInput(GLFWwindow* window)
 			UpdateQuadTreeBox();
 		}
 	}
-	
 
 	if (mCurrentCommand != nullptr)
 	{
@@ -1328,6 +1401,10 @@ void Update(float elapsedTime)
 	if (mIsStatisticsVisible && mIsTextEnabled)
 	{
 		UpdateStatitstics();
+	}
+	if (mConfiguration == QUADTREE_WITH_CAMERA)
+	{
+		UpdateCameraAABB();
 	}
 }
 
@@ -1449,8 +1526,8 @@ void SetupConfiguration()
 		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
-		mIsVegetationEnabled = false;
-		mIsPropsEnabled = false;
+		mIsVegetationEnabled = true;
+		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
@@ -1474,6 +1551,22 @@ void SetupConfiguration()
 		mIsStatisticsVisible = false;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = false;
+		break;
+	case QUADTREE_WITH_CAMERA:
+		mIsDebugModeEnabled = true;
+		mIsWaterEnabled = false;
+		mIsGameplayCameraEnabled = true;
+		mIsFogEnabled = false;
+		mIsVegetationEnabled = true;
+		mIsPropsEnabled = true;
+		mIsEnergyWallEnabled = false;
+		mIsSkyboxEnabled = false;
+		mIsTerrainFlat = true;
+		mIsTextEnabled = true;
+		mIsStatisticsVisible = true;
+		mIsParticlesEnabled = false;
+		mIsShadowEnabled = false;
+		mIsFullScreen = false;
 		break;
 	case RELEASE:
 		mIsDebugModeEnabled = true;

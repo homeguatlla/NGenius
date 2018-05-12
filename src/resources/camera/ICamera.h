@@ -1,5 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <string>
+#include "../../AABB.h"
 
 class ICamera
 {
@@ -11,19 +13,23 @@ public:
 	void SetPosition(const glm::vec3& position);
 	void SetTarget(const glm::vec3& target);
 	void SetUp(const glm::vec3& up);
+	void SetName(const std::string& name);
 
 	glm::vec3 GetPosition() const;
 	glm::vec3 GetTarget() const;
 	glm::vec3 GetUp() const;
+	const std::string& GetName() const;
 
 	void Move(float speed);
 	void Rotate(float angle, const glm::vec3& axis);
+	virtual AABB GetAABB() const = 0;
 
 private:
 	virtual void CreateViewMatrix() = 0;
 	virtual void CreateProjectionMatrix() = 0;
 
 protected:
+	std::string mName;
 	bool mIsDirty;
 	glm::mat4 mViewMatrix;
 	glm::mat4 mProjectionMatrix;

@@ -119,6 +119,11 @@ glm::vec3 ThirdPersonCameraComponent::GetCameraPosition() const
 	return newPosition;
 }
 
+float ThirdPersonCameraComponent::GetCameraPitch() const
+{
+	return mCurrentPitch;
+}
+
 float ThirdPersonCameraComponent::CalculateHorizontalDistance() const
 {
 	return mDistanceFromTarget * glm::cos(glm::radians(mCurrentPitch));

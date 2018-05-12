@@ -12,6 +12,7 @@ class RenderSystem;
 class GameScene : public BaseVisitable<>
 {
 	std::vector<GameEntity*> mEntities;
+	std::vector<GameEntity*> mEntitiesOutsideSpacePartition;
 	std::vector<GameEntity*> mNewEntitiesToAdd;
 	std::vector<GameEntity*> mEntitiesToRemove;
 	typedef std::vector<GameEntity*>::iterator GameEntitiesIterator;
@@ -29,7 +30,10 @@ public:
 	void RemoveEntity(GameEntity* entity);
 
 	void Render(RenderSystem* renderSystem);
+	void RenderOutsideSpacePartition(RenderSystem* renderSystem);
+
 	unsigned int GetNumberGameEntities() const;
+	unsigned int GetNumberGameEntitiesOutsideSpacePartition() const;
 	
 	std::vector<GameEntity*>& GetAllGameEntities();
 

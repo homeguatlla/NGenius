@@ -6,6 +6,7 @@
 
 class GameEntity;
 class GameEntityQuadTree;
+class RenderSystem;
 
 class SpacePartitionSystem : public IGameSceneListener
 {
@@ -19,6 +20,7 @@ public:
 
 	void Start(const GameScene& gameScene);
 	void Update(float elapsedTime);
+	void Render(RenderSystem* renderSystem);
 
 	void Query(const AABB& aabb, std::vector<GameEntity*>& result) const;
 	

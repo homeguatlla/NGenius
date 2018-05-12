@@ -74,6 +74,7 @@ RenderSystem::~RenderSystem()
 		delete pass;
 	}
 
+	DestroyCameras();
 	DestroyResourcesLibraries();
 	DestroySubSystems();
 	glfwDestroyWindow(mWindow);
@@ -305,6 +306,32 @@ void RenderSystem::AddToRender(IRenderer* renderer, std::vector<RenderPass*>& re
 			mRenderersPerPass[pass->GetLayersMask()].push_back(renderer);
 		}
 	}
+}
+
+void RenderSystem::AddCamera(const ICamera* camera)
+{
+	mCamerasList[camera->GetName()] = camera;
+}
+
+const ICamera* RenderSystem::GetCamera(const std::string name) const
+{
+	if (mCamerasList.find(name) != mCamerasList.end())
+	{
+		return mCamerasList.at(name);
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+void RenderSystem::DestroyCameras()
+{
+	for (CamerasListIterator it = mCamerasList.begin(); it != mCamerasList.end(); ++it)
+	{
+		delete it->second;
+	}
+	mCamerasList.clear();
 }
 
 void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances)

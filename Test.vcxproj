@@ -192,6 +192,7 @@
     <ClInclude Include="src\resources\components\PhysicsComponent.h" />
     <ClInclude Include="src\resources\components\CollisionComponent.h" />
     <ClInclude Include="src\resources\components\RotationComponent.h" />
+    <ClInclude Include="src\resources\components\SpacePartitionComponent.h" />
     <ClInclude Include="src\resources\components\ThirdPersonCameraComponent.h" />
     <ClInclude Include="src\resources\entities\EnergyWall.h" />
     <ClInclude Include="src\resources\entities\Light.h" />
@@ -331,6 +332,7 @@
     <ClCompile Include="src\resources\components\PhysicsComponent.cpp" />
     <ClCompile Include="src\resources\components\CollisionComponent.cpp" />
     <ClCompile Include="src\resources\components\RotationComponent.cpp" />
+    <ClCompile Include="src\resources\components\SpacePartitionComponent.cpp" />
     <ClCompile Include="src\resources\components\ThirdPersonCameraComponent.cpp" />
     <ClCompile Include="src\resources\entities\EnergyWall.cpp" />
     <ClCompile Include="src\resources\entities\Light.cpp" />
