@@ -54,6 +54,11 @@ void SpacePartitionSystem::Query(const AABB& aabb, std::vector<GameEntity*>& res
 	mQuadTree->Query(aabb, result);
 }
 
+unsigned int SpacePartitionSystem::GetNumberEntities() const
+{
+	return mQuadTree->GetNumEntities();
+}
+
 void SpacePartitionSystem::AddEntity(GameEntity* entity)
 {
 	mNewEntitiesToAdd.push_back(entity);
@@ -105,4 +110,9 @@ void SpacePartitionSystem::RemoveEntities()
 		mQuadTree->RemoveGameEntity(entity);
 	}
 	mEntitiesToRemove.clear();
+}
+
+BaseVisitable<>::ReturnType SpacePartitionSystem::Accept(BaseVisitor& guest)
+{
+	return AcceptImpl(*this, guest);
 }

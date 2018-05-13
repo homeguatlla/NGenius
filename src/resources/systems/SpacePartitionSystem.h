@@ -8,7 +8,7 @@ class GameEntity;
 class GameEntityQuadTree;
 class RenderSystem;
 
-class SpacePartitionSystem : public IGameSceneListener
+class SpacePartitionSystem : public IGameSceneListener, BaseVisitable<>
 {
 	std::vector<GameEntity*> mNewEntitiesToAdd;
 	std::vector<GameEntity*> mEntitiesToRemove;
@@ -24,6 +24,10 @@ public:
 
 	void Query(const AABB& aabb, std::vector<GameEntity*>& result) const;
 	
+	unsigned int GetNumberEntities() const;
+
+	BaseVisitable<>::ReturnType Accept(BaseVisitor& guest) override;
+
 private:
 	bool HasSpacePartitionComponents(const GameEntity* entity);
 	void AddEntity(GameEntity* entity);

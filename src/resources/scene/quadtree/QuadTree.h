@@ -59,6 +59,7 @@ class QuadTree
 	QuadTreeNode* mRoot;
 	unsigned int mMaxLevels;
 	glm::vec2 mRegionMin;
+	glm::vec2 mRegionMax;
 	glm::vec2 mRegionSize;
 	float mConversionFactor;
 
@@ -70,6 +71,7 @@ public:
 		assert(mMaxLevels > 1);
 
 		mRegionMin = regionMin;
+		mRegionMax = regionMax;
 		mRegionSize = regionMax - regionMin;
 		mConversionFactor = static_cast<float>(glm::pow(2, mMaxLevels));
 
@@ -84,21 +86,32 @@ public:
 
 	void Add(const glm::vec2& regionMin, const glm::vec2& regionMax, T* data)
 	{
-		glm::uvec2 locationCode1 = CalculateLocationCode(regionMin);
-		glm::uvec2 locationCode2 = CalculateLocationCode(regionMax);
+		std::cout << "region min: " << regionMin.x << ", " << regionMin.y;
+		std::cout << " region max: " << regionMax.x << ", " << regionMax.y << "\n";
 
-		unsigned int xDiff = locationCode1.x ^ locationCode2.x;
-		unsigned int yDiff = locationCode1.y ^ locationCode2.y;
-
-		unsigned int minLevel = FindMinLevel(xDiff, yDiff);
-
-		//std::cout << "diff(" << xDiff << " , " << yDiff << ")" << " level:" << minLevel << " ";
-		//std::cout << " code: " << locationCode1.x << ", " << locationCode1.y << "\n";
-
-		QuadTreeNode* node = TraverseToLevelFromRootCreatingNewNodes(mMaxLevels - 1, locationCode1, minLevel);
-		if (node != nullptr)
+		if (Contains(mRegionMin, mRegionMax, regionMin, regionMax))
 		{
-			node->mData.push_back(new Element(regionMin, regionMax, data));
+			glm::uvec2 locationCode1 = CalculateLocationCode(regionMin);
+			glm::uvec2 locationCode2 = CalculateLocationCode(regionMax);
+
+			unsigned int xDiff = locationCode1.x ^ locationCode2.x;
+			unsigned int yDiff = locationCode1.y ^ locationCode2.y;
+
+			unsigned int minLevel = FindMinLevel(xDiff, yDiff);
+
+			//std::cout << "diff(" << xDiff << " , " << yDiff << ")" << " level:" << minLevel << " ";
+			//std::cout << " code: " << locationCode1.x << ", " << locationCode1.y << "\n";
+
+			QuadTreeNode* node = TraverseToLevelFromRootCreatingNewNodes(mMaxLevels - 1, locationCode1, minLevel);
+			if (node != nullptr)
+			{
+				node->mData.push_back(new Element(regionMin, regionMax, data));
+			}
+		}
+		else
+		{
+			std::cout << "Skipped Entity: Entity outside the volume of the quadtree!";
+			assert(false);
 		}
 	}
 
@@ -135,34 +148,41 @@ public:
 
 	void Query(const glm::vec2& regionMin, const glm::vec2& regionMax, std::vector<T*>& result)
 	{
-		glm::uvec2 locationCode1 = CalculateLocationCode(regionMin);
-		glm::uvec2 locationCode2 = CalculateLocationCode(regionMax);
-
-		unsigned int xDiff = locationCode1.x ^ locationCode2.x;
-		unsigned int yDiff = locationCode1.y ^ locationCode2.y;
-
-		unsigned int minLevel = FindMinLevel(xDiff, yDiff);
-
-		QuadTreeNode* node = TraverseToLevel(mRoot, mMaxLevels-1, locationCode1, minLevel);
-
-		if (node != nullptr)
+		if (Contains(mRegionMin, mRegionMax, regionMin, regionMax))
 		{
-			//from node to the leaves
-			Query(node, regionMin, regionMax, result);
+			glm::uvec2 locationCode1 = CalculateLocationCode(regionMin);
+			glm::uvec2 locationCode2 = CalculateLocationCode(regionMax);
 
-			//from node to the parent
-			node = node->mParent;
-			while (node != nullptr)
+			unsigned int xDiff = locationCode1.x ^ locationCode2.x;
+			unsigned int yDiff = locationCode1.y ^ locationCode2.y;
+
+			unsigned int minLevel = FindMinLevel(xDiff, yDiff);
+
+			QuadTreeNode* node = TraverseToLevel(mRoot, mMaxLevels - 1, locationCode1, minLevel);
+
+			if (node != nullptr)
 			{
-				for (Element* element : node->mData)
-				{
-					if (Contains(regionMin, regionMax, element->regionMin, element->regionMax))
-					{
-						result.push_back(element->data);
-					}
-				}
+				//from node to the leaves
+				Query(node, regionMin, regionMax, result);
+
+				//from node to the parent
 				node = node->mParent;
+				while (node != nullptr)
+				{
+					for (Element* element : node->mData)
+					{
+						if (Contains(regionMin, regionMax, element->regionMin, element->regionMax))
+						{
+							result.push_back(element->data);
+						}
+					}
+					node = node->mParent;
+				}
 			}
+		}
+		else
+		{
+			assert(false);
 		}
 	}
 
@@ -170,6 +190,11 @@ public:
 		glm::uvec2 CalculateLocationCode(const glm::vec2& region)
 		{
 			glm::vec2 location = ((region - mRegionMin) / mRegionSize);
+			if (location.y < 0.0f && location.x < 0.0f)
+			{
+				std::cout << "incorrect data: " << location.x << ", " << location.y << "\n";
+			}
+			location = glm::max(location, glm::vec2(0.0f));
 			glm::uvec2 locationCode = location * mConversionFactor;
 
 			return locationCode;

@@ -130,6 +130,7 @@ void NGenius::AcceptStatistics()
 		mRenderSystem->Accept(*mStatistics);
 		mGameScene->Accept(*mStatistics);
 		mPhysicsSystem->Accept(*mStatistics);
+		mSpacePartitionSystem->Accept(*mStatistics);
 		this->Accept(*mStatistics);
 	}
 }
@@ -142,6 +143,7 @@ void NGenius::UpdateSystems(float elapsedTime)
 	mGameScene->Update(elapsedTime);
 	mPhysicsSystem->Update(elapsedTime);
 	mSpacePartitionSystem->Update(elapsedTime);
+	mRenderSystem->Update(elapsedTime);
 }
 
 void NGenius::CreateSystems(float screenWidth, float screenHeight)

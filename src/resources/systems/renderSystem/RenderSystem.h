@@ -75,6 +75,7 @@ class RenderSystem : public BaseVisitable<>
 
 	unsigned int mNumberTrianglesRendered;
 	unsigned int mNumberDrawCalls;
+	unsigned int mNumberRenderers;
 	
 public:
 	
@@ -87,6 +88,7 @@ public:
 	//cameras, 
 	//subsystems pues waterpass necesita de la camera
 	void Start();
+	void Update(float elapsedTime);
 	void Render();
 	void AddToRender(IRenderer* renderer);
 	
@@ -101,6 +103,7 @@ public:
 
 	unsigned int GetNumberTrianglesRendered() const;
 	unsigned int GetNumberDrawCalls() const;
+	unsigned int GetNumberRenderers() const;
 
 	GLFWwindow* GetGLWindow() const;
 	IShaderProgram* GetShader(const std::string& name) const;

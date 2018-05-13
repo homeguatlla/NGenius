@@ -137,7 +137,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = FLAT;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -185,8 +185,7 @@ GameEntity* mQuadTreeBox;
 GameScene* mScene;
 
 EnergyWall* mEnergyWall;
-Text* mText[5];
-IMaterial* materialText;
+
 
 float mFogDensity = 0.04f;
 const float mFogGradient = 1.5f;
@@ -195,7 +194,9 @@ glm::vec3 mFogColor = vec3(89.0f, 120.0f, 143.0f) / 255.0f;
 float mEnergyWallRadius = 22.0f;
 glm::vec3 mEnergyWallPosition(0.0f, 0.0f, 0.0f);
 
-std::vector<std::string> texts = { "FPS: ", "Triangles: ", "Drawcalls: ", "GameEntities: ", "GEWithPhysics: "};
+const std::vector<std::string> texts = { "FPS: ", "Triangles: ", "Drawcalls: ", "GameEntities(GE): ", "GESpacePartition:", "GERendered:", "GEWithPhysics: "};
+Text* mText[7];
+IMaterial* materialText;
 
 ICommand* mCurrentCommand = nullptr;
 
@@ -211,7 +212,6 @@ glm::vec3 mQuadMovingPosition(0.0f);
 glm::vec3 mQuadMovingScale(1.0f);
 GameEntity* mQuadTreeMovedEntity;
 std::vector<GameEntity*> mQuadTreeEntities;
-
 
 
 double aleatori()
@@ -1214,11 +1214,16 @@ void UpdateStatitstics()
 		effect->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
+	unsigned int numGameEntities = statistics->GetNumberGameEntities();
+	unsigned int numGameEntitiesInsideSpacePartition = statistics->GetNumberGameEntitiesInsideSpacePartition();
+
 	mText[0]->UpdateText(texts[0] + std::to_string(fps));
 	mText[1]->UpdateText(texts[1] + std::to_string(statistics->GetNumberTrianglesRendered()));
 	mText[2]->UpdateText(texts[2] + std::to_string(statistics->GetNumberDrawCalls()));
-	mText[3]->UpdateText(texts[3] + std::to_string(statistics->GetNumberGameEntities()));
-	mText[4]->UpdateText(texts[4] + std::to_string(statistics->GetNumberGameEntitiesWithPhysics()));
+	mText[3]->UpdateText(texts[3] + std::to_string(numGameEntities));
+	mText[4]->UpdateText(texts[4] + std::to_string(numGameEntitiesInsideSpacePartition));
+	mText[5]->UpdateText(texts[5] + std::to_string(statistics->GetNumberRenderers()));
+	mText[6]->UpdateText(texts[6] + std::to_string(statistics->GetNumberGameEntitiesWithPhysics()));
 }
 
 void UpdateCommand(float elapsedTime)
@@ -1344,7 +1349,7 @@ void UpdateInput(GLFWwindow* window)
 			mCurrentCommand = new RiseTerrainCommand(mTerrain);
 		}
 	} 
-	else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+	else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 	{
 		mIsSpacePartitionEnabled = !mIsSpacePartitionEnabled;
 		mEngine.SetIsSpacePartitionEnabled(mIsSpacePartitionEnabled);
@@ -1526,12 +1531,12 @@ void SetupConfiguration()
 		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
-		mIsVegetationEnabled = true;
+		mIsVegetationEnabled = false;
 		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
-		mIsTextEnabled = false;
+		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = false;

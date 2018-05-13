@@ -61,7 +61,8 @@ mIsClippingEnabled(false),
 mIsOverdrawEnabled(false),
 mIsPostprocessEnabled(true),
 mNumberTrianglesRendered(0),
-mNumberDrawCalls(0)
+mNumberDrawCalls(0),
+mNumberRenderers(0)
 {
 	BitNumber bit;
 	bit.Test();
@@ -125,6 +126,12 @@ void RenderSystem::LoadResources()
 	mMaterialsLibrary->Load();
 }
 
+void RenderSystem::Update(float elapsedTime)
+{
+	mNumberRenderers = 0;
+	UpdateSubsystems();
+}
+
 void RenderSystem::UpdateSubsystems()
 {
 	mShadowsRenderPass->Update();
@@ -133,8 +140,6 @@ void RenderSystem::UpdateSubsystems()
 
 void RenderSystem::Render()
 {
-	UpdateSubsystems();
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	mNumberDrawCalls = 0;
@@ -291,6 +296,7 @@ void RenderSystem::AddToRender(IRenderer* renderer)
 	{
 		AddToRender(renderer, mRenderPasses);
 		AddToRender(renderer, mRenderPassesAfterPostProcessing);
+		mNumberRenderers++;
 	}
 }
 
@@ -529,6 +535,11 @@ unsigned int RenderSystem::GetNumberTrianglesRendered() const
 unsigned int RenderSystem::GetNumberDrawCalls() const
 {
 	return mNumberDrawCalls;
+}
+
+unsigned int RenderSystem::GetNumberRenderers() const
+{
+	return mNumberRenderers;
 }
 
 GLFWmonitor* RenderSystem::GetCurrentMonitor(float* screenWidth, float* screenHeight)

@@ -24,6 +24,7 @@ void Statistics::Visit(RenderSystem& renderSystem)
 {
 	mNumberTrianglesRendered = renderSystem.GetNumberTrianglesRendered();
 	mNumberDrawCalls = renderSystem.GetNumberDrawCalls();
+	mNumberRenderers = renderSystem.GetNumberRenderers();
 	//std::cout << "triangles: " << mNumberTrianglesRendered << " calls: " << mNumberDrawCalls << "\n";
 }
 
@@ -35,6 +36,11 @@ void Statistics::Visit(GameScene& gameScene)
 void Statistics::Visit(PhysicsSystem& physicsSystem)
 {
 	mNumberGameEntitiesWithPhysics = physicsSystem.GetNumberGameEntities();
+}
+
+void Statistics::Visit(SpacePartitionSystem& spacePartitionSystem)
+{
+	mNumberGameEntitiesInsideSpacePartition = spacePartitionSystem.GetNumberEntities();
 }
 
 unsigned int Statistics::GetNumberTrianglesRendered() const
@@ -60,4 +66,14 @@ unsigned int Statistics::GetNumberGameEntities() const
 unsigned int Statistics::GetNumberGameEntitiesWithPhysics() const
 {
 	return mNumberGameEntitiesWithPhysics;
+}
+
+unsigned int Statistics::GetNumberGameEntitiesInsideSpacePartition() const
+{
+	return mNumberGameEntitiesInsideSpacePartition;
+}
+
+unsigned int Statistics::GetNumberRenderers() const
+{
+	return mNumberRenderers;
 }

@@ -42,7 +42,7 @@ public:
 	void RegisterGameSceneListener(IGameSceneListener* listener);
 	void UnRegisterGameSceneListener(IGameSceneListener* listener);
 
-	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
+	BaseVisitable<>::ReturnType Accept(BaseVisitor& guest) override;
 
 private:
 	void ReleaseEntities(std::vector<GameEntity*>* entities);
