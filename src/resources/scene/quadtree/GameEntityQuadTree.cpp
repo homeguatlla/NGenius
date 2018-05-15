@@ -4,7 +4,7 @@
 #include "../../renderers/IRenderer.h"
 #include "../../Transformation.h"
 
-const int GameEntityQuadTree::MAX_QUADTREE_LEVELS = 3;
+const int GameEntityQuadTree::MAX_QUADTREE_LEVELS = 6;
 
 GameEntityQuadTree::GameEntityQuadTree(const AABB& boundingBox)
 {

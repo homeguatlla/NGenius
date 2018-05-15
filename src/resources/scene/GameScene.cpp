@@ -68,7 +68,8 @@ std::vector<GameEntity*>& GameScene::GetAllGameEntities()
 void GameScene::AddEntity(GameEntity* entity)
 {
 	entity->Init();
-	if (entity->GetRenderer() != nullptr)
+
+	if (entity->GetRenderer() != nullptr && entity->GetRenderer()->GetLayer() != IRenderer::LAYER_GUI)
 	{
 		mAABB = mAABB.Merge(entity->GetRenderer()->GetAABB());
 	}

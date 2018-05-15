@@ -73,7 +73,7 @@ public:
 		mRegionMin = regionMin;
 		mRegionMax = regionMax;
 		mRegionSize = regionMax - regionMin;
-		mConversionFactor = static_cast<float>(glm::pow(2, mMaxLevels));
+		mConversionFactor = static_cast<float>(glm::pow(2, mMaxLevels-1));
 
 		mRoot = new QuadTreeNode(glm::uvec2(0), maxLevels - 1, nullptr);
 	}
@@ -86,8 +86,8 @@ public:
 
 	void Add(const glm::vec2& regionMin, const glm::vec2& regionMax, T* data)
 	{
-		std::cout << "region min: " << regionMin.x << ", " << regionMin.y;
-		std::cout << " region max: " << regionMax.x << ", " << regionMax.y << "\n";
+		//std::cout << "region min: " << regionMin.x << ", " << regionMin.y;
+		//std::cout << " region max: " << regionMax.x << ", " << regionMax.y << "\n";
 
 		if (Contains(mRegionMin, mRegionMax, regionMin, regionMax))
 		{
@@ -157,6 +157,8 @@ public:
 			unsigned int yDiff = locationCode1.y ^ locationCode2.y;
 
 			unsigned int minLevel = FindMinLevel(xDiff, yDiff);
+
+			//std::cout << "min level " << minLevel << "\n";
 
 			QuadTreeNode* node = TraverseToLevel(mRoot, mMaxLevels - 1, locationCode1, minLevel);
 

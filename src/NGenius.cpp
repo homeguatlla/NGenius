@@ -36,7 +36,7 @@ mParticlesSystem(nullptr),
 mSpacePartitionSystem(nullptr),
 mGameScene(nullptr),
 mApplicationName(applicationName),
-mIsSpacePartitionEnabled(false)
+mIsSpacePartitionEnabled(true)
 {
 	CreateSystems(screenWidth, screenHeight);
 }
@@ -69,26 +69,33 @@ void NGenius::Run()
 	int frames = 0;
 	float accumulatedTime = 0.0f;
 	float elapsedTime = 0.0f;
-
+	float lag = 0.0f;
+	float frameTime = 0.016666f;
 	do
 	{
-		mInputHandler->Update(elapsedTime);
-
-		UpdateSystems(elapsedTime);
-
-		if (mUpdateHandler != nullptr)
-		{
-			mUpdateHandler(elapsedTime);
-		}
-
-		Render();
-
 		double currentTime = glfwGetTime();
 		elapsedTime = static_cast<float>(currentTime - lastCurrentTime);
 		lastCurrentTime = currentTime;
 		frames++;
 
 		accumulatedTime += elapsedTime;
+		lag += elapsedTime;
+
+		mInputHandler->Update(elapsedTime);
+
+		//while (lag >= frameTime)
+		{
+			UpdateSystems(elapsedTime);
+
+			if (mUpdateHandler != nullptr)
+			{
+				mUpdateHandler(elapsedTime);
+			}
+			lag -= frameTime;
+		}
+		Render();
+
+		
 		if (accumulatedTime > 1.0f)
 		{
 			mNumberFPS = frames / accumulatedTime;
