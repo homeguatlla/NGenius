@@ -29,6 +29,7 @@ public:
 	void UnbindOutput() const;
 	Texture* CopyDepthBuffer();
 
+	void SetCamera(const ICamera* camera);
 	const ICamera* GetCamera() const;
 	char GetLayersMask() const;
 	

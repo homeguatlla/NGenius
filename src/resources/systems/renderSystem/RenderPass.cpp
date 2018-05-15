@@ -50,6 +50,11 @@ Texture* RenderPass::CopyDepthBuffer()
 	return mFrameBufferOutput->CopyDepthBuffer();
 }
 
+void RenderPass::SetCamera(const ICamera* camera)
+{
+	mCamera = camera;
+}
+
 const ICamera* RenderPass::GetCamera() const
 {
 	return mCamera;
