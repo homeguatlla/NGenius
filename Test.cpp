@@ -137,7 +137,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = FLAT;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -171,7 +171,7 @@ bool mIsSpacePartitionEnabled = false;
 NGenius mEngine("Demo", SCREEN_WIDTH, SCREEN_HEIGHT);
 ICamera* mGameplayCamera;
 ICamera* mEagleEyeCamera;
-ICamera* mCameraTest;
+RenderPass *mGameplayPass; 
 ThirdPersonCameraComponent* mThirdPersonCameraComponent;
 
 RenderPass* mMapPass;
@@ -411,6 +411,23 @@ GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, const
 	return modelEntity;
 }
 
+GameEntity* CreateQuadTreeBoxEntity(float size, glm::vec3 position, glm::vec3 color)
+{
+	IMaterial* material = mEngine.CreateMaterial("quadtree", mEngine.GetShader("default"));
+	material->AddEffect(new MaterialEffectFloat3(color));
+
+	IRenderer* renderer = new WireframeRenderer(mEngine.GetModel("cube"), material);
+	GameEntity* quad = new GameEntity(
+		new Transformation(position, glm::vec3(0.0f), glm::vec3(size * 2.0f)),
+		renderer
+	);
+	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
+	quad->AddComponent(new DebugComponent(boundingBoxRenderer));
+
+	mScene->AddEntity(quad);
+	return quad;
+}
+
 void CreateTrees()
 {
 	std::vector<glm::vec3> positions;
@@ -424,7 +441,7 @@ void CreateTrees()
 		float z = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
 		float height = mTerrain->GetHeight(glm::vec2(x, z));
 		
-		if (height > mWaterHeight + 0.2f)
+		if (mConfiguration == QUADTREE_WITH_CAMERA || (height > mWaterHeight + 0.2f))
 		{
 			positions.push_back(glm::vec3(x, height, z));
 			float scale = .5f;// (rand() % 5) / 200.0f + 0.02f;
@@ -479,7 +496,7 @@ void CreateTrees()
 void CreateProps()
 {
 	int areaSize = 5;
-	int numProps = 6;
+	int numProps = 5;
 
 	std::vector<std::string> models;
 	std::vector<glm::vec3> positions;
@@ -494,14 +511,30 @@ void CreateProps()
 	//models.push_back(std::string("floor"));
 	
 
+	positions.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+	positions.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+	positions.push_back(glm::vec3(-1.0f, 0.0f, 0.0f));
+	positions.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
+	positions.push_back(glm::vec3(0.0f, 0.0f, -1.0f));
 
+	int extraProps = 0;
+	numProps += extraProps;
+	for (int i = 0; i < extraProps; ++i)
+	{
+		float x = rand() % 7 * (1 - 2 * (rand() % 2));
+		float z = rand() % 7 * (1 - 2 * (rand() % 2));
+
+		positions.push_back(glm::vec3(x, 0.0f, z));
+	}
+
+	/*
 	positions.push_back(glm::vec3(0.8f, 0.0f, -2.3f));
 	positions.push_back(glm::vec3(0.4f, 0.0f, -2.0f));
 	positions.push_back(glm::vec3(1.0f, 0.0f, -1.7f));
 	positions.push_back(glm::vec3(1.1f, 0.0f, -2.3f));
 	positions.push_back(glm::vec3(2.5f, 0.0f, -2.7f));
 	positions.push_back(glm::vec3(-2.0f, 0.0f, 2.0f));
-	positions.push_back(glm::vec3(0.0f, 0.0f, 0.0f));	
+	positions.push_back(glm::vec3(0.0f, 0.0f, 0.0f));*/	
 
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(0.0f));
@@ -533,7 +566,7 @@ void CreateProps()
 		z = positions[i % positions.size()].z;
 
 		float height = mTerrain->GetHeight(glm::vec2(x, z)) - 0.1f;
-		//if (height > mWaterHeight + 0.2f)
+		if (mConfiguration == QUADTREE_WITH_CAMERA || (height > mWaterHeight + 0.2f))
 		{
 			glm::vec3 position(x, height, z);
 			glm::vec3 scale(0.3f);
@@ -745,7 +778,7 @@ void CreateTextTest()
 	for (unsigned int i = 0; i < texts.size(); ++i)
 	{
 		mText[i] = new Text(
-			new Transformation(	glm::vec3(-mEngine.GetScreenWidth() * 0.5f, mEngine.GetScreenHeight() * 0.5f - i * 20.0f, 0.0f),
+								new Transformation(	glm::vec3(-mEngine.GetScreenWidth() * 0.5f, mEngine.GetScreenHeight() * 0.5f - i * 20.0f, 0.0f),
 								glm::vec3(0.0f),
 								glm::vec3(0.70f)
 							),
@@ -874,7 +907,7 @@ void CreateGameCameraEntity()
 																	PLAYER_PITCH, 
 																	PLAYER_PITCH_SPEED, 
 																	PLAYER_ZOOM_SPEED);
-	//mCamera->AddComponent(mThirdPersonCameraComponent);
+	mCamera->AddComponent(mThirdPersonCameraComponent);
 	mCamera->AddComponent(new CollisionComponent());
 
 	mCamera->AddComponent(new CharacterComponent());
@@ -918,13 +951,13 @@ void CreateCameras()
 	//CAMERA
 	//mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
 	float factor = 1.0f;
-	if (mConfiguration != QUADTREE)
+	if (mConfiguration != QUADTREE && mConfiguration != QUADTREE_WITH_CAMERA)
 	{
 		factor = 20.0f;
 	}
 	else
 	{
-		factor = 100.0f;
+		factor = 50.0f;
 	}
 	mEagleEyeCamera = new OrthogonalCamera("eagle_camera", screenWidth/factor, screenHeight/factor, NEAR_PLANE, FAR_PLANE);
 	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 0.0f));
@@ -939,6 +972,7 @@ void CreateCameras()
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 	mEngine.AddCamera(mGameplayCamera);
 
+	/*
 	if (mConfiguration == QUADTREE_WITH_CAMERA)
 	{
 		mCameraTest = new PerspectiveCamera("gameplay_test", VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
@@ -946,24 +980,7 @@ void CreateCameras()
 		mCameraTest->SetTarget(glm::vec3(0.0f, 0.0f, 10.0f));
 		mCameraTest->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 		mEngine.AddCamera(mCameraTest);
-	}
-}
-
-GameEntity* CreateQuadTreeBoxEntity(float size, glm::vec3 position, glm::vec3 color)
-{
-	IMaterial* material = mEngine.CreateMaterial("quadtree", mEngine.GetShader("default"));
-	material->AddEffect(new MaterialEffectFloat3(color));
-
-	IRenderer* renderer = new WireframeRenderer(mEngine.GetModel("cube"), material);
-	GameEntity* quad = new GameEntity(
-										new Transformation(position, glm::vec3(0.0f), glm::vec3(size * 2.0f)),
-										renderer
-									);
-	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
-	quad->AddComponent(new DebugComponent(boundingBoxRenderer));
-
-	mScene->AddEntity(quad);
-	return quad;
+	}*/
 }
 
 void CreateQuadTreeGrid(int levels, int maxWidth, const glm::vec3 color)
@@ -1027,7 +1044,7 @@ void CreateQuads()
 
 void CreateCameraAABBEntity()
 {
-	AABB aabb = mCameraTest->GetAABB();
+	AABB aabb = mGameplayCamera->GetAABB();
 	mCameraAABBEntity = CreateQuadTreeBoxEntity(1.0f, aabb.GetCenter(), glm::vec3(1.0f, 1.0f, 0.0f));
 	mCameraAABBEntity->RemoveComponent<DebugComponent>();
 
@@ -1136,18 +1153,18 @@ void CreateGameplayRenderPass()
 	int screenWidth = static_cast<int>(mEngine.GetScreenWidth());
 	int screenHeight = static_cast<int>(mEngine.GetScreenHeight());
 	//RENDER PASS GAMEPLAY	
-	RenderPass *gameplayPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
+	mGameplayPass = new RenderPass(static_cast<ICamera*>(mEagleEyeCamera), IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
 	
 	IFrameBuffer* frameBuffer = new IFrameBuffer(screenWidth, screenHeight);
 	Texture* depthTexture = static_cast<Texture*>(mEngine.GetTexture("depth_texture"));
 	frameBuffer->SetCopyBufferToTexture(depthTexture, 0, 0, screenWidth, screenHeight);
-	gameplayPass->SetFrameBufferOutput(frameBuffer);
+	mGameplayPass->SetFrameBufferOutput(frameBuffer);
 	
 	//IMaterial* material = mEngine.GetMaterial("shadow");
 	//material->AddEffect(new MaterialEffectDiffuseTexture(mEngine.GetTexture("tree_foliage_diffuse"), glm::vec3(0.0f), 1.0f));
-	//gameplayPass->SetMaterial(material);
+	//mGameplayPass->SetMaterial(material);
 
-	mEngine.AddRenderPass(gameplayPass, false);
+	mEngine.AddRenderPass(mGameplayPass, false);
 }
 
 void CreateTerrainRenderPass()
@@ -1224,6 +1241,8 @@ void UpdateStatitstics()
 	mText[4]->UpdateText(texts[4] + std::to_string(numGameEntitiesInsideSpacePartition));
 	mText[5]->UpdateText(texts[5] + std::to_string(statistics->GetNumberRenderers()));
 	mText[6]->UpdateText(texts[6] + std::to_string(statistics->GetNumberGameEntitiesWithPhysics()));
+
+	//std::cout << "entities rendered: " << statistics->GetNumberRenderers() << "\n";
 }
 
 void UpdateCommand(float elapsedTime)
@@ -1284,6 +1303,7 @@ void UpdateQuadTreeBox()
 
 void UpdateCameraAABB()
 {
+	/*
 	glm::vec3 position(0.0f);
 	glm::vec3 rotation(0.0f);
 	glm::vec3 scale(1.0f);
@@ -1300,10 +1320,9 @@ void UpdateCameraAABB()
 	mCameraTargetEntity->GetTransformation()->SetPosition(targetPos + forward);
 	
 	mCameraTest->SetTarget(targetPos + forward);
-	mCameraTest->SetPosition(targetPos);
+	mCameraTest->SetPosition(targetPos);*/
 	
-	AABB aabb = mCameraTest->GetAABB();
-	position = aabb.GetCenter();
+	AABB aabb = mGameplayCamera->GetAABB();// mCameraTest->GetAABB();
 	mCameraAABBEntity->GetTransformation()->SetPosition(aabb.GetCenter());
 	mCameraAABBEntity->GetTransformation()->SetScale(aabb.GetSize());
 }
@@ -1312,27 +1331,13 @@ void UpdateInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 	{
-		PerspectiveCamera* gameplayCamera = static_cast<PerspectiveCamera*>(mGameplayCamera);
-		PerspectiveCamera* eagleEyeCamera = static_cast<PerspectiveCamera*>(mEagleEyeCamera);
-		std::swap(*gameplayCamera, *eagleEyeCamera);
 		if (mIsGameplayCameraEnabled)
 		{
-			if (mCamera->HasComponent<ThirdPersonCameraComponent>())
-			{
-				mCamera->RemoveComponent<ThirdPersonCameraComponent>();
-			}
+			mGameplayPass->SetCamera(mGameplayCamera);
 		}
 		else
 		{
-			glm::vec3 targetOffset(0.0f, 0.5f, 0.0f); //head
-			mThirdPersonCameraComponent = new ThirdPersonCameraComponent(static_cast<PerspectiveCamera*>(mGameplayCamera),
-				mPlayer,
-				targetOffset,
-				1.5f,
-				PLAYER_PITCH,
-				PLAYER_PITCH_SPEED,
-				PLAYER_ZOOM_SPEED);
-			mCamera->AddComponent(mThirdPersonCameraComponent);
+			mGameplayPass->SetCamera(mEagleEyeCamera);
 		}
 
 		mIsGameplayCameraEnabled = !mIsGameplayCameraEnabled;

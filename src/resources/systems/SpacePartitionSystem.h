@@ -13,12 +13,14 @@ class SpacePartitionSystem : public IGameSceneListener, BaseVisitable<>
 	std::vector<GameEntity*> mNewEntitiesToAdd;
 	std::vector<GameEntity*> mEntitiesToRemove;
 	GameEntityQuadTree* mQuadTree;
+	AABB mAABB;
+	bool mHasBuilt;
 
 public:
 	SpacePartitionSystem();
 	~SpacePartitionSystem();
 
-	void Start(const GameScene& gameScene);
+	void Start();
 	void Update(float elapsedTime);
 	void Render(RenderSystem* renderSystem);
 
@@ -38,5 +40,7 @@ private:
 	
 	void RemoveEntities();
 	void AddNewEntities();
+
+	void Build();
 };
 

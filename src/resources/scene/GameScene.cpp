@@ -69,7 +69,7 @@ void GameScene::AddEntity(GameEntity* entity)
 {
 	entity->Init();
 
-	if (entity->GetRenderer() != nullptr && entity->GetRenderer()->GetLayer() != IRenderer::LAYER_GUI)
+	if (entity->GetRenderer() != nullptr)
 	{
 		mAABB = mAABB.Merge(entity->GetRenderer()->GetAABB());
 	}

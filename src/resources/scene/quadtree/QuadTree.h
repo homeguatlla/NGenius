@@ -196,7 +196,7 @@ public:
 			{
 				std::cout << "incorrect data: " << location.x << ", " << location.y << "\n";
 			}
-			location = glm::max(location, glm::vec2(0.0f));
+			location = glm::max(glm::vec2(0.0f), glm::min(glm::vec2(1.0f), location));
 			glm::uvec2 locationCode = location * mConversionFactor;
 
 			return locationCode;

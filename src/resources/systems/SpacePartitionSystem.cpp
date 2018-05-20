@@ -8,7 +8,9 @@
 
 #include <algorithm>
 
-SpacePartitionSystem::SpacePartitionSystem()
+SpacePartitionSystem::SpacePartitionSystem() : 
+	mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limits<float>::max())),
+	mHasBuilt(false)
 {
 }
 
@@ -18,15 +20,24 @@ SpacePartitionSystem::~SpacePartitionSystem()
 	mEntitiesToRemove.clear();
 }
 
-void SpacePartitionSystem::Start(const GameScene& gameScene)
+void SpacePartitionSystem::Start()
 {
-	AABB aabb = gameScene.GetAABB();
-	aabb.Expand(glm::vec3(1.0f));
-	mQuadTree = new GameEntityQuadTree(aabb);
+	mHasBuilt = false;
+}
+
+void SpacePartitionSystem::Build()
+{
+	mAABB.Expand(glm::vec3(1.0f));
+	mQuadTree = new GameEntityQuadTree(mAABB);
+	mHasBuilt = true;
 }
 
 void SpacePartitionSystem::Update(float elapsedTime)
 {
+	if (!mHasBuilt)
+	{
+		Build();
+	}
 	RemoveEntities();
 	AddNewEntities();
 }
@@ -71,13 +82,15 @@ void SpacePartitionSystem::RemoveEntity(GameEntity* entity)
 
 bool SpacePartitionSystem::HasSpacePartitionComponents(const GameEntity* entity)
 {
-	return entity->GetRenderer() != nullptr && entity->HasComponent<SpacePartitionComponent>();
+	return	entity->GetRenderer() != nullptr && entity->HasComponent<SpacePartitionComponent>() && 
+			entity->GetRenderer()->GetLayer() != IRenderer::LAYER_GUI;
 }
 
 void SpacePartitionSystem::OnGameEntityAdded(GameEntity* entity)
 {
 	if (HasSpacePartitionComponents(entity))
 	{
+		mAABB = mAABB.Merge(entity->GetRenderer()->GetAABB());
 		AddEntity(entity);
 	}
 }

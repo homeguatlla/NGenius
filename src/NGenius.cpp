@@ -59,12 +59,11 @@ void NGenius::Init(bool isFullscreen)
 void NGenius::Start()
 {
 	mRenderSystem->Start();
+	mSpacePartitionSystem->Start();
 }
 
 void NGenius::Run()
 {
-	mSpacePartitionSystem->Start(*mGameScene);
-
 	double lastCurrentTime = glfwGetTime();
 	int frames = 0;
 	float accumulatedTime = 0.0f;
