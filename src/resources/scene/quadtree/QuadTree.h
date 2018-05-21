@@ -192,10 +192,10 @@ public:
 		glm::uvec2 CalculateLocationCode(const glm::vec2& region)
 		{
 			glm::vec2 location = ((region - mRegionMin) / mRegionSize);
-			if (location.y < 0.0f && location.x < 0.0f)
+			/*if (location.y < 0.0f && location.x < 0.0f)
 			{
 				std::cout << "incorrect data: " << location.x << ", " << location.y << "\n";
-			}
+			}*/
 			location = glm::max(glm::vec2(0.0f), glm::min(glm::vec2(1.0f), location));
 			glm::uvec2 locationCode = location * mConversionFactor;
 
