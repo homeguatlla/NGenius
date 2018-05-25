@@ -434,7 +434,7 @@ void CreateTrees()
 	std::vector<glm::vec3> sizes;
 
 	int areaSize = 50;
-	int numTrees = 1000;
+	int numTrees = 200;
 	for (int i = 0; i < numTrees; i++)
 	{
 		float x = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
