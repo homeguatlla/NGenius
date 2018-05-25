@@ -4,6 +4,7 @@
 #include "../scene/quadtree/GameEntityQuadTree.h"
 #include "../GameEntity.h"
 #include "../camera/ICamera.h"
+#include "../camera/PerspectiveCamera.h"
 #include "../components/SpacePartitionComponent.h"
 
 #include <algorithm>
@@ -46,19 +47,18 @@ void SpacePartitionSystem::Update(float elapsedTime)
 
 void SpacePartitionSystem::Render(RenderSystem* renderSystem)
 {
-	const ICamera* camera = renderSystem->GetCamera("gameplay_camera");
+	ICamera* camera = renderSystem->GetCamera("gameplay_camera");
 	assert(camera != nullptr);
 
 	if (camera != nullptr)
 	{
 		const AABB aabb = camera->GetAABB();
-		
-		std::vector<glm::vec2> points;
-		camera->FillWithProjectedVolume(points, FOV_DILATATION);
-		
+		camera->SetFrustumDilatation(FOV_DILATATION);
+		const Frustum frustum = const_cast<ICamera*>(camera)->GetFrustum();
+
 		std::vector<GameEntity*> entities;
 		//Query(aabb, entities);
-		Query(aabb, points, entities);
+		Query(aabb, frustum, entities);
 		for (GameEntity* entity : entities)
 		{
 			renderSystem->AddToRender(entity->GetRenderer());
@@ -71,9 +71,9 @@ void SpacePartitionSystem::Query(const AABB& aabb, std::vector<GameEntity*>& res
 	mQuadTree->Query(aabb, result);
 }
 
-void SpacePartitionSystem::Query(const AABB& aabb, const std::vector<glm::vec2>& points, std::vector<GameEntity*>& result) const
+void SpacePartitionSystem::Query(const AABB& aabb, const Frustum& frustum, std::vector<GameEntity*>& result) const
 {
-	mQuadTree->Query(aabb, points, result);
+	mQuadTree->Query(aabb, frustum, result);
 }
 
 unsigned int SpacePartitionSystem::GetNumberEntities() const

@@ -314,12 +314,12 @@ void RenderSystem::AddToRender(IRenderer* renderer, std::vector<RenderPass*>& re
 	}
 }
 
-void RenderSystem::AddCamera(const ICamera* camera)
+void RenderSystem::AddCamera(ICamera* camera)
 {
 	mCamerasList[camera->GetName()] = camera;
 }
 
-const ICamera* RenderSystem::GetCamera(const std::string name) const
+ICamera* RenderSystem::GetCamera(const std::string name)
 {
 	if (mCamerasList.find(name) != mCamerasList.end())
 	{

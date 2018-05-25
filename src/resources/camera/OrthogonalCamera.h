@@ -6,9 +6,9 @@ public:
 	OrthogonalCamera(std::string name, float screenWidth, float screenHeight, float nearPlane, float farPlane);
 	~OrthogonalCamera();
 	AABB GetAABB() const override;
-	void FillWithProjectedVolume(std::vector<glm::vec2>& points, float fovDilatation) const override;
 
 private:
+	void CalculateFrustum() override;
 	void CreateViewMatrix() override;
 	void CreateProjectionMatrix() override;
 

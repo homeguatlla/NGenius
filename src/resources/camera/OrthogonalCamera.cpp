@@ -13,6 +13,7 @@ mScreenHeight(screenHeight),
 mNearPlane(nearPlane),
 mFarPlane(farPlane)
 {
+	SetFrustumDilatation(0.0f);
 	SetName(name);
 	mIsDirty = true;
 	CreateProjectionMatrix();
@@ -28,7 +29,7 @@ AABB OrthogonalCamera::GetAABB() const
 	return aabb;
 }
 
-void OrthogonalCamera::FillWithProjectedVolume(std::vector<glm::vec2>& points, float fovDilatation) const
+void OrthogonalCamera::CalculateFrustum()
 {
 
 }

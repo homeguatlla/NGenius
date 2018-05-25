@@ -43,8 +43,8 @@ class RenderSystem : public BaseVisitable<>
 	std::vector<RenderPass*> mRenderPasses;
 	std::vector<RenderPass*> mRenderPassesAfterPostProcessing;
 	
-	typedef std::map<const std::string, const ICamera*>::iterator CamerasListIterator;
-	std::map<const std::string, const ICamera*> mCamerasList;
+	typedef std::map<const std::string, ICamera*>::iterator CamerasListIterator;
+	std::map<const std::string, ICamera*> mCamerasList;
 
 	float mScreenWidth;
 	float mScreenHeight;
@@ -95,8 +95,8 @@ public:
 	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing = false);
 	void RemoveRenderPass(RenderPass* renderPass);
 
-	void AddCamera(const ICamera* camera);
-	const ICamera* GetCamera(const std::string name) const;
+	void AddCamera(ICamera* camera);
+	ICamera* GetCamera(const std::string name);
 
 	float GetScreenWidth() const;
 	float GetScreenHeight() const;

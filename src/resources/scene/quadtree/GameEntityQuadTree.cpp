@@ -52,8 +52,8 @@ void GameEntityQuadTree::Query(const AABB& aabb, std::vector<GameEntity*>& resul
 						glm::vec2(aabb.GetVertexMax().x, aabb.GetVertexMax().z), result);
 }
 
-void GameEntityQuadTree::Query(const AABB& aabb, const std::vector<glm::vec2>& points, std::vector<GameEntity*>& result)
+void GameEntityQuadTree::Query(const AABB& aabb, const Frustum& frustum, std::vector<GameEntity*>& result)
 {
 	mQuadTree->Query(	glm::vec2(aabb.GetVertexMin().x, aabb.GetVertexMin().z),
-						glm::vec2(aabb.GetVertexMax().x, aabb.GetVertexMax().z), points, result);
+						glm::vec2(aabb.GetVertexMax().x, aabb.GetVertexMax().z), frustum, result);
 }

@@ -434,7 +434,7 @@ void CreateTrees()
 	std::vector<glm::vec3> sizes;
 
 	int areaSize = 50;
-	int numTrees = 200;
+	int numTrees = 1000;
 	for (int i = 0; i < numTrees; i++)
 	{
 		float x = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
@@ -521,8 +521,8 @@ void CreateProps()
 	numProps += extraProps;
 	for (int i = 0; i < extraProps; ++i)
 	{
-		float x = rand() % 7 * (1 - 2 * (rand() % 2));
-		float z = rand() % 7 * (1 - 2 * (rand() % 2));
+		float x = static_cast<float>(rand() % 7 * (1 - 2 * (rand() % 2)));
+		float z = static_cast<float>(rand() % 7 * (1 - 2 * (rand() % 2)));
 
 		positions.push_back(glm::vec3(x, 0.0f, z));
 	}
@@ -1434,7 +1434,7 @@ void SetupConfiguration()
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = true;
+		mIsParticlesEnabled = false;
 		mIsShadowEnabled = true;
 		break;
 	case SHADOWS:

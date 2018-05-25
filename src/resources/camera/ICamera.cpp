@@ -14,13 +14,19 @@ const glm::mat4& ICamera::GetProjectionMatrix() const
 
 const glm::mat4& ICamera::GetViewMatrix()
 {
-	if (mIsDirty)
-	{
-		CreateViewMatrix();
-	}
+	UpdateDirty();
 	return mViewMatrix;
 }
 
+void ICamera::UpdateDirty()
+{
+	if (mIsDirty)
+	{
+		CreateViewMatrix();
+		CalculateFrustum();
+		mIsDirty = false;
+	}
+}
 
 void ICamera::SetPosition(const glm::vec3& position)
 {
@@ -45,6 +51,11 @@ void ICamera::SetName(const std::string& name)
 	mName = name;
 }
 
+void ICamera::SetFrustumDilatation(float value)
+{
+	mFrustumDilatation = value;
+}
+
 glm::vec3 ICamera::GetPosition() const
 {
 	return mPosition;
@@ -63,6 +74,12 @@ glm::vec3 ICamera::GetUp() const
 const std::string& ICamera::GetName() const
 {
 	return mName;
+}
+
+const Frustum& ICamera::GetFrustum()
+{
+	UpdateDirty();
+	return mFrustum;
 }
 
 void ICamera::Move(float speed)

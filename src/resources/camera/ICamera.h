@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "../../AABB.h"
+#include "../../Frustum.h"
 
 class ICamera
 {
@@ -15,18 +16,21 @@ public:
 	void SetTarget(const glm::vec3& target);
 	void SetUp(const glm::vec3& up);
 	void SetName(const std::string& name);
+	void SetFrustumDilatation(float value);
 
 	glm::vec3 GetPosition() const;
 	glm::vec3 GetTarget() const;
 	glm::vec3 GetUp() const;
 	const std::string& GetName() const;
+	const Frustum& GetFrustum();
 
 	void Move(float speed);
 	void Rotate(float angle, const glm::vec3& axis);
 	virtual AABB GetAABB() const = 0;
-	virtual void FillWithProjectedVolume(std::vector<glm::vec2>& points, float fovDilatation) const = 0;
+	virtual void CalculateFrustum() = 0;
 
 private:
+	void UpdateDirty();
 	virtual void CreateViewMatrix() = 0;
 	virtual void CreateProjectionMatrix() = 0;
 
@@ -38,5 +42,8 @@ protected:
 	glm::vec3 mTarget;
 	glm::vec3 mUp;
 	glm::vec3 mPosition;
+
+	Frustum mFrustum;
+	float mFrustumDilatation;
 };
 

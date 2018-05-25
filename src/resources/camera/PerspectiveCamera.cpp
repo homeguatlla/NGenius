@@ -8,11 +8,11 @@ mAspectRatio(aspectRatio),
 mNearPlane(nearPlane),
 mFarPlane(farPlane)
 {
+	SetFrustumDilatation(0.0f);
 	SetName(name);
 	mIsDirty = true;
 	CreateProjectionMatrix();
 }
-
 
 PerspectiveCamera::~PerspectiveCamera()
 {
@@ -69,13 +69,13 @@ AABB PerspectiveCamera::GetAABB() const
 	return aabb;
 }
 
-void PerspectiveCamera::FillWithProjectedVolume(std::vector<glm::vec2>& points, float fovDilatation) const
+void PerspectiveCamera::CalculateFrustum()
 {
 	glm::vec3 forward = glm::normalize(mTarget - mPosition);
 	glm::vec3 nearCenter = mPosition + forward * mNearPlane;
 	glm::vec3 farCenter = mPosition + forward * mFarPlane;
 
-	float fovRadians = glm::tan(glm::radians(mFov + fovDilatation) * 0.5f);
+	float fovRadians = glm::tan(glm::radians(mFov + mFrustumDilatation) * 0.5f);
 	float nearHeight = 2.0f * fovRadians * mNearPlane;
 	float farHeight = 2.0f * fovRadians * mFarPlane;
 	float nearWidth = nearHeight * mAspectRatio;
@@ -89,17 +89,19 @@ void PerspectiveCamera::FillWithProjectedVolume(std::vector<glm::vec2>& points, 
 	glm::vec3 right = glm::cross(mUp, forward);
 	glm::vec3 up = glm::cross(right, forward);
 
-	glm::vec3 point = farCenter - up * farHeight2 - right * farWidth2; //far bottom left
-	points.push_back(glm::vec2(point.x, point.z));
-	
-	point = farCenter - up * farHeight2 + right * farWidth2;//far bottom right
-	points.push_back(glm::vec2(point.x, point.z));
+	std::vector<glm::vec3> points;
 
-	point = nearCenter - up * nearHeight2 - right * nearWidth2;//near bottom left
-	points.push_back(glm::vec2(point.x, point.z));
+	points.push_back(farCenter + up * farHeight2 - right * farWidth2); //far top left
+	points.push_back(farCenter + up * farHeight2 + right * farWidth2); //far top right
+	points.push_back(farCenter - up * farHeight2 - right * farWidth2);//far bottom left
+	points.push_back(farCenter - up * farHeight2 + right * farWidth2);//far bottom right
 
-	point = nearCenter - up * nearHeight2 + right * nearWidth2;//near bottom right
-	points.push_back(glm::vec2(point.x, point.z));
+	points.push_back(nearCenter + up * nearHeight2 - right * nearWidth2);//near top left
+	points.push_back(nearCenter + up * nearHeight2 + right * nearWidth2);//near top right
+	points.push_back(nearCenter - up * nearHeight2 - right * nearWidth2);//near bottom left
+	points.push_back(nearCenter - up * nearHeight2 + right * nearWidth2);//near bottom right
+
+	mFrustum.SetPoints(points);
 }
 
 void PerspectiveCamera::CreateViewMatrix()

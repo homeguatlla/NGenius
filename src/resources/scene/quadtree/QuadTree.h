@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include "../../../Frustum.h"
 #include <vector>
 #include <assert.h>
 #include <iostream>
@@ -188,7 +189,7 @@ public:
 		}
 	}
 
-	void Query(const glm::vec2& regionMin, const glm::vec2& regionMax, const std::vector<glm::vec2>& points, std::vector<T*>& result)
+	void Query(const glm::vec2& regionMin, const glm::vec2& regionMax, const Frustum& frustum, std::vector<T*>& result)
 	{
 		if (Contains(mRegionMin, mRegionMax, regionMin, regionMax))
 		{
@@ -207,7 +208,7 @@ public:
 			if (node != nullptr)
 			{
 				//from node to the leaves
-				Query(node, points, result);
+				Query(node, frustum, result);
 
 				//from node to the parent
 				node = node->mParent;
@@ -215,7 +216,13 @@ public:
 				{
 					for (Element* element : node->mData)
 					{
-						if (Contains(points, element->regionMin, element->regionMax))
+						std::vector<glm::vec2> points;
+
+						points.push_back(element->regionMin);
+						points.push_back(glm::vec2(element->regionMax.x, element->regionMin.y));
+						points.push_back(element->regionMax);
+						points.push_back(glm::vec2(element->regionMin.x, element->regionMax.y));
+						if (frustum.Intersect2D(points))
 						{
 							result.push_back(element->data);
 						}
@@ -340,11 +347,18 @@ public:
 			}
 		}
 		
-		void Query(QuadTreeNode* node, const std::vector<glm::vec2>& points, std::vector<T*>& result)
+		void Query(QuadTreeNode* node, const Frustum& frustum, std::vector<T*>& result)
 		{
 			for (Element* element : node->mData)
 			{
-				if (Contains(points, element->regionMin, element->regionMax))
+				std::vector<glm::vec2> points;
+
+				points.push_back(element->regionMin);
+				points.push_back(glm::vec2(element->regionMax.x, element->regionMin.y));
+				points.push_back(element->regionMax);
+				points.push_back(glm::vec2(element->regionMin.x, element->regionMax.y));
+
+				if (frustum.Intersect2D(points))
 				{
 					result.push_back(element->data);
 				}
@@ -354,7 +368,7 @@ public:
 			{
 				if (node->mChildren[i] != nullptr)
 				{
-					Query(node->mChildren[i], points, result);
+					Query(node->mChildren[i], frustum, result);
 				}
 			}
 		}
@@ -365,71 +379,6 @@ public:
 
 			return !isOutside;
 		}
-		
-		bool Contains(const std::vector<glm::vec2>& points, const glm::vec2& region2Min, const glm::vec2& region2Max)
-		{
-			std::vector<glm::vec2> points2;
-			points2.push_back(region2Min);
-			points2.push_back(glm::vec2(region2Max.x, region2Min.y));
-			points2.push_back(region2Max);
-			points2.push_back(glm::vec2(region2Min.x, region2Max.y));
-
-			std::vector<glm::vec2> axis1, axis2;
-			FillWithAxis(points, axis1);
-			FillWithAxis(points2, axis2);
-
-			axis1.insert(axis1.end(), axis2.begin(), axis2.end());
-
-			for (glm::vec2 axis : axis1)
-			{
-				glm::vec2 projection1 = Projection(points, axis);
-				glm::vec2 projection2 = Projection(points2, axis);
-
-				if (!Overlap(projection1, projection2))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		void FillWithAxis(const std::vector<glm::vec2>& points, std::vector<glm::vec2>& axis)
-		{
-			axis.clear();
-
-			for (long i = 0; i < points.size(); ++i)
-			{
-				glm::vec2 p1 = points[i];
-				glm::vec2 p2 = points[(i + 1) % points.size()];
-
-				glm::vec2 edge = p2 - p1;
-				glm::vec2 normal(-edge.y, edge.x);
-
-				axis.push_back(normal);
-			}
-		}
-
-		glm::vec2 Projection(const std::vector<glm::vec2>& points, glm::vec2& axis)
-		{
-			float min = glm::dot(axis, points[0]);
-			float max = min;
-
-			for (long i = 1; i < points.size(); ++i)
-			{
-				float value = glm::dot(axis, points[i]);
-				min = glm::min(min, value);
-				max = glm::max(max, value);
-			}
-
-			return glm::vec2(min, max);
-		}
-
-		bool Overlap(const glm::vec2& p1, const glm::vec2& p2) const
-		{
-			return (p1.y >= p2.x && p2.y >= p1.x);
-		}
-
-
 };
 
 

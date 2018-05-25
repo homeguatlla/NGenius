@@ -2,6 +2,7 @@
 
 #include "../scene/GameScene.h"
 #include "../scene/IGameSceneListener.h"
+#include "../../Frustum.h"
 #include <vector>
 
 class GameEntity;
@@ -25,7 +26,7 @@ public:
 	void Render(RenderSystem* renderSystem);
 
 	void Query(const AABB& aabb, std::vector<GameEntity*>& result) const;
-	void Query(const AABB& aabb, const std::vector<glm::vec2>& points, std::vector<GameEntity*>& result) const;
+	void Query(const AABB& aabb, const Frustum& frustum, std::vector<GameEntity*>& result) const;
 
 	unsigned int GetNumberEntities() const;
 

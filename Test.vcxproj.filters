@@ -603,6 +603,9 @@
     <ClInclude Include="src\resources\components\SpacePartitionComponent.h">
       <Filter>Header Files\resources\components</Filter>
     </ClInclude>
+    <ClInclude Include="src\Frustum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1024,6 +1027,9 @@
     </ClCompile>
     <ClCompile Include="src\resources\components\SpacePartitionComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Frustum.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -164,6 +164,7 @@
     <ClInclude Include="src\AABB.h" />
     <ClInclude Include="src\BasicTypes.h" />
     <ClInclude Include="src\BitNumber.h" />
+    <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\input\bindings\KeyToEventBind.h" />
     <ClInclude Include="src\input\bindings\MouseToEventBind.h" />
     <ClInclude Include="src\input\InputConverter.h" />
@@ -306,6 +307,7 @@
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="src\AABB.cpp" />
     <ClCompile Include="src\BitNumber.cpp" />
+    <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\input\bindings\KeyToEventBind.cpp" />
     <ClCompile Include="src\input\bindings\MouseToEventBind.cpp" />
     <ClCompile Include="src\input\IInputListener.cpp" />
