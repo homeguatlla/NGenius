@@ -25,7 +25,8 @@ public:
 	void Render(RenderSystem* renderSystem);
 
 	void Query(const AABB& aabb, std::vector<GameEntity*>& result) const;
-	
+	void Query(const AABB& aabb, const std::vector<glm::vec2>& points, std::vector<GameEntity*>& result) const;
+
 	unsigned int GetNumberEntities() const;
 
 	BaseVisitable<>::ReturnType Accept(BaseVisitor& guest) override;

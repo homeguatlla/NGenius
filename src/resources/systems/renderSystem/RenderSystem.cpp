@@ -693,7 +693,7 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
 
-	DisableVSync(true);
+	DisableVSync(false);
 
 	return true;
 }

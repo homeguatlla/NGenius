@@ -28,6 +28,11 @@ AABB OrthogonalCamera::GetAABB() const
 	return aabb;
 }
 
+void OrthogonalCamera::FillWithProjectedVolume(std::vector<glm::vec2>& points, float fovDilatation) const
+{
+
+}
+
 void OrthogonalCamera::CreateViewMatrix()
 {
 	mViewMatrix = glm::lookAt(

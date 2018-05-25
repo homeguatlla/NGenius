@@ -69,6 +69,39 @@ AABB PerspectiveCamera::GetAABB() const
 	return aabb;
 }
 
+void PerspectiveCamera::FillWithProjectedVolume(std::vector<glm::vec2>& points, float fovDilatation) const
+{
+	glm::vec3 forward = glm::normalize(mTarget - mPosition);
+	glm::vec3 nearCenter = mPosition + forward * mNearPlane;
+	glm::vec3 farCenter = mPosition + forward * mFarPlane;
+
+	float fovRadians = glm::tan(glm::radians(mFov + fovDilatation) * 0.5f);
+	float nearHeight = 2.0f * fovRadians * mNearPlane;
+	float farHeight = 2.0f * fovRadians * mFarPlane;
+	float nearWidth = nearHeight * mAspectRatio;
+	float farWidth = farHeight * mAspectRatio;
+
+	float farWidth2 = farWidth * 0.5f;
+	float nearWidth2 = nearWidth * 0.5f;
+	float farHeight2 = farHeight * 0.5f;
+	float nearHeight2 = nearHeight * 0.5f;
+
+	glm::vec3 right = glm::cross(mUp, forward);
+	glm::vec3 up = glm::cross(right, forward);
+
+	glm::vec3 point = farCenter - up * farHeight2 - right * farWidth2; //far bottom left
+	points.push_back(glm::vec2(point.x, point.z));
+	
+	point = farCenter - up * farHeight2 + right * farWidth2;//far bottom right
+	points.push_back(glm::vec2(point.x, point.z));
+
+	point = nearCenter - up * nearHeight2 - right * nearWidth2;//near bottom left
+	points.push_back(glm::vec2(point.x, point.z));
+
+	point = nearCenter - up * nearHeight2 + right * nearWidth2;//near bottom right
+	points.push_back(glm::vec2(point.x, point.z));
+}
+
 void PerspectiveCamera::CreateViewMatrix()
 {
 	mViewMatrix = glm::lookAt(

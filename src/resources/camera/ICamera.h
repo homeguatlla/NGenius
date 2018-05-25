@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <string>
+#include <vector>
 #include "../../AABB.h"
 
 class ICamera
@@ -23,6 +24,7 @@ public:
 	void Move(float speed);
 	void Rotate(float angle, const glm::vec3& axis);
 	virtual AABB GetAABB() const = 0;
+	virtual void FillWithProjectedVolume(std::vector<glm::vec2>& points, float fovDilatation) const = 0;
 
 private:
 	virtual void CreateViewMatrix() = 0;

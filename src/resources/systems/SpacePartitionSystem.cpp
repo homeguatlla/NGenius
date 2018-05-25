@@ -8,6 +8,8 @@
 
 #include <algorithm>
 
+const float FOV_DILATATION = 10.0f;
+
 SpacePartitionSystem::SpacePartitionSystem() : 
 	mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limits<float>::max())),
 	mHasBuilt(false)
@@ -50,9 +52,13 @@ void SpacePartitionSystem::Render(RenderSystem* renderSystem)
 	if (camera != nullptr)
 	{
 		const AABB aabb = camera->GetAABB();
+		
+		std::vector<glm::vec2> points;
+		camera->FillWithProjectedVolume(points, FOV_DILATATION);
+		
 		std::vector<GameEntity*> entities;
-		Query(aabb, entities);
-
+		//Query(aabb, entities);
+		Query(aabb, points, entities);
 		for (GameEntity* entity : entities)
 		{
 			renderSystem->AddToRender(entity->GetRenderer());
@@ -63,6 +69,11 @@ void SpacePartitionSystem::Render(RenderSystem* renderSystem)
 void SpacePartitionSystem::Query(const AABB& aabb, std::vector<GameEntity*>& result) const
 {
 	mQuadTree->Query(aabb, result);
+}
+
+void SpacePartitionSystem::Query(const AABB& aabb, const std::vector<glm::vec2>& points, std::vector<GameEntity*>& result) const
+{
+	mQuadTree->Query(aabb, points, result);
 }
 
 unsigned int SpacePartitionSystem::GetNumberEntities() const
