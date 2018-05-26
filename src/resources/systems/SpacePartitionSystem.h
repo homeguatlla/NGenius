@@ -7,12 +7,13 @@
 
 class GameEntity;
 class GameEntityQuadTree;
-class RenderSystem;
+class ICamera;
 
 class SpacePartitionSystem : public IGameSceneListener, BaseVisitable<>
 {
 	std::vector<GameEntity*> mNewEntitiesToAdd;
 	std::vector<GameEntity*> mEntitiesToRemove;
+	std::vector<GameEntity*> mLastQueryResult;
 	GameEntityQuadTree* mQuadTree;
 	AABB mAABB;
 	bool mHasBuilt;
@@ -23,12 +24,14 @@ public:
 
 	void Start();
 	void Update(float elapsedTime);
-	void Render(RenderSystem* renderSystem);
+	void MarkGameEntitiesInsideCameraAsVisible(ICamera* camera);
 
 	void Query(const AABB& aabb, std::vector<GameEntity*>& result) const;
 	void Query(const AABB& aabb, const Frustum& frustum, std::vector<GameEntity*>& result) const;
 
 	unsigned int GetNumberEntities() const;
+
+	void SetSpacePartitionComponentsEnabled(bool enable);
 
 	BaseVisitable<>::ReturnType Accept(BaseVisitor& guest) override;
 
@@ -44,5 +47,6 @@ private:
 	void AddNewEntities();
 
 	void Build();
+	void UpdateVisibilityLastQueryResult();
 };
 

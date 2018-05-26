@@ -63,11 +63,13 @@ class QuadTree
 	glm::vec2 mRegionMax;
 	glm::vec2 mRegionSize;
 	float mConversionFactor;
+	unsigned int mNumberElements;
 
 public:
 	QuadTree(const glm::vec2& regionMin, const glm::vec2& regionMax, unsigned int maxLevels) :
 		mRoot(nullptr), 
-		mMaxLevels(maxLevels) 
+		mMaxLevels(maxLevels),
+		mNumberElements(0)
 	{
 		assert(mMaxLevels > 1);
 
@@ -106,6 +108,7 @@ public:
 			QuadTreeNode* node = TraverseToLevelFromRootCreatingNewNodes(mMaxLevels - 1, locationCode1, minLevel);
 			if (node != nullptr)
 			{
+				mNumberElements++;
 				node->mData.push_back(new Element(regionMin, regionMax, data));
 			}
 		}
@@ -133,6 +136,7 @@ public:
 			std::vector<Element*>::iterator it = std::find_if(node->mData.begin(), node->mData.end(), [data](Element* element) { return element->data == data; });
 			if (it != node->mData.end())
 			{
+				mNumberElements--;
 				node->mData.erase(it);
 			}
 			else
@@ -144,7 +148,7 @@ public:
 
 	unsigned int GetNumElements() const
 	{
-		return GetNumElements(mRoot);
+		return mNumberElements;
 	}
 
 	void Query(const glm::vec2& regionMin, const glm::vec2& regionMax, std::vector<T*>& result)

@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "RenderPass.h"
 #include "IFrameBuffer.h"
+#include "../../renderers/IRenderer.h"
+#include "../../GameEntity.h"
+#include "../../components/SpacePartitionComponent.h"
 
 RenderPass::RenderPass(const ICamera* camera, char layersMask) :
 mLayersMask(layersMask),
@@ -10,6 +13,7 @@ mIsEnabled(true),
 mIsFogEnabled(true),
 mIsClippingEnabled(false),
 mHasToCalculateDistanceToCamera(false),
+mCanAcceptSpacePartitionRenderersOnly(false),
 mClippingPlaneNumber(0),
 mClippingPlane(0.0f, 0.0f, 0.0f, 0.0f),
 mMaterial(nullptr)
@@ -63,6 +67,35 @@ const ICamera* RenderPass::GetCamera() const
 char RenderPass::GetLayersMask() const
 {
 	return mLayersMask;
+}
+
+void RenderPass::SetAcceptSpacePartitionOnly(bool accept)
+{
+	mCanAcceptSpacePartitionRenderersOnly = accept;
+}
+
+bool RenderPass::CanAcceptRenderer(IRenderer* renderer) const
+{
+	if (mCanAcceptSpacePartitionRenderersOnly)
+	{
+		const SpacePartitionComponent* spacePartitionComponent = renderer->GetParent()->GetComponent<SpacePartitionComponent>();
+		if (spacePartitionComponent != nullptr && spacePartitionComponent->IsEnabled())
+		{
+			if (!spacePartitionComponent->IsVisible())
+			{
+				return false;
+			}
+		}
+	}
+
+	const char layer = renderer->GetLayer();
+	char result = GetLayersMask() & layer;
+	if (result != 0)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 bool RenderPass::IsEnabled() const

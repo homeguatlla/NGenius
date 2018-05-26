@@ -5,6 +5,7 @@ class ICamera;
 class IFrameBuffer;
 class IMaterial;
 class Texture;
+class IRenderer;
 
 class RenderPass
 {
@@ -15,6 +16,7 @@ class RenderPass
 	bool mIsFogEnabled;
 	bool mIsClippingEnabled;
 	bool mHasToCalculateDistanceToCamera;
+	bool mCanAcceptSpacePartitionRenderersOnly;
 	int mClippingPlaneNumber;
 	glm::vec4 mClippingPlane;
 	IMaterial* mMaterial;
@@ -33,6 +35,9 @@ public:
 	const ICamera* GetCamera() const;
 	char GetLayersMask() const;
 	
+	void SetAcceptSpacePartitionOnly(bool accept);
+	bool CanAcceptRenderer(IRenderer* renderer) const;
+
 	bool IsEnabled() const;
 	void SetEnable(bool enable);
 	

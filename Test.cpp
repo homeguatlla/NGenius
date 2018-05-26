@@ -434,7 +434,7 @@ void CreateTrees()
 	std::vector<glm::vec3> sizes;
 
 	int areaSize = 50;
-	int numTrees = 200;
+	int numTrees = 1000;
 	for (int i = 0; i < numTrees; i++)
 	{
 		float x = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
@@ -1154,7 +1154,8 @@ void CreateGameplayRenderPass()
 	int screenHeight = static_cast<int>(mEngine.GetScreenHeight());
 	//RENDER PASS GAMEPLAY	
 	mGameplayPass = new RenderPass(static_cast<ICamera*>(mEagleEyeCamera), IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
-	
+	mGameplayPass->SetAcceptSpacePartitionOnly(true);
+
 	IFrameBuffer* frameBuffer = new IFrameBuffer(screenWidth, screenHeight);
 	Texture* depthTexture = static_cast<Texture*>(mEngine.GetTexture("depth_texture"));
 	frameBuffer->SetCopyBufferToTexture(depthTexture, 0, 0, screenWidth, screenHeight);

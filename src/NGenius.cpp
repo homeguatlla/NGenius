@@ -118,14 +118,11 @@ void NGenius::Render()
 	//render all entities
 	if (mIsSpacePartitionEnabled)
 	{
-		mSpacePartitionSystem->Render(mRenderSystem);
-		mGameScene->RenderOutsideSpacePartition(mRenderSystem);
-	}
-	else
-	{
-		mGameScene->Render(mRenderSystem);
+		ICamera* camera = mRenderSystem->GetCamera("gameplay_camera");
+		mSpacePartitionSystem->MarkGameEntitiesInsideCameraAsVisible(camera);
 	}
 
+	mGameScene->Render(mRenderSystem);
 	mRenderSystem->Render();
 }
 
@@ -393,4 +390,5 @@ void NGenius::Query(const AABB& aabb, std::vector<GameEntity*>& result)
 void NGenius::SetIsSpacePartitionEnabled(bool enable)
 {
 	mIsSpacePartitionEnabled = enable;
+	mSpacePartitionSystem->SetSpacePartitionComponentsEnabled(enable);
 }

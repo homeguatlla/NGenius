@@ -104,6 +104,7 @@ RenderPass* WaterRenderPassSubSystem::CreateRefractionRenderPass()
 	//the distorsion is not affecting, otherwise the border of the water has a bit of blue color (the default color of the plane)
 	refractionWaterPass->SetClippingPlane(glm::vec4(0.0f, -1.0f, 0.0f, mWaterY + 2.0f));
 	refractionWaterPass->EnableFog(false);
+	refractionWaterPass->SetAcceptSpacePartitionOnly(true);
 
 	return refractionWaterPass;
 }
@@ -127,6 +128,7 @@ RenderPass* WaterRenderPassSubSystem::CreateReflectionRenderPass()
 	reflectionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);
 	reflectionWaterPass->SetClippingPlane(glm::vec4(0.0f, 1.0f, 0.0f, -mWaterY + 0.2));
 	reflectionWaterPass->EnableFog(true);
+	reflectionWaterPass->SetAcceptSpacePartitionOnly(true);
 
 	return reflectionWaterPass;
 }

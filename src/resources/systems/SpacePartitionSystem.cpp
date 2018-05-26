@@ -41,13 +41,16 @@ void SpacePartitionSystem::Update(float elapsedTime)
 	{
 		Build();
 	}
+	
+	UpdateVisibilityLastQueryResult();
+	mLastQueryResult.clear();
+
 	RemoveEntities();
 	AddNewEntities();
 }
 
-void SpacePartitionSystem::Render(RenderSystem* renderSystem)
+void SpacePartitionSystem::MarkGameEntitiesInsideCameraAsVisible(ICamera* camera)
 {
-	ICamera* camera = renderSystem->GetCamera("gameplay_camera");
 	assert(camera != nullptr);
 
 	if (camera != nullptr)
@@ -55,14 +58,21 @@ void SpacePartitionSystem::Render(RenderSystem* renderSystem)
 		const AABB aabb = camera->GetAABB();
 		camera->SetFrustumDilatation(FOV_DILATATION);
 		const Frustum frustum = const_cast<ICamera*>(camera)->GetFrustum();
-
-		std::vector<GameEntity*> entities;
+		
 		//Query(aabb, entities);
-		Query(aabb, frustum, entities);
-		for (GameEntity* entity : entities)
+		Query(aabb, frustum, mLastQueryResult);
+		for (GameEntity* entity : mLastQueryResult)
 		{
-			renderSystem->AddToRender(entity->GetRenderer());
+			entity->GetComponent<SpacePartitionComponent>()->SetVisibility(true);
 		}
+	}
+}
+
+void SpacePartitionSystem::UpdateVisibilityLastQueryResult()
+{
+	for (GameEntity* entity : mLastQueryResult)
+	{
+		entity->GetComponent<SpacePartitionComponent>()->SetVisibility(false);
 	}
 }
 
@@ -74,6 +84,18 @@ void SpacePartitionSystem::Query(const AABB& aabb, std::vector<GameEntity*>& res
 void SpacePartitionSystem::Query(const AABB& aabb, const Frustum& frustum, std::vector<GameEntity*>& result) const
 {
 	mQuadTree->Query(aabb, frustum, result);
+}
+
+void SpacePartitionSystem::SetSpacePartitionComponentsEnabled(bool enable)
+{
+	std::vector<GameEntity*> result;
+
+	Query(mAABB, result);
+
+	for (GameEntity* entity : result)
+	{
+		entity->GetComponent<SpacePartitionComponent>()->SetEnabled(enable);
+	}
 }
 
 unsigned int SpacePartitionSystem::GetNumberEntities() const

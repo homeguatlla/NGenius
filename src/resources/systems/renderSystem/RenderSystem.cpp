@@ -302,12 +302,9 @@ void RenderSystem::AddToRender(IRenderer* renderer)
 
 void RenderSystem::AddToRender(IRenderer* renderer, std::vector<RenderPass*>& renderPasses)
 {
-	char layer = renderer->GetLayer();
-		
 	for (const RenderPass* pass : renderPasses)
 	{
-		char result = pass->GetLayersMask() & layer;
-		if (result != 0)
+		if (pass->CanAcceptRenderer(renderer))
 		{
 			mRenderersPerPass[pass->GetLayersMask()].push_back(renderer);
 		}
