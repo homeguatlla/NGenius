@@ -16,6 +16,10 @@ class MaterialsLibrary : public BaseLibrary<IMaterial*>
 public:
 	static const char* OVERDRAW_MATERIAL_NAME;
 	static const char* WIREFRAME_MATERIAL_NAME;
+	static const char* MODEL_MATERIAL_NAME;
+	static const char* TEXT_MATERIAL_NAME;
+	static const char* TEXT3D_MATERIAL_NAME;
+	static const char* GUI_MATERIAL_NAME;
 
 	MaterialsLibrary(ShadersLibrary* shadersLibrary);
 	virtual ~MaterialsLibrary();

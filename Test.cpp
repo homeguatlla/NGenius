@@ -434,7 +434,7 @@ void CreateTrees()
 	std::vector<glm::vec3> sizes;
 
 	int areaSize = 50;
-	int numTrees = 1000;
+	int numTrees = 200;
 	for (int i = 0; i < numTrees; i++)
 	{
 		float x = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
@@ -455,7 +455,7 @@ void CreateTrees()
 	modelsFoliage.push_back("tree_foliage_2");
 
 	std::vector<float> distances;
-	distances.push_back(100.0f);
+	distances.push_back(128.0f);
 	distances.push_back(500.0f);
 	distances.push_back(1000.0f);
 
@@ -496,7 +496,7 @@ void CreateTrees()
 void CreateProps()
 {
 	int areaSize = 5;
-	int numProps = 5;
+	int numProps = 6;
 
 	std::vector<std::string> models;
 	std::vector<glm::vec3> positions;
@@ -511,7 +511,7 @@ void CreateProps()
 	//models.push_back(std::string("floor"));
 	
 
-	positions.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+	/*positions.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
 	positions.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
 	positions.push_back(glm::vec3(-1.0f, 0.0f, 0.0f));
 	positions.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
@@ -525,16 +525,16 @@ void CreateProps()
 		float z = static_cast<float>(rand() % 7 * (1 - 2 * (rand() % 2)));
 
 		positions.push_back(glm::vec3(x, 0.0f, z));
-	}
+	}*/
 
-	/*
-	positions.push_back(glm::vec3(0.8f, 0.0f, -2.3f));
-	positions.push_back(glm::vec3(0.4f, 0.0f, -2.0f));
-	positions.push_back(glm::vec3(1.0f, 0.0f, -1.7f));
-	positions.push_back(glm::vec3(1.1f, 0.0f, -2.3f));
-	positions.push_back(glm::vec3(2.5f, 0.0f, -2.7f));
-	positions.push_back(glm::vec3(-2.0f, 0.0f, 2.0f));
-	positions.push_back(glm::vec3(0.0f, 0.0f, 0.0f));*/	
+	
+	positions.push_back(glm::vec3(0.8f, 10.0f, -2.3f));
+	positions.push_back(glm::vec3(0.4f, 10.0f, -2.0f));
+	positions.push_back(glm::vec3(1.0f, 10.0f, -1.7f));
+	positions.push_back(glm::vec3(1.1f, 10.0f, -2.3f));
+	positions.push_back(glm::vec3(2.5f, 10.0f, -2.7f));
+	positions.push_back(glm::vec3(-2.0f, 10.0f, 2.0f));
+	positions.push_back(glm::vec3(0.0f, 10.0f, 0.0f));	
 
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(0.0f));
@@ -550,7 +550,7 @@ void CreateProps()
 	Texture* texture = static_cast<Texture*>(mEngine.GetTexture(textureName));
 	Texture* normal = static_cast<Texture*>(mEngine.GetTexture(textureNormalName));
 
-	IMaterial* material = mEngine.CreateMaterial("model", mEngine.GetShader("normalmap"));
+	IMaterial* material = mEngine.GetMaterial(MaterialsLibrary::MODEL_MATERIAL_NAME);
 	material->AddEffect(new MaterialEffectDiffuseTexture(texture, glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
@@ -565,19 +565,16 @@ void CreateProps()
 		x = positions[i % positions.size()].x;
 		z = positions[i % positions.size()].z;
 
-		float height = mTerrain->GetHeight(glm::vec2(x, z)) - 0.1f;
-		if (mConfiguration == QUADTREE_WITH_CAMERA || (height > mWaterHeight + 0.2f))
-		{
-			glm::vec3 position(x, height, z);
-			glm::vec3 scale(0.3f);
-			glm::vec3 rotation(rotations[i % rotations.size()]);
+		float height = mTerrain->GetHeight(glm::vec2(x, z));
+		glm::vec3 position(x, height, z);
+		glm::vec3 scale(0.3f);
+		glm::vec3 rotation(rotations[i % rotations.size()]);
 			
-			std::string modelName = models[i % models.size()];
-			Model* model = mEngine.GetModel(modelName);
+		std::string modelName = models[i % models.size()];
+		Model* model = mEngine.GetModel(modelName);
 
-			GameEntity* entity = CreateModel(position, scale, rotation, model, material);
-			mScene->AddEntity(entity);
-		}
+		GameEntity* entity = CreateModel(position, scale, rotation, model, material);
+		mScene->AddEntity(entity);
 	}
 }
 
@@ -678,7 +675,7 @@ void CreateEnergyWall()
 void CreateHUD()
 {
 	//QUAD
-	IMaterial* material = mEngine.CreateMaterial("gui", mEngine.GetShader("gui"));
+	IMaterial* material = mEngine.GetMaterial(MaterialsLibrary::GUI_MATERIAL_NAME);
 	material->AddEffect(new MaterialEffectDiffuseTexture(mEngine.GetTexture("hud_map"), glm::vec3(1.0f), 1.0f));
 	IRenderer* guiRenderer = new IndexesRenderer(mEngine.GetModel("gui_quad"), material);
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
@@ -765,7 +762,7 @@ void CreateTextTest()
 {
 	FontType* font = mEngine.GetFont("OCR A Extended");
 
-	materialText = mEngine.CreateMaterial("text", mEngine.GetShader("text"));
+	materialText = mEngine.GetMaterial(MaterialsLibrary::TEXT_MATERIAL_NAME);
 	materialText->AddEffect(new MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
 	materialText->AddEffect(new MaterialEffectText(	glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 													glm::vec4(1.0f, 1.0f, 1.0f, 0.0f),
@@ -790,7 +787,7 @@ void CreateTextTest()
 	float z = 0.0f;
 	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
 
-	IMaterial* material3D = mEngine.CreateMaterial("text3D", mEngine.GetShader("text"));
+	IMaterial* material3D = mEngine.GetMaterial(MaterialsLibrary::TEXT3D_MATERIAL_NAME);
 	material3D->AddEffect(new MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
 	material3D->AddEffect(new MaterialEffectText(	glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
 													glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
@@ -1435,7 +1432,7 @@ void SetupConfiguration()
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = false;
+		mIsParticlesEnabled = true;
 		mIsShadowEnabled = true;
 		break;
 	case SHADOWS:
@@ -1537,12 +1534,12 @@ void SetupConfiguration()
 		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
-		mIsVegetationEnabled = false;
-		mIsPropsEnabled = true;
+		mIsVegetationEnabled = true;
+		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
-		mIsTextEnabled = true;
+		mIsTextEnabled = false;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = false;

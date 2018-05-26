@@ -6,8 +6,13 @@
 #include <glm/gtx/norm.hpp>
 #include <algorithm>
 
+#include <iostream>
+
+const float HYSTERESIS = 5.0f;
+
 LODComponent::LODComponent(const ICamera* camera) :
-mCamera(camera)
+mCamera(camera),
+mLastLODIndex(0)
 {
 	mLODS.reserve(MAX_LODS);
 }
@@ -33,7 +38,8 @@ void LODComponent::UpdateInternal(float elapsedTime)
 	float distance = glm::length2(mParent->GetTransformation()->GetPosition() - mCamera->GetPosition());
 	for (unsigned int i = 0; i < mLODS.size(); ++i)
 	{
-		if (distance < mLODS[i]->distance)
+		float offset = mLastLODIndex <= i ? HYSTERESIS : -HYSTERESIS;
+		if (distance < mLODS[i]->distance + offset)
 		{
 			lod = i;
 			break;
@@ -44,8 +50,11 @@ void LODComponent::UpdateInternal(float elapsedTime)
 	{
 		lod = mLODS.size() - 1;
 	}
+	mLastLODIndex = lod;
 
 	mParent->SetRenderer(mLODS[lod]->renderer);
+
+	
 }
 
 

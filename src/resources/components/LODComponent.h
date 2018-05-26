@@ -18,6 +18,7 @@ class LODComponent : public IComponent
 	const ICamera* mCamera;
 	std::vector<LOD*> mLODS;
 	const unsigned long MAX_LODS = 5;
+	unsigned int mLastLODIndex;
 
 public:
 	LODComponent(const ICamera* camera);
