@@ -18,6 +18,7 @@
 #include <iostream>
 #include <complex>
 #include <ctime>
+#include <utility>
 
 #include "GameConstants.h"
 #include "src/NGenius.h"
@@ -360,7 +361,7 @@ void MouseCursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 	//std::cout << "cursor X = " << xpos  << "\n";
 }
 
-GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string>& models, const std::vector<float>& distances, IMaterial* material, IMaterial* materialNormalmap)
+GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string>& models, const std::vector<std::pair<float, bool>>& lod, IMaterial* material, IMaterial* materialNormalmap, bool isCullingEnabled)
 {
 	GameEntity* modelEntity = new GameEntity(
 		new Transformation(position, glm::vec3(0.0f), scale),
@@ -386,7 +387,13 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 		}
 
 		IRenderer* renderer = new VertexsRenderer(mEngine.GetModel(models[i]), m);
-		lodComponent->AddLevelOfDetail(renderer, distances[i]);
+		lodComponent->AddLevelOfDetail(renderer, lod[i].first);
+		if (lod[i].second)
+		{
+			renderer->SetBillboard(true);
+			renderer->SetTransparency(true);
+		}
+		renderer->SetCullingEnabled(isCullingEnabled);
 	}
 
 	return modelEntity;
@@ -437,8 +444,8 @@ void CreateTrees()
 	int numTrees = 200;
 	for (int i = 0; i < numTrees; i++)
 	{
-		float x = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
-		float z = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
+		float x = -areaSize / 2.0f + 2.0f * (rand() % 1000) * areaSize / 1000.0f;
+		float z = -areaSize / 2.0f + 2.0f * (rand() % 1000) * areaSize / 1000.0f;
 		float height = mTerrain->GetHeight(glm::vec2(x, z));
 		
 		if (mConfiguration == QUADTREE_WITH_CAMERA || (height > mWaterHeight + 0.2f))
@@ -454,10 +461,10 @@ void CreateTrees()
 	modelsFoliage.push_back("tree_foliage_1");
 	modelsFoliage.push_back("tree_foliage_2");
 
-	std::vector<float> distances;
-	distances.push_back(128.0f);
-	distances.push_back(500.0f);
-	distances.push_back(1000.0f);
+	std::vector<std::pair<float, bool>> lod;
+	lod.push_back(std::pair<float, bool>(100.0f, false));
+	lod.push_back(std::pair<float, bool>(300.0f, false));
+	lod.push_back(std::pair<float, bool>(500.0f, false));
 
 	std::vector<std::string> modelsTrunk;
 	modelsTrunk.push_back("tree_trunk_0");
@@ -485,10 +492,56 @@ void CreateTrees()
 
 	for (unsigned long i = 0; i < positions.size(); i++)
 	{
-		GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], modelsFoliage, distances, materialFoliage, nullptr);
+		GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], modelsFoliage, lod, materialFoliage, nullptr, true);
 		mScene->AddEntity(entity);
-		
-		entity = CreateModelWithLod(positions[i], sizes[i], modelsTrunk, distances, materialTrunk, materialTrunkNormalmap);
+
+		entity = CreateModelWithLod(positions[i], sizes[i], modelsTrunk, lod, materialTrunk, materialTrunkNormalmap, true);
+		mScene->AddEntity(entity);
+	}
+}
+
+void CreateGrass()
+{
+	std::vector<glm::vec3> positions;
+	std::vector<glm::vec3> sizes;
+
+	int areaSize = 10;
+	int numGrass = 10000;
+	for (int i = 0; i < numGrass; i++)
+	{
+		float x = -areaSize / 2.0f + 2.0f * (rand() % 1000) * (areaSize / 1000.0f);
+		float z = -areaSize / 2.0f + 2.0f * (rand() % 1000) * (areaSize / 1000.0f);
+		float height = mTerrain->GetHeight(glm::vec2(x, z));
+
+		if (mConfiguration == QUADTREE_WITH_CAMERA || (height > mWaterHeight - 0.1f))
+		{
+			positions.push_back(glm::vec3(x, height, z));
+			float scale = 0.1f + (rand() % 5) / 20.0f;// (rand() % 5) / 20.0f + 0.02f;
+			sizes.push_back(glm::vec3(scale*2.0f, scale, scale));
+		}
+	}
+
+	IMaterial* materialGrass = mEngine.CreateMaterial("grass1", mEngine.GetShader("model"));
+	materialGrass->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("grass1_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	materialGrass->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	materialGrass->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
+	materialGrass->AddEffect(new MaterialEffectShadowProperties());
+
+	std::vector<std::pair<float, bool>> lod;
+	lod.push_back(std::pair<float, bool>(25.0f, false));
+	lod.push_back(std::pair<float, bool>(100.0f, true));
+
+	std::vector<std::string> models;
+	models.push_back("grass1");
+	models.push_back("grass2");
+
+	for (unsigned long i = 0; i < positions.size(); i++)
+	{
+		//GameEntity* entity = CreateModel(positions[i], sizes[i], glm::vec3(0.0f), mEngine.GetModel("grass1"), materialGrass);
+		//entity->GetRenderer()->SetBillboard(true);
+		//entity->GetRenderer()->SetTransparency(true);
+		//entity->GetRenderer()->SetCullingEnabled(false);
+		GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], models, lod, materialGrass, nullptr, false);
 		mScene->AddEntity(entity);
 	}
 }
@@ -1071,6 +1124,7 @@ void CreateEntities()
 	if (mIsVegetationEnabled)
 	{
 		CreateTrees();
+		CreateGrass();
 	}
 
 	if (mIsPropsEnabled)

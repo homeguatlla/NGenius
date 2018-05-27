@@ -72,6 +72,7 @@ class RenderSystem : public BaseVisitable<>
 	bool mIsClippingEnabled;
 	bool mIsOverdrawEnabled;
 	bool mIsPostprocessEnabled;
+	bool mLastRendererHadCullingEnabled;
 
 	unsigned int mNumberTrianglesRendered;
 	unsigned int mNumberDrawCalls;

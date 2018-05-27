@@ -60,6 +60,7 @@ mIsFullScreen(false),
 mIsClippingEnabled(false),
 mIsOverdrawEnabled(false),
 mIsPostprocessEnabled(true),
+mLastRendererHadCullingEnabled(true),
 mNumberTrianglesRendered(0),
 mNumberDrawCalls(0),
 mNumberRenderers(0)
@@ -374,6 +375,21 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 	else 
 	{
 		glDisable(GL_BLEND);
+	}
+
+	if (renderer->IsCullingEnabled())
+	{
+		if (!mLastRendererHadCullingEnabled)
+		{
+			glEnable(GL_CULL_FACE);
+		}
+	}
+	else
+	{
+		if (mLastRendererHadCullingEnabled)
+		{
+			glDisable(GL_CULL_FACE);
+		}
 	}
 
 	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, mCurrentMaterial);

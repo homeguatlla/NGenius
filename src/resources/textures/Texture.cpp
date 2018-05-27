@@ -20,7 +20,7 @@ void Texture::Load(const std::string& filename, unsigned int textureUnit, bool h
 
 	if (!loaded)
 	{
-		std::cout << "Couldn't load texture %s " << filename;
+		std::cout << "Couldn't load texture %s " << filename << "\n";
 		return;
 	}
 

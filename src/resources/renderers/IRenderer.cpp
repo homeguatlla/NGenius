@@ -28,7 +28,8 @@ mLayer(LAYER_OTHER),
 mMaterial(material),
 mTransformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 mIsVisible(true),
-mIsBillboard(false)
+mIsBillboard(false),
+mIsCullingEnabled(true)
 {
 	assert(model != nullptr);
 	assert(mMaterial != nullptr);
@@ -220,6 +221,16 @@ void IRenderer::SetInstances(std::vector<IRenderer*>& instances)
 void IRenderer::SetBillboard(bool billboard)
 {
 	mIsBillboard = billboard;
+}
+
+void IRenderer::SetCullingEnabled(bool culling)
+{
+	mIsCullingEnabled = culling;
+}
+
+bool IRenderer::IsCullingEnabled() const
+{
+	return mIsCullingEnabled;
 }
 
 unsigned int IRenderer::GetNumberTrianglesRendered() const

@@ -242,6 +242,7 @@ public:
 	}
 
 	private:
+
 		glm::uvec2 CalculateLocationCode(const glm::vec2& region)
 		{
 			glm::vec2 location = ((region - mRegionMin) / mRegionSize);

@@ -43,6 +43,7 @@ protected:
 
 	bool mIsVisible;
 	bool mIsBillboard;
+	bool mIsCullingEnabled;
 
 	//virtual void PreRender(VertexBuffersManager& vertexBufferManager) = 0;
 	virtual void Draw();
@@ -85,6 +86,9 @@ public:
 	void SetInstances(std::vector<IRenderer*>& instances);
 	
 	void SetBillboard(bool billboard);
+
+	bool IsCullingEnabled() const;
+	void SetCullingEnabled(bool culling);
 
 	const AABB& GetModelAABB() const;
 	const AABB GetAABB() const;

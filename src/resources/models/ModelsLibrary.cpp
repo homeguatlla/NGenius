@@ -40,6 +40,9 @@ void ModelsLibrary::Load()
 	LoadModel("floor", "data/models/props/floor.obj", true, true);
 	LoadModel("statue", "data/models/props/statue.obj", true, true);
 
+	LoadModel("grass1", "data/models/grass/grass1.obj", false, false);
+	LoadModel("grass2", "data/models/grass/grass2.obj", false, false);
+
 	//model = OBJLoader::LoadModel("data/models/hermes/hermes.obj");
 	//AddElement("hermes", model);
 
