@@ -255,8 +255,7 @@
     <ClInclude Include="src\resources\scene\IGameSceneListener.h" />
     <ClInclude Include="src\resources\scene\ISpacePartition.h" />
     <ClInclude Include="src\resources\scene\quadtree\GameEntityQuadTree.h" />
-    <ClInclude Include="src\resources\scene\quadtree\QuadTree.h" />
-    <ClInclude Include="src\resources\scene\quadtree\QuadTreeNode.h" />
+    <ClInclude Include="src\resources\scene\quadtree\DirectQuadTree.h" />
     <ClInclude Include="src\resources\shaders\BloomShader.h" />
     <ClInclude Include="src\resources\shaders\BrightShader.h" />
     <ClInclude Include="src\resources\shaders\ContrastShader.h" />
@@ -396,8 +395,7 @@
     <ClCompile Include="src\resources\scene\IGameSceneListener.cpp" />
     <ClCompile Include="src\resources\scene\ISpacePartition.cpp" />
     <ClCompile Include="src\resources\scene\quadtree\GameEntityQuadTree.cpp" />
-    <ClCompile Include="src\resources\scene\quadtree\QuadTree.cpp" />
-    <ClCompile Include="src\resources\scene\quadtree\QuadTreeNode.cpp" />
+    <ClCompile Include="src\resources\scene\quadtree\DirectQuadTree.cpp" />
     <ClCompile Include="src\resources\shaders\BloomShader.cpp" />
     <ClCompile Include="src\resources\shaders\BrightShader.cpp" />
     <ClCompile Include="src\resources\shaders\ContrastShader.cpp" />

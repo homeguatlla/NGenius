@@ -1,13 +1,13 @@
 #pragma once
 #include "../ISpacePartition.h"
-#include "QuadTree.h"
+#include "DirectQuadTree.h"
 #include "../../../AABB.h"
 
 class GameEntity;
 
 class GameEntityQuadTree : public ISpacePartition
 {
-	QuadTree<GameEntity>* mQuadTree;
+	DirectQuadTree<GameEntity>* mQuadTree;
 public:
 	static const int MAX_QUADTREE_LEVELS;
 
