@@ -495,8 +495,8 @@ void CreateTrees()
 		GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], modelsFoliage, lod, materialFoliage, nullptr, true);
 		mScene->AddEntity(entity);
 
-		entity = CreateModelWithLod(positions[i], sizes[i], modelsTrunk, lod, materialTrunk, materialTrunkNormalmap, true);
-		mScene->AddEntity(entity);
+		//entity = CreateModelWithLod(positions[i], sizes[i], modelsTrunk, lod, materialTrunk, materialTrunkNormalmap, true);
+		//mScene->AddEntity(entity);
 	}
 }
 
@@ -1053,8 +1053,8 @@ void CreateQuadTreeGrid(int levels, int maxWidth, const glm::vec3 color)
 void CreateQuads()
 {
 	mQuadTreeBox = CreateQuadTreeBoxEntity(aabbSize, glm::vec3(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-
-	/*GameEntity* entity = CreateQuadTreeBoxEntity(1.3f, glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
+	/*
+	GameEntity* entity = CreateQuadTreeBoxEntity(1.3f, glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
 	mQuadTree.AddGameEntity(entity);
 	mQuadTreeEntities.push_back(entity);
 
@@ -1068,9 +1068,13 @@ void CreateQuads()
 
 	entity = CreateQuadTreeBoxEntity(0.8f, glm::vec3(-0.9f, 0.0f, 1.1f), glm::vec3(0.0f, 1.0f, 1.0f));
 	mQuadTree.AddGameEntity(entity);
-	mQuadTreeEntities.push_back(entity);*/
+	mQuadTreeEntities.push_back(entity);
 
-
+	entity = CreateQuadTreeBoxEntity(0.2f, glm::vec3(-0.9f, 0.0f, 0.3f), glm::vec3(0.0f, 1.0f, 1.0f));
+	mQuadTree.AddGameEntity(entity);
+	mQuadTreeEntities.push_back(entity);
+	*/
+	
 	int maxBoxes = 20;
 	for (int i = 0; i < maxBoxes; ++i)
 	{
@@ -1084,7 +1088,7 @@ void CreateQuads()
 	GameEntity* entity = CreateQuadTreeBoxEntity(1.9f, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 1.0f));
 	mQuadTree.AddGameEntity(entity);
 	mQuadTreeEntities.push_back(entity);
-
+	
 
 	//quad reference for move and scale, different color no debug component
 	mQuadTreeMovedEntity = CreateQuadTreeBoxEntity(mQuadMovingScale.x, mQuadMovingPosition, glm::vec3(1.0f, 1.0f, 0.0f));
@@ -1151,7 +1155,7 @@ void CreateEntities()
 
 	if (mConfiguration == QUADTREE)
 	{
-		CreateQuadTreeGrid(GameEntityQuadTree::MAX_QUADTREE_LEVELS, static_cast<int>(aabbSize), glm::vec3(0.0f, 1.0f, 0.0f));
+		CreateQuadTreeGrid(2, static_cast<int>(aabbSize), glm::vec3(0.0f, 1.0f, 0.0f));
 		CreateQuads();
 	}
 

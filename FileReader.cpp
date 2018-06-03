@@ -52,7 +52,7 @@ std::string FileReader::ReadToken(std::string& line)
 	std::string token;
 	bool found = false;
 	bool hasMarks = false;
-	long i = 0;
+	unsigned int i = 0;
 
 	ltrim(line);
 
