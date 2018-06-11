@@ -440,12 +440,14 @@ void CreateTrees()
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec3> sizes;
 
-	int areaSize = 50;
+	float areaSize = 50.0f;
 	int numTrees = 200;
 	for (int i = 0; i < numTrees; i++)
 	{
-		float x = -areaSize / 2.0f + 2.0f * (rand() % 1000) * areaSize / 1000.0f;
-		float z = -areaSize / 2.0f + 2.0f * (rand() % 1000) * areaSize / 1000.0f;
+		float randValue = (rand() % 1000) * areaSize / 1000.0f;
+		float x = -areaSize * 0.5f + randValue;
+		randValue = (rand() % 1000) * areaSize / 1000.0f;
+		float z = -areaSize * 0.5f + randValue;
 		float height = mTerrain->GetHeight(glm::vec2(x, z));
 		
 		if (mConfiguration == QUADTREE_WITH_CAMERA || (height > mWaterHeight + 0.2f))
@@ -495,8 +497,8 @@ void CreateTrees()
 		GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], modelsFoliage, lod, materialFoliage, nullptr, true);
 		mScene->AddEntity(entity);
 
-		//entity = CreateModelWithLod(positions[i], sizes[i], modelsTrunk, lod, materialTrunk, materialTrunkNormalmap, true);
-		//mScene->AddEntity(entity);
+		entity = CreateModelWithLod(positions[i], sizes[i], modelsTrunk, lod, materialTrunk, materialTrunkNormalmap, true);
+		mScene->AddEntity(entity);
 	}
 }
 
@@ -505,12 +507,12 @@ void CreateGrass()
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec3> sizes;
 
-	int areaSize = 10;
-	int numGrass = 10000;
+	float areaSize = 10.0f;
+	int numGrass = 2000;
 	for (int i = 0; i < numGrass; i++)
 	{
-		float x = -areaSize / 2.0f + 2.0f * (rand() % 1000) * (areaSize / 1000.0f);
-		float z = -areaSize / 2.0f + 2.0f * (rand() % 1000) * (areaSize / 1000.0f);
+		float x = -areaSize * 0.5f + (rand() % 1000) * (areaSize / 1000.0f);
+		float z = -areaSize * 0.5f + (rand() % 1000) * (areaSize / 1000.0f);
 		float height = mTerrain->GetHeight(glm::vec2(x, z));
 
 		if (mConfiguration == QUADTREE_WITH_CAMERA || (height > mWaterHeight - 0.1f))
@@ -533,15 +535,15 @@ void CreateGrass()
 
 	std::vector<std::string> models;
 	models.push_back("grass1");
-	models.push_back("grass2");
+	models.push_back("grass2"); // modelo simplificado
 
 	for (unsigned long i = 0; i < positions.size(); i++)
 	{
-		//GameEntity* entity = CreateModel(positions[i], sizes[i], glm::vec3(0.0f), mEngine.GetModel("grass1"), materialGrass);
+		GameEntity* entity = CreateModel(positions[i], sizes[i], glm::vec3(0.0f), mEngine.GetModel("grass2"), materialGrass);
 		//entity->GetRenderer()->SetBillboard(true);
-		//entity->GetRenderer()->SetTransparency(true);
-		//entity->GetRenderer()->SetCullingEnabled(false);
-		GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], models, lod, materialGrass, nullptr, false);
+		entity->GetRenderer()->SetTransparency(true);
+		entity->GetRenderer()->SetCullingEnabled(false);
+		//GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], models, lod, materialGrass, nullptr, false);
 		mScene->AddEntity(entity);
 	}
 }

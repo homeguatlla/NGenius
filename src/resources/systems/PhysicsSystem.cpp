@@ -81,18 +81,19 @@ void PhysicsSystem::CheckCollisionTerrain(GameEntity* entity)
 		bool isColliding = ApplyCollisions(entity, &groundHeight);
 		collisionComponent->SetOnGround(isColliding);
 		collisionComponent->SetGroundHeight(groundHeight);
-		/*	//improvement, hasta el momento no tiene mucha utilidad, pero creo que debería ser útil.
+		
+		//improvement, hasta el momento no tiene mucha utilidad, pero creo que debería ser útil.
 		//cuando un objeto es estático si ha colisionado le eliminamos los componentes físicos de colisión y el físico para que no sea updateado
 		//pues no va a colisionar más ni va a moverse más.
-		if (collide && entity->HasComponent<PhysicsComponent>())
+		/*if (isColliding && entity->HasComponent<PhysicsComponent>())
 		{
-		PhysicsComponent* physicComponent = entity->GetComponent<PhysicsComponent>();
-		if (physicComponent->IsStatic())
-		{
-		entity->RemoveComponent<CollisionComponent>();
-		entity->RemoveComponent<PhysicsComponent>();
-		//TODO si no tiene más componentes quitarlo del physicsSystem
-		}
+			PhysicsComponent* physicComponent = entity->GetComponent<PhysicsComponent>();
+			if (physicComponent->IsStatic())
+			{
+				entity->RemoveComponent<CollisionComponent>();
+				entity->RemoveComponent<PhysicsComponent>();
+				//TODO si no tiene más componentes quitarlo del physicsSystem
+			}
 		}*/
 	}
 	else

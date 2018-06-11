@@ -25,7 +25,42 @@ void Frustum::FillWithPointsXZ(std::vector<glm::vec2>& points) const
 	points.push_back(glm::vec2(mPoints[5].x, mPoints[5].z));
 }
 
-bool Frustum::Intersect2D(const std::vector<glm::vec2>& points) const 
+bool Frustum::IsInside2D(const std::vector<glm::vec2>& points) const
+{
+	assert(points.size() == 4);
+	std::vector<glm::vec2> pointsFrustum;
+	FillWithPointsXZ(pointsFrustum);
+	
+	const glm::vec2 centre = (points[0] + points[2]) * 0.5f;
+	const glm::vec2 diagonal = (points[2] - centre) * 0.5f;
+
+	for (unsigned int i = 0; i < pointsFrustum.size(); ++i)
+	{
+		glm::vec2 p1 = pointsFrustum[i];
+		glm::vec2 p2 = pointsFrustum[(i + 1) % points.size()];
+
+		const glm::vec2 edge = p2 - p1;
+		const glm::vec2 normal(-edge.y, edge.x);
+		float d = -glm::dot(normal, pointsFrustum[i]);
+		int result = IntersectPlaneAABB(centre, diagonal, normal, d);
+		if (result == -1)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+int Frustum::IntersectPlaneAABB(const glm::vec2& centre, const glm::vec2& diagonal, const glm::vec2& normal, float d) const
+{
+	float e = centre.x + diagonal.x * glm::abs(normal.x) + centre.y + diagonal.y * glm::abs(normal.y);
+	float s = glm::dot(centre, normal) + d;
+	if (s - e > 0) return -1; //outside
+	if (s + e < 0) return 1; //inside
+	return 0; //intersects
+}
+
+bool Frustum::Intersect2D(const std::vector<glm::vec2>& points) const
 {
 	std::vector<glm::vec2> pointsFrustum;
 	std::vector<glm::vec2> axis1, axis2;
