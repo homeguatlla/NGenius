@@ -172,6 +172,9 @@
     <Filter Include="Source Files\resources\scene\quadtree">
       <UniqueIdentifier>{c71a864c-9da3-442e-95ef-c2e992c07d1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\shaders\geometry">
+      <UniqueIdentifier>{9b86a005-62ed-47cd-a3ad-2df5b4fed6f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -606,6 +609,15 @@
     <ClInclude Include="src\resources\scene\quadtree\QuadTree.h">
       <Filter>Header Files\resources\scene\quadtree</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\renderers\PointsRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\PointsPatch.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\shaders\GrassShader.h">
+      <Filter>Header Files\resources\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1031,6 +1043,15 @@
     <ClCompile Include="src\resources\scene\quadtree\QuadTree.cpp">
       <Filter>Source Files\resources\scene\quadtree</Filter>
     </ClCompile>
+    <ClCompile Include="src\resources\renderers\PointsRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\PointsPatch.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\shaders\GrassShader.cpp">
+      <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\fragment\f_default.cg">
@@ -1136,6 +1157,15 @@
       <Filter>Source Files\shaders\fragment</Filter>
     </None>
     <None Include="data\shaders\vertex\v_bloom.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_grass.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\geometry\g_grass.cg">
+      <Filter>Source Files\shaders\geometry</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_grass.cg">
       <Filter>Source Files\shaders\vertex</Filter>
     </None>
   </ItemGroup>

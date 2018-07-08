@@ -151,7 +151,7 @@ RenderPass* ShadowsRenderPassSubSystem::CreateShadowRenderPass()
 	shadowPass->SetFrameBufferOutput(frameShadowBuffer);
 
 	IMaterial* material = mRenderSystem->CreateMaterial("shadow", mRenderSystem->GetShader("shadow"));
-	material->AddEffect(new MaterialEffectDiffuseTexture());
+	material->AddEffect(new MaterialEffectDiffuseTexture(mShadowMapTexture, glm::vec3(1.0f), 1.0f));
 
 	shadowPass->SetMaterial(material);
 

@@ -2,6 +2,16 @@
 #include "Transformation.h"
 #include <glm/gtc/matrix_transform.hpp>
 
+
+Transformation::Transformation() :
+	mPosition(glm::vec3(0.0f)),
+	mRotation(glm::vec3(0.0f)),
+	mScale(glm::vec3(1.0f)),
+	mIsDirty(true)
+{
+
+}
+
 Transformation::Transformation(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) :
 mPosition(position),
 mRotation(rotation),

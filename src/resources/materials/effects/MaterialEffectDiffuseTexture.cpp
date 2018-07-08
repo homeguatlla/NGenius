@@ -30,6 +30,7 @@ ITexture* MaterialEffectDiffuseTexture::GetDiffuseTexture() const
 
 void MaterialEffectDiffuseTexture::SetDiffuseTexture(ITexture* texture)
 {
+	assert(texture != nullptr);
 	mTexture = texture;
 }
 

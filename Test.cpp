@@ -75,6 +75,7 @@
 #include "src/resources/entities/Particle.h"
 #include "src/resources/entities/ParticlesEmitter.h"
 #include "src/resources/entities/EnergyWall.h"
+#include "src/resources/entities/PointsPatch.h"
 
 #include "src/resources/scene/GameScene.h"
 #include "src/resources/scene/quadtree/GameEntityQuadTree.h"
@@ -138,7 +139,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = FLAT;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -546,6 +547,19 @@ void CreateGrass()
 		//GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], models, lod, materialGrass, nullptr, false);
 		mScene->AddEntity(entity);
 	}
+}
+
+void CreatePoints()
+{
+	glPointSize(5.0f);
+	IShaderProgram* shader = mEngine.GetShader("grass");
+	IMaterial* material = mEngine.CreateMaterial("grass_material", shader);
+
+	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("grass1_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+
+	PointsPatch* pointsPatch = new PointsPatch(new Transformation(), material, mTerrain, mWaterHeight, 1.0f, 1.0f, 500.0f);
+
+	mScene->AddEntity(pointsPatch);
 }
 
 void CreateProps()
@@ -1130,7 +1144,8 @@ void CreateEntities()
 	if (mIsVegetationEnabled)
 	{
 		CreateTrees();
-		CreateGrass();
+		//CreateGrass();
+		CreatePoints();
 	}
 
 	if (mIsPropsEnabled)

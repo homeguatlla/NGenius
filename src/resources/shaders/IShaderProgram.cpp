@@ -10,10 +10,17 @@
 const std::string ATTRIBUTE_VERTEX_POSITION("vertexModelspace");
 
 IShaderProgram::IShaderProgram(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename) : 
-mLocationPosition(-1)
+mLocationPosition(-1),
+mGeometryShaderID(-1)
 {
 	mVertexShaderID = Load(vertexShaderFilename, GL_VERTEX_SHADER);
 	mFragmentShaderID = Load(fragmentShaderFilename, GL_FRAGMENT_SHADER);
+}
+
+IShaderProgram::IShaderProgram(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename, const std::string& geometryShaderFilename) :
+	IShaderProgram(vertexShaderFilename, fragmentShaderFilename)
+{
+	mGeometryShaderID = Load(geometryShaderFilename, GL_GEOMETRY_SHADER);
 }
 
 IShaderProgram::~IShaderProgram()
@@ -22,8 +29,10 @@ IShaderProgram::~IShaderProgram()
 
 	glDetachShader(mProgramID, mVertexShaderID);
 	glDetachShader(mProgramID, mFragmentShaderID);
+	glDetachShader(mProgramID, mGeometryShaderID);
 	glDeleteShader(mVertexShaderID);
 	glDeleteShader(mFragmentShaderID);
+	glDeleteShader(mGeometryShaderID);
 	glDeleteProgram(mProgramID);
 }
 
@@ -34,9 +43,12 @@ void IShaderProgram::Init()
 	mProgramID = glCreateProgram();
 	glAttachShader(mProgramID, mVertexShaderID);
 	glAttachShader(mProgramID, mFragmentShaderID);
+	if (mGeometryShaderID != -1)
+	{
+		glAttachShader(mProgramID, mGeometryShaderID);
+	}
 
 	glLinkProgram(mProgramID);
-
 	glValidateProgram(mProgramID);
 
 	// Check the program
@@ -50,6 +62,10 @@ void IShaderProgram::Init()
 
 	glDeleteShader(mVertexShaderID);
 	glDeleteShader(mFragmentShaderID);
+	if (mGeometryShaderID != -1)
+	{
+		glDeleteShader(mGeometryShaderID);
+	}
 
 	Use();
 	GetAllUniformLocationsInternal();

@@ -10,6 +10,7 @@ class Transformation
 	bool mIsDirty;
 
 public:
+	Transformation();
 	Transformation(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 	~Transformation();
 

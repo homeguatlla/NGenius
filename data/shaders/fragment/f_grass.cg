@@ -1,0 +1,18 @@
+#version 330 core
+
+in vec2 textureCoords;
+
+uniform sampler2D texture;
+
+out vec4 color;
+
+void main()
+{
+    vec4 MaterialDiffuseColor = texture2D(texture, textureCoords);
+
+	if(MaterialDiffuseColor.a < 0.5)
+	{
+		discard;
+	}
+	color = MaterialDiffuseColor;
+}

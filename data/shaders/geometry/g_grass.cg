@@ -1,0 +1,31 @@
+#version 330 core
+
+layout(points) in;
+layout(triangle_strip, max_vertices = 4) out;
+
+out vec2 textureCoords;
+uniform mat4 P;
+uniform mat4 V;
+
+
+
+const float size = 0.1;
+
+void createVertex(vec3 offset)
+{
+	vec4 actualOffset = vec4(offset * size, 0.0);
+	vec4 worldPosition = gl_in[0].gl_Position + actualOffset;
+	gl_Position = P * V * worldPosition;
+	textureCoords = vec2((offset.x + 1 ) * 0.5f, offset.y * 0.5f);
+	EmitVertex();
+}
+
+void main()
+{
+	createVertex(vec3(-1.0, 2.0, 1.0));
+	createVertex(vec3(-1.0, 0.0, 1.0));
+	createVertex(vec3(1.0, 2.0, 1.0));
+	createVertex(vec3(1.0, 0.0, 1.0));
+	
+	EndPrimitive();	
+}

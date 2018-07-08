@@ -27,7 +27,7 @@ mIsFlat(false)
 	//return;
 	assert(material != nullptr);
 
-	srand(time(NULL));
+	srand(static_cast<unsigned int>(time(NULL)));
 
 	std::vector<glm::vec3> vertexs;
 	std::vector<glm::vec2> uv;

@@ -200,6 +200,7 @@
     <ClInclude Include="src\resources\entities\Particle.h" />
     <ClInclude Include="src\resources\entities\ParticlesEmitter.h" />
     <ClInclude Include="src\resources\entities\Player.h" />
+    <ClInclude Include="src\resources\entities\PointsPatch.h" />
     <ClInclude Include="src\resources\entities\Terrain.h" />
     <ClInclude Include="src\resources\entities\Text.h" />
     <ClInclude Include="src\resources\entities\Water.h" />
@@ -245,6 +246,7 @@
     <ClInclude Include="src\resources\renderers\GUITextRenderer.h" />
     <ClInclude Include="src\resources\renderers\ImageRenderer.h" />
     <ClInclude Include="src\resources\renderers\ParticleRenderer.h" />
+    <ClInclude Include="src\resources\renderers\PointsRenderer.h" />
     <ClInclude Include="src\resources\renderers\SkyBoxRenderer.h" />
     <ClInclude Include="src\resources\renderers\TextRenderer.h" />
     <ClInclude Include="src\resources\renderers\VertexsRenderer.h" />
@@ -262,6 +264,7 @@
     <ClInclude Include="src\resources\shaders\ContrastShader.h" />
     <ClInclude Include="src\resources\shaders\DefaultShader.h" />
     <ClInclude Include="src\resources\shaders\EnergyWallShader.h" />
+    <ClInclude Include="src\resources\shaders\GrassShader.h" />
     <ClInclude Include="src\resources\shaders\GUIShader.h" />
     <ClInclude Include="src\resources\shaders\HorizontalBlurShader.h" />
     <ClInclude Include="src\resources\shaders\IShaderProgram.h" />
@@ -341,6 +344,7 @@
     <ClCompile Include="src\resources\entities\Particle.cpp" />
     <ClCompile Include="src\resources\entities\ParticlesEmitter.cpp" />
     <ClCompile Include="src\resources\entities\Player.cpp" />
+    <ClCompile Include="src\resources\entities\PointsPatch.cpp" />
     <ClCompile Include="src\resources\entities\Terrain.cpp" />
     <ClCompile Include="src\resources\entities\Text.cpp" />
     <ClCompile Include="src\resources\entities\Water.cpp" />
@@ -386,6 +390,7 @@
     <ClCompile Include="src\resources\renderers\GUITextRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\ImageRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\ParticleRenderer.cpp" />
+    <ClCompile Include="src\resources\renderers\PointsRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\SkyBoxRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\TextRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\VertexsRenderer.cpp" />
@@ -403,6 +408,7 @@
     <ClCompile Include="src\resources\shaders\ContrastShader.cpp" />
     <ClCompile Include="src\resources\shaders\DefaultShader.cpp" />
     <ClCompile Include="src\resources\shaders\EnergyWallShader.cpp" />
+    <ClCompile Include="src\resources\shaders\GrassShader.cpp" />
     <ClCompile Include="src\resources\shaders\GUIShader.cpp" />
     <ClCompile Include="src\resources\shaders\HorizontalBlurShader.cpp" />
     <ClCompile Include="src\resources\shaders\IShaderProgram.cpp" />
@@ -457,6 +463,7 @@
     <None Include="data\shaders\fragment\f_bright.cg" />
     <None Include="data\shaders\fragment\f_contrast.cg" />
     <None Include="data\shaders\fragment\f_default.cg" />
+    <None Include="data\shaders\fragment\f_grass.cg" />
     <None Include="data\shaders\fragment\f_gui_quad.cg" />
     <None Include="data\shaders\fragment\f_model.cg" />
     <None Include="data\shaders\fragment\f_model_normalmap.cg" />
@@ -469,10 +476,12 @@
     <None Include="data\shaders\fragment\f_text.cg" />
     <None Include="data\shaders\fragment\f_water.cg" />
     <None Include="data\shaders\fragment\f_energy_wall.cg" />
+    <None Include="data\shaders\geometry\g_grass.cg" />
     <None Include="data\shaders\vertex\v_bloom.cg" />
     <None Include="data\shaders\vertex\v_bright.cg" />
     <None Include="data\shaders\vertex\v_contrast.cg" />
     <None Include="data\shaders\vertex\v_default.cg" />
+    <None Include="data\shaders\vertex\v_grass.cg" />
     <None Include="data\shaders\vertex\v_gui_quad.cg" />
     <None Include="data\shaders\vertex\v_horizontal_blur.cg" />
     <None Include="data\shaders\vertex\v_model.cg" />

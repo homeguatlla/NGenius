@@ -18,6 +18,7 @@
 #include "VerticalBlurShader.h"
 #include "BrightShader.h"
 #include "BloomShader.h"
+#include "GrassShader.h"
 
 ShadersLibrary::ShadersLibrary()
 {
@@ -48,6 +49,7 @@ void ShadersLibrary::Load()
 	AddShader("vertical_blur", new VerticalBlurShader());
 	AddShader("bright", new BrightShader());
 	AddShader("bloom", new BloomShader());
+	AddShader("grass", new GrassShader());
 }
 
 void ShadersLibrary::AddShader(char* name, IShaderProgram* shader)

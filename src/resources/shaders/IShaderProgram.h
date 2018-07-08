@@ -10,6 +10,7 @@ class IShaderProgram
 {
 protected:
 	IShaderProgram(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename);
+	IShaderProgram(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename, const std::string& geometryShaderFilename);
 
 public:
 	virtual ~IShaderProgram();
@@ -49,5 +50,6 @@ private:
 	int mProgramID;
 	int mVertexShaderID;
 	int mFragmentShaderID;
+	int mGeometryShaderID;
 };
 
