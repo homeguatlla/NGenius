@@ -8,6 +8,8 @@
 
 PointsRenderer::PointsRenderer(Model* model, IMaterial* material) : IRenderer(model, material)
 {
+	//SetLayer(IRenderer::LAYER_PARTICLES);
+	SetTransparency(true);
 }
 
 PointsRenderer::~PointsRenderer()
@@ -16,6 +18,10 @@ PointsRenderer::~PointsRenderer()
 
 void PointsRenderer::Draw()
 {
+	//glDepthMask(false);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	if (mIsInstancingEnabled)
 	{
 		glDrawArraysInstanced(GL_POINTS, 0, mModel->GetNumberOfVertexs(), mInstances.size());
@@ -24,6 +30,9 @@ void PointsRenderer::Draw()
 	{
 		glDrawArrays(GL_POINTS, 0, mModel->GetNumberOfVertexs());
 	}
+
+	glDisable(GL_BLEND);
+	//glDepthMask(true);
 }
 
 bool PointsRenderer::IsInstancingAllowed() const

@@ -560,7 +560,7 @@ void CreatePoints()
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
-												material, mTerrain, mWaterHeight, 25.0f, 25.0f, 500.0f);
+												material, mTerrain, mWaterHeight, 25.0f, 25.0f, 300.0f);
 
 	mScene->AddEntity(pointsPatch);
 }

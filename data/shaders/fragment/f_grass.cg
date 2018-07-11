@@ -24,4 +24,5 @@ void main()
 	color = MaterialDiffuseColor;
 
 	color = ApplyFog(color);
+	color.a *= textureCoords.y;
 }
