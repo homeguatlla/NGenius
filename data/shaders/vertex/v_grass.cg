@@ -3,9 +3,20 @@
 in vec3 vertexModelspace;
 in mat4 M;
 out mat4 Mout;
+//out float fogVisibility;
+
+//uniform mat4 V;
+//uniform float fogDensity;
+//uniform float fogGradient;
 
 void main(void)
 {
 	gl_Position = vec4(vertexModelspace, 1);
 	Mout = M;
+
+	//vec4 positionRelativeToCamera = V * M * vec4(vertexModelspace, 1.0f);
+
+	//fog
+	//float distance = length(positionRelativeToCamera);
+	//fogVisibility = clamp(exp(-pow(distance * fogDensity, fogGradient)), 0.0, 1.0);
 }

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GrassShader.h"
+#include "../Transformation.h"
 #include "../camera/ICamera.h"
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectDiffuseTexture.h"
@@ -32,6 +33,7 @@ GrassShader::~GrassShader()
 
 void GrassShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
+	LoadMatrix4(mLocationModelMatrix, const_cast<Transformation*>(transformation)->GetModelMatrix());
 	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
 	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
 

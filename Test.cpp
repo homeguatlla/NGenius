@@ -555,9 +555,11 @@ void CreatePoints()
 	IShaderProgram* shader = mEngine.GetShader("grass");
 	IMaterial* material = mEngine.CreateMaterial("grass_material", shader);
 
-	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("grass1_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	material->AddEffect(new MaterialEffectDiffuseTexture(	static_cast<Texture*>(mEngine.GetTexture("grass1_diffuse")), 
+															glm::vec3(1.0f, 1.0f, 1.0f), 1));
 
-	PointsPatch* pointsPatch = new PointsPatch(new Transformation(), material, mTerrain, mWaterHeight, 1.0f, 1.0f, 500.0f);
+	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
+												material, mTerrain, mWaterHeight, 1.0f, 1.0f, 500.0f);
 
 	mScene->AddEntity(pointsPatch);
 }
