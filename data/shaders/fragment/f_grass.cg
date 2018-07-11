@@ -1,17 +1,17 @@
 #version 330 core
 
 in vec2 textureCoords;
-//in float fogVisibility;
+in float fogVisibility;
 
 uniform sampler2D texture;
-//uniform vec3 fogColor;
+uniform vec3 fogColor;
 
 out vec4 color;
 
-/*vec4 ApplyFog(vec4 color)
+vec4 ApplyFog(vec4 color)
 {
 	return mix(vec4(fogColor, 1.0f), color, fogVisibility);
-}*/
+}
 
 void main()
 {
@@ -23,5 +23,5 @@ void main()
 	}
 	color = MaterialDiffuseColor;
 
-	//color = ApplyFog(color);
+	color = ApplyFog(color);
 }

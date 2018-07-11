@@ -37,7 +37,7 @@ void PointsPatch::Create()
 		float x = -mWide * 0.5f + (rand() % 1000) * (mWide / 1000.0f);
 		float z = -mLength * 0.5f + (rand() % 1000) * (mLength / 1000.0f);
 		float y = mTerrain->GetHeight(glm::vec2(x, z));
-		//if (y > mWaterHeight - 0.1f)
+		if (y > mWaterHeight - 0.1f)
 		{
 			vertexs.push_back(glm::vec3(x, y, z));
 		}

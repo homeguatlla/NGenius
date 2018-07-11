@@ -10,8 +10,13 @@ class GrassShader : public IShaderProgram
 	int mLocationModelMatrix;
 	int mLocationViewMatrix;
 	int mLocationProjectionMatrix;
+	
 	int mLocationTexture;
 	int mLocationTile;
+	
+	int mLocationFogDensity;
+	int	mLocationFogGradient;
+	int mLocationFogColor;
 
 public:
 	GrassShader();

@@ -2,22 +2,33 @@
 
 layout(points) in;
 in mat4 Mout[];
-//in float fogVisibility;
 
 layout(triangle_strip, max_vertices = 8) out;
-
 out vec2 textureCoords;
+out float fogVisibility;
+
 uniform mat4 P;
 uniform mat4 V;
+uniform float tile;
 
+uniform float fogDensity;
+uniform float fogGradient;
 const float size = 0.1;
 
 void createVertex(vec3 offset)
 {
 	vec4 actualOffset = vec4(offset * size, 0.0);
 	vec4 worldPosition = gl_in[0].gl_Position + actualOffset;
-	gl_Position = P * V * Mout[0] * worldPosition;
-	textureCoords = vec2((offset.x + 1 ) * 0.5f, offset.y * 0.5f);
+	vec4 positionRelativeToCamera = V * Mout[0] * worldPosition;
+	gl_Position = P * positionRelativeToCamera;
+
+	//texture
+	textureCoords = vec2((offset.x + 1 ) * 0.5f, offset.y * 0.5f) * vec2(tile, tile);
+
+	//fog
+	float distance = length(positionRelativeToCamera);
+	fogVisibility = clamp(exp(-pow(distance * fogDensity, fogGradient)), 0.0, 1.0);
+
 	EmitVertex();
 }
 

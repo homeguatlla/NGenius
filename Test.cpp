@@ -139,7 +139,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = FLAT;
+Configuration mConfiguration = RELEASE;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -557,9 +557,10 @@ void CreatePoints()
 
 	material->AddEffect(new MaterialEffectDiffuseTexture(	static_cast<Texture*>(mEngine.GetTexture("grass1_diffuse")), 
 															glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
-												material, mTerrain, mWaterHeight, 1.0f, 1.0f, 500.0f);
+												material, mTerrain, mWaterHeight, 25.0f, 25.0f, 500.0f);
 
 	mScene->AddEntity(pointsPatch);
 }
@@ -1610,7 +1611,7 @@ void SetupConfiguration()
 		mIsDebugModeEnabled = true;
 		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
+		mIsFogEnabled = true;
 		mIsVegetationEnabled = true;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;

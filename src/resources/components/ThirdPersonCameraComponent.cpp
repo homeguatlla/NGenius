@@ -16,7 +16,7 @@
 const float CAMERA_HEIGHT_OFFSET_GROUND = 0.2f;
 const float CAMERA_SMOOTH_MOVEMENT_VALUE = 1.0f;
 const float WATER_HEIGHT_OFFSET = 0.1f;
-const float MAX_ZOOM = 3.0f;
+const float MAX_ZOOM = 5.0f;
 const float MIN_ZOOM = 1.0f;
 const float MAX_PITCH = 89.0f;//degrees
 const float MIN_PITCH = 5.0f;
