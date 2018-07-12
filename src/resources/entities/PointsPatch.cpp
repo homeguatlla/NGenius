@@ -5,10 +5,11 @@
 #include "../models/Mesh.h"
 #include "../entities/Terrain.h"
 
-PointsPatch::PointsPatch(Transformation* transformation, IMaterial* material, const Terrain* terrain, float waterHeight, float wide, float length, float density) : 
+PointsPatch::PointsPatch(Transformation* transformation, IMaterial* material, const Terrain* terrain, float heightMin, float heightMax, float wide, float length, float density) : 
 	GameEntity(transformation),
 	mTerrain(terrain),
-	mWaterHeight(waterHeight),
+	mHeightMin(heightMin),
+	mHeightMax(heightMax),
 	mWide(wide),
 	mLength(length),
 	mDensity(density)
@@ -37,7 +38,7 @@ void PointsPatch::Create()
 		float x = -mWide * 0.5f + (rand() % 1000) * (mWide / 1000.0f);
 		float z = -mLength * 0.5f + (rand() % 1000) * (mLength / 1000.0f);
 		float y = mTerrain->GetHeight(glm::vec2(x, z));
-		if (y > mWaterHeight + 0.1f)
+		if (y > mHeightMin && y < mHeightMax)
 		{
 			vertexs.push_back(glm::vec3(x, y, z));
 		}

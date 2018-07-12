@@ -551,16 +551,29 @@ void CreateGrass()
 
 void CreatePoints()
 {
-	glPointSize(5.0f);
+	//glPointSize(5.0f);
 	IShaderProgram* shader = mEngine.GetShader("grass");
-	IMaterial* material = mEngine.CreateMaterial("grass_material", shader);
+	IMaterial* material = mEngine.CreateMaterial("grass2_material", shader);
 
-	material->AddEffect(new MaterialEffectDiffuseTexture(	static_cast<Texture*>(mEngine.GetTexture("grass1_diffuse")), 
+	material->AddEffect(new MaterialEffectDiffuseTexture(	static_cast<Texture*>(mEngine.GetTexture("grass2")), 
 															glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
+	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
 
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
-												material, mTerrain, mWaterHeight, 25.0f, 25.0f, 300.0f);
+												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 40.0f, 40.0f, 200.0f);
+
+	mScene->AddEntity(pointsPatch);
+
+	material = mEngine.CreateMaterial("grass3_material", shader);
+
+	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("grass3")),
+						glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
+	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 5.0f)));
+
+	pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
+									material, mTerrain, mWaterHeight - 0.1f, mWaterHeight + 0.2f, 10.0f, 10.0f, 100.0f);
 
 	mScene->AddEntity(pointsPatch);
 }
@@ -1666,7 +1679,7 @@ void SetupConfiguration()
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = true;
+		mIsParticlesEnabled = false;
 		mIsShadowEnabled = true;
 		mIsFullScreen = true;
 		break;

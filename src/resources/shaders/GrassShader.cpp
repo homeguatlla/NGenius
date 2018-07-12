@@ -5,6 +5,7 @@
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectDiffuseTexture.h"
 #include "../materials/effects/MaterialEffectFogProperties.h"
+#include "../materials/effects/MaterialEffectFloat2.h"
 #include "../textures/ITexture.h"
 
 const std::string GrassShader::VERTEX_FILE = "data/shaders/vertex/v_grass.cg";
@@ -22,7 +23,9 @@ const std::string ATTRIBUTE_FOG_DENSITY("fogDensity");
 const std::string ATTRIBUTE_FOG_GRADIENT("fogGradient");
 const std::string ATTRIBUTE_FOG_COLOR("fogColor");
 
-GrassShader::GrassShader() : 
+const std::string ATTRIBUTE_SIZE("size");
+
+GrassShader::GrassShader() :
 	IShaderProgram(VERTEX_FILE, FRAGMENT_FILE, GEOMETRY_FILE),
 	mLocationModelMatrix(-1),
 	mLocationViewMatrix(-1),
@@ -31,7 +34,8 @@ GrassShader::GrassShader() :
 	mLocationTile(-1),
 	mLocationFogDensity(-1),
 	mLocationFogGradient(-1),
-	mLocationFogColor(-1)
+	mLocationFogColor(-1),
+	mLocationSize(-1)
 {
 }
 
@@ -60,6 +64,12 @@ void GrassShader::LoadData(const ICamera* camera, const Transformation* transfor
 		LoadFloat(mLocationFogDensity, effectFog->GetDensity());
 		LoadFloat(mLocationFogGradient, effectFog->GetGradient());
 	}
+
+	MaterialEffectFloat2* effectFloat2 = material->GetEffect<MaterialEffectFloat2>();
+	if (effectFloat2 != nullptr)
+	{
+		LoadVector2(mLocationSize, effectFloat2->GetValue());
+	}
 }
 
 void GrassShader::BindAttributes()
@@ -79,4 +89,6 @@ void GrassShader::GetAllUniformLocations()
 	mLocationFogDensity = GetUniformLocation(ATTRIBUTE_FOG_DENSITY);
 	mLocationFogGradient = GetUniformLocation(ATTRIBUTE_FOG_GRADIENT);
 	mLocationFogColor = GetUniformLocation(ATTRIBUTE_FOG_COLOR);
+
+	mLocationSize = GetUniformLocation(ATTRIBUTE_SIZE);
 }

@@ -30,6 +30,8 @@ void TexturesLibrary::Load()
 	filenames.push_back("data/textures/grass_256.png");
 	filenames.push_back("data/textures/grass_dark_256.png");	
 	filenames.push_back("data/textures/rock3.png");
+	
+
 	TextureArray* textureArray = new TextureArray();
 	textureArray->Load(filenames, ++mCurrentTextureUnit, true);
 	AddElement("terrain_array", textureArray);
@@ -57,6 +59,10 @@ void TexturesLibrary::Load()
 	LoadTexture("smoke", "data/textures/smoke_64_.png", false, false);
 	LoadTexture("yellow_grid", "data/textures/grid_64.png", false, true);
 	LoadTexture("stall", "data/models/stall/stall.png", false, false);
+	
+	LoadTexture("grass2", "data/textures/grass2.png", false, false);
+	LoadTexture("grass3", "data/textures/grass3.png", false, false);
+	LoadTexture("grass5", "data/textures/grass5.png", false, false);
 
 	LoadTexturesPendingToLoad();
 }

@@ -18,6 +18,8 @@ class GrassShader : public IShaderProgram
 	int	mLocationFogGradient;
 	int mLocationFogColor;
 
+	int mLocationSize;
+
 public:
 	GrassShader();
 	~GrassShader();

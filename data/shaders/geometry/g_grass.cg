@@ -13,17 +13,17 @@ uniform float tile;
 
 uniform float fogDensity;
 uniform float fogGradient;
-const float size = 0.1;
+uniform vec2 size;
 
-void createVertex(vec3 offset)
+void createVertex(vec3 offset, vec2 coordText)
 {
-	vec4 actualOffset = vec4(offset * size, 0.0);
+	vec4 actualOffset = vec4(offset * 0.1f, 0.0);
 	vec4 worldPosition = gl_in[0].gl_Position + actualOffset;
 	vec4 positionRelativeToCamera = V * Mout[0] * worldPosition;
 	gl_Position = P * positionRelativeToCamera;
 
 	//texture
-	textureCoords = vec2((offset.x + 1 ) * 0.5f, offset.y * 0.5f) * vec2(tile, tile);
+	textureCoords = vec2(coordText.x, coordText.y) * vec2(tile, tile);
 
 	//fog
 	float distance = length(positionRelativeToCamera);
@@ -34,17 +34,20 @@ void createVertex(vec3 offset)
 
 void main()
 {
-	createVertex(vec3(-1.0, 2.0, 1.0));
-	createVertex(vec3(-1.0, 0.0, 1.0));
-	createVertex(vec3(1.0, 2.0, 1.0));
-	createVertex(vec3(1.0, 0.0, 1.0));
+	float w = size.x * 0.5;
+	float h = size.y * 0.5;
+
+	createVertex(vec3(-w, h, 0.0), vec2(0.0, 1.0));
+	createVertex(vec3(-w, 0.0, 0.0), vec2(0.0, 0.0));
+	createVertex(vec3(w, h, 0.0), vec2(1.0, 1.0));
+	createVertex(vec3(w, 0.0, 0.0), vec2(1.0, 0.0));
 	
 	EndPrimitive();	
 
-	createVertex(vec3(-1.0, 2.0, 1.0));
-	createVertex(vec3(-1.0, 0.0, 1.0));
-	createVertex(vec3(1.0, 2.0, -1.0));
-	createVertex(vec3(1.0, 0.0, -1.0));
+	createVertex(vec3(0, h, -w), vec2(0.0, 1.0));
+	createVertex(vec3(0, 0.0, -w), vec2(0.0, 0.0));
+	createVertex(vec3(0, h, w), vec2(1.0, 1.0));
+	createVertex(vec3(0, 0.0, w), vec2(1.0, 0.0));
 	
 	EndPrimitive();	
 }
