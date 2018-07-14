@@ -101,6 +101,7 @@
 #include "src/resources/components/CharacterComponent.h"
 #include "src/resources/components/DebugComponent.h"
 #include "src/resources/components/SpacePartitionComponent.h"
+#include "src/resources/components/EnvironmentAffectedComponent.h"
 
 #include "src/resources/command/ICommand.h"
 #include "src/resources/command/commands/RiseTerrainCommand.h"
@@ -139,7 +140,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = RELEASE;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -559,10 +560,13 @@ void CreatePoints()
 															glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
+	material->AddEffect(new MaterialEffectShadowProperties());
+	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
 
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
 												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 40.0f, 40.0f, 200.0f);
 
+	pointsPatch->AddComponent(new EnvironmentAffectedComponent());
 	mScene->AddEntity(pointsPatch);
 
 	material = mEngine.CreateMaterial("grass3_material", shader);
@@ -571,10 +575,11 @@ void CreatePoints()
 						glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 5.0f)));
+	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
 
-	pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
-									material, mTerrain, mWaterHeight - 0.1f, mWaterHeight + 0.2f, 10.0f, 10.0f, 100.0f);
-
+	pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
+									material, mTerrain, mWaterHeight - 0.1f, mWaterHeight + 0.2f, 10.0f, 10.0f, 50.0f);
+	pointsPatch->AddComponent(new EnvironmentAffectedComponent());
 	mScene->AddEntity(pointsPatch);
 }
 
@@ -1633,7 +1638,7 @@ void SetupConfiguration()
 		mIsTextEnabled = false;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
-		mIsShadowEnabled = false;
+		mIsShadowEnabled = true;
 		mIsFullScreen = false;
 		break;
 	case QUADTREE:

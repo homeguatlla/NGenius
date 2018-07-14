@@ -6,6 +6,7 @@ in mat4 Mout[];
 layout(triangle_strip, max_vertices = 8) out;
 out vec2 textureCoords;
 out float fogVisibility;
+out vec4 shadowCoords;
 
 uniform mat4 P;
 uniform mat4 V;
@@ -15,11 +16,20 @@ uniform float fogDensity;
 uniform float fogGradient;
 uniform vec2 size;
 
+uniform mat4 toShadowMapSpace;
+
+uniform vec3 wind;
+
+const float shadowDistance = 10.0;
+const float transitionDistance = 20.0;
+
 void createVertex(vec3 offset, vec2 coordText)
 {
 	vec4 actualOffset = vec4(offset * 0.1f, 0.0);
 	vec4 worldPosition = gl_in[0].gl_Position + actualOffset;
-	vec4 positionRelativeToCamera = V * Mout[0] * worldPosition;
+	vec4 positionWorldspace = Mout[0] * worldPosition;
+	shadowCoords = toShadowMapSpace * positionWorldspace;
+	vec4 positionRelativeToCamera = V * Mout[0] * positionWorldspace;
 	gl_Position = P * positionRelativeToCamera;
 
 	//texture
@@ -29,6 +39,11 @@ void createVertex(vec3 offset, vec2 coordText)
 	float distance = length(positionRelativeToCamera);
 	fogVisibility = clamp(exp(-pow(distance * fogDensity, fogGradient)), 0.0, 1.0);
 
+	//shadow
+	distance = distance - (shadowDistance - transitionDistance);
+	distance = distance / transitionDistance;
+	shadowCoords.w = clamp(1.0 - distance, 0.0, 1.0);
+
 	EmitVertex();
 }
 
@@ -37,17 +52,17 @@ void main()
 	float w = size.x * 0.5;
 	float h = size.y * 0.5;
 
-	createVertex(vec3(-w, h, 0.0), vec2(0.0, 1.0));
+	createVertex(vec3(-w, h, 0.0) + wind, vec2(0.0, 1.0));
 	createVertex(vec3(-w, 0.0, 0.0), vec2(0.0, 0.0));
-	createVertex(vec3(w, h, 0.0), vec2(1.0, 1.0));
+	createVertex(vec3(w, h, 0.0) + wind, vec2(1.0, 1.0));
 	createVertex(vec3(w, 0.0, 0.0), vec2(1.0, 0.0));
 	
 	EndPrimitive();	
 
-	createVertex(vec3(0, h, -w), vec2(0.0, 1.0));
-	createVertex(vec3(0, 0.0, -w), vec2(0.0, 0.0));
-	createVertex(vec3(0, h, w), vec2(1.0, 1.0));
-	createVertex(vec3(0, 0.0, w), vec2(1.0, 0.0));
+	createVertex(vec3(0.0, h, -w) + wind, vec2(0.0, 1.0));
+	createVertex(vec3(0.0, 0.0, -w), vec2(0.0, 0.0));
+	createVertex(vec3(0.0, h, w) + wind, vec2(1.0, 1.0));
+	createVertex(vec3(0.0, 0.0, w), vec2(1.0, 0.0));
 	
 	EndPrimitive();	
 }

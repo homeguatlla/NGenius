@@ -2,20 +2,50 @@
 
 in vec2 textureCoords;
 in float fogVisibility;
+in vec4 shadowCoords;
 
 uniform sampler2D texture;
 uniform vec3 fogColor;
 
+uniform sampler2D shadowMap;
+uniform int shadowMapSize;
+uniform int pfcCount;
+
 out vec4 color;
+
+float totalTexelsShadow = (pfcCount * 2.0 + 1.0) * (pfcCount * 2.0 + 1.0);
+
 
 vec4 ApplyFog(vec4 color)
 {
 	return mix(vec4(fogColor, 1.0f), color, fogVisibility);
 }
 
+float ApplyShadow(int pfcCount, float totalTexels)
+{
+	float texelSize = 1.0 / shadowMapSize;
+	float total = 0.0f;
+	float bias = 0.001;
+
+	for(int x = -pfcCount; x <= pfcCount; x++) {
+		for(int y = -pfcCount; y <= pfcCount; y++) {
+			float objectNearestLight = texture2D(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
+			if(objectNearestLight < shadowCoords.z - bias)
+			{
+				total += 1.0;
+			}
+		}
+	}
+	total /= totalTexelsShadow;
+	float shadowFactor = 1.0 - (total * shadowCoords.w);
+
+	return shadowFactor;
+}
+
 void main()
 {
-    vec4 MaterialDiffuseColor = texture2D(texture, textureCoords);
+    float shadowFactor = ApplyShadow(pfcCount, totalTexelsShadow);
+	vec4 MaterialDiffuseColor = shadowFactor * texture2D(texture, textureCoords);
 
 	if(MaterialDiffuseColor.a < 0.5)
 	{
@@ -24,6 +54,5 @@ void main()
 	color = MaterialDiffuseColor;
 
 	color = ApplyFog(color);
-	color.a *= textureCoords.y;
-	//color = vec4(1.0, 0.0, 0.0, 1.0);
+	color.a *= textureCoords.y * 2.0f;
 }

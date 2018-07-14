@@ -4,6 +4,7 @@
 class IMaterial;
 class Model;
 class Terrain;
+class MaterialEffectFloat;
 
 class PointsPatch :	public GameEntity
 {

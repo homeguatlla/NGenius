@@ -618,6 +618,12 @@
     <ClInclude Include="src\resources\shaders\GrassShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\systems\EnvironmentSystem.h">
+      <Filter>Header Files\resources\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\EnvironmentAffectedComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1051,6 +1057,12 @@
     </ClCompile>
     <ClCompile Include="src\resources\shaders\GrassShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\EnvironmentSystem.cpp">
+      <Filter>Source Files\resources\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\EnvironmentAffectedComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

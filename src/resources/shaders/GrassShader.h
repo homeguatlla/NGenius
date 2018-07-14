@@ -20,6 +20,13 @@ class GrassShader : public IShaderProgram
 
 	int mLocationSize;
 
+	int mLocationShadowSpaceMatrix;
+	int mLocationShadowMapTexture;
+	int mLocationShadowMapTextureWidth;
+	int mLocationShadowMapPFC;
+
+	int mLocationSpeed;
+
 public:
 	GrassShader();
 	~GrassShader();

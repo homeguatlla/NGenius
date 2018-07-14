@@ -16,6 +16,7 @@ class InputSystem;
 class DebugSystem;
 class SpacePartitionSystem;
 class Statistics;
+class EnvironmentSystem;
 
 class InputHandler;
 class IInputListener;
@@ -48,6 +49,7 @@ class NGenius : public BaseVisitable<>
 	InputSystem* mInputSystem;
 	SpacePartitionSystem* mSpacePartitionSystem;
 	DebugSystem* mDebugSystem;
+	EnvironmentSystem* mEnvironmentSystem;
 	InputHandler* mInputHandler;
 	Statistics* mStatistics;
 	GameScene* mGameScene;

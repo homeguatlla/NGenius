@@ -19,6 +19,7 @@
 #include "resources/systems/InputSystem.h"
 #include "resources/systems/DebugSystem.h"
 #include "resources/systems/SpacePartitionSystem.h"
+#include "resources/systems/EnvironmentSystem.h"
 
 #include "resources/scene/GameScene.h"
 #include "resources/entities/ParticlesEmitter.h"
@@ -34,6 +35,7 @@ mPhysicsSystem(nullptr),
 mEntitiesSystem(nullptr),
 mParticlesSystem(nullptr),
 mSpacePartitionSystem(nullptr),
+mEnvironmentSystem(nullptr),
 mGameScene(nullptr),
 mApplicationName(applicationName),
 mIsSpacePartitionEnabled(true)
@@ -142,6 +144,7 @@ void NGenius::UpdateSystems(float elapsedTime)
 {
 	mInputSystem->Update(elapsedTime);
 	mDebugSystem->Update(elapsedTime);
+	mEnvironmentSystem->Update(elapsedTime);
 	mParticlesSystem->Update(elapsedTime);
 	mGameScene->Update(elapsedTime);
 	mPhysicsSystem->Update(elapsedTime);
@@ -159,10 +162,12 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 	mDebugSystem = new DebugSystem(mRenderSystem, mInputHandler);
 	mParticlesSystem = new ParticlesSystem();
 	mSpacePartitionSystem = new SpacePartitionSystem();
+	mEnvironmentSystem = new EnvironmentSystem();
 }
 
 void NGenius::DestroySystems()
 {
+	delete mEnvironmentSystem;
 	delete mSpacePartitionSystem;
 	delete mDebugSystem;
 	delete mInputSystem;
@@ -289,6 +294,7 @@ GameScene* NGenius::CreateGameScene(const std::string& name)
 	mGameScene->RegisterGameSceneListener(mInputSystem);
 	mGameScene->RegisterGameSceneListener(mPhysicsSystem);
 	mGameScene->RegisterGameSceneListener(mSpacePartitionSystem);
+	mGameScene->RegisterGameSceneListener(mEnvironmentSystem);
 
 	return mGameScene;
 }

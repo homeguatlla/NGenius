@@ -4,6 +4,10 @@
 #include "../models/Model.h"
 #include "../models/Mesh.h"
 #include "../entities/Terrain.h"
+#include "../materials/IMaterial.h"
+#include "../materials/effects/MaterialEffectFloat.h"
+
+#include <iostream>
 
 PointsPatch::PointsPatch(Transformation* transformation, IMaterial* material, const Terrain* terrain, float heightMin, float heightMax, float wide, float length, float density) : 
 	GameEntity(transformation),
@@ -14,7 +18,10 @@ PointsPatch::PointsPatch(Transformation* transformation, IMaterial* material, co
 	mLength(length),
 	mDensity(density)
 {
+	assert(material != nullptr);
+
 	Create();
+
 	SetRenderer(new PointsRenderer(mModel, material));
 	GetRenderer()->SetCullingEnabled(false);
 	GetRenderer()->SetTransparency(true);
@@ -24,7 +31,6 @@ PointsPatch::PointsPatch(Transformation* transformation, IMaterial* material, co
 PointsPatch::~PointsPatch()
 {
 }
-
 
 void PointsPatch::Create()
 {
@@ -46,3 +52,4 @@ void PointsPatch::Create()
 
 	mModel = new Model(new Mesh(vertexs, uv, indices));
 }
+

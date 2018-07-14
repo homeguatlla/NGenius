@@ -6,7 +6,11 @@
 #include "../materials/effects/MaterialEffectDiffuseTexture.h"
 #include "../materials/effects/MaterialEffectFogProperties.h"
 #include "../materials/effects/MaterialEffectFloat2.h"
+#include "../materials/effects/MaterialEffectShadowProperties.h"
+#include "../materials/effects/MaterialEffectFloat3.h"
 #include "../textures/ITexture.h"
+
+
 
 const std::string GrassShader::VERTEX_FILE = "data/shaders/vertex/v_grass.cg";
 const std::string GrassShader::FRAGMENT_FILE = "data/shaders/fragment/f_grass.cg";
@@ -25,6 +29,13 @@ const std::string ATTRIBUTE_FOG_COLOR("fogColor");
 
 const std::string ATTRIBUTE_SIZE("size");
 
+const std::string ATTRIBUTE_SHADOW_SPACE_MATRIX("toShadowMapSpace");
+const std::string ATTRIBUTE_SHADOW_TEXTURE("shadowMap");
+const std::string ATTRIBUTE_SHADOW_TEXTURE_WIDTH("shadowMapSize");
+const std::string ATTRIBUTE_SHADOW_PFC("pfcCount");
+
+const std::string ATTRIBUTE_SPEED("wind");
+
 GrassShader::GrassShader() :
 	IShaderProgram(VERTEX_FILE, FRAGMENT_FILE, GEOMETRY_FILE),
 	mLocationModelMatrix(-1),
@@ -35,7 +46,12 @@ GrassShader::GrassShader() :
 	mLocationFogDensity(-1),
 	mLocationFogGradient(-1),
 	mLocationFogColor(-1),
-	mLocationSize(-1)
+	mLocationSize(-1),
+	mLocationShadowSpaceMatrix(-1),
+	mLocationShadowMapTexture(-1),
+	mLocationShadowMapTextureWidth(-1),
+	mLocationShadowMapPFC(-1),
+	mLocationSpeed(-1)
 {
 }
 
@@ -70,6 +86,21 @@ void GrassShader::LoadData(const ICamera* camera, const Transformation* transfor
 	{
 		LoadVector2(mLocationSize, effectFloat2->GetValue());
 	}
+
+	MaterialEffectShadowProperties* effectShadow = material->GetEffect<MaterialEffectShadowProperties>();
+	if (effectShadow != nullptr && effectShadow->GetDepthTexture() != nullptr)
+	{
+		LoadMatrix4(mLocationShadowSpaceMatrix, effectShadow->GetMatrix());
+		LoadTexture(mLocationShadowMapTexture, effectShadow->GetDepthTexture()->GetUnit());
+		LoadInteger(mLocationShadowMapTextureWidth, effectShadow->GetDepthTexture()->GetWidth());
+		LoadInteger(mLocationShadowMapPFC, effectShadow->GetPFCCounter());
+	}
+
+	MaterialEffectFloat3* effectWind = material->GetEffect<MaterialEffectFloat3>();
+	if (effectWind != nullptr)
+	{
+		LoadVector3(mLocationSpeed, effectWind->GetValue());
+	}
 }
 
 void GrassShader::BindAttributes()
@@ -91,4 +122,11 @@ void GrassShader::GetAllUniformLocations()
 	mLocationFogColor = GetUniformLocation(ATTRIBUTE_FOG_COLOR);
 
 	mLocationSize = GetUniformLocation(ATTRIBUTE_SIZE);
+
+	mLocationShadowSpaceMatrix = GetUniformLocation(ATTRIBUTE_SHADOW_SPACE_MATRIX);
+	mLocationShadowMapTexture = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE);
+	mLocationShadowMapTextureWidth = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE_WIDTH);
+	mLocationShadowMapPFC = GetUniformLocation(ATTRIBUTE_SHADOW_PFC);
+
+	mLocationSpeed = GetUniformLocation(ATTRIBUTE_SPEED);
 }

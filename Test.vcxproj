@@ -186,6 +186,7 @@
     <ClInclude Include="src\resources\components\CharacterComponent.h" />
     <ClInclude Include="src\resources\components\DebugComponent.h" />
     <ClInclude Include="src\resources\components\EnergyWallCollisionComponent.h" />
+    <ClInclude Include="src\resources\components\EnvironmentAffectedComponent.h" />
     <ClInclude Include="src\resources\components\IComponent.h" />
     <ClInclude Include="src\resources\components\InputComponent.h" />
     <ClInclude Include="src\resources\components\LODComponent.h" />
@@ -280,6 +281,7 @@
     <ClInclude Include="src\resources\shaders\VerticalBlurShader.h" />
     <ClInclude Include="src\resources\shaders\WaterShader.h" />
     <ClInclude Include="src\resources\systems\DebugSystem.h" />
+    <ClInclude Include="src\resources\systems\EnvironmentSystem.h" />
     <ClInclude Include="src\resources\systems\InputSystem.h" />
     <ClInclude Include="src\resources\systems\LightsSystem.h" />
     <ClInclude Include="src\resources\systems\ParticlesSystem.h" />
@@ -330,6 +332,7 @@
     <ClCompile Include="src\resources\components\CharacterComponent.cpp" />
     <ClCompile Include="src\resources\components\DebugComponent.cpp" />
     <ClCompile Include="src\resources\components\EnergyWallCollisionComponent.cpp" />
+    <ClCompile Include="src\resources\components\EnvironmentAffectedComponent.cpp" />
     <ClCompile Include="src\resources\components\IComponent.cpp" />
     <ClCompile Include="src\resources\components\InputComponent.cpp" />
     <ClCompile Include="src\resources\components\LODComponent.cpp" />
@@ -424,6 +427,7 @@
     <ClCompile Include="src\resources\shaders\VerticalBlurShader.cpp" />
     <ClCompile Include="src\resources\shaders\WaterShader.cpp" />
     <ClCompile Include="src\resources\systems\DebugSystem.cpp" />
+    <ClCompile Include="src\resources\systems\EnvironmentSystem.cpp" />
     <ClCompile Include="src\resources\systems\InputSystem.cpp" />
     <ClCompile Include="src\resources\systems\LightsSystem.cpp" />
     <ClCompile Include="src\resources\systems\ParticlesSystem.cpp" />
