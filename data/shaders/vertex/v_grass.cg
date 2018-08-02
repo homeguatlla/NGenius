@@ -1,12 +1,17 @@
 #version 330 core
 
 in vec3 vertexModelspace;
+in vec2 textureCoordsModelspace;
 in mat4 M;
 
+out float rotationY;
+out float scale;
 out mat4 Mout;
 
 void main(void)
 {
 	gl_Position = vec4(vertexModelspace, 1);
+	rotationY = textureCoordsModelspace.x;
+	scale = textureCoordsModelspace.y;
 	Mout = M;
 }

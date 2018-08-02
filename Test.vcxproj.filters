@@ -175,6 +175,12 @@
     <Filter Include="Source Files\shaders\geometry">
       <UniqueIdentifier>{9b86a005-62ed-47cd-a3ad-2df5b4fed6f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\resources\systems\environmentSystem">
+      <UniqueIdentifier>{01a13a10-db98-42d0-8991-c27ff37153ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\systems\environmentSystem">
+      <UniqueIdentifier>{45d73283-2a56-4f1d-a0df-633780dbc133}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -618,11 +624,14 @@
     <ClInclude Include="src\resources\shaders\GrassShader.h">
       <Filter>Header Files\resources\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\systems\EnvironmentSystem.h">
-      <Filter>Header Files\resources\systems</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\components\EnvironmentAffectedComponent.h">
       <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\environmentSystem\EnvironmentSystem.h">
+      <Filter>Header Files\resources\systems\environmentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\environmentSystem\WindManager.h">
+      <Filter>Header Files\resources\systems\environmentSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1058,11 +1067,14 @@
     <ClCompile Include="src\resources\shaders\GrassShader.cpp">
       <Filter>Source Files\resources\shaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\systems\EnvironmentSystem.cpp">
-      <Filter>Source Files\resources\systems</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\components\EnvironmentAffectedComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\environmentSystem\WindManager.cpp">
+      <Filter>Source Files\resources\systems\environmentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\environmentSystem\EnvironmentSystem.cpp">
+      <Filter>Source Files\resources\systems\environmentSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,18 +1,20 @@
 #pragma once
 #include <glm/glm.hpp>
-#include "../../visitor/BaseVisitable.h"
-#include "../scene/IGameSceneListener.h"
+#include "../../../visitor/BaseVisitable.h"
+#include "../../scene/IGameSceneListener.h"
 #include <vector>
+#include <memory>
 
 class GameEntity;
 class Terrain;
+class WindManager;
 
 class EnvironmentSystem : public BaseVisitable<>, public IGameSceneListener
 {
 	std::vector<GameEntity*> mEntities;
 	const Terrain* mTerrain;
-	float mSpeed;
-	float mAccumulatedTime;
+	std::unique_ptr<WindManager> mWindManager;
+	float mTimer;
 
 public:
 	EnvironmentSystem();
@@ -25,6 +27,8 @@ public:
 	void SetTerrain(const Terrain* terrain);
 	
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
+
+	float GetTimer() const;
 
 private:
 	void AddEntity(GameEntity* entity);

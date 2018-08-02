@@ -3,15 +3,18 @@
 #include <GLFW/glfw3.h>
 #include <algorithm>
 
-#include "../GameEntity.h"
-#include "../components/EnvironmentAffectedComponent.h"
-#include "../materials/IMaterial.h"
-#include "../materials/effects/MaterialEffectFloat3.h"
-#include "../entities/Terrain.h"
-#include "../renderers/IRenderer.h"
+#include "../../GameEntity.h"
+#include "../../components/EnvironmentAffectedComponent.h"
+#include "../../materials/IMaterial.h"
+#include "../../materials/effects/MaterialEffectFloat.h"
+#include "../../materials/effects/MaterialEffectFloat3.h"
+#include "../../entities/Terrain.h"
+#include "../../renderers/IRenderer.h"
+#include "WindManager.h"
 
-EnvironmentSystem::EnvironmentSystem()
+EnvironmentSystem::EnvironmentSystem() : mTimer(0.0f)
 {
+	mWindManager = std::make_unique<WindManager>(4);
 }
 
 EnvironmentSystem::~EnvironmentSystem()
@@ -26,17 +29,22 @@ unsigned int EnvironmentSystem::GetNumberGameEntities() const
 
 void EnvironmentSystem::Update(float deltaTime)
 {
-	mAccumulatedTime += deltaTime;
+	mTimer += deltaTime;
 
-	mSpeed = glm::sin(mAccumulatedTime) * 0.5f;
-
+	mWindManager->Update(deltaTime);
+	
 	for (GameEntity* entity : mEntities)
 	{
 		IMaterial* material = entity->GetRenderer()->GetMaterial();
 		MaterialEffectFloat3* effectWind = material->GetEffect<MaterialEffectFloat3>();
 		if (effectWind != nullptr)
 		{
-			effectWind->SetValue(mSpeed * glm::vec3(1.0f, 0.0f, 0.0f));
+			//effectWind->SetValue(mSpeed * glm::vec3(1.0f, 0.0f, 0.0f));
+		}
+		MaterialEffectFloat* effectTimer = material->GetEffect<MaterialEffectFloat>();
+		if (effectTimer != nullptr)
+		{
+			effectTimer->SetValue(mTimer);
 		}
 	}
 }
@@ -96,4 +104,9 @@ void EnvironmentSystem::OnGameEntityRemoved(GameEntity* entity)
 BaseVisitable<>::ReturnType EnvironmentSystem::Accept(BaseVisitor& guest)
 {
 	return AcceptImpl(*this, guest);
+}
+
+float EnvironmentSystem::GetTimer() const
+{
+	return mTimer;
 }

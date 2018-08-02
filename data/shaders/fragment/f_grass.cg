@@ -10,7 +10,7 @@ uniform vec3 fogColor;
 uniform sampler2D shadowMap;
 uniform int shadowMapSize;
 uniform int pfcCount;
-
+//in vec4 outColor;
 out vec4 color;
 
 float totalTexelsShadow = (pfcCount * 2.0 + 1.0) * (pfcCount * 2.0 + 1.0);
@@ -44,6 +44,7 @@ float ApplyShadow(int pfcCount, float totalTexels)
 
 void main()
 {
+	int newPfcCount = 1; 
     float shadowFactor = ApplyShadow(pfcCount, totalTexelsShadow);
 	vec4 MaterialDiffuseColor = shadowFactor * texture2D(texture, textureCoords);
 
@@ -54,5 +55,6 @@ void main()
 	color = MaterialDiffuseColor;
 
 	color = ApplyFog(color);
-	color.a *= textureCoords.y * 2.0f;
+	color.a *= textureCoords.y * 2.0;
+	//color = outColor;
 }

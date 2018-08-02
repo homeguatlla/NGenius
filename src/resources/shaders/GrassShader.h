@@ -26,6 +26,8 @@ class GrassShader : public IShaderProgram
 	int mLocationShadowMapPFC;
 
 	int mLocationSpeed;
+	int mLocationTimer;
+	int mLocationWindDirections;
 
 public:
 	GrassShader();

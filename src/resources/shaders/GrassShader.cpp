@@ -4,7 +4,9 @@
 #include "../camera/ICamera.h"
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectDiffuseTexture.h"
+#include "../materials/effects/MaterialEffectNormalTexture.h"
 #include "../materials/effects/MaterialEffectFogProperties.h"
+#include "../materials/effects/MaterialEffectFloat.h"
 #include "../materials/effects/MaterialEffectFloat2.h"
 #include "../materials/effects/MaterialEffectShadowProperties.h"
 #include "../materials/effects/MaterialEffectFloat3.h"
@@ -35,6 +37,8 @@ const std::string ATTRIBUTE_SHADOW_TEXTURE_WIDTH("shadowMapSize");
 const std::string ATTRIBUTE_SHADOW_PFC("pfcCount");
 
 const std::string ATTRIBUTE_SPEED("wind");
+const std::string ATTRIBUTE_TIMER("timer");
+const std::string ATTRIBUTE_TEXTURE_WIND("textureWind");
 
 GrassShader::GrassShader() :
 	IShaderProgram(VERTEX_FILE, FRAGMENT_FILE, GEOMETRY_FILE),
@@ -51,7 +55,9 @@ GrassShader::GrassShader() :
 	mLocationShadowMapTexture(-1),
 	mLocationShadowMapTextureWidth(-1),
 	mLocationShadowMapPFC(-1),
-	mLocationSpeed(-1)
+	mLocationSpeed(-1),
+	mLocationTimer(-1),
+	mLocationWindDirections(-1)
 {
 }
 
@@ -71,6 +77,12 @@ void GrassShader::LoadData(const ICamera* camera, const Transformation* transfor
 	{
 		LoadTexture(mLocationTexture, effectDiffuse->GetDiffuseTexture()->GetUnit());
 		LoadFloat(mLocationTile, effectDiffuse->GetTile());
+	}
+
+	MaterialEffectNormalTexture* effectWindDirections = material->GetEffect<MaterialEffectNormalTexture>();
+	if (effectWindDirections != nullptr)
+	{
+		LoadTexture(mLocationWindDirections, effectWindDirections->GetNormalTexture()->GetUnit());
 	}
 
 	MaterialEffectFogProperties* effectFog = material->GetEffect<MaterialEffectFogProperties>();
@@ -101,6 +113,12 @@ void GrassShader::LoadData(const ICamera* camera, const Transformation* transfor
 	{
 		LoadVector3(mLocationSpeed, effectWind->GetValue());
 	}
+
+	MaterialEffectFloat* effectTimer = material->GetEffect<MaterialEffectFloat>();
+	if (effectTimer != nullptr)
+	{
+		LoadFloat(mLocationTimer, effectTimer->GetValue());
+	}
 }
 
 void GrassShader::BindAttributes()
@@ -129,4 +147,7 @@ void GrassShader::GetAllUniformLocations()
 	mLocationShadowMapPFC = GetUniformLocation(ATTRIBUTE_SHADOW_PFC);
 
 	mLocationSpeed = GetUniformLocation(ATTRIBUTE_SPEED);
+
+	mLocationTimer = GetUniformLocation(ATTRIBUTE_TIMER);
+	mLocationWindDirections = GetUniformLocation(ATTRIBUTE_TEXTURE_WIND);
 }

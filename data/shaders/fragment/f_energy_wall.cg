@@ -8,7 +8,7 @@ in vec3 normal;
 
 uniform sampler2D texture;
 uniform sampler2D depthTexture;
-uniform float time;
+uniform float timer;
 uniform float tile;
 uniform vec3 contactPosition;
 uniform vec2 screenSize;
@@ -24,7 +24,7 @@ float circle(in vec2 _st, in float _radius, float tile){
 
 void main()
 {
-	float newTime = time;
+	float newTime = timer;
 	vec2 newTextureCoords = vec2( textureCoords.x + newTime * 0.005, textureCoords.y) * tile;
 	color = texture2D(texture, newTextureCoords);
 	

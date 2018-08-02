@@ -64,6 +64,9 @@ void TexturesLibrary::Load()
 	LoadTexture("grass3", "data/textures/grass3.png", false, false);
 	LoadTexture("grass5", "data/textures/grass5.png", false, false);
 
+	//LoadTexture("wind_texture", "data/textures/wind_256.png", true, true);
+	LoadTexture("wind_texture", "data/degradated_red.png", false, true);
+
 	LoadTexturesPendingToLoad();
 }
 

@@ -13,14 +13,14 @@ const std::string EnergyWallShader::FRAGMENT_FILE = "data/shaders/fragment/f_ene
 const std::string ATTRIBUTE_DEPTH_TEXTURE("depthTexture");
 const std::string ATTRIBUTE_CONTACT_POINT("contactPoint");
 const std::string ATTRIBUTE_SCREEN_SIZE("screenSize");
-const std::string ATTRIBUTE_TIME("time");
+const std::string ATTRIBUTE_TIMER("timer");
 
 EnergyWallShader::EnergyWallShader() : 
 ModelShader(EnergyWallShader::VERTEX_FILE, EnergyWallShader::FRAGMENT_FILE),
 mLocationDepthTexture(-1),
 mLocationContactPoint(-1),
 mLocationScreenSize(-1),
-mLocationTime(-1)
+mLocationTimer(-1)
 {
 }
 
@@ -39,10 +39,10 @@ void EnergyWallShader::LoadData(const ICamera* camera, const Transformation* tra
 		LoadTexture(mLocationDepthTexture, effectDepth->GetDepthTexture()->GetUnit());
 	}
 
-	MaterialEffectFloat* effectFloat = material->GetEffect<MaterialEffectFloat>();
-	if (effectFloat != nullptr)
+	MaterialEffectFloat* effectTimer = material->GetEffect<MaterialEffectFloat>();
+	if (effectTimer != nullptr)
 	{
-		LoadFloat(mLocationTime, effectFloat->GetValue());
+		LoadFloat(mLocationTimer, effectTimer->GetValue());
 	}
 
 	MaterialEffectFloat2* effectFloat2 = material->GetEffect<MaterialEffectFloat2>();
@@ -64,5 +64,5 @@ void EnergyWallShader::GetAllUniformLocations()
 	mLocationDepthTexture = GetUniformLocation(ATTRIBUTE_DEPTH_TEXTURE);
 	mLocationContactPoint = GetUniformLocation(ATTRIBUTE_CONTACT_POINT);
 	mLocationScreenSize = GetUniformLocation(ATTRIBUTE_SCREEN_SIZE);
-	mLocationTime = GetUniformLocation(ATTRIBUTE_TIME);
+	mLocationTimer = GetUniformLocation(ATTRIBUTE_TIMER);
 }

@@ -140,7 +140,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = FLAT;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -562,13 +562,17 @@ void CreatePoints()
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
 	material->AddEffect(new MaterialEffectShadowProperties());
 	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
+	material->AddEffect(new MaterialEffectFloat(0.0));
+
+	Texture* windTexture = static_cast<Texture*>(mEngine.GetTexture("wind_texture"));
+	material->AddEffect(new MaterialEffectNormalTexture(windTexture, 1.0f));
 
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
-												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 40.0f, 40.0f, 200.0f);
+												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 5.0f, 5.0f, 50.0f);
 
 	pointsPatch->AddComponent(new EnvironmentAffectedComponent());
 	mScene->AddEntity(pointsPatch);
-
+	/*
 	material = mEngine.CreateMaterial("grass3_material", shader);
 
 	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("grass3")),
@@ -577,10 +581,10 @@ void CreatePoints()
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 5.0f)));
 	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
 
-	pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
-									material, mTerrain, mWaterHeight - 0.1f, mWaterHeight + 0.2f, 10.0f, 10.0f, 50.0f);
+	pointsPatch = new PointsPatch(	new Transformation(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
+									material, mTerrain, mWaterHeight - 0.1f, mWaterHeight + 0.2f, 1.0f, 1.0f, 50.0f);
 	pointsPatch->AddComponent(new EnvironmentAffectedComponent());
-	mScene->AddEntity(pointsPatch);
+	mScene->AddEntity(pointsPatch);*/
 }
 
 void CreateProps()
@@ -1518,17 +1522,17 @@ void SetupConfiguration()
 	{
 	case DEBUG:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = true;
+		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
 		mIsVegetationEnabled = true;
-		mIsPropsEnabled = true;
-		mIsEnergyWallEnabled = true;
+		mIsPropsEnabled = false;
+		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = true;
+		mIsParticlesEnabled = false;
 		mIsShadowEnabled = true;
 		break;
 	case SHADOWS:
@@ -1702,7 +1706,7 @@ void Initialize()
 
 	CreateCameras();
 
-	mEngine.SetCastingShadowsParameters(mSunLightDirection, 3);
+	mEngine.SetCastingShadowsParameters(mSunLightDirection, 5);
 	mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
 
 	mEngine.SetWaterEnabled(mIsWaterEnabled);

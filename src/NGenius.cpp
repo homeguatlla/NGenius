@@ -19,7 +19,7 @@
 #include "resources/systems/InputSystem.h"
 #include "resources/systems/DebugSystem.h"
 #include "resources/systems/SpacePartitionSystem.h"
-#include "resources/systems/EnvironmentSystem.h"
+#include "resources/systems/EnvironmentSystem/EnvironmentSystem.h"
 
 #include "resources/scene/GameScene.h"
 #include "resources/entities/ParticlesEmitter.h"
