@@ -706,14 +706,14 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
 
-	DisableVSync(false);
+	EnableVSync(true);
 
 	return true;
 }
 
-void RenderSystem::DisableVSync(bool enable)
+void RenderSystem::EnableVSync(bool enable)
 {
-	glfwSwapInterval(enable ? 0 : 1);
+	glfwSwapInterval(enable ? 1 : 0);
 }
 
 void RenderSystem::CreateResourcesLibraries()

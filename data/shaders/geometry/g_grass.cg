@@ -9,7 +9,8 @@ layout(triangle_strip, max_vertices = 8) out;
 out vec2 textureCoords;
 out float fogVisibility;
 out vec4 shadowCoords;
-//out vec4 outColor;
+out vec4 outColor;
+out float alphaFactor;
 
 uniform mat4 P;
 uniform mat4 V;
@@ -27,6 +28,9 @@ uniform sampler2D textureWind;
 
 const float shadowDistance = 10.0;
 const float transitionDistance = 20.0;
+const float AFFECTED_BY_WIND_RADIUS = 6.0;
+const float FAR_DISTANCE_CLIPPING = 10.0;
+const float FOG_DENSITY_MULTIPLIER = 2.5;
 
 void createVertex(vec3 offset, vec2 coordText)
 {
@@ -34,7 +38,7 @@ void createVertex(vec3 offset, vec2 coordText)
 	vec4 worldPosition = (gl_in[0].gl_Position + actualOffset);
 	vec4 positionWorldspace = Mout[0] * worldPosition;
 	shadowCoords = toShadowMapSpace * positionWorldspace;
-	vec4 positionRelativeToCamera = V * Mout[0] * positionWorldspace;
+	vec4 positionRelativeToCamera = V * positionWorldspace;
 	gl_Position = P * positionRelativeToCamera;
 
 	//texture
@@ -52,8 +56,31 @@ void createVertex(vec3 offset, vec2 coordText)
 	EmitVertex();
 }
 
+vec3 calculateWindVector(float patchSize)
+{
+	vec2 coord = vec2(gl_in[0].gl_Position.x, gl_in[0].gl_Position.z) + vec2(patchSize * 0.5, patchSize * 0.5);
+	coord = coord * 1.0 / patchSize;
+	coord = coord * vec2(cos(timer + 4), sin(timer * 3 + 10));
+
+	vec3 wind = texture2D(textureWind, coord).bgr * 2.0 - 1.0;
+	//wind.x = min(max(-0.3, wind.x), 0.3);
+	//wind.z = min(max(-0.3, wind.z), 0.3);
+	wind.y = 0.8;
+	wind = normalize(wind);
+	return wind;
+}
+
 void main()
 {
+	vec4 positionRelativeToCamera = V * Mout[0] * gl_in[0].gl_Position;
+	float distance = length(positionRelativeToCamera);
+	//clipping
+	if(distance < 0.0 || distance > FAR_DISTANCE_CLIPPING)
+	{
+		//outColor = vec4(0,0,1,1);
+				return;
+	}
+
 	float x = size.x * 0.5 * scale[0];
 	float h = size.y * 0.5 * scale[0];
 	
@@ -65,16 +92,22 @@ void main()
 	float zr = -x * s;
 	float xr2 = -xr;
 	float zr2 = -zr;
-	
-	float patchSize = 10.0;
 
-	vec2 coord = vec2(gl_in[0].gl_Position.x, gl_in[0].gl_Position.z) + vec2(patchSize * 0.5, patchSize * 0.5);
-	coord = coord * 1.0 / patchSize;
-	coord = coord * vec2(0.0, timer * 1.0);
-
-	vec3 newWind = texture2D(textureWind, coord).bgr * 2.0 - 1.0;
-	newWind = normalize(newWind) * h;
+	vec3 newWind = vec3(0.0, 1.0, 0.0) * h;
 	
+	if(distance < AFFECTED_BY_WIND_RADIUS)
+	{
+		newWind = calculateWindVector(10.0) * h;	
+		//outColor = vec4(0,1,0,1);
+	}
+	//else
+	//{
+		//outColor = vec4(1,0,0,1);
+	//}
+	
+	
+	alphaFactor = clamp(exp(-pow(distance * fogDensity * FOG_DENSITY_MULTIPLIER, fogGradient)), 0.0, 1.0);
+
 	createVertex(vec3(xr, 0.0, zr) + newWind, vec2(0.0, 1.0));
 	createVertex(vec3(xr, 0.0, zr), vec2(0.0, 0.0));
 	createVertex(vec3(xr2, 0.0, zr2) + newWind, vec2(1.0, 1.0));

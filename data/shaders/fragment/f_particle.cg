@@ -19,10 +19,9 @@ vec4 ApplyFog(vec4 color)
 	return mix(vec4(fogColor, color.a), color, fogVisibility);
 }
 */
-void main()
-{	
-	//vec2 ndc = (clipSpace.xy / clipSpace.w) / 2.0 + 0.5;
-	
+
+float ApplySoftParticle(float alphaColor)
+{
 	float near = 0.1;
 	float far = 1000.0f;
 	
@@ -33,17 +32,23 @@ void main()
 	depth = gl_FragCoord.z;
 	float particleDistance = 2.0 * near * far /( far + near - (2.0 * depth - 1.0) * (far - near));
 	float particleDepth = clamp((floorDistance - particleDistance)/20.0, 0.0, 1.0);
-	
-	vec4 textureColor = texture2D(texture, textureCoords * tile);
-	
-	color = (textureColor + vec4(luminiscence.r, luminiscence.g, luminiscence.b, textureColor.a) )* luminiscence.a;
 
-	//we want the alpha goes to 0.0 when the particledepth is lower than 0.01 and then we apply a alpha decrease from current color.a to 0.0
 	float limit = 0.01;
 	if(particleDepth > 0.0 && particleDepth < limit)
 	{
-		color.a = mix(0.0, color.a, particleDepth / limit);
+		alphaColor = mix(0.0, alphaColor, particleDepth / limit);
 	}
+	return alphaColor;
+}
+
+void main()
+{	
+	//vec2 ndc = (clipSpace.xy / clipSpace.w) / 2.0 + 0.5;
+	
+	vec4 textureColor = texture2D(texture, textureCoords * tile);
+	color = (textureColor + vec4(luminiscence.r, luminiscence.g, luminiscence.b, textureColor.a) )* luminiscence.a;
+	color.a = ApplySoftParticle(color.a);
+
 	//color = ApplyFog(color);
 }
 

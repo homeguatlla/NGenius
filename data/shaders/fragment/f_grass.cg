@@ -1,25 +1,22 @@
 #version 330 core
 
 in vec2 textureCoords;
-in float fogVisibility;
 in vec4 shadowCoords;
 
 uniform sampler2D texture;
 uniform vec3 fogColor;
 
 uniform sampler2D shadowMap;
+uniform sampler2D depthTexture;
 uniform int shadowMapSize;
 uniform int pfcCount;
-//in vec4 outColor;
+uniform vec2 screenSize;
+
+in vec4 outColor;
+in float alphaFactor;
 out vec4 color;
 
 float totalTexelsShadow = (pfcCount * 2.0 + 1.0) * (pfcCount * 2.0 + 1.0);
-
-
-vec4 ApplyFog(vec4 color)
-{
-	return mix(vec4(fogColor, 1.0f), color, fogVisibility);
-}
 
 float ApplyShadow(int pfcCount, float totalTexels)
 {
@@ -30,10 +27,12 @@ float ApplyShadow(int pfcCount, float totalTexels)
 	for(int x = -pfcCount; x <= pfcCount; x++) {
 		for(int y = -pfcCount; y <= pfcCount; y++) {
 			float objectNearestLight = texture2D(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
-			if(objectNearestLight < shadowCoords.z - bias)
+
+			total += step(objectNearestLight, shadowCoords.z - bias);
+			/*if(objectNearestLight < shadowCoords.z - bias)
 			{
 				total += 1.0;
-			}
+			}*/
 		}
 	}
 	total /= totalTexelsShadow;
@@ -42,9 +41,30 @@ float ApplyShadow(int pfcCount, float totalTexels)
 	return shadowFactor;
 }
 
+float ApplySoftParticle(float alphaColor)
+{
+	float near = 0.1;
+	float far = 1000.0f;
+	
+	//calculate the depth texture value from the pixel we are rendering (the depth texture is a texture of 1024 x 768)	
+	float depth = texture2D(depthTexture, vec2(gl_FragCoord.x, gl_FragCoord.y) * 1.0/screenSize).r;
+	float floorDistance = 2.0 * near * far /( far + near - (2.0 * depth - 1.0) * (far - near));
+	
+	depth = gl_FragCoord.z;
+	float particleDistance = 2.0 * near * far /( far + near - (2.0 * depth - 1.0) * (far - near));
+	float particleDepth = clamp((floorDistance - particleDistance)/20.0, 0.0, 1.0);
+
+	float limit = 0.01;
+	if(particleDepth > -0.001 && particleDepth < limit)
+	{
+		alphaColor = mix(0.0, alphaColor, particleDepth / limit);
+	}
+	return alphaColor;
+}
+
 void main()
 {
-	int newPfcCount = 1; 
+	int newPfcCount = 0; 
     float shadowFactor = ApplyShadow(pfcCount, totalTexelsShadow);
 	vec4 MaterialDiffuseColor = shadowFactor * texture2D(texture, textureCoords);
 
@@ -53,8 +73,7 @@ void main()
 		discard;
 	}
 	color = MaterialDiffuseColor;
-
-	color = ApplyFog(color);
-	color.a *= textureCoords.y * 2.0;
+	//color.a = ApplySoftParticle(color.a);
+	color.a *= textureCoords.y * 2.0 * alphaFactor;
 	//color = outColor;
 }

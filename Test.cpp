@@ -140,7 +140,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = FLAT;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -151,8 +151,8 @@ int muevej[] = { 0, 1, 0, -1 };
 
 
 const float Pi = 3.141592f;
-
-float mWaterHeight = 8.2f * TERRAIN_SCALE / 15.0f;
+const float WaterFloor = 8.2f * TERRAIN_SCALE / 15.0f;
+float mWaterHeight = WaterFloor;
 
 bool mIsDebugModeEnabled = false;
 bool mIsWaterEnabled = true;
@@ -190,7 +190,7 @@ GameScene* mScene;
 EnergyWall* mEnergyWall;
 
 
-float mFogDensity = 0.04f;
+float mFogDensity = 0.08f;
 const float mFogGradient = 1.5f;
 glm::vec3 mFogColor = vec3(89.0f, 120.0f, 143.0f) / 255.0f;
 //red glm::vec3 mFogColor = vec3(218.0f, 74.0f, 43.0f) / 255.0f; 
@@ -556,35 +556,43 @@ void CreatePoints()
 	IShaderProgram* shader = mEngine.GetShader("grass");
 	IMaterial* material = mEngine.CreateMaterial("grass2_material", shader);
 
-	material->AddEffect(new MaterialEffectDiffuseTexture(	static_cast<Texture*>(mEngine.GetTexture("grass2")), 
-															glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
 	material->AddEffect(new MaterialEffectShadowProperties());
 	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
 	material->AddEffect(new MaterialEffectFloat(0.0));
+	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(mEngine.GetTexture("grass2")),
+		mEngine.GetTexture("depth_texture"),
+		glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight()),
+		1.0f)
+	);
 
 	Texture* windTexture = static_cast<Texture*>(mEngine.GetTexture("wind_texture"));
 	material->AddEffect(new MaterialEffectNormalTexture(windTexture, 1.0f));
 
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
-												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 5.0f, 5.0f, 50.0f);
+												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 50.0f, 50.0f, 200.0f);
 
 	pointsPatch->AddComponent(new EnvironmentAffectedComponent());
 	mScene->AddEntity(pointsPatch);
 	/*
 	material = mEngine.CreateMaterial("grass3_material", shader);
-
-	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("grass3")),
-						glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
-	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 5.0f)));
+	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
+	material->AddEffect(new MaterialEffectShadowProperties());
 	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
+	material->AddEffect(new MaterialEffectFloat(0.0));
+	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(mEngine.GetTexture("grass3")),
+		mEngine.GetTexture("depth_texture"),
+		glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight()),
+		1.0f)
+	);
 
-	pointsPatch = new PointsPatch(	new Transformation(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
-									material, mTerrain, mWaterHeight - 0.1f, mWaterHeight + 0.2f, 1.0f, 1.0f, 50.0f);
+	pointsPatch = new PointsPatch(	new Transformation(glm::vec3(5.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
+									material, mTerrain, mWaterHeight - 0.1f, mWaterHeight + 0.2f, 5.0f, 5.0f, 50.0f);
 	pointsPatch->AddComponent(new EnvironmentAffectedComponent());
-	mScene->AddEntity(pointsPatch);*/
+	mScene->AddEntity(pointsPatch);
+	*/
 }
 
 void CreateProps()
@@ -1522,18 +1530,18 @@ void SetupConfiguration()
 	{
 	case DEBUG:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
+		mIsWaterEnabled = true;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
 		mIsVegetationEnabled = true;
-		mIsPropsEnabled = false;
-		mIsEnergyWallEnabled = false;
+		mIsPropsEnabled = true;
+		mIsEnergyWallEnabled = true;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
-		mIsShadowEnabled = true;
+		mIsShadowEnabled = false;
 		break;
 	case SHADOWS:
 		mIsDebugModeEnabled = true;
@@ -1639,11 +1647,12 @@ void SetupConfiguration()
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
-		mIsTextEnabled = false;
+		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = true;
 		mIsFullScreen = false;
+		mWaterHeight = 0.0f;
 		break;
 	case QUADTREE:
 		mIsDebugModeEnabled = true;

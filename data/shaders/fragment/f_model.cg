@@ -55,10 +55,12 @@ float ApplyShadow(int pfcCount, float totalTexels)
 	for(int x = -pfcCount; x <= pfcCount; x++) {
 		for(int y = -pfcCount; y <= pfcCount; y++) {
 			float objectNearestLight = texture2D(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
-			if(objectNearestLight < shadowCoords.z - bias)
+
+			total += step(objectNearestLight, shadowCoords.z - bias);
+			/*if(objectNearestLight < shadowCoords.z - bias)
 			{
 				total += 1.0;
-			}
+			}*/
 		}
 	}
 	total /= totalTexelsShadow;

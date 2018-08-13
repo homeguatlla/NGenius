@@ -29,6 +29,9 @@ class GrassShader : public IShaderProgram
 	int mLocationTimer;
 	int mLocationWindDirections;
 
+	int mLocationDepthTexture;
+	int mLocationScreenSize;
+
 public:
 	GrassShader();
 	~GrassShader();

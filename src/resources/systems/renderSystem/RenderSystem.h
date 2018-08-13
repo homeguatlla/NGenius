@@ -142,7 +142,7 @@ private:
 	void DestroySubSystems();
 
 	bool InitializeWindowAndOpenGL(const std::string& applicationName, bool isFullscreen);
-	void DisableVSync(bool enable);
+	void EnableVSync(bool enable);
 	GLFWmonitor* GetCurrentMonitor(float* screenWidth, float* screenHeight);
 
 	void LoadResources();

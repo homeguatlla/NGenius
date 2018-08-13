@@ -80,5 +80,12 @@ void main()
 	color = mix(reflectionColor, refractionColor, reflectionFresnelFactor);
 	color = mix(refractionColor,  color, depthFactor);
 	color = mix(color, waterColor, 0.2) + vec4(specularColor, 1.0);
+	/*if(depthFactor < 0.05)
+	{
+		float factor = (1.0 -(depthFactor/0.05));
+		color.r += factor;
+		color.a = factor;
+		//TODO aplicar textura de foam
+	}*/
 	//color = ApplyFog(color);
 }

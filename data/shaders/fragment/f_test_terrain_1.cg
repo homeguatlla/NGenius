@@ -184,10 +184,11 @@ float ApplyShadow(int pfcCount, float totalTexels)
 	for(int x = -pfcCount; x <= pfcCount; x++) {
 		for(int y = -pfcCount; y <= pfcCount; y++) {
 			float objectNearestLight = texture(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
-			if(objectNearestLight < shadowCoords.z - bias)
+			total += step(objectNearestLight, shadowCoords.z - bias);
+			/*if(objectNearestLight < shadowCoords.z - bias)
 			{
 				total += 1.0;
-			}
+			}*/
 		}
 	}
 	total /= totalTexelsShadow;
@@ -202,19 +203,17 @@ void main() {
 	vec4 blendmapColor = texture(blendMap, textureCoords.xy);
 	vec2 tiledTextureCoords = textureCoords * tile;
 	
-
+	/*
 	vec4 rTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 0)) * blendmapColor.r;
 	vec4 gTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 1)) * blendmapColor.g;
 	vec4 bTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 2)) * blendmapColor.b;
 	vec4 aTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 3)) * max(0.0f, (1.0f -  (blendmapColor.r +  blendmapColor.g +  blendmapColor.b)));
-	
-	/*
+	*/
+
 	vec4 rTextureColor = texture(textureArray, vec3(tiledTextureCoords, 0)) * blendmapColor.r;
 	vec4 gTextureColor = texture(textureArray, vec3(tiledTextureCoords, 1)) * blendmapColor.g;
 	vec4 bTextureColor = texture(textureArray, vec3(tiledTextureCoords, 2)) * blendmapColor.b;
 	vec4 aTextureColor = texture(textureArray, vec3(tiledTextureCoords, 3)) * max(0.0f, (1.0f -  (blendmapColor.r +  blendmapColor.g +  blendmapColor.b)));
-	*/
-
 
 	// Material properties
 	vec3 MaterialDiffuseColor = shadowFactor * (rTextureColor.rgb + gTextureColor.rgb + bTextureColor.rgb + aTextureColor.rgb) * lightColor;

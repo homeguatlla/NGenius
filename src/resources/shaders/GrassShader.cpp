@@ -3,13 +3,13 @@
 #include "../Transformation.h"
 #include "../camera/ICamera.h"
 #include "../materials/IMaterial.h"
-#include "../materials/effects/MaterialEffectDiffuseTexture.h"
 #include "../materials/effects/MaterialEffectNormalTexture.h"
 #include "../materials/effects/MaterialEffectFogProperties.h"
 #include "../materials/effects/MaterialEffectFloat.h"
 #include "../materials/effects/MaterialEffectFloat2.h"
 #include "../materials/effects/MaterialEffectShadowProperties.h"
 #include "../materials/effects/MaterialEffectFloat3.h"
+#include "../materials/effects/MaterialEffectParticle.h"
 #include "../textures/ITexture.h"
 
 
@@ -40,6 +40,9 @@ const std::string ATTRIBUTE_SPEED("wind");
 const std::string ATTRIBUTE_TIMER("timer");
 const std::string ATTRIBUTE_TEXTURE_WIND("textureWind");
 
+const std::string ATTRIBUTE_DEPTH_TEXTURE("depthTexture");
+const std::string ATTRIBTUTE_SCREEN_SIZE("screenSize");
+
 GrassShader::GrassShader() :
 	IShaderProgram(VERTEX_FILE, FRAGMENT_FILE, GEOMETRY_FILE),
 	mLocationModelMatrix(-1),
@@ -57,7 +60,9 @@ GrassShader::GrassShader() :
 	mLocationShadowMapPFC(-1),
 	mLocationSpeed(-1),
 	mLocationTimer(-1),
-	mLocationWindDirections(-1)
+	mLocationWindDirections(-1),
+	mLocationDepthTexture(-1),
+	mLocationScreenSize(-1)
 {
 }
 
@@ -71,13 +76,6 @@ void GrassShader::LoadData(const ICamera* camera, const Transformation* transfor
 	LoadMatrix4(mLocationModelMatrix, const_cast<Transformation*>(transformation)->GetModelMatrix());
 	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
 	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
-
-	MaterialEffectDiffuseTexture* effectDiffuse = material->GetEffect<MaterialEffectDiffuseTexture>();
-	if (effectDiffuse != nullptr)
-	{
-		LoadTexture(mLocationTexture, effectDiffuse->GetDiffuseTexture()->GetUnit());
-		LoadFloat(mLocationTile, effectDiffuse->GetTile());
-	}
 
 	MaterialEffectNormalTexture* effectWindDirections = material->GetEffect<MaterialEffectNormalTexture>();
 	if (effectWindDirections != nullptr)
@@ -119,6 +117,14 @@ void GrassShader::LoadData(const ICamera* camera, const Transformation* transfor
 	{
 		LoadFloat(mLocationTimer, effectTimer->GetValue());
 	}
+	MaterialEffectParticle* effectParticle = material->GetEffect<MaterialEffectParticle>();
+	if (effectParticle != nullptr)
+	{
+		LoadTexture(mLocationTexture, effectParticle->GetTexture()->GetUnit());
+		LoadFloat(mLocationTile, effectParticle->GetTile());
+		LoadTexture(mLocationDepthTexture, effectParticle->GetDepthTexture()->GetUnit());
+		LoadVector2(mLocationScreenSize, effectParticle->GetScreenSize());
+	}
 }
 
 void GrassShader::BindAttributes()
@@ -150,4 +156,7 @@ void GrassShader::GetAllUniformLocations()
 
 	mLocationTimer = GetUniformLocation(ATTRIBUTE_TIMER);
 	mLocationWindDirections = GetUniformLocation(ATTRIBUTE_TEXTURE_WIND);
+
+	mLocationDepthTexture = GetUniformLocation(ATTRIBUTE_DEPTH_TEXTURE);
+	mLocationScreenSize = GetUniformLocation(ATTRIBTUTE_SCREEN_SIZE);
 }

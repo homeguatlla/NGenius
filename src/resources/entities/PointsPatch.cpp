@@ -22,9 +22,12 @@ PointsPatch::PointsPatch(Transformation* transformation, IMaterial* material, co
 
 	Create();
 
-	SetRenderer(new PointsRenderer(mModel, material));
-	GetRenderer()->SetCullingEnabled(false);
-	GetRenderer()->SetTransparency(true);
+	if (mModel != nullptr)
+	{
+		SetRenderer(new PointsRenderer(mModel, material));
+		GetRenderer()->SetCullingEnabled(false);
+		GetRenderer()->SetTransparency(true);
+	}
 }
 
 
@@ -38,21 +41,23 @@ void PointsPatch::Create()
 	std::vector<glm::vec2> uv;
 	std::vector<unsigned int> indices;
 
-	int numPoints = static_cast<int>((mWide * mLength) * mDensity);
-	for (int point = 0; point < numPoints; ++point)
+	unsigned int numPoints = static_cast<int>((mWide * mLength) * mDensity);
+	for (unsigned int point = 0; point < numPoints; ++point)
 	{
 		float x = -mWide * 0.5f + (rand() % 1000) * (mWide / 1000.0f);
 		float z = -mLength * 0.5f +(rand() % 1000) * (mLength / 1000.0f);
 		float y = mTerrain->GetHeight(glm::vec2(x, z));
-		//if (y > mHeightMin && y < mHeightMax)
+		if (y >= mHeightMin && y <= mHeightMax)
 		{
 			vertexs.push_back(glm::vec3(x, y, z));
 			float rotationY = rand() % 360;
-			float scale = 0.8f + (rand() % 10) * (0.4f / 10.0f);
+			float scale = 0.4f + (rand() % 10) * (0.4f / 10.0f);
 			uv.push_back(glm::vec2(glm::radians(rotationY), scale * 0.1));
 		}
 	}
-
-	mModel = new Model(new Mesh(vertexs, uv, indices));
+	if (vertexs.size() > 0)
+	{
+		mModel = new Model(new Mesh(vertexs, uv, indices));
+	}
 }
 

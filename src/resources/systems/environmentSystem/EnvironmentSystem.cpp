@@ -35,16 +35,19 @@ void EnvironmentSystem::Update(float deltaTime)
 	
 	for (GameEntity* entity : mEntities)
 	{
-		IMaterial* material = entity->GetRenderer()->GetMaterial();
-		MaterialEffectFloat3* effectWind = material->GetEffect<MaterialEffectFloat3>();
-		if (effectWind != nullptr)
+		if (entity->GetRenderer() != nullptr)
 		{
-			//effectWind->SetValue(mSpeed * glm::vec3(1.0f, 0.0f, 0.0f));
-		}
-		MaterialEffectFloat* effectTimer = material->GetEffect<MaterialEffectFloat>();
-		if (effectTimer != nullptr)
-		{
-			effectTimer->SetValue(mTimer);
+			IMaterial* material = entity->GetRenderer()->GetMaterial();
+			MaterialEffectFloat3* effectWind = material->GetEffect<MaterialEffectFloat3>();
+			if (effectWind != nullptr)
+			{
+				//effectWind->SetValue(mSpeed * glm::vec3(1.0f, 0.0f, 0.0f));
+			}
+			MaterialEffectFloat* effectTimer = material->GetEffect<MaterialEffectFloat>();
+			if (effectTimer != nullptr)
+			{
+				effectTimer->SetValue(glm::sin(mTimer * 0.05f));
+			}
 		}
 	}
 }
