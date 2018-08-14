@@ -15,7 +15,7 @@
 #include "../../textures/ITexture.h"
 #include "../../textures/Texture.h"
 
-static const int SHADOWS_TEXTURE_SIZE = 4096;
+static const int SHADOWS_TEXTURE_SIZE = 2048;
 
 ShadowsRenderPassSubSystem::ShadowsRenderPassSubSystem(RenderSystem* renderSystem, float screenWidth, float screenHeight) :
 mRenderSystem(renderSystem),

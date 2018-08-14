@@ -9,6 +9,7 @@ in vec4 shadowCoords;
 //in vec3 lightPosition;
 
 in vec3 normal;
+in float distanceToCamera;
 
 uniform sampler2D texture;
 uniform sampler2D normalmap;
@@ -19,6 +20,7 @@ uniform int pfcCount;
 out vec4 color;
 
 float totalTexelsShadow = (pfcCount * 2.0 + 1.0) * (pfcCount * 2.0 + 1.0);
+const float FAR_DISTANCE_CLIPPING = 25.0;
 
 vec4 ApplyLight(vec3 ambient, vec3 materialDiffuse, vec3 materialSpecular)
 {
@@ -70,6 +72,10 @@ float ApplyShadow(int pfcCount, float totalTexels)
 
 void main()
 {
+	if(distanceToCamera < 0.0 || distanceToCamera > FAR_DISTANCE_CLIPPING)
+	{
+		discard;
+	}
 	// Material properties
 	float shadowFactor = ApplyShadow(pfcCount, totalTexelsShadow);
 	vec4 MaterialDiffuseColor = shadowFactor * texture2D(texture, textureCoords);

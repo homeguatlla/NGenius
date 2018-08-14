@@ -30,7 +30,7 @@ const float shadowDistance = 10.0;
 const float transitionDistance = 20.0;
 const float AFFECTED_BY_WIND_RADIUS = 6.0;
 const float FAR_DISTANCE_CLIPPING = 10.0;
-const float FOG_DENSITY_MULTIPLIER = 2.5;
+const float FOG_DENSITY_MULTIPLIER = 4.5;
 
 void createVertex(vec3 offset, vec2 coordText)
 {

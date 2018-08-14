@@ -11,6 +11,7 @@ out vec3 eyeDirection;
 out vec3 lightDirection;
 out vec3 positionWorldspace;
 out float fogVisibility;
+out float distanceToCamera;
 
 out vec3 normal;
 out vec4 shadowCoords;
@@ -51,11 +52,11 @@ void main()
 	eyeDirection = toTangentSpace * normalize(cameraPosition - positionWorldspace);
 
 	//fog
-	float distance = length(positionRelativeToCamera);
-	fogVisibility = clamp(exp(-pow(distance * fogDensity, fogGradient)), 0.0, 1.0);
+	distanceToCamera = length(positionRelativeToCamera);
+	fogVisibility = clamp(exp(-pow(distanceToCamera * fogDensity, fogGradient)), 0.0, 1.0);
 
 	//shadow
-	distance = distance - (shadowDistance - transitionDistance);
+	float distance = distanceToCamera - (shadowDistance - transitionDistance);
 	distance = distance / transitionDistance;
 	shadowCoords.w = clamp(1.0 - distance, 0.0, 1.0);
 }
