@@ -203,17 +203,18 @@ void main() {
 	vec4 blendmapColor = texture(blendMap, textureCoords.xy);
 	vec2 tiledTextureCoords = textureCoords * tile;
 	
-	/*
+	
 	vec4 rTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 0)) * blendmapColor.r;
 	vec4 gTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 1)) * blendmapColor.g;
 	vec4 bTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 2)) * blendmapColor.b;
 	vec4 aTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 3)) * max(0.0f, (1.0f -  (blendmapColor.r +  blendmapColor.g +  blendmapColor.b)));
-	*/
-
+	
+	/*
 	vec4 rTextureColor = texture(textureArray, vec3(tiledTextureCoords, 0)) * blendmapColor.r;
 	vec4 gTextureColor = texture(textureArray, vec3(tiledTextureCoords, 1)) * blendmapColor.g;
 	vec4 bTextureColor = texture(textureArray, vec3(tiledTextureCoords, 2)) * blendmapColor.b;
 	vec4 aTextureColor = texture(textureArray, vec3(tiledTextureCoords, 3)) * max(0.0f, (1.0f -  (blendmapColor.r +  blendmapColor.g +  blendmapColor.b)));
+	*/
 
 	// Material properties
 	vec3 MaterialDiffuseColor = shadowFactor * (rTextureColor.rgb + gTextureColor.rgb + bTextureColor.rgb + aTextureColor.rgb) * lightColor;
