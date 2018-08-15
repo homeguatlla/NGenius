@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <glm/glm.hpp>
 
 class IMaterial;
@@ -33,6 +34,7 @@ public:
 	void LoadMatrix4(int location, const glm::mat4& value);
 	void LoadTexture(int location, int unit);
 	void LoadInteger(int location, int value);
+	void LoadVector3Array(int location, std::vector<glm::vec3>& values);
 
 	virtual void BindAttributes() = 0;
 	virtual void GetAllUniformLocations() = 0;

@@ -24,10 +24,11 @@ uniform mat4 toShadowMapSpace;
 
 uniform float timer;
 uniform sampler2D textureWind;
+uniform vec3 windModificators[1];
 
 const float shadowDistance = 10.0;
 const float transitionDistance = 20.0;
-const float AFFECTED_BY_WIND_RADIUS = 6.0;
+const float AFFECTED_BY_WIND_RADIUS = 10.0;
 const float FAR_DISTANCE_CLIPPING = 10.0;
 const float FOG_DENSITY_MULTIPLIER = 4.5;
 
@@ -69,6 +70,29 @@ vec3 calculateWindVector(float patchSize)
 	return wind;
 }
 
+vec3 calculateModificatorsWindVector()
+{
+	bool modified = false;
+	vec3 modification = vec3(0.0, 0.0, 0.0);
+
+	for(int modificator = 0; modificator < 1; modificator++)
+	{
+		vec3 direction = gl_in[0].gl_Position.xyz -  windModificators[modificator];
+		float distance = length(direction);
+		if(distance < 0.4)
+		{
+			modification += (direction * 10.0 / distance);
+			modified = true;
+		}
+	}
+	if(modified)
+	{
+		modification = normalize(modification);
+	}
+	modification.y = max(0.0, modification.y);
+	return modification;
+}
+
 void main()
 {
 	vec4 positionRelativeToCamera = V * Mout[0] * gl_in[0].gl_Position;
@@ -96,13 +120,15 @@ void main()
 	
 	if(distance < AFFECTED_BY_WIND_RADIUS)
 	{
-		newWind = calculateWindVector(10.0) * h;	
-		//outColor = vec4(0,1,0,1);
+		newWind = calculateWindVector(10.0);
+		newWind += calculateModificatorsWindVector();
+		newWind *= h;
+		//outColor = vec4(newWind.x,newWind.y,newWind.z,1);
 	}
-	//else
-	//{
+	else
+	{
 		//outColor = vec4(1,0,0,1);
-	//}
+	}
 	
 	
 	alphaFactor = clamp(exp(-pow(distance * fogDensity * FOG_DENSITY_MULTIPLIER, fogGradient)), 0.0, 1.0);

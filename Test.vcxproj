@@ -187,6 +187,7 @@
     <ClInclude Include="src\resources\components\DebugComponent.h" />
     <ClInclude Include="src\resources\components\EnergyWallCollisionComponent.h" />
     <ClInclude Include="src\resources\components\EnvironmentAffectedComponent.h" />
+    <ClInclude Include="src\resources\components\EnvironmentModificatorComponent.h" />
     <ClInclude Include="src\resources\components\IComponent.h" />
     <ClInclude Include="src\resources\components\InputComponent.h" />
     <ClInclude Include="src\resources\components\LODComponent.h" />
@@ -225,6 +226,7 @@
     <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat2.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat3.h" />
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat3Array.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat4.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectFogProperties.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectHeightMapTexture.h" />
@@ -334,6 +336,7 @@
     <ClCompile Include="src\resources\components\DebugComponent.cpp" />
     <ClCompile Include="src\resources\components\EnergyWallCollisionComponent.cpp" />
     <ClCompile Include="src\resources\components\EnvironmentAffectedComponent.cpp" />
+    <ClCompile Include="src\resources\components\EnvironmentModificatorComponent.cpp" />
     <ClCompile Include="src\resources\components\IComponent.cpp" />
     <ClCompile Include="src\resources\components\InputComponent.cpp" />
     <ClCompile Include="src\resources\components\LODComponent.cpp" />
@@ -372,6 +375,7 @@
     <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat2.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat3.cpp" />
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat3Array.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat4.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectFogProperties.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectHeightMapTexture.cpp" />

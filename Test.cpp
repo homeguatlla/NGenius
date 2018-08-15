@@ -67,6 +67,7 @@
 #include "src/resources/materials/effects/MaterialEffectDepthTexture.h"
 #include "src/resources/materials/effects/MaterialEffectFloat2.h"
 #include "src/resources/materials/effects/MaterialEffectFloat3.h"
+#include "src/resources/materials/effects/MaterialEffectFloat3Array.h"
 
 #include "src/resources/entities/Terrain.h"
 #include "src/resources/entities/Player.h"
@@ -102,6 +103,7 @@
 #include "src/resources/components/DebugComponent.h"
 #include "src/resources/components/SpacePartitionComponent.h"
 #include "src/resources/components/EnvironmentAffectedComponent.h"
+#include "src/resources/components/EnvironmentModificatorComponent.h"
 
 #include "src/resources/command/ICommand.h"
 #include "src/resources/command/commands/RiseTerrainCommand.h"
@@ -140,7 +142,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = FLAT;
+Configuration mConfiguration = RELEASE;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -560,6 +562,7 @@ void CreatePoints()
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
 	material->AddEffect(new MaterialEffectShadowProperties(0));
 	material->AddEffect(new MaterialEffectFloat(0.0));
+	material->AddEffect(new MaterialEffectFloat3Array());
 	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(mEngine.GetTexture("grass2")),
 		mEngine.GetTexture("depth_texture"),
 		glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight()),
@@ -570,9 +573,11 @@ void CreatePoints()
 	material->AddEffect(new MaterialEffectNormalTexture(windTexture, 1.0f));
 
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
-												material, mTerrain, mWaterHeight /*+ 0.2f*/, mWaterHeight + 0.8f, 50.0f, 50.0f, 200.0f);
+												material, mTerrain, mWaterHeight /*+ 0.2f*/, mWaterHeight + 0.8f, 50.0f, 50.0f, 100.0f);
 
-	pointsPatch->AddComponent(new EnvironmentAffectedComponent());
+	EnvironmentAffectedComponent* environmentComponent = new EnvironmentAffectedComponent();
+	environmentComponent->SetAffectedByWind(true);
+	pointsPatch->AddComponent(environmentComponent);
 	mScene->AddEntity(pointsPatch);
 	
 	/*material = mEngine.CreateMaterial("grass3_material", shader);
@@ -589,7 +594,9 @@ void CreatePoints()
 
 	pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 									material, mTerrain, mWaterHeight - 0.1f, mWaterHeight + 0.2f, 50.0f, 50.0f, 50.0f);
-	pointsPatch->AddComponent(new EnvironmentAffectedComponent());
+	environmentComponent = new EnvironmentAffectedComponent();
+	environmentComponent->SetAffectedByWind(true);
+	pointsPatch->AddComponent(environmentComponent);
 	mScene->AddEntity(pointsPatch);*/
 }
 
@@ -883,7 +890,7 @@ void CreateTextTest()
 			texts[i], false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
 		mScene->AddEntity(mText[i]);
 	}
-	float x = 0.0f;
+	/*float x = 0.0f;
 	float z = 0.0f;
 	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
 
@@ -900,7 +907,7 @@ void CreateTextTest()
 	Text* mTestText = new Text(	new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.01f)),
 								material3D, font,
 								"Origin", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
-	mScene->AddEntity(mTestText);
+	mScene->AddEntity(mTestText);*/
 	/*
 	x = 10.0f;
 	z = 10.0f;
@@ -984,6 +991,7 @@ void CreatePlayer()
 	mPlayer->AddComponent(new EnergyWallCollisionComponent());
 	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	mPlayer->AddComponent(new DebugComponent(boundingBoxRenderer));
+	mPlayer->AddComponent(new EnvironmentModificatorComponent());
 	mScene->AddEntity(mPlayer);
 }
 

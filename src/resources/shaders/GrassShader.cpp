@@ -8,7 +8,7 @@
 #include "../materials/effects/MaterialEffectFloat.h"
 #include "../materials/effects/MaterialEffectFloat2.h"
 #include "../materials/effects/MaterialEffectShadowProperties.h"
-#include "../materials/effects/MaterialEffectFloat3.h"
+#include "../materials/effects/MaterialEffectFloat3Array.h"
 #include "../materials/effects/MaterialEffectParticle.h"
 #include "../textures/ITexture.h"
 
@@ -42,6 +42,8 @@ const std::string ATTRIBUTE_TEXTURE_WIND("textureWind");
 const std::string ATTRIBUTE_DEPTH_TEXTURE("depthTexture");
 const std::string ATTRIBTUTE_SCREEN_SIZE("screenSize");
 
+const std::string ATTRIBUTE_WIND_MODIFICATORS_ARRAY("windModificators");
+
 GrassShader::GrassShader() :
 	IShaderProgram(VERTEX_FILE, FRAGMENT_FILE, GEOMETRY_FILE),
 	mLocationModelMatrix(-1),
@@ -60,7 +62,8 @@ GrassShader::GrassShader() :
 	mLocationTimer(-1),
 	mLocationWindDirections(-1),
 	mLocationDepthTexture(-1),
-	mLocationScreenSize(-1)
+	mLocationScreenSize(-1),
+	mLocationWindModificatorsArray(-1)
 {
 }
 
@@ -117,6 +120,12 @@ void GrassShader::LoadData(const ICamera* camera, const Transformation* transfor
 		LoadTexture(mLocationDepthTexture, effectParticle->GetDepthTexture()->GetUnit());
 		LoadVector2(mLocationScreenSize, effectParticle->GetScreenSize());
 	}
+
+	MaterialEffectFloat3Array* effectModificators = material->GetEffect<MaterialEffectFloat3Array>();
+	if (effectModificators != nullptr)
+	{
+		LoadVector3Array(mLocationWindModificatorsArray, effectModificators->GetValues());
+	}
 }
 
 void GrassShader::BindAttributes()
@@ -149,4 +158,6 @@ void GrassShader::GetAllUniformLocations()
 
 	mLocationDepthTexture = GetUniformLocation(ATTRIBUTE_DEPTH_TEXTURE);
 	mLocationScreenSize = GetUniformLocation(ATTRIBTUTE_SCREEN_SIZE);
+
+	mLocationWindModificatorsArray = GetUniformLocation(ATTRIBUTE_WIND_MODIFICATORS_ARRAY);
 }
