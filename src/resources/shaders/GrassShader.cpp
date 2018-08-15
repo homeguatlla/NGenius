@@ -36,7 +36,6 @@ const std::string ATTRIBUTE_SHADOW_TEXTURE("shadowMap");
 const std::string ATTRIBUTE_SHADOW_TEXTURE_WIDTH("shadowMapSize");
 const std::string ATTRIBUTE_SHADOW_PFC("pfcCount");
 
-const std::string ATTRIBUTE_SPEED("wind");
 const std::string ATTRIBUTE_TIMER("timer");
 const std::string ATTRIBUTE_TEXTURE_WIND("textureWind");
 
@@ -58,7 +57,6 @@ GrassShader::GrassShader() :
 	mLocationShadowMapTexture(-1),
 	mLocationShadowMapTextureWidth(-1),
 	mLocationShadowMapPFC(-1),
-	mLocationSpeed(-1),
 	mLocationTimer(-1),
 	mLocationWindDirections(-1),
 	mLocationDepthTexture(-1),
@@ -106,12 +104,6 @@ void GrassShader::LoadData(const ICamera* camera, const Transformation* transfor
 		LoadInteger(mLocationShadowMapPFC, effectShadow->GetPFCCounter());
 	}
 
-	MaterialEffectFloat3* effectWind = material->GetEffect<MaterialEffectFloat3>();
-	if (effectWind != nullptr)
-	{
-		LoadVector3(mLocationSpeed, effectWind->GetValue());
-	}
-
 	MaterialEffectFloat* effectTimer = material->GetEffect<MaterialEffectFloat>();
 	if (effectTimer != nullptr)
 	{
@@ -151,8 +143,6 @@ void GrassShader::GetAllUniformLocations()
 	mLocationShadowMapTexture = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE);
 	mLocationShadowMapTextureWidth = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE_WIDTH);
 	mLocationShadowMapPFC = GetUniformLocation(ATTRIBUTE_SHADOW_PFC);
-
-	mLocationSpeed = GetUniformLocation(ATTRIBUTE_SPEED);
 
 	mLocationTimer = GetUniformLocation(ATTRIBUTE_TIMER);
 	mLocationWindDirections = GetUniformLocation(ATTRIBUTE_TEXTURE_WIND);

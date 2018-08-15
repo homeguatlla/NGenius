@@ -140,7 +140,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = RELEASE;
+Configuration mConfiguration = FLAT;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -559,7 +559,6 @@ void CreatePoints()
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
 	material->AddEffect(new MaterialEffectShadowProperties(0));
-	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
 	material->AddEffect(new MaterialEffectFloat(0.0));
 	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(mEngine.GetTexture("grass2")),
 		mEngine.GetTexture("depth_texture"),
@@ -571,7 +570,7 @@ void CreatePoints()
 	material->AddEffect(new MaterialEffectNormalTexture(windTexture, 1.0f));
 
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
-												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 50.0f, 50.0f, 200.0f);
+												material, mTerrain, mWaterHeight /*+ 0.2f*/, mWaterHeight + 0.8f, 50.0f, 50.0f, 200.0f);
 
 	pointsPatch->AddComponent(new EnvironmentAffectedComponent());
 	mScene->AddEntity(pointsPatch);
@@ -580,7 +579,6 @@ void CreatePoints()
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
 	material->AddEffect(new MaterialEffectShadowProperties(0));
-	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
 	material->AddEffect(new MaterialEffectFloat(0.0));
 	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(mEngine.GetTexture("grass3")),
 		mEngine.GetTexture("depth_texture"),
@@ -1645,12 +1643,12 @@ void SetupConfiguration()
 		mIsVegetationEnabled = true;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = false;
+		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = true;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
-		mIsShadowEnabled = true;
+		mIsShadowEnabled = false;
 		mIsFullScreen = false;
 		mWaterHeight = 0.0f;
 		break;

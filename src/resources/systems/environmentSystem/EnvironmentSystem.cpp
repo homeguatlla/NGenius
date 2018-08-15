@@ -14,7 +14,7 @@
 
 EnvironmentSystem::EnvironmentSystem() : mTimer(0.0f)
 {
-	mWindManager = std::make_unique<WindManager>(4);
+	//mWindManager = std::make_unique<WindManager>(4);
 }
 
 EnvironmentSystem::~EnvironmentSystem()
@@ -31,18 +31,13 @@ void EnvironmentSystem::Update(float deltaTime)
 {
 	mTimer += deltaTime;
 
-	mWindManager->Update(deltaTime);
+	//mWindManager->Update(deltaTime);
 	
 	for (GameEntity* entity : mEntities)
 	{
 		if (entity->GetRenderer() != nullptr)
 		{
 			IMaterial* material = entity->GetRenderer()->GetMaterial();
-			MaterialEffectFloat3* effectWind = material->GetEffect<MaterialEffectFloat3>();
-			if (effectWind != nullptr)
-			{
-				//effectWind->SetValue(mSpeed * glm::vec3(1.0f, 0.0f, 0.0f));
-			}
 			MaterialEffectFloat* effectTimer = material->GetEffect<MaterialEffectFloat>();
 			if (effectTimer != nullptr)
 			{

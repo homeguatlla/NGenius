@@ -22,7 +22,6 @@ uniform vec2 size;
 
 uniform mat4 toShadowMapSpace;
 
-uniform vec3 wind;
 uniform float timer;
 uniform sampler2D textureWind;
 
