@@ -2,9 +2,9 @@
 #include "MaterialEffectShadowProperties.h"
 #include "../IMaterial.h"
 
-MaterialEffectShadowProperties::MaterialEffectShadowProperties() :
+MaterialEffectShadowProperties::MaterialEffectShadowProperties(int pfcCounter) :
 	mDepthTexture(nullptr),
-	mPFCCounter(0),
+	mPFCCounter(pfcCounter),
 	mMatrix(glm::mat4(0.0f))
 {
 }

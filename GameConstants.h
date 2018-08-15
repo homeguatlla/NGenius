@@ -15,3 +15,4 @@ static const float SKYBOX_ROTATION_SPEED = 0.01f;
 static const float MIN_FPS_ALLOWED = 30.0f;
 static const float TERRAIN_SCALE = 7.5f;
 
+static const int SHADOWS_PFC_COUNTER = 5;

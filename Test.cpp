@@ -140,7 +140,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = RELEASE;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -479,20 +479,20 @@ void CreateTrees()
 	materialFoliage->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_foliage_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	materialFoliage->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	materialFoliage->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
-	materialFoliage->AddEffect(new MaterialEffectShadowProperties());
+	materialFoliage->AddEffect(new MaterialEffectShadowProperties(1));
 
 	IMaterial* materialTrunk = mEngine.CreateMaterial("tree_trunk", mEngine.GetShader("model"));
 	materialTrunk->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	materialTrunk->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	materialTrunk->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
-	materialTrunk->AddEffect(new MaterialEffectShadowProperties());
+	materialTrunk->AddEffect(new MaterialEffectShadowProperties(1));
 
 	IMaterial* materialTrunkNormalmap = mEngine.CreateMaterial("tree_trunk_normalmap", mEngine.GetShader("normalmap"));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_normalmap")), 1));
-	materialTrunkNormalmap->AddEffect(new MaterialEffectShadowProperties());
+	materialTrunkNormalmap->AddEffect(new MaterialEffectShadowProperties(1));
 
 	for (unsigned long i = 0; i < positions.size(); i++)
 	{
@@ -529,7 +529,7 @@ void CreateGrass()
 	materialGrass->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("grass1_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	materialGrass->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	materialGrass->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
-	materialGrass->AddEffect(new MaterialEffectShadowProperties());
+	materialGrass->AddEffect(new MaterialEffectShadowProperties(0));
 
 	std::vector<std::pair<float, bool>> lod;
 	lod.push_back(std::pair<float, bool>(25.0f, false));
@@ -558,7 +558,7 @@ void CreatePoints()
 
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
-	material->AddEffect(new MaterialEffectShadowProperties());
+	material->AddEffect(new MaterialEffectShadowProperties(0));
 	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
 	material->AddEffect(new MaterialEffectFloat(0.0));
 	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(mEngine.GetTexture("grass2")),
@@ -579,7 +579,7 @@ void CreatePoints()
 	/*material = mEngine.CreateMaterial("grass3_material", shader);
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
-	material->AddEffect(new MaterialEffectShadowProperties());
+	material->AddEffect(new MaterialEffectShadowProperties(0));
 	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
 	material->AddEffect(new MaterialEffectFloat(0.0));
 	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(mEngine.GetTexture("grass3")),
@@ -657,7 +657,7 @@ void CreateProps()
 	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectNormalTexture(normal, 1));
-	material->AddEffect(new MaterialEffectShadowProperties());
+	material->AddEffect(new MaterialEffectShadowProperties(1));
 
 	for (int i = 0; i < numProps; i++)
 	{
@@ -936,7 +936,7 @@ void CreateTerrain()
 	material->AddEffect(new MaterialEffectHeightMapTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")), 1.0f));
 	material->AddEffect(new MaterialEffectTextureArray(static_cast<TextureArray*>(mEngine.GetTexture("terrain_array"))));
 	material->AddEffect(new MaterialEffectClippingPlane());
-	material->AddEffect(new MaterialEffectShadowProperties());
+	material->AddEffect(new MaterialEffectShadowProperties(2));
 	material->AddEffect(new MaterialEffectFloat(scale));
 	
 	mTerrain = new Terrain(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
@@ -961,7 +961,7 @@ void CreatePlayer()
 	material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("enano_normalmap")), 1.0f));
 	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
-	material->AddEffect(new MaterialEffectShadowProperties());
+	material->AddEffect(new MaterialEffectShadowProperties(1));
 	
 	InputComponent* inputComponent = new InputComponent();
 	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_W, new ForwardEvent()));
@@ -1715,7 +1715,7 @@ void Initialize()
 
 	CreateCameras();
 
-	mEngine.SetCastingShadowsParameters(mSunLightDirection, 2);
+	mEngine.SetCastingShadowsParameters(mSunLightDirection, SHADOWS_PFC_COUNTER);
 	mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
 
 	mEngine.SetWaterEnabled(mIsWaterEnabled);

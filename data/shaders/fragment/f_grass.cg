@@ -64,8 +64,7 @@ float ApplySoftParticle(float alphaColor)
 
 void main()
 {
-	int newPfcCount = 0; 
-    float shadowFactor = ApplyShadow(pfcCount, totalTexelsShadow);
+	float shadowFactor = ApplyShadow(pfcCount, totalTexelsShadow);
 	vec4 MaterialDiffuseColor = shadowFactor * texture2D(texture, textureCoords);
 
 	if(MaterialDiffuseColor.a < 0.5)

@@ -11,7 +11,7 @@ class MaterialEffectShadowProperties : public IMaterialEffect
 	int mPFCCounter;
 
 public:
-	MaterialEffectShadowProperties();
+	MaterialEffectShadowProperties(int pfcCounter = -1);
 	virtual ~MaterialEffectShadowProperties();
 
 	void SetParameters(const ITexture* texture, const glm::mat4& matrix, int pfcCounter);

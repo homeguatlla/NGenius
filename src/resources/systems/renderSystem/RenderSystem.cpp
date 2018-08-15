@@ -407,9 +407,10 @@ void RenderSystem::ApplyShadows(IRenderer* renderer)
 		MaterialEffectShadowProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectShadowProperties>();
 		if (effect != nullptr)
 		{
+			int effectPFCCounter = effect->GetPFCCounter() == -1 ? mShadowsRenderPass->GetShadowMapPFCCounter() : effect->GetPFCCounter();
 			effect->SetParameters(mShadowsRenderPass->GetShadowMapTexture(),
 				mShadowsRenderPass->GetShadowMapMatrix(),
-				mShadowsRenderPass->GetShadowMapPFCCounter());
+				effectPFCCounter);
 		}
 	}
 }
