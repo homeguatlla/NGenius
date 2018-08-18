@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "IShaderProgram.h"
+#include "../materials/IMaterial.h"
+#include "../materials/effects/MaterialEffectClippingPlane.h"
 #include <glm/glm.hpp>
 
 #include <GL/glew.h>
@@ -8,9 +10,11 @@
 #include <iostream>
 
 const std::string ATTRIBUTE_VERTEX_POSITION("vertexModelspace");
+const std::string ATTRIBUTE_CLIP_PLANE("clippingPlane");
 
 IShaderProgram::IShaderProgram(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename) : 
 mLocationPosition(-1),
+mLocationClippingPlane(-1),
 mGeometryShaderID(-1)
 {
 	mVertexShaderID = Load(vertexShaderFilename, GL_VERTEX_SHADER);
@@ -89,6 +93,15 @@ void IShaderProgram::BindAttributesInternal()
 	BindAttributes();
 }
 
+void IShaderProgram::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
+{
+	MaterialEffectClippingPlane* effectClipping = material->GetEffect<MaterialEffectClippingPlane>();
+	if (effectClipping != nullptr)
+	{
+		LoadVector4(mLocationClippingPlane, effectClipping->GetClippingPlane());
+	}
+}
+
 void IShaderProgram::BindAttribute(int attribute, const std::string& variableName)
 {
 	glBindAttribLocation(mProgramID, attribute, variableName.c_str());
@@ -97,6 +110,7 @@ void IShaderProgram::BindAttribute(int attribute, const std::string& variableNam
 void IShaderProgram::GetAllUniformLocationsInternal()
 {
 	mLocationPosition = GetAttributeLocation(ATTRIBUTE_VERTEX_POSITION);
+	mLocationClippingPlane = GetUniformLocation(ATTRIBUTE_CLIP_PLANE);
 	GetAllUniformLocations();
 }
 

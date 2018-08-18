@@ -10,6 +10,7 @@
 #include "../materials/effects/MaterialEffectShadowProperties.h"
 #include "../materials/effects/MaterialEffectFloat3Array.h"
 #include "../materials/effects/MaterialEffectParticle.h"
+#include "../materials/effects/MaterialEffectClippingPlane.h"
 #include "../textures/ITexture.h"
 
 
@@ -74,6 +75,8 @@ GrassShader::~GrassShader()
 
 void GrassShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
+	IShaderProgram::LoadData(camera, transformation, material);
+
 	LoadMatrix4(mLocationModelMatrix, const_cast<Transformation*>(transformation)->GetModelMatrix());
 	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
 	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());

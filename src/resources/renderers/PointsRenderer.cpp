@@ -8,7 +8,7 @@
 
 PointsRenderer::PointsRenderer(Model* model, IMaterial* material) : IRenderer(model, material)
 {
-	SetLayer(IRenderer::LAYER_TERRAIN);
+	SetLayer(IRenderer::LAYER_PARTICLES);
 	SetTransparency(true);
 }
 

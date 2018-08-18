@@ -1,0 +1,38 @@
+#version 330 core
+
+layout(points) in;
+in mat4 Mout[];
+in float rotationY[];
+in float scale[];
+
+layout(line_strip, max_vertices = 8) out;
+out vec4 outColor;
+
+uniform mat4 P;
+uniform mat4 V;
+
+void createVertex(vec4 point)
+{
+	gl_Position = P * V * Mout[0] * point;
+
+	EmitVertex();
+}
+
+void main()
+{
+	createVertex(gl_in[0].gl_Position);
+	createVertex(gl_in[0].gl_Position + vec4(0, 1, 0, 0));
+	EndPrimitive();	
+
+	createVertex(vec4(0.637256622, 4.51171875, -0.127449036, 1.0));
+	createVertex(vec4(0.382354736, 4.57031250, 0.127452850, 1.0));
+	EndPrimitive();
+
+	createVertex(vec4(0.382354736, 4.57031250, 0.127452850, 1.0));
+	createVertex(vec4(0.637256622, 4.57031250, 0.127452850, 1.0));
+	EndPrimitive();
+
+	createVertex(vec4(0.637256622, 4.57031250, 0.127452850, 1.0));
+	createVertex(vec4(0.637256622, 4.51171875, -0.127449036, 1.0));
+	EndPrimitive();	
+}

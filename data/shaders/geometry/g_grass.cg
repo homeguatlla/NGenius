@@ -20,6 +20,8 @@ uniform float fogDensity;
 uniform float fogGradient;
 uniform vec2 size;
 
+uniform vec4 clippingPlane;
+
 uniform mat4 toShadowMapSpace;
 
 uniform float timer;
@@ -31,6 +33,8 @@ const float transitionDistance = 20.0;
 const float AFFECTED_BY_WIND_RADIUS = 10.0;
 const float FAR_DISTANCE_CLIPPING = 10.0;
 const float FOG_DENSITY_MULTIPLIER = 4.5;
+const float PATCH_SIZE = 50.0f; //debería venir como un uniform
+
 
 void createVertex(vec3 offset, vec2 coordText)
 {
@@ -40,6 +44,8 @@ void createVertex(vec3 offset, vec2 coordText)
 	shadowCoords = toShadowMapSpace * positionWorldspace;
 	vec4 positionRelativeToCamera = V * positionWorldspace;
 	gl_Position = P * positionRelativeToCamera;
+
+	gl_ClipDistance[0] = dot(positionWorldspace, clippingPlane);
 
 	//texture
 	textureCoords = vec2(coordText.x, coordText.y) * vec2(tile, tile);
@@ -79,7 +85,7 @@ vec3 calculateModificatorsWindVector()
 	{
 		vec3 direction = gl_in[0].gl_Position.xyz -  windModificators[modificator];
 		float distance = length(direction);
-		if(distance < 0.4)
+		if(distance < 0.2)
 		{
 			modification += (direction * 10.0 / distance);
 			modified = true;
@@ -120,7 +126,7 @@ void main()
 	
 	if(distance < AFFECTED_BY_WIND_RADIUS)
 	{
-		newWind = calculateWindVector(10.0);
+		newWind = calculateWindVector(PATCH_SIZE);
 		newWind += calculateModificatorsWindVector();
 		newWind *= h;
 		//outColor = vec4(newWind.x,newWind.y,newWind.z,1);

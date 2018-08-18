@@ -21,8 +21,7 @@ public:
 	void Use();
 	void UnUse();
 
-	virtual void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) = 0;
-
+	
 	void BindAttribute(int attribute, const std::string& variableName);
 	int GetUniformLocation(const std::string& uniformName);
 	int GetAttributeLocation(const std::string& name);
@@ -36,6 +35,7 @@ public:
 	void LoadInteger(int location, int value);
 	void LoadVector3Array(int location, std::vector<glm::vec3>& values);
 
+	virtual void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material);
 	virtual void BindAttributes() = 0;
 	virtual void GetAllUniformLocations() = 0;
 
@@ -43,6 +43,7 @@ public:
 
 protected:
 	int mLocationPosition;
+	int mLocationClippingPlane;
 	
 private:
 	void BindAttributesInternal();

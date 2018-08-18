@@ -25,6 +25,7 @@ uniform float fogDensity;
 uniform float fogGradient;
 uniform float tile;
 uniform mat4 toShadowMapSpace;
+uniform vec4 clippingPlane;
 
 const float shadowDistance = 10.0;
 const float transitionDistance = 20.0;
@@ -35,6 +36,8 @@ void main()
 	
 	positionWorldspace = vec3(M * vec4(vertexModelspace, 1.0));
 	shadowCoords = toShadowMapSpace * vec4(positionWorldspace, 1.0f);
+
+	gl_ClipDistance[0] = dot(vec4(positionWorldspace, 1.0), clippingPlane);
 
 	vec4 positionRelativeToCamera = V * vec4(positionWorldspace, 1.0f);	
 	gl_Position =  P * positionRelativeToCamera;

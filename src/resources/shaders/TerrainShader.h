@@ -30,7 +30,6 @@ private:
 	int mLocationFogDensity;
 	int	mLocationFogGradient;
 	int mLocationFogColor;
-	int mLocationClippingPlane;
 	int mLocationShadowSpaceMatrix;
 	int mLocationShadowMapTexture;
 	int mLocationShadowMapTextureWidth;

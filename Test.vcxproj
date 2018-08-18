@@ -477,6 +477,7 @@
     <None Include="data\shaders\fragment\f_gui_quad.cg" />
     <None Include="data\shaders\fragment\f_model.cg" />
     <None Include="data\shaders\fragment\f_model_normalmap.cg" />
+    <None Include="data\shaders\fragment\f_normal.cg" />
     <None Include="data\shaders\fragment\f_overdraw.cg" />
     <None Include="data\shaders\fragment\f_particle.cg" />
     <None Include="data\shaders\fragment\f_quad.cg" />
@@ -487,6 +488,7 @@
     <None Include="data\shaders\fragment\f_water.cg" />
     <None Include="data\shaders\fragment\f_energy_wall.cg" />
     <None Include="data\shaders\geometry\g_grass.cg" />
+    <None Include="data\shaders\geometry\g_normal.cg" />
     <None Include="data\shaders\vertex\v_bloom.cg" />
     <None Include="data\shaders\vertex\v_bright.cg" />
     <None Include="data\shaders\vertex\v_contrast.cg" />

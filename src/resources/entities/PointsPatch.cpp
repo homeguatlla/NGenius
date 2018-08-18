@@ -45,16 +45,17 @@ void PointsPatch::Create()
 	for (unsigned int point = 0; point < numPoints; ++point)
 	{
 		float x = -mWide * 0.5f + (rand() % 1000) * (mWide / 1000.0f);
-		float z = -mLength * 0.5f +(rand() % 1000) * (mLength / 1000.0f);
+		float z = -mLength * 0.5f + (rand() % 1000) * (mLength / 1000.0f);
 		float y = mTerrain->GetHeight(glm::vec2(x, z));
 		if (y >= mHeightMin && y <= mHeightMax)
 		{
 			vertexs.push_back(glm::vec3(x, y, z));
-			float rotationY = rand() % 360;
+			float rotationY = static_cast<float>(rand() % 360);
 			float scale = 1.2f + (rand() % 10) * (0.4f / 10.0f);
 			uv.push_back(glm::vec2(glm::radians(rotationY), scale * 0.1));
 		}
 	}
+
 	if (vertexs.size() > 0)
 	{
 		mModel = new Model(new Mesh(vertexs, uv, indices));

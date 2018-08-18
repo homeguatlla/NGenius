@@ -15,12 +15,14 @@ out vec3 normal;
 uniform mat4 V;
 uniform mat4 P;
 uniform vec3 contactPoint;
+uniform vec4 clippingPlane;
 
 void main()
 {
 	textureCoords = textureCoordsModelspace;
 	
 	positionWorldspace = vec3(M * vec4(vertexModelspace, 1.0));
+	gl_ClipDistance[0] = dot(vec4(positionWorldspace, 1.0), clippingPlane);
 	contactPoint_ = contactPoint;
 	vec4 positionRelativeToCamera = V * vec4(positionWorldspace, 1.0f);	
 	gl_Position = P * positionRelativeToCamera;

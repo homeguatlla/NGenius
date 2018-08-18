@@ -129,6 +129,7 @@ using namespace std;
 
 enum Configuration
 {
+	TEST,
 	DEBUG,
 	TEXT,
 	ENERGY_WALL,
@@ -482,12 +483,14 @@ void CreateTrees()
 	materialFoliage->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	materialFoliage->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	materialFoliage->AddEffect(new MaterialEffectShadowProperties(1));
+	materialFoliage->AddEffect(new MaterialEffectClippingPlane());
 
 	IMaterial* materialTrunk = mEngine.CreateMaterial("tree_trunk", mEngine.GetShader("model"));
 	materialTrunk->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	materialTrunk->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	materialTrunk->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	materialTrunk->AddEffect(new MaterialEffectShadowProperties(1));
+	materialTrunk->AddEffect(new MaterialEffectClippingPlane());
 
 	IMaterial* materialTrunkNormalmap = mEngine.CreateMaterial("tree_trunk_normalmap", mEngine.GetShader("normalmap"));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
@@ -495,6 +498,7 @@ void CreateTrees()
 	materialTrunkNormalmap->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_normalmap")), 1));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectShadowProperties(1));
+	materialTrunkNormalmap->AddEffect(new MaterialEffectClippingPlane());
 
 	for (unsigned long i = 0; i < positions.size(); i++)
 	{
@@ -554,7 +558,7 @@ void CreateGrass()
 
 void CreatePoints()
 {
-	//glPointSize(5.0f);
+	glPointSize(5.0f);
 	IShaderProgram* shader = mEngine.GetShader("grass");
 	IMaterial* material = mEngine.CreateMaterial("grass2_material", shader);
 
@@ -571,9 +575,10 @@ void CreatePoints()
 
 	Texture* windTexture = static_cast<Texture*>(mEngine.GetTexture("wind_texture"));
 	material->AddEffect(new MaterialEffectNormalTexture(windTexture, 1.0f));
+	material->AddEffect(new MaterialEffectClippingPlane());
 
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
-												material, mTerrain, mWaterHeight /*+ 0.2f*/, mWaterHeight + 0.8f, 50.0f, 50.0f, 100.0f);
+												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 25.0f, 25.0f, 200.0f);
 
 	EnvironmentAffectedComponent* environmentComponent = new EnvironmentAffectedComponent();
 	environmentComponent->SetAffectedByWind(true);
@@ -663,6 +668,7 @@ void CreateProps()
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectNormalTexture(normal, 1));
 	material->AddEffect(new MaterialEffectShadowProperties(1));
+	material->AddEffect(new MaterialEffectClippingPlane());
 
 	for (int i = 0; i < numProps; i++)
 	{
@@ -967,7 +973,8 @@ void CreatePlayer()
 	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectShadowProperties(1));
-	
+	material->AddEffect(new MaterialEffectClippingPlane());
+
 	InputComponent* inputComponent = new InputComponent();
 	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_W, new ForwardEvent()));
 	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_S, new BackwardEvent()));
@@ -1534,19 +1541,35 @@ void SetupConfiguration()
 {
 	switch (mConfiguration)
 	{
+	case TEST:
+		mIsDebugModeEnabled = true;
+		mIsWaterEnabled = false;
+		mIsGameplayCameraEnabled = true;
+		mIsFogEnabled = false;
+		mIsVegetationEnabled = true;
+		mIsPropsEnabled = false;
+		mIsEnergyWallEnabled = false;
+		mIsSkyboxEnabled = false;
+		mIsTerrainFlat = false;
+		//mWaterHeight = 0.0f;
+		mIsTextEnabled = true;
+		mIsStatisticsVisible = true;
+		mIsParticlesEnabled = false;
+		mIsShadowEnabled = false;
+		break;
 	case DEBUG:
 		mIsDebugModeEnabled = true;
 		mIsWaterEnabled = true;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
 		mIsVegetationEnabled = true;
-		mIsPropsEnabled = false;
+		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = true;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = false;
+		mIsParticlesEnabled = true;
 		mIsShadowEnabled = true;
 		break;
 	case SHADOWS:

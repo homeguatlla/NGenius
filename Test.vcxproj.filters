@@ -1204,5 +1204,11 @@
     <None Include="data\shaders\vertex\v_grass.cg">
       <Filter>Source Files\shaders\vertex</Filter>
     </None>
+    <None Include="data\shaders\geometry\g_normal.cg">
+      <Filter>Source Files\shaders\geometry</Filter>
+    </None>
+    <None Include="data\shaders\fragment\f_normal.cg">
+      <Filter>Source Files\shaders\fragment</Filter>
+    </None>
   </ItemGroup>
 </Project>

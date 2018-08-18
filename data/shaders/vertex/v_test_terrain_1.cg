@@ -35,7 +35,7 @@ void main()
 	textureCoords = textureCoordsModelspace;
 
 	vec4 color = texture(heightMap, textureCoordsModelspace);
-	vertex.y = color.a * scale;
+	//vertex.y = color.a * scale;
 	
 	gl_Position =  MVP * vec4(vertex.xyz, 1.0f);
 

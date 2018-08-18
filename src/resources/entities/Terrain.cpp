@@ -29,17 +29,18 @@ mIsFlat(false)
 
 	srand(static_cast<unsigned int>(time(NULL)));
 
-	std::vector<glm::vec3> vertexs;
 	std::vector<glm::vec2> uv;
 	std::vector<unsigned int> indices;
 
 	mGridSize = 65;
 	mNumVertexsSide = 256;
 	TerrainGrid terrainGrid;
-	terrainGrid.GeneratePointsRectangular(vertexs, uv, mNumVertexsSide, mGridSize, 0, true);
+	terrainGrid.GeneratePointsRectangular(mVertexs, uv, mNumVertexsSide, mGridSize, 0, true);
 	terrainGrid.GenerateIndicesRectangular(indices);
-
-	mModel = new Model(new Mesh(vertexs, uv, indices));
+	
+	CalculateY();
+	
+	mModel = new Model(new Mesh(mVertexs, uv, indices));
 	SetRenderer(new IndexesRenderer(mModel, material));
 
 	GetRenderer()->SetLayer(IRenderer::LAYER_TERRAIN);
@@ -73,6 +74,55 @@ bool Terrain::IsPointInside(glm::vec2 point) const
 }
 
 float Terrain::GetHeight(glm::vec2 point) const
+{
+	float height = -std::numeric_limits<float>::infinity();
+
+	if (IsPointInside(point))
+	{
+		float inc = mGridSize / (mNumVertexsSide - 1);
+
+		float X1 = point.x;
+		float X2 = point.x + inc;
+		float Z1 = point.y;
+		float Z2 = point.y + inc;
+
+		bool isLeft = glm::sign((X2 - X1) * (point.y - Z2) - (Z1 - Z2) * (point.x - X1));
+		X1 += mGridSize * 0.5f;
+		X2 += mGridSize * 0.5f;
+		Z1 += mGridSize * 0.5f;
+		Z2 += mGridSize * 0.5f;
+
+		X1 /= inc;
+		X2 /= inc;
+		Z1 /= inc;
+		Z2 /= inc;
+
+		X1 = glm::floor(X1);
+		X2 = glm::floor(X2);
+		Z1 = glm::floor(Z1);
+		Z2 = glm::floor(Z2);
+
+		glm::vec3 vertex1, vertex2, vertex3;
+
+		if (isLeft)
+		{
+			vertex1 = mVertexs[static_cast<unsigned int>(Z1 + X2 * (mNumVertexsSide))];
+			vertex2 = mVertexs[static_cast<unsigned int>(Z2 + X1 * (mNumVertexsSide))];
+			vertex3 = mVertexs[static_cast<unsigned int>(Z2 + X2 * (mNumVertexsSide))];
+		}
+		else
+		{
+			vertex1 = mVertexs[static_cast<unsigned int>(Z1 + X1 * (mNumVertexsSide))];
+			vertex2 = mVertexs[static_cast<unsigned int>(Z2 + X1 * (mNumVertexsSide))];
+			vertex3 = mVertexs[static_cast<unsigned int>(Z1 + X2 * (mNumVertexsSide))];
+		}
+		height = CalculateBarryCenter(vertex1, vertex2, vertex3, point);
+	}
+
+	return height;
+}
+
+float Terrain::GetHeightFromColor(glm::vec2 point) const
 {
 	float height = -std::numeric_limits<float>::infinity();
 
@@ -116,6 +166,25 @@ float Terrain::GetHeight(glm::vec2 point) const
 	}
 
 	return mIsFlat ? 0.0f : height;
+}
+
+void Terrain::CalculateY()
+{
+	//TODO este cálculo se podría hacer dentro del grid. Aunque el grid no conoce de alturas pues vienen en el heighmap
+	//igual está bien como está ahora aunque penalice el performance.
+	float gridSquareSizeInTexture = static_cast<float>(mHeightmap->GetWidth() / (mNumVertexsSide - 1));
+	float conversionToTextureValue = gridSquareSizeInTexture / mHeightmap->GetWidth();
+	float gridSquareSize = mGridSize / (mNumVertexsSide - 1);
+
+	for (unsigned int i = 0; i < mVertexs.size(); i++)
+	{
+		float X = mVertexs[i].x + mGridSize * 0.5f;
+		float Z = mVertexs[i].z + mGridSize * 0.5f;
+
+		int gridX = static_cast<int>(glm::floor(X / gridSquareSize));
+		int gridZ = static_cast<int>(glm::floor(Z / gridSquareSize));
+		mVertexs[i].y = mHeightmap->GetColor(glm::vec2(gridX *conversionToTextureValue, gridZ*conversionToTextureValue)).a * mScale / 256.0f;
+	}
 }
 
 float Terrain::CalculateBarryCenter(glm::vec3& p1, glm::vec3& p2, glm::vec3& p3, glm::vec2& point) const

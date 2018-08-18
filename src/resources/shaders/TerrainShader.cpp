@@ -32,7 +32,6 @@ const std::string ATTRIBUTE_TILE("tile");
 const std::string ATTRIBUTE_FOG_DENSITY("fogDensity");
 const std::string ATTRIBUTE_FOG_GRADIENT("fogGradient");
 const std::string ATTRIBUTE_FOG_COLOR("fogColor");
-const std::string ATTRIBUTE_CLIP_PLANE("clippingPlane");
 const std::string ATTRIBUTE_SHADOW_SPACE_MATRIX("toShadowMapSpace");
 const std::string ATTRIBUTE_SHADOW_TEXTURE("shadowMap");
 const std::string ATTRIBUTE_SHADOW_TEXTURE_WIDTH("shadowMapSize");
@@ -54,7 +53,6 @@ mLocationTile(-1),
 mLocationFogDensity(-1),
 mLocationFogGradient(-1),
 mLocationFogColor(-1),
-mLocationClippingPlane(-1),
 mLocationShadowSpaceMatrix(-1),
 mLocationShadowMapTexture(-1),
 mLocationShadowMapTextureWidth(-1),
@@ -69,6 +67,8 @@ TerrainShader::~TerrainShader()
 
 void TerrainShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
+	IShaderProgram::LoadData(camera, transformation, material);
+
 	LoadMatrix4(mLocationModelMatrix, const_cast<Transformation*>(transformation)->GetModelMatrix());
 	glm::mat4 MVP = camera->GetProjectionMatrix() * 
 					const_cast<ICamera*>(camera)->GetViewMatrix() * 
@@ -99,12 +99,6 @@ void TerrainShader::LoadData(const ICamera* camera, const Transformation* transf
 	if (effectTextureArray != nullptr)
 	{
 		LoadTexture(mLocationArrayTexture, effectTextureArray->GetTextureArray()->GetUnit());
-	}
-
-	MaterialEffectClippingPlane* effectClipping = material->GetEffect<MaterialEffectClippingPlane>();
-	if (effectClipping != nullptr)
-	{
-		LoadVector4(mLocationClippingPlane, effectClipping->GetClippingPlane());
 	}
 
 	MaterialEffectLightProperties* effectLight = material->GetEffect<MaterialEffectLightProperties>();
@@ -152,7 +146,6 @@ void TerrainShader::GetAllUniformLocations()
 	mLocationHeightMapTexture = GetUniformLocation(ATTRIBUTE_HEIGHTMAP_TEXTURE);
 	mLocationTile = GetUniformLocation(ATTRIBUTE_TILE);
 	mLocationScale = GetUniformLocation(ATTRIBUTE_SCALE);
-	mLocationClippingPlane = GetUniformLocation(ATTRIBUTE_CLIP_PLANE);
 	mLocationFogDensity = GetUniformLocation(ATTRIBUTE_FOG_DENSITY);
 	mLocationFogGradient = GetUniformLocation(ATTRIBUTE_FOG_GRADIENT);
 	mLocationFogColor = GetUniformLocation(ATTRIBUTE_FOG_COLOR);
