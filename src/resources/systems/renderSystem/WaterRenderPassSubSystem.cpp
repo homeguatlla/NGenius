@@ -126,7 +126,7 @@ RenderPass* WaterRenderPassSubSystem::CreateReflectionRenderPass()
 	reflectionWaterPass->SetFrameBufferOutput(frameReflectionBuffer);
 	reflectionWaterPass->EnableClipping(true);
 	reflectionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);
-	reflectionWaterPass->SetClippingPlane(glm::vec4(0.0f, 1.0f, 0.0f, -mWaterY + 0.2));
+	reflectionWaterPass->SetClippingPlane(glm::vec4(0.0f, 1.0f, 0.0f, -mWaterY /*+ 0.2*/)); //eliminamos este +0.2 pues hace que se vea un poco del reflejo de las cosas que están debajo del agua.
 	reflectionWaterPass->EnableFog(true);
 	reflectionWaterPass->SetAcceptSpacePartitionOnly(true);
 

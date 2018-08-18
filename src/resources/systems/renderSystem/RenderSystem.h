@@ -73,6 +73,11 @@ class RenderSystem : public BaseVisitable<>
 	bool mIsOverdrawEnabled;
 	bool mIsPostprocessEnabled;
 	bool mLastRendererHadCullingEnabled;
+	bool mIsFogEnabled;
+
+	glm::vec3 mFogColor;
+	float mFogDensity;
+	float mFogGradient;
 
 	unsigned int mNumberTrianglesRendered;
 	unsigned int mNumberDrawCalls;
@@ -120,6 +125,9 @@ public:
 	void SetCastingShadowsTarget(const GameEntity* target);
 	void SetCastingShadowsEnabled(bool enabled);
 
+	void SetFogParameters(const glm::vec3& color, float density, float gradient);
+	void SetFogEnabled(bool enabled);
+
 	void SetWaterEnabled(bool enabled);
 	void SetWaterParameters(const ICamera* camera, float waterY);
 
@@ -161,6 +169,7 @@ private:
 	void SelectTextures();
 	void SelectClippingPlane(RenderPass* renderPass);
 	void ApplyShadows(IRenderer* renderer);
+	void ApplyFog(IRenderer* renderer);
 
 	void DestroyCameras();
 

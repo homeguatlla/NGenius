@@ -23,11 +23,7 @@ const std::string ATTRIBUTE_DEPTH_TEXTURE("depthTexture");
 const std::string ATTRIBUTE_WATER_SPEED("waterSpeed");
 const std::string ATTRIBUTE_WATER_COLOR("waterColor");
 const std::string ATTRIBUTE_CAMERA_POSITION("cameraPosition");
-const std::string ATTRIBUTE_LIGHT_POSITION("lightPosition");
-const std::string ATTRIBUTE_LIGHT_COLOR("lightColor");
-const std::string ATTRIBUTE_FOG_DENSITY("fogDensity");
-const std::string ATTRIBUTE_FOG_GRADIENT("fogGradient");
-const std::string ATTRIBUTE_FOG_COLOR("fogColor");
+
 
 WaterShader::WaterShader() :
 IShaderProgram(VERTEX_FILE, FRAGMENT_FILE),
@@ -42,12 +38,7 @@ mLocationDepthTexture(-1),
 mLocationTextureCoords(-1),
 mLocationWaterSpeed(-1),
 mLocationWaterColor(-1),
-mLocationCameraPosition(-1),
-mLocationLightPosition(-1),
-mLocationLightColor(-1),
-mLocationFogDensity(-1),
-mLocationFogGradient(-1),
-mLocationFogColor(-1)
+mLocationCameraPosition(-1)
 {
 }
 
@@ -64,6 +55,8 @@ void WaterShader::BindAttributes()
 
 void WaterShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
+	IShaderProgram::LoadData(camera, transformation, material);
+
 	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
 	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
 	LoadVector3(mLocationCameraPosition, camera->GetPosition());
@@ -78,21 +71,6 @@ void WaterShader::LoadData(const ICamera* camera, const Transformation* transfor
 		LoadTexture(mLocationDepthTexture, effect->GetDepthTexture()->GetUnit());
 		LoadFloat(mLocationWaterSpeed, effect->GetSpeed());
 		LoadVector4(mLocationWaterColor, effect->GetColor());
-	}
-
-	MaterialEffectLightProperties* effectLight = material->GetEffect<MaterialEffectLightProperties>();
-	if (effectLight != nullptr)
-	{
-		LoadVector3(mLocationLightPosition, effectLight->GetPosition());
-		LoadVector3(mLocationLightColor, effectLight->GetColor());
-	}
-
-	MaterialEffectFogProperties* effectFog = material->GetEffect<MaterialEffectFogProperties>();
-	if (effectFog != nullptr)
-	{
-		LoadVector3(mLocationFogColor, effectFog->GetColor());
-		LoadFloat(mLocationFogDensity, effectFog->GetDensity());
-		LoadFloat(mLocationFogGradient, effectFog->GetGradient());
 	}
 }
 
@@ -110,10 +88,4 @@ void WaterShader::GetAllUniformLocations()
 	mLocationWaterSpeed = GetUniformLocation(ATTRIBUTE_WATER_SPEED);
 	mLocationWaterColor = GetUniformLocation(ATTRIBUTE_WATER_COLOR);
 	mLocationCameraPosition = GetUniformLocation(ATTRIBUTE_CAMERA_POSITION);
-	mLocationLightPosition = GetUniformLocation(ATTRIBUTE_LIGHT_POSITION);
-	mLocationLightColor = GetUniformLocation(ATTRIBUTE_LIGHT_COLOR);
-
-	mLocationFogDensity = GetUniformLocation(ATTRIBUTE_FOG_DENSITY);
-	mLocationFogGradient = GetUniformLocation(ATTRIBUTE_FOG_GRADIENT);
-	mLocationFogColor = GetUniformLocation(ATTRIBUTE_FOG_COLOR);
 }

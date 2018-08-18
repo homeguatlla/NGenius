@@ -107,6 +107,10 @@ public:
 	void SetCastingShadowsTarget(const GameEntity* target);
 	void SetCastingShadowsEnabled(bool enabled);
 
+	//fog
+	void SetFogParameters(const glm::vec3& color, float density, float gradient);
+	void SetFogEnabled(bool enabled);
+
 	//water
 	void SetWaterEnabled(bool enabled);
 	void SetWaterParameters(const ICamera* camera, float waterY);

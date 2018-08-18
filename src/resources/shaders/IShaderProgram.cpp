@@ -2,6 +2,10 @@
 #include "IShaderProgram.h"
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectClippingPlane.h"
+#include "../materials/effects/MaterialEffectLightProperties.h"
+#include "../materials/effects/MaterialEffectFogProperties.h"
+#include "../materials/effects/MaterialEffectShadowProperties.h"
+#include "../textures/ITexture.h"
 #include <glm/glm.hpp>
 
 #include <GL/glew.h>
@@ -12,9 +16,30 @@
 const std::string ATTRIBUTE_VERTEX_POSITION("vertexModelspace");
 const std::string ATTRIBUTE_CLIP_PLANE("clippingPlane");
 
+const std::string ATTRIBUTE_FOG_DENSITY("fogDensity");
+const std::string ATTRIBUTE_FOG_GRADIENT("fogGradient");
+const std::string ATTRIBUTE_FOG_COLOR("fogColor");
+
+const std::string ATTRIBUTE_SHADOW_SPACE_MATRIX("toShadowMapSpace");
+const std::string ATTRIBUTE_SHADOW_TEXTURE("shadowMap");
+const std::string ATTRIBUTE_SHADOW_TEXTURE_WIDTH("shadowMapSize");
+const std::string ATTRIBUTE_SHADOW_PFC("pfcCount");
+
+const std::string ATTRIBUTE_LIGHT_POSITION("lightPositionWorldspace");
+const std::string ATTRIBUTE_LIGHT_COLOR("lightColor");
+
 IShaderProgram::IShaderProgram(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename) : 
 mLocationPosition(-1),
 mLocationClippingPlane(-1),
+mLocationFogDensity(-1),
+mLocationFogGradient(-1),
+mLocationFogColor(-1),
+mLocationShadowSpaceMatrix(-1),
+mLocationShadowMapTexture(-1),
+mLocationShadowMapTextureWidth(-1),
+mLocationShadowMapPFC(-1),
+mLocationLightPosition(-1),
+mLocationLightColor(-1),
 mGeometryShaderID(-1)
 {
 	mVertexShaderID = Load(vertexShaderFilename, GL_VERTEX_SHADER);
@@ -100,6 +125,29 @@ void IShaderProgram::LoadData(const ICamera* camera, const Transformation* trans
 	{
 		LoadVector4(mLocationClippingPlane, effectClipping->GetClippingPlane());
 	}
+	MaterialEffectLightProperties* effectLight = material->GetEffect<MaterialEffectLightProperties>();
+	if (effectLight != nullptr)
+	{
+		LoadVector3(mLocationLightPosition, effectLight->GetPosition());
+		LoadVector3(mLocationLightColor, effectLight->GetColor());
+	}
+
+	MaterialEffectFogProperties* effectFog = material->GetEffect<MaterialEffectFogProperties>();
+	if (effectFog != nullptr)
+	{
+		LoadVector3(mLocationFogColor, effectFog->GetColor());
+		LoadFloat(mLocationFogDensity, effectFog->GetDensity());
+		LoadFloat(mLocationFogGradient, effectFog->GetGradient());
+	}
+
+	MaterialEffectShadowProperties* effectShadow = material->GetEffect<MaterialEffectShadowProperties>();
+	if (effectShadow != nullptr && effectShadow->GetDepthTexture() != nullptr)
+	{
+		LoadMatrix4(mLocationShadowSpaceMatrix, effectShadow->GetMatrix());
+		LoadTexture(mLocationShadowMapTexture, effectShadow->GetDepthTexture()->GetUnit());
+		LoadInteger(mLocationShadowMapTextureWidth, effectShadow->GetDepthTexture()->GetWidth());
+		LoadInteger(mLocationShadowMapPFC, effectShadow->GetPFCCounter());
+	}
 }
 
 void IShaderProgram::BindAttribute(int attribute, const std::string& variableName)
@@ -111,6 +159,16 @@ void IShaderProgram::GetAllUniformLocationsInternal()
 {
 	mLocationPosition = GetAttributeLocation(ATTRIBUTE_VERTEX_POSITION);
 	mLocationClippingPlane = GetUniformLocation(ATTRIBUTE_CLIP_PLANE);
+	mLocationFogDensity = GetUniformLocation(ATTRIBUTE_FOG_DENSITY);
+	mLocationFogGradient = GetUniformLocation(ATTRIBUTE_FOG_GRADIENT);
+	mLocationFogColor = GetUniformLocation(ATTRIBUTE_FOG_COLOR);
+	mLocationShadowSpaceMatrix = GetUniformLocation(ATTRIBUTE_SHADOW_SPACE_MATRIX);
+	mLocationShadowMapTexture = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE);
+	mLocationShadowMapTextureWidth = GetUniformLocation(ATTRIBUTE_SHADOW_TEXTURE_WIDTH);
+	mLocationShadowMapPFC = GetUniformLocation(ATTRIBUTE_SHADOW_PFC);
+	mLocationLightPosition = GetUniformLocation(ATTRIBUTE_LIGHT_POSITION);
+	mLocationLightColor = GetUniformLocation(ATTRIBUTE_LIGHT_COLOR);
+
 	GetAllUniformLocations();
 }
 

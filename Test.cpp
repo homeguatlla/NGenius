@@ -194,9 +194,10 @@ EnergyWall* mEnergyWall;
 
 
 float mFogDensity = 0.04f;
-const float mFogGradient = 1.5f;
+float mFogGradient = 1.5f;
 glm::vec3 mFogColor = vec3(89.0f, 120.0f, 143.0f) / 255.0f;
-//red glm::vec3 mFogColor = vec3(218.0f, 74.0f, 43.0f) / 255.0f; 
+// red glm::vec3 mFogColor = vec3(218.0f, 74.0f, 43.0f) / 255.0f; 
+// green glm::vec3 mFogColor = vec3(74.0f, 218.0f, 43.0f) / 255.0f;
 float mEnergyWallRadius = 22.0f;
 glm::vec3 mEnergyWallPosition(0.0f, 0.0f, 0.0f);
 
@@ -697,6 +698,8 @@ void CreateWater()
 	if (mIsWaterEnabled)
 	{
 		float waterSpeed = 0.02f;
+		glm::vec4 waterColor(0.0f, 0.3f, 0.8f, 0.0f);
+
 		IMaterial* material = mEngine.CreateMaterial("water", mEngine.GetShader("water"));
 		material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 		material->AddEffect(new MaterialEffectWater(
@@ -706,7 +709,7 @@ void CreateWater()
 														mEngine.GetTexture("normal_water"),
 														mEngine.GetTexture("refraction_depth_water"),
 														waterSpeed,
-														glm::vec4(0.0f, 0.3f, 0.8f, 0.0f)
+														waterColor
 													));
 		material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 
@@ -1478,6 +1481,21 @@ void UpdateInput(GLFWwindow* window)
 		mIsSpacePartitionEnabled = !mIsSpacePartitionEnabled;
 		mEngine.SetIsSpacePartitionEnabled(mIsSpacePartitionEnabled);
 	}
+	else if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS)
+	{
+		mFogDensity += 0.01;
+		mEngine.SetFogParameters(mFogColor, mFogDensity, mFogGradient);
+		mIsFogEnabled = true;
+		mEngine.SetFogEnabled(mIsFogEnabled);
+	}
+	else if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS)
+	{
+		mFogDensity -= 0.01;
+		mFogDensity = glm::max(0.0f, mFogDensity);
+		mEngine.SetFogParameters(mFogColor, mFogDensity, mFogGradient);
+		mIsFogEnabled = mFogDensity > 0.0f;
+		mEngine.SetFogEnabled(mIsFogEnabled);
+	}
 
 	if (mConfiguration == QUADTREE)
 	{
@@ -1758,6 +1776,8 @@ void Initialize()
 	glfwSetCursorPosCallback(mEngine.GetGLWindow(), &MouseCursorPosCallback);
 
 	mFogDensity = mIsFogEnabled ? mFogDensity : 0.0f;
+	mEngine.SetFogEnabled(mIsFogEnabled);
+	mEngine.SetFogParameters(mFogColor, mFogDensity, mFogGradient);
 	mEngine.Start();
 }
 

@@ -29,6 +29,7 @@
 #include "../../materials/effects/MaterialEffectTextureCubemap.h"
 #include "../../materials/effects/MaterialEffectParticle.h"
 #include "../../materials/effects/MaterialEffectDepthTexture.h"
+#include "../../materials/effects/MaterialEffectFogProperties.h"
 
 #include "RenderPass.h"
 #include "../../../BitNumber.h"
@@ -61,6 +62,10 @@ mIsClippingEnabled(false),
 mIsOverdrawEnabled(false),
 mIsPostprocessEnabled(true),
 mLastRendererHadCullingEnabled(true),
+mIsFogEnabled(false),
+mFogColor(1.0f, 1.0f, 1.0f),
+mFogDensity(0.0f),
+mFogGradient(0.0f),
 mNumberTrianglesRendered(0),
 mNumberDrawCalls(0),
 mNumberRenderers(0)
@@ -362,6 +367,8 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 
 	ApplyShadows(renderer);
 
+	ApplyFog(renderer);
+
 	mCurrentMaterial->Use();
 
 	SelectTextures();
@@ -411,6 +418,18 @@ void RenderSystem::ApplyShadows(IRenderer* renderer)
 			effect->SetParameters(mShadowsRenderPass->GetShadowMapTexture(),
 				mShadowsRenderPass->GetShadowMapMatrix(),
 				effectPFCCounter);
+		}
+	}
+}
+
+void RenderSystem::ApplyFog(IRenderer* renderer)
+{
+	if (mIsFogEnabled)
+	{
+		MaterialEffectFogProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectFogProperties>();
+		if (effect != nullptr)
+		{
+			effect->SetProperties(mFogColor, mFogDensity, mFogGradient);
 		}
 	}
 }
@@ -778,6 +797,18 @@ void RenderSystem::SetCastingShadowsEnabled(bool enabled)
 {
 	assert(mShadowsRenderPass != nullptr);
 	mShadowsRenderPass->SetEnable(enabled);
+}
+
+void RenderSystem::SetFogParameters(const glm::vec3& color, float density, float gradient)
+{
+	mFogColor = color;
+	mFogDensity = density;
+	mFogGradient = gradient;
+}
+
+void RenderSystem::SetFogEnabled(bool enabled)
+{
+	mIsFogEnabled = enabled;
 }
 
 void RenderSystem::SetWaterEnabled(bool enabled)

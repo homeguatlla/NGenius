@@ -44,6 +44,15 @@ public:
 protected:
 	int mLocationPosition;
 	int mLocationClippingPlane;
+	int mLocationFogDensity;
+	int	mLocationFogGradient;
+	int mLocationFogColor;
+	int mLocationShadowSpaceMatrix;
+	int mLocationShadowMapTexture;
+	int mLocationShadowMapTextureWidth;
+	int mLocationShadowMapPFC;
+	int mLocationLightPosition;
+	int	mLocationLightColor;
 	
 private:
 	void BindAttributesInternal();

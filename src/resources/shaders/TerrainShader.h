@@ -27,12 +27,5 @@ private:
 	int mLocationBlendMapTexture;
 	int mLocationArrayTexture;
 	int mLocationTile;
-	int mLocationFogDensity;
-	int	mLocationFogGradient;
-	int mLocationFogColor;
-	int mLocationShadowSpaceMatrix;
-	int mLocationShadowMapTexture;
-	int mLocationShadowMapTextureWidth;
-	int mLocationShadowMapPFC;
 };
 

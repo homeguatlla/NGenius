@@ -20,19 +20,10 @@ private:
 	int mLocationModelMatrix;
 	int mLocationViewMatrix;
 	int mLocationProjectionMatrix;
-	int mLocationLightPosition;
-	int mLocationLightColor;
 	int mLocationCameraPosition;
 	int mLocationTextureCoords;
 	int mLocationNormal;
 	int mLocationTexture;
-	int mLocationFogDensity;
-	int	mLocationFogGradient;
-	int mLocationFogColor;
 	int mLocationTile;
-	int mLocationShadowSpaceMatrix;
-	int mLocationShadowMapTexture;
-	int mLocationShadowMapTextureWidth;
-	int mLocationShadowMapPFC;
 };
 

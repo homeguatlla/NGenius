@@ -10,7 +10,6 @@ class SkyBoxShader : public IShaderProgram
 	int mLocationViewMatrix;
 	int mLocationProjectionMatrix;
 	int mLocationCubemapTexture;
-	int mLocationFogColor;
 
 public:
 	SkyBoxShader();

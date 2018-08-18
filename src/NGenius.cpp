@@ -360,6 +360,18 @@ void NGenius::SetCastingShadowsEnabled(bool enabled)
 	mRenderSystem->SetCastingShadowsEnabled(enabled);
 }
 
+void NGenius::SetFogParameters(const glm::vec3& color, float density, float gradient)
+{
+	assert(mRenderSystem != nullptr);
+	mRenderSystem->SetFogParameters(color, density, gradient);
+}
+
+void NGenius::SetFogEnabled(bool enabled)
+{
+	assert(mRenderSystem != nullptr);
+	mRenderSystem->SetFogEnabled(enabled);
+}
+
 void NGenius::SetWaterEnabled(bool enabled)
 {
 	assert(mRenderSystem != nullptr);

@@ -2,6 +2,7 @@
 
 in vec2 textureCoords;
 in vec4 shadowCoords;
+in float fogVisibility;
 
 uniform sampler2D texture;
 uniform vec3 fogColor;
@@ -62,6 +63,11 @@ float ApplySoftParticle(float alphaColor)
 	return alphaColor;
 }
 
+vec4 ApplyFog(vec4 color)
+{
+	return mix(vec4(fogColor, 1.0f), color, fogVisibility);
+}
+
 void main()
 {
 	float shadowFactor = ApplyShadow(pfcCount, totalTexelsShadow);
@@ -72,7 +78,9 @@ void main()
 		discard;
 	}
 	color = MaterialDiffuseColor;
+	color = ApplyFog(color);
 	//color.a = ApplySoftParticle(color.a);
 	color.a *= textureCoords.y * 2.0 * alphaFactor;
+	
 	//color = outColor;
 }

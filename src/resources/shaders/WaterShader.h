@@ -19,11 +19,7 @@ class WaterShader :	public IShaderProgram
 	int mLocationWaterSpeed;
 	int mLocationWaterColor;
 	int mLocationCameraPosition;
-	int mLocationLightPosition;
-	int mLocationLightColor;
-	int mLocationFogDensity;
-	int	mLocationFogGradient;
-	int mLocationFogColor;
+
 
 public:
 	WaterShader();
