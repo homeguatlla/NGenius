@@ -48,8 +48,13 @@ void WaterRenderPassSubSystem::Init()
 		mRenderSystem->AddCamera(mRefractionCamera);
 		mReflectionRenderPass = CreateReflectionRenderPass();
 		mRefractionRenderPass = CreateRefractionRenderPass();
+		//OJO! cuando se crean esto renderpass, por algún motivo no pueden terminar teniendo el mismo layer id
+		//lo que quiere decir que tienen que tener alguna layer_mask distinta como ahora
+		//que la reflexion tiene la skybox y la refracción no.
+		//sino, una de las dos renderpass no se renderizará bien, o la refracción o la relflexión. No sé el motivo.
 		mRenderSystem->AddRenderPass(mReflectionRenderPass);
-		mRenderSystem->AddRenderPass(mRefractionRenderPass);
+		mRenderSystem->AddRenderPass(mRefractionRenderPass);		
+		
 		mIsInitialized = true;
 	}
 }
@@ -94,7 +99,7 @@ RenderPass* WaterRenderPassSubSystem::CreateRefractionRenderPass()
 	frameRefractionBuffer->SetDepthTextureAttachment(refractionDepthTexture);
 	frameRefractionBuffer->Init();
 
-	RenderPass* refractionWaterPass = new RenderPass(static_cast<ICamera*>(mRefractionCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER);
+	RenderPass* refractionWaterPass = new RenderPass(static_cast<ICamera*>(mRefractionCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES | IRenderer::LAYER_TRANSPARENT);
 	refractionWaterPass->SetFrameBufferOutput(frameRefractionBuffer);
 	refractionWaterPass->EnableClipping(true);
 	refractionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);
@@ -122,7 +127,7 @@ RenderPass* WaterRenderPassSubSystem::CreateReflectionRenderPass()
 
 	frameReflectionBuffer->Init();
 
-	RenderPass* reflectionWaterPass = new RenderPass(static_cast<ICamera*>(mReflectionCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES);
+	RenderPass* reflectionWaterPass = new RenderPass(static_cast<ICamera*>(mReflectionCamera), IRenderer::LAYER_REFLEXION | IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES | IRenderer::LAYER_TRANSPARENT);
 	reflectionWaterPass->SetFrameBufferOutput(frameReflectionBuffer);
 	reflectionWaterPass->EnableClipping(true);
 	reflectionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);

@@ -579,24 +579,27 @@ void CreatePoints()
 	material->AddEffect(new MaterialEffectClippingPlane());
 
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
-												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 25.0f, 25.0f, 200.0f);
+												material, mTerrain, mWaterHeight - 0.2f, mWaterHeight + 0.8f, 50.0f, 50.0f, 100.0f);
 
 	EnvironmentAffectedComponent* environmentComponent = new EnvironmentAffectedComponent();
 	environmentComponent->SetAffectedByWind(true);
 	pointsPatch->AddComponent(environmentComponent);
 	mScene->AddEntity(pointsPatch);
-	
-	/*material = mEngine.CreateMaterial("grass3_material", shader);
+	/*
+	material = mEngine.CreateMaterial("grass3_material", shader);
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
 	material->AddEffect(new MaterialEffectShadowProperties(0));
 	material->AddEffect(new MaterialEffectFloat(0.0));
+	material->AddEffect(new MaterialEffectFloat3Array());
 	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(mEngine.GetTexture("grass3")),
 		mEngine.GetTexture("depth_texture"),
 		glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight()),
 		1.0f)
 	);
+
 	material->AddEffect(new MaterialEffectNormalTexture(windTexture, 1.0f));
+	material->AddEffect(new MaterialEffectClippingPlane());
 
 	pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 									material, mTerrain, mWaterHeight - 0.1f, mWaterHeight + 0.2f, 50.0f, 50.0f, 50.0f);
@@ -734,6 +737,7 @@ Particle* CreateParticle(bool canCollide, Texture* texture, glm::vec3& gravity)
 													glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight()), 
 													1.0f)
 						);
+	material->AddEffect(new MaterialEffectClippingPlane());
 
 	Particle* particle = new Particle(new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
 		mEngine.GetModel("particle_quad"),
@@ -817,31 +821,14 @@ void CreateHUD()
 	mScene->AddGameEntity(map);*/
 }
 
-/*
-
-void CreateParticlesSparkles()
-{
-	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("sparkle")), PhysicsSystem::GRAVITY_VALUE * 0.1f);
-	particle->SetLiveTime(0.5f);
-
-	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(particle,
-		new Transformation(glm::vec3(0.0f, 4.7f, 0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
-		nullptr,
-		10);
-	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-	particlesEmitter->SetScaleValues(0.003f, 0.001f);
-	particlesEmitter->SetVelocity(glm::vec3(-0.7f), glm::vec3(0.7f));
-	particlesEmitter->SetSpawnArea(glm::vec3(0.0f), glm::vec3(0.01f, 0.01f, 0.01f));
-	mScene->AddGameEntity(particlesEmitter);
-	mEngine.AddParticleEmitter(particlesEmitter);
-}
-
 void CreateParticlesTest()
 {
-	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
+	glm::vec3 gravity = PhysicsSystem::GRAVITY_VALUE;
+
+	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), gravity * 0.1f);
 	particle->SetLiveTime(1.0f);
 
-	glm::vec3 position(5.5f, 0.0f, 3.3f); 
+	glm::vec3 position(3.0f, 0.0f, 4.0f); 
 	float height = mTerrain->GetHeight(glm::vec2(position.x, position.z)) + 0.01f;
 	position.y = height;
 	
@@ -849,30 +836,29 @@ void CreateParticlesTest()
 	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(	particle,
 																new Transformation(position, glm::vec3(0.0f), glm::vec3(0.1f)),
 																nullptr,
-																20);
-	particlesEmitter->SetColorGradientValues(glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec4(0.6f, 0.0f, 0.6f, 0.0f));
-	particlesEmitter->SetScaleValues(0.03f, 0.4f + (rand() % 4) / 10.0f);
-	particlesEmitter->SetVelocity(glm::vec3(0.0f, 0.2f, 0.0f), glm::vec3(0.0f, 0.5f, 0.0f));
-	mScene->AddGameEntity(particlesEmitter);
+																50);
+	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+	particlesEmitter->SetScaleValues(0.06f, 0.4f + (rand() % 4) / 10.0f);
+	particlesEmitter->SetVelocity(glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+	mScene->AddEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);	
-
+	
 	particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
 	particle->SetLiveTime(1.0f);
 
-	position = glm::vec3(5.0f, 0.0f, 3.3f);
+	position = glm::vec3(4.0f, 0.0f, 4.0f);
 	height = mTerrain->GetHeight(glm::vec2(position.x, position.z)) + 0.01f;
 	position.y = height;
 	particlesEmitter = new ParticlesEmitter(	particle,
 												new Transformation(position, glm::vec3(0.0f), glm::vec3(0.1f)),
 												nullptr,
-												20);
-	particlesEmitter->SetColorGradientValues(glm::vec4(0.0f, 0.8f, 0.0f, 1.0f), glm::vec4(0.0f, 0.6f, 0.6f, 0.0f));
+												50);
+	particlesEmitter->SetColorGradientValues(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
 	particlesEmitter->SetScaleValues(0.03f, 0.4f + (rand() % 4) / 10.0f);
 	particlesEmitter->SetVelocity(glm::vec3(0.0f, 0.2f, 0.0f), glm::vec3(0.0f, 0.5f, 0.0f));
-	mScene->AddGameEntity(particlesEmitter);
+	mScene->AddEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);
 }
-*/
 
 void CreateTextTest()
 {
@@ -1204,9 +1190,8 @@ void CreateEntities()
 
 	if (mIsParticlesEnabled)
 	{
-		//CreateParticlesTest();
+		CreateParticlesTest();
 		CreateParticlesFire();
-		//CreateParticlesSparkles();
 	}
 
 	if (mIsEnergyWallEnabled)
@@ -1304,6 +1289,13 @@ void CreateParticlesRenderPass()
 	mEngine.AddRenderPass(particlesPass, false);
 }
 
+void CreateTransparentRenderPass()
+{
+	//RENDER PASS TRANSPARENT
+	RenderPass *transparentPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TRANSPARENT);
+	mEngine.AddRenderPass(transparentPass, false);
+}
+
 void CreateSubSystems()
 {
 	//CreateHudMapRenderPass();
@@ -1311,6 +1303,8 @@ void CreateSubSystems()
 	CreateTerrainRenderPass();
 
 	CreateGameplayRenderPass();
+
+	CreateTransparentRenderPass();
 
 	CreateParticlesRenderPass();
 
@@ -1561,13 +1555,13 @@ void SetupConfiguration()
 	{
 	case TEST:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
+		mIsWaterEnabled = true;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
-		mIsVegetationEnabled = true;
+		mIsVegetationEnabled = false;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = false;
+		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
 		//mWaterHeight = 0.0f;
 		mIsTextEnabled = true;
@@ -1697,7 +1691,7 @@ void SetupConfiguration()
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
-		mIsShadowEnabled = false;
+		mIsShadowEnabled = true;
 		mIsFullScreen = false;
 		mWaterHeight = 0.0f;
 		break;

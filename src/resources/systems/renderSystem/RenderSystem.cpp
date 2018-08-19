@@ -312,7 +312,11 @@ void RenderSystem::AddToRender(IRenderer* renderer, std::vector<RenderPass*>& re
 	{
 		if (pass->CanAcceptRenderer(renderer))
 		{
-			mRenderersPerPass[pass->GetLayersMask()].push_back(renderer);
+			bool found = std::find(mRenderersPerPass[pass->GetLayersMask()].begin(), mRenderersPerPass[pass->GetLayersMask()].end(), renderer) != mRenderersPerPass[pass->GetLayersMask()].end();
+			if (!found)
+			{
+				mRenderersPerPass[pass->GetLayersMask()].push_back(renderer);
+			}
 		}
 	}
 }

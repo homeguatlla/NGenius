@@ -9,6 +9,7 @@ uniform mat4 V;
 uniform mat4 P;
 uniform float fogDensity;
 uniform float fogGradient;
+uniform vec4 clippingPlane;
 out vec2 textureCoords;
 out vec4 luminiscence;
 //out vec4 clipSpace;
@@ -17,8 +18,11 @@ out vec4 luminiscence;
 void main()
 {
 	textureCoords = textureCoordsModelspace;
-	vec4 positionRelativeToCamera = V * M * vec4(vertexModelspace.xyz, 1.0f);
+	vec4 positionWorldspace = M * vec4(vertexModelspace.xyz, 1.0);
+	vec4 positionRelativeToCamera = V * positionWorldspace;
 	gl_Position =  P * positionRelativeToCamera;
+
+	gl_ClipDistance[0] = dot(positionWorldspace, clippingPlane);
 
 	luminiscence = colorGradient;
 
