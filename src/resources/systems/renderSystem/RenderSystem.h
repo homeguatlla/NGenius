@@ -154,9 +154,10 @@ private:
 	GLFWmonitor* GetCurrentMonitor(float* screenWidth, float* screenHeight);
 
 	void LoadResources();
-	void CreateNewResources();
 
 	void AddToRender(IRenderer* renderer, std::vector<RenderPass*>& renderPasses);
+
+	bool ValidateRenderPassesLayerMasks(RenderPass* renderPass, std::vector<RenderPass*>& renderPasses) const;
 
 	void Render(RenderPass* renderPass);
 	void RenderPasses(std::vector<RenderPass*>& renderPasses);

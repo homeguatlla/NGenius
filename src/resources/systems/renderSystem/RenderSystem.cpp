@@ -263,13 +263,42 @@ void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProces
 		bool found = std::find(mRenderPassesAfterPostProcessing.begin(), mRenderPassesAfterPostProcessing.end(), renderPass) != mRenderPassesAfterPostProcessing.end();
 		if (!found)
 		{
-			mRenderPassesAfterPostProcessing.push_back(renderPass);
+			bool isRenderPassOK = ValidateRenderPassesLayerMasks(renderPass, mRenderPassesAfterPostProcessing);
+			std::cout << "There is a render pass with the same layer masks as another render pass. Must be different!";
+			assert(isRenderPassOK);
+			if (isRenderPassOK)
+			{
+				mRenderPassesAfterPostProcessing.push_back(renderPass);
+			}
 		}
 	}
 	else
 	{
-		mRenderPasses.push_back(renderPass);
+		bool found = std::find(mRenderPasses.begin(), mRenderPasses.end(), renderPass) != mRenderPasses.end();
+		if (!found)
+		{
+			bool isRenderPassOK = ValidateRenderPassesLayerMasks(renderPass, mRenderPasses);
+			std::cout << "There is a render pass with the same layer masks as another render pass. Must be different!";
+			assert(isRenderPassOK);
+			if (isRenderPassOK)
+			{
+				mRenderPasses.push_back(renderPass);
+			}
+		}
 	}
+}
+
+bool RenderSystem::ValidateRenderPassesLayerMasks(RenderPass* renderPass, std::vector<RenderPass*>& renderPasses) const
+{
+	for (const RenderPass* pass : renderPasses)
+	{
+		if (pass->GetLayersMask() == renderPass->GetLayersMask())
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
 void RenderSystem::RemoveRenderPass(RenderPass* renderPass)
@@ -308,11 +337,7 @@ void RenderSystem::AddToRender(IRenderer* renderer, std::vector<RenderPass*>& re
 	{
 		if (pass->CanAcceptRenderer(renderer))
 		{
-			bool found = std::find(mRenderersPerPass[pass->GetLayersMask()].begin(), mRenderersPerPass[pass->GetLayersMask()].end(), renderer) != mRenderersPerPass[pass->GetLayersMask()].end();
-			if (!found)
-			{
-				mRenderersPerPass[pass->GetLayersMask()].push_back(renderer);
-			}
+			mRenderersPerPass[pass->GetLayersMask()].push_back(renderer);
 		}
 	}
 }
