@@ -268,11 +268,7 @@ void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProces
 	}
 	else
 	{
-		bool found = std::find(mRenderPasses.begin(), mRenderPasses.end(), renderPass) != mRenderPasses.end();
-		if (!found)
-		{
-			mRenderPasses.push_back(renderPass);
-		}
+		mRenderPasses.push_back(renderPass);
 	}
 }
 
