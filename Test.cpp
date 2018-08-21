@@ -143,7 +143,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = RELEASE;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -579,7 +579,7 @@ void CreatePoints()
 	material->AddEffect(new MaterialEffectClippingPlane());
 
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
-												material, mTerrain, mWaterHeight, mWaterHeight + 0.8f, 50.0f, 50.0f, 150.0f);
+												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 50.0f, 50.0f, 150.0f);
 
 	EnvironmentAffectedComponent* environmentComponent = new EnvironmentAffectedComponent();
 	environmentComponent->SetAffectedByWind(true);
@@ -1178,7 +1178,7 @@ void CreateEntities()
 
 	if (mIsVegetationEnabled)
 	{
-		//CreateTrees();
+		CreateTrees();
 		//CreateGrass();
 		CreatePoints();
 	}
