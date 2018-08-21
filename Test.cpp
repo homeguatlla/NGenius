@@ -143,7 +143,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = RELEASE;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -579,7 +579,7 @@ void CreatePoints()
 	material->AddEffect(new MaterialEffectClippingPlane());
 
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
-												material, mTerrain, mWaterHeight - 0.2f, mWaterHeight + 0.8f, 50.0f, 50.0f, 100.0f);
+												material, mTerrain, mWaterHeight, mWaterHeight + 0.8f, 50.0f, 50.0f, 150.0f);
 
 	EnvironmentAffectedComponent* environmentComponent = new EnvironmentAffectedComponent();
 	environmentComponent->SetAffectedByWind(true);
@@ -602,7 +602,7 @@ void CreatePoints()
 	material->AddEffect(new MaterialEffectClippingPlane());
 
 	pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
-									material, mTerrain, mWaterHeight - 0.1f, mWaterHeight + 0.2f, 50.0f, 50.0f, 50.0f);
+									material, mTerrain, mWaterHeight - 0.1f, mWaterHeight + 0.2f, 50.0f, 50.0f, 100.0f);
 	environmentComponent = new EnvironmentAffectedComponent();
 	environmentComponent->SetAffectedByWind(true);
 	pointsPatch->AddComponent(environmentComponent);
@@ -1178,7 +1178,7 @@ void CreateEntities()
 
 	if (mIsVegetationEnabled)
 	{
-		CreateTrees();
+		//CreateTrees();
 		//CreateGrass();
 		CreatePoints();
 	}
@@ -1682,16 +1682,16 @@ void SetupConfiguration()
 		mIsDebugModeEnabled = true;
 		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = true;
+		mIsFogEnabled = false;
 		mIsVegetationEnabled = true;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = true;
+		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
-		mIsTextEnabled = true;
+		mIsTextEnabled = false;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
-		mIsShadowEnabled = true;
+		mIsShadowEnabled = false;
 		mIsFullScreen = false;
 		mWaterHeight = 0.0f;
 		break;

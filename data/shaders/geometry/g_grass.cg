@@ -1,7 +1,6 @@
 #version 330 core
 
 layout(points) in;
-in mat4 Mout[];
 in float rotationY[];
 in float scale[];
 
@@ -40,12 +39,11 @@ void createVertex(vec3 offset, vec2 coordText)
 {
 	vec4 actualOffset = vec4(offset, 0.0);
 	vec4 worldPosition = (gl_in[0].gl_Position + actualOffset);
-	vec4 positionWorldspace = Mout[0] * worldPosition;
-	shadowCoords = toShadowMapSpace * positionWorldspace;
-	vec4 positionRelativeToCamera = V * positionWorldspace;
+	shadowCoords = toShadowMapSpace * worldPosition;
+	vec4 positionRelativeToCamera = V * worldPosition;
 	gl_Position = P * positionRelativeToCamera;
 
-	gl_ClipDistance[0] = dot(positionWorldspace, clippingPlane);
+	gl_ClipDistance[0] = dot(worldPosition, clippingPlane);
 
 	//texture
 	textureCoords = vec2(coordText.x, coordText.y) * vec2(tile, tile);
@@ -101,7 +99,7 @@ vec3 calculateModificatorsWindVector()
 
 void main()
 {
-	vec4 positionRelativeToCamera = V * Mout[0] * gl_in[0].gl_Position;
+	vec4 positionRelativeToCamera = V * gl_in[0].gl_Position;
 	float distance = length(positionRelativeToCamera);
 	//clipping
 	if(distance < 0.0 || distance > FAR_DISTANCE_CLIPPING)

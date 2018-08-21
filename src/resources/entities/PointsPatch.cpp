@@ -42,14 +42,18 @@ void PointsPatch::Create()
 	std::vector<unsigned int> indices;
 
 	unsigned int numPoints = static_cast<int>((mWide * mLength) * mDensity);
-	for (unsigned int point = 0; point < numPoints; ++point)
+	for (unsigned int i = 0; i < numPoints; ++i)
 	{
-		float x = -mWide * 0.5f + (rand() % 1000) * (mWide / 1000.0f);
-		float z = -mLength * 0.5f + (rand() % 1000) * (mLength / 1000.0f);
-		float y = mTerrain->GetHeight(glm::vec2(x, z));
-		if (y >= mHeightMin && y <= mHeightMax)
+		glm::vec3 point(0.0f);
+
+		point.x = -mWide * 0.5f + (rand() % 1000) * (mWide / 1000.0f);
+		point.z = -mLength * 0.5f + (rand() % 1000) * (mLength / 1000.0f);
+		point = GetTransformation()->GetModelMatrix() * glm::vec4(point, 1.0f);
+
+		point.y = mTerrain->GetHeight(glm::vec2(point.x, point.z));
+		if (point.y >= mHeightMin && point.y <= mHeightMax)
 		{
-			vertexs.push_back(glm::vec3(x, y, z));
+			vertexs.push_back(point);
 			float rotationY = static_cast<float>(rand() % 360);
 			float scale = 1.2f + (rand() % 10) * (0.4f / 10.0f);
 			uv.push_back(glm::vec2(glm::radians(rotationY), scale * 0.1));

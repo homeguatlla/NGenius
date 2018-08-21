@@ -7,7 +7,6 @@ class GrassShader : public IShaderProgram
 	static const std::string FRAGMENT_FILE;
 	static const std::string GEOMETRY_FILE;
 
-	int mLocationModelMatrix;
 	int mLocationViewMatrix;
 	int mLocationProjectionMatrix;
 	

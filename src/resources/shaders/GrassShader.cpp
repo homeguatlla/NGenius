@@ -21,7 +21,6 @@ const std::string GrassShader::GEOMETRY_FILE = "data/shaders/geometry/g_grass.cg
 
 const std::string ATTRIBUTE_VIEW_MATRIX("V");
 const std::string ATTRIBUTE_PROJECTION_MATRIX("P");
-const std::string ATTRIBUTE_MODEL_MATRIX("M");
 
 const std::string ATTRIBUTE_TILE("tile");
 const std::string ATTRIBUTE_TEXTURE("texture");
@@ -47,7 +46,6 @@ const std::string ATTRIBUTE_WIND_MODIFICATORS_ARRAY("windModificators");
 
 GrassShader::GrassShader() :
 	IShaderProgram(VERTEX_FILE, FRAGMENT_FILE, GEOMETRY_FILE),
-	mLocationModelMatrix(-1),
 	mLocationViewMatrix(-1),
 	mLocationProjectionMatrix(-1),
 	mLocationTexture(-1),
@@ -77,7 +75,6 @@ void GrassShader::LoadData(const ICamera* camera, const Transformation* transfor
 {
 	IShaderProgram::LoadData(camera, transformation, material);
 
-	LoadMatrix4(mLocationModelMatrix, const_cast<Transformation*>(transformation)->GetModelMatrix());
 	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());
 	LoadMatrix4(mLocationProjectionMatrix, camera->GetProjectionMatrix());
 
@@ -133,15 +130,14 @@ void GrassShader::LoadData(const ICamera* camera, const Transformation* transfor
 
 void GrassShader::BindAttributes()
 {
-	BindAttribute(mLocationModelMatrix, ATTRIBUTE_MODEL_MATRIX);
+
 }
 
 void GrassShader::GetAllUniformLocations()
 {
 	mLocationProjectionMatrix = GetUniformLocation(ATTRIBUTE_PROJECTION_MATRIX);
 	mLocationViewMatrix = GetUniformLocation(ATTRIBUTE_VIEW_MATRIX);
-	mLocationModelMatrix = GetAttributeLocation(ATTRIBUTE_MODEL_MATRIX);
-
+	
 	mLocationTexture = GetUniformLocation(ATTRIBUTE_TEXTURE);
 	mLocationTile = GetUniformLocation(ATTRIBUTE_TILE);
 
