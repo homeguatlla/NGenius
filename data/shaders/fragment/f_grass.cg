@@ -82,5 +82,6 @@ void main()
 	//color.a = ApplySoftParticle(color.a);
 	color.a *= textureCoords.y * 2.0 * alphaFactor;
 	
+	//color = vec4(1.0, 0.0, 0.0, 1.0);
 	//color = outColor;
 }
