@@ -40,7 +40,6 @@ public:
 
 	void BindAttributes();
 	void GetAllUniformLocations();
-
-
+	int GetGeometryShaderNumTriangles() const override;
 };
 

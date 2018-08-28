@@ -62,6 +62,7 @@ public:
 	GameEntity* GetParent();
 
 	IMaterial* GetMaterial();
+	const IMaterial* GetMaterial() const;
 	Model* GetModel();
 
 	bool HasTransformation() const;

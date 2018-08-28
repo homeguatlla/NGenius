@@ -187,6 +187,11 @@ int IShaderProgram::GetAttributePosition()
 	return mLocationPosition;
 }
 
+int IShaderProgram::GetGeometryShaderNumTriangles() const
+{ 
+	return 0; 
+}
+
 void IShaderProgram::LoadFloat(int location, float value)
 {
 	glUniform1f(location, value);

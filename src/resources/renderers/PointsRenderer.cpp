@@ -3,6 +3,7 @@
 #include "../models/Model.h"
 #include "../materials/IMaterial.h"
 #include "../camera/ICamera.h"
+#include "../shaders/IShaderProgram.h"
 #include <GL/glew.h>
 
 
@@ -42,5 +43,5 @@ bool PointsRenderer::IsInstancingAllowed() const
 
 unsigned int PointsRenderer::GetNumberTrianglesRendered() const
 {
-	return mInstances.size() * mModel->GetNumberOfVertexs() / 3;
+	return mInstances.size() * mModel->GetNumberOfVertexs() * GetMaterial()->GetShader()->GetGeometryShaderNumTriangles();
 }

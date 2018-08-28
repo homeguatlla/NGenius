@@ -48,6 +48,11 @@ IShaderProgram*  IMaterial::GetShader()
 	return mShader;
 }
 
+const IShaderProgram*  IMaterial::GetShader() const
+{
+	return mShader;
+}
+
 void IMaterial::CopyMaterialEffectsValuesFrom(IMaterial* material)
 {
 	IMaterialEffectIterator it = mEffects.begin();

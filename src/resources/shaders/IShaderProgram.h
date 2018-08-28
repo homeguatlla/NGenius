@@ -40,6 +40,7 @@ public:
 	virtual void GetAllUniformLocations() = 0;
 
 	int GetAttributePosition();
+	virtual int GetGeometryShaderNumTriangles() const;
 
 protected:
 	int mLocationPosition;

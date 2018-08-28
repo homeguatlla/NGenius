@@ -160,3 +160,8 @@ void GrassShader::GetAllUniformLocations()
 
 	mLocationWindModificatorsArray = GetUniformLocation(ATTRIBUTE_WIND_MODIFICATORS_ARRAY);
 }
+
+int GrassShader::GetGeometryShaderNumTriangles() const
+{
+	return 10;
+}

@@ -33,6 +33,7 @@ public:
 	void CopyMaterialEffectsValuesFrom(IMaterial* material);
 
 	IShaderProgram* GetShader();
+	const IShaderProgram* GetShader() const;
 
 	virtual IMaterial* Clone() const;
 

@@ -64,6 +64,11 @@ IMaterial* IRenderer::GetMaterial()
 	return mMaterial;
 }
 
+const IMaterial* IRenderer::GetMaterial() const
+{
+	return mMaterial;
+}
+
 Model* IRenderer::GetModel()
 {
 	return mModel;
