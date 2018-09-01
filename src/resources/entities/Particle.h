@@ -35,9 +35,5 @@ public:
 	const glm::vec4& GetColor() const;
 	float GetMaxLiveTime() const;
 	float GetLiveTime() const;
-
-private:
-	float Lerp(float p0, float p1, float t);
-	glm::vec4 Lerp(glm::vec4& p0, glm::vec4& p1, float t);
 };
 

@@ -181,6 +181,12 @@
     <Filter Include="Source Files\resources\systems\environmentSystem">
       <UniqueIdentifier>{45d73283-2a56-4f1d-a0df-633780dbc133}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\resources\models\animation">
+      <UniqueIdentifier>{c25fd792-fcb7-427a-afb1-f4e3d62639c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\models\animation">
+      <UniqueIdentifier>{6e3747f4-dbe2-4bcf-b28f-db28e177175c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -639,6 +645,24 @@
     <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat3Array.h">
       <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\models\animation\AnimateModel.h">
+      <Filter>Header Files\resources\models\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\models\animation\Joint.h">
+      <Filter>Header Files\resources\models\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\models\animation\Animation.h">
+      <Filter>Header Files\resources\models\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\models\animation\KeyFrame.h">
+      <Filter>Header Files\resources\models\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\models\animation\JointTransform.h">
+      <Filter>Header Files\resources\models\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\models\animation\Animator.h">
+      <Filter>Header Files\resources\models\animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1087,6 +1111,24 @@
     </ClCompile>
     <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat3Array.cpp">
       <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\animation\AnimateModel.cpp">
+      <Filter>Source Files\resources\models\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\animation\Joint.cpp">
+      <Filter>Source Files\resources\models\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\animation\Animation.cpp">
+      <Filter>Source Files\resources\models\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\animation\KeyFrame.cpp">
+      <Filter>Source Files\resources\models\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\animation\JointTransform.cpp">
+      <Filter>Source Files\resources\models\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\animation\Animator.cpp">
+      <Filter>Source Files\resources\models\animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -241,6 +241,12 @@
     <ClInclude Include="src\resources\materials\IMaterial.h" />
     <ClInclude Include="src\resources\materials\IMaterialEffect.h" />
     <ClInclude Include="src\resources\materials\MaterialsLibrary.h" />
+    <ClInclude Include="src\resources\models\animation\AnimateModel.h" />
+    <ClInclude Include="src\resources\models\animation\Animation.h" />
+    <ClInclude Include="src\resources\models\animation\Animator.h" />
+    <ClInclude Include="src\resources\models\animation\Joint.h" />
+    <ClInclude Include="src\resources\models\animation\JointTransform.h" />
+    <ClInclude Include="src\resources\models\animation\KeyFrame.h" />
     <ClInclude Include="src\resources\models\Mesh.h" />
     <ClInclude Include="src\resources\models\Model.h" />
     <ClInclude Include="src\resources\models\ModelsLibrary.h" />
@@ -390,6 +396,12 @@
     <ClCompile Include="src\resources\materials\IMaterial.cpp" />
     <ClCompile Include="src\resources\materials\IMaterialEffect.cpp" />
     <ClCompile Include="src\resources\materials\MaterialsLibrary.cpp" />
+    <ClCompile Include="src\resources\models\animation\AnimateModel.cpp" />
+    <ClCompile Include="src\resources\models\animation\Animation.cpp" />
+    <ClCompile Include="src\resources\models\animation\Animator.cpp" />
+    <ClCompile Include="src\resources\models\animation\Joint.cpp" />
+    <ClCompile Include="src\resources\models\animation\JointTransform.cpp" />
+    <ClCompile Include="src\resources\models\animation\KeyFrame.cpp" />
     <ClCompile Include="src\resources\models\Mesh.cpp" />
     <ClCompile Include="src\resources\models\Model.cpp" />
     <ClCompile Include="src\resources\models\ModelsLibrary.cpp" />

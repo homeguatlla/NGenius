@@ -57,11 +57,11 @@ void Particle::Update(float elapsedTime)
 	Transformation* transformation = GetTransformation();
 	mRotation += mRotationSpeed * elapsedTime;
 	transformation->SetRotation(glm::vec3(mRotation));
-	float scale = Lerp(mScale.x, mScale.y, t);
+	float scale = glm::mix(mScale.x, mScale.y, t);
 	transformation->SetScale(glm::vec3(scale));
 
 	//COLOR
-	mColor = Lerp(mColorOrigin, mColorDestination, t);
+	mColor = glm::mix(mColorOrigin, mColorDestination, t);
 }
 
 void Particle::SetScaleFactor(glm::vec2& scale)
@@ -99,13 +99,4 @@ const glm::vec4& Particle::GetColor() const
 float Particle::GetMaxLiveTime() const
 {
 	return mMaxLiveTime;
-}
-
-float Particle::Lerp(float p0, float p1, float t)
-{
-	return p0 + (p1 - p0) * t;
-}
-glm::vec4 Particle::Lerp(glm::vec4& p0, glm::vec4& p1, float t)
-{
-	return p0 + (p1 - p0) * t;
 }
