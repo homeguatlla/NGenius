@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "TexturesLibrary.h"
 
-#include "ITexture.h"
 #include "Texture.h"
 #include "TextureArray.h"
 #include "TextureCubemap.h"
@@ -80,7 +79,7 @@ void TexturesLibrary::LoadTexture(std::string name, std::string filename, bool h
 ITexture* TexturesLibrary::CreateColorTexture(std::string name, const glm::vec2& size)
 {
 	Texture* texture = new Texture();
-	texture->CreateTexture(++mCurrentTextureUnit, size.x, size.y);
+	texture->CreateTexture(++mCurrentTextureUnit, static_cast<int>(size.x), static_cast<int>(size.y));
 	AddElement(name, texture);
 
 	return texture;

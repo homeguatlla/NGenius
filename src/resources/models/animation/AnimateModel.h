@@ -1,6 +1,7 @@
 #pragma once
 #include "glm/glm.hpp"
 #include <vector>
+#include "Animator.h"
 
 class Joint;
 class Model;
@@ -13,11 +14,11 @@ public:
 
 	const Model* GetModel() const;
 	Joint* GetRootJoint();
-	//void SetAnimation(const Animation* animation);
+	void PlayAnimation(Animation* animation);
 	
 	void FillWithJointTransforms(std::vector<glm::mat4>& jointMatrices) const;
 	
-	void Update();
+	void Update(float elapsedTime);
 
 private:
 	//void CreateAnimationWeightsVBO(VertexBuffersManager& vertexBufferManager, int location);
@@ -29,6 +30,6 @@ private:
 	//skin
 	const Model* mModel;
 
-	//Animator mAnimator;
+	Animator mAnimator;
 };
 

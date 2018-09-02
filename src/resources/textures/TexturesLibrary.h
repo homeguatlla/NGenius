@@ -6,9 +6,8 @@
 #include <functional>
 #include <glm/glm.hpp>
 #include "../BaseLibrary.h"
+#include "ITexture.h"
 
-
-class ITexture;
 
 class TexturesLibrary : public BaseLibrary<ITexture*>
 {

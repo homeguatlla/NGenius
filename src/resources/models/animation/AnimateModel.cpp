@@ -5,7 +5,8 @@
 
 AnimateModel::AnimateModel(const Model* model, Joint* rootJoint) :
 	mModel(model),
-	mRootJoint(rootJoint)
+	mRootJoint(rootJoint),
+	mAnimator(this)
 {
 	mRootJoint->CalculateInverseBindTransform(glm::mat4(1.0f));
 }
@@ -24,16 +25,19 @@ Joint* AnimateModel::GetRootJoint()
 	return mRootJoint;
 }
 
-//void SetAnimation(const Animation* animation)
+void AnimateModel::PlayAnimation(Animation* animation)
+{
+	mAnimator.PlayAnimation(animation);
+}
 
 void AnimateModel::FillWithJointTransforms(std::vector<glm::mat4>& jointMatrices) const
 {
 	mRootJoint->FillWithJointTransforms(jointMatrices);
 }
 
-void AnimateModel::Update()
+void AnimateModel::Update(float elapsedTime)
 {
-	//mAnimator.Update();
+	mAnimator.Update(elapsedTime);
 }
 
 /*

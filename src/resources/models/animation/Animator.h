@@ -25,7 +25,7 @@ private:
 	void IncreaseAnimationTime(float elapsedTime);
 	void FillWithCalculatedCurrentAnimationPose(std::map<std::string, const glm::mat4x4>& jointTransforms);
 	void ApplyPoseToJoints(std::map<std::string, const glm::mat4x4>& currentPose, Joint* joint, glm::mat4x4& parentTransform);
-	std::pair<KeyFrame*, KeyFrame*>& GetPreviousAndNextFrames();
+	std::pair<KeyFrame*, KeyFrame*> GetPreviousAndNextFrames();
 	float CalculateProgression(KeyFrame* previousFrame, KeyFrame* nextFrame) const;
 	void FillWithInterpolateFrames(std::map<std::string, const glm::mat4x4>& jointTransforms, KeyFrame* previousFrame, KeyFrame* nextFrame, float lambda) const;
 

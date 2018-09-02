@@ -17,6 +17,8 @@ class Model
 	int mIndexesVBO;
 	int mTextureCoordsVBO;
 	int mColorVBO;
+	int mAnimationWeightsVBO;
+	int mAnimationJointsIDsVBO;
 
 public:
 	Model(Mesh* model);

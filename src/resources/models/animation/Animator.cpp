@@ -69,7 +69,7 @@ void Animator::ApplyPoseToJoints(std::map<std::string, const glm::mat4x4>& curre
 	joint->SetAnimatedTransform(currentTransform);
 }
 
-std::pair<KeyFrame*, KeyFrame*>& Animator::GetPreviousAndNextFrames()
+std::pair<KeyFrame*, KeyFrame*> Animator::GetPreviousAndNextFrames()
 {
 	std::vector<KeyFrame*> frames = mCurrentAnimation->GetKeyframes();
 	KeyFrame* previousFrame = frames[0];

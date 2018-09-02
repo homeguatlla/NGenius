@@ -19,6 +19,8 @@ Mesh* OBJLoader::LoadModel(const std::string& filename)
 
 	std::ifstream input(filename);
 
+	std::cout << "Loading Model: " << filename << "\n";
+
 	if (input.is_open())
 	{
 		std::string line;

@@ -21,6 +21,7 @@ private:
 
 		FaceValues() {}
 	};
+
 	typedef struct FaceValues Face;
 
 	static void LoadMaterial(Mesh* model, const std::string& path, const std::string& filename);

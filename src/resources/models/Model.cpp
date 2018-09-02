@@ -199,7 +199,7 @@ void Model::CreateVertexsVBO(VertexBuffersManager& vertexBufferManager, int loca
 	long numVertexs = mMesh->GetNumberOfVertexs();
 	if (numVertexs > 0)
 	{
-		// 1rst attribute buffer : vertices
+		// 1st attribute buffer : vertices
 		std::string name("model_vertexs_");
 		name.append(std::to_string(GetID()));
 
@@ -275,7 +275,7 @@ void Model::CreateNormalsVBO(VertexBuffersManager& vertexBufferManager, int loca
 
 void Model::CreateTangentsVBO(VertexBuffersManager& vertexBufferManager, int location)
 {
-	//4rd tangents
+	//4th tangents
 	long numTangents = mMesh->GetNumberOfTangents();
 	if (numTangents > 0)
 	{

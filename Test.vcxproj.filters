@@ -663,6 +663,12 @@
     <ClInclude Include="src\resources\models\animation\Animator.h">
       <Filter>Header Files\resources\models\animation</Filter>
     </ClInclude>
+    <ClInclude Include="src\loader\FBXLoader.h">
+      <Filter>Header Files\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\ModelFactory.h">
+      <Filter>Header Files\loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1129,6 +1135,12 @@
     </ClCompile>
     <ClCompile Include="src\resources\models\animation\Animator.cpp">
       <Filter>Source Files\resources\models\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\FBXLoader.cpp">
+      <Filter>Source Files\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\ModelFactory.cpp">
+      <Filter>Source Files\loader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

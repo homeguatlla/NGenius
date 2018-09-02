@@ -2,7 +2,8 @@
 #include "ModelsLibrary.h"
 #include "Model.h"
 #include "Mesh.h"
-#include "../../loader/OBJLoader.h"
+#include "../../loader/ModelFactory.h"
+
 
 #include <iostream>
 
@@ -56,6 +57,7 @@ void ModelsLibrary::Load()
 	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", false, true);
 	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
 
+	LoadModel("yurown", "data/models/yurown/Sci-Fi_Soldier.fbx", false, true);
 
 	//LoadModel("marine", "data/models/marine/marine.obj", true, true);
 	//LoadModel("stone", "data/models/stone/stone.obj");
@@ -69,12 +71,12 @@ void ModelsLibrary::Load()
 
 void ModelsLibrary::LoadModel(const std::string& name, const std::string& filename, bool calculateNormals, bool calculateTangents)
 {
-	Mesh* model = OBJLoader::LoadModel(filename);
-
-	model->Build(calculateNormals, calculateTangents);
+	Mesh* model = ModelFactory::LoadModel(filename);
 
 	if (model != nullptr)
 	{
+		model->Build(calculateNormals, calculateTangents);
+
 		Model* modelRender = new Model(model);
 		AddElement(name, modelRender);
 
