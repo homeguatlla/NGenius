@@ -58,6 +58,7 @@ void ModelsLibrary::Load()
 	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
 
 	LoadModel("yurown", "data/models/yurown/Sci-Fi_Soldier.fbx", false, true);
+	LoadModel("spider", "data/models/spider2/spider_myOldOne.fbx", false, true);
 
 	//LoadModel("marine", "data/models/marine/marine.obj", true, true);
 	//LoadModel("stone", "data/models/stone/stone.obj");

@@ -162,17 +162,20 @@ void OBJLoader::LoadMaterial(Mesh* model, const std::string& path,  const std::s
 	}
 	else
 	{
-		std::cout << "Material filename " << filename << " not found.";
+		std::cout << "	Material filename " << filename << " not found." << "\n";
 		assert(false);
 	}
 
 	model->SetMaterialName(materialName);
 	if (!diffuseTexture.empty())
 	{
+		std::cout << "	Diffuse texture filename " << path + diffuseTexture << "\n";
+
 		model->SetDiffuseTextureName(path + diffuseTexture);
 	}
 	if (!normalMapTexture.empty())
 	{
+		std::cout << "	Normalmap texture filename " << path + normalMapTexture << "\n";
 		model->SetNormalMapTextureName(path + normalMapTexture);
 	}
 }

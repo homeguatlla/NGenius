@@ -2,12 +2,14 @@
 #include "FBXLoader.h"
 #include "glm/glm.hpp"
 #include "../resources/models/Mesh.h"
+#include "fbxsdk/scene/geometry/fbxlayer.h"
 
 #include <assert.h>
 #include <vector>
 #include <iostream>
 
 using namespace std;
+using namespace fbxsdk;
 
 FBXLoader::FBXLoader()
 {
@@ -70,6 +72,18 @@ Mesh* FBXLoader::LoadMesh(FbxScene* scene)
 						std::vector<glm::vec2> uvs;
 						std::vector<unsigned int> indexes;
 
+						FbxLayerElementArrayTemplate<FbxVector2>* uvVertices = 0;
+						fbxMesh->GetTextureUV(&uvVertices, fbxsdk::FbxLayerElement::eTextureDiffuse);
+
+
+						int materialsCount = fbxMesh->GetElementMaterialCount();
+						for (int m = 0; m < materialsCount; ++m)
+						{
+							fbxsdk::FbxGeometryElementMaterial* material = fbxMesh->GetElementMaterial(m);
+							fbxsdk::FbxLayerElement::EMappingMode mappingMode = material->GetMappingMode();
+							
+						}
+						
 						FbxVector4* fbxVertices = fbxMesh->GetControlPoints();
 						for (int j = 0; j < fbxMesh->GetPolygonCount(); ++j)
 						{
@@ -101,15 +115,10 @@ Mesh* FBXLoader::LoadMesh(FbxScene* scene)
 								}
 								
 								//Getting texture information
-								FbxVector2 fbxUV(0, 0);
 								bool isMapped = true;
-								success = fbxMesh->GetPolygonVertexUV(j, k, "UVW", fbxUV, isMapped);
-								if (success)
-								{
-									x = static_cast<float>(fbxUV[0]);
-									y = static_cast<float>(fbxUV[1]);
-									uvs.push_back(glm::vec2(x, y));
-								}
+								x = static_cast<float>(uvVertices->GetAt(fbxMesh->GetTextureUVIndex(j, k)).mData[0]);
+								y = static_cast<float>(uvVertices->GetAt(fbxMesh->GetTextureUVIndex(j, k)).mData[1]);
+								uvs.push_back(glm::vec2(x, y));
 							}
 						}
 
@@ -149,17 +158,41 @@ void FBXLoader::LoadMaterials(FbxScene* scene, Mesh* mesh)
 {
 	if (scene != nullptr && mesh != nullptr)
 	{
-		int materialCount = scene->GetMaterialCount();
+		int materialsCount = scene->GetMaterialCount();
+		if (materialsCount > 0)
+		{
+			mesh->SetMaterialName(scene->GetMaterial(0)->GetName());
+		}
+		else 
+		{
+			std::cout << "	Material not found!\n";
+		}
+
+		//load textures
 		int numTextures = scene->GetTextureCount();
 		for (int textureIndex = 0; textureIndex < numTextures; ++textureIndex)
 		{
 			FbxTexture* texture = scene->GetTexture(textureIndex);
+			FbxTexture::EMappingType type = texture->GetMappingType();
+		
 			FbxFileTexture* textureFile = static_cast<FbxFileTexture*>(texture);
 			if (textureFile != nullptr && !textureFile->GetUserDataPtr())
 			{
 				const FbxString filename = textureFile->GetFileName();
+				std::cout << "	Texture name: " << texture->GetName() << "\n";
 				std::cout << "	Texture name: " << filename << "\n";
-				mesh->SetDiffuseTextureName(std::string(filename));
+				if (std::string(texture->GetName()) == "DiffuseTexture")
+				{
+					mesh->SetDiffuseTextureName(std::string(filename));
+				}
+				else if (std::string(texture->GetName()) == "NormalTexture")
+				{
+					mesh->SetNormalMapTextureName(std::string(filename));
+				}
+				else
+				{
+					std::cout << "	Texture name not recognized!\n";
+				}
 			}
 		}
 	}

@@ -202,6 +202,9 @@ glm::vec3 Mesh::CalculateTriangleNormalFromVertex(const glm::vec3& a, const glm:
 
 void Mesh::CalculateTangents()
 {
+	assert(mVertexs.size() > 0);
+	assert(mTextureCoords.size() > 0);
+
 	std::vector<glm::vec3> tan1(0.0f);
 	std::vector<glm::vec3> tan2(0.0f);
 
