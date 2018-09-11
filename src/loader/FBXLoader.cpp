@@ -330,7 +330,7 @@ void FBXLoader::LoadAnimations(FbxScene* fbxScene, FbxCluster* fbxCluster, Anima
 			{
 				keyFrames.push_back(new KeyFrame());
 			}
-			(*animation) = new Animation(duration.GetMilliSeconds(), keyFrames);
+			(*animation) = new Animation(std::string(animStack->GetName()), duration.GetMilliSeconds(), keyFrames);
 		}
 
 		std::vector<KeyFrame*>& frames = (*animation)->GetKeyframes();

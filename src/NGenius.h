@@ -17,6 +17,7 @@ class DebugSystem;
 class SpacePartitionSystem;
 class Statistics;
 class EnvironmentSystem;
+class AnimationSystem;
 
 class InputHandler;
 class IInputListener;
@@ -28,6 +29,8 @@ class Texture;
 class FontType;
 class IMaterial;
 class Light;
+class Animation;
+class AnimatedModel;
 
 class GameEntity;
 class ParticlesEmitter;
@@ -50,6 +53,7 @@ class NGenius : public BaseVisitable<>
 	SpacePartitionSystem* mSpacePartitionSystem;
 	DebugSystem* mDebugSystem;
 	EnvironmentSystem* mEnvironmentSystem;
+	AnimationSystem* mAnimationSystem;
 	InputHandler* mInputHandler;
 	Statistics* mStatistics;
 	GameScene* mGameScene;
@@ -72,6 +76,8 @@ public:
 	ITexture* GetTexture(const std::string& name) const;
 	const ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
 	IMaterial* GetMaterial(const std::string& name) const;
+	Animation* GetAnimation(const std::string& name) const;
+	AnimatedModel* GetAnimatedModel(const std::string& name) const;
 
 	FontType* GetFont(const std::string& name) const;
 	float GetNumberFPS() const;

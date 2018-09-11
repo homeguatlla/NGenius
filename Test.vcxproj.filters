@@ -669,6 +669,18 @@
     <ClInclude Include="src\resources\models\animation\AnimatedModel.h">
       <Filter>Header Files\resources\models\animation</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\models\animation\AnimatedModelLibrary.h">
+      <Filter>Header Files\resources\models\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\models\animation\AnimationsLibrary.h">
+      <Filter>Header Files\resources\models\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\AnimationSystem.h">
+      <Filter>Header Files\resources\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\AnimationComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1141,6 +1153,18 @@
     </ClCompile>
     <ClCompile Include="src\resources\models\animation\AnimatedModel.cpp">
       <Filter>Source Files\resources\models\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\animation\AnimatedModelLibrary.cpp">
+      <Filter>Source Files\resources\models\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\animation\AnimationsLibrary.cpp">
+      <Filter>Source Files\resources\models\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\AnimationSystem.cpp">
+      <Filter>Source Files\resources\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\AnimationComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

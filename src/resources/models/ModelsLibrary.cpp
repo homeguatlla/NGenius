@@ -4,10 +4,14 @@
 #include "Mesh.h"
 #include "../../loader/ModelFactory.h"
 #include "animation/AnimatedModel.h"
+#include "animation/Animation.h"
 
 #include <iostream>
 
-ModelsLibrary::ModelsLibrary(TexturesLibrary* texturesLibrary) : mTexturesLibrary(texturesLibrary)
+ModelsLibrary::ModelsLibrary(TexturesLibrary* texturesLibrary, AnimationsLibrary* animationsLibrary, AnimatedModelLibrary* animatedModelLibrary) : 
+	mTexturesLibrary(texturesLibrary),
+	mAnimationsLibrary(animationsLibrary),
+	mAnimatedModelLibrary(animatedModelLibrary)
 {
 }
 
@@ -88,9 +92,9 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 
 		if (animation != nullptr && rootJoint != nullptr)
 		{
-			AnimatedModel* animateModel = new AnimatedModel(modelRender, rootJoint);
-			//add the animateModel To animateModel library
-			//add animation to animations library
+			AnimatedModel* animatedModel = new AnimatedModel(name, modelRender, rootJoint);
+			mAnimatedModelLibrary->AddElement(name, animatedModel);
+			mAnimationsLibrary->AddElement(animation->GetName(), animation);
 		}
 
 		if (!model->GetDiffuseTextureName().empty())

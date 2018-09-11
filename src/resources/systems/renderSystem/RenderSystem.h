@@ -17,12 +17,16 @@ class TexturesLibrary;
 class ModelsLibrary;
 class FontsLibrary;
 class MaterialsLibrary;
+class AnimationsLibrary;
+class AnimatedModelLibrary;
 
 class Model;
 class IShaderProgram;
 class ITexture;
 class FontType;
 class IMaterial;
+class Animation;
+class AnimatedModel;
 
 struct GLFWwindow;
 struct GLFWmonitor;
@@ -54,6 +58,8 @@ class RenderSystem : public BaseVisitable<>
 	ModelsLibrary* mModelsLibrary;
 	FontsLibrary* mFontsLibrary;
 	MaterialsLibrary* mMaterialsLibrary;
+	AnimationsLibrary* mAnimationsLibrary;
+	AnimatedModelLibrary* mAnimatedModelLibrary;
 
 	GLFWwindow* mWindow;
 
@@ -117,6 +123,10 @@ public:
 	ITexture* GetTexture(const std::string& name) const;
 	FontType* GetFont(const std::string& name) const;
 	IMaterial* GetMaterial(const std::string& name) const;
+	
+	//TODO esto igual se tendría que pasar fuera del rendersystem y meterlo en el animationssystem
+	Animation* GetAnimation(const std::string& name) const;
+	AnimatedModel* GetAnimatedModel(const std::string& name) const;
 
 	//esto no me gusta...
 	VertexBuffersManager& GetVertexBufferManager();

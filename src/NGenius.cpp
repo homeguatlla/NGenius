@@ -20,6 +20,7 @@
 #include "resources/systems/DebugSystem.h"
 #include "resources/systems/SpacePartitionSystem.h"
 #include "resources/systems/EnvironmentSystem/EnvironmentSystem.h"
+#include "resources/systems/AnimationSystem.h"
 
 #include "resources/scene/GameScene.h"
 #include "resources/entities/ParticlesEmitter.h"
@@ -132,6 +133,7 @@ void NGenius::AcceptStatistics()
 {
 	if (mDebugSystem->IsDebugModeEnabled())
 	{
+		mAnimationSystem->Accept(*mStatistics);
 		mRenderSystem->Accept(*mStatistics);
 		mGameScene->Accept(*mStatistics);
 		mPhysicsSystem->Accept(*mStatistics);
@@ -149,6 +151,7 @@ void NGenius::UpdateSystems(float elapsedTime)
 	mGameScene->Update(elapsedTime);
 	mPhysicsSystem->Update(elapsedTime);
 	mSpacePartitionSystem->Update(elapsedTime);
+	mAnimationSystem->Update(elapsedTime);
 	mRenderSystem->Update(elapsedTime);
 }
 
@@ -163,10 +166,12 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 	mParticlesSystem = new ParticlesSystem();
 	mSpacePartitionSystem = new SpacePartitionSystem();
 	mEnvironmentSystem = new EnvironmentSystem();
+	mAnimationSystem = new AnimationSystem();
 }
 
 void NGenius::DestroySystems()
 {
+	delete mAnimationSystem;
 	delete mEnvironmentSystem;
 	delete mSpacePartitionSystem;
 	delete mDebugSystem;
@@ -249,6 +254,18 @@ IMaterial* NGenius::GetMaterial(const std::string& name) const
 	return mRenderSystem->GetMaterial(name);
 }
 
+Animation* NGenius::GetAnimation(const std::string& name) const
+{
+	assert(mRenderSystem != nullptr);
+	return mRenderSystem->GetAnimation(name);
+}
+
+AnimatedModel* NGenius::GetAnimatedModel(const std::string& name) const
+{
+	assert(mRenderSystem != nullptr);
+	return mRenderSystem->GetAnimatedModel(name);
+}
+
 GLFWwindow* NGenius::GetGLWindow() const
 {
 	assert(mRenderSystem != nullptr);
@@ -295,6 +312,7 @@ GameScene* NGenius::CreateGameScene(const std::string& name)
 	mGameScene->RegisterGameSceneListener(mPhysicsSystem);
 	mGameScene->RegisterGameSceneListener(mSpacePartitionSystem);
 	mGameScene->RegisterGameSceneListener(mEnvironmentSystem);
+	mGameScene->RegisterGameSceneListener(mAnimationSystem);
 
 	return mGameScene;
 }

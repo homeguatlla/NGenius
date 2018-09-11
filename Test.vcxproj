@@ -183,6 +183,7 @@
     <ClInclude Include="src\resources\camera\PerspectiveCamera.h" />
     <ClInclude Include="src\resources\command\commands\RiseTerrainCommand.h" />
     <ClInclude Include="src\resources\command\ICommand.h" />
+    <ClInclude Include="src\resources\components\AnimationComponent.h" />
     <ClInclude Include="src\resources\components\BillboardComponent.h" />
     <ClInclude Include="src\resources\components\CameraComponent.h" />
     <ClInclude Include="src\resources\components\CharacterComponent.h" />
@@ -244,7 +245,9 @@
     <ClInclude Include="src\resources\materials\IMaterialEffect.h" />
     <ClInclude Include="src\resources\materials\MaterialsLibrary.h" />
     <ClInclude Include="src\resources\models\animation\AnimatedModel.h" />
+    <ClInclude Include="src\resources\models\animation\AnimatedModelLibrary.h" />
     <ClInclude Include="src\resources\models\animation\Animation.h" />
+    <ClInclude Include="src\resources\models\animation\AnimationsLibrary.h" />
     <ClInclude Include="src\resources\models\animation\Animator.h" />
     <ClInclude Include="src\resources\models\animation\Joint.h" />
     <ClInclude Include="src\resources\models\animation\JointTransform.h" />
@@ -290,6 +293,7 @@
     <ClInclude Include="src\resources\shaders\TextShader.h" />
     <ClInclude Include="src\resources\shaders\VerticalBlurShader.h" />
     <ClInclude Include="src\resources\shaders\WaterShader.h" />
+    <ClInclude Include="src\resources\systems\AnimationSystem.h" />
     <ClInclude Include="src\resources\systems\DebugSystem.h" />
     <ClInclude Include="src\resources\systems\environmentSystem\EnvironmentSystem.h" />
     <ClInclude Include="src\resources\systems\environmentSystem\WindManager.h" />
@@ -340,6 +344,7 @@
     <ClCompile Include="src\resources\camera\PerspectiveCamera.cpp" />
     <ClCompile Include="src\resources\command\commands\RiseTerrainCommand.cpp" />
     <ClCompile Include="src\resources\command\ICommand.cpp" />
+    <ClCompile Include="src\resources\components\AnimationComponent.cpp" />
     <ClCompile Include="src\resources\components\BillboardComponent.cpp" />
     <ClCompile Include="src\resources\components\CameraComponent.cpp" />
     <ClCompile Include="src\resources\components\CharacterComponent.cpp" />
@@ -401,7 +406,9 @@
     <ClCompile Include="src\resources\materials\IMaterialEffect.cpp" />
     <ClCompile Include="src\resources\materials\MaterialsLibrary.cpp" />
     <ClCompile Include="src\resources\models\animation\AnimatedModel.cpp" />
+    <ClCompile Include="src\resources\models\animation\AnimatedModelLibrary.cpp" />
     <ClCompile Include="src\resources\models\animation\Animation.cpp" />
+    <ClCompile Include="src\resources\models\animation\AnimationsLibrary.cpp" />
     <ClCompile Include="src\resources\models\animation\Animator.cpp" />
     <ClCompile Include="src\resources\models\animation\Joint.cpp" />
     <ClCompile Include="src\resources\models\animation\JointTransform.cpp" />
@@ -447,6 +454,7 @@
     <ClCompile Include="src\resources\shaders\TextShader.cpp" />
     <ClCompile Include="src\resources\shaders\VerticalBlurShader.cpp" />
     <ClCompile Include="src\resources\shaders\WaterShader.cpp" />
+    <ClCompile Include="src\resources\systems\AnimationSystem.cpp" />
     <ClCompile Include="src\resources\systems\DebugSystem.cpp" />
     <ClCompile Include="src\resources\systems\environmentSystem\EnvironmentSystem.cpp" />
     <ClCompile Include="src\resources\systems\environmentSystem\WindManager.cpp" />

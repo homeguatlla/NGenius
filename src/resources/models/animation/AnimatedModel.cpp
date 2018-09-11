@@ -3,7 +3,8 @@
 #include "Joint.h"
 #include "../Model.h"
 
-AnimatedModel::AnimatedModel(const Model* model, Joint* rootJoint) :
+AnimatedModel::AnimatedModel(const std::string& name,  const Model* model, Joint* rootJoint) :
+	mName(name),
 	mModel(model),
 	mRootJoint(rootJoint),
 	mAnimator(this)
@@ -23,6 +24,11 @@ const Model* AnimatedModel::GetModel() const
 Joint* AnimatedModel::GetRootJoint()
 {
 	return mRootJoint;
+}
+
+std::string AnimatedModel::GetName() const
+{
+	return mName;
 }
 
 void AnimatedModel::PlayAnimation(Animation* animation)

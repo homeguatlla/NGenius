@@ -104,6 +104,7 @@
 #include "src/resources/components/SpacePartitionComponent.h"
 #include "src/resources/components/EnvironmentAffectedComponent.h"
 #include "src/resources/components/EnvironmentModificatorComponent.h"
+#include "src/resources/components/AnimationComponent.h"
 
 #include "src/resources/command/ICommand.h"
 #include "src/resources/command/commands/RiseTerrainCommand.h"
@@ -988,6 +989,7 @@ void CreatePlayer()
 	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	mPlayer->AddComponent(new DebugComponent(boundingBoxRenderer));
 	mPlayer->AddComponent(new EnvironmentModificatorComponent());
+	mPlayer->AddComponent(new AnimationComponent(mEngine.GetAnimation("Armature|Armature|Armature|walking|Armature|walking"), mEngine.GetAnimatedModel("farmer")));
 	mScene->AddEntity(mPlayer);
 }
 
