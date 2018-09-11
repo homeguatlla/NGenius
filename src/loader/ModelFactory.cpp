@@ -4,7 +4,7 @@
 #include "FBXLoader.h"
 #include <algorithm>
 
-Mesh* ModelFactory::LoadModel(const std::string& filename)
+Mesh* ModelFactory::LoadModel(const std::string& filename, Animation** animation, Joint** rootJoint)
 {
 	FileType type = GetFileType(filename);
 
@@ -13,7 +13,7 @@ Mesh* ModelFactory::LoadModel(const std::string& filename)
 		case FileType::TYPE_OBJ:
 			return OBJLoader::LoadModel(filename);
 		case FileType::TYPE_FBX:
-			return FBXLoader::LoadModel(filename);
+			return FBXLoader::LoadModel(filename, animation, rootJoint);
 		case FileType::TYPE_INVALID:
 		default:
 			return nullptr;

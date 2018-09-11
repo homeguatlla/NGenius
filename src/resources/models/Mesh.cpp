@@ -150,6 +150,39 @@ const std::string& Mesh::GetNormalMapTextureName() const
 	return mNormalMapTextureName;
 }
 
+
+void Mesh::AddVertexWeightToVertex(int vertexIndex, float weight)
+{
+	if (mVertexWeights.size() == 0)
+	{
+		mVertexWeights.reserve(mVertexs.size());
+		for (unsigned int i = 0; i < mVertexs.size(); ++i)
+		{
+			mVertexWeights.push_back(glm::vec4(0.0f));
+		}
+	}
+	if (mVertexWeights[vertexIndex].x == 0.0f) mVertexWeights[vertexIndex].x = weight;
+	if (mVertexWeights[vertexIndex].y == 0.0f) mVertexWeights[vertexIndex].y = weight;
+	if (mVertexWeights[vertexIndex].z == 0.0f) mVertexWeights[vertexIndex].z = weight;
+	if (mVertexWeights[vertexIndex].w == 0.0f) mVertexWeights[vertexIndex].w = weight;
+}
+
+void Mesh::AddJointIdToVertex(int vertexIndex, int jointId)
+{
+	if (mVertexJointsIds.size() == 0)
+	{
+		mVertexJointsIds.reserve(mVertexs.size());
+		for (unsigned int i = 0; i < mVertexs.size(); ++i)
+		{
+			mVertexJointsIds.push_back(glm::ivec4(-1));
+		}
+	}
+	if (mVertexJointsIds[vertexIndex].x == -1) mVertexJointsIds[vertexIndex].x = jointId;
+	if (mVertexJointsIds[vertexIndex].y == -1) mVertexJointsIds[vertexIndex].y = jointId;
+	if (mVertexJointsIds[vertexIndex].z == -1) mVertexJointsIds[vertexIndex].z = jointId;
+	if (mVertexJointsIds[vertexIndex].w == -1) mVertexJointsIds[vertexIndex].w = jointId;
+}
+
 void Mesh::CalculateNormals()
 {
 	struct Face 

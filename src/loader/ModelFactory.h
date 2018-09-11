@@ -2,6 +2,8 @@
 #include <string>
 
 class Mesh;
+class Animation;
+class Joint;
 
 class ModelFactory
 {
@@ -13,7 +15,7 @@ class ModelFactory
 	};
 
 public:
-	static Mesh* LoadModel(const std::string& filename);
+	static Mesh* LoadModel(const std::string& filename, Animation** animation = nullptr, Joint** rootJoint = nullptr);
 
 private:
 	static FileType GetFileType(const std::string& filename);

@@ -957,8 +957,8 @@ void CreatePlayer()
 {
 	//PLAYER
 	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("normalmap"));
-	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("SpiderMaterial_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("SpiderMaterial_normalmap")), 1.0f));
+	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("ManMaterial_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("enano_normalmap")), 1.0f));
 	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectShadowProperties(1));
@@ -971,10 +971,10 @@ void CreatePlayer()
 	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_SPACE, new JumpEvent()));
 	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
 
-	Model* model = mEngine.GetModel("spider");
+	Model* model = mEngine.GetModel("farmer");
 	IRenderer* renderer = new VertexsRenderer(model, material);
 
-	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 6.0f, 0.0f), glm::vec3(90.0f, 0.0f, 0.0f), glm::vec3(0.01f)),
+	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 6.0f, 0.0f), glm::vec3(-90.0f, 0.0f, 0.0f), glm::vec3(0.1f)),
 							renderer,
 							inputComponent,
 							new CharacterComponent(),

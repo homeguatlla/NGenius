@@ -12,6 +12,11 @@ class Mesh
 	std::vector<glm::vec3> mNormals;
 	std::vector<glm::vec3> mTangents;
 	std::vector<unsigned int> mIndexes;
+
+	//max of 4 joints per vertex
+	std::vector<glm::vec4> mVertexWeights;
+	std::vector<glm::ivec4> mVertexJointsIds;
+
 	int mModelID;
 	std::string mMaterialName;
 	std::string mDiffuseTextureName;
@@ -30,11 +35,12 @@ public:
 
 	unsigned int GetID() const;
 	void SetVertexs(std::vector<glm::vec3>& vertexs);
-	std::vector<glm::vec3>& GetVertexs();
 	void SetTextureCoords(std::vector<glm::vec2>& textureCoords);
+	void SetIndexes(std::vector<unsigned int>& indexes);
+	
+	std::vector<glm::vec3>& GetVertexs();
 	std::vector<glm::vec2>& GetTextureCoords();
 	std::vector<glm::vec3>& GetNormals();
-	void SetIndexes(std::vector<unsigned int>& indexes);
 	std::vector<unsigned int>& GetIndexes();
 	std::vector<glm::vec3>& GetTangents();
 
@@ -45,12 +51,17 @@ public:
 	long GetNumberOfTangents() const;
 
 	void Build(bool calculateNormals, bool calculateTangents);
+	
 	void SetMaterialName(const std::string& name);
-	const std::string& GetMaterialName() const;
 	void SetDiffuseTextureName(const std::string& name);
-	const std::string& GetDiffuseTextureName() const;
 	void SetNormalMapTextureName(const std::string& name);
-	const std::string& GetNormalMapTextureName() const;	
+	
+	const std::string& GetMaterialName() const;
+	const std::string& GetDiffuseTextureName() const;
+	const std::string& GetNormalMapTextureName() const;
+
+	void AddVertexWeightToVertex(int vertexIndex, float weight);
+	void AddJointIdToVertex(int vertexIndex, int jointId);
 
 private:
 	void CalculateNormals();

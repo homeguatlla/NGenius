@@ -2,7 +2,7 @@
 #include "Animation.h"
 
 
-Animation::Animation(float duration, std::vector<KeyFrame*>& frames) :
+Animation::Animation(long long duration, std::vector<KeyFrame*>& frames) :
 	mDuration(duration),
 	mKeyframes(frames)
 {
@@ -12,7 +12,7 @@ Animation::~Animation()
 {
 }
 
-float Animation::GetDuration() const
+long long Animation::GetDuration() const
 {
 	return mDuration;
 }

@@ -8,14 +8,17 @@ class JointTransform;
 class KeyFrame
 {
 public:
-	KeyFrame(float timeStamp, std::map<std::string, JointTransform*>& pose);
+	KeyFrame();
+	KeyFrame(long long timeStamp, std::map<std::string, JointTransform*>& pose);
 	~KeyFrame();
 
-	float GetTimestamp() const;
+	long long GetTimestamp() const;
 	std::map<std::string, JointTransform*>& GetJointKeyframes();
+	void SetTimestamp(long long timeStamp);
+	void AddJointTransform(std::string& name, JointTransform* pose);
 
 private:
-	float mTimestamp;
+	long long mTimestamp;
 	std::map<std::string, JointTransform*> mPose;
 };
 

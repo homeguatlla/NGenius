@@ -3,7 +3,7 @@
 #include "Model.h"
 #include "Mesh.h"
 #include "../../loader/ModelFactory.h"
-
+#include "animation/AnimateModel.h"
 
 #include <iostream>
 
@@ -57,9 +57,11 @@ void ModelsLibrary::Load()
 	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", false, true);
 	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
 
+	LoadModel("farmer", "data/models/farmer/farmer.fbx", false, true);
+	/*
 	LoadModel("yurown", "data/models/yurown/Sci-Fi_Soldier.fbx", false, true);
-	LoadModel("spider", "data/models/spider2/spider_myOldOne.fbx", false, true);
-
+	LoadModel("spider", "data/models/spider2/spider.fbx", false, true);
+	*/
 	//LoadModel("marine", "data/models/marine/marine.obj", true, true);
 	//LoadModel("stone", "data/models/stone/stone.obj");
 
@@ -72,7 +74,10 @@ void ModelsLibrary::Load()
 
 void ModelsLibrary::LoadModel(const std::string& name, const std::string& filename, bool calculateNormals, bool calculateTangents)
 {
-	Mesh* model = ModelFactory::LoadModel(filename);
+	Animation* animation = nullptr;
+	Joint* rootJoint = nullptr;
+
+	Mesh* model = ModelFactory::LoadModel(filename, &animation, &rootJoint);
 
 	if (model != nullptr)
 	{
@@ -80,6 +85,13 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 
 		Model* modelRender = new Model(model);
 		AddElement(name, modelRender);
+
+		if (animation != nullptr && rootJoint != nullptr)
+		{
+			AnimateModel* animateModel = new AnimateModel(modelRender, rootJoint);
+			//add the animateModel To animateModel library
+			//add animation to animations library
+		}
 
 		if (!model->GetDiffuseTextureName().empty())
 		{

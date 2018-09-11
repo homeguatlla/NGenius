@@ -7,14 +7,14 @@ class KeyFrame;
 class Animation
 {
 public:
-	Animation(float duration, std::vector<KeyFrame*>& frames);
+	Animation(long long duration, std::vector<KeyFrame*>& frames);
 	~Animation();
 
-	float GetDuration() const;
+	long long GetDuration() const;
 	std::vector<KeyFrame*>& GetKeyframes();
 
 private:
-	float mDuration; //in seconds
+	long long mDuration; //in seconds
 	std::vector<KeyFrame*> mKeyframes;
 };
 

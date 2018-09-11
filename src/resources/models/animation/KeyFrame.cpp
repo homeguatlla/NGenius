@@ -1,8 +1,13 @@
 #include "stdafx.h"
 #include "KeyFrame.h"
 
+KeyFrame::KeyFrame() : 
+	mTimestamp(0)
+{
 
-KeyFrame::KeyFrame(float timeStamp, std::map<std::string, JointTransform*>& pose) :
+}
+
+KeyFrame::KeyFrame(long long timeStamp, std::map<std::string, JointTransform*>& pose) :
 	mTimestamp(timeStamp),
 	mPose(pose)
 {
@@ -12,7 +17,7 @@ KeyFrame::~KeyFrame()
 {
 }
 
-float KeyFrame::GetTimestamp() const
+long long KeyFrame::GetTimestamp() const
 {
 	return mTimestamp;
 }
@@ -20,4 +25,14 @@ float KeyFrame::GetTimestamp() const
 std::map<std::string, JointTransform*>& KeyFrame::GetJointKeyframes()
 {
 	return mPose;
+}
+
+void KeyFrame::SetTimestamp(long long timeStamp)
+{
+	mTimestamp = timeStamp;
+}
+
+void KeyFrame::AddJointTransform(std::string& name, JointTransform* pose)
+{
+	mPose[name] = pose;
 }
