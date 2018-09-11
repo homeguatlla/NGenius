@@ -6,11 +6,11 @@
 class Joint;
 class Model;
 
-class AnimateModel
+class AnimatedModel
 {
 public:
-	AnimateModel(const Model* model, Joint* rootJoint);
-	~AnimateModel();
+	AnimatedModel(const Model* model, Joint* rootJoint);
+	~AnimatedModel();
 
 	const Model* GetModel() const;
 	Joint* GetRootJoint();

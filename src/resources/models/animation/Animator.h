@@ -6,7 +6,7 @@
 #include <utility>
 
 
-class AnimateModel;
+class AnimatedModel;
 class Animation;
 class Joint;
 class KeyFrame;
@@ -15,7 +15,7 @@ class KeyFrame;
 class Animator
 {
 public:
-	Animator(AnimateModel* entity);
+	Animator(AnimatedModel* entity);
 	~Animator();
 
 	void PlayAnimation(Animation* animation);
@@ -30,7 +30,7 @@ private:
 	void FillWithInterpolateFrames(std::map<std::string, const glm::mat4x4>& jointTransforms, KeyFrame* previousFrame, KeyFrame* nextFrame, float lambda) const;
 
 private:
-	AnimateModel* mEntity;
+	AnimatedModel* mEntity;
 	Animation* mCurrentAnimation;
 	float mAnimationTime;
 };

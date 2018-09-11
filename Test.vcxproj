@@ -243,7 +243,7 @@
     <ClInclude Include="src\resources\materials\IMaterial.h" />
     <ClInclude Include="src\resources\materials\IMaterialEffect.h" />
     <ClInclude Include="src\resources\materials\MaterialsLibrary.h" />
-    <ClInclude Include="src\resources\models\animation\AnimateModel.h" />
+    <ClInclude Include="src\resources\models\animation\AnimatedModel.h" />
     <ClInclude Include="src\resources\models\animation\Animation.h" />
     <ClInclude Include="src\resources\models\animation\Animator.h" />
     <ClInclude Include="src\resources\models\animation\Joint.h" />
@@ -400,7 +400,7 @@
     <ClCompile Include="src\resources\materials\IMaterial.cpp" />
     <ClCompile Include="src\resources\materials\IMaterialEffect.cpp" />
     <ClCompile Include="src\resources\materials\MaterialsLibrary.cpp" />
-    <ClCompile Include="src\resources\models\animation\AnimateModel.cpp" />
+    <ClCompile Include="src\resources\models\animation\AnimatedModel.cpp" />
     <ClCompile Include="src\resources\models\animation\Animation.cpp" />
     <ClCompile Include="src\resources\models\animation\Animator.cpp" />
     <ClCompile Include="src\resources\models\animation\Joint.cpp" />

@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include "AnimateModel.h"
+#include "AnimatedModel.h"
 #include "Joint.h"
 #include "../Model.h"
 
-AnimateModel::AnimateModel(const Model* model, Joint* rootJoint) :
+AnimatedModel::AnimatedModel(const Model* model, Joint* rootJoint) :
 	mModel(model),
 	mRootJoint(rootJoint),
 	mAnimator(this)
@@ -11,37 +11,37 @@ AnimateModel::AnimateModel(const Model* model, Joint* rootJoint) :
 	mRootJoint->CalculateInverseBindTransform(glm::mat4(1.0f));
 }
 
-AnimateModel::~AnimateModel()
+AnimatedModel::~AnimatedModel()
 {
 }
 
-const Model* AnimateModel::GetModel() const
+const Model* AnimatedModel::GetModel() const
 {
 	return mModel;
 }
 
-Joint* AnimateModel::GetRootJoint()
+Joint* AnimatedModel::GetRootJoint()
 {
 	return mRootJoint;
 }
 
-void AnimateModel::PlayAnimation(Animation* animation)
+void AnimatedModel::PlayAnimation(Animation* animation)
 {
 	mAnimator.PlayAnimation(animation);
 }
 
-void AnimateModel::FillWithJointTransforms(std::vector<glm::mat4>& jointMatrices) const
+void AnimatedModel::FillWithJointTransforms(std::vector<glm::mat4>& jointMatrices) const
 {
 	mRootJoint->FillWithJointTransforms(jointMatrices);
 }
 
-void AnimateModel::Update(float elapsedTime)
+void AnimatedModel::Update(float elapsedTime)
 {
 	mAnimator.Update(elapsedTime);
 }
 
 /*
-void AnimateModel::CreateAnimationWeightsVBO(VertexBuffersManager& vertexBufferManager, int location)
+void AnimatedModel::CreateAnimationWeightsVBO(VertexBuffersManager& vertexBufferManager, int location)
 {
 	//5th animation weights
 	long numWeights = mJointCount;

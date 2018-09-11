@@ -645,9 +645,6 @@
     <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat3Array.h">
       <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\models\animation\AnimateModel.h">
-      <Filter>Header Files\resources\models\animation</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\models\animation\Joint.h">
       <Filter>Header Files\resources\models\animation</Filter>
     </ClInclude>
@@ -668,6 +665,9 @@
     </ClInclude>
     <ClInclude Include="src\loader\ModelFactory.h">
       <Filter>Header Files\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\models\animation\AnimatedModel.h">
+      <Filter>Header Files\resources\models\animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1118,9 +1118,6 @@
     <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat3Array.cpp">
       <Filter>Source Files\resources\materials\effects</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\models\animation\AnimateModel.cpp">
-      <Filter>Source Files\resources\models\animation</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\models\animation\Joint.cpp">
       <Filter>Source Files\resources\models\animation</Filter>
     </ClCompile>
@@ -1141,6 +1138,9 @@
     </ClCompile>
     <ClCompile Include="src\loader\ModelFactory.cpp">
       <Filter>Source Files\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\models\animation\AnimatedModel.cpp">
+      <Filter>Source Files\resources\models\animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

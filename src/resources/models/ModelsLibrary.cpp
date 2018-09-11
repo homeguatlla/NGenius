@@ -3,7 +3,7 @@
 #include "Model.h"
 #include "Mesh.h"
 #include "../../loader/ModelFactory.h"
-#include "animation/AnimateModel.h"
+#include "animation/AnimatedModel.h"
 
 #include <iostream>
 
@@ -88,7 +88,7 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 
 		if (animation != nullptr && rootJoint != nullptr)
 		{
-			AnimateModel* animateModel = new AnimateModel(modelRender, rootJoint);
+			AnimatedModel* animateModel = new AnimatedModel(modelRender, rootJoint);
 			//add the animateModel To animateModel library
 			//add animation to animations library
 		}

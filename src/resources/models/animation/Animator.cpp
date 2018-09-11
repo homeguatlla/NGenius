@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Animator.h"
 #include "Animation.h"
-#include "AnimateModel.h"
+#include "AnimatedModel.h"
 #include "Joint.h"
 #include "KeyFrame.h"
 #include "JointTransform.h"
@@ -9,7 +9,7 @@
 
 
 
-Animator::Animator(AnimateModel* entity) :
+Animator::Animator(AnimatedModel* entity) :
 	mEntity(entity),
 	mAnimationTime(0.0f)
 {
