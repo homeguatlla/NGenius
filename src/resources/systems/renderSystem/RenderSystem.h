@@ -18,7 +18,6 @@ class ModelsLibrary;
 class FontsLibrary;
 class MaterialsLibrary;
 class AnimationsLibrary;
-class AnimatedModelLibrary;
 
 class Model;
 class IShaderProgram;
@@ -59,7 +58,6 @@ class RenderSystem : public BaseVisitable<>
 	FontsLibrary* mFontsLibrary;
 	MaterialsLibrary* mMaterialsLibrary;
 	AnimationsLibrary* mAnimationsLibrary;
-	AnimatedModelLibrary* mAnimatedModelLibrary;
 
 	GLFWwindow* mWindow;
 
@@ -126,7 +124,6 @@ public:
 	
 	//TODO esto igual se tendría que pasar fuera del rendersystem y meterlo en el animationssystem
 	Animation* GetAnimation(const std::string& name) const;
-	AnimatedModel* GetAnimatedModel(const std::string& name) const;
 
 	//esto no me gusta...
 	VertexBuffersManager& GetVertexBufferManager();

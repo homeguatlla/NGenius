@@ -989,7 +989,7 @@ void CreatePlayer()
 	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	mPlayer->AddComponent(new DebugComponent(boundingBoxRenderer));
 	mPlayer->AddComponent(new EnvironmentModificatorComponent());
-	mPlayer->AddComponent(new AnimationComponent(mEngine.GetAnimation("Armature|Armature|Armature|walking|Armature|walking"), mEngine.GetAnimatedModel("farmer")));
+	mPlayer->AddComponent(new AnimationComponent(mEngine.GetAnimation("Armature|Armature|Armature|walking|Armature|walking")));
 	mScene->AddEntity(mPlayer);
 }
 

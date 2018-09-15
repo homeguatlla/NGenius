@@ -260,12 +260,6 @@ Animation* NGenius::GetAnimation(const std::string& name) const
 	return mRenderSystem->GetAnimation(name);
 }
 
-AnimatedModel* NGenius::GetAnimatedModel(const std::string& name) const
-{
-	assert(mRenderSystem != nullptr);
-	return mRenderSystem->GetAnimatedModel(name);
-}
-
 GLFWwindow* NGenius::GetGLWindow() const
 {
 	assert(mRenderSystem != nullptr);

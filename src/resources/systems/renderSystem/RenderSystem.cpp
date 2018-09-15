@@ -19,7 +19,6 @@
 #include "../../textures/TextureCubemap.h"
 #include "../../materials/IMaterial.h"
 #include "../../materials/MaterialsLibrary.h"
-#include "../../models/animation/AnimatedModelLibrary.h"
 #include "../../models/animation/AnimationsLibrary.h"
 
 #include "../../materials/effects/MaterialEffectDiffuseTexture.h"
@@ -53,7 +52,6 @@ mTexturesLibrary(nullptr),
 mModelsLibrary(nullptr),
 mFontsLibrary(nullptr),
 mAnimationsLibrary(nullptr),
-mAnimatedModelLibrary(nullptr),
 mWindow(nullptr),
 mShadowsRenderPass(nullptr),
 mWaterRenderPass(nullptr),
@@ -669,11 +667,6 @@ Animation* RenderSystem::GetAnimation(const std::string& name) const
 	return mAnimationsLibrary->GetElement(name);
 }
 
-AnimatedModel* RenderSystem::GetAnimatedModel(const std::string& name) const
-{
-	return mAnimatedModelLibrary->GetElement(name);
-}
-
 VertexBuffersManager& RenderSystem::GetVertexBufferManager()
 {
 	return mVertexsBuffersManager;
@@ -781,9 +774,8 @@ void RenderSystem::CreateResourcesLibraries()
 {
 	mShadersLibrary = new ShadersLibrary();
 	mTexturesLibrary = new TexturesLibrary();
-	mAnimatedModelLibrary = new AnimatedModelLibrary();
 	mAnimationsLibrary = new AnimationsLibrary();
-	mModelsLibrary = new ModelsLibrary(mTexturesLibrary, mAnimationsLibrary, mAnimatedModelLibrary);
+	mModelsLibrary = new ModelsLibrary(mTexturesLibrary, mAnimationsLibrary);
 	mFontsLibrary = new FontsLibrary(mTexturesLibrary);
 	mMaterialsLibrary = new MaterialsLibrary(mShadersLibrary);
 }
@@ -791,7 +783,6 @@ void RenderSystem::CreateResourcesLibraries()
 void RenderSystem::DestroyResourcesLibraries()
 {
 	delete mAnimationsLibrary;
-	delete mAnimatedModelLibrary;
 	delete mMaterialsLibrary;
 	delete mFontsLibrary;
 	delete mModelsLibrary;

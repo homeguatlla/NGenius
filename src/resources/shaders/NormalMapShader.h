@@ -9,7 +9,6 @@ class NormalMapShader : public ModelShader
 	int mLocationTangent;
 	int mLocationNormalmapTexture;
 
-
 public:
 	NormalMapShader();
 	~NormalMapShader();

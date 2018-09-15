@@ -8,10 +8,9 @@
 
 #include <iostream>
 
-ModelsLibrary::ModelsLibrary(TexturesLibrary* texturesLibrary, AnimationsLibrary* animationsLibrary, AnimatedModelLibrary* animatedModelLibrary) : 
+ModelsLibrary::ModelsLibrary(TexturesLibrary* texturesLibrary, AnimationsLibrary* animationsLibrary) : 
 	mTexturesLibrary(texturesLibrary),
-	mAnimationsLibrary(animationsLibrary),
-	mAnimatedModelLibrary(animatedModelLibrary)
+	mAnimationsLibrary(animationsLibrary)
 {
 }
 
@@ -87,14 +86,15 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 	{
 		model->Build(calculateNormals, calculateTangents);
 
-		Model* modelRender = new Model(model);
-		AddElement(name, modelRender);
-
 		if (animation != nullptr && rootJoint != nullptr)
 		{
-			AnimatedModel* animatedModel = new AnimatedModel(name, modelRender, rootJoint);
-			mAnimatedModelLibrary->AddElement(name, animatedModel);
-			mAnimationsLibrary->AddElement(animation->GetName(), animation);
+			AnimatedModel* animatedModel = new AnimatedModel(name, model, rootJoint);
+			AddElement(name, animatedModel);
+		}
+		else
+		{
+			Model* modelRender = modelRender = new Model(model);
+			AddElement(name, modelRender);
 		}
 
 		if (!model->GetDiffuseTextureName().empty())

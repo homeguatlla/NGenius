@@ -39,6 +39,8 @@ public:
 	void Build(VertexBuffersManager& vertexBufferManager, IMaterial* material);
 	void UpdateVBOs();
 
+	virtual bool IsAnimatedModel() const;
+
 private:
 	void CreateVertexsVBO(VertexBuffersManager& vertexBufferManager, int location);
 	void CreateIndexesVBO(VertexBuffersManager& vertexBufferManager);

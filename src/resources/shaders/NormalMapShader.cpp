@@ -19,7 +19,6 @@ mLocationNormalmapTexture(-1)
 {
 }
 
-
 NormalMapShader::~NormalMapShader()
 {
 }

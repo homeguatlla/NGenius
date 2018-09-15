@@ -57,6 +57,11 @@ int Model::GetNumberOfIndexes() const
 	return mMesh->GetNumberOfIndexes();
 }
 
+bool Model::IsAnimatedModel() const
+{
+	return false;
+}
+
 void Model::Apply(const glm::mat4& matrix)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, mMatrixVBO);

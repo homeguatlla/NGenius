@@ -2,12 +2,10 @@
 #include "AnimationComponent.h"
 #include <assert.h>
 
-AnimationComponent::AnimationComponent(Animation* animation, AnimatedModel* animatedModel) :
-	mAnimation(animation),
-	mAnimatedModel(animatedModel)
+AnimationComponent::AnimationComponent(Animation* animation) :
+	mAnimation(animation)
 {
 	assert(animation != nullptr);
-	assert(animatedModel != nullptr);
 }
 
 AnimationComponent::~AnimationComponent()
@@ -22,9 +20,4 @@ AnimationComponent* AnimationComponent::DoClone() const
 Animation* AnimationComponent::GetAnimation() const
 {
 	return mAnimation;
-}
-
-AnimatedModel* AnimationComponent::GetAnimatedModel() const
-{
-	return mAnimatedModel;
 }

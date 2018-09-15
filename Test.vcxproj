@@ -245,7 +245,6 @@
     <ClInclude Include="src\resources\materials\IMaterialEffect.h" />
     <ClInclude Include="src\resources\materials\MaterialsLibrary.h" />
     <ClInclude Include="src\resources\models\animation\AnimatedModel.h" />
-    <ClInclude Include="src\resources\models\animation\AnimatedModelLibrary.h" />
     <ClInclude Include="src\resources\models\animation\Animation.h" />
     <ClInclude Include="src\resources\models\animation\AnimationsLibrary.h" />
     <ClInclude Include="src\resources\models\animation\Animator.h" />
@@ -406,7 +405,6 @@
     <ClCompile Include="src\resources\materials\IMaterialEffect.cpp" />
     <ClCompile Include="src\resources\materials\MaterialsLibrary.cpp" />
     <ClCompile Include="src\resources\models\animation\AnimatedModel.cpp" />
-    <ClCompile Include="src\resources\models\animation\AnimatedModelLibrary.cpp" />
     <ClCompile Include="src\resources\models\animation\Animation.cpp" />
     <ClCompile Include="src\resources\models\animation\AnimationsLibrary.cpp" />
     <ClCompile Include="src\resources\models\animation\Animator.cpp" />
@@ -521,6 +519,7 @@
     <None Include="data\shaders\vertex\v_gui_quad.cg" />
     <None Include="data\shaders\vertex\v_horizontal_blur.cg" />
     <None Include="data\shaders\vertex\v_model.cg" />
+    <None Include="data\shaders\vertex\v_model_animated.cg" />
     <None Include="data\shaders\vertex\v_model_normalmap.cg" />
     <None Include="data\shaders\vertex\v_overdraw.cg" />
     <None Include="data\shaders\vertex\v_particle.cg" />

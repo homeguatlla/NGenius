@@ -669,9 +669,6 @@
     <ClInclude Include="src\resources\models\animation\AnimatedModel.h">
       <Filter>Header Files\resources\models\animation</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\models\animation\AnimatedModelLibrary.h">
-      <Filter>Header Files\resources\models\animation</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\models\animation\AnimationsLibrary.h">
       <Filter>Header Files\resources\models\animation</Filter>
     </ClInclude>
@@ -1154,9 +1151,6 @@
     <ClCompile Include="src\resources\models\animation\AnimatedModel.cpp">
       <Filter>Source Files\resources\models\animation</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\models\animation\AnimatedModelLibrary.cpp">
-      <Filter>Source Files\resources\models\animation</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\models\animation\AnimationsLibrary.cpp">
       <Filter>Source Files\resources\models\animation</Filter>
     </ClCompile>
@@ -1287,6 +1281,9 @@
     </None>
     <None Include="data\shaders\fragment\f_normal.cg">
       <Filter>Source Files\shaders\fragment</Filter>
+    </None>
+    <None Include="data\shaders\vertex\v_model_animated.cg">
+      <Filter>Source Files\shaders\vertex</Filter>
     </None>
   </ItemGroup>
 </Project>

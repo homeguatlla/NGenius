@@ -5,6 +5,7 @@
 #include "../models/animation/AnimatedModel.h"
 #include "../models/animation/Animation.h"
 #include "../models/animation/Animator.h"
+#include "../renderers/IRenderer.h"
 
 #include <algorithm>
 
@@ -28,11 +29,12 @@ void AnimationSystem::AddEntity(GameEntity* entity)
 {
 	if (HasAnimationComponents(entity))
 	{
-		AnimationComponent* component = entity->GetComponent<AnimationComponent>();
-		Animator* animator = new Animator(component->GetAnimatedModel());
+		AnimatedModel* model = static_cast<AnimatedModel*>(entity->GetRenderer()->GetModel());
+		Animator* animator = new Animator(model);
 
+		AnimationComponent* component = entity->GetComponent<AnimationComponent>();
 		mEntities.push_back(std::pair<GameEntity*, Animator*>(entity, animator));
-		mAnimations[component->GetAnimatedModel()->GetName()].push_back(component->GetAnimation());
+		mAnimations[model->GetName()].push_back(component->GetAnimation());
 
 		//TODO por ahora lo hacemos aquí, pero esto se tendría que hacer a través del AnimatorComponent
 		animator->PlayAnimation(component->GetAnimation());
@@ -58,7 +60,10 @@ void AnimationSystem::RemoveEntity(GameEntity* entity)
 
 bool AnimationSystem::HasAnimationComponents(const GameEntity* entity) const
 {
-	return entity != nullptr && (entity->HasComponent<AnimationComponent>());
+	assert(entity != nullptr && entity->GetRenderer() != nullptr);
+
+	return entity != nullptr && entity->GetRenderer()->GetModel()->IsAnimatedModel() &&
+		(entity->HasComponent<AnimationComponent>());
 }
 
 void AnimationSystem::OnGameEntityAdded(GameEntity* entity)
