@@ -9,7 +9,10 @@ class IMaterial;
 
 class Model
 {
+protected:
 	Mesh* mMesh;
+
+private:
 	AABB mAABB;
 	int mVAO;
 	int mMatrixVBO;
@@ -17,8 +20,6 @@ class Model
 	int mIndexesVBO;
 	int mTextureCoordsVBO;
 	int mColorVBO;
-	int mAnimationWeightsVBO;
-	int mAnimationJointsIDsVBO;
 
 public:
 	Model(Mesh* model);
@@ -37,6 +38,7 @@ public:
 
 	bool IsBuilt() const;
 	void Build(VertexBuffersManager& vertexBufferManager, IMaterial* material);
+	virtual void BuildInternal(VertexBuffersManager& vertexBufferManager, IMaterial* material) {};
 	void UpdateVBOs();
 
 	virtual bool IsAnimatedModel() const;

@@ -9,6 +9,7 @@
 #include "../shaders/QuadShader.h"
 #include "../models/Model.h"
 #include "../materials/IMaterial.h"
+#include "../models/animation/AnimatedModel.h"
 
 //TODO esto hay que quitarlo de aquí y hacerlo de otra manera
 #include "../renderers/ParticleRenderer.h"

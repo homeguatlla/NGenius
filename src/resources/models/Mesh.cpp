@@ -183,6 +183,16 @@ void Mesh::AddJointIdToVertex(int vertexIndex, int jointId)
 	if (mVertexJointsIds[vertexIndex].w == -1) mVertexJointsIds[vertexIndex].w = jointId;
 }
 
+std::vector<glm::vec4>& Mesh::GetVertexsWeights()
+{
+	return mVertexWeights;
+}
+
+std::vector<glm::ivec4>& Mesh::GetVertexsJointsIDs()
+{
+	return mVertexJointsIds;
+}
+
 void Mesh::CalculateNormals()
 {
 	struct Face 

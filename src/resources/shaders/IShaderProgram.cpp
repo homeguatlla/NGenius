@@ -240,6 +240,14 @@ void IShaderProgram::LoadVector3Array(int location, std::vector<glm::vec3>& valu
 	}
 }
 
+void IShaderProgram::LoadMatrix4Array(int location, std::vector<glm::mat4>& values)
+{
+	if (values.size() > 0)
+	{
+		glUniformMatrix4fv(location, values.size(), GL_FALSE, reinterpret_cast<float*>(&values[0]));
+	}
+}
+
 int IShaderProgram::Load(const std::string& filename, int type)
 {
 		// Create the shaders

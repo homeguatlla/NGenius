@@ -9,8 +9,8 @@
 
 
 
-Animator::Animator(AnimatedModel* entity) :
-	mEntity(entity),
+Animator::Animator(AnimatedModel* model) :
+	mModel(model),
 	mAnimationTime(0.0f)
 {
 }
@@ -33,8 +33,16 @@ void Animator::Update(float elapsedTime)
 		IncreaseAnimationTime(elapsedTime);
 		std::map<std::string, const glm::mat4x4> currentPose;
 		FillWithCalculatedCurrentAnimationPose(currentPose);
-		ApplyPoseToJoints(currentPose, mEntity->GetRootJoint(), glm::mat4x4(1.0f));
+		ApplyPoseToJoints(currentPose, mModel->GetRootJoint(), glm::mat4x4(1.0f));
+
+		mJointTransforms.clear();
+		mModel->FillWithJointTransforms(mJointTransforms);
 	}
+}
+
+const std::vector <glm::mat4>& Animator::GetJointTransforms() const
+{
+	return mJointTransforms;
 }
 
 void Animator::IncreaseAnimationTime(float elapsedTime)

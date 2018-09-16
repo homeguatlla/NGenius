@@ -63,6 +63,9 @@ public:
 	void AddVertexWeightToVertex(int vertexIndex, float weight);
 	void AddJointIdToVertex(int vertexIndex, int jointId);
 
+	std::vector<glm::vec4>& GetVertexsWeights();
+	std::vector<glm::ivec4>& GetVertexsJointsIDs();
+
 private:
 	void CalculateNormals();
 	void CalculateTangents();

@@ -19,6 +19,7 @@
 #include "BrightShader.h"
 #include "BloomShader.h"
 #include "GrassShader.h"
+#include "AnimatedModelShader.h"
 
 ShadersLibrary::ShadersLibrary()
 {
@@ -50,6 +51,7 @@ void ShadersLibrary::Load()
 	AddShader("bright", new BrightShader());
 	AddShader("bloom", new BloomShader());
 	AddShader("grass", new GrassShader());
+	AddShader("animated_model", new AnimatedModelShader());
 }
 
 void ShadersLibrary::AddShader(char* name, IShaderProgram* shader)

@@ -6,6 +6,8 @@
 #include "../models/animation/Animation.h"
 #include "../models/animation/Animator.h"
 #include "../renderers/IRenderer.h"
+#include "../materials/IMaterial.h"
+#include "../materials/effects/MaterialEffectMatrix4Array.h"
 
 #include <algorithm>
 
@@ -21,7 +23,18 @@ void AnimationSystem::Update(float deltaTime)
 {
 	for (std::pair<GameEntity*, Animator*> elem : mEntities)
 	{
-		elem.second->Update(deltaTime);
+		Animator* animator = elem.second;
+		animator->Update(deltaTime);
+
+		GameEntity* entity = elem.first;
+		IRenderer* renderer = entity->GetRenderer();
+		assert(renderer != nullptr);
+		IMaterial* material = renderer->GetMaterial();
+		MaterialEffectMatrix4Array* effectMatrix4Array = material->GetEffect<MaterialEffectMatrix4Array>();
+		if (effectMatrix4Array != nullptr)
+		{
+			effectMatrix4Array->SetValues(animator->GetJointTransforms());
+		}
 	}
 }
 
@@ -60,10 +73,16 @@ void AnimationSystem::RemoveEntity(GameEntity* entity)
 
 bool AnimationSystem::HasAnimationComponents(const GameEntity* entity) const
 {
-	assert(entity != nullptr && entity->GetRenderer() != nullptr);
+	if (entity != nullptr)
+	{
+		IRenderer* renderer = entity->GetRenderer();
+		bool hasRenderer = renderer != nullptr;
+		bool hasAnimationComponent = entity->HasComponent<AnimationComponent>();
 
-	return entity != nullptr && entity->GetRenderer()->GetModel()->IsAnimatedModel() &&
-		(entity->HasComponent<AnimationComponent>());
+		return hasRenderer && renderer->GetModel()->IsAnimatedModel() && hasAnimationComponent;
+	}
+
+	return false;
 }
 
 void AnimationSystem::OnGameEntityAdded(GameEntity* entity)

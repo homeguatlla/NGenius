@@ -90,6 +90,7 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 		{
 			AnimatedModel* animatedModel = new AnimatedModel(name, model, rootJoint);
 			AddElement(name, animatedModel);
+			mAnimationsLibrary->AddElement(animation->GetName(), animation);
 		}
 		else
 		{

@@ -26,8 +26,11 @@ public:
 	bool IsAnimatedModel() const override;
 
 private:
-	//void CreateAnimationWeightsVBO(VertexBuffersManager& vertexBufferManager, int location);
+	void BuildInternal(VertexBuffersManager& vertexBufferManager, IMaterial* material) override;
 
+	void CreateAnimationWeightsVBO(VertexBuffersManager& vertexBufferManager, int location);
+	void CreateAnimationVertexsJointIDsVBO(VertexBuffersManager& vertexBufferManager, int location);
+	
 private:
 	std::string mName;
 
@@ -35,5 +38,8 @@ private:
 	Joint* mRootJoint;
 
 	Animator mAnimator;
+
+	int mAnimationVertexWeightsVBO;
+	int mAnimationVertexJointIDsVBO;
 };
 

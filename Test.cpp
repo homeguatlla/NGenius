@@ -48,6 +48,7 @@
 #include "src/resources/font/FontType.h"
 
 #include "src/resources/models/Model.h"
+#include "src/resources/models/animation/AnimatedModel.h"
 
 #include "src/resources/materials/MaterialsLibrary.h"
 #include "src/resources/materials/IMaterial.h"
@@ -68,6 +69,7 @@
 #include "src/resources/materials/effects/MaterialEffectFloat2.h"
 #include "src/resources/materials/effects/MaterialEffectFloat3.h"
 #include "src/resources/materials/effects/MaterialEffectFloat3Array.h"
+#include "src/resources/materials/effects/MaterialEffectMatrix4Array.h"
 
 #include "src/resources/entities/Terrain.h"
 #include "src/resources/entities/Player.h"
@@ -957,13 +959,14 @@ void CreateTerrain()
 void CreatePlayer()
 {
 	//PLAYER
-	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("normalmap"));
+	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("animated_model"));
 	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("ManMaterial_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("enano_normalmap")), 1.0f));
 	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectShadowProperties(1));
 	material->AddEffect(new MaterialEffectClippingPlane());
+	material->AddEffect(new MaterialEffectMatrix4Array());
 
 	InputComponent* inputComponent = new InputComponent();
 	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_W, new ForwardEvent()));

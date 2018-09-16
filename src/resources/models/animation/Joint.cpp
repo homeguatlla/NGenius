@@ -44,6 +44,7 @@ const glm::mat4& Joint::GetInverseBindTransform() const
 
 void Joint::FillWithJointTransforms(std::vector<glm::mat4>& jointMatrices) const
 {
+
 	jointMatrices.push_back(GetAnimatedTransform());
 
 	for (Joint* child : mChildren)

@@ -148,6 +148,8 @@ void Model::Build(VertexBuffersManager& vertexBufferManager, IMaterial* material
 		CreateColorVBO(vertexBufferManager, location);
 	}
 
+	BuildInternal(vertexBufferManager, material);
+
 	glBindVertexArray(0);
 }
 

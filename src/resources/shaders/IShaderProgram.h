@@ -34,6 +34,7 @@ public:
 	void LoadTexture(int location, int unit);
 	void LoadInteger(int location, int value);
 	void LoadVector3Array(int location, std::vector<glm::vec3>& values);
+	void LoadMatrix4Array(int location, std::vector<glm::mat4>& values);
 
 	virtual void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material);
 	virtual void BindAttributes() = 0;

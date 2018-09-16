@@ -5,8 +5,9 @@ in vec3 vertexModelspace;
 in vec2 textureCoordsModelspace;
 in vec3 normalModelspace;
 in vec3 tangentModelspace;
-in vec4 jointIndices;
 in vec4 weights;
+in ivec4 jointIndices;
+
 
 out vec2 textureCoords;
 out vec3 eyeDirection;
@@ -47,7 +48,10 @@ void main()
 		totalNormal += worldNormal * weights[i];
 	}
 
-	positionWorldspace = vec3(M * localPosition);
+	//totalLocalPos = vec4(vertexModelspace, 1.0);
+	//totalNormal = vec4(normalModelspace, 1.0);
+
+	positionWorldspace = vec3(M * totalLocalPos);
 	shadowCoords = toShadowMapSpace * vec4(positionWorldspace, 1.0f);
 
 	gl_ClipDistance[0] = dot(vec4(positionWorldspace, 1.0), clippingPlane);

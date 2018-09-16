@@ -234,6 +234,7 @@
     <ClInclude Include="src\resources\materials\effects\MaterialEffectFogProperties.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectHeightMapTexture.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectLightProperties.h" />
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectMatrix4Array.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectNormalTexture.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectParticle.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectShadowProperties.h" />
@@ -272,6 +273,7 @@
     <ClInclude Include="src\resources\scene\quadtree\GameEntityQuadTree.h" />
     <ClInclude Include="src\resources\scene\quadtree\DirectQuadTree.h" />
     <ClInclude Include="src\resources\scene\quadtree\QuadTree.h" />
+    <ClInclude Include="src\resources\shaders\AnimatedModelShader.h" />
     <ClInclude Include="src\resources\shaders\BloomShader.h" />
     <ClInclude Include="src\resources\shaders\BrightShader.h" />
     <ClInclude Include="src\resources\shaders\ContrastShader.h" />
@@ -394,6 +396,7 @@
     <ClCompile Include="src\resources\materials\effects\MaterialEffectFogProperties.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectHeightMapTexture.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectLightProperties.cpp" />
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectMatric4Array.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectNormalTexture.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectParticle.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectShadowProperties.cpp" />
@@ -432,6 +435,7 @@
     <ClCompile Include="src\resources\scene\quadtree\GameEntityQuadTree.cpp" />
     <ClCompile Include="src\resources\scene\quadtree\DirectQuadTree.cpp" />
     <ClCompile Include="src\resources\scene\quadtree\QuadTree.cpp" />
+    <ClCompile Include="src\resources\shaders\AnimatedModelShader.cpp" />
     <ClCompile Include="src\resources\shaders\BloomShader.cpp" />
     <ClCompile Include="src\resources\shaders\BrightShader.cpp" />
     <ClCompile Include="src\resources\shaders\ContrastShader.cpp" />
