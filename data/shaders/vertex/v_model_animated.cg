@@ -28,7 +28,7 @@ uniform float fogGradient;
 uniform float tile;
 uniform mat4 toShadowMapSpace;
 uniform vec4 clippingPlane;
-uniform mat4 jointTransforms[4];
+uniform mat4 jointTransforms[50];
 
 const float shadowDistance = 10.0;
 const float transitionDistance = 20.0;

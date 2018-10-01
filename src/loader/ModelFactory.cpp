@@ -2,6 +2,7 @@
 #include "ModelFactory.h"
 #include "OBJLoader.h"
 #include "FBXLoader.h"
+#include "ColladaLoader.h"
 #include <algorithm>
 
 Mesh* ModelFactory::LoadModel(const std::string& filename, Animation** animation, Joint** rootJoint)
@@ -14,6 +15,8 @@ Mesh* ModelFactory::LoadModel(const std::string& filename, Animation** animation
 			return OBJLoader::LoadModel(filename);
 		case FileType::TYPE_FBX:
 			return FBXLoader::LoadModel(filename, animation, rootJoint);
+		case FileType::TYPE_COLLADA:
+			return ColladaLoader::LoadModel(filename, animation, rootJoint);
 		case FileType::TYPE_INVALID:
 		default:
 			return nullptr;
@@ -32,6 +35,10 @@ ModelFactory::FileType ModelFactory::GetFileType(const std::string& filename)
 	else if (upperString.find(".FBX") != std::string::npos)
 	{
 		return FileType::TYPE_FBX;
+	}
+	else if (upperString.find(".DAE") != std::string::npos)
+	{
+		return FileType::TYPE_COLLADA;
 	}
 	else
 	{

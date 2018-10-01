@@ -60,7 +60,8 @@ void ModelsLibrary::Load()
 	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", false, true);
 	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
 
-	LoadModel("farmer", "data/models/farmer/farmer.fbx", false, true);
+	LoadModel("farmer", "data/models/farmer/farmer.dae", false, true);
+	//LoadModel("cube_animated", "data/models/cube/cube.fbx", false, true);
 	/*
 	LoadModel("yurown", "data/models/yurown/Sci-Fi_Soldier.fbx", false, true);
 	LoadModel("spider", "data/models/spider2/spider.fbx", false, true);

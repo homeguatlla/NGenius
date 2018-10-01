@@ -161,6 +161,10 @@
   <ItemGroup>
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="GameConstants.h" />
+    <ClInclude Include="rapidxml\rapidxml.hpp" />
+    <ClInclude Include="rapidxml\rapidxml_iterators.hpp" />
+    <ClInclude Include="rapidxml\rapidxml_print.hpp" />
+    <ClInclude Include="rapidxml\rapidxml_utils.hpp" />
     <ClInclude Include="src\AABB.h" />
     <ClInclude Include="src\BasicTypes.h" />
     <ClInclude Include="src\BitNumber.h" />
@@ -170,6 +174,7 @@
     <ClInclude Include="src\input\InputConverter.h" />
     <ClInclude Include="src\input\InputHandler.h" />
     <ClInclude Include="src\listeners\IInputListener.h" />
+    <ClInclude Include="src\loader\ColladaLoader.h" />
     <ClInclude Include="src\loader\FBXLoader.h" />
     <ClInclude Include="src\loader\FontLoader.h" />
     <ClInclude Include="src\loader\ModelFactory.h" />
@@ -263,8 +268,8 @@
     <ClInclude Include="src\resources\renderers\PointsRenderer.h" />
     <ClInclude Include="src\resources\renderers\SkyBoxRenderer.h" />
     <ClInclude Include="src\resources\renderers\TextRenderer.h" />
-    <ClInclude Include="src\resources\renderers\VertexsRenderer.h" />
-    <ClInclude Include="src\resources\renderers\IndexesRenderer.h" />
+    <ClInclude Include="src\resources\renderers\VerticesRenderer.h" />
+    <ClInclude Include="src\resources\renderers\IndicesRenderer.h" />
     <ClInclude Include="src\resources\renderers\IRenderer.h" />
     <ClInclude Include="src\resources\renderers\WireframeRenderer.h" />
     <ClInclude Include="src\resources\scene\GameScene.h" />
@@ -334,6 +339,7 @@
     <ClCompile Include="src\input\IInputListener.cpp" />
     <ClCompile Include="src\input\InputConverter.cpp" />
     <ClCompile Include="src\input\InputHandler.cpp" />
+    <ClCompile Include="src\loader\ColladaLoader.cpp" />
     <ClCompile Include="src\loader\FBXLoader.cpp" />
     <ClCompile Include="src\loader\FontLoader.cpp" />
     <ClCompile Include="src\loader\ModelFactory.cpp" />
@@ -425,8 +431,8 @@
     <ClCompile Include="src\resources\renderers\PointsRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\SkyBoxRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\TextRenderer.cpp" />
-    <ClCompile Include="src\resources\renderers\VertexsRenderer.cpp" />
-    <ClCompile Include="src\resources\renderers\IndexesRenderer.cpp" />
+    <ClCompile Include="src\resources\renderers\VerticesRenderer.cpp" />
+    <ClCompile Include="src\resources\renderers\IndicesRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\IRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\WireframeRenderer.cpp" />
     <ClCompile Include="src\resources\scene\GameScene.cpp" />

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Terrain.h"
-#include "../renderers/IndexesRenderer.h"
+#include "../renderers/IndicesRenderer.h"
 #include "../../TerrainGrid.h"
 #include "../textures/ITexture.h"
 #include "../textures/TextureGenerator.h"
@@ -41,7 +41,7 @@ mIsFlat(false)
 	CalculateY();
 	
 	mModel = new Model(new Mesh(mVertexs, uv, indices));
-	SetRenderer(new IndexesRenderer(mModel, material));
+	SetRenderer(new IndicesRenderer(mModel, material));
 
 	GetRenderer()->SetLayer(IRenderer::LAYER_TERRAIN);
 

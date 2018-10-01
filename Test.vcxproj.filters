@@ -187,6 +187,9 @@
     <Filter Include="Source Files\resources\models\animation">
       <UniqueIdentifier>{6e3747f4-dbe2-4bcf-b28f-db28e177175c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\rapidxml">
+      <UniqueIdentifier>{9ba81435-6500-4df7-8333-8ff6ef9267d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -392,12 +395,6 @@
     </ClInclude>
     <ClInclude Include="src\resources\systems\LightsSystem.h">
       <Filter>Header Files\resources\systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\renderers\VertexsRenderer.h">
-      <Filter>Header Files\resources\renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\renderers\IndexesRenderer.h">
-      <Filter>Header Files\resources\renderers</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\renderers\SkyBoxRenderer.h">
       <Filter>Header Files\resources\renderers</Filter>
@@ -684,6 +681,27 @@
     <ClInclude Include="src\resources\materials\effects\MaterialEffectMatrix4Array.h">
       <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
+    <ClInclude Include="src\loader\ColladaLoader.h">
+      <Filter>Header Files\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml\rapidxml.hpp">
+      <Filter>Header Files\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml\rapidxml_iterators.hpp">
+      <Filter>Header Files\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml\rapidxml_print.hpp">
+      <Filter>Header Files\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml\rapidxml_utils.hpp">
+      <Filter>Header Files\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\VerticesRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\IndicesRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -883,12 +901,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\systems\LightsSystem.cpp">
       <Filter>Source Files\resources\systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\renderers\VertexsRenderer.cpp">
-      <Filter>Source Files\resources\renderers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\renderers\IndexesRenderer.cpp">
-      <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\renderers\SkyBoxRenderer.cpp">
       <Filter>Source Files\resources\renderers</Filter>
@@ -1171,6 +1183,15 @@
     </ClCompile>
     <ClCompile Include="src\resources\materials\effects\MaterialEffectMatric4Array.cpp">
       <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\ColladaLoader.cpp">
+      <Filter>Source Files\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\VerticesRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\IndicesRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

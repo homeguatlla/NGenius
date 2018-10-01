@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Water.h"
-#include "../renderers/IndexesRenderer.h"
+#include "../renderers/IndicesRenderer.h"
 #include "../models/Mesh.h"
 #include "../models/Model.h"
 
@@ -17,7 +17,7 @@ mWaterSpeed(speed),
 mCurrentWaterSpeed(speed)
 {
 	Create();
-	SetRenderer(new IndexesRenderer(mModel, material));
+	SetRenderer(new IndicesRenderer(mModel, material));
 
 	GetRenderer()->SetLayer(IRenderer::LAYER_WATER);
 	if (material->HasEffect<MaterialEffectWater>())

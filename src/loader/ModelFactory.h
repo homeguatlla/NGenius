@@ -11,6 +11,7 @@ class ModelFactory
 	{
 		TYPE_OBJ,
 		TYPE_FBX,
+		TYPE_COLLADA,
 		TYPE_INVALID
 	};
 

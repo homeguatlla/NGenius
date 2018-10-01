@@ -114,7 +114,7 @@ void Mesh::Build(bool calculateNormals, bool calculateTangents)
 	{
 		CalculateNormals();
 	}
-	if (calculateTangents)
+	if (calculateTangents && mTextureCoords.size() > 0)
 	{
 		CalculateTangents();
 	}

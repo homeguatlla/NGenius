@@ -145,9 +145,12 @@ Mesh* FBXLoader::LoadMesh(FbxMesh* fbxMesh)
 								
 			//Getting texture information
 			bool isMapped = true;
-			x = static_cast<float>(uvVertices->GetAt(fbxMesh->GetTextureUVIndex(j, k)).mData[0]);
-			y = static_cast<float>(uvVertices->GetAt(fbxMesh->GetTextureUVIndex(j, k)).mData[1]);
-			uvs.push_back(glm::vec2(x, y));
+			if (uvVertices != nullptr)
+			{
+				x = static_cast<float>(uvVertices->GetAt(fbxMesh->GetTextureUVIndex(j, k)).mData[0]);
+				y = static_cast<float>(uvVertices->GetAt(fbxMesh->GetTextureUVIndex(j, k)).mData[1]);
+				uvs.push_back(glm::vec2(x, y));
+			}
 		}
 	}
 

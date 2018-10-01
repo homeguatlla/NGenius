@@ -1,0 +1,494 @@
+#include "stdafx.h"
+#include "ColladaLoader.h"
+#include "../resources/models/Mesh.h"
+#include "../resources/models/animation/Joint.h"
+#include "../resources/models/animation/Animation.h"
+#include "../resources/models/animation/KeyFrame.h"
+#include "../resources/models/animation/JointTransform.h"
+
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <iterator>
+
+
+ColladaLoader::ColladaLoader()
+{
+}
+
+ColladaLoader::~ColladaLoader()
+{
+}
+
+Mesh* ColladaLoader::LoadModel(const std::string& filename, Animation** animation, Joint** rootJoint)
+{
+	std::cout << "Loading Model: " << filename << "\n";
+
+	// Read the xml file into a stringstream
+	std::ifstream fileStream(filename);
+	std::stringstream buffer;
+	buffer << fileStream.rdbuf();
+	fileStream.close();
+
+	// Parse the buffer using the xml file parsing library into doc 
+	rapidxml::xml_document<> doc;
+	std::string content(buffer.str());
+	doc.parse<0>(&content[0]);
+
+	// Find our root node
+	rapidxml::xml_node<> * rootNode = doc.first_node("COLLADA");
+	
+	if (rootNode != nullptr)
+	{
+		rapidxml::xml_node<> *geometryLibrary = rootNode->first_node("library_geometries");
+		Mesh* mesh = LoadMesh(geometryLibrary);
+
+		rapidxml::xml_node<>* controllersLibrary = rootNode->first_node("library_controllers");
+		LoadVertexWeightJoints(controllersLibrary, mesh);
+
+		LoadJointsInformation(rootNode, rootJoint);
+
+		return mesh;
+	}
+	else
+	{
+		std::cout << "	Error loading Model: " << filename << "\n";
+	}
+
+	return nullptr;
+}
+
+void ColladaLoader::LoadJointsInformation(rapidxml::xml_node<>* collada, Joint** rootJoint)
+{
+	std::map<std::string, int> jointNamesMap;
+
+	rapidxml::xml_node<>* controllersLibraryNode = collada->first_node("library_controllers");
+	if (controllersLibraryNode != nullptr)
+	{
+		rapidxml::xml_node<>* controllerNode = controllersLibraryNode->first_node("controller");
+		if (controllerNode != nullptr)
+		{
+			rapidxml::xml_node<>* skinNode = controllerNode->first_node("skin");
+			if (skinNode != nullptr)
+			{
+				std::map<std::string, std::string> sourceNames;
+
+				rapidxml::xml_node<>* jointsNode = skinNode->first_node("joints");
+				if (jointsNode != nullptr)
+				{
+					for (rapidxml::xml_node<>* inputNode = jointsNode->first_node("input"); inputNode != nullptr; inputNode = inputNode->next_sibling())
+					{
+						rapidxml::xml_attribute<> *attribute = inputNode->first_attribute("semantic");
+						if (attribute != nullptr)
+						{
+							std::string inputType = attribute->value();
+							attribute = inputNode->first_attribute("source");
+							if (attribute != nullptr)
+							{
+								std::string nameSource = attribute->value();
+								sourceNames[inputType] = nameSource.substr(1, nameSource.size());
+							}
+						}
+					}
+				}
+				std::vector<std::string> jointNames;
+				FillValuesString(skinNode, sourceNames["JOINT"], jointNames);
+				for (int i = 0; i < jointNames.size(); ++i)
+				{
+					jointNamesMap[jointNames[i]] = i;
+				}
+			}
+		}
+	}
+
+	rapidxml::xml_node<>* visualScenesController = collada->first_node("library_visual_scenes");
+	if (visualScenesController != nullptr)
+	{
+		rapidxml::xml_node<>* visualSceneNode = visualScenesController->first_node("visual_scene");
+		if (visualSceneNode != nullptr)
+		{
+			for (rapidxml::xml_node<>* node = visualSceneNode->first_node("node"); node != nullptr; node = node->next_sibling())
+			{
+				rapidxml::xml_attribute<>* attribute = node->first_attribute("id");
+				if (attribute != nullptr)
+				{
+					std::string name = attribute->value();
+					if (name == "Armature")
+					{
+						LoadJoint(node, rootJoint, jointNamesMap);
+					}
+				}
+			}
+		}
+	}
+}
+
+void ColladaLoader::LoadJoint(rapidxml::xml_node<>* rootNode, Joint** rootJoint, std::map<std::string, int>& jointNames)
+{
+	for (rapidxml::xml_node<>* node = rootNode->first_node("node"); node != nullptr; node = node->next_sibling())
+	{
+		rapidxml::xml_attribute<>* attribute = node->first_attribute("type");
+		if (attribute != nullptr)
+		{
+			std::string type = attribute->value();
+			if (type == "JOINT")
+			{
+				attribute = node->first_attribute("id");
+				if(attribute != nullptr)
+				{ 
+					std::string name = attribute->value();
+					unsigned int index = jointNames[name];
+					glm::mat4 matrix = GetMatrix(node);
+					Joint* joint = new Joint(index, name, matrix);
+
+					*rootJoint == nullptr ? *rootJoint = joint : (*rootJoint)->AddChild(joint);
+					LoadJoint(node, &joint, jointNames);
+				}
+			}
+		}
+	}
+}
+
+glm::mat4 ColladaLoader::GetMatrix(rapidxml::xml_node<>* node)
+{
+	glm::mat4 matrix;
+
+	rapidxml::xml_node<>* matrixNode = node->first_node("matrix");
+	if (matrixNode != nullptr)
+	{
+		std::string values = matrixNode->value();
+		for (int c = 0; c < 4; ++c)
+		{
+			for (int r = 0; r < 4; ++r)
+			{
+				float value = atof(GetFirstValueString(values).c_str());
+				matrix[c][r] = value;
+			}
+		}
+	}
+
+	return matrix;
+}
+
+void ColladaLoader::LoadVertexWeightJoints(rapidxml::xml_node<>* controllersLibrary, Mesh* mesh)
+{
+	rapidxml::xml_node<>* controllerNode = controllersLibrary->first_node("controller");
+	if (controllerNode != nullptr)
+	{
+		rapidxml::xml_node<>* skinNode = controllerNode->first_node("skin");
+		if (skinNode != nullptr)
+		{
+			std::map<std::string, std::string> sourceNames;
+			FillWithSourceNames(skinNode, sourceNames);
+
+			rapidxml::xml_node<>* vertexWeightsNode = skinNode->first_node("vertex_weights");
+			if (vertexWeightsNode != nullptr)
+			{
+				std::vector<float> weightValues;
+				FillValues(skinNode, sourceNames["WEIGHT"], weightValues);
+
+				rapidxml::xml_node<>* vCountNode = vertexWeightsNode->first_node("vcount");
+				if (vCountNode != nullptr)
+				{
+					std::string vCountString = vCountNode->value();
+					rapidxml::xml_node<>* vNode = vertexWeightsNode->first_node("v");
+					if (vNode != nullptr)
+					{
+						std::string vString = vNode->value();
+						int vertexIndex = 0;
+						while (!vCountString.empty())
+						{
+							unsigned int numVertexWeightPerVertex = atoi(GetFirstValueString(vCountString).c_str());
+							
+							int numElementsPerVertex = sourceNames.size();
+							assert(numElementsPerVertex == 2);
+							for (int i = 0; i < numVertexWeightPerVertex; ++i)
+							{
+								unsigned int jointIndex = atoi(GetFirstValueString(vString).c_str());
+								unsigned int weightIndex = atoi(GetFirstValueString(vString).c_str());
+							
+								mesh->AddJointIdToVertex(vertexIndex, jointIndex);
+								mesh->AddVertexWeightToVertex(vertexIndex, weightValues[weightIndex]);
+							}
+							vertexIndex++;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+std::string ColladaLoader::GetFirstValueString(std::string& listValues)
+{
+	std::string value;
+	int spaceIndex = listValues.find(" ");
+	if (spaceIndex == std::string::npos)
+	{
+		value = listValues.substr(0, listValues.size());
+	}
+	else
+	{
+		value = listValues.substr(0, spaceIndex);
+		listValues = listValues.substr(spaceIndex + 1, listValues.size() - spaceIndex);
+	}
+	return value;
+}
+
+Mesh* ColladaLoader::LoadMesh(rapidxml::xml_node<> *geometryLibrary)
+{
+	std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> uvs;
+	std::vector<unsigned int> indices;
+	std::vector<glm::vec3> vertexs;
+
+	for (rapidxml::xml_node<>* geometryNode = geometryLibrary->first_node("geometry"); geometryNode != nullptr; geometryNode = geometryNode->next_sibling())
+	{
+		for (rapidxml::xml_node<>* meshNode = geometryNode->first_node("mesh"); meshNode != nullptr; meshNode = meshNode->next_sibling())
+		{
+			std::map<std::string, std::string> sourceNames;
+			FillWithSourceNames(meshNode, sourceNames);
+			
+			std::vector<glm::vec3> tempNormals;
+			std::vector<glm::vec2> tempUvs;
+			//std::vector<glm::vec3> tempVertexs;
+
+			FillValuesOf3(meshNode, sourceNames["VERTEX"], vertexs);
+			FillValuesOf3(meshNode, sourceNames["NORMAL"], tempNormals);
+			FillValuesOf2(meshNode, sourceNames["TEXCOORD"], tempUvs);
+			//TODO not reading COLOR information
+			
+			rapidxml::xml_node<>* polylistNode = meshNode->first_node("polylist");
+			if (polylistNode == nullptr)
+			{
+				polylistNode = meshNode->first_node("triangles");
+			}
+			if (polylistNode != nullptr)
+			{
+				unsigned int numInputs = 0;
+				for (rapidxml::xml_node<>* inputNode = polylistNode->first_node("input"); inputNode != nullptr; inputNode = inputNode->next_sibling())
+				{
+					std::string inputNodeName = inputNode->name();
+					if (inputNodeName == "input")
+					{
+						numInputs++;
+					}
+				}
+
+				std::string vertexInformationList = polylistNode->first_node("p")->value();
+
+				unsigned int element = 0;
+				int indexFirstSpace = 1;
+				bool hasTexureCoordinates = tempUvs.size() > 0;
+				bool hasNormals = tempNormals.size() > 0;
+				while (!vertexInformationList.empty() && indexFirstSpace > 0)
+				{
+					indexFirstSpace = vertexInformationList.find(" ");
+					std::string value = vertexInformationList.substr(0, indexFirstSpace);
+					unsigned int index = atoi(value.c_str());
+					if (element % numInputs == 0)
+					{
+						indices.push_back(index);
+					}
+					else if (hasNormals && element % numInputs == 1)
+					{
+						normals.push_back(tempNormals[index]);
+					}
+					else if (hasTexureCoordinates && element % numInputs == 2)
+					{
+						uvs.push_back(tempUvs[index]);
+					}
+					vertexInformationList = vertexInformationList.substr(indexFirstSpace + 1, vertexInformationList.size() - indexFirstSpace);
+					element++;
+				}
+			}
+		}
+	}
+
+	Mesh* mesh = new Mesh(vertexs, uvs, indices, normals);
+
+	return mesh;
+}
+
+void ColladaLoader::FillValuesString(rapidxml::xml_node<>* meshNode, std::string& name, std::vector<std::string>& values)
+{
+	values.clear();
+
+	for (rapidxml::xml_node<>* sourceNode = meshNode->first_node("source"); sourceNode != nullptr; sourceNode = sourceNode->next_sibling())
+	{
+		if (sourceNode != nullptr)
+		{
+			rapidxml::xml_attribute<> *attribute = sourceNode->first_attribute("id");
+			if (attribute != nullptr)
+			{
+				std::string attributeValue = attribute->value();
+
+				if (attributeValue == name)
+				{
+					rapidxml::xml_node<>* nameArrayNode = sourceNode->first_node("Name_array");
+					if (nameArrayNode != nullptr)
+					{
+						std::string valuesString = nameArrayNode->value();
+						unsigned int numElements = atoi(nameArrayNode->first_attribute("count")->value());
+						for (unsigned int i = 0; i < numElements; i++)
+						{
+							std::string value = GetFirstValueString(valuesString);
+							values.push_back(value);
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
+void ColladaLoader::FillValues(rapidxml::xml_node<>* meshNode, std::string& name, std::vector<float>& values)
+{
+	values.clear();
+
+	for (rapidxml::xml_node<>* sourceNode = meshNode->first_node("source"); sourceNode != nullptr; sourceNode = sourceNode->next_sibling())
+	{
+		if (sourceNode != nullptr)
+		{
+			rapidxml::xml_attribute<> *attribute = sourceNode->first_attribute("id");
+			if (attribute != nullptr)
+			{
+				std::string attributeValue = attribute->value();
+
+				if (attributeValue == name)
+				{
+					rapidxml::xml_node<>* floatArrayNode = sourceNode->first_node("float_array");
+					if (floatArrayNode != nullptr)
+					{
+						std::string valuesString = floatArrayNode->value();
+						unsigned int numElements = atoi(floatArrayNode->first_attribute("count")->value());
+						for (unsigned int i = 0; i < numElements; i++)
+						{
+							float floatValue = atof(GetFirstValueString(valuesString).c_str());
+							values.push_back(floatValue);
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
+void ColladaLoader::FillValuesOf2(rapidxml::xml_node<>* meshNode, std::string& name, std::vector<glm::vec2>& values)
+{
+	values.clear();
+
+	for (rapidxml::xml_node<>* sourceNode = meshNode->first_node("source"); sourceNode != nullptr; sourceNode = sourceNode->next_sibling())
+	{
+		if (sourceNode != nullptr)
+		{
+			rapidxml::xml_attribute<> *attribute = sourceNode->first_attribute("id");
+			if (attribute != nullptr)
+			{
+				std::string attributeValue = attribute->value();
+
+				if (attributeValue == name)
+				{
+					rapidxml::xml_node<>* floatArrayNode = sourceNode->first_node("float_array");
+					if (floatArrayNode != nullptr)
+					{
+						std::string valuesString = floatArrayNode->value();
+						unsigned int numElements = atoi(floatArrayNode->first_attribute("count")->value());
+						for (unsigned int i = 0; i < numElements; i = i + 2)
+						{
+							float floatValues[2];
+							for (unsigned int j = 0; j < 2; ++j)
+							{
+								floatValues[j] = atof(GetFirstValueString(valuesString).c_str());
+							}
+							values.push_back(glm::vec2(floatValues[0], floatValues[1]));
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
+void ColladaLoader::FillValuesOf3(rapidxml::xml_node<>* meshNode, std::string& name, std::vector<glm::vec3>& values)
+{
+	values.clear();
+
+	for (rapidxml::xml_node<>* sourceNode = meshNode->first_node("source"); sourceNode != nullptr; sourceNode = sourceNode->next_sibling())
+	{
+		if (sourceNode != nullptr)
+		{
+			rapidxml::xml_attribute<> *attribute = sourceNode->first_attribute("id");
+			if (attribute != nullptr)
+			{
+				std::string attributeValue = attribute->value();
+
+				if (attributeValue == name)
+				{
+					rapidxml::xml_node<>* floatArrayNode = sourceNode->first_node("float_array");
+					if (floatArrayNode != nullptr)
+					{
+						std::string valuesString = floatArrayNode->value();
+						unsigned int numElements = atoi(floatArrayNode->first_attribute("count")->value());
+						for (unsigned int i = 0; i < numElements; i = i + 3)
+						{
+							float floatValues[3];
+							for (unsigned int j = 0; j < 3; ++j)
+							{
+								floatValues[j] = atof(GetFirstValueString(valuesString).c_str());
+							}
+							values.push_back(glm::vec3(floatValues[0], floatValues[1], floatValues[2]));
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
+void ColladaLoader::FillWithSourceNames(rapidxml::xml_node<>* node, std::map<std::string, std::string>& sourceNames)
+{
+	std::vector<std::string> names = {"polylist", "triangles", "vertex_weights"};
+	rapidxml::xml_node<>* polyList = nullptr;
+	int i = 0;
+	while(polyList == nullptr && i < names.size())
+	{
+		polyList = node->first_node(names[i].c_str());
+		++i;
+	}
+	
+	for (rapidxml::xml_node<>* inputNode = polyList->first_node("input"); inputNode != nullptr; inputNode = inputNode->next_sibling())
+	{
+		rapidxml::xml_attribute<> *attribute = inputNode->first_attribute("semantic");
+		if (attribute != nullptr)
+		{
+			std::string inputType = attribute->value();
+			attribute = inputNode->first_attribute("source");
+			if (attribute != nullptr)
+			{
+				std::string nameSource = attribute->value();
+				sourceNames[inputType] = nameSource.substr(1, nameSource.size());
+			}
+		}
+	}
+	rapidxml::xml_node<>* verticesNode = node->first_node("vertices");
+	if (verticesNode != nullptr)
+	{
+		rapidxml::xml_attribute<> *attribute = verticesNode->first_attribute("id");
+		std::string vertexValue = attribute->value();
+
+		if (attribute != nullptr && sourceNames["VERTEX"] == vertexValue)
+		{
+			attribute = verticesNode->first_node("input")->first_attribute("source");
+			if (attribute != nullptr)
+			{
+				std::string newName = attribute->value();
+				sourceNames["VERTEX"] = newName.substr(1, newName.size());
+			}
+		}
+	}
+}

@@ -7,7 +7,7 @@
 
 
 EnergyWallRenderer::EnergyWallRenderer(Model* model, IMaterial* material) :
-VertexsRenderer(model, material)
+VerticesRenderer(model, material)
 {
 }
 
@@ -22,7 +22,7 @@ void EnergyWallRenderer::Draw()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);// GL_ONE_MINUS_SRC_ALPHA);
 	
-	VertexsRenderer::Draw();
+	VerticesRenderer::Draw();
 
 	glDisable(GL_BLEND);
 	glDepthMask(true);

@@ -1,26 +1,26 @@
 #include "stdafx.h"
-#include "VertexsRenderer.h"
+#include "VerticesRenderer.h"
 #include "../models/Model.h"
 #include "../materials/IMaterial.h"
 #include "../camera/ICamera.h"
 #include <GL/glew.h>
 
 
-VertexsRenderer::VertexsRenderer(Model* model, IMaterial* material) :
+VerticesRenderer::VerticesRenderer(Model* model, IMaterial* material) :
 IRenderer(model, material)
 {
 }
 
-VertexsRenderer::~VertexsRenderer()
+VerticesRenderer::~VerticesRenderer()
 {
 }
 /*
-const std::string VertexsRenderer::GetName() const
+const std::string VerticesRenderer::GetName() const
 {
-	return std::string("VertexsRenderer") + std::to_string(mModel->GetID());
+	return std::string("VerticesRenderer") + std::to_string(mModel->GetID());
 }*/
 
-void VertexsRenderer::Draw()
+void VerticesRenderer::Draw()
 {
 	if (mIsInstancingEnabled)
 	{
@@ -32,12 +32,12 @@ void VertexsRenderer::Draw()
 	}
 }
 
-bool VertexsRenderer::IsInstancingAllowed() const
+bool VerticesRenderer::IsInstancingAllowed() const
 {
 	return true;
 }
 
-unsigned int VertexsRenderer::GetNumberTrianglesRendered() const
+unsigned int VerticesRenderer::GetNumberTrianglesRendered() const
 {
 	return mInstances.size() * mModel->GetNumberOfVertexs() / 3;
 }

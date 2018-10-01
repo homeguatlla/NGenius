@@ -7,15 +7,15 @@ class IMaterial;
 class Texture;
 class ICamera;
 
-class VertexsRenderer : public IRenderer
+class VerticesRenderer : public IRenderer
 {
 	unsigned int mMatrixVBO;
 
 public:
-	VertexsRenderer(Model* model, IMaterial* material);
-	~VertexsRenderer();
+	VerticesRenderer(Model* model, IMaterial* material);
+	~VerticesRenderer();
 
-	VertexsRenderer* DoClone() const override { return nullptr; }
+	VerticesRenderer* DoClone() const override { return nullptr; }
 	//const std::string GetName() const override;
 	void Draw() override;
 

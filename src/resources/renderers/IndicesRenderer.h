@@ -5,15 +5,15 @@
 class Model;
 class IMaterial;
 
-class IndexesRenderer : public IRenderer
+class IndicesRenderer : public IRenderer
 {
 	unsigned int mMatrixVBO;
 
 public:
-	IndexesRenderer(Model* model, IMaterial* material);
-	~IndexesRenderer();
+	IndicesRenderer(Model* model, IMaterial* material);
+	~IndicesRenderer();
 
-	IndexesRenderer* DoClone() const override { return nullptr; }
+	IndicesRenderer* DoClone() const override { return nullptr; }
 	//const std::string GetName() const override;
 
 private:
