@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Animation.h"
 
-Animation::Animation(std::string& name, long long duration, std::vector<KeyFrame*>& frames) :
+Animation::Animation(std::string& name, float duration, std::vector<KeyFrame*>& frames) :
 	mName(name),
 	mDuration(duration),
 	mKeyframes(frames)
@@ -17,7 +17,7 @@ std::string Animation::GetName() const
 	return mName;
 }
 
-long long Animation::GetDuration() const
+float Animation::GetDuration() const
 {
 	return mDuration;
 }

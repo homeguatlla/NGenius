@@ -6,6 +6,7 @@ class JointTransform
 {
 public:
 	JointTransform(glm::vec3& position, glm::quat& rotation);
+	JointTransform(const glm::mat4x4& localTransformation);
 	~JointTransform();
 
 	glm::vec3 GetPosition() const;
@@ -16,6 +17,8 @@ public:
 
 private:
 	void CalculateLocalTransform();
+	glm::quat FromMatrix(const glm::mat4x4& matrix);
+	glm::mat4x4& ToRotationMatrix();
 
 private:
 	glm::vec3 mPosition;

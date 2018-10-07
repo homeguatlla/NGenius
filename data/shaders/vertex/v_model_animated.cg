@@ -5,9 +5,8 @@ in vec3 vertexModelspace;
 in vec2 textureCoordsModelspace;
 in vec3 normalModelspace;
 in vec3 tangentModelspace;
-in vec4 weights;
 in ivec4 jointIndices;
-
+in vec4 weights;
 
 out vec2 textureCoords;
 out vec3 eyeDirection;
@@ -18,6 +17,8 @@ out float distanceToCamera;
 
 out vec3 normal;
 out vec4 shadowCoords;
+
+out vec4 in_color;
 
 uniform mat4 V;
 uniform mat4 P;
@@ -41,15 +42,28 @@ void main()
 	vec4 totalNormal = vec4(0.0);
 	for(int i = 0; i < 4; ++i)
 	{
-		vec4 localPosition = jointTransforms[jointIndices[i]] * vec4(vertexModelspace, 1.0);
-		totalLocalPos += localPosition * weights[i];
+		if(jointIndices[i] != -1)
+		{
+			vec4 localPosition = jointTransforms[jointIndices[i]] * vec4(vertexModelspace, 1.0);
+			totalLocalPos += localPosition * weights[i];
 		
-		vec4 worldNormal = jointTransforms[jointIndices[i]] * vec4(normalModelspace, 1.0);
-		totalNormal += worldNormal * weights[i];
+			vec4 worldNormal = jointTransforms[jointIndices[i]] * vec4(normalModelspace, 1.0);
+			totalNormal += worldNormal * weights[i];
+		}
 	}
 
-	//totalLocalPos = vec4(vertexModelspace, 1.0);
-	//totalNormal = vec4(normalModelspace, 1.0);
+	in_color = vec4(0.0, 0.0, 0.0, 1.0);
+
+	int jointIndex = 12;
+	if(jointIndices[0] == jointIndex || jointIndices[1] == jointIndex || jointIndices[2] == jointIndex || jointIndices[3] == jointIndex)
+	{
+		in_color = vec4(weights[0], weights[1], weights[2], 1.0);
+	}
+	else
+	{
+		//totalLocalPos = vec4(vertexModelspace, 1.0);
+	}
+	totalNormal = vec4(normalModelspace, 1.0);
 
 	positionWorldspace = vec3(M * totalLocalPos);
 	shadowCoords = toShadowMapSpace * vec4(positionWorldspace, 1.0f);

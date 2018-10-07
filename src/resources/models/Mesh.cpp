@@ -118,6 +118,16 @@ void Mesh::Build(bool calculateNormals, bool calculateTangents)
 	{
 		CalculateTangents();
 	}
+
+	for (int i = 0; i < mVertexWeights.size(); ++i)
+	{
+		float totalValue = mVertexWeights[i].x + mVertexWeights[i].y + mVertexWeights[i].z + mVertexWeights[i].w;
+
+		mVertexWeights[i].x /= totalValue;
+		mVertexWeights[i].y /= totalValue;
+		mVertexWeights[i].z /= totalValue;
+		mVertexWeights[i].w /= totalValue;
+	}
 }
 
 void  Mesh::SetMaterialName(const std::string& name)
@@ -162,9 +172,9 @@ void Mesh::AddVertexWeightToVertex(int vertexIndex, float weight)
 		}
 	}
 	if (mVertexWeights[vertexIndex].x == 0.0f) mVertexWeights[vertexIndex].x = weight;
-	if (mVertexWeights[vertexIndex].y == 0.0f) mVertexWeights[vertexIndex].y = weight;
-	if (mVertexWeights[vertexIndex].z == 0.0f) mVertexWeights[vertexIndex].z = weight;
-	if (mVertexWeights[vertexIndex].w == 0.0f) mVertexWeights[vertexIndex].w = weight;
+	else if (mVertexWeights[vertexIndex].y == 0.0f) mVertexWeights[vertexIndex].y = weight;
+	else if (mVertexWeights[vertexIndex].z == 0.0f) mVertexWeights[vertexIndex].z = weight;
+	else if (mVertexWeights[vertexIndex].w == 0.0f) mVertexWeights[vertexIndex].w = weight;
 }
 
 void Mesh::AddJointIdToVertex(int vertexIndex, int jointId)
@@ -178,9 +188,9 @@ void Mesh::AddJointIdToVertex(int vertexIndex, int jointId)
 		}
 	}
 	if (mVertexJointsIds[vertexIndex].x == -1) mVertexJointsIds[vertexIndex].x = jointId;
-	if (mVertexJointsIds[vertexIndex].y == -1) mVertexJointsIds[vertexIndex].y = jointId;
-	if (mVertexJointsIds[vertexIndex].z == -1) mVertexJointsIds[vertexIndex].z = jointId;
-	if (mVertexJointsIds[vertexIndex].w == -1) mVertexJointsIds[vertexIndex].w = jointId;
+	else if (mVertexJointsIds[vertexIndex].y == -1) mVertexJointsIds[vertexIndex].y = jointId;
+	else if (mVertexJointsIds[vertexIndex].z == -1) mVertexJointsIds[vertexIndex].z = jointId;
+	else if (mVertexJointsIds[vertexIndex].w == -1) mVertexJointsIds[vertexIndex].w = jointId;
 }
 
 std::vector<glm::vec4>& Mesh::GetVertexsWeights()

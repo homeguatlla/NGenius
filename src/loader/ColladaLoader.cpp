@@ -6,10 +6,13 @@
 #include "../resources/models/animation/KeyFrame.h"
 #include "../resources/models/animation/JointTransform.h"
 
+#include "glm/gtx/transform.hpp"
+
 #include <sstream>
 #include <iostream>
 #include <fstream>
 #include <iterator>
+#include <algorithm>
 
 
 ColladaLoader::ColladaLoader()
@@ -40,22 +43,95 @@ Mesh* ColladaLoader::LoadModel(const std::string& filename, Animation** animatio
 	
 	if (rootNode != nullptr)
 	{
-		rapidxml::xml_node<> *geometryLibrary = rootNode->first_node("library_geometries");
-		Mesh* mesh = LoadMesh(geometryLibrary);
-
+		std::multimap<unsigned int, float> weights;
+		std::multimap<unsigned int, unsigned int> joints;
 		rapidxml::xml_node<>* controllersLibrary = rootNode->first_node("library_controllers");
-		LoadVertexWeightJoints(controllersLibrary, mesh);
+		LoadVertexWeightJoints(controllersLibrary, weights, joints);
+
+		rapidxml::xml_node<> *geometryLibrary = rootNode->first_node("library_geometries");
+		Mesh* mesh = LoadMesh(geometryLibrary, weights, joints);
 
 		LoadJointsInformation(rootNode, rootJoint);
 
+		rapidxml::xml_node<>* animationsLibrary = rootNode->first_node("library_animations");
+		LoadAnimation(animationsLibrary, animation);
+
 		return mesh;
 	}
-	else
-	{
-		std::cout << "	Error loading Model: " << filename << "\n";
-	}
+
+	std::cout << "	Error loading Model: " << filename << "\n";
 
 	return nullptr;
+}
+
+void ColladaLoader::LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Animation** animation)
+{
+	if (animationsLibrary != nullptr)
+	{
+		std::multimap<float, KeyFrame*> keyFramesMap;
+		std::vector<KeyFrame*> keyFrameList;
+		float duration = 0.0f;
+
+		for (rapidxml::xml_node<>* animationNode = animationsLibrary->first_node("animation"); animationNode != nullptr; animationNode = animationNode->next_sibling())
+		{
+			std::string jointName;
+			rapidxml::xml_node<>* channelNode = animationNode->first_node("channel");
+			if (channelNode != nullptr)
+			{
+				rapidxml::xml_attribute<>* attribute = channelNode->first_attribute("target");
+				if (attribute != nullptr)
+				{
+					jointName = attribute->value();
+					int separatorIndex = jointName.find("/");
+					//Armature_
+					jointName = jointName.substr(0, separatorIndex);
+				}
+			}
+
+			std::map<std::string, std::string> sourceNames;
+			FillWithSourceNames(animationNode, sourceNames);
+
+			std::vector<float> keyFramesTime;
+			FillValues(animationNode, sourceNames["INPUT"], keyFramesTime);
+
+			std::vector<float> keyFramesMatrix;
+			FillValues(animationNode, sourceNames["OUTPUT"], keyFramesMatrix);
+
+			for (unsigned int frame = 0; frame < keyFramesTime.size(); frame++)
+			{
+				float time = keyFramesTime[frame];
+				duration = std::max(duration, time);
+
+				KeyFrame* keyFrame = nullptr;
+
+				std::multimap<float, KeyFrame*>::iterator it = keyFramesMap.find(time);
+				if (it == keyFramesMap.end())
+				{
+					keyFrame = new KeyFrame();
+					keyFrame->SetTimestamp(time);
+					keyFramesMap.insert(std::make_pair(time, keyFrame));
+					keyFrameList.push_back(keyFrame);
+				}
+				else 
+				{
+					keyFrame = it->second;
+				}
+
+				glm::mat4x4 matrix = GetMatrix(keyFramesMatrix, 16 * frame);
+				//TODO hay que saber cuál es el root para aplicar la corrección
+				if (jointName == "Torso")
+				{
+					glm::mat4x4 correctionMatrix = glm::rotate(glm::mat4x4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+					matrix = matrix * correctionMatrix;
+				}
+				JointTransform* jointTransform = new JointTransform(matrix);
+				keyFrame->AddJointTransform(jointName, jointTransform);
+			}
+		}
+
+		//create animation
+		(*animation) = new Animation(std::string("animation"), duration, keyFrameList);
+	}
 }
 
 void ColladaLoader::LoadJointsInformation(rapidxml::xml_node<>* collada, Joint** rootJoint)
@@ -93,7 +169,7 @@ void ColladaLoader::LoadJointsInformation(rapidxml::xml_node<>* collada, Joint**
 				}
 				std::vector<std::string> jointNames;
 				FillValuesString(skinNode, sourceNames["JOINT"], jointNames);
-				for (int i = 0; i < jointNames.size(); ++i)
+				for (unsigned int i = 0; i < jointNames.size(); ++i)
 				{
 					jointNamesMap[jointNames[i]] = i;
 				}
@@ -133,12 +209,17 @@ void ColladaLoader::LoadJoint(rapidxml::xml_node<>* rootNode, Joint** rootJoint,
 			std::string type = attribute->value();
 			if (type == "JOINT")
 			{
-				attribute = node->first_attribute("id");
+				attribute = node->first_attribute("sid");
 				if(attribute != nullptr)
 				{ 
 					std::string name = attribute->value();
 					unsigned int index = jointNames[name];
 					glm::mat4 matrix = GetMatrix(node);
+					if (*rootJoint == nullptr)
+					{
+						glm::mat4x4 correctionMatrix = glm::rotate(glm::mat4x4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+						matrix = matrix * correctionMatrix;
+					}
 					Joint* joint = new Joint(index, name, matrix);
 
 					*rootJoint == nullptr ? *rootJoint = joint : (*rootJoint)->AddChild(joint);
@@ -149,6 +230,38 @@ void ColladaLoader::LoadJoint(rapidxml::xml_node<>* rootNode, Joint** rootJoint,
 	}
 }
 
+glm::mat4 ColladaLoader::GetMatrix(std::vector<float>& values, unsigned int offset)
+{
+	glm::mat4 matrix;
+
+	for (int c = 0; c < 4; ++c)
+	{
+		for (int r = 0; r < 4; ++r)
+		{
+			float value = values[r + c * 4 + offset];
+			matrix[c][r] = value;
+		}
+	}
+
+	return matrix;
+}
+
+glm::mat4 ColladaLoader::GetMatrix(std::string& values)
+{
+	glm::mat4 matrix;
+
+	for (int c = 0; c < 4; ++c)
+	{
+		for (int r = 0; r < 4; ++r)
+		{
+			float value = static_cast<float>(atof(GetFirstValueString(values).c_str()));
+			matrix[c][r] = value;
+		}
+	}
+
+	return matrix;
+}
+
 glm::mat4 ColladaLoader::GetMatrix(rapidxml::xml_node<>* node)
 {
 	glm::mat4 matrix;
@@ -157,60 +270,55 @@ glm::mat4 ColladaLoader::GetMatrix(rapidxml::xml_node<>* node)
 	if (matrixNode != nullptr)
 	{
 		std::string values = matrixNode->value();
-		for (int c = 0; c < 4; ++c)
-		{
-			for (int r = 0; r < 4; ++r)
-			{
-				float value = atof(GetFirstValueString(values).c_str());
-				matrix[c][r] = value;
-			}
-		}
+		matrix = GetMatrix(values);
 	}
 
 	return matrix;
 }
 
-void ColladaLoader::LoadVertexWeightJoints(rapidxml::xml_node<>* controllersLibrary, Mesh* mesh)
+void ColladaLoader::LoadVertexWeightJoints(rapidxml::xml_node<>* controllersLibrary, std::multimap<unsigned int, float>& weights, std::multimap<unsigned int, unsigned int>& joints)
 {
-	rapidxml::xml_node<>* controllerNode = controllersLibrary->first_node("controller");
-	if (controllerNode != nullptr)
+	if (controllersLibrary != nullptr)
 	{
-		rapidxml::xml_node<>* skinNode = controllerNode->first_node("skin");
-		if (skinNode != nullptr)
+		rapidxml::xml_node<>* controllerNode = controllersLibrary->first_node("controller");
+		if (controllerNode != nullptr)
 		{
-			std::map<std::string, std::string> sourceNames;
-			FillWithSourceNames(skinNode, sourceNames);
-
-			rapidxml::xml_node<>* vertexWeightsNode = skinNode->first_node("vertex_weights");
-			if (vertexWeightsNode != nullptr)
+			rapidxml::xml_node<>* skinNode = controllerNode->first_node("skin");
+			if (skinNode != nullptr)
 			{
-				std::vector<float> weightValues;
-				FillValues(skinNode, sourceNames["WEIGHT"], weightValues);
+				std::map<std::string, std::string> sourceNames;
+				FillWithSourceNames(skinNode, sourceNames);
 
-				rapidxml::xml_node<>* vCountNode = vertexWeightsNode->first_node("vcount");
-				if (vCountNode != nullptr)
+				rapidxml::xml_node<>* vertexWeightsNode = skinNode->first_node("vertex_weights");
+				if (vertexWeightsNode != nullptr)
 				{
-					std::string vCountString = vCountNode->value();
-					rapidxml::xml_node<>* vNode = vertexWeightsNode->first_node("v");
-					if (vNode != nullptr)
+					std::vector<float> weightValues;
+					FillValues(skinNode, sourceNames["WEIGHT"], weightValues);
+
+					rapidxml::xml_node<>* vCountNode = vertexWeightsNode->first_node("vcount");
+					if (vCountNode != nullptr)
 					{
-						std::string vString = vNode->value();
-						int vertexIndex = 0;
-						while (!vCountString.empty())
+						std::string vCountString = vCountNode->value();
+						rapidxml::xml_node<>* vNode = vertexWeightsNode->first_node("v");
+						if (vNode != nullptr)
 						{
-							unsigned int numVertexWeightPerVertex = atoi(GetFirstValueString(vCountString).c_str());
-							
-							int numElementsPerVertex = sourceNames.size();
-							assert(numElementsPerVertex == 2);
-							for (int i = 0; i < numVertexWeightPerVertex; ++i)
+							std::string vString = vNode->value();
+							int vertexIndex = 0;
+							while (!vCountString.empty())
 							{
-								unsigned int jointIndex = atoi(GetFirstValueString(vString).c_str());
-								unsigned int weightIndex = atoi(GetFirstValueString(vString).c_str());
-							
-								mesh->AddJointIdToVertex(vertexIndex, jointIndex);
-								mesh->AddVertexWeightToVertex(vertexIndex, weightValues[weightIndex]);
+								unsigned int numVertexWeightPerVertex = atoi(GetFirstValueString(vCountString).c_str());
+
+								int numElementsPerVertex = sourceNames.size();
+								assert(numElementsPerVertex == 2);
+								for (unsigned int i = 0; i < numVertexWeightPerVertex; ++i)
+								{
+									unsigned int jointIndex = atoi(GetFirstValueString(vString).c_str());
+									unsigned int weightIndex = atoi(GetFirstValueString(vString).c_str());
+									weights.insert(std::make_pair(vertexIndex, weightValues[weightIndex]));
+									joints.insert(std::make_pair(vertexIndex, jointIndex));
+								}
+								vertexIndex++;
 							}
-							vertexIndex++;
 						}
 					}
 				}
@@ -235,12 +343,13 @@ std::string ColladaLoader::GetFirstValueString(std::string& listValues)
 	return value;
 }
 
-Mesh* ColladaLoader::LoadMesh(rapidxml::xml_node<> *geometryLibrary)
+Mesh* ColladaLoader::LoadMesh(rapidxml::xml_node<> *geometryLibrary, std::multimap<unsigned int, float>& weights, std::multimap<unsigned int, unsigned int>& joints)
 {
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> uvs;
 	std::vector<unsigned int> indices;
-	std::vector<glm::vec3> vertexs;
+	std::vector<glm::vec3> vertices;
+	std::vector<int> verticesIndices;
 
 	for (rapidxml::xml_node<>* geometryNode = geometryLibrary->first_node("geometry"); geometryNode != nullptr; geometryNode = geometryNode->next_sibling())
 	{
@@ -251,9 +360,9 @@ Mesh* ColladaLoader::LoadMesh(rapidxml::xml_node<> *geometryLibrary)
 			
 			std::vector<glm::vec3> tempNormals;
 			std::vector<glm::vec2> tempUvs;
-			//std::vector<glm::vec3> tempVertexs;
+			std::vector<glm::vec3> tempVertices;
 
-			FillValuesOf3(meshNode, sourceNames["VERTEX"], vertexs);
+			FillValuesOf3(meshNode, sourceNames["VERTEX"], tempVertices);
 			FillValuesOf3(meshNode, sourceNames["NORMAL"], tempNormals);
 			FillValuesOf2(meshNode, sourceNames["TEXCOORD"], tempUvs);
 			//TODO not reading COLOR information
@@ -289,6 +398,8 @@ Mesh* ColladaLoader::LoadMesh(rapidxml::xml_node<> *geometryLibrary)
 					if (element % numInputs == 0)
 					{
 						indices.push_back(index);
+						vertices.push_back(tempVertices[index]);
+						verticesIndices.push_back(index);
 					}
 					else if (hasNormals && element % numInputs == 1)
 					{
@@ -305,7 +416,25 @@ Mesh* ColladaLoader::LoadMesh(rapidxml::xml_node<> *geometryLibrary)
 		}
 	}
 
-	Mesh* mesh = new Mesh(vertexs, uvs, indices, normals);
+	Mesh* mesh = new Mesh(vertices, uvs, indices, normals);
+	typedef std::multimap<unsigned int, unsigned int>::iterator JointsIterator;
+	for (unsigned int i = 0; i < verticesIndices.size(); ++i)
+	{
+		std::pair<JointsIterator, JointsIterator> result = joints.equal_range(verticesIndices[i]);
+		for (JointsIterator it = result.first; it != result.second; it++)
+		{
+			mesh->AddJointIdToVertex(i, it->second);
+		}
+	}
+	typedef std::multimap<unsigned int, float>::iterator WeightsIterator;
+	for (unsigned int i = 0; i < verticesIndices.size(); ++i)
+	{
+		std::pair<WeightsIterator, WeightsIterator> result = weights.equal_range(verticesIndices[i]);
+		for (WeightsIterator it = result.first; it != result.second; it++)
+		{
+			mesh->AddVertexWeightToVertex(i, it->second);
+		}
+	}
 
 	return mesh;
 }
@@ -365,7 +494,7 @@ void ColladaLoader::FillValues(rapidxml::xml_node<>* meshNode, std::string& name
 						unsigned int numElements = atoi(floatArrayNode->first_attribute("count")->value());
 						for (unsigned int i = 0; i < numElements; i++)
 						{
-							float floatValue = atof(GetFirstValueString(valuesString).c_str());
+							float floatValue = static_cast<float>(atof(GetFirstValueString(valuesString).c_str()));
 							values.push_back(floatValue);
 						}
 						break;
@@ -401,7 +530,7 @@ void ColladaLoader::FillValuesOf2(rapidxml::xml_node<>* meshNode, std::string& n
 							float floatValues[2];
 							for (unsigned int j = 0; j < 2; ++j)
 							{
-								floatValues[j] = atof(GetFirstValueString(valuesString).c_str());
+								floatValues[j] = static_cast<float>(atof(GetFirstValueString(valuesString).c_str()));
 							}
 							values.push_back(glm::vec2(floatValues[0], floatValues[1]));
 						}
@@ -438,7 +567,7 @@ void ColladaLoader::FillValuesOf3(rapidxml::xml_node<>* meshNode, std::string& n
 							float floatValues[3];
 							for (unsigned int j = 0; j < 3; ++j)
 							{
-								floatValues[j] = atof(GetFirstValueString(valuesString).c_str());
+								floatValues[j] = static_cast<float>(atof(GetFirstValueString(valuesString).c_str()));
 							}
 							values.push_back(glm::vec3(floatValues[0], floatValues[1], floatValues[2]));
 						}
@@ -452,9 +581,9 @@ void ColladaLoader::FillValuesOf3(rapidxml::xml_node<>* meshNode, std::string& n
 
 void ColladaLoader::FillWithSourceNames(rapidxml::xml_node<>* node, std::map<std::string, std::string>& sourceNames)
 {
-	std::vector<std::string> names = {"polylist", "triangles", "vertex_weights"};
+	std::vector<std::string> names = {"polylist", "triangles", "vertex_weights", "sampler"};
 	rapidxml::xml_node<>* polyList = nullptr;
-	int i = 0;
+	unsigned int i = 0;
 	while(polyList == nullptr && i < names.size())
 	{
 		polyList = node->first_node(names[i].c_str());

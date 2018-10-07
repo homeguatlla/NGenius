@@ -8,16 +8,16 @@ class KeyFrame;
 class Animation
 {
 public:
-	Animation(std::string& name, long long duration, std::vector<KeyFrame*>& frames);
+	Animation(std::string& name, float duration, std::vector<KeyFrame*>& frames);
 	~Animation();
 
 	std::string GetName() const;
-	long long GetDuration() const;
+	float GetDuration() const;
 	std::vector<KeyFrame*>& GetKeyframes();
 
 private:
 	std::string mName;
-	long long mDuration; //in seconds
+	float mDuration; //in seconds
 	std::vector<KeyFrame*> mKeyframes;
 };
 

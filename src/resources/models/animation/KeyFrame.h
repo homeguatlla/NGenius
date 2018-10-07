@@ -9,16 +9,16 @@ class KeyFrame
 {
 public:
 	KeyFrame();
-	KeyFrame(long long timeStamp, std::map<std::string, JointTransform*>& pose);
+	KeyFrame(float timeStamp, std::map<std::string, JointTransform*>& pose);
 	~KeyFrame();
 
-	long long GetTimestamp() const;
+	float GetTimestamp() const;
 	std::map<std::string, JointTransform*>& GetJointKeyframes();
-	void SetTimestamp(long long timeStamp);
+	void SetTimestamp(float timeStamp);
 	void AddJointTransform(std::string& name, JointTransform* pose);
 
 private:
-	long long mTimestamp;
+	float mTimestamp;
 	std::map<std::string, JointTransform*> mPose;
 };
 

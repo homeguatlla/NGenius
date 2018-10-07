@@ -79,7 +79,9 @@ void AnimatedModel::CreateAnimationWeightsVBO(VertexBuffersManager& vertexBuffer
 
 		mAnimationVertexWeightsVBO = vertexBufferManager.CreateVBO(name);
 		glBindBuffer(GL_ARRAY_BUFFER, mAnimationVertexWeightsVBO);
-		glBufferData(GL_ARRAY_BUFFER, numVertexs * sizeof(glm::vec4), &mMesh->GetVertexsWeights()[0], GL_STATIC_DRAW);
+
+		std::vector<glm::vec4> data = mMesh->GetVertexsWeights();
+		glBufferData(GL_ARRAY_BUFFER, numVertexs * sizeof(glm::vec4), &data[0], GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(location);
 		glVertexAttribPointer(
@@ -108,13 +110,12 @@ void AnimatedModel::CreateAnimationVertexsJointIDsVBO(VertexBuffersManager& vert
 		glBufferData(GL_ARRAY_BUFFER, numVertexs * sizeof(glm::ivec4), &mMesh->GetVertexsJointsIDs()[0], GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(location);
-		glVertexAttribPointer(
+		glVertexAttribIPointer(
 			location,  // The attribute we want to configure
 			4,                            // size
 			GL_INT,                     // type
 			GL_FALSE,                     // normalized?
-			0,                            // stride
-			(void*)0                      // array buffer offset
+			0
 		);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}

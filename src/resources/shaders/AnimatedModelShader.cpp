@@ -27,7 +27,8 @@ void AnimatedModelShader::LoadData(const ICamera* camera, const Transformation* 
 	MaterialEffectMatrix4Array* effectMatrixArray = material->GetEffect<MaterialEffectMatrix4Array>();
 	if (effectMatrixArray != nullptr)
 	{
-		LoadMatrix4Array(mLocationJointTransformMatrixs, effectMatrixArray->GetValues());
+		std::vector<glm::mat4x4> values = effectMatrixArray->GetValues();
+		LoadMatrix4Array(mLocationJointTransformMatrixs, values);
 	}
 }
 

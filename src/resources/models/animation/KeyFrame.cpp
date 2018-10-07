@@ -7,7 +7,7 @@ KeyFrame::KeyFrame() :
 
 }
 
-KeyFrame::KeyFrame(long long timeStamp, std::map<std::string, JointTransform*>& pose) :
+KeyFrame::KeyFrame(float timeStamp, std::map<std::string, JointTransform*>& pose) :
 	mTimestamp(timeStamp),
 	mPose(pose)
 {
@@ -17,7 +17,7 @@ KeyFrame::~KeyFrame()
 {
 }
 
-long long KeyFrame::GetTimestamp() const
+float KeyFrame::GetTimestamp() const
 {
 	return mTimestamp;
 }
@@ -27,7 +27,7 @@ std::map<std::string, JointTransform*>& KeyFrame::GetJointKeyframes()
 	return mPose;
 }
 
-void KeyFrame::SetTimestamp(long long timeStamp)
+void KeyFrame::SetTimestamp(float timeStamp)
 {
 	mTimestamp = timeStamp;
 }

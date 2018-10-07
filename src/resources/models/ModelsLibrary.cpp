@@ -61,6 +61,8 @@ void ModelsLibrary::Load()
 	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
 
 	LoadModel("farmer", "data/models/farmer/farmer.dae", false, true);
+	//LoadModel("cubeSimple", "data/models/cube/untitled.dae", false, true);
+
 	//LoadModel("cube_animated", "data/models/cube/cube.fbx", false, true);
 	/*
 	LoadModel("yurown", "data/models/yurown/Sci-Fi_Soldier.fbx", false, true);
@@ -95,7 +97,7 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 		}
 		else
 		{
-			Model* modelRender = modelRender = new Model(model);
+			Model* modelRender = new Model(model);
 			AddElement(name, modelRender);
 		}
 

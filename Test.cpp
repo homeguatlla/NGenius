@@ -959,8 +959,8 @@ void CreateTerrain()
 void CreatePlayer()
 {
 	//PLAYER
-	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("model"));
-	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("enano_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("animated_model"));
+	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_texture")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("enano_normalmap")), 1.0f));
 	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
@@ -976,9 +976,9 @@ void CreatePlayer()
 	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
 
 	Model* model = mEngine.GetModel("farmer");
-	IRenderer* renderer = new IndicesRenderer(model, material);
+	IRenderer* renderer = new VerticesRenderer(model, material);
 
-	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 6.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f)),
+	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f)),
 							renderer,
 							inputComponent,
 							new CharacterComponent(),
@@ -992,7 +992,7 @@ void CreatePlayer()
 	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	mPlayer->AddComponent(new DebugComponent(boundingBoxRenderer));
 	mPlayer->AddComponent(new EnvironmentModificatorComponent());
-	//mPlayer->AddComponent(new AnimationComponent(mEngine.GetAnimation("Armature|Armature|Armature|walking|Armature|walking")));
+	mPlayer->AddComponent(new AnimationComponent(mEngine.GetAnimation("animation")));
 	mScene->AddEntity(mPlayer);
 }
 

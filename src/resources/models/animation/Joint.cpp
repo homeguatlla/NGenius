@@ -44,7 +44,9 @@ const glm::mat4& Joint::GetInverseBindTransform() const
 
 void Joint::FillWithJointTransforms(std::vector<glm::mat4>& jointMatrices) const
 {
-	jointMatrices.push_back(GetAnimatedTransform());
+	//TODO esto creo que si se quita por indice y se añade directamente con un push_back funcionaría aunque no estoy muy seguro 
+	//si para todas las animaciones
+	jointMatrices[mIndex] = GetAnimatedTransform();
 
 	for (Joint* child : mChildren)
 	{
@@ -54,7 +56,7 @@ void Joint::FillWithJointTransforms(std::vector<glm::mat4>& jointMatrices) const
 
 void Joint::CalculateInverseBindTransform(const glm::mat4& parentBindTransform)
 {
-	glm::mat4 bindTransform = parentBindTransform * mLocalBindTransformation;
+	glm::mat4 bindTransform = mLocalBindTransformation * parentBindTransform;
 	mInverseBindTransformation = glm::inverse(bindTransform);
 	for (Joint* child : mChildren)
 	{

@@ -10,6 +10,7 @@ in vec4 shadowCoords;
 
 in vec3 normal;
 in float distanceToCamera;
+in vec4 in_color;
 
 uniform sampler2D texture;
 uniform vec3 fogColor;
@@ -86,9 +87,11 @@ void main()
 		discard;
 	}
 
-	vec3 MaterialAmbientColor = vec3(0.1f, 0.1f, 0.1f);
+	vec3 MaterialAmbientColor = vec3(0.3f, 0.3f, 0.3f);
 	vec3 MaterialSpecularColor = vec3(1.0f, 1.0f, 1.0f);
 	color = ApplyLight(MaterialAmbientColor, MaterialDiffuseColor.rgb, MaterialSpecularColor);
 	color = ApplyFog(color);
+
+	color = in_color;
 }
 
