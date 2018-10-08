@@ -92,6 +92,6 @@ void main()
 	color = ApplyLight(MaterialAmbientColor, MaterialDiffuseColor.rgb, MaterialSpecularColor);
 	color = ApplyFog(color);
 
-	color = in_color;
+	//color = in_color;
 }
 

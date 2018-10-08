@@ -42,12 +42,7 @@ void Animator::Update(float elapsedTime)
 
 		for (glm::mat4x4& m : mJointTransforms)
 		{
-			m[3][0] = m[0][3];
-			m[0][3] = 0.0f;
-			m[3][1] = m[1][3];
-			m[1][3] = 0.0f;
-			m[3][2] = m[2][3];
-			m[2][3] = 0.0f;
+			m = glm::transpose(m);
 		}
 	}
 }

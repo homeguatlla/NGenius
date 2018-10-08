@@ -398,12 +398,15 @@ Mesh* ColladaLoader::LoadMesh(rapidxml::xml_node<> *geometryLibrary, std::multim
 					if (element % numInputs == 0)
 					{
 						indices.push_back(index);
-						vertices.push_back(tempVertices[index]);
+
+						glm::vec3 newVertex = glm::vec3(tempVertices[index].x, tempVertices[index].z, tempVertices[index].y);
+						vertices.push_back(newVertex);
 						verticesIndices.push_back(index);
 					}
 					else if (hasNormals && element % numInputs == 1)
 					{
-						normals.push_back(tempNormals[index]);
+						glm::vec3 newNormal = glm::vec3(tempNormals[index].x, tempNormals[index].z, tempNormals[index].y);
+						normals.push_back(newNormal);
 					}
 					else if (hasTexureCoordinates && element % numInputs == 2)
 					{

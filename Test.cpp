@@ -978,7 +978,7 @@ void CreatePlayer()
 	Model* model = mEngine.GetModel("farmer");
 	IRenderer* renderer = new VerticesRenderer(model, material);
 
-	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f)),
+	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(0.1f)),
 							renderer,
 							inputComponent,
 							new CharacterComponent(),
