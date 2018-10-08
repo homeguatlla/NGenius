@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Mesh.h"
 
+#include <algorithm>
+
 int Mesh::IDCounter = 0;
 const float EPSILON = 0.0001f;
 const float EPSILON2 = EPSILON * EPSILON;
@@ -119,15 +121,7 @@ void Mesh::Build(bool calculateNormals, bool calculateTangents)
 		CalculateTangents();
 	}
 
-	for (int i = 0; i < mVertexWeights.size(); ++i)
-	{
-		float totalValue = mVertexWeights[i].x + mVertexWeights[i].y + mVertexWeights[i].z + mVertexWeights[i].w;
-
-		mVertexWeights[i].x /= totalValue;
-		mVertexWeights[i].y /= totalValue;
-		mVertexWeights[i].z /= totalValue;
-		mVertexWeights[i].w /= totalValue;
-	}
+	CreateWeightsAndJointsVectors();
 }
 
 void  Mesh::SetMaterialName(const std::string& name)
@@ -163,34 +157,38 @@ const std::string& Mesh::GetNormalMapTextureName() const
 
 void Mesh::AddVertexWeightToVertex(int vertexIndex, float weight)
 {
-	if (mVertexWeights.size() == 0)
+	if (mTempVertexWeights.size() == 0)
 	{
-		mVertexWeights.reserve(mVertexs.size());
+		mTempVertexWeights.reserve(mVertexs.size());
 		for (unsigned int i = 0; i < mVertexs.size(); ++i)
 		{
-			mVertexWeights.push_back(glm::vec4(0.0f));
+			mTempVertexWeights.push_back(std::vector<float>());
 		}
 	}
-	if (mVertexWeights[vertexIndex].x == 0.0f) mVertexWeights[vertexIndex].x = weight;
+	mTempVertexWeights[vertexIndex].push_back(weight);
+	/*if (mVertexWeights[vertexIndex].x == 0.0f) mVertexWeights[vertexIndex].x = weight;
 	else if (mVertexWeights[vertexIndex].y == 0.0f) mVertexWeights[vertexIndex].y = weight;
 	else if (mVertexWeights[vertexIndex].z == 0.0f) mVertexWeights[vertexIndex].z = weight;
-	else if (mVertexWeights[vertexIndex].w == 0.0f) mVertexWeights[vertexIndex].w = weight;
+	else if (mVertexWeights[vertexIndex].w == 0.0f) mVertexWeights[vertexIndex].w = weight;*/
 }
 
 void Mesh::AddJointIdToVertex(int vertexIndex, int jointId)
 {
-	if (mVertexJointsIds.size() == 0)
+	if (mTempVertexJointsIds.size() == 0)
 	{
-		mVertexJointsIds.reserve(mVertexs.size());
+		mTempVertexJointsIds.reserve(mVertexs.size());
 		for (unsigned int i = 0; i < mVertexs.size(); ++i)
 		{
-			mVertexJointsIds.push_back(glm::ivec4(-1));
+			mTempVertexJointsIds.push_back(std::vector<int>());
 		}
 	}
+	mTempVertexJointsIds[vertexIndex].push_back(jointId);
+	/*
 	if (mVertexJointsIds[vertexIndex].x == -1) mVertexJointsIds[vertexIndex].x = jointId;
 	else if (mVertexJointsIds[vertexIndex].y == -1) mVertexJointsIds[vertexIndex].y = jointId;
 	else if (mVertexJointsIds[vertexIndex].z == -1) mVertexJointsIds[vertexIndex].z = jointId;
 	else if (mVertexJointsIds[vertexIndex].w == -1) mVertexJointsIds[vertexIndex].w = jointId;
+	*/
 }
 
 std::vector<glm::vec4>& Mesh::GetVertexsWeights()
@@ -201,6 +199,72 @@ std::vector<glm::vec4>& Mesh::GetVertexsWeights()
 std::vector<glm::ivec4>& Mesh::GetVertexsJointsIDs()
 {
 	return mVertexJointsIds;
+}
+
+void Mesh::CreateWeightsAndJointsVectors()
+{
+	for (int i = 0; i < mTempVertexWeights.size(); ++i)
+	{
+		if (mTempVertexWeights[i].size() > 4)
+		{
+			ReorderVertexWeightAndJointIdsToHaveGreaterFirst(mTempVertexWeights[i], mTempVertexJointsIds[i]);
+		}
+
+		float totalValue = 0.0f;
+		for (int j = 0; j < mTempVertexWeights[i].size() && j < 4; ++j)
+		{
+			totalValue += mTempVertexWeights[i][j];
+		}
+
+		glm::vec4 weight;
+		glm::ivec4 joint;
+		if (mTempVertexWeights[i].size() == 1)
+		{
+			weight = glm::vec4(mTempVertexWeights[i][0], 0.0f, 0.0f, 0.0f);
+			joint = glm::ivec4(mTempVertexJointsIds[i][0], -1, -1, -1);
+		}
+		else if (mTempVertexWeights[i].size() == 2)
+		{
+			weight = glm::vec4(mTempVertexWeights[i][0], mTempVertexWeights[i][1], 0.0f, 0.0f);
+			joint = glm::ivec4(mTempVertexJointsIds[i][0], mTempVertexJointsIds[i][1], -1, -1);
+		}
+		else if (mTempVertexWeights[i].size() == 3)
+		{
+			weight = glm::vec4(mTempVertexWeights[i][0], mTempVertexWeights[i][1], mTempVertexWeights[i][2], 0.0f);
+			joint = glm::ivec4(mTempVertexJointsIds[i][0], mTempVertexJointsIds[i][1], mTempVertexJointsIds[i][2], -1);
+		}
+		else if (mTempVertexWeights[i].size() > 3)
+		{
+			weight = glm::vec4(mTempVertexWeights[i][0], mTempVertexWeights[i][1], mTempVertexWeights[i][2], mTempVertexWeights[i][3]);
+			joint = glm::ivec4(mTempVertexJointsIds[i][0], mTempVertexJointsIds[i][1], mTempVertexJointsIds[i][2], mTempVertexJointsIds[i][3]);
+		}
+		mVertexWeights.push_back(weight / totalValue);
+		mVertexJointsIds.push_back(joint);
+	}
+}
+
+void Mesh::ReorderVertexWeightAndJointIdsToHaveGreaterFirst(std::vector<float>& weights, std::vector<int>& joints)
+{
+	std::vector<std::pair<float, int>> tempVector;
+
+	for (int i = 0; i < weights.size(); ++i)
+	{
+		tempVector.push_back(std::pair<float, int>(weights[i], joints[i]));
+	}
+
+	weights.clear();
+	joints.clear();
+	std::sort(tempVector.begin(), tempVector.end(),
+		[](const std::pair<float, int> & a, const std::pair<float, int> & b) -> bool
+	{
+		return a.first > b.first;
+	});
+
+	for (int i = 0; i < tempVector.size(); ++i)
+	{
+		weights.push_back(tempVector[i].first);
+		joints.push_back(tempVector[i].second);
+	}
 }
 
 void Mesh::CalculateNormals()

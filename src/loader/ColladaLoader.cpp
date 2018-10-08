@@ -406,7 +406,7 @@ Mesh* ColladaLoader::LoadMesh(rapidxml::xml_node<> *geometryLibrary, std::multim
 					else if (hasNormals && element % numInputs == 1)
 					{
 						glm::vec3 newNormal = glm::vec3(tempNormals[index].x, tempNormals[index].z, tempNormals[index].y);
-						normals.push_back(newNormal);
+						normals.push_back(-newNormal);
 					}
 					else if (hasTexureCoordinates && element % numInputs == 2)
 					{

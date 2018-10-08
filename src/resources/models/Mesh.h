@@ -17,6 +17,9 @@ class Mesh
 	std::vector<glm::vec4> mVertexWeights;
 	std::vector<glm::ivec4> mVertexJointsIds;
 
+	std::vector<std::vector<float>> mTempVertexWeights;
+	std::vector<std::vector<int>> mTempVertexJointsIds;
+
 	int mModelID;
 	std::string mMaterialName;
 	std::string mDiffuseTextureName;
@@ -70,5 +73,7 @@ private:
 	void CalculateNormals();
 	void CalculateTangents();
 	glm::vec3 CalculateTriangleNormalFromVertex(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
+	void CreateWeightsAndJointsVectors();
+	void ReorderVertexWeightAndJointIdsToHaveGreaterFirst(std::vector<float>& weights, std::vector<int>& joints);
 };
 

@@ -1,7 +1,3 @@
-
-// Test.cpp : Defines the entry point for the console application.
-//
-
 #include "stdafx.h"
 #include <Windows.h>
 #include <stdio.h>
@@ -11,7 +7,6 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
 
 #include <string>
 #include <vector>
@@ -978,7 +973,7 @@ void CreatePlayer()
 	Model* model = mEngine.GetModel("farmer");
 	IRenderer* renderer = new VerticesRenderer(model, material);
 
-	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(0.1f)),
+	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f)),
 							renderer,
 							inputComponent,
 							new CharacterComponent(),
@@ -1013,7 +1008,7 @@ void CreateGameCameraEntity()
 																	PLAYER_PITCH, 
 																	PLAYER_PITCH_SPEED, 
 																	PLAYER_ZOOM_SPEED);
-	mCamera->AddComponent(mThirdPersonCameraComponent);
+	//mCamera->AddComponent(mThirdPersonCameraComponent);
 	mCamera->AddComponent(new CollisionComponent());
 
 	mCamera->AddComponent(new CharacterComponent());
