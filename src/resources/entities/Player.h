@@ -46,6 +46,8 @@ private:
 	void UpdateJumping(float elapsedTime);
 	void UpdateFalling(float elapsedTime);
 
+	void UpdateAnimations();
+
 	glm::vec3 CalculateRunPosition(float elapsedTime, Transformation* transformation, glm::vec3 velocity, float runSpeed);
 	void CalculateTurnPosition(float elapsedTime, Transformation* transformation, float turnSpeed);
 	glm::vec3 CalculateJumpPosition(float elapsedTime, Transformation* transformation, glm::vec3 velocity, float upwardsSpeed);

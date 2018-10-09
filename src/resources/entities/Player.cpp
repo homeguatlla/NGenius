@@ -5,6 +5,12 @@
 #include "../components/PhysicsComponent.h"
 #include "../components/CharacterComponent.h"
 #include "../components/ThirdPersonCameraComponent.h"
+#include "../components/AnimationComponent.h"
+
+#include "../renderers/IRenderer.h"
+#include "../models/Model.h"
+#include "../models/animation/AnimatedModel.h"
+
 #include "../GameEvent.h"
 #include "../events/characterControllerEvents/BackwardEvent.h"
 #include "../events/characterControllerEvents/ForwardEvent.h"
@@ -64,8 +70,25 @@ void Player::Update(float elapsedTime)
 		default:
 			break;
 	}
-	PhysicsComponent* physicsComponent = GetComponent<PhysicsComponent>();
+	UpdateAnimations();
+	//PhysicsComponent* physicsComponent = GetComponent<PhysicsComponent>();
 	//std::cout << "state: " << mState << " velocity = " << physicsComponent->GetVelocity().y << "\n";
+}
+
+void Player::UpdateAnimations()
+{
+	AnimationComponent* animationComponent = GetComponent<AnimationComponent>();
+	if (animationComponent != nullptr)
+	{
+		if (mState == MOVING && mCurrentRunSpeed > 0.0f)
+		{
+			animationComponent->PlayAnimation("walking");
+		}
+		else
+		{
+			animationComponent->StopAnimation();
+		}
+	}
 }
 
 void Player::UpdateGameEvents()

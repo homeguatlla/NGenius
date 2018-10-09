@@ -132,7 +132,7 @@ void ColladaLoader::LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Anima
 		}
 
 		//create animation
-		(*animation) = new Animation(std::string("animation"), duration, keyFrameList);
+		(*animation) = new Animation(std::string("walking"), duration, keyFrameList);
 	}
 }
 

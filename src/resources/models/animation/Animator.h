@@ -19,9 +19,11 @@ public:
 	Animator(AnimatedModel* model);
 	~Animator();
 
-	void PlayAnimation(Animation* animation);
+	void BindAnimation(Animation* animation);
 	void Update(float elapsedTime);
 	const std::vector <glm::mat4>& GetJointTransforms() const;
+	bool HasAnimation() const;
+	void ReleaseAnimation();
 
 private:
 	void IncreaseAnimationTime(float elapsedTime);

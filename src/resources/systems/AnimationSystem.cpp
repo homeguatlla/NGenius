@@ -23,17 +23,32 @@ void AnimationSystem::Update(float deltaTime)
 {
 	for (std::pair<GameEntity*, Animator*> elem : mEntities)
 	{
-		Animator* animator = elem.second;
-		animator->Update(deltaTime);
-
 		GameEntity* entity = elem.first;
-		IRenderer* renderer = entity->GetRenderer();
-		assert(renderer != nullptr);
-		IMaterial* material = renderer->GetMaterial();
-		MaterialEffectMatrix4Array* effectMatrix4Array = material->GetEffect<MaterialEffectMatrix4Array>();
-		if (effectMatrix4Array != nullptr)
+		Animator* animator = elem.second;
+
+		AnimationComponent* animationComponent = entity->GetComponent<AnimationComponent>();
+		assert(animationComponent != nullptr);
+
+		//TODO hay que ver esto bien. Ahora suponemos que solo una animación puede estar activa
+		Animation* animation = animationComponent->GetCurrentAnimation();
+		if (animation != nullptr)
 		{
-			effectMatrix4Array->SetValues(animator->GetJointTransforms());
+			animator->BindAnimation(animation);
+			animator->Update(deltaTime);
+
+			//Set animation parameters
+			IRenderer* renderer = entity->GetRenderer();
+			assert(renderer != nullptr);
+			IMaterial* material = renderer->GetMaterial();
+			MaterialEffectMatrix4Array* effectMatrix4Array = material->GetEffect<MaterialEffectMatrix4Array>();
+			if (effectMatrix4Array != nullptr)
+			{
+				effectMatrix4Array->SetValues(animator->GetJointTransforms());
+			}
+		}
+		else
+		{
+			animator->ReleaseAnimation();
 		}
 	}
 }
@@ -47,10 +62,7 @@ void AnimationSystem::AddEntity(GameEntity* entity)
 
 		AnimationComponent* component = entity->GetComponent<AnimationComponent>();
 		mEntities.push_back(std::pair<GameEntity*, Animator*>(entity, animator));
-		mAnimations[model->GetName()].push_back(component->GetAnimation());
-
-		//TODO por ahora lo hacemos aquí, pero esto se tendría que hacer a través del AnimatorComponent
-		animator->PlayAnimation(component->GetAnimation());
+		//mAnimations[model->GetName()].push_back(component->GetAnimation());
 	}
 }
 

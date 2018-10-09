@@ -1,17 +1,24 @@
 #pragma once
 #include "IComponent.h"
 
+#include <string>
+#include <map>
+
 class Animation;
 
 class AnimationComponent : public IComponent
 {
-	Animation* mAnimation;
-	
+	std::map<std::string, Animation*> mAnimations;
+	Animation* mCurrentAnimation;
+
 public:
-	AnimationComponent(Animation* animation);
+	AnimationComponent();
 	~AnimationComponent();
 
-	Animation* GetAnimation() const;
+	void AddAnimation(Animation* animation);
+	Animation* GetCurrentAnimation();
+	void PlayAnimation(const std::string& name);
+	void StopAnimation();
 
 	AnimationComponent* DoClone() const override;
 };

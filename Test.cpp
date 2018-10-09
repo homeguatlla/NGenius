@@ -987,7 +987,9 @@ void CreatePlayer()
 	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	mPlayer->AddComponent(new DebugComponent(boundingBoxRenderer));
 	mPlayer->AddComponent(new EnvironmentModificatorComponent());
-	mPlayer->AddComponent(new AnimationComponent(mEngine.GetAnimation("animation")));
+	AnimationComponent* animationComponent = new AnimationComponent();
+	animationComponent->AddAnimation(mEngine.GetAnimation("walking"));
+	mPlayer->AddComponent(animationComponent);
 	mScene->AddEntity(mPlayer);
 }
 
@@ -1008,7 +1010,7 @@ void CreateGameCameraEntity()
 																	PLAYER_PITCH, 
 																	PLAYER_PITCH_SPEED, 
 																	PLAYER_ZOOM_SPEED);
-	//mCamera->AddComponent(mThirdPersonCameraComponent);
+	mCamera->AddComponent(mThirdPersonCameraComponent);
 	mCamera->AddComponent(new CollisionComponent());
 
 	mCamera->AddComponent(new CharacterComponent());

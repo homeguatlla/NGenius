@@ -14,10 +14,17 @@ public:
 	std::string GetName() const;
 	float GetDuration() const;
 	std::vector<KeyFrame*>& GetKeyframes();
+	
+	/*
+	bool IsPlaying() const;
+	void Play();
+	void Stop();
+	*/
 
 private:
 	std::string mName;
 	float mDuration; //in seconds
 	std::vector<KeyFrame*> mKeyframes;
+	//bool mIsPlaying;
 };
 

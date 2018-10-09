@@ -40,7 +40,7 @@ bool AnimatedModel::IsAnimatedModel() const
 
 void AnimatedModel::PlayAnimation(Animation* animation)
 {
-	mAnimator.PlayAnimation(animation);
+	mAnimator.BindAnimation(animation);
 }
 
 void AnimatedModel::FillWithJointTransforms(std::vector<glm::mat4>& jointMatrices) const

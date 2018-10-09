@@ -12,7 +12,7 @@ class Animation;
 class AnimationSystem : public BaseVisitable<>, public IGameSceneListener
 {
 	std::vector<std::pair<GameEntity*, Animator*>> mEntities;
-	std::map<std::string, std::vector<Animation*>> mAnimations;
+	//std::map<std::string, std::vector<Animation*>> mAnimations;
 
 public:
 	AnimationSystem();

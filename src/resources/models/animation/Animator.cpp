@@ -20,15 +20,28 @@ Animator::~Animator()
 {
 }
 
-void Animator::PlayAnimation(Animation* animation)
+bool Animator::HasAnimation() const
 {
-	mAnimationTime = 0.0f;
-	mCurrentAnimation = animation;
+	return mCurrentAnimation != nullptr;
+}
+
+void Animator::BindAnimation(Animation* animation)
+{
+	if (mCurrentAnimation == nullptr || animation->GetName() != mCurrentAnimation->GetName())
+	{
+		mAnimationTime = 0.0f;
+		mCurrentAnimation = animation;
+	}
+}
+
+void Animator::ReleaseAnimation()
+{
+	mCurrentAnimation = nullptr;
 }
 
 void Animator::Update(float elapsedTime)
 {
-	if (mCurrentAnimation != nullptr)
+	if (HasAnimation())
 	{
 		IncreaseAnimationTime(elapsedTime);
 		std::map<std::string, const glm::mat4x4> currentPose;
