@@ -59,6 +59,7 @@ void main()
 	{
 		in_color = vec4(weights[0], weights[1], weights[2], 1.0);
 	}
+	//totalLocalPos = vec4(vertexModelspace, 1.0);
 
 	positionWorldspace = vec3(M * totalLocalPos);
 	shadowCoords = toShadowMapSpace * vec4(positionWorldspace, 1.0f);

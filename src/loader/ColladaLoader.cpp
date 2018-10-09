@@ -15,6 +15,8 @@
 #include <algorithm>
 
 
+glm::mat4x4 ColladaLoader::CORRECTION_MATRIX = glm::rotate(glm::mat4x4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
 ColladaLoader::ColladaLoader()
 {
 }
@@ -118,11 +120,11 @@ void ColladaLoader::LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Anima
 				}
 
 				glm::mat4x4 matrix = GetMatrix(keyFramesMatrix, 16 * frame);
+				matrix = glm::transpose(matrix);
 				//TODO hay que saber cuál es el root para aplicar la corrección
 				if (jointName == "Torso")
 				{
-					glm::mat4x4 correctionMatrix = glm::rotate(glm::mat4x4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-					matrix = matrix * correctionMatrix;
+					matrix = matrix * CORRECTION_MATRIX;
 				}
 				JointTransform* jointTransform = new JointTransform(matrix);
 				keyFrame->AddJointTransform(jointName, jointTransform);
@@ -215,10 +217,10 @@ void ColladaLoader::LoadJoint(rapidxml::xml_node<>* rootNode, Joint** rootJoint,
 					std::string name = attribute->value();
 					unsigned int index = jointNames[name];
 					glm::mat4 matrix = GetMatrix(node);
+					matrix = glm::transpose(matrix);
 					if (*rootJoint == nullptr)
 					{
-						glm::mat4x4 correctionMatrix = glm::rotate(glm::mat4x4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-						matrix = matrix * correctionMatrix;
+						matrix = matrix * CORRECTION_MATRIX;
 					}
 					Joint* joint = new Joint(index, name, matrix);
 
@@ -234,11 +236,11 @@ glm::mat4 ColladaLoader::GetMatrix(std::vector<float>& values, unsigned int offs
 {
 	glm::mat4 matrix;
 
-	for (int c = 0; c < 4; ++c)
+	for (int r = 0; r < 4; ++r)
 	{
-		for (int r = 0; r < 4; ++r)
+		for (int c = 0; c < 4; ++c)
 		{
-			float value = values[r + c * 4 + offset];
+			float value = values[c + r * 4 + offset];
 			matrix[c][r] = value;
 		}
 	}
@@ -250,9 +252,9 @@ glm::mat4 ColladaLoader::GetMatrix(std::string& values)
 {
 	glm::mat4 matrix;
 
-	for (int c = 0; c < 4; ++c)
+	for (int r = 0; r < 4; ++r)
 	{
-		for (int r = 0; r < 4; ++r)
+		for (int c = 0; c < 4; ++c)
 		{
 			float value = static_cast<float>(atof(GetFirstValueString(values).c_str()));
 			matrix[c][r] = value;
@@ -399,14 +401,14 @@ Mesh* ColladaLoader::LoadMesh(rapidxml::xml_node<> *geometryLibrary, std::multim
 					{
 						indices.push_back(index);
 
-						glm::vec3 newVertex = glm::vec3(tempVertices[index].x, tempVertices[index].z, tempVertices[index].y);
+						glm::vec3 newVertex = glm::vec4(tempVertices[index], 1.0) * CORRECTION_MATRIX;
 						vertices.push_back(newVertex);
 						verticesIndices.push_back(index);
 					}
 					else if (hasNormals && element % numInputs == 1)
 					{
-						glm::vec3 newNormal = glm::vec3(tempNormals[index].x, tempNormals[index].z, tempNormals[index].y);
-						normals.push_back(-newNormal);
+						glm::vec3 newNormal = glm::vec4(tempNormals[index], 1.0) * CORRECTION_MATRIX;
+						normals.push_back(newNormal);
 					}
 					else if (hasTexureCoordinates && element % numInputs == 2)
 					{

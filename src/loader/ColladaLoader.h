@@ -12,7 +12,8 @@ class Animation;
 
 class ColladaLoader
 {
-	
+	static glm::mat4x4 CORRECTION_MATRIX;
+
 public:
 	ColladaLoader();
 	~ColladaLoader();
