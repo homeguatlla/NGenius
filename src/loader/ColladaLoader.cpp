@@ -93,41 +93,45 @@ void ColladaLoader::LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Anima
 			std::map<std::string, std::string> sourceNames;
 			FillWithSourceNames(animationNode, sourceNames);
 
-			std::vector<float> keyFramesTime;
-			FillValues(animationNode, sourceNames["INPUT"], keyFramesTime);
-
-			std::vector<float> keyFramesMatrix;
-			FillValues(animationNode, sourceNames["OUTPUT"], keyFramesMatrix);
-
-			for (unsigned int frame = 0; frame < keyFramesTime.size(); frame++)
+			if (sourceNames.size() > 0)
 			{
-				float time = keyFramesTime[frame];
-				duration = std::max(duration, time);
 
-				KeyFrame* keyFrame = nullptr;
+				std::vector<float> keyFramesTime;
+				FillValues(animationNode, sourceNames["INPUT"], keyFramesTime);
 
-				std::multimap<float, KeyFrame*>::iterator it = keyFramesMap.find(time);
-				if (it == keyFramesMap.end())
-				{
-					keyFrame = new KeyFrame();
-					keyFrame->SetTimestamp(time);
-					keyFramesMap.insert(std::make_pair(time, keyFrame));
-					keyFrameList.push_back(keyFrame);
-				}
-				else 
-				{
-					keyFrame = it->second;
-				}
+				std::vector<float> keyFramesMatrix;
+				FillValues(animationNode, sourceNames["OUTPUT"], keyFramesMatrix);
 
-				glm::mat4x4 matrix = GetMatrix(keyFramesMatrix, 16 * frame);
-				matrix = glm::transpose(matrix);
-				//TODO hay que saber cuál es el root para aplicar la corrección
-				if (jointName == "Torso")
+				for (unsigned int frame = 0; frame < keyFramesTime.size(); frame++)
 				{
-					matrix = matrix * CORRECTION_MATRIX;
+					float time = keyFramesTime[frame];
+					duration = std::max(duration, time);
+
+					KeyFrame* keyFrame = nullptr;
+
+					std::multimap<float, KeyFrame*>::iterator it = keyFramesMap.find(time);
+					if (it == keyFramesMap.end())
+					{
+						keyFrame = new KeyFrame();
+						keyFrame->SetTimestamp(time);
+						keyFramesMap.insert(std::make_pair(time, keyFrame));
+						keyFrameList.push_back(keyFrame);
+					}
+					else
+					{
+						keyFrame = it->second;
+					}
+
+					glm::mat4x4 matrix = GetMatrix(keyFramesMatrix, 16 * frame);
+					matrix = glm::transpose(matrix);
+					//TODO hay que saber cuál es el root para aplicar la corrección
+					if (jointName == "Torso")
+					{
+						matrix = matrix * CORRECTION_MATRIX;
+					}
+					JointTransform* jointTransform = new JointTransform(matrix);
+					keyFrame->AddJointTransform(jointName, jointTransform);
 				}
-				JointTransform* jointTransform = new JointTransform(matrix);
-				keyFrame->AddJointTransform(jointName, jointTransform);
 			}
 		}
 
@@ -595,33 +599,36 @@ void ColladaLoader::FillWithSourceNames(rapidxml::xml_node<>* node, std::map<std
 		++i;
 	}
 	
-	for (rapidxml::xml_node<>* inputNode = polyList->first_node("input"); inputNode != nullptr; inputNode = inputNode->next_sibling())
+	if (polyList != nullptr)
 	{
-		rapidxml::xml_attribute<> *attribute = inputNode->first_attribute("semantic");
-		if (attribute != nullptr)
+		for (rapidxml::xml_node<>* inputNode = polyList->first_node("input"); inputNode != nullptr; inputNode = inputNode->next_sibling())
 		{
-			std::string inputType = attribute->value();
-			attribute = inputNode->first_attribute("source");
+			rapidxml::xml_attribute<> *attribute = inputNode->first_attribute("semantic");
 			if (attribute != nullptr)
 			{
-				std::string nameSource = attribute->value();
-				sourceNames[inputType] = nameSource.substr(1, nameSource.size());
+				std::string inputType = attribute->value();
+				attribute = inputNode->first_attribute("source");
+				if (attribute != nullptr)
+				{
+					std::string nameSource = attribute->value();
+					sourceNames[inputType] = nameSource.substr(1, nameSource.size());
+				}
 			}
 		}
-	}
-	rapidxml::xml_node<>* verticesNode = node->first_node("vertices");
-	if (verticesNode != nullptr)
-	{
-		rapidxml::xml_attribute<> *attribute = verticesNode->first_attribute("id");
-		std::string vertexValue = attribute->value();
-
-		if (attribute != nullptr && sourceNames["VERTEX"] == vertexValue)
+		rapidxml::xml_node<>* verticesNode = node->first_node("vertices");
+		if (verticesNode != nullptr)
 		{
-			attribute = verticesNode->first_node("input")->first_attribute("source");
-			if (attribute != nullptr)
+			rapidxml::xml_attribute<> *attribute = verticesNode->first_attribute("id");
+			std::string vertexValue = attribute->value();
+
+			if (attribute != nullptr && sourceNames["VERTEX"] == vertexValue)
 			{
-				std::string newName = attribute->value();
-				sourceNames["VERTEX"] = newName.substr(1, newName.size());
+				attribute = verticesNode->first_node("input")->first_attribute("source");
+				if (attribute != nullptr)
+				{
+					std::string newName = attribute->value();
+					sourceNames["VERTEX"] = newName.substr(1, newName.size());
+				}
 			}
 		}
 	}
