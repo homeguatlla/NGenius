@@ -80,7 +80,7 @@ void Player::UpdateAnimations()
 	AnimationComponent* animationComponent = GetComponent<AnimationComponent>();
 	if (animationComponent != nullptr)
 	{
-		if (mState == MOVING && mCurrentRunSpeed > 0.0f)
+		if (mState == MOVING && glm::abs(mCurrentRunSpeed) > 0.0f)
 		{
 			animationComponent->PlayAnimation("walking");
 		}
