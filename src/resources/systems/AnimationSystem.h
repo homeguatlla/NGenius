@@ -2,6 +2,8 @@
 #include "../../visitor/BaseVisitable.h"
 #include "../scene/IGameSceneListener.h"
 
+#include "glm/glm.hpp"
+
 #include <vector>
 #include <map>
 
@@ -26,6 +28,8 @@ private:
 	void AddEntity(GameEntity* entity);
 	void RemoveEntity(GameEntity* entity);
 	bool HasAnimationComponents(const GameEntity* entity) const;
+
+	void SetAnimationData(GameEntity* entity, const std::vector<glm::mat4x4>& data);
 
 	void OnGameEntityAdded(GameEntity* entity) override;
 	void OnGameEntityRemoved(GameEntity* entity) override;

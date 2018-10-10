@@ -7,6 +7,7 @@ class AnimatedModelShader : public ModelShader
 	static const std::string FRAGMENT_FILE;
 
 	int mLocationJointTransformMatrixs;
+	int mLocationJointTransformSize;
 
 public:
 	AnimatedModelShader();

@@ -30,6 +30,7 @@ uniform float tile;
 uniform mat4 toShadowMapSpace;
 uniform vec4 clippingPlane;
 uniform mat4 jointTransforms[50];
+uniform int jointTransformsSize;
 
 const float shadowDistance = 10.0;
 const float transitionDistance = 20.0;
@@ -40,26 +41,34 @@ void main()
 	
 	vec4 totalLocalPos = vec4(0.0);
 	vec4 totalNormal = vec4(0.0);
-	for(int i = 0; i < 4; ++i)
-	{
-		if(jointIndices[i] != -1)
-		{
-			vec4 localPosition = jointTransforms[jointIndices[i]] * vec4(vertexModelspace, 1.0);
-			totalLocalPos += localPosition * weights[i];
 		
-			vec4 worldNormal = jointTransforms[jointIndices[i]] * vec4(normalModelspace, 1.0);
-			totalNormal += worldNormal * weights[i];
+	if(jointTransformsSize > 0)
+	{
+		for(int i = 0; i < 4; ++i)
+		{
+			if(jointIndices[i] != -1)
+			{
+				vec4 localPosition = jointTransforms[jointIndices[i]] * vec4(vertexModelspace, 1.0);
+				totalLocalPos += localPosition * weights[i];
+		
+				vec4 worldNormal = jointTransforms[jointIndices[i]] * vec4(normalModelspace, 1.0);
+				totalNormal += worldNormal * weights[i];
+			}
 		}
 	}
-
-	in_color = vec4(0.0, 0.0, 0.0, 1.0);
+	else
+	{
+		totalLocalPos = vec4(vertexModelspace, 1.0);
+		totalNormal = vec4(normalModelspace, 1.0);
+	}
+	/*in_color = vec4(0.0, 0.0, 0.0, 1.0);
 
 	int jointIndex = 12;
 	if(jointIndices[0] == jointIndex || jointIndices[1] == jointIndex || jointIndices[2] == jointIndex || jointIndices[3] == jointIndex)
 	{
 		in_color = vec4(weights[0], weights[1], weights[2], 1.0);
-	}
-	//totalLocalPos = vec4(vertexModelspace, 1.0);
+	}*/
+	
 
 	positionWorldspace = vec3(M * totalLocalPos);
 	shadowCoords = toShadowMapSpace * vec4(positionWorldspace, 1.0f);

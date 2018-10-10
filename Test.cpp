@@ -141,7 +141,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = FLAT;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -159,7 +159,7 @@ bool mIsDebugModeEnabled = false;
 bool mIsWaterEnabled = true;
 bool mIsGameplayCameraEnabled = true;
 bool mIsFogEnabled = true;
-bool mIsVegetationEnabled = true;
+bool mIsVegetationEnabled = false;
 bool mIsEnergyWallEnabled = true;
 bool mIsSkyboxEnabled = true;
 bool mIsTerrainFlat = false;
@@ -973,7 +973,7 @@ void CreatePlayer()
 	Model* model = mEngine.GetModel("farmer");
 	IRenderer* renderer = new VerticesRenderer(model, material);
 
-	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f)),
+	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.08f)),
 							renderer,
 							inputComponent,
 							new CharacterComponent(),
@@ -1575,16 +1575,16 @@ void SetupConfiguration()
 		mIsDebugModeEnabled = true;
 		mIsWaterEnabled = true;
 		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = true;
-		mIsVegetationEnabled = true;
+		mIsFogEnabled = false;
+		mIsVegetationEnabled = false;
 		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = true;
-		mIsSkyboxEnabled = true;
+		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = true;
-		mIsShadowEnabled = true;
+		mIsParticlesEnabled = false;
+		mIsShadowEnabled = false;
 		break;
 	case SHADOWS:
 		mIsDebugModeEnabled = true;

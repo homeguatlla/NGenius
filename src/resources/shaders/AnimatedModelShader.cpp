@@ -9,10 +9,12 @@ const std::string AnimatedModelShader::VERTEX_FILE = "data/shaders/vertex/v_mode
 const std::string AnimatedModelShader::FRAGMENT_FILE = "data/shaders/fragment/f_model.cg";
 
 const std::string ATTRIBUTE_JOINT_TRANSFORM_MATRIXS("jointTransforms");
+const std::string ATTRIBUTE_JOINT_TRANSFORM_SIZE("jointTransformsSize");
 
 AnimatedModelShader::AnimatedModelShader() :
 ModelShader(VERTEX_FILE, FRAGMENT_FILE),
-mLocationJointTransformMatrixs(-1)
+mLocationJointTransformMatrixs(-1),
+mLocationJointTransformSize(-1)
 {
 }
 
@@ -29,6 +31,7 @@ void AnimatedModelShader::LoadData(const ICamera* camera, const Transformation* 
 	{
 		std::vector<glm::mat4x4> values = effectMatrixArray->GetValues();
 		LoadMatrix4Array(mLocationJointTransformMatrixs, values);
+		LoadInteger(mLocationJointTransformSize, static_cast<int>(values.size()));
 	}
 }
 
@@ -36,6 +39,7 @@ void AnimatedModelShader::BindAttributes()
 {
 	ModelShader::BindAttributes();
 	BindAttribute(mLocationJointTransformMatrixs, ATTRIBUTE_JOINT_TRANSFORM_MATRIXS);
+	BindAttribute(mLocationJointTransformSize, ATTRIBUTE_JOINT_TRANSFORM_SIZE);
 }
 
 void AnimatedModelShader::GetAllUniformLocations()
@@ -43,4 +47,5 @@ void AnimatedModelShader::GetAllUniformLocations()
 	ModelShader::GetAllUniformLocations();
 
 	mLocationJointTransformMatrixs = GetUniformLocation(ATTRIBUTE_JOINT_TRANSFORM_MATRIXS);
+	mLocationJointTransformSize = GetUniformLocation(ATTRIBUTE_JOINT_TRANSFORM_SIZE);
 }

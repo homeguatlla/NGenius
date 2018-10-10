@@ -58,6 +58,10 @@ void Animator::Update(float elapsedTime)
 			m = glm::transpose(m);
 		}
 	}
+	else if(!mJointTransforms.empty())
+	{
+		mJointTransforms.clear();
+	}
 }
 
 const std::vector <glm::mat4>& Animator::GetJointTransforms() const

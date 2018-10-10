@@ -31,25 +31,22 @@ void AnimationSystem::Update(float deltaTime)
 
 		//TODO hay que ver esto bien. Ahora suponemos que solo una animación puede estar activa
 		Animation* animation = animationComponent->GetCurrentAnimation();
-		if (animation != nullptr)
-		{
-			animator->BindAnimation(animation);
-			animator->Update(deltaTime);
+		animation != nullptr ? animator->BindAnimation(animation) : animator->ReleaseAnimation();
+		animator->Update(deltaTime);
+		SetAnimationData(entity, animator->GetJointTransforms());
+	}
+}
 
-			//Set animation parameters
-			IRenderer* renderer = entity->GetRenderer();
-			assert(renderer != nullptr);
-			IMaterial* material = renderer->GetMaterial();
-			MaterialEffectMatrix4Array* effectMatrix4Array = material->GetEffect<MaterialEffectMatrix4Array>();
-			if (effectMatrix4Array != nullptr)
-			{
-				effectMatrix4Array->SetValues(animator->GetJointTransforms());
-			}
-		}
-		else
-		{
-			animator->ReleaseAnimation();
-		}
+void AnimationSystem::SetAnimationData(GameEntity* entity, const std::vector<glm::mat4x4>& data)
+{
+	//Set animation parameters
+	IRenderer* renderer = entity->GetRenderer();
+	assert(renderer != nullptr);
+	IMaterial* material = renderer->GetMaterial();
+	MaterialEffectMatrix4Array* effectMatrix4Array = material->GetEffect<MaterialEffectMatrix4Array>();
+	if (effectMatrix4Array != nullptr)
+	{
+		effectMatrix4Array->SetValues(data);
 	}
 }
 
