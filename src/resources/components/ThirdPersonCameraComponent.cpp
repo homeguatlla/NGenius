@@ -11,16 +11,22 @@
 #include "OverWaterComponent.h"
 #include "CharacterComponent.h"
 
+#include <iostream>
+
 //WARNING!! hay que tener en cuenta que, si subimos este valor la cámara por colisión subirá y no mantendrá el ángulo pitch que le hemos definido.
 //es decir, si vemos que el ángulo de la cámara con el target es demasiado alto (vemos al player desde una posición más alta) hay que tener en cuenta que haya subido por este valor
 const float CAMERA_HEIGHT_OFFSET_GROUND = 0.2f;
-const float CAMERA_SMOOTH_MOVEMENT_VALUE = 1.0f;
+const float CAMERA_SMOOTH_MOVEMENT_VALUE = 0.1f;
 const float WATER_HEIGHT_OFFSET = 0.1f;
-const float MAX_ZOOM = 50.0f;
-const float MIN_ZOOM = 1.0f;
+
 const float MAX_PITCH = 89.0f;//degrees
 const float MIN_PITCH = 5.0f;
-
+//this hysteresis if to make camera don't follow target when distance between camera and target < mDistanceToTarget-HYSTERESIS and 
+//start following again if distance > mDistance+HYSTERESIS, this way the player can move with freedom of the camera near it.
+const float HYSTERESIS = 0.2f;
+const float MIN_DISTANCE_TO_START_FOLLOW = 2.0f;
+const float MAX_ZOOM = 50.0f;
+const float MIN_ZOOM = MIN_DISTANCE_TO_START_FOLLOW;
 
 ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed) :
 	mCamera(camera), 
@@ -32,7 +38,8 @@ ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera
 	mCurrentPitch(pitch),
 	mLastPitch(pitch),
 	mAngleAroundTarget(0.0f), 
-	mZoomSpeed(zoomSpeed)
+	mZoomSpeed(zoomSpeed),
+	mIsCameraFollowingTarget(false)
 {
 	assert(target != nullptr);
 }
@@ -80,7 +87,25 @@ void ThirdPersonCameraComponent::UpdateInternal(float elapsedTime)
 
 	newPosition = currentPosition + (newPosition - currentPosition) * CAMERA_SMOOTH_MOVEMENT_VALUE;
 
-	mCamera->SetPosition(newPosition);
+	//la camara deja de seguir al target si está por debajo de la distancia target-camera y 
+	//vuelve a seguir al target si está por encima
+	float distanceTargetCamera = glm::distance(newPosition, mTarget->GetTransformation()->GetPosition());
+	if (!mIsCameraFollowingTarget && distanceTargetCamera > MIN_DISTANCE_TO_START_FOLLOW + HYSTERESIS)
+	{
+		mIsCameraFollowingTarget = true;
+		//std::cout << "distance = " << distanceTargetCamera << "ON" << "\n";
+
+	}
+	else if(mIsCameraFollowingTarget && distanceTargetCamera < MIN_DISTANCE_TO_START_FOLLOW - HYSTERESIS)
+	{
+		mIsCameraFollowingTarget = false;
+		//std::cout << "distance = " << distanceTargetCamera << "OFF" << "\n";
+	}
+
+	if (mIsCameraFollowingTarget)
+	{
+		mCamera->SetPosition(newPosition);
+	}
 	mParent->GetTransformation()->SetPosition(newPosition);
 }
 
@@ -126,12 +151,20 @@ float ThirdPersonCameraComponent::GetCameraPitch() const
 
 float ThirdPersonCameraComponent::CalculateHorizontalDistance() const
 {
-	return mDistanceFromTarget * glm::cos(glm::radians(mCurrentPitch));
+	glm::vec3 currentPosition = mCamera->GetPosition();
+	float distance = glm::distance(mTarget->GetTransformation()->GetPosition(), currentPosition);
+	distance = glm::min(distance, mDistanceFromTarget);
+
+	return distance * glm::cos(glm::radians(mCurrentPitch));
 }
 
 float ThirdPersonCameraComponent::CalculateVerticalDistance() const
 {
-	return mDistanceFromTarget * glm::sin(glm::radians(mCurrentPitch));
+	glm::vec3 currentPosition = mCamera->GetPosition();
+	float distance = glm::distance(mTarget->GetTransformation()->GetPosition(), currentPosition);
+	distance = glm::min(distance, mDistanceFromTarget);
+
+	return distance * glm::sin(glm::radians(mCurrentPitch));
 }
 
 glm::vec3 ThirdPersonCameraComponent::CalculateCameraPosition(float horizontalDistance, float verticalDistance) const

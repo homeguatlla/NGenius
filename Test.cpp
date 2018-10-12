@@ -959,7 +959,7 @@ void CreatePlayer()
 	material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_normalmap")), 1.0f));
 	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
-	material->AddEffect(new MaterialEffectShadowProperties(1));
+	material->AddEffect(new MaterialEffectShadowProperties(3));
 	material->AddEffect(new MaterialEffectClippingPlane());
 	material->AddEffect(new MaterialEffectMatrix4Array());
 
@@ -973,7 +973,7 @@ void CreatePlayer()
 	Model* model = mEngine.GetModel("farmer");
 	IRenderer* renderer = new VerticesRenderer(model, material);
 
-	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.08f)),
+	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.08f)),
 							renderer,
 							inputComponent,
 							new CharacterComponent(),
@@ -1006,7 +1006,7 @@ void CreateGameCameraEntity()
 	mThirdPersonCameraComponent = new ThirdPersonCameraComponent(	static_cast<PerspectiveCamera*>(mGameplayCamera), 
 																	mPlayer, 
 																	targetOffset, 
-																	1.5f, 
+																	2.0f, 
 																	PLAYER_PITCH, 
 																	PLAYER_PITCH_SPEED, 
 																	PLAYER_ZOOM_SPEED);
@@ -1260,7 +1260,7 @@ void CreateGameplayRenderPass()
 	int screenWidth = static_cast<int>(mEngine.GetScreenWidth());
 	int screenHeight = static_cast<int>(mEngine.GetScreenHeight());
 	//RENDER PASS GAMEPLAY	
-	mGameplayPass = new RenderPass(static_cast<ICamera*>(mEagleEyeCamera), IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
+	mGameplayPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
 	mGameplayPass->SetAcceptSpacePartitionOnly(true);
 
 	IFrameBuffer* frameBuffer = new IFrameBuffer(screenWidth, screenHeight);
@@ -1452,7 +1452,7 @@ void UpdateInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 	{
-		if (mIsGameplayCameraEnabled)
+		if (!mIsGameplayCameraEnabled)
 		{
 			mGameplayPass->SetCamera(mGameplayCamera);
 		}
@@ -1560,33 +1560,33 @@ void SetupConfiguration()
 	{
 	case TEST:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = true;
+		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
+		mIsFogEnabled = true;
 		mIsVegetationEnabled = false;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = true;
-		mIsTerrainFlat = false;
+		mIsTerrainFlat = true;
 		//mWaterHeight = 0.0f;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
-		mIsShadowEnabled = false;
+		mIsShadowEnabled = true;
 		break;
 	case DEBUG:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
+		mIsWaterEnabled = true;
 		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
-		mIsVegetationEnabled = false;
-		mIsPropsEnabled = false;
-		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = false;
+		mIsFogEnabled = true;
+		mIsVegetationEnabled = true;
+		mIsPropsEnabled = true;
+		mIsEnergyWallEnabled = true;
+		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
-		mIsTextEnabled = false;
-		mIsStatisticsVisible = false;
-		mIsParticlesEnabled = false;
+		mIsTextEnabled = true;
+		mIsStatisticsVisible = true;
+		mIsParticlesEnabled = true;
 		mIsShadowEnabled = true;
 		break;
 	case SHADOWS:

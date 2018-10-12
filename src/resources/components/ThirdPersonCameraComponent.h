@@ -17,6 +17,7 @@ class ThirdPersonCameraComponent : public IComponent
 	float mLastPitch;
 	float mAngleAroundTarget;
 	const float mZoomSpeed;
+	bool mIsCameraFollowingTarget;
 	
 public:
 	explicit ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed);
