@@ -956,7 +956,7 @@ void CreatePlayer()
 	//PLAYER
 	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("animated_model"));
 	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_texture")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("enano_normalmap")), 1.0f));
+	material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_normalmap")), 1.0f));
 	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectShadowProperties(1));
@@ -1240,7 +1240,6 @@ void CreateHudMapRenderPass()
 	frameBuffer->SetColorTextureAttachment(0, static_cast<Texture*>(mEngine.GetTexture("map")));
 	frameBuffer->Init();
 	mMapPass->SetFrameBufferOutput(frameBuffer);
-	mMapPass->EnableFog(false);
 	mEngine.AddRenderPass(mMapPass, false);
 }
 
@@ -1268,6 +1267,7 @@ void CreateGameplayRenderPass()
 	Texture* depthTexture = static_cast<Texture*>(mEngine.GetTexture("depth_texture"));
 	frameBuffer->SetCopyBufferToTexture(depthTexture, 0, 0, screenWidth, screenHeight);
 	mGameplayPass->SetFrameBufferOutput(frameBuffer);
+	mGameplayPass->EnableFog(true);
 	
 	//IMaterial* material = mEngine.GetMaterial("shadow");
 	//material->AddEffect(new MaterialEffectDiffuseTexture(mEngine.GetTexture("tree_foliage_diffuse"), glm::vec3(0.0f), 1.0f));
@@ -1280,6 +1280,7 @@ void CreateTerrainRenderPass()
 {
 	//RENDER PASS GAMEPLAY
 	RenderPass *terrainPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TERRAIN);
+	terrainPass->EnableFog(true);
 	mEngine.AddRenderPass(terrainPass, false);
 }
 
@@ -1288,6 +1289,7 @@ void CreateParticlesRenderPass()
 	//RENDER PASS PARTICLES
 	RenderPass *particlesPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_PARTICLES);
 	particlesPass->SetCalculateDistanceToCamera(true);
+	particlesPass->EnableFog(true);
 	mEngine.AddRenderPass(particlesPass, false);
 }
 
@@ -1295,6 +1297,7 @@ void CreateTransparentRenderPass()
 {
 	//RENDER PASS TRANSPARENT
 	RenderPass *transparentPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TRANSPARENT);
+	transparentPass->EnableFog(true);
 	mEngine.AddRenderPass(transparentPass, false);
 }
 
@@ -1573,18 +1576,18 @@ void SetupConfiguration()
 		break;
 	case DEBUG:
 		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = true;
+		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = false;
 		mIsVegetationEnabled = false;
-		mIsPropsEnabled = true;
-		mIsEnergyWallEnabled = true;
+		mIsPropsEnabled = false;
+		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = false;
-		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
+		mIsTextEnabled = false;
+		mIsStatisticsVisible = false;
 		mIsParticlesEnabled = false;
-		mIsShadowEnabled = false;
+		mIsShadowEnabled = true;
 		break;
 	case SHADOWS:
 		mIsDebugModeEnabled = true;

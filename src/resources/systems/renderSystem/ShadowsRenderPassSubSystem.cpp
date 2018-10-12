@@ -12,6 +12,7 @@
 #include "../../textures/Texture.h"
 #include "../../materials/IMaterial.h"
 #include "../../materials/effects/MaterialEffectDiffuseTexture.h"
+#include "../../materials/effects/MaterialEffectMatrix4Array.h"
 #include "../../textures/ITexture.h"
 #include "../../textures/Texture.h"
 
@@ -144,6 +145,10 @@ RenderPass* ShadowsRenderPassSubSystem::CreateShadowRenderPass()
 	//SHADOW RENDER PASS
 	//SHADOW
 	IFrameBuffer* frameShadowBuffer = new IFrameBuffer(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight));
+
+	//Texture* colorTexture = static_cast<Texture*>(mRenderSystem->CreateColorTexture("shadow_color", glm::ivec2(SHADOWS_TEXTURE_SIZE)));
+
+	//frameShadowBuffer->SetColorTextureAttachment(0, colorTexture);
 	frameShadowBuffer->SetDepthTextureAttachment(mShadowMapTexture);
 	frameShadowBuffer->Init();
 
@@ -152,6 +157,8 @@ RenderPass* ShadowsRenderPassSubSystem::CreateShadowRenderPass()
 
 	IMaterial* material = mRenderSystem->CreateMaterial("shadow", mRenderSystem->GetShader("shadow"));
 	material->AddEffect(new MaterialEffectDiffuseTexture(mShadowMapTexture, glm::vec3(1.0f), 1.0f));
+	//for animated models
+	material->AddEffect(new MaterialEffectMatrix4Array());
 
 	shadowPass->SetMaterial(material);
 

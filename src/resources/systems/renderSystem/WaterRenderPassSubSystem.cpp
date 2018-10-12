@@ -108,7 +108,6 @@ RenderPass* WaterRenderPassSubSystem::CreateRefractionRenderPass()
 	//a bit more of the height, cutting over the water, we are painting more space in the water plane and then
 	//the distorsion is not affecting, otherwise the border of the water has a bit of blue color (the default color of the plane)
 	refractionWaterPass->SetClippingPlane(glm::vec4(0.0f, -1.0f, 0.0f, mWaterY + 2.0f));
-	refractionWaterPass->EnableFog(false);
 	refractionWaterPass->SetAcceptSpacePartitionOnly(true);
 
 	return refractionWaterPass;

@@ -27,6 +27,8 @@ std::vector<glm::mat4>& MaterialEffectMatrix4Array::GetValues()
 
 void MaterialEffectMatrix4Array::CopyValuesFrom(IMaterial* material)
 {
+	mValues.clear();
+
 	MaterialEffectMatrix4Array* effect = material->GetEffect<MaterialEffectMatrix4Array>();
 	if (effect != nullptr)
 	{

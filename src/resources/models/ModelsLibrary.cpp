@@ -31,17 +31,17 @@ void ModelsLibrary::Load()
 	CreateQuad("gui_quad", 0.5f, 0.5f);
 	CreateQuad("particle_quad", 0.5f, 0.5f);
 
-	LoadModel("cube2", "data/models/cube/cube.obj", false, true);
-	LoadModel("enano", "data/models/enano/enano.obj", false, true);
-	LoadModel("mazo", "data/models/mazo/mazo.obj", false, true);
+	//LoadModel("cube2", "data/models/cube/cube.obj", false, true);
+	//LoadModel("enano", "data/models/enano/enano.obj", false, true);
+	//LoadModel("mazo", "data/models/mazo/mazo.obj", false, true);
 
 	LoadModel("barrel", "data/models/props/barrel.obj", true, true);
 	LoadModel("chest", "data/models/props/chest.obj", true, true);
 	LoadModel("brazier", "data/models/props/brazier.obj", true, true);
-	LoadModel("stall", "data/models/stall/stall.obj", false, true);
-	LoadModel("cube3", "data/models/props/cube.obj", false, true);
+	//LoadModel("stall", "data/models/stall/stall.obj", false, true);
+	//LoadModel("cube3", "data/models/props/cube.obj", false, true);
 	LoadModel("crate", "data/models/props/crate.obj", true, true);
-	LoadModel("floor", "data/models/props/floor.obj", true, true);
+	//LoadModel("floor", "data/models/props/floor.obj", true, true);
 	LoadModel("statue", "data/models/props/statue.obj", true, true);
 
 	LoadModel("grass1", "data/models/grass/grass1.obj", false, false);

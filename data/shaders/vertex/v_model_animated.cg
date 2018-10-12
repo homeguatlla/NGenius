@@ -54,6 +54,10 @@ void main()
 				vec4 worldNormal = jointTransforms[jointIndices[i]] * vec4(normalModelspace, 1.0);
 				totalNormal += worldNormal * weights[i];
 			}
+			else
+			{
+				break;
+			}
 		}
 	}
 	else

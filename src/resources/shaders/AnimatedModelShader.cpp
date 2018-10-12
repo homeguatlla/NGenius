@@ -33,6 +33,10 @@ void AnimatedModelShader::LoadData(const ICamera* camera, const Transformation* 
 		LoadMatrix4Array(mLocationJointTransformMatrixs, values);
 		LoadInteger(mLocationJointTransformSize, static_cast<int>(values.size()));
 	}
+	else
+	{
+		LoadInteger(mLocationJointTransformSize, 0);
+	}
 }
 
 void AnimatedModelShader::BindAttributes()

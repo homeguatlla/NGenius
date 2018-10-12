@@ -23,5 +23,7 @@ private:
 	int mLocationTextureCoords;
 	int mLocationTexture;
 	int mLocationTile;
+	int mLocationJointTransformMatrixs;
+	int mLocationJointTransformSize;
 };
 

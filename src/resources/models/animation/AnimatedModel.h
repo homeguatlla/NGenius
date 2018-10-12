@@ -21,8 +21,6 @@ public:
 	
 	void FillWithJointTransforms(std::vector<glm::mat4>& jointMatrices) const;
 	
-	void Update(float elapsedTime);
-
 	bool IsAnimatedModel() const override;
 
 private:

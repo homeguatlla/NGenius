@@ -3,15 +3,54 @@
 in mat4 M;
 in vec3 vertexModelspace;
 in vec2 textureCoordsModelspace;
+layout(location=7) in ivec4 jointIndices;
+layout(location=8) in vec4 weights;
 
 out vec2 textureCoords;
 
 uniform mat4 V;
 uniform mat4 P;
 uniform float tile;
+uniform mat4 jointTransforms[50];
+uniform int jointTransformsSize;
 
 void main(void)
 {
+	vec4 totalLocalPos = vec4(0.0);
+		
+	if(jointTransformsSize > 0)
+	{
+		for(int i = 0; i < 4; ++i)
+		{
+			if(jointIndices[i] != -1)
+			{
+				vec4 localPosition = jointTransforms[jointIndices[i]] * vec4(vertexModelspace, 1.0);
+				totalLocalPos += localPosition * weights[i];
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+	else
+	{
+		totalLocalPos = vec4(vertexModelspace, 1.0);
+	}
+	
+	/*if(jointTransformsSize > 0)
+	{
+		int joint = 3;
+		//if(jointIndices[0] != joint && jointIndices[1] != joint && jointIndices[2] != joint && jointIndices[3] != joint)
+		if(jointIndices[0] > 10)
+		{
+			totalLocalPos = vec4(vertexModelspace, 1.0);
+		}
+	}
+	else
+	{
+		totalLocalPos = vec4(vertexModelspace, 1.0);
+	}*/
 	textureCoords = tile * textureCoordsModelspace;
-	gl_Position = P * V * M * vec4(vertexModelspace, 1);
+	gl_Position = P * V * M * totalLocalPos;
 }

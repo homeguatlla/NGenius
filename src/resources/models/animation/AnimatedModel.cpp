@@ -48,11 +48,6 @@ void AnimatedModel::FillWithJointTransforms(std::vector<glm::mat4>& jointMatrice
 	mRootJoint->FillWithJointTransforms(jointMatrices);
 }
 
-void AnimatedModel::Update(float elapsedTime)
-{
-	mAnimator.Update(elapsedTime);
-}
-
 void AnimatedModel::BuildInternal(VertexBuffersManager& vertexBufferManager, IMaterial* material)
 {
 	int location = material->GetShader()->GetAttributeLocation("weights");
