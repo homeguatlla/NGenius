@@ -7,6 +7,7 @@
 #include "../../renderers/IRenderer.h"
 #include "../../../visitor/BaseVisitable.h"
 
+
 class ICamera;
 class RenderPass;
 class Texture;
@@ -33,6 +34,8 @@ struct GLFWmonitor;
 class ShadowsRenderPassSubSystem;
 class WaterRenderPassSubSystem;
 class PostProcessSubSystem;
+
+class GuiTool;
 
 class RenderSystem : public BaseVisitable<>
 {
@@ -70,6 +73,8 @@ class RenderSystem : public BaseVisitable<>
 
 	ITexture* mDiffuseTexture;
 	ITexture* mNormalTexture;
+
+	GuiTool* mGuiTool;
 
 	int mLastClipPlaneNumberUsed;
 	bool mIsFullScreen;
@@ -146,6 +151,8 @@ public:
 
 	ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
 	ITexture* CreateColorTexture(const std::string& name, const glm::ivec2& size);
+
+	GuiTool* GetGuiTool();
 
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 

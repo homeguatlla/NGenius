@@ -36,6 +36,9 @@
 #include "RenderPass.h"
 #include "../../../BitNumber.h"
 
+#include "../../../guiTool/GuiTool.h"
+
+
 #include <iostream>
 #include <algorithm>
 #include <GL/glew.h>
@@ -59,6 +62,7 @@ mPostProcessSubsystem(nullptr),
 mCurrentMaterial(nullptr),
 mDiffuseTexture(nullptr),
 mNormalTexture(nullptr),
+mGuiTool(nullptr),
 mLastClipPlaneNumberUsed(0),
 mIsFullScreen(false),
 mIsClippingEnabled(false),
@@ -87,6 +91,7 @@ RenderSystem::~RenderSystem()
 	DestroyCameras();
 	DestroyResourcesLibraries();
 	DestroySubSystems();
+	delete mGuiTool;
 	glfwDestroyWindow(mWindow);
 }
 
@@ -98,6 +103,7 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 	assert(initialized);
 
 	CheckGLError();
+	mGuiTool = new GuiTool(mWindow);
 
 	CreateResourcesLibraries();
 	LoadResources();
@@ -106,6 +112,7 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 
 void RenderSystem::Start()
 {
+	mGuiTool->Initialize();
 	mShadowsRenderPass->Init();
 	mWaterRenderPass->Init();
 	mPostProcessSubsystem->Init();
@@ -150,10 +157,10 @@ void RenderSystem::UpdateSubsystems()
 void RenderSystem::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	
 	mNumberDrawCalls = 0;
 	mNumberTrianglesRendered = 0;
-
+	
 	RenderPasses(mRenderPasses);
 
 	if (mIsPostprocessEnabled)
@@ -162,7 +169,9 @@ void RenderSystem::Render()
 	}
 
 	RenderPasses(mRenderPassesAfterPostProcessing);
-
+	
+	mGuiTool->Render();
+	
 	// Swap buffers
 	glfwSwapBuffers(mWindow);
 	glfwPollEvents();
@@ -873,6 +882,11 @@ ITexture* RenderSystem::CreateColorTexture(const std::string& name, const glm::i
 IMaterial* RenderSystem::CreateMaterial(const std::string& name, IShaderProgram* shader)
 {
 	return mMaterialsLibrary->CreateMaterial(name, shader);
+}
+
+GuiTool* RenderSystem::GetGuiTool()
+{
+	return mGuiTool;
 }
 
 void RenderSystem::CheckGLError()

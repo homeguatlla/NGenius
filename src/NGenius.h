@@ -137,6 +137,7 @@ private:
 	
 	void UpdateSystems(float elapsedTime);
 	void AcceptStatistics();
+	void AcceptGuiTool();
 
 	void Render();
 };

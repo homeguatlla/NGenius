@@ -4,6 +4,7 @@
 #include "../../input/InputHandler.h"
 #include "../components/DebugComponent.h"
 #include "renderSystem/RenderSystem.h"
+#include "../../guiTool/GuiTool.h"
 #include "GLFW/glfw3.h"
 #include <algorithm>
 
@@ -14,9 +15,9 @@ DebugSystem::DebugSystem(RenderSystem* renderSystem, InputHandler* inputHandler)
 	mIsWireframeEnabled(false),
 	mIsPostProcessEnabled(true),
 	mInputHandler(inputHandler),
-	mRenderSystem(renderSystem)
+	mRenderSystem(renderSystem),
+	mIsInitialized(false)
 {
-	mInputHandler->RegisterAllEventsInputListener(this);
 }
 
 DebugSystem::~DebugSystem()
@@ -25,8 +26,16 @@ DebugSystem::~DebugSystem()
 	mInputHandler->UnRegisterInputListener(this);
 }
 
+void DebugSystem::Start()
+{
+	mInputHandler->RegisterAllEventsInputListener(this);
+	mIsInitialized = true;
+}
+
 void DebugSystem::Update(float elapsedTime)
 {
+	assert(mIsInitialized);
+
 	if (mIsDebugModeEnabled && mIsBoundingBoxVisible)
 	{
 		for (GameEntity* entity : mEntities)
@@ -100,6 +109,12 @@ void DebugSystem::OnKey(int key, int action)
 	{
 		mIsPostProcessEnabled = !mIsPostProcessEnabled;
 		mRenderSystem->SetPostProcessEnabled(mIsPostProcessEnabled);
+	}
+
+	if (key == GLFW_KEY_T && action == GLFW_PRESS)
+	{
+		GuiTool* guiTool = mRenderSystem->GetGuiTool();
+		guiTool->IsVisible() ? guiTool->Hide() : guiTool->Show();
 	}
 }
 

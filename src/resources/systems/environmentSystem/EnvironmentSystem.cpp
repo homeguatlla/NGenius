@@ -3,6 +3,8 @@
 #include <GLFW/glfw3.h>
 #include <algorithm>
 
+#include <glm/gtc/matrix_transform.hpp> 
+
 #include "../../GameEntity.h"
 #include "../../components/EnvironmentAffectedComponent.h"
 #include "../../components/EnvironmentModificatorComponent.h"
@@ -13,7 +15,11 @@
 #include "../../renderers/IRenderer.h"
 #include "WindManager.h"
 
-EnvironmentSystem::EnvironmentSystem() : mTimer(0.0f)
+const glm::vec3 SUN_POSITION_DEFAULT(0.0f, 100000.0f, 0.0f);
+
+EnvironmentSystem::EnvironmentSystem() : 
+	mTimer(0.0f),
+	mSunLightDirection(SUN_POSITION_DEFAULT)
 {
 	//mWindManager = std::make_unique<WindManager>(4);
 }
@@ -146,4 +152,23 @@ BaseVisitable<>::ReturnType EnvironmentSystem::Accept(BaseVisitor& guest)
 float EnvironmentSystem::GetTimer() const
 {
 	return mTimer;
+}
+
+glm::vec3 EnvironmentSystem::GetSunLightDirection() const
+{
+	return mSunLightDirection;
+}
+
+void EnvironmentSystem::SetSunLightDirection(const glm::vec3& direction)
+{
+	mSunLightDirection = direction;
+}
+
+void EnvironmentSystem::SetDayHour(float hour)
+{
+	glm::vec3 sunDirection = SUN_POSITION_DEFAULT;
+	glm::mat4x4 matrix(1.0f);
+	matrix = glm::rotate(matrix, glm::radians(hour / 24.0f * 360.0f - 180.f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	mSunLightDirection = matrix * glm::vec4(sunDirection, 1.0f);
 }

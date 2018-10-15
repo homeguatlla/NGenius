@@ -27,6 +27,9 @@
 #include "resources/textures/Texture.h"
 
 #include "statistics/Statistics.h"
+#include "guiTool/GuiTool.h"
+
+#include "../GameConstants.h"
 
 
 
@@ -63,6 +66,7 @@ void NGenius::Start()
 {
 	mRenderSystem->Start();
 	mSpacePartitionSystem->Start();
+	mDebugSystem->Start();
 }
 
 void NGenius::Run()
@@ -73,6 +77,7 @@ void NGenius::Run()
 	float elapsedTime = 0.0f;
 	float lag = 0.0f;
 	float frameTime = 0.016666f;
+
 	do
 	{
 		double currentTime = glfwGetTime();
@@ -107,6 +112,9 @@ void NGenius::Run()
 		}
 
 		AcceptStatistics();
+		AcceptGuiTool();
+
+		SetCastingShadowsParameters(mEnvironmentSystem->GetSunLightDirection(), SHADOWS_PFC_COUNTER);
 
 	} // Check if the ESC key was pressed or the window was closed
 	while (	glfwGetKey(mRenderSystem->GetGLWindow(), GLFW_KEY_ESCAPE) != GLFW_PRESS && 
@@ -127,6 +135,14 @@ void NGenius::Render()
 
 	mGameScene->Render(mRenderSystem);
 	mRenderSystem->Render();
+}
+
+void NGenius::AcceptGuiTool()
+{
+	if (mDebugSystem->IsDebugModeEnabled())
+	{
+		mEnvironmentSystem->Accept(*mRenderSystem->GetGuiTool());
+	}
 }
 
 void NGenius::AcceptStatistics()

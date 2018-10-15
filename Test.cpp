@@ -180,7 +180,6 @@ ThirdPersonCameraComponent* mThirdPersonCameraComponent;
 
 RenderPass* mMapPass;
 //Light* mSunLight;
-glm::vec3 mSunLightDirection(-100000.0f, 100000.0f, -100000.0f);
 Terrain* mTerrain;
 Player* mPlayer;
 Water* mWater;
@@ -1566,7 +1565,7 @@ void SetupConfiguration()
 		mIsVegetationEnabled = false;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = true;
+		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
 		//mWaterHeight = 0.0f;
 		mIsTextEnabled = true;
@@ -1761,7 +1760,6 @@ void Initialize()
 
 	CreateCameras();
 
-	mEngine.SetCastingShadowsParameters(mSunLightDirection, SHADOWS_PFC_COUNTER);
 	mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
 
 	mEngine.SetWaterEnabled(mIsWaterEnabled);

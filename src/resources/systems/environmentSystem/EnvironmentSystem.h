@@ -17,6 +17,7 @@ class EnvironmentSystem : public BaseVisitable<>, public IGameSceneListener
 	std::unique_ptr<WindManager> mWindManager;
 	float mTimer;
 	std::vector<glm::vec3> mModificatorsPositions;
+	glm::vec3 mSunLightDirection;
 
 public:
 	EnvironmentSystem();
@@ -31,6 +32,10 @@ public:
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
 	float GetTimer() const;
+
+	glm::vec3 GetSunLightDirection() const;
+	void SetSunLightDirection(const glm::vec3& direction);
+	void SetDayHour(float hour);
 
 private:
 	void AddEntity(GameEntity* entity);

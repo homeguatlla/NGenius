@@ -19,11 +19,14 @@ class DebugSystem : public IInputListener, public IGameSceneListener
 	bool mIsPostProcessEnabled;
 	InputHandler* mInputHandler;
 	RenderSystem* mRenderSystem;
+	bool mIsInitialized;
 
 public:
 
 	DebugSystem(RenderSystem* renderSystem, InputHandler* inputHandler);
 	~DebugSystem();
+
+	void Start();
 
 	void Update(float elapsedTime);
 
