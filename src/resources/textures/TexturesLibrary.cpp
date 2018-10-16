@@ -46,7 +46,20 @@ void TexturesLibrary::Load()
 
 	TextureCubemap* cubemap = new TextureCubemap();
 	cubemap->Load(filenames, ++mCurrentTextureUnit);
-	AddElement("cubemap", cubemap);
+	AddElement("day_cubemap", cubemap);
+
+	filenames.clear();
+
+	filenames.push_back("data/skybox/sky2/right.png");
+	filenames.push_back("data/skybox/sky2/left.png");
+	filenames.push_back("data/skybox/sky2/top.png");
+	filenames.push_back("data/skybox/sky2/bottom.png");
+	filenames.push_back("data/skybox/sky2/back.png");
+	filenames.push_back("data/skybox/sky2/front.png");
+
+	cubemap = new TextureCubemap();
+	cubemap->Load(filenames, ++mCurrentTextureUnit);
+	AddElement("night_cubemap", cubemap);
 
 	LoadTexture("hud_map", "data/ui/hud/hud_map.png", false, false);
 

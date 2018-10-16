@@ -4,20 +4,40 @@
 
 #include <assert.h>
 
-MaterialEffectTextureCubemap::MaterialEffectTextureCubemap(TextureCubemap* textureCubemap) :
-mTexture(textureCubemap)
+MaterialEffectTextureCubemap::MaterialEffectTextureCubemap(TextureCubemap* textureCubemap1, TextureCubemap* textureCubemap2, float blendFactor) :
+mTexture1(textureCubemap1),
+mTexture2(textureCubemap2),
+mBlendFactor(blendFactor)
 {
-	assert(textureCubemap != nullptr);
+	assert(textureCubemap1 != nullptr);
+	if (textureCubemap2 == nullptr)
+	{
+		blendFactor = 0.0f;
+	}
 }
-
 
 MaterialEffectTextureCubemap::~MaterialEffectTextureCubemap()
 {
 }
 
-TextureCubemap* MaterialEffectTextureCubemap::GetCubemap() const
+TextureCubemap* MaterialEffectTextureCubemap::GetCubemap1() const
 {
-	return mTexture;
+	return mTexture1;
+}
+
+TextureCubemap* MaterialEffectTextureCubemap::GetCubemap2() const
+{
+	return mTexture2;
+}
+
+float MaterialEffectTextureCubemap::GetBlendFactor() const
+{
+	return mBlendFactor;
+}
+
+void MaterialEffectTextureCubemap::SetBlendFactor(float blendFactor)
+{
+	mBlendFactor = blendFactor;
 }
 
 void MaterialEffectTextureCubemap::CopyValuesFrom(IMaterial* material)
@@ -25,7 +45,9 @@ void MaterialEffectTextureCubemap::CopyValuesFrom(IMaterial* material)
 	MaterialEffectTextureCubemap* effect = material->GetEffect<MaterialEffectTextureCubemap>();
 	if (effect != nullptr)
 	{
-		mTexture = effect->GetCubemap();
+		mTexture1 = effect->GetCubemap1();
+		mTexture2 = effect->GetCubemap2();
+		mBlendFactor = effect->GetBlendFactor();
 	}
 }
 

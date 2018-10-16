@@ -5,13 +5,18 @@ class TextureCubemap;
 
 class MaterialEffectTextureCubemap : public IMaterialEffect
 {
-	TextureCubemap* mTexture;
+	TextureCubemap* mTexture1;
+	TextureCubemap* mTexture2;
+	float mBlendFactor;
 
 public:
-	MaterialEffectTextureCubemap(TextureCubemap* textureCubemap);
+	MaterialEffectTextureCubemap(TextureCubemap* textureCubemap1, TextureCubemap* textureCubemap2, float blendFactor);
 	virtual ~MaterialEffectTextureCubemap();
 
-	TextureCubemap* GetCubemap() const;
+	TextureCubemap* GetCubemap1() const;
+	TextureCubemap* GetCubemap2() const;
+	float GetBlendFactor() const;
+	void SetBlendFactor(float blendFactor);
 
 	void CopyValuesFrom(IMaterial* material) override;
 

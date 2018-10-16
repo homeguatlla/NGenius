@@ -459,6 +459,11 @@ void RenderSystem::ApplyLights(IRenderer* renderer)
 			effect->SetSunLightProperties(mEnvironmentSystem->GetSunLightDirection(), mEnvironmentSystem->GetSunLightColor());
 		}
 	}
+	MaterialEffectTextureCubemap* textureCubemapMaterial = mCurrentMaterial->GetEffect<MaterialEffectTextureCubemap>();
+	if (textureCubemapMaterial != nullptr)
+	{
+		textureCubemapMaterial->SetBlendFactor(mEnvironmentSystem->GetSkyBoxBlenderFactor());
+	}
 }
 
 void RenderSystem::ApplyShadows(IRenderer* renderer)
@@ -567,7 +572,11 @@ void RenderSystem::SelectTextures()
 	MaterialEffectTextureCubemap* textureCubemapMaterial = mCurrentMaterial->GetEffect<MaterialEffectTextureCubemap>();
 	if (textureCubemapMaterial != nullptr)
 	{
-		textureCubemapMaterial->GetCubemap()->SetActive(true);
+		textureCubemapMaterial->GetCubemap1()->SetActive(true);
+		if (textureCubemapMaterial->GetCubemap2() != nullptr)
+		{
+			textureCubemapMaterial->GetCubemap2()->SetActive(true);
+		}
 	}
 
 	MaterialEffectWater* effectWater = mCurrentMaterial->GetEffect<MaterialEffectWater>();

@@ -17,14 +17,18 @@ const std::string SkyBoxShader::FRAGMENT_FILE = "data/shaders/fragment/f_skybox.
 const std::string ATTRIBUTE_MODEL_MATRIX("M");
 const std::string ATTRIBUTE_VIEW_MATRIX("V");
 const std::string ATTRIBUTE_PROJECTION_MATRIX("P");
-const std::string ATTRIBUTE_CUBEMAP_TEXTURE("cubeMap");
+const std::string ATTRIBUTE_CUBEMAP1_TEXTURE("cubeMap1");
+const std::string ATTRIBUTE_CUBEMAP2_TEXTURE("cubeMap2");
+const std::string ATTRIBUTE_BLENDER_FACTOR("blendFactor");
 
 SkyBoxShader::SkyBoxShader() :
 IShaderProgram(VERTEX_FILE, FRAGMENT_FILE), 
 mLocationModelMatrix(-1),
 mLocationViewMatrix(-1), 
 mLocationProjectionMatrix(-1),
-mLocationCubemapTexture(-1)
+mLocationCubemap1Texture(-1),
+mLocationCubemap2Texture(-1),
+mLocationBlendFactor(-1)
 {
 }
 
@@ -44,7 +48,9 @@ void SkyBoxShader::LoadData(const ICamera* camera, const Transformation* transfo
 	MaterialEffectTextureCubemap* effectCubemap = material->GetEffect<MaterialEffectTextureCubemap>();
 	if (effectCubemap != nullptr)
 	{
-		LoadTexture(mLocationCubemapTexture, effectCubemap->GetCubemap()->GetUnit());
+		LoadTexture(mLocationCubemap1Texture, effectCubemap->GetCubemap1()->GetUnit());
+		LoadTexture(mLocationCubemap2Texture, effectCubemap->GetCubemap2()->GetUnit());
+		LoadFloat(mLocationBlendFactor, effectCubemap->GetBlendFactor());
 	}
 }
 
@@ -59,10 +65,7 @@ void SkyBoxShader::GetAllUniformLocations()
 
 	mLocationProjectionMatrix = GetUniformLocation(ATTRIBUTE_PROJECTION_MATRIX);
 	mLocationViewMatrix = GetUniformLocation(ATTRIBUTE_VIEW_MATRIX);
-	mLocationCubemapTexture = GetUniformLocation(ATTRIBUTE_CUBEMAP_TEXTURE);
-}
-
-void SkyBoxShader::LoadCubemapTexture(int unit)
-{
-	LoadTexture(mLocationCubemapTexture, unit);
+	mLocationCubemap1Texture = GetUniformLocation(ATTRIBUTE_CUBEMAP1_TEXTURE);
+	mLocationCubemap2Texture = GetUniformLocation(ATTRIBUTE_CUBEMAP2_TEXTURE);
+	mLocationBlendFactor = GetUniformLocation(ATTRIBUTE_BLENDER_FACTOR);
 }

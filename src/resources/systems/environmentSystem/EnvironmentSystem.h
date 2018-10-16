@@ -19,6 +19,7 @@ class EnvironmentSystem : public BaseVisitable<>, public IGameSceneListener
 	std::vector<glm::vec3> mModificatorsPositions;
 	glm::vec3 mSunLightDirection;
 	glm::vec3 mSunLightColor;
+	float mHourDayNormalized;
 
 public:
 	EnvironmentSystem();
@@ -39,6 +40,8 @@ public:
 	void SetDayHour(float hour);
 	void SetSunLightColor(const glm::vec3& color);
 	glm::vec3 GetSunLightColor() const;
+
+	float GetSkyBoxBlenderFactor() const;
 
 private:
 	void AddEntity(GameEntity* entity);

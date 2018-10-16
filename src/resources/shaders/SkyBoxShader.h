@@ -9,7 +9,9 @@ class SkyBoxShader : public IShaderProgram
 	int mLocationModelMatrix;
 	int mLocationViewMatrix;
 	int mLocationProjectionMatrix;
-	int mLocationCubemapTexture;
+	int mLocationCubemap1Texture;
+	int mLocationCubemap2Texture;
+	int mLocationBlendFactor;
 
 public:
 	SkyBoxShader();
@@ -19,6 +21,5 @@ public:
 
 	void GetAllUniformLocations() override;
 	void BindAttributes() override;
-	void LoadCubemapTexture(int unit);
 };
 

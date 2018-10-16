@@ -20,7 +20,8 @@ const glm::vec3 SUN_POSITION_DEFAULT(0.0f, -10000.0f, 0.0f);
 EnvironmentSystem::EnvironmentSystem() : 
 	mTimer(0.0f),
 	mSunLightDirection(SUN_POSITION_DEFAULT),
-	mSunLightColor(glm::vec3(1.0f))
+	mSunLightColor(glm::vec3(1.0f)),
+	mHourDayNormalized(0.5f)
 {
 	//mWindManager = std::make_unique<WindManager>(4);
 }
@@ -169,9 +170,26 @@ void EnvironmentSystem::SetDayHour(float hour)
 {
 	glm::vec3 sunDirection = SUN_POSITION_DEFAULT;
 	glm::mat4x4 matrix(1.0f);
-	matrix = glm::rotate(matrix, glm::radians(hour / 24.0f * 360.0f - 180.f), glm::vec3(0.0f, 0.0f, 1.0f));
+	mHourDayNormalized = hour / 24.0f;
+	matrix = glm::rotate(matrix, glm::radians(mHourDayNormalized * 360.0f - 180.f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	mSunLightDirection = matrix * glm::vec4(sunDirection, 1.0f);
+}
+
+float EnvironmentSystem::GetSkyBoxBlenderFactor() const
+{
+	if (mHourDayNormalized > 0.75f || mHourDayNormalized < 0.25f)
+	{
+		return 1.0f;
+	}
+	else if(mHourDayNormalized >= 0.25f && mHourDayNormalized <= 0.5f)
+	{
+		return 1.0f - (mHourDayNormalized - 0.25f) / 0.25f;
+	}
+	else if (mHourDayNormalized > 0.5f && mHourDayNormalized <= 0.75f)
+	{
+		return (mHourDayNormalized - 0.5f) / 0.25f;
+	}
 }
 
 void EnvironmentSystem::SetSunLightColor(const glm::vec3& color)

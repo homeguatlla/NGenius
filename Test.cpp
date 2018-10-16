@@ -141,7 +141,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = RELEASE;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -1032,7 +1032,9 @@ void CreateCube()
 	if (mIsSkyboxEnabled)
 	{
 		IMaterial* material = mEngine.CreateMaterial("skybox", mEngine.GetShader("skybox"));
-		material->AddEffect(new MaterialEffectTextureCubemap(static_cast<TextureCubemap*>(mEngine.GetTexture("cubemap"))));
+		TextureCubemap* cubemap1 = static_cast<TextureCubemap*>(mEngine.GetTexture("day_cubemap"));
+		TextureCubemap* cubemap2 = static_cast<TextureCubemap*>(mEngine.GetTexture("night_cubemap"));
+		material->AddEffect(new MaterialEffectTextureCubemap(cubemap1, cubemap2, 0.0f));
 		material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 
 		SkyBoxRenderer* skyboxRenderer = new SkyBoxRenderer(mEngine.GetModel("skybox"), material);
@@ -1184,7 +1186,7 @@ void CreateEntities()
 	{
 		CreateTrees();
 		//CreateGrass();
-		//CreatePoints();
+		CreatePoints();
 	}
 
 	if (mIsPropsEnabled)
