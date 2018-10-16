@@ -564,6 +564,7 @@ void CreatePoints()
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
 	material->AddEffect(new MaterialEffectShadowProperties(0));
 	material->AddEffect(new MaterialEffectFloat(0.0));
+	material->AddEffect(new MaterialEffectLightProperties());
 	material->AddEffect(new MaterialEffectFloat3Array());
 	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(mEngine.GetTexture("grass2")),
 		mEngine.GetTexture("depth_texture"),

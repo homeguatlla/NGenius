@@ -9,6 +9,7 @@ out float scale;
 void main(void)
 {
 	gl_Position = vec4(vertexModelspace, 1);
+	
 	rotationY = textureCoordsModelspace.x;
 	scale = textureCoordsModelspace.y;
 }

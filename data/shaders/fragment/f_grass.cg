@@ -3,6 +3,8 @@
 in vec2 textureCoords;
 in vec4 shadowCoords;
 in float fogVisibility;
+in vec3 eyeDirection;
+in vec3 lightDirection;
 
 uniform sampler2D texture;
 uniform vec3 fogColor;
@@ -12,6 +14,7 @@ uniform sampler2D depthTexture;
 uniform int shadowMapSize;
 uniform int pfcCount;
 uniform vec2 screenSize;
+uniform vec3 lightColor;
 
 in vec4 outColor;
 in float alphaFactor;
@@ -63,6 +66,18 @@ float ApplySoftParticle(float alphaColor)
 	return alphaColor;
 }
 
+vec4 ApplyLight(vec3 ambient, vec3 materialDiffuse)
+{
+	vec3 l = -lightDirection;
+	vec3 diffuse = materialDiffuse * 1.0 - max(0.0, dot(eyeDirection, l));
+	
+	color.rgb = lightColor * (ambient * materialDiffuse + diffuse );
+	color.a = 1.0f;
+	
+	return color;
+}
+
+
 vec4 ApplyFog(vec4 color)
 {
 	return mix(vec4(fogColor, 1.0f), color, fogVisibility);
@@ -77,11 +92,14 @@ void main()
 	{
 		discard;
 	}
-	color = MaterialDiffuseColor;
+	vec3 MaterialAmbientColor = vec3(0.1f, 0.1f, 0.1f);
+	
+	//color = MaterialDiffuseColor;
+	color = ApplyLight(MaterialAmbientColor, MaterialDiffuseColor.rgb);
 	color = ApplyFog(color);
 	//color.a = ApplySoftParticle(color.a);
 	color.a *= textureCoords.y * 2.0 * alphaFactor;
 	
 	//color = vec4(1.0, 0.0, 0.0, 1.0);
-	//color = outColor;
+	//color.rgb = lightColor;
 }
