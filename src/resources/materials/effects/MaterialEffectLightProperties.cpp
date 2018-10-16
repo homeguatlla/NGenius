@@ -2,9 +2,9 @@
 #include "MaterialEffectLightProperties.h"
 #include "../IMaterial.h"
 
-MaterialEffectLightProperties::MaterialEffectLightProperties(const glm::vec3& position, const glm::vec3& color) :
-mPosition(position),
-mColor(color)
+MaterialEffectLightProperties::MaterialEffectLightProperties() :
+mSunLightDirection(glm::vec3(10000.0f, 10000.0f, 10000.0f)),
+mSunLightColor(glm::vec3(1.0f))
 {
 }
 
@@ -13,14 +13,20 @@ MaterialEffectLightProperties::~MaterialEffectLightProperties()
 {
 }
 
-glm::vec3 MaterialEffectLightProperties::GetPosition() const
+void MaterialEffectLightProperties::SetSunLightProperties(const glm::vec3& sunDirection, const glm::vec3& sunColor)
 {
-	return mPosition;
+	mSunLightDirection = sunDirection;
+	mSunLightColor = sunColor;
 }
 
-glm::vec3 MaterialEffectLightProperties::GetColor() const
+glm::vec3 MaterialEffectLightProperties::GetSunLightDirection() const
 {
-	return mColor;
+	return mSunLightDirection;
+}
+
+glm::vec3 MaterialEffectLightProperties::GetSunLightColor() const
+{
+	return mSunLightColor;
 }
 
 void MaterialEffectLightProperties::CopyValuesFrom(IMaterial* material)
@@ -28,8 +34,8 @@ void MaterialEffectLightProperties::CopyValuesFrom(IMaterial* material)
 	MaterialEffectLightProperties* effect = material->GetEffect<MaterialEffectLightProperties>();
 	if (effect != nullptr)
 	{
-		mPosition = effect->GetPosition();
-		mColor = effect->GetColor();
+		mSunLightDirection = effect->GetSunLightDirection();
+		mSunLightColor = effect->GetSunLightColor();
 	}
 }
 

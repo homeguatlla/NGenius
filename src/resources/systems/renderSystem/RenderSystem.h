@@ -36,6 +36,7 @@ class WaterRenderPassSubSystem;
 class PostProcessSubSystem;
 
 class GuiTool;
+class EnvironmentSystem;
 
 class RenderSystem : public BaseVisitable<>
 {
@@ -63,6 +64,8 @@ class RenderSystem : public BaseVisitable<>
 	AnimationsLibrary* mAnimationsLibrary;
 
 	GLFWwindow* mWindow;
+
+	EnvironmentSystem* mEnvironmentSystem;
 
 	ShadowsRenderPassSubSystem* mShadowsRenderPass;
 	WaterRenderPassSubSystem* mWaterRenderPass;
@@ -147,6 +150,8 @@ public:
 	void SetOverdrawEnabled(bool isOverdrawEnabled);
 	void SetPostProcessEnabled(bool isPostProcessEnabled);
 	
+	void SetEnvironmentSystem(EnvironmentSystem* environmentSystem);
+
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 
 	ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
@@ -185,6 +190,7 @@ private:
 	void SelectClippingPlane(RenderPass* renderPass);
 	void ApplyShadows(IRenderer* renderer);
 	void ApplyFog(IRenderer* renderer);
+	void ApplyLights(IRenderer* renderer);
 
 	void DestroyCameras();
 

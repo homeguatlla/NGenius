@@ -128,8 +128,8 @@ void IShaderProgram::LoadData(const ICamera* camera, const Transformation* trans
 	MaterialEffectLightProperties* effectLight = material->GetEffect<MaterialEffectLightProperties>();
 	if (effectLight != nullptr)
 	{
-		LoadVector3(mLocationLightPosition, effectLight->GetPosition());
-		LoadVector3(mLocationLightColor, effectLight->GetColor());
+		LoadVector3(mLocationLightPosition, effectLight->GetSunLightDirection());
+		LoadVector3(mLocationLightColor, effectLight->GetSunLightColor());
 	}
 
 	MaterialEffectFogProperties* effectFog = material->GetEffect<MaterialEffectFogProperties>();

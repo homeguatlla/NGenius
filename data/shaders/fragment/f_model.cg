@@ -29,15 +29,15 @@ vec4 ApplyLight(vec3 ambient, vec3 materialDiffuse, vec3 materialSpecular)
 	
 	//n = normalize(cross(dFdx(positionWorldspace), dFdy(positionWorldspace)));
 	
-	vec3 l = lightDirection;
-	vec3 diffuse = materialDiffuse * clamp(dot( normal, l ), 0.0f, 1.0f);
+	vec3 l = -lightDirection;
+	vec3 diffuse = materialDiffuse * max(0.0, dot(normal, l));
 	
 	vec3 reflectDir = reflect(-l, normal);	
 	vec3 specular = materialSpecular * specularStrength * pow(max(dot(reflectDir, normalize(eyeDirection)), 0.0), 32);
 	
 	//float attenuation = length(lightPosition - positionWorldspace);
 
-	color.rgb = lightColor * (ambient + diffuse + specular);// * (1.0f / attenuation);
+	color.rgb = lightColor * (ambient * materialDiffuse + (diffuse + specular));// * (1.0f / attenuation);
 	color.a = 1.0f;
 	
 	return color;
@@ -87,11 +87,11 @@ void main()
 		discard;
 	}
 
-	vec3 MaterialAmbientColor = vec3(0.3f, 0.3f, 0.3f);
+	vec3 MaterialAmbientColor = vec3(0.5f, 0.5f, 0.5f);
 	vec3 MaterialSpecularColor = vec3(1.0f, 1.0f, 1.0f);
 	color = ApplyLight(MaterialAmbientColor, MaterialDiffuseColor.rgb, MaterialSpecularColor);
 	color = ApplyFog(color);
-
-	//color = in_color;
+	//color = MaterialDiffuseColor;
+	//color = vec4(1.0, 0.0, 0.0, 1.0);
 }
 

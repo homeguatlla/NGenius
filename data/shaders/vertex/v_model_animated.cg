@@ -65,15 +65,7 @@ void main()
 		totalLocalPos = vec4(vertexModelspace, 1.0);
 		totalNormal = vec4(normalModelspace, 1.0);
 	}
-	/*in_color = vec4(0.0, 0.0, 0.0, 1.0);
-
-	int jointIndex = 12;
-	if(jointIndices[0] == jointIndex || jointIndices[1] == jointIndex || jointIndices[2] == jointIndex || jointIndices[3] == jointIndex)
-	{
-		in_color = vec4(weights[0], weights[1], weights[2], 1.0);
-	}*/
 	
-
 	positionWorldspace = vec3(M * totalLocalPos);
 	shadowCoords = toShadowMapSpace * vec4(positionWorldspace, 1.0f);
 
@@ -82,8 +74,11 @@ void main()
 	vec4 positionRelativeToCamera = V * vec4(positionWorldspace, 1.0f);	
 	gl_Position =  P * positionRelativeToCamera;
 	
-	normal = normalize(vec3( M * totalNormal));
-	
+	//deberia ser así pero no funciona bien
+	//vec4 normaltemp = M * totalNormal;
+	//normal = normalize(normaltemp.rgb);
+	normal = normalize(totalNormal.rgb);
+
 	lightDirection = normalize(lightPositionWorldspace - positionWorldspace);
 	eyeDirection = normalize(cameraPosition - positionWorldspace);
 

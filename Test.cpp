@@ -478,21 +478,21 @@ void CreateTrees()
 	
 	IMaterial* materialFoliage = mEngine.CreateMaterial("tree_foliage", mEngine.GetShader("model"));
 	materialFoliage->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_foliage_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	materialFoliage->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	materialFoliage->AddEffect(new MaterialEffectLightProperties());
 	materialFoliage->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	materialFoliage->AddEffect(new MaterialEffectShadowProperties(1));
 	materialFoliage->AddEffect(new MaterialEffectClippingPlane());
 
 	IMaterial* materialTrunk = mEngine.CreateMaterial("tree_trunk", mEngine.GetShader("model"));
 	materialTrunk->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	materialTrunk->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	materialTrunk->AddEffect(new MaterialEffectLightProperties());
 	materialTrunk->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	materialTrunk->AddEffect(new MaterialEffectShadowProperties(1));
 	materialTrunk->AddEffect(new MaterialEffectClippingPlane());
 
 	IMaterial* materialTrunkNormalmap = mEngine.CreateMaterial("tree_trunk_normalmap", mEngine.GetShader("normalmap"));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	materialTrunkNormalmap->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	materialTrunkNormalmap->AddEffect(new MaterialEffectLightProperties());
 	materialTrunkNormalmap->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_normalmap")), 1));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectShadowProperties(1));
@@ -531,7 +531,7 @@ void CreateGrass()
 
 	IMaterial* materialGrass = mEngine.CreateMaterial("grass1", mEngine.GetShader("model"));
 	materialGrass->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("grass1_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	materialGrass->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	materialGrass->AddEffect(new MaterialEffectLightProperties());
 	materialGrass->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	materialGrass->AddEffect(new MaterialEffectShadowProperties(0));
 
@@ -609,13 +609,13 @@ void CreatePoints()
 void CreateProps()
 {
 	int areaSize = 5;
-	int numProps = 6;
+	int numProps = 1;
 
 	std::vector<std::string> models;
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec3> rotations;
 
-	models.push_back(std::string("barrel"));
+	models.push_back(std::string("barrel2"));
 	models.push_back(std::string("chest"));
 	models.push_back(std::string("brazier"));
 	models.push_back(std::string("barrel"));
@@ -657,15 +657,18 @@ void CreateProps()
 	rotations.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
 	rotations.push_back(glm::vec3(0.0f));
 
-	std::string textureName("MedievalDungeonPropsAtlas02_diffuse");
-	std::string textureNormalName("MedievalDungeonPropsAtlas02_normalmap");
+	//std::string textureName("MedievalDungeonPropsAtlas02_diffuse");
+	//std::string textureNormalName("MedievalDungeonPropsAtlas02_normalmap");
+
+	std::string textureName("barrel_diffuse");
+	std::string textureNormalName("barrel_normalmap");
 
 	Texture* texture = static_cast<Texture*>(mEngine.GetTexture(textureName));
 	Texture* normal = static_cast<Texture*>(mEngine.GetTexture(textureNormalName));
 
 	IMaterial* material = mEngine.GetMaterial(MaterialsLibrary::MODEL_MATERIAL_NAME);
 	material->AddEffect(new MaterialEffectDiffuseTexture(texture, glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	material->AddEffect(new MaterialEffectLightProperties());
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectNormalTexture(normal, 1));
 	material->AddEffect(new MaterialEffectShadowProperties(1));
@@ -681,7 +684,7 @@ void CreateProps()
 
 		float height = mTerrain->GetHeight(glm::vec2(x, z));
 		glm::vec3 position(x, height, z);
-		glm::vec3 scale(0.3f);
+		glm::vec3 scale(0.03f);
 		glm::vec3 rotation(rotations[i % rotations.size()]);
 			
 		std::string modelName = models[i % models.size()];
@@ -711,7 +714,7 @@ void CreateWater()
 														waterSpeed,
 														waterColor
 													));
-		material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+		material->AddEffect(new MaterialEffectLightProperties());
 
 		mWater = new Water(		new Transformation(
 													glm::vec3(4.0f, mWaterHeight, 4.5f), 
@@ -928,7 +931,7 @@ void CreateTerrain()
 
 	IMaterial* material = mEngine.CreateMaterial("terrain", mEngine.GetShader("terrain"));
 	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_blendmap")), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f));
-	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	material->AddEffect(new MaterialEffectLightProperties());
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectHeightMapTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")), 1.0f));
 	material->AddEffect(new MaterialEffectTextureArray(static_cast<TextureArray*>(mEngine.GetTexture("terrain_array"))));
@@ -955,8 +958,8 @@ void CreatePlayer()
 	//PLAYER
 	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("animated_model"));
 	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_texture")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_normalmap")), 1.0f));
-	material->AddEffect(new MaterialEffectLightProperties(glm::vec3(100000.0f, 100000.0f, 100000.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
+	//material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_normalmap")), 1.0f));
+	material->AddEffect(new MaterialEffectLightProperties());
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectShadowProperties(3));
 	material->AddEffect(new MaterialEffectClippingPlane());
@@ -1181,7 +1184,7 @@ void CreateEntities()
 	{
 		CreateTrees();
 		//CreateGrass();
-		CreatePoints();
+		//CreatePoints();
 	}
 
 	if (mIsPropsEnabled)
@@ -1563,7 +1566,7 @@ void SetupConfiguration()
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
 		mIsVegetationEnabled = false;
-		mIsPropsEnabled = false;
+		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;

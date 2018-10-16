@@ -15,11 +15,12 @@
 #include "../../renderers/IRenderer.h"
 #include "WindManager.h"
 
-const glm::vec3 SUN_POSITION_DEFAULT(0.0f, 100000.0f, 0.0f);
+const glm::vec3 SUN_POSITION_DEFAULT(0.0f, -10000.0f, 0.0f);
 
 EnvironmentSystem::EnvironmentSystem() : 
 	mTimer(0.0f),
-	mSunLightDirection(SUN_POSITION_DEFAULT)
+	mSunLightDirection(SUN_POSITION_DEFAULT),
+	mSunLightColor(glm::vec3(1.0f))
 {
 	//mWindManager = std::make_unique<WindManager>(4);
 }
@@ -171,4 +172,14 @@ void EnvironmentSystem::SetDayHour(float hour)
 	matrix = glm::rotate(matrix, glm::radians(hour / 24.0f * 360.0f - 180.f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	mSunLightDirection = matrix * glm::vec4(sunDirection, 1.0f);
+}
+
+void EnvironmentSystem::SetSunLightColor(const glm::vec3& color)
+{
+	mSunLightColor = color;
+}
+
+glm::vec3 EnvironmentSystem::GetSunLightColor() const
+{
+	return mSunLightColor;
 }

@@ -47,7 +47,7 @@ void main()
 
 	vec3 positionRelativeToCamera = cameraPosition - positionWorldspace;
 		
-	lightDirection = normalize(lightPositionWorldspace - positionWorldspace);
+	lightDirection = normalize(lightPositionWorldspace);//normalize(lightPositionWorldspace - positionWorldspace);
 	//lightPosition = lightPositionWorldspace;
 
 	eyeDirection = normalize(cameraPosition - positionWorldspace);

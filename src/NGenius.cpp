@@ -29,9 +29,6 @@
 #include "statistics/Statistics.h"
 #include "guiTool/GuiTool.h"
 
-#include "../GameConstants.h"
-
-
 
 NGenius::NGenius(std::string applicationName, float screenWidth, float screenHeight) :
 mRenderSystem(nullptr),
@@ -64,6 +61,7 @@ void NGenius::Init(bool isFullscreen)
 
 void NGenius::Start()
 {
+	mRenderSystem->SetEnvironmentSystem(mEnvironmentSystem);
 	mRenderSystem->Start();
 	mSpacePartitionSystem->Start();
 	mDebugSystem->Start();
@@ -90,6 +88,8 @@ void NGenius::Run()
 
 		mInputHandler->Update(elapsedTime);
 
+		AcceptGuiTool();
+
 		//while (lag >= frameTime)
 		{
 			UpdateSystems(elapsedTime);
@@ -100,9 +100,9 @@ void NGenius::Run()
 			}
 			lag -= frameTime;
 		}
+
 		Render();
 
-		
 		if (accumulatedTime > 1.0f)
 		{
 			mNumberFPS = frames / accumulatedTime;
@@ -112,9 +112,6 @@ void NGenius::Run()
 		}
 
 		AcceptStatistics();
-		AcceptGuiTool();
-
-		SetCastingShadowsParameters(mEnvironmentSystem->GetSunLightDirection(), SHADOWS_PFC_COUNTER);
 
 	} // Check if the ESC key was pressed or the window was closed
 	while (	glfwGetKey(mRenderSystem->GetGLWindow(), GLFW_KEY_ESCAPE) != GLFW_PRESS && 

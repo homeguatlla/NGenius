@@ -38,19 +38,6 @@ void main(void)
 		totalLocalPos = vec4(vertexModelspace, 1.0);
 	}
 	
-	/*if(jointTransformsSize > 0)
-	{
-		int joint = 3;
-		//if(jointIndices[0] != joint && jointIndices[1] != joint && jointIndices[2] != joint && jointIndices[3] != joint)
-		if(jointIndices[0] > 10)
-		{
-			totalLocalPos = vec4(vertexModelspace, 1.0);
-		}
-	}
-	else
-	{
-		totalLocalPos = vec4(vertexModelspace, 1.0);
-	}*/
 	textureCoords = tile * textureCoordsModelspace;
 	gl_Position = P * V * M * totalLocalPos;
 }

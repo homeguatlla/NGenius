@@ -32,12 +32,14 @@
 #include "../../materials/effects/MaterialEffectParticle.h"
 #include "../../materials/effects/MaterialEffectDepthTexture.h"
 #include "../../materials/effects/MaterialEffectFogProperties.h"
+#include "../../materials/effects/MaterialEffectLightProperties.h"
 
 #include "RenderPass.h"
 #include "../../../BitNumber.h"
 
 #include "../../../guiTool/GuiTool.h"
 
+#include "../GameConstants.h"
 
 #include <iostream>
 #include <algorithm>
@@ -59,6 +61,7 @@ mWindow(nullptr),
 mShadowsRenderPass(nullptr),
 mWaterRenderPass(nullptr),
 mPostProcessSubsystem(nullptr),
+mEnvironmentSystem(nullptr),
 mCurrentMaterial(nullptr),
 mDiffuseTexture(nullptr),
 mNormalTexture(nullptr),
@@ -402,6 +405,8 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 
 	SelectClippingPlane(renderPass);
 
+	ApplyLights(renderer);
+
 	ApplyShadows(renderer);
 
 	ApplyFog(renderer);
@@ -444,10 +449,25 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 	mNumberTrianglesRendered += renderer->GetNumberTrianglesRendered();
 }
 
+void RenderSystem::ApplyLights(IRenderer* renderer)
+{
+	if (mEnvironmentSystem != nullptr)
+	{
+		MaterialEffectLightProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectLightProperties>();
+		if (effect != nullptr)
+		{
+			effect->SetSunLightProperties(mEnvironmentSystem->GetSunLightDirection(), mEnvironmentSystem->GetSunLightColor());
+		}
+	}
+}
+
 void RenderSystem::ApplyShadows(IRenderer* renderer)
 {
 	if (mShadowsRenderPass->IsEnabled())
 	{
+		assert(mEnvironmentSystem != nullptr);
+		SetCastingShadowsParameters(-mEnvironmentSystem->GetSunLightDirection(), SHADOWS_PFC_COUNTER);
+
 		MaterialEffectShadowProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectShadowProperties>();
 		if (effect != nullptr)
 		{
@@ -469,6 +489,11 @@ void RenderSystem::ApplyFog(IRenderer* renderer)
 			effect->SetProperties(mFogColor, mFogDensity, mFogGradient);
 		}
 	}
+}
+
+void RenderSystem::SetEnvironmentSystem(EnvironmentSystem* environmentSystem)
+{
+	mEnvironmentSystem = environmentSystem;
 }
 
 void RenderSystem::SelectClippingPlane(RenderPass* renderPass)

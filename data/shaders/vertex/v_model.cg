@@ -44,7 +44,7 @@ void main()
 	
 	normal = normalize(vec3( M * vec4(normalModelspace, 0.0f) ));
 	
-	lightDirection = normalize(lightPositionWorldspace - positionWorldspace);
+	lightDirection = normalize(lightPositionWorldspace);//normalize(lightPositionWorldspace - positionWorldspace);
 	eyeDirection = normalize(cameraPosition - positionWorldspace);
 
 	//fog

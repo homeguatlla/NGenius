@@ -141,8 +141,8 @@ vec4 ApplyLight(vec4 color, vec3 ambient, vec3 materialDiffuse, vec3 materialSpe
 
 	//n = normalize(cross(dFdx(positionWorldspace), dFdy(positionWorldspace)));
 	
-	vec3 l = lightDirection;
-	float cosTheta = clamp(max( dot( n, l ), 0.0f), 0.0f, 1.0f);
+	vec3 l = -lightDirection;
+	float cosTheta =  max(0.0, dot(n, l));
 	vec3 diffuse = materialDiffuse * cosTheta;
 	
 	vec3 reflectDir = reflect(-l, n);	
@@ -151,7 +151,7 @@ vec4 ApplyLight(vec4 color, vec3 ambient, vec3 materialDiffuse, vec3 materialSpe
 
 	//float attenuation = length(lightPosition - positionWorldspace);
 
-	color.rgb = ambient + (diffuse + specular);// * (1.0f / attenuation);
+	color.rgb = ambient * materialDiffuse + (diffuse + specular);// * (1.0f / attenuation);
 	color.a = 1.0f;
 
 	return color;
@@ -218,7 +218,7 @@ void main() {
 
 	// Material properties
 	vec3 MaterialDiffuseColor = shadowFactor * (rTextureColor.rgb + gTextureColor.rgb + bTextureColor.rgb + aTextureColor.rgb) * lightColor;
-	vec3 MaterialAmbientColor = vec3(0.1f, 0.1f, 0.1f);
+	vec3 MaterialAmbientColor = vec3(0.3f, 0.3f, 0.3f);
 	vec3 MaterialSpecularColor = vec3(0.0f, 0.0f, 0.0f);
 
 	color = ApplyLight(color, MaterialAmbientColor, MaterialDiffuseColor, MaterialSpecularColor);

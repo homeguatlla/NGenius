@@ -52,7 +52,7 @@ void main()
 		tangent.z, bitangent.z, normal.z
 	);
 
-	lightDirection = toTangentSpace * normalize(lightPositionWorldspace - positionWorldspace);
+	lightDirection = toTangentSpace * normalize(lightPositionWorldspace); //toTangentSpace * normalize(lightPositionWorldspace - positionWorldspace);
 	eyeDirection = toTangentSpace * normalize(cameraPosition - positionWorldspace);
 
 	//fog

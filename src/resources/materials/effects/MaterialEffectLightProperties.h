@@ -4,15 +4,16 @@
 
 class MaterialEffectLightProperties : public IMaterialEffect
 {
-	glm::vec3 mPosition;
-	glm::vec3 mColor;
+	glm::vec3 mSunLightDirection;
+	glm::vec3 mSunLightColor;
 
 public:
-	MaterialEffectLightProperties(const glm::vec3& position, const glm::vec3& color);
+	MaterialEffectLightProperties();
 	virtual ~MaterialEffectLightProperties();
 
-	glm::vec3 GetPosition() const;
-	glm::vec3 GetColor() const;
+	void SetSunLightProperties(const glm::vec3& sunDirection, const glm::vec3& sunColor);
+	glm::vec3 GetSunLightDirection() const;
+	glm::vec3 GetSunLightColor() const;
 
 	void CopyValuesFrom(IMaterial* material) override;
 

@@ -9,12 +9,15 @@
 
 
 GuiTool::GuiTool(GLFWwindow* window) :
-	mIsVisible(true),
+	mIsVisible(false),
 	mGLFWindow(window),
-	mSunHour(0.0f)
+	mSunHour(12.0f)
 {
+	for (int i = 0; i < 3; ++i)
+	{
+		mSunLightColor[i] = 1.0f;
+	}
 }
-
 
 GuiTool::~GuiTool()
 {
@@ -69,7 +72,7 @@ void GuiTool::Show()
 void GuiTool::Hide()
 {
 	mIsVisible = false;
-	glfwSetInputMode(mGLFWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	glfwSetInputMode(mGLFWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 bool GuiTool::IsVisible() const
@@ -82,6 +85,7 @@ void GuiTool::ShowEnvironmentTool()
 	ImGui::Begin("Environment:");
 	ImGui::Text("Sun time");
 	ImGui::SliderFloat("hour:", &mSunHour, 0.0, 24.0);
+	ImGui::ColorPicker3("sun light color:", &mSunLightColor[0]);
 
 	if (ImGui::Button("Save"))
 	{
@@ -93,4 +97,5 @@ void GuiTool::ShowEnvironmentTool()
 void GuiTool::Visit(EnvironmentSystem& environmentSystem)
 {
 	environmentSystem.SetDayHour(mSunHour);
+	environmentSystem.SetSunLightColor(glm::vec3(mSunLightColor[0], mSunLightColor[1], mSunLightColor[2]));
 }

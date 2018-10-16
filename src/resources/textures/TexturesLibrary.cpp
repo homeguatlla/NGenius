@@ -69,6 +69,10 @@ void TexturesLibrary::Load()
 	LoadTexture("farmer_texture", "data/models/farmer/farmer_texture.png", true, false); 
 	LoadTexture("farmer_normalmap", "data/models/farmer/farmer_normalmap.png", true, false);
 
+
+	LoadTexture("barrel_diffuse", "data/models/barrel/barrel.png", false, false);
+	LoadTexture("barrel_normalmap", "data/models/barrel/barrelNormal.png", false, false);
+
 	LoadTexturesPendingToLoad();
 }
 
