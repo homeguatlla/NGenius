@@ -7,6 +7,7 @@ uniform samplerCube cubeMap1;
 uniform samplerCube cubeMap2;
 uniform float blendFactor;
 uniform vec3 fogColor;
+uniform vec3 lightColor;
 
 const float lowerLimit = 0.0f;
 const float upperLimit = 0.3f;
@@ -16,7 +17,7 @@ void main()
     vec4 color1 = texture(cubeMap1, textureCoords);
 	vec4 color2 = texture(cubeMap2, textureCoords);
 
-	color = mix(color1, color2, blendFactor);
+	color = mix(color1, color2, blendFactor) * vec4(lightColor, 1.0);
 
 	//making between lower and upper limit mix the fog color.
 	float factor = (textureCoords.y - lowerLimit) / (upperLimit - lowerLimit);

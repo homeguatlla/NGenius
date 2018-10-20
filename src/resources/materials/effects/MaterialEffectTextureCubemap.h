@@ -17,6 +17,8 @@ public:
 	TextureCubemap* GetCubemap2() const;
 	float GetBlendFactor() const;
 	void SetBlendFactor(float blendFactor);
+	void SetCubemap1(TextureCubemap* texture);
+	void SetCubemap2(TextureCubemap* texture);
 
 	void CopyValuesFrom(IMaterial* material) override;
 

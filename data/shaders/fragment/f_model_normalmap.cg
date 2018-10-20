@@ -20,6 +20,7 @@ uniform int pfcCount;
 out vec4 color;
 uniform vec3 lightColor;
 
+
 float totalTexelsShadow = (pfcCount * 2.0 + 1.0) * (pfcCount * 2.0 + 1.0);
 const float FAR_DISTANCE_CLIPPING = 25.0;
 

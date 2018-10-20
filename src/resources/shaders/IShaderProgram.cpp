@@ -2,7 +2,7 @@
 #include "IShaderProgram.h"
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectClippingPlane.h"
-#include "../materials/effects/MaterialEffectLightProperties.h"
+#include "../materials/effects/MaterialEffectDirectionalLightProperties.h"
 #include "../materials/effects/MaterialEffectFogProperties.h"
 #include "../materials/effects/MaterialEffectShadowProperties.h"
 #include "../textures/ITexture.h"
@@ -125,7 +125,7 @@ void IShaderProgram::LoadData(const ICamera* camera, const Transformation* trans
 	{
 		LoadVector4(mLocationClippingPlane, effectClipping->GetClippingPlane());
 	}
-	MaterialEffectLightProperties* effectLight = material->GetEffect<MaterialEffectLightProperties>();
+	MaterialEffectDirectionalLightProperties* effectLight = material->GetEffect<MaterialEffectDirectionalLightProperties>();
 	if (effectLight != nullptr)
 	{
 		LoadVector3(mLocationLightPosition, effectLight->GetSunLightDirection());

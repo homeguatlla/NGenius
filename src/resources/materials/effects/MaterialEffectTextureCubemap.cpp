@@ -40,6 +40,16 @@ void MaterialEffectTextureCubemap::SetBlendFactor(float blendFactor)
 	mBlendFactor = blendFactor;
 }
 
+void MaterialEffectTextureCubemap::SetCubemap1(TextureCubemap* texture)
+{
+	mTexture1 = texture;
+}
+
+void MaterialEffectTextureCubemap::SetCubemap2(TextureCubemap* texture)
+{
+	mTexture2 = texture;
+}
+
 void MaterialEffectTextureCubemap::CopyValuesFrom(IMaterial* material)
 {
 	MaterialEffectTextureCubemap* effect = material->GetEffect<MaterialEffectTextureCubemap>();

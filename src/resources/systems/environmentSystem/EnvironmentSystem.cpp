@@ -5,25 +5,23 @@
 
 #include <glm/gtc/matrix_transform.hpp> 
 
+#include "SunLight.h"
+
 #include "../../GameEntity.h"
 #include "../../components/EnvironmentAffectedComponent.h"
 #include "../../components/EnvironmentModificatorComponent.h"
 #include "../../materials/IMaterial.h"
 #include "../../materials/effects/MaterialEffectFloat.h"
 #include "../../materials/effects/MaterialEffectFloat3Array.h"
-#include "../../entities/Terrain.h"
 #include "../../renderers/IRenderer.h"
-#include "WindManager.h"
+#include "../../entities/Terrain.h"
 
-const glm::vec3 SUN_POSITION_DEFAULT(0.0f, -10000.0f, 0.0f);
+
 
 EnvironmentSystem::EnvironmentSystem() : 
 	mTimer(0.0f),
-	mSunLightDirection(SUN_POSITION_DEFAULT),
-	mSunLightColor(glm::vec3(1.0f)),
-	mHourDayNormalized(0.5f)
+	mSunLight(new SunLight())
 {
-	//mWindManager = std::make_unique<WindManager>(4);
 }
 
 EnvironmentSystem::~EnvironmentSystem()
@@ -31,11 +29,20 @@ EnvironmentSystem::~EnvironmentSystem()
 	mEntities.clear();
 	mModificators.clear();
 	mModificatorsPositions.clear();
+	delete mSunLight;
 }
 
 unsigned int EnvironmentSystem::GetNumberGameEntities() const
 {
 	return mEntities.size();
+}
+
+void EnvironmentSystem::Start()
+{
+	mSunLight->AddFrame(1200.0f, 90.0f, glm::vec3(0.99f, 0.96f, 0.80f), glm::vec3(89.0f, 120.0f, 143.0f) / 255.0f, 0.004f, 1.5f, "day_cubemap");
+	mSunLight->AddFrame(1800.0f, 135.0f, glm::vec3(0.93f, 0.64f, 0.78f), glm::vec3(218.0f, 74.0f, 43.0f) / 255.0f, 0.0f, 1.5f, "day_cubemap");
+	mSunLight->AddFrame(2400.0f, 270.0f, glm::vec3(0.86f, 0.64f, 0.93f), glm::vec3(0.0f), 0.0f, 1.5f, "night_cubemap");
+	mSunLight->AddFrame(600.0f, 45.0f, glm::vec3(0.9f, 0.81f, 0.65f), glm::vec3(0.9f, 0.81f, 0.65f), 0.02f, 1.5f, "day_cubemap");
 }
 
 void EnvironmentSystem::Update(float deltaTime)
@@ -44,32 +51,36 @@ void EnvironmentSystem::Update(float deltaTime)
 
 	mTimer += deltaTime;
 
-	//mWindManager->Update(deltaTime);
-	
 	for (GameEntity* entity : mEntities)
 	{
 		if (entity->GetRenderer() != nullptr)
 		{
-			EnvironmentAffectedComponent* affectedComponent = entity->GetComponent<EnvironmentAffectedComponent>();
-			if (affectedComponent->IsAffectedByWind())
-			{
-				IMaterial* material = entity->GetRenderer()->GetMaterial();
-				MaterialEffectFloat* effectTimer = material->GetEffect<MaterialEffectFloat>();
-				if (effectTimer != nullptr)
-				{
-					effectTimer->SetValue(glm::sin(mTimer * 0.05f));
-				}
-				//TODO mirar los valores de los componentes de environment affected para pasarlos al shader
-				//ahora mismo no se está usando la resistencia
-				MaterialEffectFloat3Array* effectModificators = material->GetEffect<MaterialEffectFloat3Array>();
-				if (effectModificators != nullptr)
-				{
-					effectModificators->SetValues(mModificatorsPositions);
-				}
-			}
+			ApplyWind(entity);
 		}
 	}
 }
+
+void EnvironmentSystem::ApplyWind(GameEntity* entity)
+{
+	EnvironmentAffectedComponent* affectedComponent = entity->GetComponent<EnvironmentAffectedComponent>();
+	if (affectedComponent->IsAffectedByWind())
+	{
+		IMaterial* material = entity->GetRenderer()->GetMaterial();
+		MaterialEffectFloat* effectTimer = material->GetEffect<MaterialEffectFloat>();
+		if (effectTimer != nullptr)
+		{
+			effectTimer->SetValue(glm::sin(mTimer * 0.05f));
+		}
+		//TODO mirar los valores de los componentes de environment affected para pasarlos al shader
+		//ahora mismo no se está usando la resistencia
+		MaterialEffectFloat3Array* effectModificators = material->GetEffect<MaterialEffectFloat3Array>();
+		if (effectModificators != nullptr)
+		{
+			effectModificators->SetValues(mModificatorsPositions);
+		}
+	}
+}
+
 
 void EnvironmentSystem::UpdateModificatorsVector()
 {
@@ -158,46 +169,50 @@ float EnvironmentSystem::GetTimer() const
 
 glm::vec3 EnvironmentSystem::GetSunLightDirection() const
 {
-	return mSunLightDirection;
-}
-
-void EnvironmentSystem::SetSunLightDirection(const glm::vec3& direction)
-{
-	mSunLightDirection = direction;
-}
-
-void EnvironmentSystem::SetDayHour(float hour)
-{
-	glm::vec3 sunDirection = SUN_POSITION_DEFAULT;
-	glm::mat4x4 matrix(1.0f);
-	mHourDayNormalized = hour / 24.0f;
-	matrix = glm::rotate(matrix, glm::radians(mHourDayNormalized * 360.0f - 180.f), glm::vec3(0.0f, 0.0f, 1.0f));
-
-	mSunLightDirection = matrix * glm::vec4(sunDirection, 1.0f);
-}
-
-float EnvironmentSystem::GetSkyBoxBlenderFactor() const
-{
-	if (mHourDayNormalized > 0.75f || mHourDayNormalized < 0.25f)
-	{
-		return 1.0f;
-	}
-	else if(mHourDayNormalized >= 0.25f && mHourDayNormalized <= 0.5f)
-	{
-		return 1.0f - (mHourDayNormalized - 0.25f) / 0.25f;
-	}
-	else if (mHourDayNormalized > 0.5f && mHourDayNormalized <= 0.75f)
-	{
-		return (mHourDayNormalized - 0.5f) / 0.25f;
-	}
-}
-
-void EnvironmentSystem::SetSunLightColor(const glm::vec3& color)
-{
-	mSunLightColor = color;
+	return mSunLight->GetSunLightDirection();
 }
 
 glm::vec3 EnvironmentSystem::GetSunLightColor() const
 {
-	return mSunLightColor;
+	return mSunLight->GetSunLightColor();
+}
+
+void EnvironmentSystem::SetDayHour(float hour)
+{
+	mSunLight->SetDayHour(hour);
+}
+
+float EnvironmentSystem::GetSunLightBlendFactor() const
+{
+	return mSunLight->GetSunLightBlendFactor();
+}
+
+const std::string EnvironmentSystem::GetSkyBoxCubemapOrigin() const
+{
+	return mSunLight->GetSkyBoxCubemapOrigin();
+}
+
+const std::string EnvironmentSystem::GetSkyBoxCubemapDestination() const
+{
+	return mSunLight->GetSkyBoxCubemapDestination();
+}
+
+void EnvironmentSystem::SetSunLightColor(const glm::vec3& color)
+{
+	mSunLight->SetCurrentFrameColor(color);
+}
+
+glm::vec3 EnvironmentSystem::GetFogColor() const
+{
+	return mSunLight->GetFogColor();
+}
+
+float EnvironmentSystem::GetFogDensity() const
+{
+	return mSunLight->GetFogDensity();
+}
+
+float EnvironmentSystem::GetFogGradient() const
+{
+	return mSunLight->GetFogGradient();
 }

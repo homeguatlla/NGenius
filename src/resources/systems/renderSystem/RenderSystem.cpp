@@ -32,7 +32,10 @@
 #include "../../materials/effects/MaterialEffectParticle.h"
 #include "../../materials/effects/MaterialEffectDepthTexture.h"
 #include "../../materials/effects/MaterialEffectFogProperties.h"
-#include "../../materials/effects/MaterialEffectLightProperties.h"
+#include "../../materials/effects/MaterialEffectDirectionalLightProperties.h"
+
+#include "../environmentSystem/EnvironmentSystem.h"
+#include "../environmentSystem/SunLight.h"
 
 #include "RenderPass.h"
 #include "../../../BitNumber.h"
@@ -73,9 +76,6 @@ mIsOverdrawEnabled(false),
 mIsPostprocessEnabled(true),
 mLastRendererHadCullingEnabled(true),
 mIsFogEnabled(false),
-mFogColor(1.0f, 1.0f, 1.0f),
-mFogDensity(0.0f),
-mFogGradient(0.0f),
 mNumberTrianglesRendered(0),
 mNumberDrawCalls(0),
 mNumberRenderers(0)
@@ -453,7 +453,7 @@ void RenderSystem::ApplyLights(IRenderer* renderer)
 {
 	if (mEnvironmentSystem != nullptr)
 	{
-		MaterialEffectLightProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectLightProperties>();
+		MaterialEffectDirectionalLightProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectDirectionalLightProperties>();
 		if (effect != nullptr)
 		{
 			effect->SetSunLightProperties(mEnvironmentSystem->GetSunLightDirection(), mEnvironmentSystem->GetSunLightColor());
@@ -462,7 +462,9 @@ void RenderSystem::ApplyLights(IRenderer* renderer)
 	MaterialEffectTextureCubemap* textureCubemapMaterial = mCurrentMaterial->GetEffect<MaterialEffectTextureCubemap>();
 	if (textureCubemapMaterial != nullptr)
 	{
-		textureCubemapMaterial->SetBlendFactor(mEnvironmentSystem->GetSkyBoxBlenderFactor());
+		textureCubemapMaterial->SetCubemap1(static_cast<TextureCubemap*>(mTexturesLibrary->GetElement(mEnvironmentSystem->GetSkyBoxCubemapOrigin())));
+		textureCubemapMaterial->SetCubemap2(static_cast<TextureCubemap*>(mTexturesLibrary->GetElement(mEnvironmentSystem->GetSkyBoxCubemapDestination())));
+		textureCubemapMaterial->SetBlendFactor(mEnvironmentSystem->GetSunLightBlendFactor());
 	}
 }
 
@@ -491,7 +493,7 @@ void RenderSystem::ApplyFog(IRenderer* renderer)
 		MaterialEffectFogProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectFogProperties>();
 		if (effect != nullptr)
 		{
-			effect->SetProperties(mFogColor, mFogDensity, mFogGradient);
+			effect->SetProperties(mEnvironmentSystem->GetFogColor(), mEnvironmentSystem->GetFogDensity(), mEnvironmentSystem->GetFogGradient());
 		}
 	}
 }
@@ -876,13 +878,6 @@ void RenderSystem::SetCastingShadowsEnabled(bool enabled)
 {
 	assert(mShadowsRenderPass != nullptr);
 	mShadowsRenderPass->SetEnable(enabled);
-}
-
-void RenderSystem::SetFogParameters(const glm::vec3& color, float density, float gradient)
-{
-	mFogColor = color;
-	mFogDensity = density;
-	mFogGradient = gradient;
 }
 
 void RenderSystem::SetFogEnabled(bool enabled)

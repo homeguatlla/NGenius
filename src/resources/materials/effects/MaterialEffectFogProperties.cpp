@@ -2,10 +2,10 @@
 #include "MaterialEffectFogProperties.h"
 #include "../IMaterial.h"
 
-MaterialEffectFogProperties::MaterialEffectFogProperties(const glm::vec3& color, float density, float gradient) :
-	mColor(color),
-	mDensity(density),
-	mGradient(gradient)
+MaterialEffectFogProperties::MaterialEffectFogProperties() :
+	mColor(glm::vec3(0.0f)),
+	mDensity(0.0f),
+	mGradient(0.0f)
 {
 }
 

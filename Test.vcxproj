@@ -247,7 +247,7 @@
     <ClInclude Include="src\resources\materials\effects\MaterialEffectFloat4.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectFogProperties.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectHeightMapTexture.h" />
-    <ClInclude Include="src\resources\materials\effects\MaterialEffectLightProperties.h" />
+    <ClInclude Include="src\resources\materials\effects\MaterialEffectDirectionalLightProperties.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectMatrix4Array.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectNormalTexture.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectParticle.h" />
@@ -311,7 +311,7 @@
     <ClInclude Include="src\resources\systems\AnimationSystem.h" />
     <ClInclude Include="src\resources\systems\DebugSystem.h" />
     <ClInclude Include="src\resources\systems\environmentSystem\EnvironmentSystem.h" />
-    <ClInclude Include="src\resources\systems\environmentSystem\WindManager.h" />
+    <ClInclude Include="src\resources\systems\environmentSystem\SunLight.h" />
     <ClInclude Include="src\resources\systems\InputSystem.h" />
     <ClInclude Include="src\resources\systems\LightsSystem.h" />
     <ClInclude Include="src\resources\systems\ParticlesSystem.h" />
@@ -435,7 +435,7 @@
     <ClCompile Include="src\resources\materials\effects\MaterialEffectFloat4.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectFogProperties.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectHeightMapTexture.cpp" />
-    <ClCompile Include="src\resources\materials\effects\MaterialEffectLightProperties.cpp" />
+    <ClCompile Include="src\resources\materials\effects\MaterialEffectDirectionalLightProperties.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectMatric4Array.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectNormalTexture.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectParticle.cpp" />
@@ -499,7 +499,7 @@
     <ClCompile Include="src\resources\systems\AnimationSystem.cpp" />
     <ClCompile Include="src\resources\systems\DebugSystem.cpp" />
     <ClCompile Include="src\resources\systems\environmentSystem\EnvironmentSystem.cpp" />
-    <ClCompile Include="src\resources\systems\environmentSystem\WindManager.cpp" />
+    <ClCompile Include="src\resources\systems\environmentSystem\SunLight.cpp" />
     <ClCompile Include="src\resources\systems\InputSystem.cpp" />
     <ClCompile Include="src\resources\systems\LightsSystem.cpp" />
     <ClCompile Include="src\resources\systems\ParticlesSystem.cpp" />

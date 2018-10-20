@@ -3,7 +3,7 @@
 #include "../camera/ICamera.h"
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectDiffuseTexture.h"
-#include "../materials/effects/MaterialEffectLightProperties.h"
+#include "../materials/effects/MaterialEffectDirectionalLightProperties.h"
 #include "../materials/effects/MaterialEffectFogProperties.h"
 #include "../materials/effects/MaterialEffectShadowProperties.h"
 #include "../textures/ITexture.h"

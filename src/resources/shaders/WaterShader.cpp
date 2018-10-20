@@ -5,7 +5,7 @@
 #include "../textures/ITexture.h"
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectFogProperties.h"
-#include "../materials/effects/MaterialEffectLightProperties.h"
+#include "../materials/effects/MaterialEffectDirectionalLightProperties.h"
 #include "../materials/effects/MaterialEffectWater.h"
 
 const std::string WaterShader::VERTEX_FILE = "data/shaders/vertex/v_water.cg";

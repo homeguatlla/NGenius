@@ -4,27 +4,26 @@
 #include "../../scene/IGameSceneListener.h"
 #include <vector>
 #include <memory>
+#include <string>
 
 class GameEntity;
 class Terrain;
-class WindManager;
+class SunLight;
 
 class EnvironmentSystem : public BaseVisitable<>, public IGameSceneListener
 {
 	std::vector<GameEntity*> mEntities;
 	std::vector<GameEntity*> mModificators;
 	const Terrain* mTerrain;
-	std::unique_ptr<WindManager> mWindManager;
 	float mTimer;
 	std::vector<glm::vec3> mModificatorsPositions;
-	glm::vec3 mSunLightDirection;
-	glm::vec3 mSunLightColor;
-	float mHourDayNormalized;
+	SunLight* mSunLight;
 
 public:
 	EnvironmentSystem();
 	~EnvironmentSystem();
 
+	void Start();
 	void Update(float deltaTime);
 	
 	unsigned int GetNumberGameEntities() const;
@@ -35,13 +34,22 @@ public:
 
 	float GetTimer() const;
 
-	glm::vec3 GetSunLightDirection() const;
-	void SetSunLightDirection(const glm::vec3& direction);
 	void SetDayHour(float hour);
-	void SetSunLightColor(const glm::vec3& color);
+
+	float GetSunLightBlendFactor() const;
+	glm::vec3 GetSunLightDirection() const;
 	glm::vec3 GetSunLightColor() const;
 
-	float GetSkyBoxBlenderFactor() const;
+	const std::string GetSkyBoxCubemapOrigin() const;
+	const std::string GetSkyBoxCubemapDestination() const;
+
+	//fog
+	glm::vec3 GetFogColor() const;
+	float GetFogDensity() const;
+	float GetFogGradient() const;
+
+	//debug
+	void SetSunLightColor(const glm::vec3& color);
 
 private:
 	void AddEntity(GameEntity* entity);
@@ -50,6 +58,8 @@ private:
 	bool HasEnvironmentComponents(const GameEntity* entity) const;
 
 	void UpdateModificatorsVector();
+
+	void ApplyWind(GameEntity* entity);
 
 	void OnGameEntityAdded(GameEntity* entity) override;
 	void OnGameEntityRemoved(GameEntity* entity) override;

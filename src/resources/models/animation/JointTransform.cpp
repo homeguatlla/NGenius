@@ -172,12 +172,12 @@ void JointTransform::CalculateLocalTransform()
 	mLocalTransform[1][3] = mPosition.y;
 	mLocalTransform[2][3] = mPosition.z;
 
-	glm::mat4x4 temp = glm::mat4_cast(mRotation);
+	//glm::mat4x4 temp = glm::mat4_cast(mRotation);
 	glm::mat4x4 temp2 = ToRotationMatrix();
-	glm::mat4x4 temp3 = glm::toMat4(mRotation);
-	temp = temp * mLocalTransform;
+	//glm::mat4x4 temp3 = glm::toMat4(mRotation);
+	//temp = temp * mLocalTransform;
 	temp2 = temp2 * mLocalTransform;
-	temp3 = temp3 * mLocalTransform;
+	//temp3 = temp3 * mLocalTransform;
 
 	mLocalTransform = temp2;
 }

@@ -61,6 +61,7 @@ void NGenius::Init(bool isFullscreen)
 
 void NGenius::Start()
 {
+	mEnvironmentSystem->Start();
 	mRenderSystem->SetEnvironmentSystem(mEnvironmentSystem);
 	mRenderSystem->Start();
 	mSpacePartitionSystem->Start();
@@ -383,12 +384,6 @@ void NGenius::SetCastingShadowsEnabled(bool enabled)
 {
 	assert(mRenderSystem != nullptr);
 	mRenderSystem->SetCastingShadowsEnabled(enabled);
-}
-
-void NGenius::SetFogParameters(const glm::vec3& color, float density, float gradient)
-{
-	assert(mRenderSystem != nullptr);
-	mRenderSystem->SetFogParameters(color, density, gradient);
 }
 
 void NGenius::SetFogEnabled(bool enabled)

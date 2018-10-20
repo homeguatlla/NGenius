@@ -10,7 +10,7 @@ class MaterialEffectFogProperties : public IMaterialEffect
 	float mGradient;
 
 public:
-	MaterialEffectFogProperties(const glm::vec3& color, float density, float gradient);
+	MaterialEffectFogProperties();
 	virtual ~MaterialEffectFogProperties();
 
 	void SetProperties(const glm::vec3& color, float density, float gradient);

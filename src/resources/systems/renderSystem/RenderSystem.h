@@ -87,10 +87,6 @@ class RenderSystem : public BaseVisitable<>
 	bool mLastRendererHadCullingEnabled;
 	bool mIsFogEnabled;
 
-	glm::vec3 mFogColor;
-	float mFogDensity;
-	float mFogGradient;
-
 	unsigned int mNumberTrianglesRendered;
 	unsigned int mNumberDrawCalls;
 	unsigned int mNumberRenderers;
@@ -140,7 +136,6 @@ public:
 	void SetCastingShadowsTarget(const GameEntity* target);
 	void SetCastingShadowsEnabled(bool enabled);
 
-	void SetFogParameters(const glm::vec3& color, float density, float gradient);
 	void SetFogEnabled(bool enabled);
 
 	void SetWaterEnabled(bool enabled);

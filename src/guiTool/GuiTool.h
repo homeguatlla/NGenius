@@ -13,6 +13,7 @@ class GuiTool :
 
 	float mSunHour;
 	float mSunLightColor[3];
+	float mFogGradient;
 
 public:
 	GuiTool(GLFWwindow* window);

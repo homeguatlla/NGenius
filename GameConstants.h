@@ -16,3 +16,5 @@ static const float MIN_FPS_ALLOWED = 30.0f;
 static const float TERRAIN_SCALE = 7.5f;
 
 static const int SHADOWS_PFC_COUNTER = 5;
+
+const glm::vec3 SUN_POSITION_DEFAULT(1.0f, 0.0f, 0.0f);
