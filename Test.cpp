@@ -1728,7 +1728,7 @@ void SetupConfiguration()
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = true;
+		mIsParticlesEnabled = false;
 		mIsShadowEnabled = true;
 		mIsFullScreen = true;
 		break;

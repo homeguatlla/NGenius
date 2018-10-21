@@ -208,3 +208,12 @@ void SunLight::SetCurrentFrameColor(const glm::vec3& color)
 		currentKeyFrame->mColor = color;
 	}
 }
+
+void SunLight::SetCurrentFrameFogGradient(float gradient)
+{
+	const KeyFrame* currentKeyFrame = GetCurrentFrame();
+	if (currentKeyFrame != nullptr)
+	{
+		currentKeyFrame->mFogGradient = gradient;
+	}
+}

@@ -15,7 +15,7 @@ public:
 		//shadow??
 		glm::vec3 mFogColor;
 		float mFogDensity;
-		float mFogGradient;
+		mutable float mFogGradient;
 
 		KeyFrame(float hour, float angle, const glm::vec3& color,
 			const glm::vec3& fogColor, float fogDensity, float fogGradient, const std::string& cubemap) :
@@ -56,6 +56,7 @@ public:
 
 	//debug
 	void SetCurrentFrameColor(const glm::vec3& color);
+	void SetCurrentFrameFogGradient(float gradient);
 
 private:
 	const KeyFrame* GetCurrentFrame() const;
