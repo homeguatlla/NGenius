@@ -302,6 +302,11 @@ float NGenius::GetScreenHeight() const
 	return mRenderSystem->GetScreenHeight();
 }
 
+float NGenius::GetDayTime() const
+{
+	return mEnvironmentSystem->GetDayTime();
+}
+
 void NGenius::SetFullScreen(bool isFullScreen)
 {
 	assert(mRenderSystem != nullptr);

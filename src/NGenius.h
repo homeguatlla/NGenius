@@ -129,6 +129,9 @@ public:
 	void Query(const AABB& aabb, std::vector<GameEntity*>& result);
 	void SetIsSpacePartitionEnabled(bool enable);
 
+	//environment
+	float GetDayTime() const;
+
 private:
 	
 	void CreateSystems(float screenWidth, float screenHeight);

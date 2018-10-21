@@ -44,7 +44,9 @@ public:
 	void AddFrame(	float hour, float rotationAngle, const glm::vec3& color, 
 					const glm::vec3& fogColor, float fogDensity, float fogGradient, const std::string& cubemapName);
 
-	void SetDayHour(float hour);
+	void SetDayTime(float hour);
+
+	float GetDayTime() const;
 	float GetSunLightBlendFactor() const;
 	glm::vec3 GetSunLightDirection() const;
 	glm::vec3 GetSunLightColor() const;

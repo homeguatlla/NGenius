@@ -18,10 +18,11 @@
 
 #include <iostream>
 
-const float HOUR_DAY_
+const long HOUR_DAY_SPEED = 300;
+const long DAY_PERIOD_SEC = 3600 * 24;
 
 EnvironmentSystem::EnvironmentSystem() :
-	mTimer(0.0f),
+	mTimer(DAY_PERIOD_SEC * 0.5f / HOUR_DAY_SPEED),
 	mSunLight(new SunLight()),
 	mDayTime(0)
 {
@@ -42,6 +43,7 @@ unsigned int EnvironmentSystem::GetNumberGameEntities() const
 
 void EnvironmentSystem::Start()
 {
+	mTimer = DAY_PERIOD_SEC * 0.5f / HOUR_DAY_SPEED;
 	mSunLight->AddFrame(1200.0f, 90.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(255.0f, 255.0f, 255.0f) / 255.0f, 0.004f, 1.5f, "day_cubemap");
 	mSunLight->AddFrame(1800.0f, 135.0f, glm::vec3(0.93f, 0.64f, 0.78f), glm::vec3(218.0f, 74.0f, 43.0f) / 255.0f, 0.04f, 1.5f, "day_cubemap");
 	mSunLight->AddFrame(2400.0f, 270.0f, glm::vec3(0.86f, 0.64f, 0.93f), glm::vec3(0.0f), 0.004f, 1.5f, "night_cubemap");
@@ -67,23 +69,18 @@ void EnvironmentSystem::Update(float deltaTime)
 
 void EnvironmentSystem::UpdateTime()
 {
-	mDayTime = mTimer * 3000;
+	mDayTime = static_cast<long>(mTimer * HOUR_DAY_SPEED);
+	mDayTime = mDayTime % DAY_PERIOD_SEC;
 
-
-	mDayTime = mDayTime % (3600*24);
-
-	//if (mDayTime % 60 == 0)
+	long min = mDayTime / 60;
+	long hour = min / 60;
+	float dayHour = hour + (min - hour * 60) / 60.0f;
+	if (dayHour > 2400)
 	{
-		long min = mDayTime / 60;
-		long hour = min / 60;
-		float dayHour = hour + (min - hour * 60) / 60.0f;
-		if (dayHour > 2400)
-		{
-			dayHour = dayHour - 2400;
-		}
-		mSunLight->SetDayHour(dayHour);
-		std::cout << dayHour << "\n";
+		dayHour = dayHour - 2400;
 	}
+	mSunLight->SetDayTime(dayHour);
+	//std::cout << dayHour << "\n";
 }
 
 void EnvironmentSystem::ApplyWind(GameEntity* entity)
@@ -203,9 +200,14 @@ glm::vec3 EnvironmentSystem::GetSunLightColor() const
 	return mSunLight->GetSunLightColor();
 }
 
-void EnvironmentSystem::SetDayHour(float hour)
+float EnvironmentSystem::GetDayTime() const
 {
-	mSunLight->SetDayHour(hour);
+	return mSunLight->GetDayTime();
+}
+
+void EnvironmentSystem::SetDayTime(float hour)
+{
+	mSunLight->SetDayTime(hour);
 }
 
 void EnvironmentSystem::SetFogGradient(float gradient)

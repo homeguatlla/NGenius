@@ -22,6 +22,7 @@ class Statistics :
 	unsigned int mNumberGameEntitiesInsideSpacePartition;
 	unsigned int mNumberGameEntitiesWithPhysics;
 	unsigned int mNumberRenderers;
+	float mDayTime;
 
 public:
 	Statistics();
@@ -40,5 +41,6 @@ public:
 	unsigned int GetNumberGameEntitiesWithPhysics() const;
 	unsigned int GetNumberGameEntitiesInsideSpacePartition() const;
 	unsigned int GetNumberRenderers() const;
+	float GetDayTime() const;
 };
 

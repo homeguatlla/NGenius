@@ -35,7 +35,8 @@ public:
 
 	float GetTimer() const;
 
-	void SetDayHour(float hour);
+	void SetDayTime(float hour);
+	float GetDayTime() const;
 	
 
 	float GetSunLightBlendFactor() const;

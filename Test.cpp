@@ -141,7 +141,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = RELEASE;
+Configuration mConfiguration = TEST;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -192,8 +192,8 @@ EnergyWall* mEnergyWall;
 float mEnergyWallRadius = 22.0f;
 glm::vec3 mEnergyWallPosition(0.0f, 0.0f, 0.0f);
 
-const std::vector<std::string> texts = { "FPS: ", "Triangles: ", "Drawcalls: ", "GameEntities(GE): ", "GESpacePartition:", "GERendered:", "GEWithPhysics: "};
-Text* mText[7];
+const std::vector<std::string> texts = { "FPS: ", "Triangles: ", "Drawcalls: ", "GameEntities(GE): ", "GESpacePartition:", "GERendered:", "GEWithPhysics: ", "DayTime: "};
+Text* mText[8];
 IMaterial* materialText;
 
 ICommand* mCurrentCommand = nullptr;
@@ -1070,7 +1070,7 @@ void CreateCameras()
 	mEngine.AddCamera(mEagleEyeCamera);
 
 	mGameplayCamera = new PerspectiveCamera("gameplay_camera", VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
-	mGameplayCamera->SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
+	mGameplayCamera->SetPosition(glm::vec3(0.0f, 5.0f, 5.0f));
 	mGameplayCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 	mEngine.AddCamera(mGameplayCamera);
@@ -1362,6 +1362,7 @@ void UpdateStatitstics()
 	mText[4]->UpdateText(texts[4] + std::to_string(numGameEntitiesInsideSpacePartition));
 	mText[5]->UpdateText(texts[5] + std::to_string(statistics->GetNumberRenderers()));
 	mText[6]->UpdateText(texts[6] + std::to_string(statistics->GetNumberGameEntitiesWithPhysics()));
+	mText[7]->UpdateText(texts[7] + std::to_string(statistics->GetDayTime()));
 
 	//std::cout << "entities rendered: " << statistics->GetNumberRenderers() << "\n";
 }

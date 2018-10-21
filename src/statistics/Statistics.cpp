@@ -18,6 +18,7 @@ Statistics::~Statistics()
 void Statistics::Visit(NGenius& nGenius)
 {
 	mNumberFPS = nGenius.GetNumberFPS();
+	mDayTime = nGenius.GetDayTime();
 }
 
 void Statistics::Visit(RenderSystem& renderSystem)
@@ -76,4 +77,9 @@ unsigned int Statistics::GetNumberGameEntitiesInsideSpacePartition() const
 unsigned int Statistics::GetNumberRenderers() const
 {
 	return mNumberRenderers;
+}
+
+float Statistics::GetDayTime() const
+{
+	return mDayTime;
 }

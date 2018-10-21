@@ -69,7 +69,12 @@ float SunLight::GetSunLightBlendFactor() const
 	return mCurrentBlendFactor;
 }
 
-void SunLight::SetDayHour(float hour)
+float SunLight::GetDayTime() const
+{
+	return mCurrentHour;
+}
+
+void SunLight::SetDayTime(float hour)
 {
 	mCurrentBlendFactor = 0.0f;
 	mCurrentHour = hour * 100.0f;
