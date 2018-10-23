@@ -25,7 +25,7 @@ private:
 	static void LoadVertexWeightJoints(rapidxml::xml_node<>* controllersLibrary, std::multimap<unsigned int, float>& weights, std::multimap<unsigned int, unsigned int>& joints);
 	static void LoadJointsInformation(rapidxml::xml_node<>* controllersLibrary, Joint** rootJoint);
 	static void LoadJoint(rapidxml::xml_node<>* node, Joint** rootJoint, std::map<std::string, int>& jointNames);
-	static void LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Animation** animation);
+	static void LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Animation** animation, const std::string& rootJointName);
 
 	static std::string GetFirstValueString(std::string& listValues);
 	static glm::mat4 GetMatrix(std::vector<float>& values, unsigned int offset);

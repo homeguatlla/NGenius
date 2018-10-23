@@ -125,7 +125,7 @@ std::pair<KeyFrame*, KeyFrame*> Animator::GetPreviousAndNextFrames()
 float Animator::CalculateProgression(KeyFrame* previousFrame, KeyFrame* nextFrame) const
 {
 	float totalTime = nextFrame->GetTimestamp() - previousFrame->GetTimestamp();
-	float currentTime = mAnimationTime - previousFrame->GetTimestamp();
+	float currentTime = glm::max(mAnimationTime - previousFrame->GetTimestamp(), 0.0f);
 	return currentTime / totalTime;
 }
 

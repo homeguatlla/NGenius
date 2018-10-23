@@ -55,9 +55,12 @@ Mesh* ColladaLoader::LoadModel(const std::string& filename, Animation** animatio
 
 		LoadJointsInformation(rootNode, rootJoint);
 
-		rapidxml::xml_node<>* animationsLibrary = rootNode->first_node("library_animations");
-		LoadAnimation(animationsLibrary, animation);
-
+		if (*rootJoint != nullptr)
+		{
+			rapidxml::xml_node<>* animationsLibrary = rootNode->first_node("library_animations");
+			std::string rootJointName = (*rootJoint)->GetName();
+			LoadAnimation(animationsLibrary, animation, rootJointName);
+		}
 		return mesh;
 	}
 
@@ -66,7 +69,7 @@ Mesh* ColladaLoader::LoadModel(const std::string& filename, Animation** animatio
 	return nullptr;
 }
 
-void ColladaLoader::LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Animation** animation)
+void ColladaLoader::LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Animation** animation, const std::string& rootJointName)
 {
 	if (animationsLibrary != nullptr)
 	{
@@ -102,35 +105,41 @@ void ColladaLoader::LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Anima
 				std::vector<float> keyFramesMatrix;
 				FillValues(animationNode, sourceNames["OUTPUT"], keyFramesMatrix);
 
-				for (unsigned int frame = 0; frame < keyFramesTime.size(); frame++)
+				if (keyFramesMatrix.size() / 16 == keyFramesTime.size())
 				{
-					float time = keyFramesTime[frame];
-					duration = std::max(duration, time);
-
-					KeyFrame* keyFrame = nullptr;
-
-					std::multimap<float, KeyFrame*>::iterator it = keyFramesMap.find(time);
-					if (it == keyFramesMap.end())
+					for (unsigned int frame = 0; frame < keyFramesTime.size(); frame++)
 					{
-						keyFrame = new KeyFrame();
-						keyFrame->SetTimestamp(time);
-						keyFramesMap.insert(std::make_pair(time, keyFrame));
-						keyFrameList.push_back(keyFrame);
-					}
-					else
-					{
-						keyFrame = it->second;
-					}
+						float time = keyFramesTime[frame];
+						duration = std::max(duration, time);
 
-					glm::mat4x4 matrix = GetMatrix(keyFramesMatrix, 16 * frame);
-					matrix = glm::transpose(matrix);
-					//TODO hay que saber cuál es el root para aplicar la corrección
-					if (jointName == "Torso")
-					{
-						matrix = matrix * CORRECTION_MATRIX;
+						KeyFrame* keyFrame = nullptr;
+
+						std::multimap<float, KeyFrame*>::iterator it = keyFramesMap.find(time);
+						if (it == keyFramesMap.end())
+						{
+							keyFrame = new KeyFrame();
+							keyFrame->SetTimestamp(time);
+							keyFramesMap.insert(std::make_pair(time, keyFrame));
+							keyFrameList.push_back(keyFrame);
+						}
+						else
+						{
+							keyFrame = it->second;
+						}
+
+						glm::mat4x4 matrix = GetMatrix(keyFramesMatrix, 16 * frame);
+						matrix = glm::transpose(matrix);
+						if (jointName == rootJointName)
+						{
+							matrix = matrix * CORRECTION_MATRIX;
+						}
+						JointTransform* jointTransform = new JointTransform(matrix);
+						keyFrame->AddJointTransform(jointName, jointTransform);
 					}
-					JointTransform* jointTransform = new JointTransform(matrix);
-					keyFrame->AddJointTransform(jointName, jointTransform);
+				}
+				else
+				{
+					std::cout << "	Error loading Animation number frames differ than number of matrices" << "\n";
 				}
 			}
 		}
@@ -191,15 +200,7 @@ void ColladaLoader::LoadJointsInformation(rapidxml::xml_node<>* collada, Joint**
 		{
 			for (rapidxml::xml_node<>* node = visualSceneNode->first_node("node"); node != nullptr; node = node->next_sibling())
 			{
-				rapidxml::xml_attribute<>* attribute = node->first_attribute("id");
-				if (attribute != nullptr)
-				{
-					std::string name = attribute->value();
-					if (name == "Armature")
-					{
-						LoadJoint(node, rootJoint, jointNamesMap);
-					}
-				}
+				LoadJoint(node, rootJoint, jointNamesMap);
 			}
 		}
 	}
