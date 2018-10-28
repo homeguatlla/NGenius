@@ -82,7 +82,7 @@ void Player::UpdateAnimations()
 	{
 		if (mState == MOVING && glm::abs(mCurrentRunSpeed) > 0.0f)
 		{
-			animationComponent->PlayAnimation("walking");
+			animationComponent->PlayAnimation("animation_0");
 		}
 		else
 		{

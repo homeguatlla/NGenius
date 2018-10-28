@@ -279,11 +279,15 @@ void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProces
 		if (!found)
 		{
 			bool isRenderPassOK = ValidateRenderPassesLayerMasks(renderPass, mRenderPassesAfterPostProcessing);
-			std::cout << "There is a render pass with the same layer masks as another render pass. Must be different!";
-			assert(isRenderPassOK);
+			
 			if (isRenderPassOK)
 			{
 				mRenderPassesAfterPostProcessing.push_back(renderPass);
+			}
+			else
+			{
+				std::cout << "There is a render pass with the same layer masks as another render pass. Must be different!" << "\n";
+				assert(isRenderPassOK);
 			}
 		}
 	}
@@ -293,11 +297,15 @@ void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProces
 		if (!found)
 		{
 			bool isRenderPassOK = ValidateRenderPassesLayerMasks(renderPass, mRenderPasses);
-			std::cout << "There is a render pass with the same layer masks as another render pass. Must be different!";
-			assert(isRenderPassOK);
+			
 			if (isRenderPassOK)
 			{
 				mRenderPasses.push_back(renderPass);
+			}
+			else
+			{
+				std::cout << "There is a render pass with the same layer masks as another render pass. Must be different!" << "\n";
+				assert(isRenderPassOK);
 			}
 		}
 	}

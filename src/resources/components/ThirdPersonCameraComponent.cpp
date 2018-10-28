@@ -39,7 +39,7 @@ ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera
 	mLastPitch(pitch),
 	mAngleAroundTarget(0.0f), 
 	mZoomSpeed(zoomSpeed),
-	mIsCameraFollowingTarget(false)
+	mIsCameraFollowingTarget(true)
 {
 	assert(target != nullptr);
 }
@@ -89,7 +89,7 @@ void ThirdPersonCameraComponent::UpdateInternal(float elapsedTime)
 
 	//la camara deja de seguir al target si está por debajo de la distancia target-camera y 
 	//vuelve a seguir al target si está por encima
-	float distanceTargetCamera = glm::distance(newPosition, mTarget->GetTransformation()->GetPosition());
+	/*float distanceTargetCamera = glm::distance(newPosition, mTarget->GetTransformation()->GetPosition());
 	if (!mIsCameraFollowingTarget && distanceTargetCamera > MIN_DISTANCE_TO_START_FOLLOW + HYSTERESIS)
 	{
 		mIsCameraFollowingTarget = true;
@@ -100,7 +100,7 @@ void ThirdPersonCameraComponent::UpdateInternal(float elapsedTime)
 	{
 		mIsCameraFollowingTarget = false;
 		//std::cout << "distance = " << distanceTargetCamera << "OFF" << "\n";
-	}
+	}*/
 
 	if (mIsCameraFollowingTarget)
 	{

@@ -65,8 +65,8 @@ void AnimatedModel::BuildInternal(VertexBuffersManager& vertexBufferManager, IMa
 
 void AnimatedModel::CreateAnimationWeightsVBO(VertexBuffersManager& vertexBufferManager, int location)
 {
-	long numVertexs = mMesh->GetNumberOfVertexs();
-	if (numVertexs > 0)
+	std::vector<glm::vec4>& data = mMesh->GetVertexsWeights();
+	if (data.size() > 0)
 	{
 		// 1st attribute buffer : vertices
 		std::string name("animation_weights_");
@@ -75,8 +75,8 @@ void AnimatedModel::CreateAnimationWeightsVBO(VertexBuffersManager& vertexBuffer
 		mAnimationVertexWeightsVBO = vertexBufferManager.CreateVBO(name);
 		glBindBuffer(GL_ARRAY_BUFFER, mAnimationVertexWeightsVBO);
 
-		std::vector<glm::vec4> data = mMesh->GetVertexsWeights();
-		glBufferData(GL_ARRAY_BUFFER, numVertexs * sizeof(glm::vec4), &data[0], GL_STATIC_DRAW);
+		
+		glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(glm::vec4), &data[0], GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(location);
 		glVertexAttribPointer(
@@ -93,8 +93,8 @@ void AnimatedModel::CreateAnimationWeightsVBO(VertexBuffersManager& vertexBuffer
 
 void AnimatedModel::CreateAnimationVertexsJointIDsVBO(VertexBuffersManager& vertexBufferManager, int location)
 {
-	long numVertexs = mMesh->GetNumberOfVertexs();
-	if (numVertexs > 0)
+	std::vector<glm::ivec4>& data = mMesh->GetVertexsJointsIDs();
+	if (data.size() > 0)
 	{
 		// 1st attribute buffer : vertices
 		std::string name("animation_vertex_joints_ids_");
@@ -102,7 +102,7 @@ void AnimatedModel::CreateAnimationVertexsJointIDsVBO(VertexBuffersManager& vert
 
 		mAnimationVertexJointIDsVBO = vertexBufferManager.CreateVBO(name);
 		glBindBuffer(GL_ARRAY_BUFFER, mAnimationVertexJointIDsVBO);
-		glBufferData(GL_ARRAY_BUFFER, numVertexs * sizeof(glm::ivec4), &mMesh->GetVertexsJointsIDs()[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(glm::ivec4), &data[0], GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(location);
 		glVertexAttribIPointer(

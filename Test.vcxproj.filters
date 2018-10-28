@@ -741,6 +741,9 @@
     <ClInclude Include="src\resources\materials\effects\MaterialEffectDirectionalLightProperties.h">
       <Filter>Header Files\resources\materials\effects</Filter>
     </ClInclude>
+    <ClInclude Include="src\loader\AssimpLoader.h">
+      <Filter>Header Files\loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1252,6 +1255,9 @@
     </ClCompile>
     <ClCompile Include="src\resources\materials\effects\MaterialEffectDirectionalLightProperties.cpp">
       <Filter>Source Files\resources\materials\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\AssimpLoader.cpp">
+      <Filter>Source Files\loader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

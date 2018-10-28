@@ -145,7 +145,7 @@ void ColladaLoader::LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Anima
 		}
 
 		//create animation
-		(*animation) = new Animation(std::string("walking"), duration, keyFrameList);
+		(*animation) = new Animation(std::string("animation_0"), duration, keyFrameList);
 	}
 }
 
@@ -341,6 +341,7 @@ std::string ColladaLoader::GetFirstValueString(std::string& listValues)
 	if (spaceIndex == std::string::npos)
 	{
 		value = listValues.substr(0, listValues.size());
+		listValues.clear();
 	}
 	else
 	{

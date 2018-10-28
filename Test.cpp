@@ -604,18 +604,21 @@ void CreatePoints()
 void CreateProps()
 {
 	int areaSize = 5;
-	int numProps = 1;
+	int numProps = 5;
 
 	std::vector<std::string> models;
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec3> rotations;
 
-	models.push_back(std::string("barrel2"));
+	//models.push_back(std::string("barrel2"));
 	models.push_back(std::string("chest"));
 	models.push_back(std::string("brazier"));
 	models.push_back(std::string("barrel"));
 	models.push_back(std::string("crate"));
 	models.push_back(std::string("statue"));
+	models.push_back(std::string("wood"));
+	models.push_back(std::string("bridge"));
+
 	//models.push_back(std::string("floor"));
 	
 
@@ -644,6 +647,9 @@ void CreateProps()
 	positions.push_back(glm::vec3(-2.0f, 10.0f, 2.0f));
 	positions.push_back(glm::vec3(0.0f, 10.0f, 0.0f));	
 
+	positions.push_back(glm::vec3(10.0f, 10.0f, 0.0f));
+	positions.push_back(glm::vec3(0.0f, 10.0f, 10.0f));
+
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(0.0f));
@@ -651,12 +657,14 @@ void CreateProps()
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
 	rotations.push_back(glm::vec3(0.0f));
+	rotations.push_back(glm::vec3(0.0f));
+	rotations.push_back(glm::vec3(0.0f));
 
-	//std::string textureName("MedievalDungeonPropsAtlas02_diffuse");
-	//std::string textureNormalName("MedievalDungeonPropsAtlas02_normalmap");
+	std::string textureName("MedievalDungeonPropsAtlas02_diffuse");
+	std::string textureNormalName("MedievalDungeonPropsAtlas02_normalmap");
 
-	std::string textureName("barrel_diffuse");
-	std::string textureNormalName("barrel_normalmap");
+	//std::string textureName("barrel_diffuse");
+	//std::string textureNormalName("barrel_normalmap");
 
 	Texture* texture = static_cast<Texture*>(mEngine.GetTexture(textureName));
 	Texture* normal = static_cast<Texture*>(mEngine.GetTexture(textureNormalName));
@@ -679,7 +687,7 @@ void CreateProps()
 
 		float height = mTerrain->GetHeight(glm::vec2(x, z));
 		glm::vec3 position(x, height, z);
-		glm::vec3 scale(0.03f);
+		glm::vec3 scale(0.3f);
 		glm::vec3 rotation(rotations[i % rotations.size()]);
 			
 		std::string modelName = models[i % models.size()];
@@ -952,7 +960,7 @@ void CreatePlayer()
 {
 	//PLAYER
 	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("animated_model"));
-	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_texture")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	//material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_normalmap")), 1.0f));
 	material->AddEffect(new MaterialEffectDirectionalLightProperties());
 	material->AddEffect(new MaterialEffectFogProperties());
@@ -968,7 +976,8 @@ void CreatePlayer()
 	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
 
 	Model* model = mEngine.GetModel("farmer");
-	IRenderer* renderer = new VerticesRenderer(model, material);
+	//IRenderer* renderer = new VerticesRenderer(model, material);
+	IRenderer* renderer = new IndicesRenderer(model, material);
 
 	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.08f)),
 							renderer,
@@ -985,7 +994,7 @@ void CreatePlayer()
 	mPlayer->AddComponent(new DebugComponent(boundingBoxRenderer));
 	mPlayer->AddComponent(new EnvironmentModificatorComponent());
 	AnimationComponent* animationComponent = new AnimationComponent();
-	animationComponent->AddAnimation(mEngine.GetAnimation("walking"));
+	animationComponent->AddAnimation(mEngine.GetAnimation("animation_0"));
 	mPlayer->AddComponent(animationComponent);
 	mScene->AddEntity(mPlayer);
 }
@@ -1550,7 +1559,7 @@ void SetupConfiguration()
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
 		mIsVegetationEnabled = false;
-		mIsPropsEnabled = true;
+		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = true;

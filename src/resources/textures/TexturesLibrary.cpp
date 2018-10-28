@@ -79,9 +79,10 @@ void TexturesLibrary::Load()
 	//LoadTexture("wind_texture", "data/textures/wind_256.png", true, true);
 	LoadTexture("wind_texture", "data/wind_map.png", false, true);
 
-	LoadTexture("farmer_texture", "data/models/farmer/farmer_texture.png", true, false); 
+	LoadTexture("farmer_diffuse", "data/models/farmer/farmer_texture.png", true, false); 
 	LoadTexture("farmer_normalmap", "data/models/farmer/farmer_normalmap.png", true, false);
-
+	LoadTexture("spider_diffuse", "data/models/spider2/spider_diffuse.png", true, false);
+	
 
 	LoadTexture("barrel_diffuse", "data/models/barrel/barrel.png", false, false);
 	LoadTexture("barrel_normalmap", "data/models/barrel/barrelNormal.png", false, false);

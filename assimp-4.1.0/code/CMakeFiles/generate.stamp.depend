@@ -1,0 +1,5 @@
+# CMake generation dependency list for this directory.
+D:/david/codi/NGenius/assimp-4.1.0/cmake-modules/FindRT.cmake
+D:/david/codi/NGenius/assimp-4.1.0/code/CMakeLists.txt
+D:/programas/CMake/share/cmake-3.13/Modules/FindPackageHandleStandardArgs.cmake
+D:/programas/CMake/share/cmake-3.13/Modules/FindPackageMessage.cmake
