@@ -35,14 +35,14 @@ void ModelsLibrary::Load()
 	//LoadModel("enano", "data/models/enano/enano.obj", false, true);
 	//LoadModel("mazo", "data/models/mazo/mazo.obj", false, true);
 
-	//LoadModel("barrel", "data/models/props/barrel.obj", true, true);
-	//LoadModel("chest", "data/models/props/chest.obj", true, true);
-	//LoadModel("brazier", "data/models/props/brazier.obj", true, true);
+	LoadModel("barrel", "data/models/props/barrel.obj", true, true);
+	LoadModel("chest", "data/models/props/chest.obj", true, true);
+	LoadModel("brazier", "data/models/props/brazier.obj", true, true);
 	//LoadModel("stall", "data/models/stall/stall.obj", false, true);
 	//LoadModel("cube3", "data/models/props/cube.obj", false, true);
-	//LoadModel("crate", "data/models/props/crate.obj", true, true);
+	LoadModel("crate", "data/models/props/crate.obj", true, true);
 	//LoadModel("floor", "data/models/props/floor.obj", true, true);
-	//LoadModel("statue", "data/models/props/statue.obj", true, true);
+	LoadModel("statue", "data/models/props/statue.obj", true, true);
 
 	//LoadModel("grass1", "data/models/grass/grass1.obj", false, false);
 	//LoadModel("grass2", "data/models/grass/grass2.obj", false, false);
@@ -51,7 +51,7 @@ void ModelsLibrary::Load()
 	//AddElement("hermes", model);
 
 	LoadModel("sphere", "data/models/sphere/sphere.obj", false, true);
-	/*
+	
 	LoadModel("tree_foliage_0", "data/models/tree4/tree_foliage_lod0.obj", false, true);
 	LoadModel("tree_foliage_1", "data/models/tree4/tree_foliage_lod1.obj", false, true);
 	LoadModel("tree_foliage_2", "data/models/tree4/tree_foliage_lod2.obj", false, true);
@@ -59,12 +59,12 @@ void ModelsLibrary::Load()
 	LoadModel("tree_trunk_0", "data/models/tree4/tree_trunk_lod0.obj", false, true);
 	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", false, true);
 	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
-	*/
+	
 	LoadModel("farmer", "data/models/farmer/farmer.dae", true, true);
 	//LoadModel("farmer", "data/models/cube/cube.dae", false, true);
-	//LoadModel("farmer", "data/models/yurown/yurown.dae", true, true);
+	//LoadModel("farmer", "data/models/Adventurer-Militia/Militia-Adventurer-RIGGED.dae", true, true);
 
-	//LoadModel("farmer", "data/models/spider_new/spider.dae", false, true);
+	//LoadModel("farmer", "data/models/ethan/model.dae", false, true);
 	//LoadModel("barrel2", "data/models/barrel/barrel.obj", false, true);
 	//LoadModel("wooden", "data/models/wooden/wood.fbx", false, true);
 	//LoadModel("bridge", "data/models/wooden_bridge/wooden_bridge.fbx", false, true);

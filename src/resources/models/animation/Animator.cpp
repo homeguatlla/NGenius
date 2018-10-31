@@ -7,7 +7,7 @@
 #include "JointTransform.h"
 #include "Joint.h"
 
-
+#include <iostream>
 
 Animator::Animator(AnimatedModel* model) :
 	mModel(model),
@@ -118,7 +118,7 @@ std::pair<KeyFrame*, KeyFrame*> Animator::GetPreviousAndNextFrames()
 		}
 		previousFrame = nextFrame;
 	}
-
+	std::cout << "From frame: " << previousFrame->GetTimestamp() << " to frame: " << nextFrame->GetTimestamp() << "\n";
 	return std::pair<KeyFrame*, KeyFrame*>(previousFrame, nextFrame);
 }
 
@@ -131,6 +131,9 @@ float Animator::CalculateProgression(KeyFrame* previousFrame, KeyFrame* nextFram
 
 void Animator::FillWithInterpolateFrames(std::map<std::string, const glm::mat4x4>& jointTransforms, KeyFrame* previousFrame, KeyFrame* nextFrame, float lambda) const
 {
+	assert(previousFrame != nullptr);
+	assert(nextFrame != nullptr);
+
 	jointTransforms.clear();
 	std::map<std::string, JointTransform*>& previousFrameTransforms = previousFrame->GetJointKeyframes();
 	std::map<std::string, JointTransform*>& nextFrameTransforms = nextFrame->GetJointKeyframes();
@@ -140,7 +143,10 @@ void Animator::FillWithInterpolateFrames(std::map<std::string, const glm::mat4x4
 	{
 		JointTransform* previousTransform = previousFrameTransforms[it->first];
 		JointTransform* nextTransform = nextFrameTransforms[it->first];
-		JointTransform currentTransform = JointTransform::Interpolate(previousTransform, nextTransform, lambda);
-		jointTransforms.insert(std::pair<std::string, const glm::mat4x4>(it->first, currentTransform.GetLocalTransform()));
+		if (previousTransform != nullptr && nextTransform != nullptr)
+		{
+			JointTransform currentTransform = JointTransform::Interpolate(previousTransform, nextTransform, lambda);
+			jointTransforms.insert(std::pair<std::string, const glm::mat4x4>(it->first, currentTransform.GetLocalTransform()));
+		}
 	}
 }

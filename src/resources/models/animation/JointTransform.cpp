@@ -14,23 +14,7 @@ JointTransform::JointTransform(glm::vec3& position, glm::quat& rotation) :
 JointTransform::JointTransform(const glm::mat4x4& localTransformation) :
 	mLocalTransform(localTransformation)
 {
-	/*
-	glm::vec3 scale;
-	glm::quat rotation;
-	glm::vec3 translation;
-	glm::vec3 skew;
-	glm::vec4 perspective;
-	glm::decompose(mLocalTransform, scale, rotation, translation, skew, perspective);
-	
-	mPosition = translation;
-	mRotation = glm::quat(glm::vec3(rotation[0], rotation[1], rotation[2]));
-	mRotation = glm::normalize(mRotation);*/
-
-	mPosition.x = mLocalTransform[0][3];
-	mPosition.y = mLocalTransform[1][3];
-	mPosition.z = mLocalTransform[2][3];
-	
-	mRotation = FromMatrix(mLocalTransform);
+	CalculatePositionRotation();
 }
 
 glm::quat JointTransform::FromMatrix(const glm::mat4x4& matrix) 
@@ -144,6 +128,13 @@ const glm::mat4x4& JointTransform::GetLocalTransform() const
 {
 	return mLocalTransform;
 }
+
+void JointTransform::SetLocalTransform(const glm::mat4x4& matrix)
+{
+	mLocalTransform = matrix;
+	CalculatePositionRotation();
+}
+
 glm::vec3 JointTransform::GetPosition() const
 {
 	return mPosition;
@@ -162,6 +153,27 @@ JointTransform JointTransform::Interpolate(JointTransform* frameA, JointTransfor
 	glm::quat rotation = glm::slerp(frameA->GetRotation(), frameB->GetRotation(), progression);
 
 	return JointTransform(position, rotation);
+}
+
+void JointTransform::CalculatePositionRotation()
+{
+	/*
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+	glm::decompose(mLocalTransform, scale, rotation, translation, skew, perspective);
+
+	mPosition = translation;
+	mRotation = glm::quat(glm::vec3(rotation[0], rotation[1], rotation[2]));
+	mRotation = glm::normalize(mRotation);*/
+
+	mPosition.x = mLocalTransform[0][3];
+	mPosition.y = mLocalTransform[1][3];
+	mPosition.z = mLocalTransform[2][3];
+
+	mRotation = FromMatrix(mLocalTransform);
 }
 
 void JointTransform::CalculateLocalTransform()

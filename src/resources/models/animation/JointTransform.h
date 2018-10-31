@@ -12,11 +12,13 @@ public:
 	glm::vec3 GetPosition() const;
 	glm::quat GetRotation() const;
 	const glm::mat4x4& GetLocalTransform() const;
+	void SetLocalTransform(const glm::mat4x4& matrix);
 
 	static JointTransform Interpolate(JointTransform* frameA, JointTransform* frameB, float progression);
 
 private:
 	void CalculateLocalTransform();
+	void CalculatePositionRotation();
 	glm::quat FromMatrix(const glm::mat4x4& matrix);
 	glm::mat4x4& ToRotationMatrix();
 

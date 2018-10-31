@@ -26,7 +26,7 @@ const float MIN_PITCH = 5.0f;
 const float HYSTERESIS = 0.2f;
 const float MIN_DISTANCE_TO_START_FOLLOW = 2.0f;
 const float MAX_ZOOM = 50.0f;
-const float MIN_ZOOM = MIN_DISTANCE_TO_START_FOLLOW;
+const float MIN_ZOOM = 3.0f; // MIN_DISTANCE_TO_START_FOLLOW;
 
 ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed) :
 	mCamera(camera), 
@@ -100,12 +100,12 @@ void ThirdPersonCameraComponent::UpdateInternal(float elapsedTime)
 	{
 		mIsCameraFollowingTarget = false;
 		//std::cout << "distance = " << distanceTargetCamera << "OFF" << "\n";
-	}*/
-
+	}
 	if (mIsCameraFollowingTarget)
 	{
 		mCamera->SetPosition(newPosition);
-	}
+	}*/
+	mCamera->SetPosition(newPosition);
 	mParent->GetTransformation()->SetPosition(newPosition);
 }
 
@@ -151,20 +151,20 @@ float ThirdPersonCameraComponent::GetCameraPitch() const
 
 float ThirdPersonCameraComponent::CalculateHorizontalDistance() const
 {
-	glm::vec3 currentPosition = mCamera->GetPosition();
+	/*glm::vec3 currentPosition = mCamera->GetPosition();
 	float distance = glm::distance(mTarget->GetTransformation()->GetPosition(), currentPosition);
 	distance = glm::min(distance, mDistanceFromTarget);
-
-	return distance * glm::cos(glm::radians(mCurrentPitch));
+	*/
+	return mDistanceFromTarget * glm::cos(glm::radians(mCurrentPitch));
 }
 
 float ThirdPersonCameraComponent::CalculateVerticalDistance() const
 {
-	glm::vec3 currentPosition = mCamera->GetPosition();
+	/*glm::vec3 currentPosition = mCamera->GetPosition();
 	float distance = glm::distance(mTarget->GetTransformation()->GetPosition(), currentPosition);
 	distance = glm::min(distance, mDistanceFromTarget);
-
-	return distance * glm::sin(glm::radians(mCurrentPitch));
+	*/
+	return mDistanceFromTarget * glm::sin(glm::radians(mCurrentPitch));
 }
 
 glm::vec3 ThirdPersonCameraComponent::CalculateCameraPosition(float horizontalDistance, float verticalDistance) const

@@ -13,6 +13,7 @@
 #include "../resources/models/animation/KeyFrame.h"
 #include "../resources/models/animation/JointTransform.h"
 
+#include <iostream>
 
 glm::mat4x4 AssimpLoader::CORRECTION_MATRIX = glm::rotate(glm::mat4x4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
@@ -40,23 +41,29 @@ Mesh* AssimpLoader::LoadModel(const std::string& filename, Animation** animation
 	if (assimpScene != nullptr && !(assimpScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE))
 	{
 		aiNode* rootNode = assimpScene->mRootNode;
-		std::map<std::string, int> jointsIndexesMap;
-
-		if (rootNode != nullptr)
-		{
-			TransformAssimpSkeletonToEngineSkeleton(rootNode, rootJoint, jointsIndexesMap);
-		}
+		std::string rootBoneName;
 
 		Mesh* mesh = nullptr;
 
 		if (assimpScene->HasMeshes())
 		{
+			std::map<std::string, int> jointsIndexesMap;
+
+			if (rootNode != nullptr)
+			{
+				bool found = FindFirstSkeletonBoneName(assimpScene->mMeshes, assimpScene->mNumMeshes, rootBoneName);
+				if (found)
+				{
+					TransformAssimpSkeletonToEngineSkeleton(rootNode, rootJoint, rootBoneName, jointsIndexesMap);
+				}
+			}
+
 			mesh = TransformAssimpMeshToEngineMesh(assimpScene->mMeshes, assimpScene->mNumMeshes, jointsIndexesMap);
 		}
 
 		if (assimpScene->HasAnimations())
 		{
-			TransformAssimpAnimationsToEngineAnimations(assimpScene->mAnimations, assimpScene->mNumAnimations, animation);
+			TransformAssimpAnimationsToEngineAnimations(assimpScene->mAnimations, assimpScene->mNumAnimations, animation, rootBoneName);
 		}
 
 		return mesh;
@@ -67,7 +74,22 @@ Mesh* AssimpLoader::LoadModel(const std::string& filename, Animation** animation
 	return nullptr;
 }
 
-void AssimpLoader::TransformAssimpAnimationsToEngineAnimations(aiAnimation** animations, unsigned int numAnimations, Animation** animation)
+bool AssimpLoader::FindFirstSkeletonBoneName(aiMesh** meshes, unsigned int numMeshes, std::string& boneName)
+{
+	for (unsigned int i = 0; i < numMeshes; ++i)
+	{
+		const aiMesh* assimpMesh = meshes[i];
+		if (assimpMesh->HasBones())
+		{
+			aiBone* bone = assimpMesh->mBones[i];
+			boneName = std::string(bone->mName.C_Str());
+			return true;
+		}
+	}
+	return false;
+}
+
+void AssimpLoader::TransformAssimpAnimationsToEngineAnimations(aiAnimation** animations, unsigned int numAnimations, Animation** animation, const std::string& rootJointName)
 {
 	for (unsigned int i = 0; i < numAnimations; ++i)
 	{
@@ -106,8 +128,23 @@ void AssimpLoader::TransformAssimpAnimationsToEngineAnimations(aiAnimation** ani
 					glm::vec3(position.mValue.x, position.mValue.y, position.mValue.z), 
 					glm::quat(rotation.mValue.w, rotation.mValue.x, rotation.mValue.y, rotation.mValue.z)
 				);
+				glm::mat4x4 matrix = joint->GetLocalTransform();
 
+				matrix[3][0] = matrix[0][3];
+				matrix[3][1] = matrix[1][3];
+				matrix[3][2] = matrix[2][3];
+				matrix[0][3] = 0.0f;
+				matrix[1][3] = 0.0f;
+				matrix[2][3] = 0.0f;
+				matrix = glm::transpose(matrix);
 				std::string name(channel->mNodeName.C_Str());
+
+				if (name == rootJointName)
+				{
+					matrix = matrix * CORRECTION_MATRIX;
+				}
+
+				joint->SetLocalTransform(matrix);
 				keyFrame->AddJointTransform(name, joint);
 			}
 		}
@@ -120,6 +157,10 @@ void AssimpLoader::TransformAssimpAnimationsToEngineAnimations(aiAnimation** ani
 			name = "animation_" + std::to_string(i);
 		}
 
+		std::sort(keyFrameList.begin(), keyFrameList.end(), [](const KeyFrame* a, const KeyFrame* b) -> bool
+		{
+			return a->GetTimestamp() < b->GetTimestamp();
+		});
 		(*animation) = new Animation(name, duration, keyFrameList);
 	}
 }
@@ -170,7 +211,7 @@ void AssimpLoader::TransformAssimpBonesToEngineWeights(aiBone** bones, unsigned 
 	{
 		aiBone* bone = bones[i];
 		int jointId = joints[std::string(bone->mName.C_Str())];
-		for (unsigned int j = 0; j < bone->mNumWeights && j < 4; ++j)
+		for (unsigned int j = 0; j < bone->mNumWeights; ++j)
 		{
 			aiVertexWeight weight = bone->mWeights[j];
 			mesh->AddVertexWeightToVertex(weight.mVertexId, weight.mWeight);
@@ -212,25 +253,64 @@ void AssimpLoader::TransformAssimpPositionToEngineVertex(const aiVector3D* posit
 	}
 }
 
-void AssimpLoader::TransformAssimpSkeletonToEngineSkeleton(const aiNode* rootNode, Joint** rootJoint, std::map<std::string, int>& joints)
+void AssimpLoader::TransformAssimpSkeletonToEngineSkeleton(const aiNode* rootNode, Joint** rootJoint, const std::string& rootBoneName, std::map<std::string, int>& joints)
 {
 	int index = 0;
 
-	*rootJoint = TransformAssimpSkeletonNodeToJoint(rootNode, &index, joints);
+	rootNode = FindFirstSkeletonNode(rootNode, rootBoneName);
+	if (rootNode != nullptr)
+	{
+		*rootJoint = TransformAssimpSkeletonNodeToJoint(rootNode, &index, joints, rootBoneName);
+	}
+	else
+	{
+		std::cout << "First note skeleton not found %s" << rootBoneName << "\n";
+	}
 }
 
-Joint* AssimpLoader::TransformAssimpSkeletonNodeToJoint(const aiNode* rootNode, int *index, std::map<std::string, int>& joints)
+const aiNode* AssimpLoader::FindFirstSkeletonNode(const aiNode* rootNode, const std::string& rootBoneName)
 {
-	Joint* joint = new Joint(*index, std::string(rootNode->mName.C_Str()), AssimpMatrix4x4ToGlmMatrix(rootNode->mTransformation));
+	const aiNode* foundNode = nullptr;
+
+	std::string nodeName = std::string(rootNode->mName.C_Str());
+	if (nodeName == rootBoneName)
+	{
+		foundNode = rootNode;
+	}
+	else
+	{
+		for (unsigned int i = 0; i < rootNode->mNumChildren; ++i)
+		{
+			foundNode = FindFirstSkeletonNode(rootNode->mChildren[i], rootBoneName);
+			if (foundNode)
+			{
+				break;
+			}
+		}
+	}
+	return foundNode;
+}
+
+Joint* AssimpLoader::TransformAssimpSkeletonNodeToJoint(const aiNode* rootNode, int *index, std::map<std::string, int>& joints, const std::string& rootJointName)
+{
+	std::string nodeName = std::string(rootNode->mName.C_Str());
+	
+	glm::mat4x4 matrix = AssimpMatrix4x4ToGlmMatrix(rootNode->mTransformation);
+	matrix = glm::transpose(matrix);
+	if (nodeName == rootJointName)
+	{
+		matrix = matrix * CORRECTION_MATRIX;
+	}
+	Joint* joint = new Joint(*index, nodeName, matrix);
 	joints.insert(std::make_pair(joint->GetName(), *index));
+
 	for (unsigned int i = 0; i < rootNode->mNumChildren; ++i)
 	{
 		const aiNode* childNode = rootNode->mChildren[i];
 		*index = *index + 1;
-		Joint* child = TransformAssimpSkeletonNodeToJoint(childNode, index, joints);
+		Joint* child = TransformAssimpSkeletonNodeToJoint(childNode, index, joints, rootJointName);
 		joint->AddChild(child);
 	}
-
 	return joint;
 }
 

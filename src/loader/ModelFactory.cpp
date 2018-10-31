@@ -24,7 +24,7 @@ Mesh* ModelFactory::LoadModel(const std::string& filename, Animation** animation
 		}
 		case FileType::TYPE_INVALID:
 		default:
-			return nullptr;
+			return AssimpLoader::LoadModel(filename, animation, rootJoint);
 	}
 }
 
