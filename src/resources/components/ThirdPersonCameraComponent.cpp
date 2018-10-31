@@ -26,7 +26,7 @@ const float MIN_PITCH = 5.0f;
 const float HYSTERESIS = 0.2f;
 const float MIN_DISTANCE_TO_START_FOLLOW = 2.0f;
 const float MAX_ZOOM = 50.0f;
-const float MIN_ZOOM = 3.0f; // MIN_DISTANCE_TO_START_FOLLOW;
+const float MIN_ZOOM = 2.0f; // MIN_DISTANCE_TO_START_FOLLOW;
 
 ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed) :
 	mCamera(camera), 

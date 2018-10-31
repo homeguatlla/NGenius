@@ -960,7 +960,7 @@ void CreatePlayer()
 {
 	//PLAYER
 	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("animated_model"));
-	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("material_farmer_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	//material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_normalmap")), 1.0f));
 	material->AddEffect(new MaterialEffectDirectionalLightProperties());
 	material->AddEffect(new MaterialEffectFogProperties());
@@ -979,7 +979,7 @@ void CreatePlayer()
 	//IRenderer* renderer = new VerticesRenderer(model, material);
 	IRenderer* renderer = new IndicesRenderer(model, material);
 
-	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.08f)),
+	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.02f)),
 							renderer,
 							inputComponent,
 							new CharacterComponent(),

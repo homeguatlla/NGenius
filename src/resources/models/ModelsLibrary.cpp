@@ -60,9 +60,9 @@ void ModelsLibrary::Load()
 	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", false, true);
 	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
 	
-	LoadModel("farmer", "data/models/farmer/farmer.dae", true, true);
+	//LoadModel("farmer", "data/models/farmer/farmer.dae", false, true);
 	//LoadModel("farmer", "data/models/cube/cube.dae", false, true);
-	//LoadModel("farmer", "data/models/Adventurer-Militia/Militia-Adventurer-RIGGED.dae", true, true);
+	LoadModel("farmer", "data/models/Adventurer-Militia/Militia-Adventurer-RIGGED.dae", false, true);
 
 	//LoadModel("farmer", "data/models/ethan/model.dae", false, true);
 	//LoadModel("barrel2", "data/models/barrel/barrel.obj", false, true);
@@ -98,6 +98,11 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 	{
 		model->Build(calculateNormals, calculateTangents);
 
+		if (model->GetMaterialName().empty())
+		{
+			model->SetMaterialName("material_" + name);
+		}
+
 		if (animation != nullptr && rootJoint != nullptr)
 		{
 			AnimatedModel* animatedModel = new AnimatedModel(name, model, rootJoint);
@@ -110,20 +115,38 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 			AddElement(name, modelRender);
 		}
 
+		std::string path = GetPath(filename) + "/";
+
 		if (!model->GetDiffuseTextureName().empty())
 		{
-			mTexturesLibrary->AddTextureNameToLoad(model->GetMaterialName() + "_diffuse", model->GetDiffuseTextureName());
+			mTexturesLibrary->AddTextureNameToLoad(model->GetMaterialName() + "_diffuse", path + model->GetDiffuseTextureName());
 		}
 
 		if (!model->GetNormalMapTextureName().empty())
 		{
-			mTexturesLibrary->AddTextureNameToLoad(model->GetMaterialName() + "_normalmap", model->GetNormalMapTextureName());
+			mTexturesLibrary->AddTextureNameToLoad(model->GetMaterialName() + "_normalmap", path + model->GetNormalMapTextureName());
 		}
 	}
 	else
 	{
 		std::cout << "Error reading model " << filename;
 	}
+}
+
+std::string ModelsLibrary::GetPath(const std::string& filename)
+{
+	char separator[2] = { '/', '\\' };
+	
+	for (int s = 0; s < 2; ++s)
+	{
+		size_t i = filename.rfind(separator[s], filename.length());
+		if (i != std::string::npos)
+		{
+			return(filename.substr(0, i));
+		}
+	}
+	
+	return "";
 }
 
 void ModelsLibrary::CreateSkyBox()

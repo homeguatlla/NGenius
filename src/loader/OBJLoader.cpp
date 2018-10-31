@@ -171,12 +171,12 @@ void OBJLoader::LoadMaterial(Mesh* model, const std::string& path,  const std::s
 	{
 		std::cout << "	Diffuse texture filename " << path + diffuseTexture << "\n";
 
-		model->SetDiffuseTextureName(path + diffuseTexture);
+		model->SetDiffuseTextureName(diffuseTexture);
 	}
 	if (!normalMapTexture.empty())
 	{
 		std::cout << "	Normalmap texture filename " << path + normalMapTexture << "\n";
-		model->SetNormalMapTextureName(path + normalMapTexture);
+		model->SetNormalMapTextureName(normalMapTexture);
 	}
 }
 

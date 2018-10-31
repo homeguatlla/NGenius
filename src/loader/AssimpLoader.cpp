@@ -38,12 +38,12 @@ Mesh* AssimpLoader::LoadModel(const std::string& filename, Animation** animation
 																aiProcess_OptimizeMeshes
 	);
 
+	Mesh* mesh = nullptr;
+
 	if (assimpScene != nullptr && !(assimpScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE))
 	{
 		aiNode* rootNode = assimpScene->mRootNode;
 		std::string rootBoneName;
-
-		Mesh* mesh = nullptr;
 
 		if (assimpScene->HasMeshes())
 		{
@@ -59,19 +59,61 @@ Mesh* AssimpLoader::LoadModel(const std::string& filename, Animation** animation
 			}
 
 			mesh = TransformAssimpMeshToEngineMesh(assimpScene->mMeshes, assimpScene->mNumMeshes, jointsIndexesMap);
+
+			if (assimpScene->HasMaterials())
+			{
+				TransformAssimpMaterialsToEngineMaterials(assimpScene, mesh);
+			}
 		}
 
 		if (assimpScene->HasAnimations())
 		{
 			TransformAssimpAnimationsToEngineAnimations(assimpScene->mAnimations, assimpScene->mNumAnimations, animation, rootBoneName);
 		}
-
-		return mesh;
 	}
 
 	aiReleaseImport(assimpScene);
 
-	return nullptr;
+	return mesh;
+}
+
+void AssimpLoader::TransformAssimpMaterialsToEngineMaterials(const aiScene* assimpScene, Mesh* mesh)
+{
+	std::string textureName;
+
+	for (unsigned int m = 0; m < assimpScene->mNumMaterials; ++m)
+	{
+		aiMaterial* material = assimpScene->mMaterials[m];
+		if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+		{
+			bool hasFilename = TransformAssimpTextureToEngineTexture(material, aiTextureType_DIFFUSE, textureName);
+			if (hasFilename)
+			{
+				mesh->SetDiffuseTextureName(textureName);
+			}
+		}
+		if (material->GetTextureCount(aiTextureType_NORMALS) > 0)
+		{
+			bool hasFilename = TransformAssimpTextureToEngineTexture(material, aiTextureType_NORMALS, textureName);
+			if (hasFilename)
+			{
+				mesh->SetNormalMapTextureName(textureName);
+			}
+		}
+	}
+}
+
+bool AssimpLoader::TransformAssimpTextureToEngineTexture(const aiMaterial* material, aiTextureType type, std::string& filename)
+{
+	aiString path("");
+	bool hasPath = material->GetTexture(type, 0, &path, nullptr, nullptr, nullptr, nullptr, nullptr) == AI_SUCCESS;
+
+	if (hasPath)
+	{
+		filename = std::string(path.C_Str());
+	}
+
+	return hasPath;
 }
 
 bool AssimpLoader::FindFirstSkeletonBoneName(aiMesh** meshes, unsigned int numMeshes, std::string& boneName)
@@ -239,7 +281,7 @@ void AssimpLoader::TransformAssimpUVsToEngineUV(aiVector3D *const textcoords[8],
 	for (unsigned int i = 0; i < numUvs; ++i)
 	{
 		const aiVector3D uv = textcoords[0][i];
-		uvs.push_back(glm::vec2(uv.x, uv.y));
+		uvs.push_back(glm::vec2(uv.x, 1.0f - uv.y));
 	}
 }
 

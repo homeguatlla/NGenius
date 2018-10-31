@@ -3,6 +3,7 @@
 #include "glm/glm.hpp"
 #include <assimp/vector3.h>
 #include <assimp/matrix4x4.h>
+#include <assimp/material.h>
 
 #include <string>
 #include <vector>
@@ -12,6 +13,7 @@ class Mesh;
 class Animation;
 class Joint;
 class Mesh;
+struct aiScene;
 struct aiNode;
 struct aiMesh;
 struct aiFace;
@@ -34,6 +36,8 @@ private:
 	static void TransformAssimpAnimationsToEngineAnimations(aiAnimation** animations, unsigned int numAnimations, Animation** animation, const std::string& rootJointName);
 	static Joint* TransformAssimpSkeletonNodeToJoint(const aiNode* rootNode, int *index, std::map<std::string, int>& joints, const std::string& rootJointName);
 	static void TransformAssimpBonesToEngineWeights(aiBone** bones, unsigned int numBones, Mesh* mesh, std::map<std::string, int>& joints);
+	static void TransformAssimpMaterialsToEngineMaterials(const aiScene* assimpScene, Mesh* mesh);
+	static bool TransformAssimpTextureToEngineTexture(const aiMaterial* material, aiTextureType type, std::string& filename);
 
 	static const aiNode* FindFirstSkeletonNode(const aiNode* node, const std::string& boneName);
 	static bool FindFirstSkeletonBoneName(aiMesh** meshes, unsigned int numMeshes, std::string& boneName);

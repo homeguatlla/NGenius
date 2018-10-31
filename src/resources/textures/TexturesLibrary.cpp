@@ -79,11 +79,6 @@ void TexturesLibrary::Load()
 	//LoadTexture("wind_texture", "data/textures/wind_256.png", true, true);
 	LoadTexture("wind_texture", "data/wind_map.png", false, true);
 
-	LoadTexture("farmer_diffuse", "data/models/farmer/farmer_texture.png", true, false); 
-	LoadTexture("farmer_normalmap", "data/models/farmer/farmer_normalmap.png", true, false);
-	LoadTexture("spider_diffuse", "data/models/spider2/spider_diffuse.png", true, false);
-	
-
 	LoadTexture("barrel_diffuse", "data/models/barrel/barrel.png", false, false);
 	LoadTexture("barrel_normalmap", "data/models/barrel/barrelNormal.png", false, false);
 
@@ -131,11 +126,18 @@ void TexturesLibrary::LoadTexturesPendingToLoad()
 		//suponiendo que las que se cargan directamente sin ser añadidas a mTexturesPendingToLoad se cargasen mediante esta lista.
 		
 		Texture* texture = new Texture();
-		texture->Load(std::get<1>(tuple), ++mCurrentTextureUnit, true, true);
-		AddElement(std::get<0>(tuple), texture);
-		if (std::get<2>(tuple) != nullptr)
+		bool loaded = texture->Load(std::get<1>(tuple), ++mCurrentTextureUnit, true, true);
+		if (loaded)
 		{
-			std::get<2>(tuple)(std::get<0>(tuple), texture);
+			AddElement(std::get<0>(tuple), texture);
+			if (std::get<2>(tuple) != nullptr)
+			{
+				std::get<2>(tuple)(std::get<0>(tuple), texture);
+			}
+		}
+		else
+		{
+			delete texture;
 		}
 	}
 	mTexturesPendingToLoad.clear();

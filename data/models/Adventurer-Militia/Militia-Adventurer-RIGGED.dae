@@ -447,7 +447,7 @@
   </library_lights>
   <library_images>
     <image id="Militia-Texture_jpg" name="Militia-Texture_jpg">
-      <init_from>Militia-Texture.jpg</init_from>
+      <init_from>Militia-Texture.png</init_from>
     </image>
   </library_images>
   <library_effects>
@@ -3540,110 +3540,6 @@
   </library_controllers>
   <library_visual_scenes>
     <visual_scene id="Scene" name="Scene">
-      <node id="Camera" name="Camera" type="NODE">
-        <translate sid="location">7.481132 -6.50764 5.343665</translate>
-        <rotate sid="rotationZ">0 0 1 46.69194</rotate>
-        <rotate sid="rotationY">0 1 0 0.619768</rotate>
-        <rotate sid="rotationX">1 0 0 63.5593</rotate>
-        <scale sid="scale">0.6511878 0.6511878 0.6511878</scale>
-        <instance_camera url="#Camera-camera"/>
-      </node>
-      <node id="Camera_001" name="Camera_001" type="NODE">
-        <translate sid="location">-0.07417932 -3.7767 1.917609</translate>
-        <rotate sid="rotationZ">0 0 1 0.6239755</rotate>
-        <rotate sid="rotationY">0 1 0 0.4838298</rotate>
-        <rotate sid="rotationX">1 0 0 77.4841</rotate>
-        <scale sid="scale">0.2795682 0.2795683 0.2795682</scale>
-        <instance_camera url="#Camera_001-camera"/>
-      </node>
-      <node id="Lamp_001" name="Lamp_001" type="NODE">
-        <translate sid="location">-0.2500715 2.392556 1.125749</translate>
-        <rotate sid="rotationZ">0 0 1 106.9363</rotate>
-        <rotate sid="rotationY">0 1 0 3.163707</rotate>
-        <rotate sid="rotationX">1 0 0 37.26105</rotate>
-        <scale sid="scale">1 0.9999999 1</scale>
-        <instance_light url="#Lamp_001-light"/>
-      </node>
-      <node id="Camera_002" name="Camera_002" type="NODE">
-        <translate sid="location">0.007990886 4.730329 1.086423</translate>
-        <rotate sid="rotationZ">0 0 1 5.00896e-6</rotate>
-        <rotate sid="rotationY">0 1 0 179.6688</rotate>
-        <rotate sid="rotationX">1 0 0 -89.52386</rotate>
-        <scale sid="scale">0.2795682 0.2795682 0.2795682</scale>
-        <instance_camera url="#Camera_002-camera"/>
-      </node>
-      <node id="Camera_003" name="Camera_003" type="NODE">
-        <translate sid="location">0.5453334 -4.766114 1.143555</translate>
-        <rotate sid="rotationZ">0 0 1 0.716774</rotate>
-        <rotate sid="rotationY">0 1 0 0.3311619</rotate>
-        <rotate sid="rotationX">1 0 0 90.47613</rotate>
-        <scale sid="scale">0.2795682 0.2795682 0.2795682</scale>
-        <instance_camera url="#Camera_003-camera"/>
-      </node>
-      <node id="Camera_004" name="Camera_004" type="NODE">
-        <translate sid="location">0.007990886 2.79004 1.086423</translate>
-        <rotate sid="rotationZ">0 0 1 5.00896e-6</rotate>
-        <rotate sid="rotationY">0 1 0 179.6688</rotate>
-        <rotate sid="rotationX">1 0 0 -89.52386</rotate>
-        <scale sid="scale">0.2795682 0.2795682 0.2795682</scale>
-        <instance_camera url="#Camera_004-camera"/>
-      </node>
-      <node id="Camera_005" name="Camera_005" type="NODE">
-        <translate sid="location">-0.009832182 -0.9070741 1.660133</translate>
-        <rotate sid="rotationZ">0 0 1 0.716774</rotate>
-        <rotate sid="rotationY">0 1 0 0.3311619</rotate>
-        <rotate sid="rotationX">1 0 0 90.47613</rotate>
-        <scale sid="scale">0.2795682 0.2795682 0.2795682</scale>
-        <instance_camera url="#Camera_005-camera"/>
-      </node>
-      <node id="Camera_006" name="Camera_006" type="NODE">
-        <translate sid="location">2.751271 -2.684427 1.053477</translate>
-        <rotate sid="rotationZ">0 0 1 46.90195</rotate>
-        <rotate sid="rotationY">0 1 0 0.3311619</rotate>
-        <rotate sid="rotationX">1 0 0 90.47613</rotate>
-        <scale sid="scale">0.2795682 0.2795682 0.2795682</scale>
-        <instance_camera url="#Camera_006-camera"/>
-      </node>
-      <node id="Camera_007" name="Camera_007" type="NODE">
-        <translate sid="location">-0.009832181 -2.433141 1.532054</translate>
-        <rotate sid="rotationZ">0 0 1 0.716774</rotate>
-        <rotate sid="rotationY">0 1 0 0.3311619</rotate>
-        <rotate sid="rotationX">1 0 0 90.47613</rotate>
-        <scale sid="scale">0.2795682 0.2795682 0.2795682</scale>
-        <instance_camera url="#Camera_007-camera"/>
-      </node>
-      <node id="Camera_008" name="Camera_008" type="NODE">
-        <translate sid="location">-3.024006 -3.004526 1.053477</translate>
-        <rotate sid="rotationZ">0 0 1 -41.36175</rotate>
-        <rotate sid="rotationY">0 1 0 0.3311619</rotate>
-        <rotate sid="rotationX">1 0 0 90.47613</rotate>
-        <scale sid="scale">0.2795682 0.2795682 0.2795682</scale>
-        <instance_camera url="#Camera_008-camera"/>
-      </node>
-      <node id="Camera_009" name="Camera_009" type="NODE">
-        <translate sid="location">-0.009832181 -1.415146 0.3365946</translate>
-        <rotate sid="rotationZ">0 0 1 0.716774</rotate>
-        <rotate sid="rotationY">0 1 0 0.3311619</rotate>
-        <rotate sid="rotationX">1 0 0 90.47613</rotate>
-        <scale sid="scale">0.2795682 0.2795682 0.2795682</scale>
-        <instance_camera url="#Camera_009-camera"/>
-      </node>
-      <node id="Camera_010" name="Camera_010" type="NODE">
-        <translate sid="location">2.445124 -0.632068 2.095779</translate>
-        <rotate sid="rotationZ">0 0 1 46.90195</rotate>
-        <rotate sid="rotationY">0 1 0 0.3311619</rotate>
-        <rotate sid="rotationX">1 0 0 90.47613</rotate>
-        <scale sid="scale">0.2795682 0.2795682 0.2795682</scale>
-        <instance_camera url="#Camera_010-camera"/>
-      </node>
-      <node id="Camera_011" name="Camera_011" type="NODE">
-        <translate sid="location">1.428449 -1.210426 2.083388</translate>
-        <rotate sid="rotationZ">0 0 1 46.90195</rotate>
-        <rotate sid="rotationY">0 1 0 0.3311619</rotate>
-        <rotate sid="rotationX">1 0 0 90.47613</rotate>
-        <scale sid="scale">0.2795682 0.2795682 0.2795682</scale>
-        <instance_camera url="#Camera_011-camera"/>
-      </node>
       <node id="Sword_001" name="Sword_001" type="NODE">
         <translate sid="location">-0.5853477 -0.3126077 0.04307816</translate>
         <rotate sid="rotationZ">0 0 1 137.6478</rotate>
@@ -4291,22 +4187,6 @@
             </technique_common>
           </bind_material>
         </instance_controller>
-      </node>
-      <node id="Lamp" name="Lamp" type="NODE">
-        <translate sid="location">-0.03053731 -5.00903 0.5991669</translate>
-        <rotate sid="rotationZ">0 0 1 1.27241e-14</rotate>
-        <rotate sid="rotationY">0 1 0 1.27222e-14</rotate>
-        <rotate sid="rotationX">1 0 0 90.00867</rotate>
-        <scale sid="scale">1 1 1</scale>
-        <instance_light url="#Lamp-light"/>
-      </node>
-      <node id="Lamp_002" name="Lamp_002" type="NODE">
-        <translate sid="location">0.08930254 -0.00859572 14.3501</translate>
-        <rotate sid="rotationZ">0 0 1 0</rotate>
-        <rotate sid="rotationY">0 1 0 0</rotate>
-        <rotate sid="rotationX">1 0 0 0</rotate>
-        <scale sid="scale">1 1 1</scale>
-        <instance_light url="#Lamp_002-light"/>
       </node>
     </visual_scene>
   </library_visual_scenes>
