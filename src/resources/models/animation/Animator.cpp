@@ -52,11 +52,6 @@ void Animator::Update(float elapsedTime)
 		mJointTransforms.resize(currentPose.size(), glm::mat4x4());
 
 		mModel->FillWithJointTransforms(mJointTransforms);
-
-		for (glm::mat4x4& m : mJointTransforms)
-		{
-			m = glm::transpose(m);
-		}
 	}
 	else if(!mJointTransforms.empty())
 	{
@@ -91,13 +86,13 @@ void Animator::FillWithCalculatedCurrentAnimationPose(std::map<std::string, cons
 void Animator::ApplyPoseToJoints(std::map<std::string, const glm::mat4x4>& currentPose, Joint* joint, glm::mat4x4& parentTransform)
 {
 	glm::mat4x4 currentLocalTransform = currentPose[joint->GetName()];
-	glm::mat4x4 currentTransform = currentLocalTransform * parentTransform;
+	glm::mat4x4 currentTransform = parentTransform * currentLocalTransform;
 	const std::vector<Joint*>& joints = joint->GetJoints();
 	for (Joint* child : joints)
 	{
 		ApplyPoseToJoints(currentPose, child, currentTransform);
 	}
-	currentTransform = joint->GetInverseBindTransform() * currentTransform;
+	currentTransform = currentTransform * joint->GetInverseBindTransform();
 	joint->SetAnimatedTransform(currentTransform);
 }
 

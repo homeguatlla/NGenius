@@ -958,6 +958,7 @@ void CreateTerrain()
 
 void CreatePlayer()
 {
+	//TODO texto color std::cout << "\033[1;31mbold red text\033[0m normal text\n";
 	//PLAYER
 	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("animated_model"));
 	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("material_farmer_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));

@@ -15,7 +15,7 @@
 
 #include <iostream>
 
-glm::mat4x4 AssimpLoader::CORRECTION_MATRIX = glm::rotate(glm::mat4x4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+glm::mat4x4 AssimpLoader::CORRECTION_MATRIX = glm::rotate(glm::mat4x4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
 AssimpLoader::AssimpLoader()
 {
@@ -171,19 +171,11 @@ void AssimpLoader::TransformAssimpAnimationsToEngineAnimations(aiAnimation** ani
 					glm::quat(rotation.mValue.w, rotation.mValue.x, rotation.mValue.y, rotation.mValue.z)
 				);
 				glm::mat4x4 matrix = joint->GetLocalTransform();
-
-				matrix[3][0] = matrix[0][3];
-				matrix[3][1] = matrix[1][3];
-				matrix[3][2] = matrix[2][3];
-				matrix[0][3] = 0.0f;
-				matrix[1][3] = 0.0f;
-				matrix[2][3] = 0.0f;
-				matrix = glm::transpose(matrix);
 				std::string name(channel->mNodeName.C_Str());
 
 				if (name == rootJointName)
 				{
-					matrix = matrix * CORRECTION_MATRIX;
+					matrix = CORRECTION_MATRIX * matrix;
 				}
 
 				joint->SetLocalTransform(matrix);
@@ -290,7 +282,7 @@ void AssimpLoader::TransformAssimpPositionToEngineVertex(const aiVector3D* posit
 	for (unsigned int i = 0; i < numPositions; ++i)
 	{
 		const aiVector3D position = positions[i];
-		glm::vec3 newVertex = glm::vec4(position.x, position.y, position.z, 1.0) * CORRECTION_MATRIX;
+		glm::vec3 newVertex = CORRECTION_MATRIX * glm::vec4(position.x, position.y, position.z, 1.0) ;
 		vertices.push_back(newVertex);
 	}
 }
@@ -338,10 +330,9 @@ Joint* AssimpLoader::TransformAssimpSkeletonNodeToJoint(const aiNode* rootNode, 
 	std::string nodeName = std::string(rootNode->mName.C_Str());
 	
 	glm::mat4x4 matrix = AssimpMatrix4x4ToGlmMatrix(rootNode->mTransformation);
-	matrix = glm::transpose(matrix);
 	if (nodeName == rootJointName)
 	{
-		matrix = matrix * CORRECTION_MATRIX;
+		matrix = CORRECTION_MATRIX * matrix;
 	}
 	Joint* joint = new Joint(*index, nodeName, matrix);
 	joints.insert(std::make_pair(joint->GetName(), *index));

@@ -15,7 +15,7 @@
 #include <algorithm>
 
 
-glm::mat4x4 ColladaLoader::CORRECTION_MATRIX = glm::rotate(glm::mat4x4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+glm::mat4x4 ColladaLoader::CORRECTION_MATRIX = glm::mat4();// glm::rotate(glm::mat4x4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
 ColladaLoader::ColladaLoader()
 {
@@ -128,10 +128,10 @@ void ColladaLoader::LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Anima
 						}
 
 						glm::mat4x4 matrix = GetMatrix(keyFramesMatrix, 16 * frame);
-						matrix = glm::transpose(matrix);
+						//matrix = glm::transpose(matrix);
 						if (jointName == rootJointName)
 						{
-							matrix = matrix * CORRECTION_MATRIX;
+							matrix = CORRECTION_MATRIX * matrix;
 						}
 						JointTransform* jointTransform = new JointTransform(matrix);
 						keyFrame->AddJointTransform(jointName, jointTransform);
@@ -222,10 +222,10 @@ void ColladaLoader::LoadJoint(rapidxml::xml_node<>* rootNode, Joint** rootJoint,
 					std::string name = attribute->value();
 					unsigned int index = jointNames[name];
 					glm::mat4 matrix = GetMatrix(node);
-					matrix = glm::transpose(matrix);
+					//matrix = glm::transpose(matrix);
 					if (*rootJoint == nullptr)
 					{
-						matrix = matrix * CORRECTION_MATRIX;
+						matrix = CORRECTION_MATRIX * matrix;
 					}
 					Joint* joint = new Joint(index, name, matrix);
 
@@ -407,13 +407,13 @@ Mesh* ColladaLoader::LoadMesh(rapidxml::xml_node<> *geometryLibrary, std::multim
 					{
 						indices.push_back(index);
 
-						glm::vec3 newVertex = glm::vec4(tempVertices[index], 1.0) * CORRECTION_MATRIX;
+						glm::vec3 newVertex = CORRECTION_MATRIX * glm::vec4(tempVertices[index], 1.0);
 						vertices.push_back(newVertex);
 						verticesIndices.push_back(index);
 					}
 					else if (hasNormals && element % numInputs == 1)
 					{
-						glm::vec3 newNormal = glm::vec4(tempNormals[index], 1.0) * CORRECTION_MATRIX;
+						glm::vec3 newNormal = CORRECTION_MATRIX * glm::vec4(tempNormals[index], 1.0);
 						normals.push_back(newNormal);
 					}
 					else if (hasTexureCoordinates && element % numInputs == 2)

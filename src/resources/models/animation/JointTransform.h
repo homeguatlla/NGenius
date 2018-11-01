@@ -19,8 +19,6 @@ public:
 private:
 	void CalculateLocalTransform();
 	void CalculatePositionRotation();
-	glm::quat FromMatrix(const glm::mat4x4& matrix);
-	glm::mat4x4& ToRotationMatrix();
 
 private:
 	glm::vec3 mPosition;
