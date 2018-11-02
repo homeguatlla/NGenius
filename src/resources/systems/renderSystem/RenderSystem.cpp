@@ -44,6 +44,8 @@
 
 #include "../GameConstants.h"
 
+#include "../../../utils/Log.h"
+
 #include <iostream>
 #include <algorithm>
 #include <GL/glew.h>
@@ -286,7 +288,7 @@ void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProces
 			}
 			else
 			{
-				std::cout << "There is a render pass with the same layer masks as another render pass. Must be different!" << "\n";
+				Log(Log::LOG_WARNING) << "There is a render pass with the same layer masks as another render pass. Must be different!" << "\n";
 				assert(isRenderPassOK);
 			}
 		}
@@ -304,7 +306,7 @@ void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProces
 			}
 			else
 			{
-				std::cout << "There is a render pass with the same layer masks as another render pass. Must be different!" << "\n";
+				Log(Log::LOG_WARNING) << "There is a render pass with the same layer masks as another render pass. Must be different!" << "\n";
 				assert(isRenderPassOK);
 			}
 		}
@@ -749,7 +751,7 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 		mScreenWidth = 0.0f;
 		monitor = GetCurrentMonitor(&mScreenWidth, &mScreenHeight);
 	}
-	cout << " screen size ( " << mScreenWidth << ", " << mScreenHeight << ") \n";
+	Log(Log::LOG_INFO) << " screen size ( " << mScreenWidth << ", " << mScreenHeight << ") \n";
 	mWindow = glfwCreateWindow(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight), applicationName.c_str(), monitor, NULL);
 
 	if (mWindow == NULL) {
@@ -930,7 +932,7 @@ void RenderSystem::CheckGLError()
 {
 	GLenum err;
 	while ((err = glGetError()) != GL_NO_ERROR) {
-		std::cout << "OpenGL error: " << err << std::endl;
+		Log(Log::LOG_ERROR) << "OpenGL error: " << err;
 	}
 }
 

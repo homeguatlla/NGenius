@@ -8,6 +8,8 @@
 #include "../textures/ITexture.h"
 #include <glm/glm.hpp>
 
+#include "../../utils/Log.h"
+
 #include <GL/glew.h>
 #include <fstream>
 #include <vector>
@@ -68,7 +70,7 @@ IShaderProgram::~IShaderProgram()
 void IShaderProgram::Init()
 {
 	// Link the program
-	std::cout << "Linking program\n";
+	Log(Log::LOG_INFO) << "Linking program\n";
 	mProgramID = glCreateProgram();
 	glAttachShader(mProgramID, mVertexShaderID);
 	glAttachShader(mProgramID, mFragmentShaderID);
@@ -87,7 +89,7 @@ void IShaderProgram::Init()
 	glGetProgramiv(mProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
 	std::vector<char> ProgramErrorMessage(glm::max(InfoLogLength, int(1)));
 	glGetProgramInfoLog(mProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-	std::cout << &ProgramErrorMessage[0] << "\n";
+	Log(Log::LOG_ERROR) << &ProgramErrorMessage[0] << "\n";
 
 	glDeleteShader(mVertexShaderID);
 	glDeleteShader(mFragmentShaderID);
@@ -265,7 +267,7 @@ int IShaderProgram::Load(const std::string& filename, int type)
 		}
 		else
 		{
-			std::cout << "Failed to open " << filename << "\n";
+			Log(Log::LOG_ERROR) << "Failed to open " << filename << "\n";
 			return -1;
 		}
 
@@ -273,7 +275,7 @@ int IShaderProgram::Load(const std::string& filename, int type)
 		int InfoLogLength;
 
 		// Compile Vertex Shader
-		std::cout << "Compiling shader :" << filename << "\n";
+		Log(Log::LOG_INFO) << "Compiling shader :" << filename << "\n";
 		char const *SourcePointer = ShaderCode.c_str();
 		glShaderSource(shaderID, 1, &SourcePointer, NULL);
 		glCompileShader(shaderID);
@@ -285,7 +287,7 @@ int IShaderProgram::Load(const std::string& filename, int type)
 		{
 			std::vector<char> ShaderErrorMessage(InfoLogLength);
 			glGetShaderInfoLog(shaderID, InfoLogLength, NULL, &ShaderErrorMessage[0]);
-			std::cout << &ShaderErrorMessage[0] << "\n";
+			Log(Log::LOG_ERROR) << &ShaderErrorMessage[0] << "\n";
 		}
 
 		return shaderID;

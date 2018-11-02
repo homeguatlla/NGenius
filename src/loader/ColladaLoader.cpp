@@ -6,6 +6,8 @@
 #include "../resources/models/animation/KeyFrame.h"
 #include "../resources/models/animation/JointTransform.h"
 
+#include "../utils/Log.h"
+
 #include "glm/gtx/transform.hpp"
 
 #include <sstream>
@@ -27,7 +29,7 @@ ColladaLoader::~ColladaLoader()
 
 Mesh* ColladaLoader::LoadModel(const std::string& filename, Animation** animation, Joint** rootJoint)
 {
-	std::cout << "Loading Model: " << filename << "\n";
+	Log(Log::LOG_INFO) << "Loading Model: " << filename << "\n";
 
 	// Read the xml file into a stringstream
 	std::ifstream fileStream(filename);
@@ -64,7 +66,7 @@ Mesh* ColladaLoader::LoadModel(const std::string& filename, Animation** animatio
 		return mesh;
 	}
 
-	std::cout << "	Error loading Model: " << filename << "\n";
+	Log(Log::LOG_ERROR) << "	Error loading Model: " << filename << "\n";
 
 	return nullptr;
 }

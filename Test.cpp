@@ -117,6 +117,7 @@
 #include "src/input/bindings/KeyToEventBind.h"
 #include "src/input/bindings/MouseToEventBind.h"
 
+#include "src/utils/Log.h"
 
 
 using namespace glm;
@@ -962,7 +963,7 @@ void CreatePlayer()
 	//PLAYER
 	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("animated_model"));
 	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("material_farmer_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	//material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_normalmap")), 1.0f));
+	//material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("material_farmer_normalmap")), 1.0f));
 	material->AddEffect(new MaterialEffectDirectionalLightProperties());
 	material->AddEffect(new MaterialEffectFogProperties());
 	material->AddEffect(new MaterialEffectShadowProperties(3));
@@ -1775,6 +1776,8 @@ void Initialize()
 
 int main(void)
 {
+	//Log(Log::LOG_ERROR) << "hola caracola " << 32 << " adios" << "\n";
+	//Log(Log::LOG_INFO) << "adios maromo " << 3234.043 << " ha" << "\n";
 	Initialize();
 
 	CreateEntities();

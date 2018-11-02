@@ -202,6 +202,12 @@
     <Filter Include="Header Files\guiTool">
       <UniqueIdentifier>{9067f0db-3c48-4ce2-b983-22a9afb5515b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{1bdb063f-819e-4270-8889-3dbb3d9f7dd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils">
+      <UniqueIdentifier>{d6dd4c34-edb5-4b31-a92c-7e5c24d08851}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -374,9 +380,6 @@
     </ClInclude>
     <ClInclude Include="src\resources\font\FontsLibrary.h">
       <Filter>Header Files\resources\font</Filter>
-    </ClInclude>
-    <ClInclude Include="FileReader.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\entities\Text.h">
       <Filter>Header Files\resources\entities</Filter>
@@ -744,6 +747,12 @@
     <ClInclude Include="src\loader\AssimpLoader.h">
       <Filter>Header Files\loader</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\Log.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\FileReader.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -910,9 +919,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\font\FontsLibrary.cpp">
       <Filter>Source Files\resources\font</Filter>
-    </ClCompile>
-    <ClCompile Include="FileReader.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\entities\Text.cpp">
       <Filter>Source Files\resources\entities</Filter>
@@ -1258,6 +1264,12 @@
     </ClCompile>
     <ClCompile Include="src\loader\AssimpLoader.cpp">
       <Filter>Source Files\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\Log.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\FileReader.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

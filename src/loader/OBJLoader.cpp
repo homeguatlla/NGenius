@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "OBJLoader.h"
 #include "../resources/models/Mesh.h"
+#include "../utils/Log.h"
 
 #include <iostream>
 #include <fstream>
@@ -19,7 +20,7 @@ Mesh* OBJLoader::LoadModel(const std::string& filename)
 
 	std::ifstream input(filename);
 
-	std::cout << "Loading Model: " << filename << "\n";
+	Log(Log::LOG_INFO) << "Loading Model: " << filename << "\n";
 
 	if (input.is_open())
 	{

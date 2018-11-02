@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include <iostream>
 
+#include "../../utils/Log.h"
+
 Texture::Texture()
 {
 }
@@ -20,7 +22,7 @@ bool Texture::Load(const std::string& filename, unsigned int textureUnit, bool h
 
 	if (!loaded)
 	{
-		std::cout << "Couldn't load texture %s " << filename << "\n";
+		Log(Log::LOG_ERROR) << "Couldn't load texture %s " << filename << "\n";
 		return false;
 	}
 

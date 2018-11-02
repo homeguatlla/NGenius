@@ -8,6 +8,7 @@
 #include "../resources/models/animation/JointTransform.h"
 
 #include "fbxsdk/scene/geometry/fbxlayer.h"
+#include "../utils/Log.h"
 
 #include <assert.h>
 #include <vector>
@@ -42,7 +43,7 @@ Mesh* FBXLoader::LoadModel(const std::string& filename, Animation** animation, J
 	FbxImporter* importer = FbxImporter::Create(mFbxManager, "");
 	FbxScene* fbxScene = FbxScene::Create(mFbxManager, "");
 
-	std::cout << "Loading Model: " << filename << "\n";
+	Log(Log::LOG_INFO) << "Loading Model: " << filename << "\n";
 
 	bool success = importer->Initialize(filename.c_str(), -1, mFbxManager->GetIOSettings());
 

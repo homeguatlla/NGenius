@@ -1,6 +1,7 @@
 #include "stdafx.h"
-#include <stdlib.h>ç
+#include <stdlib.h>
 #include "PNGLoader.h"
+#include "../../utils/Log.h"
 
 #include <cstring>
 #include <iostream>
@@ -19,7 +20,7 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 {
 	bool hasAlpha = false;
 
-	std::cout << file_name << "\n";
+	Log(Log::LOG_INFO) << file_name << "\n";
 	
 	/* open file and test for it being a png */
 	FILE *fp = fopen(file_name, "rb");
@@ -113,8 +114,8 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 
 	//allocate memory
 	
-	std::cout << colorMode;
-	std::cout << mBitDepth;
+	//std::cout << colorMode;
+	//std::cout << mBitDepth;
 	int bits = (colorMode * mBitDepth / 8);
 	if (bits == 1) bits = 3;
 

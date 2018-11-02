@@ -21,7 +21,6 @@ AssimpLoader::AssimpLoader()
 {
 }
 
-
 AssimpLoader::~AssimpLoader()
 {
 }
@@ -51,7 +50,7 @@ Mesh* AssimpLoader::LoadModel(const std::string& filename, Animation** animation
 			std::map<std::string, int> bonesNames;
 
 			ReadAllBonesNames(assimpScene->mMeshes, assimpScene->mNumMeshes, bonesNames);
-
+			//TODO si hay un hueso con más de un nombre podemos sacar un error
 			if (rootNode != nullptr)
 			{
 				bool found = FindFirstSkeletonBoneName(rootNode, bonesNames, rootBoneName);
