@@ -48,16 +48,19 @@ Mesh* AssimpLoader::LoadModel(const std::string& filename, Animation** animation
 		if (assimpScene->HasMeshes())
 		{
 			std::map<std::string, int> jointsIndexesMap;
+			std::map<std::string, int> bonesNames;
+
+			ReadAllBonesNames(assimpScene->mMeshes, assimpScene->mNumMeshes, bonesNames);
 
 			if (rootNode != nullptr)
 			{
-				bool found = FindFirstSkeletonBoneName(assimpScene->mMeshes, assimpScene->mNumMeshes, rootBoneName);
+				bool found = FindFirstSkeletonBoneName(rootNode, bonesNames, rootBoneName);
 				if (found)
 				{
 					TransformAssimpSkeletonToEngineSkeleton(rootNode, rootJoint, rootBoneName, jointsIndexesMap);
 				}
 			}
-
+			
 			mesh = TransformAssimpMeshToEngineMesh(assimpScene->mMeshes, assimpScene->mNumMeshes, jointsIndexesMap);
 
 			if (assimpScene->HasMaterials())
@@ -116,18 +119,43 @@ bool AssimpLoader::TransformAssimpTextureToEngineTexture(const aiMaterial* mater
 	return hasPath;
 }
 
-bool AssimpLoader::FindFirstSkeletonBoneName(aiMesh** meshes, unsigned int numMeshes, std::string& boneName)
+void AssimpLoader::ReadAllBonesNames(aiMesh** meshes, unsigned int numMeshes, std::map<std::string, int>& bonesNames)
 {
 	for (unsigned int i = 0; i < numMeshes; ++i)
 	{
-		const aiMesh* assimpMesh = meshes[i];
-		if (assimpMesh->HasBones())
+		aiMesh* mesh = meshes[i];
+		for (unsigned int b = 0; b < mesh->mNumBones; ++b)
 		{
-			aiBone* bone = assimpMesh->mBones[i];
-			boneName = std::string(bone->mName.C_Str());
-			return true;
+			aiBone* bone = mesh->mBones[b];
+			bonesNames[std::string(bone->mName.C_Str())]++;
 		}
 	}
+}
+
+bool AssimpLoader::FindFirstSkeletonBoneName(const aiNode* rootNode, std::map<std::string, int>& bonesNames, std::string& boneName)
+{
+	std::string name = rootNode->mName.C_Str();
+	std::map<std::string, int>::iterator it = bonesNames.find(name);
+	bool found = it != bonesNames.end();
+	if (found)
+	{
+		std::cout << "Root bone name found: " << name << "\n";
+		boneName = it->first;
+		return true;
+	}
+	else
+	{
+		for (unsigned int i = 0; i < rootNode->mNumChildren; ++i)
+		{
+			const aiNode* node = rootNode->mChildren[i];
+			found = FindFirstSkeletonBoneName(node, bonesNames, boneName);
+			if (found)
+			{
+				return true;
+			}
+		}
+	}
+	
 	return false;
 }
 

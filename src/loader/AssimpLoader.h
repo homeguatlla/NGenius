@@ -39,8 +39,9 @@ private:
 	static void TransformAssimpMaterialsToEngineMaterials(const aiScene* assimpScene, Mesh* mesh);
 	static bool TransformAssimpTextureToEngineTexture(const aiMaterial* material, aiTextureType type, std::string& filename);
 
+	static void ReadAllBonesNames(aiMesh** meshes, unsigned int numMeshes, std::map<std::string, int>& bonesNames);
 	static const aiNode* FindFirstSkeletonNode(const aiNode* node, const std::string& boneName);
-	static bool FindFirstSkeletonBoneName(aiMesh** meshes, unsigned int numMeshes, std::string& boneName);
+	static bool FindFirstSkeletonBoneName(const aiNode* rootNode, std::map<std::string, int>& bonesNames, std::string& boneName);
 	static glm::mat4 AssimpMatrix4x4ToGlmMatrix(const aiMatrix4x4 &from);
 	static void TransformAssimpPositionToEngineVertex(const aiVector3D* positions, unsigned int numPositions, std::vector<glm::vec3>& vertices);
 	static void TransformAssimpUVsToEngineUV(aiVector3D *const textcoords[8], unsigned int numUvs, std::vector<glm::vec2>& uvs);
