@@ -26,7 +26,7 @@ public:
 		LAYER_TERRAIN = 32,
 		LAYER_REFLEXION = 64,
 
-		LAYER_DEBUG = 256
+		LAYER_DEBUG = 128
 	};
 
 protected:
