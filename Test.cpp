@@ -142,7 +142,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = TEST;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -981,7 +981,7 @@ void CreatePlayer()
 	//IRenderer* renderer = new VerticesRenderer(model, material);
 	IRenderer* renderer = new IndicesRenderer(model, material);
 
-	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.02f)),
+	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.08f)),
 							renderer,
 							inputComponent,
 							new CharacterComponent(),

@@ -51,7 +51,7 @@ void ModelsLibrary::Load()
 
 	//model = OBJLoader::LoadModel("data/models/hermes/hermes.obj");
 	//AddElement("hermes", model);
-	/*
+	
 	LoadModel("sphere", "data/models/sphere/sphere.obj", false, true);
 	
 	LoadModel("tree_foliage_0", "data/models/tree4/tree_foliage_lod0.obj", false, true);
@@ -60,7 +60,7 @@ void ModelsLibrary::Load()
 
 	LoadModel("tree_trunk_0", "data/models/tree4/tree_trunk_lod0.obj", false, true);
 	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", false, true);
-	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);*/
+	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
 	
 	LoadModel("farmer", "data/models/farmer/farmer.dae", false, true);
 	//LoadModel("farmer", "data/models/cube/cube.dae", false, true);
