@@ -1410,7 +1410,7 @@ void UpdateQuadTreeBox()
 	mQuadTreeMovedEntity->GetTransformation()->SetPosition(mQuadMovingPosition);
 
 	//mQuadTree.AddGameEntity(mQuadTreeMovedEntity);
-	std::cout << "num elements in quadtree: " << mQuadTree.GetNumEntities() << "\n";
+	Log(Log::LOG_INFO) << "num elements in quadtree: " << mQuadTree.GetNumEntities() << "\n";
 	
 	for (GameEntity* entity : mQuadTreeEntities)
 	{
@@ -1776,8 +1776,6 @@ void Initialize()
 
 int main(void)
 {
-	//Log(Log::LOG_ERROR) << "hola caracola " << 32 << " adios" << "\n";
-	//Log(Log::LOG_INFO) << "adios maromo " << 3234.043 << " ha" << "\n";
 	Initialize();
 
 	CreateEntities();

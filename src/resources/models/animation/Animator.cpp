@@ -113,7 +113,7 @@ std::pair<KeyFrame*, KeyFrame*> Animator::GetPreviousAndNextFrames()
 		}
 		previousFrame = nextFrame;
 	}
-	std::cout << "From frame: " << previousFrame->GetTimestamp() << " to frame: " << nextFrame->GetTimestamp() << "\n";
+	//std::cout << "From frame: " << previousFrame->GetTimestamp() << " to frame: " << nextFrame->GetTimestamp() << "\n";
 	return std::pair<KeyFrame*, KeyFrame*>(previousFrame, nextFrame);
 }
 

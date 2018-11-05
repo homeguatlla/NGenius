@@ -13,6 +13,8 @@
 #include "../resources/models/animation/KeyFrame.h"
 #include "../resources/models/animation/JointTransform.h"
 
+#include "../utils/Log.h"
+
 #include <iostream>
 
 glm::mat4x4 AssimpLoader::CORRECTION_MATRIX = glm::rotate(glm::mat4x4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -138,7 +140,7 @@ bool AssimpLoader::FindFirstSkeletonBoneName(const aiNode* rootNode, std::map<st
 	bool found = it != bonesNames.end();
 	if (found)
 	{
-		std::cout << "Root bone name found: " << name << "\n";
+		Log(Log::LOG_INFO) << "Root bone name found: " << name << "\n";
 		boneName = it->first;
 		return true;
 	}
@@ -325,7 +327,7 @@ void AssimpLoader::TransformAssimpSkeletonToEngineSkeleton(const aiNode* rootNod
 	}
 	else
 	{
-		std::cout << "First note skeleton not found %s" << rootBoneName << "\n";
+		Log(Log::LOG_ERROR) << "First note skeleton not found %s" << rootBoneName << "\n";
 	}
 }
 

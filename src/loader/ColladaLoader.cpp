@@ -141,7 +141,7 @@ void ColladaLoader::LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Anima
 				}
 				else
 				{
-					std::cout << "	Error loading Animation number frames differ than number of matrices" << "\n";
+					Log(Log::LOG_ERROR) << "	Error loading Animation number frames differ than number of matrices" << "\n";
 				}
 			}
 		}

@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include "../../../Frustum.h"
+#include "../../../utils/Log.h"
 #include <vector>
 #include <assert.h>
 #include <iostream>
@@ -114,7 +115,7 @@ public:
 		}
 		else
 		{
-			std::cout << "Skipped Entity: Entity outside the volume of the quadtree!";
+			Log(Log::LOG_WARNING) << "Skipped Entity: Entity outside the volume of the quadtree!";
 			assert(false);
 		}
 	}
