@@ -32,7 +32,7 @@ mIsFlat(false)
 	std::vector<glm::vec2> uv;
 	std::vector<unsigned int> indices;
 
-	mGridSize = 65;
+	mGridSize = 120;
 	mNumVertexsSide = 256;
 	TerrainGrid terrainGrid;
 	terrainGrid.GeneratePointsRectangular(mVertexs, uv, mNumVertexsSide, mGridSize, 0, true);

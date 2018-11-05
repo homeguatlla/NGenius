@@ -26,6 +26,7 @@ class Player : public GameEntity
 	float mCurrentTurnSpeed;
 	float mCurrentUpwardsSpeed;
 	float mLastTurnX;
+	float mCurrentTurnAngle;
 
 	bool mHasMoved;
 	bool mHasJumped;
@@ -48,8 +49,8 @@ private:
 
 	void UpdateAnimations();
 
-	glm::vec3 CalculateRunPosition(float elapsedTime, Transformation* transformation, glm::vec3 velocity, float runSpeed);
-	void CalculateTurnPosition(float elapsedTime, Transformation* transformation, float turnSpeed);
-	glm::vec3 CalculateJumpPosition(float elapsedTime, Transformation* transformation, glm::vec3 velocity, float upwardsSpeed);
+	glm::vec3 CalculateRunPosition(float elapsedTime, float rotY, glm::vec3 velocity, float runSpeed);
+	float CalculateTurnPosition(float elapsedTime, float turnSpeed);
+	glm::vec3 CalculateJumpPosition(float elapsedTime, glm::vec3 velocity, float upwardsSpeed);
 };
 

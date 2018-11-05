@@ -142,7 +142,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = RELEASE;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -190,7 +190,7 @@ GameScene* mScene;
 
 EnergyWall* mEnergyWall;
 
-float mEnergyWallRadius = 22.0f;
+float mEnergyWallRadius = 44.0f;
 glm::vec3 mEnergyWallPosition(0.0f, 0.0f, 0.0f);
 
 const std::vector<std::string> texts = { "FPS: ", "Triangles: ", "Drawcalls: ", "GameEntities(GE): ", "GESpacePartition:", "GERendered:", "GEWithPhysics: ", "DayTime: "};
@@ -438,7 +438,7 @@ void CreateTrees()
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec3> sizes;
 
-	float areaSize = 50.0f;
+	float areaSize = 100.0f;
 	int numTrees = 200;
 	for (int i = 0; i < numTrees; i++)
 	{
@@ -451,7 +451,7 @@ void CreateTrees()
 		if (mConfiguration == QUADTREE_WITH_CAMERA || (height > mWaterHeight + 0.2f))
 		{
 			positions.push_back(glm::vec3(x, height, z));
-			float scale = .5f;// (rand() % 5) / 200.0f + 0.02f;
+			float scale = 1.0f;// (rand() % 5) / 200.0f + 0.02f;
 			sizes.push_back(glm::vec3(scale));
 		}
 	}
@@ -462,9 +462,9 @@ void CreateTrees()
 	modelsFoliage.push_back("tree_foliage_2");
 
 	std::vector<std::pair<float, bool>> lod;
-	lod.push_back(std::pair<float, bool>(100.0f, false));
-	lod.push_back(std::pair<float, bool>(300.0f, false));
 	lod.push_back(std::pair<float, bool>(500.0f, false));
+	lod.push_back(std::pair<float, bool>(800.0f, false));
+	lod.push_back(std::pair<float, bool>(1000.0f, false));
 
 	std::vector<std::string> modelsTrunk;
 	modelsTrunk.push_back("tree_trunk_0");
@@ -605,13 +605,15 @@ void CreatePoints()
 void CreateProps()
 {
 	int areaSize = 5;
-	int numProps = 5;
+	int numProps = 6;
 
 	std::vector<std::string> models;
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec3> rotations;
+	std::vector<float> scales;
 
-	//models.push_back(std::string("barrel2"));
+	//crear una estructura con los 4 datos, rotacion, escalado, traslacion y nombre y así los tenemos siempre bien puestos
+	models.push_back(std::string("barrel"));
 	models.push_back(std::string("chest"));
 	models.push_back(std::string("brazier"));
 	models.push_back(std::string("barrel"));
@@ -622,13 +624,13 @@ void CreateProps()
 
 	//models.push_back(std::string("floor"));
 	
-
-	/*positions.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+	/*
+	positions.push_back(glm::vec3(5.0f, 0.0f, 0.0f));
 	positions.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
 	positions.push_back(glm::vec3(-1.0f, 0.0f, 0.0f));
-	positions.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
-	positions.push_back(glm::vec3(0.0f, 0.0f, -1.0f));
-
+	positions.push_back(glm::vec3(0.0f, 0.0f, 5.0f));
+	positions.push_back(glm::vec3(0.0f, 0.0f, -5.0f));*/
+	/*
 	int extraProps = 0;
 	numProps += extraProps;
 	for (int i = 0; i < extraProps; ++i)
@@ -640,11 +642,11 @@ void CreateProps()
 	}*/
 
 	
-	positions.push_back(glm::vec3(0.8f, 10.0f, -2.3f));
+	positions.push_back(glm::vec3(1.8f, 10.0f, -2.3f));
 	positions.push_back(glm::vec3(0.4f, 10.0f, -2.0f));
-	positions.push_back(glm::vec3(1.0f, 10.0f, -1.7f));
-	positions.push_back(glm::vec3(1.1f, 10.0f, -2.3f));
-	positions.push_back(glm::vec3(2.5f, 10.0f, -2.7f));
+	positions.push_back(glm::vec3(4.0f, 10.0f, -1.7f));
+	positions.push_back(glm::vec3(3.1f, 10.0f, -4.3f));
+	positions.push_back(glm::vec3(5.5f, 10.0f, -2.7f));
 	positions.push_back(glm::vec3(-2.0f, 10.0f, 2.0f));
 	positions.push_back(glm::vec3(0.0f, 10.0f, 0.0f));	
 
@@ -654,12 +656,24 @@ void CreateProps()
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(0.0f));
-	rotations.push_back(glm::vec3(1.5f, 0.0f, 0.0f));
+	rotations.push_back(glm::vec3(1.8f, 0.0f, 0.0f));
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(0.0f));
 	rotations.push_back(glm::vec3(0.0f));
+
+	scales.push_back(1.0f);
+	scales.push_back(1.0f);
+	scales.push_back(0.7f);//brazer
+	scales.push_back(1.0f);
+	scales.push_back(1.0f);
+	scales.push_back(1.0f);
+	scales.push_back(1.0f);
+	scales.push_back(1.0f);
+	scales.push_back(1.0f);
+	scales.push_back(1.0f);
+
 
 	std::string textureName("MedievalDungeonPropsAtlas02_diffuse");
 	std::string textureNormalName("MedievalDungeonPropsAtlas02_normalmap");
@@ -688,7 +702,7 @@ void CreateProps()
 
 		float height = mTerrain->GetHeight(glm::vec2(x, z));
 		glm::vec3 position(x, height, z);
-		glm::vec3 scale(0.3f);
+		glm::vec3 scale(scales[i % scales.size()]);
 		glm::vec3 rotation(rotations[i % rotations.size()]);
 			
 		std::string modelName = models[i % models.size()];
@@ -763,19 +777,19 @@ void CreateParticlesFire()
 	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
 	particle->SetLiveTime(2.0f);
 
-	float x = 1.0f;
+	float x = 4.0f;
 	float z = -1.7f;
 
-	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 0.28f;
+	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 0.7f;
 
 	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(	particle,
 																new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.1f)),
 																nullptr,
-																150);
-	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 1.0f, 0.25f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));	
-	particlesEmitter->SetScaleValues(0.05f, 0.005f);
-	particlesEmitter->SetVelocity(glm::vec3(0.0f), glm::vec3(0.02f, 0.2f, 0.02f));
-	particlesEmitter->SetSpawnArea(glm::vec3(-0.02f, 0.0f, -0.02f), glm::vec3(0.03f, 0.0f, 0.03f));
+																100);
+	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 1.0f, 0.25f, 1.0f), glm::vec4(1.0f, 0.2f, 0.1f, 0.4f));	
+	particlesEmitter->SetScaleValues(0.3f, 0.01f);
+	particlesEmitter->SetVelocity(glm::vec3(0.0f), glm::vec3(0.04f, 0.4f, 0.04f));
+	particlesEmitter->SetSpawnArea(glm::vec3(-0.06f, 0.0f, -0.06f), glm::vec3(0.06f, 0.0f, 0.06f));
 	mScene->AddEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);
 }
@@ -829,21 +843,23 @@ void CreateParticlesTest()
 {
 	glm::vec3 gravity = PhysicsSystem::GRAVITY_VALUE;
 
-	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), gravity * 0.1f);
-	particle->SetLiveTime(1.0f);
+	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
+	particle->SetLiveTime(10.0f);
 
 	glm::vec3 position(3.0f, 0.0f, 4.0f); 
 	float height = mTerrain->GetHeight(glm::vec2(position.x, position.z)) + 0.01f;
-	position.y = height;
+	position.y = height + 0.3f;
 	
 
 	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(	particle,
-																new Transformation(position, glm::vec3(0.0f), glm::vec3(0.1f)),
+																new Transformation(position, glm::vec3(0.0f), glm::vec3(1.0f)),
 																nullptr,
-																50);
-	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
-	particlesEmitter->SetScaleValues(0.06f, 0.4f + (rand() % 4) / 10.0f);
-	particlesEmitter->SetVelocity(glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+																10);
+	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	particlesEmitter->SetScaleValues(1.4f + (rand() % 4) / 10.0f, 0.5f);
+	particlesEmitter->SetVelocity(glm::vec3(0.1f, 0.0f, 0.0f), glm::vec3(0.3f, 0.0f, 0.0f));
+	particlesEmitter->SetSpawnArea(glm::vec3(-3.f, 0.0f, -3.0f), glm::vec3(3.f, 0.0f, 3.0f));
+	
 	mScene->AddEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);	
 	
@@ -981,7 +997,7 @@ void CreatePlayer()
 	//IRenderer* renderer = new VerticesRenderer(model, material);
 	IRenderer* renderer = new IndicesRenderer(model, material);
 
-	mPlayer = new Player(	new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.08f)),
+	mPlayer = new Player(	new Transformation(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.18f)),
 							renderer,
 							inputComponent,
 							new CharacterComponent(),
@@ -1014,7 +1030,7 @@ void CreateGameCameraEntity()
 	mThirdPersonCameraComponent = new ThirdPersonCameraComponent(	static_cast<PerspectiveCamera*>(mGameplayCamera), 
 																	mPlayer, 
 																	targetOffset, 
-																	2.0f, 
+																	4.0f, 
 																	PLAYER_PITCH, 
 																	PLAYER_PITCH_SPEED, 
 																	PLAYER_ZOOM_SPEED);
@@ -1032,7 +1048,7 @@ void CreateGameCameraEntity()
 	mScene->AddEntity(mCamera);
 }
 
-void CreateCube()
+void CreateSkybox()
 {
 	//SKYBOX the last
 	if (mIsSkyboxEnabled)
@@ -1048,7 +1064,7 @@ void CreateCube()
 		skyboxRenderer->SetLayer(IRenderer::LAYER_PARTICLES);
 		
 		GameEntity* skyBox = new GameEntity(
-			new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(50.0f)),
+			new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(100.0f)),
 			skyboxRenderer
 		);
 		skyBox->AddComponent(new RotationComponent(glm::vec3(0.0f, 1.0f, 0.0f), SKYBOX_ROTATION_SPEED));
@@ -1203,7 +1219,7 @@ void CreateEntities()
 
 	if (mIsParticlesEnabled)
 	{
-		CreateParticlesTest();
+		//CreateParticlesTest();
 		CreateParticlesFire();
 	}
 
@@ -1214,7 +1230,7 @@ void CreateEntities()
 
 	if (mIsSkyboxEnabled)
 	{
-		CreateCube();
+		CreateSkybox();
 	}
 
 	if (mConfiguration == QUADTREE)
@@ -1563,7 +1579,7 @@ void SetupConfiguration()
 		mIsVegetationEnabled = false;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = true;
+		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
 		//mWaterHeight = 0.0f;
 		mIsTextEnabled = true;
@@ -1576,7 +1592,7 @@ void SetupConfiguration()
 		mIsWaterEnabled = true;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
-		mIsVegetationEnabled = true;
+		mIsVegetationEnabled = false;
 		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = true;
 		mIsSkyboxEnabled = true;

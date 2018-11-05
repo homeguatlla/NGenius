@@ -56,7 +56,7 @@ void PointsPatch::Create()
 			vertexs.push_back(point);
 			float rotationY = static_cast<float>(rand() % 360);
 			float scale = 1.2f + (rand() % 10) * (0.4f / 10.0f);
-			uv.push_back(glm::vec2(glm::radians(rotationY), scale * 0.1));
+			uv.push_back(glm::vec2(glm::radians(rotationY), scale * 0.2));
 		}
 	}
 

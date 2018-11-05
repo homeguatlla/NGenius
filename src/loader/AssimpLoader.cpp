@@ -17,7 +17,7 @@
 
 #include <iostream>
 
-glm::mat4x4 AssimpLoader::CORRECTION_MATRIX = glm::rotate(glm::mat4x4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+glm::mat4x4 AssimpLoader::CORRECTION_MATRIX(1.0f);// = glm::rotate(glm::mat4x4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
 AssimpLoader::AssimpLoader()
 {

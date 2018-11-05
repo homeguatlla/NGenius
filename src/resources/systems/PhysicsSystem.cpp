@@ -10,6 +10,8 @@
 #include "../entities/Terrain.h"
 #include "../renderers/IRenderer.h"
 
+#include <iostream>
+#include "../entities/Player.h"
 
 const glm::vec3 PhysicsSystem::GRAVITY_VALUE(0.0f, -9.8f, 0.0f);
 
@@ -195,15 +197,20 @@ bool PhysicsSystem::ApplyCollisions(GameEntity *entity, float *groundHeight)
 		glm::vec3 max = renderer->GetModelAABB().GetVertexMax();
 		glm::vec3 min = renderer->GetModelAABB().GetVertexMin();
 		glm::mat3 matrix = glm::mat3(transformation->GetModelMatrix());
-		max = max * matrix;
-		min = min * matrix;
+		max = matrix * max;
+		min = matrix * min;
 		entityBottomHeight = glm::abs(min.y);
 	}
 	position.y = glm::max(position.y, *groundHeight + entityBottomHeight);
 	transformation->SetPosition(position);
 
 	//is colliding
-	return position.y <= *groundHeight + entityBottomHeight;
+	bool isColliding = position.y <= *groundHeight + entityBottomHeight;
+	/*if (typeid(*entity) == typeid(Player))
+	{
+		std::cout << "position: " << position.y << " is colliding = " << isColliding << "\n";
+	}*/
+	return isColliding;
 }
 
 bool PhysicsSystem::ApplyEnergyWallCollision(GameEntity *entity, glm::vec3& collisionPoint)

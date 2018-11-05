@@ -62,11 +62,13 @@ const glm::mat4& Transformation::GetModelMatrix()
 {
 	if (mIsDirty)
 	{
-		mModelMatrix = glm::translate(glm::mat4(1.0f), mPosition);
-		mModelMatrix = glm::rotate(mModelMatrix, mRotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-		mModelMatrix = glm::rotate(mModelMatrix, mRotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-		mModelMatrix = glm::rotate(mModelMatrix, mRotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-		mModelMatrix = glm::scale(mModelMatrix, mScale);
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), mPosition);
+		glm::mat4 rotationZ = glm::rotate(glm::mat4(1.0f), mRotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+		glm::mat4 rotationY = glm::rotate(glm::mat4(1.0f), mRotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::mat4 rotationX = glm::rotate(glm::mat4(1.0f), mRotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), mScale);
+
+		mModelMatrix = translation * rotationZ * rotationY * rotationX * scale;
 		mIsDirty = false;
 	}
 	return mModelMatrix;

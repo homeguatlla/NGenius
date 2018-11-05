@@ -16,7 +16,7 @@
 //WARNING!! hay que tener en cuenta que, si subimos este valor la cámara por colisión subirá y no mantendrá el ángulo pitch que le hemos definido.
 //es decir, si vemos que el ángulo de la cámara con el target es demasiado alto (vemos al player desde una posición más alta) hay que tener en cuenta que haya subido por este valor
 const float CAMERA_HEIGHT_OFFSET_GROUND = 0.2f;
-const float CAMERA_SMOOTH_MOVEMENT_VALUE = 0.1f;
+const float CAMERA_SMOOTH_MOVEMENT_VALUE = 0.2f;
 const float WATER_HEIGHT_OFFSET = 0.1f;
 
 const float MAX_PITCH = 89.0f;//degrees

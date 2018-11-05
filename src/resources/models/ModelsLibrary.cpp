@@ -62,7 +62,7 @@ void ModelsLibrary::Load()
 	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", false, true);
 	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
 	
-	LoadModel("farmer", "data/models/farmer/farmer.dae", false, true);
+	LoadModel("farmer", "data/models/farmer/farmer.dae", true, true);
 	//LoadModel("farmer", "data/models/cube/cube.dae", false, true);
 	//LoadModel("farmer", "data/models/Adventurer-Militia/Militia-Adventurer-RIGGED.dae", false, true);
 

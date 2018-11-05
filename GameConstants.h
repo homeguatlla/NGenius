@@ -1,6 +1,6 @@
 #pragma once
 static const float PLAYER_UPWARDS_HEIGHT = 2.0f;
-static const float PLAYER_RUN_SPEED = 1.0f;
+static const float PLAYER_RUN_SPEED = 3.0f;
 static const float PLAYER_TURN_SPEED = 0.2f;
 static const float PLAYER_ZOOM_SPEED = 10.0f;
 static const float PLAYER_PITCH = 10.0f;
@@ -13,7 +13,7 @@ static const float SCREEN_HEIGHT = 768.0f;
 
 static const float SKYBOX_ROTATION_SPEED = 0.01f;
 static const float MIN_FPS_ALLOWED = 30.0f;
-static const float TERRAIN_SCALE = 7.5f;
+static const float TERRAIN_SCALE = 10.0f;
 
 static const int SHADOWS_PFC_COUNTER = 5;
 

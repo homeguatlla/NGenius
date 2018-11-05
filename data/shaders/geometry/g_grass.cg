@@ -32,11 +32,11 @@ uniform float timer;
 uniform sampler2D textureWind;
 uniform vec3 windModificators[1];
 
-const float shadowDistance = 10.0;
-const float transitionDistance = 20.0;
-const float AFFECTED_BY_WIND_RADIUS = 10.0;
-const float FAR_DISTANCE_CLIPPING = 10.0;
-const float FOG_DENSITY_MULTIPLIER = 0.2;
+const float shadowDistance = 20.0;
+const float transitionDistance = 40.0;
+const float AFFECTED_BY_WIND_RADIUS = 20.0;
+const float FAR_DISTANCE_CLIPPING = 40.0;
+const float FOG_DENSITY_MULTIPLIER = 0.1;
 const float PATCH_SIZE = 10.0f; //debería venir como un uniform
 
 
@@ -152,7 +152,6 @@ void main()
 	{
 		//outColor = vec4(1,0,0,1);
 	}
-	
 	
 	alphaFactor = clamp(exp(-pow(distance * FOG_DENSITY_MULTIPLIER, fogGradient)), 0.0, 1.0);
 
