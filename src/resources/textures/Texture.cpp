@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include <iostream>
 
+#include "../../utils/Log.h"
+
 Texture::Texture()
 {
 }
@@ -13,15 +15,15 @@ Texture::~Texture()
 	glDeleteTextures(1, &mTextureID);
 }
 
-void Texture::Load(const std::string& filename, unsigned int textureUnit, bool hasMipmapping, bool hasWrapping)
+bool Texture::Load(const std::string& filename, unsigned int textureUnit, bool hasMipmapping, bool hasWrapping)
 {
 	mTextureUnit = textureUnit;
 	bool loaded = mLoader.ReadPNGFile(filename.c_str());
 
 	if (!loaded)
 	{
-		std::cout << "Couldn't load texture %s " << filename << "\n";
-		return;
+		Log(Log::LOG_ERROR) << "Couldn't load texture %s " << filename << "\n";
+		return false;
 	}
 
 	mWidth = mLoader.GetWidth();
@@ -47,6 +49,8 @@ void Texture::Load(const std::string& filename, unsigned int textureUnit, bool h
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	return true;
 }
 
 void Texture::CreateTexture(int textureUnit, int width, int height)

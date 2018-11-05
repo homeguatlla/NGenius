@@ -8,6 +8,7 @@
 #include "../resources/models/animation/JointTransform.h"
 
 #include "fbxsdk/scene/geometry/fbxlayer.h"
+#include "../utils/Log.h"
 
 #include <assert.h>
 #include <vector>
@@ -42,7 +43,7 @@ Mesh* FBXLoader::LoadModel(const std::string& filename, Animation** animation, J
 	FbxImporter* importer = FbxImporter::Create(mFbxManager, "");
 	FbxScene* fbxScene = FbxScene::Create(mFbxManager, "");
 
-	std::cout << "Loading Model: " << filename << "\n";
+	Log(Log::LOG_INFO) << "Loading Model: " << filename << "\n";
 
 	bool success = importer->Initialize(filename.c_str(), -1, mFbxManager->GetIOSettings());
 
@@ -156,22 +157,22 @@ Mesh* FBXLoader::LoadMesh(FbxMesh* fbxMesh)
 
 	if (indexes.size() <= 0)
 	{
-		std::cout << "	Indexes not loaded!" << "\n";
+		Log(Log::LOG_ERROR) << "	Indexes not loaded!" << "\n";
 	}
 						
 	if (vertices.size() <= 0)
 	{
-		std::cout << "	Vertices not loaded!" << "\n";
+		Log(Log::LOG_ERROR) << "	Vertices not loaded!" << "\n";
 	}
 
 	if (normals.size() <= 0)
 	{
-		std::cout << "	Normals not loaded!" << "\n";
+		Log(Log::LOG_ERROR) << "	Normals not loaded!" << "\n";
 	}
 
 	if (uvs.size() <= 0)
 	{
-		std::cout << "	Texture coords not loaded!" << "\n";
+		Log(Log::LOG_ERROR) << "	Texture coords not loaded!" << "\n";
 	}
 
 	return new Mesh(vertices, uvs, indexes, normals);
@@ -188,7 +189,7 @@ void FBXLoader::LoadMaterials(FbxScene* fbxScene, Mesh* mesh)
 		}
 		else 
 		{
-			std::cout << "	Material not found!\n";
+			Log(Log::LOG_ERROR) << "	Material not found!\n";
 		}
 
 		//load textures
@@ -202,8 +203,8 @@ void FBXLoader::LoadMaterials(FbxScene* fbxScene, Mesh* mesh)
 			if (textureFile != nullptr && !textureFile->GetUserDataPtr())
 			{
 				const FbxString filename = textureFile->GetFileName();
-				std::cout << "	Texture name: " << texture->GetName() << "\n";
-				std::cout << "	Texture name: " << filename << "\n";
+				Log(Log::LOG_INFO) << "	Texture name: " << texture->GetName() << "\n";
+				Log(Log::LOG_INFO) << "	Texture name: " << filename << "\n";
 				if (std::string(texture->GetName()) == "DiffuseTexture")
 				{
 					mesh->SetDiffuseTextureName(std::string(filename));
@@ -214,7 +215,7 @@ void FBXLoader::LoadMaterials(FbxScene* fbxScene, Mesh* mesh)
 				}
 				else
 				{
-					std::cout << "	Texture name not recognized!\n";
+					Log(Log::LOG_ERROR) << "	Texture name not recognized!\n";
 				}
 			}
 		}
@@ -260,7 +261,7 @@ Animation* FBXLoader::FillAnimationData(FbxScene* fbxScene, FbxMesh* fbxMesh, st
 				unsigned int jointIndex = FindJointIndex(jointname, joints);
 				if (jointIndex != -1)
 				{
-					std::cout << "	Joint name:" << jointname << "\n";
+					Log(Log::LOG_INFO) << "	Joint name:" << jointname << "\n";
 
 					fbxsdk::FbxAMatrix fbxTransformMatrix;
 					//FbxAMatrix transformLinkMatrix;
@@ -283,7 +284,7 @@ Animation* FBXLoader::FillAnimationData(FbxScene* fbxScene, FbxMesh* fbxMesh, st
 				}
 				else
 				{
-					std::cout << "	Joint name:" << jointname << " not found! \n";
+					Log(Log::LOG_ERROR) << "	Joint name:" << jointname << " not found! \n";
 				}
 			}
 		}
@@ -324,7 +325,7 @@ void FBXLoader::LoadAnimations(FbxScene* fbxScene, FbxCluster* fbxCluster, Anima
 		FbxTime duration = time.GetDuration();
 
 		long long numFrames = duration.GetFrameCount(FbxTime::EMode::eFrames24);
-		std::cout << "	Frames count:" << numFrames << "\n";
+		Log(Log::LOG_INFO) << "	Frames count:" << numFrames << "\n";
 	
 		if ((*animation) == nullptr)
 		{

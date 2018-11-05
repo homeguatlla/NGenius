@@ -22,5 +22,8 @@ private:
 	void CreateCube();
 	void CreateSkyBox();
 	void CreateQuad(const std::string& name, float width, float height);
+
+	//TODO este método podría estar en una librería statica
+	std::string GetPath(const std::string& filename);
 };
 

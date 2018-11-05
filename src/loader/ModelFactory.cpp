@@ -19,6 +19,7 @@ Mesh* ModelFactory::LoadModel(const std::string& filename, Animation** animation
 			return FBXLoader::LoadModel(filename, animation, rootJoint);
 		case FileType::TYPE_COLLADA:
 		{
+			// necessita corregir sus transformaciones ahora
 			//return ColladaLoader::LoadModel(filename, animation, rootJoint);
 			return AssimpLoader::LoadModel(filename, animation, rootJoint);
 		}

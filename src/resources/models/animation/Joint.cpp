@@ -56,7 +56,7 @@ void Joint::FillWithJointTransforms(std::vector<glm::mat4>& jointMatrices) const
 
 void Joint::CalculateInverseBindTransform(const glm::mat4& parentBindTransform)
 {
-	glm::mat4 bindTransform = mLocalBindTransformation * parentBindTransform;
+	glm::mat4 bindTransform = parentBindTransform * mLocalBindTransformation;
 	mInverseBindTransformation = glm::inverse(bindTransform);
 	for (Joint* child : mChildren)
 	{

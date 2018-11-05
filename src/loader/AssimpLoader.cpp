@@ -13,14 +13,15 @@
 #include "../resources/models/animation/KeyFrame.h"
 #include "../resources/models/animation/JointTransform.h"
 
+#include "../utils/Log.h"
+
 #include <iostream>
 
-glm::mat4x4 AssimpLoader::CORRECTION_MATRIX = glm::rotate(glm::mat4x4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+glm::mat4x4 AssimpLoader::CORRECTION_MATRIX = glm::rotate(glm::mat4x4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
 AssimpLoader::AssimpLoader()
 {
 }
-
 
 AssimpLoader::~AssimpLoader()
 {
@@ -38,54 +39,124 @@ Mesh* AssimpLoader::LoadModel(const std::string& filename, Animation** animation
 																aiProcess_OptimizeMeshes
 	);
 
+	Mesh* mesh = nullptr;
+
 	if (assimpScene != nullptr && !(assimpScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE))
 	{
 		aiNode* rootNode = assimpScene->mRootNode;
 		std::string rootBoneName;
 
-		Mesh* mesh = nullptr;
-
 		if (assimpScene->HasMeshes())
 		{
 			std::map<std::string, int> jointsIndexesMap;
+			std::map<std::string, int> bonesNames;
 
+			ReadAllBonesNames(assimpScene->mMeshes, assimpScene->mNumMeshes, bonesNames);
+			//TODO si hay un hueso con más de un nombre podemos sacar un error
 			if (rootNode != nullptr)
 			{
-				bool found = FindFirstSkeletonBoneName(assimpScene->mMeshes, assimpScene->mNumMeshes, rootBoneName);
+				bool found = FindFirstSkeletonBoneName(rootNode, bonesNames, rootBoneName);
 				if (found)
 				{
 					TransformAssimpSkeletonToEngineSkeleton(rootNode, rootJoint, rootBoneName, jointsIndexesMap);
 				}
 			}
-
+			
 			mesh = TransformAssimpMeshToEngineMesh(assimpScene->mMeshes, assimpScene->mNumMeshes, jointsIndexesMap);
+
+			if (assimpScene->HasMaterials())
+			{
+				TransformAssimpMaterialsToEngineMaterials(assimpScene, mesh);
+			}
 		}
 
 		if (assimpScene->HasAnimations())
 		{
 			TransformAssimpAnimationsToEngineAnimations(assimpScene->mAnimations, assimpScene->mNumAnimations, animation, rootBoneName);
 		}
-
-		return mesh;
 	}
 
 	aiReleaseImport(assimpScene);
 
-	return nullptr;
+	return mesh;
 }
 
-bool AssimpLoader::FindFirstSkeletonBoneName(aiMesh** meshes, unsigned int numMeshes, std::string& boneName)
+void AssimpLoader::TransformAssimpMaterialsToEngineMaterials(const aiScene* assimpScene, Mesh* mesh)
+{
+	std::string textureName;
+
+	for (unsigned int m = 0; m < assimpScene->mNumMaterials; ++m)
+	{
+		aiMaterial* material = assimpScene->mMaterials[m];
+		if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+		{
+			bool hasFilename = TransformAssimpTextureToEngineTexture(material, aiTextureType_DIFFUSE, textureName);
+			if (hasFilename)
+			{
+				mesh->SetDiffuseTextureName(textureName);
+			}
+		}
+		if (material->GetTextureCount(aiTextureType_NORMALS) > 0)
+		{
+			bool hasFilename = TransformAssimpTextureToEngineTexture(material, aiTextureType_NORMALS, textureName);
+			if (hasFilename)
+			{
+				mesh->SetNormalMapTextureName(textureName);
+			}
+		}
+	}
+}
+
+bool AssimpLoader::TransformAssimpTextureToEngineTexture(const aiMaterial* material, aiTextureType type, std::string& filename)
+{
+	aiString path("");
+	bool hasPath = material->GetTexture(type, 0, &path, nullptr, nullptr, nullptr, nullptr, nullptr) == AI_SUCCESS;
+
+	if (hasPath)
+	{
+		filename = std::string(path.C_Str());
+	}
+
+	return hasPath;
+}
+
+void AssimpLoader::ReadAllBonesNames(aiMesh** meshes, unsigned int numMeshes, std::map<std::string, int>& bonesNames)
 {
 	for (unsigned int i = 0; i < numMeshes; ++i)
 	{
-		const aiMesh* assimpMesh = meshes[i];
-		if (assimpMesh->HasBones())
+		aiMesh* mesh = meshes[i];
+		for (unsigned int b = 0; b < mesh->mNumBones; ++b)
 		{
-			aiBone* bone = assimpMesh->mBones[i];
-			boneName = std::string(bone->mName.C_Str());
-			return true;
+			aiBone* bone = mesh->mBones[b];
+			bonesNames[std::string(bone->mName.C_Str())]++;
 		}
 	}
+}
+
+bool AssimpLoader::FindFirstSkeletonBoneName(const aiNode* rootNode, std::map<std::string, int>& bonesNames, std::string& boneName)
+{
+	std::string name = rootNode->mName.C_Str();
+	std::map<std::string, int>::iterator it = bonesNames.find(name);
+	bool found = it != bonesNames.end();
+	if (found)
+	{
+		Log(Log::LOG_INFO) << "Root bone name found: " << name << "\n";
+		boneName = it->first;
+		return true;
+	}
+	else
+	{
+		for (unsigned int i = 0; i < rootNode->mNumChildren; ++i)
+		{
+			const aiNode* node = rootNode->mChildren[i];
+			found = FindFirstSkeletonBoneName(node, bonesNames, boneName);
+			if (found)
+			{
+				return true;
+			}
+		}
+	}
+	
 	return false;
 }
 
@@ -129,19 +200,11 @@ void AssimpLoader::TransformAssimpAnimationsToEngineAnimations(aiAnimation** ani
 					glm::quat(rotation.mValue.w, rotation.mValue.x, rotation.mValue.y, rotation.mValue.z)
 				);
 				glm::mat4x4 matrix = joint->GetLocalTransform();
-
-				matrix[3][0] = matrix[0][3];
-				matrix[3][1] = matrix[1][3];
-				matrix[3][2] = matrix[2][3];
-				matrix[0][3] = 0.0f;
-				matrix[1][3] = 0.0f;
-				matrix[2][3] = 0.0f;
-				matrix = glm::transpose(matrix);
 				std::string name(channel->mNodeName.C_Str());
 
 				if (name == rootJointName)
 				{
-					matrix = matrix * CORRECTION_MATRIX;
+					matrix = CORRECTION_MATRIX * matrix;
 				}
 
 				joint->SetLocalTransform(matrix);
@@ -239,7 +302,7 @@ void AssimpLoader::TransformAssimpUVsToEngineUV(aiVector3D *const textcoords[8],
 	for (unsigned int i = 0; i < numUvs; ++i)
 	{
 		const aiVector3D uv = textcoords[0][i];
-		uvs.push_back(glm::vec2(uv.x, uv.y));
+		uvs.push_back(glm::vec2(uv.x, 1.0f - uv.y));
 	}
 }
 
@@ -248,7 +311,7 @@ void AssimpLoader::TransformAssimpPositionToEngineVertex(const aiVector3D* posit
 	for (unsigned int i = 0; i < numPositions; ++i)
 	{
 		const aiVector3D position = positions[i];
-		glm::vec3 newVertex = glm::vec4(position.x, position.y, position.z, 1.0) * CORRECTION_MATRIX;
+		glm::vec3 newVertex = CORRECTION_MATRIX * glm::vec4(position.x, position.y, position.z, 1.0) ;
 		vertices.push_back(newVertex);
 	}
 }
@@ -264,7 +327,7 @@ void AssimpLoader::TransformAssimpSkeletonToEngineSkeleton(const aiNode* rootNod
 	}
 	else
 	{
-		std::cout << "First note skeleton not found %s" << rootBoneName << "\n";
+		Log(Log::LOG_ERROR) << "First note skeleton not found %s" << rootBoneName << "\n";
 	}
 }
 
@@ -296,10 +359,9 @@ Joint* AssimpLoader::TransformAssimpSkeletonNodeToJoint(const aiNode* rootNode, 
 	std::string nodeName = std::string(rootNode->mName.C_Str());
 	
 	glm::mat4x4 matrix = AssimpMatrix4x4ToGlmMatrix(rootNode->mTransformation);
-	matrix = glm::transpose(matrix);
 	if (nodeName == rootJointName)
 	{
-		matrix = matrix * CORRECTION_MATRIX;
+		matrix = CORRECTION_MATRIX * matrix;
 	}
 	Joint* joint = new Joint(*index, nodeName, matrix);
 	joints.insert(std::make_pair(joint->GetName(), *index));

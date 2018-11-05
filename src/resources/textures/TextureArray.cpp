@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "TextureArray.h"
 #include "PNGLoader.h"
+#include "../../utils/Log.h"
 #include <GL/glew.h>
 #include <iostream>
 #include <assert.h>
@@ -33,7 +34,7 @@ void TextureArray::Load(std::vector<std::string>& filenames, unsigned int textur
 
 		if (!loaded)
 		{
-			std::cout << "Couldn't load texture %s " << filenames[i];
+			Log(Log::LOG_ERROR) << "Couldn't load texture %s " << filenames[i];
 			return;
 		}
 		//the last value will be the remaining value for with height

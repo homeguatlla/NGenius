@@ -117,6 +117,7 @@
 #include "src/input/bindings/KeyToEventBind.h"
 #include "src/input/bindings/MouseToEventBind.h"
 
+#include "src/utils/Log.h"
 
 
 using namespace glm;
@@ -958,10 +959,11 @@ void CreateTerrain()
 
 void CreatePlayer()
 {
+	//TODO texto color std::cout << "\033[1;31mbold red text\033[0m normal text\n";
 	//PLAYER
 	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("animated_model"));
-	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	//material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("farmer_normalmap")), 1.0f));
+	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("material_farmer_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	//material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("material_farmer_normalmap")), 1.0f));
 	material->AddEffect(new MaterialEffectDirectionalLightProperties());
 	material->AddEffect(new MaterialEffectFogProperties());
 	material->AddEffect(new MaterialEffectShadowProperties(3));
@@ -1408,7 +1410,7 @@ void UpdateQuadTreeBox()
 	mQuadTreeMovedEntity->GetTransformation()->SetPosition(mQuadMovingPosition);
 
 	//mQuadTree.AddGameEntity(mQuadTreeMovedEntity);
-	std::cout << "num elements in quadtree: " << mQuadTree.GetNumEntities() << "\n";
+	Log(Log::LOG_INFO) << "num elements in quadtree: " << mQuadTree.GetNumEntities() << "\n";
 	
 	for (GameEntity* entity : mQuadTreeEntities)
 	{

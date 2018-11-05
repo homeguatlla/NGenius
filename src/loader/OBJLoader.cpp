@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "OBJLoader.h"
 #include "../resources/models/Mesh.h"
+#include "../utils/Log.h"
 
 #include <iostream>
 #include <fstream>
@@ -19,7 +20,7 @@ Mesh* OBJLoader::LoadModel(const std::string& filename)
 
 	std::ifstream input(filename);
 
-	std::cout << "Loading Model: " << filename << "\n";
+	Log(Log::LOG_INFO) << "Loading Model: " << filename << "\n";
 
 	if (input.is_open())
 	{
@@ -162,21 +163,21 @@ void OBJLoader::LoadMaterial(Mesh* model, const std::string& path,  const std::s
 	}
 	else
 	{
-		std::cout << "	Material filename " << filename << " not found." << "\n";
+		Log(Log::LOG_ERROR) << "	Material filename " << filename << " not found." << "\n";
 		assert(false);
 	}
 
 	model->SetMaterialName(materialName);
 	if (!diffuseTexture.empty())
 	{
-		std::cout << "	Diffuse texture filename " << path + diffuseTexture << "\n";
+		Log(Log::LOG_INFO) << "	Diffuse texture filename " << path + diffuseTexture << "\n";
 
-		model->SetDiffuseTextureName(path + diffuseTexture);
+		model->SetDiffuseTextureName(diffuseTexture);
 	}
 	if (!normalMapTexture.empty())
 	{
-		std::cout << "	Normalmap texture filename " << path + normalMapTexture << "\n";
-		model->SetNormalMapTextureName(path + normalMapTexture);
+		Log(Log::LOG_INFO) << "	Normalmap texture filename " << path + normalMapTexture << "\n";
+		model->SetNormalMapTextureName(normalMapTexture);
 	}
 }
 

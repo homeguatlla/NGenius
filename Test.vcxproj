@@ -159,7 +159,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FileReader.h" />
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -333,6 +332,8 @@
     <ClInclude Include="src\statistics\Statistics.h" />
     <ClInclude Include="src\TerrainGrid.h" />
     <ClInclude Include="src\TextureGenerator.h" />
+    <ClInclude Include="src\utils\FileReader.h" />
+    <ClInclude Include="src\utils\Log.h" />
     <ClInclude Include="src\VertexBuffersManager.h" />
     <ClInclude Include="src\visitor\BaseVisitable.h" />
     <ClInclude Include="src\visitor\BaseVisitor.h" />
@@ -340,7 +341,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="imgui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -524,6 +524,8 @@
     <ClCompile Include="src\resources\Transformation.cpp" />
     <ClCompile Include="src\statistics\Statistics.cpp" />
     <ClCompile Include="src\TerrainGrid.cpp" />
+    <ClCompile Include="src\utils\FileReader.cpp" />
+    <ClCompile Include="src\utils\Log.cpp" />
     <ClCompile Include="src\VertexBuffersManager.cpp" />
     <ClCompile Include="src\visitor\BaseVisitable.cpp" />
     <ClCompile Include="src\visitor\BaseVisitor.cpp" />
