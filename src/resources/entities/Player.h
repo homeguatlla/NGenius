@@ -27,6 +27,7 @@ class Player : public GameEntity
 	float mCurrentUpwardsSpeed;
 	float mLastTurnX;
 	float mCurrentTurnAngle;
+	float mOriginalTurnAngle;
 
 	bool mHasMoved;
 	bool mHasJumped;

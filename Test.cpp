@@ -1592,7 +1592,7 @@ void SetupConfiguration()
 		mIsWaterEnabled = true;
 		mIsGameplayCameraEnabled = true;
 		mIsFogEnabled = true;
-		mIsVegetationEnabled = false;
+		mIsVegetationEnabled = true;
 		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = true;
 		mIsSkyboxEnabled = true;

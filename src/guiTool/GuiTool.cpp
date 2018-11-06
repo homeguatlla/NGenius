@@ -98,7 +98,7 @@ void GuiTool::ShowEnvironmentTool()
 
 void GuiTool::Visit(EnvironmentSystem& environmentSystem)
 {
-	//environmentSystem.SetDayHour(mSunHour);
+	//environmentSystem.SetDayTime(mSunHour);
 	//environmentSystem.SetFogGradient(mFogGradient);
 	//environmentSystem.SetSunLightColor(glm::vec3(mSunLightColor[0], mSunLightColor[1], mSunLightColor[2]));
 }

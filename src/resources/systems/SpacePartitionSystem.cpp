@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-const float FOV_DILATATION = 10.0f;
+const float FOV_DILATATION = 5.0f;
 
 SpacePartitionSystem::SpacePartitionSystem() : 
 	mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limits<float>::max())),
@@ -30,7 +30,7 @@ void SpacePartitionSystem::Start()
 
 void SpacePartitionSystem::Build()
 {
-	mAABB.Expand(glm::vec3(10.0f));
+	mAABB.Expand(glm::vec3(5.0f));
 	mQuadTree = new GameEntityQuadTree(mAABB);
 	mHasBuilt = true;
 }

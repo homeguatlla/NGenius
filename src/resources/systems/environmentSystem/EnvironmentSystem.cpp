@@ -43,7 +43,7 @@ unsigned int EnvironmentSystem::GetNumberGameEntities() const
 
 void EnvironmentSystem::Start()
 {
-	mTimer = DAY_PERIOD_SEC * 0.5f / HOUR_DAY_SPEED;
+	mTimer = DAY_PERIOD_SEC * 0.25f / HOUR_DAY_SPEED;
 	mSunLight->AddFrame(1200.0f, 90.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(255.0f, 255.0f, 255.0f) / 255.0f, 0.004f, 1.5f, "day_cubemap");
 	mSunLight->AddFrame(1800.0f, 135.0f, glm::vec3(0.93f, 0.64f, 0.78f), glm::vec3(218.0f, 74.0f, 43.0f) / 255.0f, 0.04f, 1.5f, "day_cubemap");
 	mSunLight->AddFrame(2400.0f, 270.0f, glm::vec3(0.86f, 0.64f, 0.93f), glm::vec3(0.0f), 0.004f, 1.5f, "night_cubemap");

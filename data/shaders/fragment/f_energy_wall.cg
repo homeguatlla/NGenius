@@ -45,7 +45,7 @@ void main()
 		color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 	
-	float radius = 4.0;
+	float radius = 10.0;
 	float distance = length(contactPoint_ - positionWorldspace);
 	float value = step(radius, distance);
 
