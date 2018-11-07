@@ -176,6 +176,10 @@
     <ClInclude Include="src\BasicTypes.h" />
     <ClInclude Include="src\BitNumber.h" />
     <ClInclude Include="src\Frustum.h" />
+    <ClInclude Include="src\game\hud\GameHUD.h" />
+    <ClInclude Include="src\game\hud\ItemsListHUD.h" />
+    <ClInclude Include="src\game\ShooterGame.h" />
+    <ClInclude Include="src\game\ShooterGameConstants.h" />
     <ClInclude Include="src\guiTool\GuiTool.h" />
     <ClInclude Include="src\input\bindings\KeyToEventBind.h" />
     <ClInclude Include="src\input\bindings\MouseToEventBind.h" />
@@ -316,6 +320,7 @@
     <ClInclude Include="src\resources\systems\LightsSystem.h" />
     <ClInclude Include="src\resources\systems\ParticlesSystem.h" />
     <ClInclude Include="src\resources\systems\PhysicsSystem.h" />
+    <ClInclude Include="src\resources\systems\renderSystem\GUIRenderPassSubSystem.h" />
     <ClInclude Include="src\resources\systems\renderSystem\IFrameBuffer.h" />
     <ClInclude Include="src\resources\systems\renderSystem\PostProcessSubSystem.h" />
     <ClInclude Include="src\resources\systems\renderSystem\RenderPass.h" />
@@ -368,6 +373,9 @@
     <ClCompile Include="src\AABB.cpp" />
     <ClCompile Include="src\BitNumber.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
+    <ClCompile Include="src\game\hud\GameHUD.cpp" />
+    <ClCompile Include="src\game\hud\ItemsListHUD.cpp" />
+    <ClCompile Include="src\game\ShooterGame.cpp" />
     <ClCompile Include="src\guiTool\GuiTool.cpp" />
     <ClCompile Include="src\input\bindings\KeyToEventBind.cpp" />
     <ClCompile Include="src\input\bindings\MouseToEventBind.cpp" />
@@ -506,6 +514,7 @@
     <ClCompile Include="src\resources\systems\LightsSystem.cpp" />
     <ClCompile Include="src\resources\systems\ParticlesSystem.cpp" />
     <ClCompile Include="src\resources\systems\PhysicsSystem.cpp" />
+    <ClCompile Include="src\resources\systems\renderSystem\GUIRenderPassSubSystem.cpp" />
     <ClCompile Include="src\resources\systems\renderSystem\IFrameBuffer.cpp" />
     <ClCompile Include="src\resources\systems\renderSystem\PostProcessSubSystem.cpp" />
     <ClCompile Include="src\resources\systems\renderSystem\RenderPass.cpp" />

@@ -34,6 +34,7 @@ struct GLFWmonitor;
 class ShadowsRenderPassSubSystem;
 class WaterRenderPassSubSystem;
 class PostProcessSubSystem;
+class GUIRenderPassSubSystem;
 
 class GuiTool;
 class EnvironmentSystem;
@@ -69,6 +70,7 @@ class RenderSystem : public BaseVisitable<>
 
 	ShadowsRenderPassSubSystem* mShadowsRenderPass;
 	WaterRenderPassSubSystem* mWaterRenderPass;
+	GUIRenderPassSubSystem* mGUIRenderPass;
 
 	PostProcessSubSystem* mPostProcessSubsystem;
 
@@ -140,6 +142,8 @@ public:
 
 	void SetWaterEnabled(bool enabled);
 	void SetWaterParameters(const ICamera* camera, float waterY);
+
+	void SetGUIEnabled(bool enabled);
 
 	void SetFullScreen(bool isFullScreen);
 	void SetOverdrawEnabled(bool isOverdrawEnabled);

@@ -66,6 +66,11 @@ void NGenius::Start()
 	mRenderSystem->Start();
 	mSpacePartitionSystem->Start();
 	mDebugSystem->Start();
+
+	if (mStartHandler != nullptr)
+	{
+		mStartHandler(*this);
+	}
 }
 
 void NGenius::Run()
@@ -218,6 +223,11 @@ void NGenius::RegisterUpdateHandler(std::function<void(float elapsedTime)> callb
 	mUpdateHandler = callback;
 }
 
+void NGenius::RegisterStartHandler(std::function<void(NGenius& engine)> callback)
+{
+	mStartHandler = callback;
+}
+
 void NGenius::OnKey(int key, int action)
 {
 	mInputHandler->OnKey(key, action);
@@ -311,6 +321,11 @@ void NGenius::SetFullScreen(bool isFullScreen)
 {
 	assert(mRenderSystem != nullptr);
 	mRenderSystem->SetFullScreen(isFullScreen);
+}
+
+GameScene* NGenius::GetGameScene(const std::string& name)
+{
+	return mGameScene;
 }
 
 GameScene* NGenius::CreateGameScene(const std::string& name)
@@ -407,6 +422,12 @@ void NGenius::SetWaterParameters(const ICamera* camera, float waterY)
 {
 	assert(mRenderSystem != nullptr);
 	mRenderSystem->SetWaterParameters(camera, waterY);
+}
+
+void NGenius::SetGUIEnabled(bool enabled)
+{
+	assert(mRenderSystem != nullptr);
+	mRenderSystem->SetGUIEnabled(enabled);
 }
 
 void NGenius::SetCastingShadowsTarget(const GameEntity* target)

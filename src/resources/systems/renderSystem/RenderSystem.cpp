@@ -4,6 +4,7 @@
 #include "WaterRenderPassSubSystem.h"
 
 #include "PostProcessSubSystem.h"
+#include "GUIRenderPassSubSystem.h"
 
 #include "../../GameEntity.h"
 #include "../../camera/ICamera.h"
@@ -66,6 +67,7 @@ mWindow(nullptr),
 mShadowsRenderPass(nullptr),
 mWaterRenderPass(nullptr),
 mPostProcessSubsystem(nullptr),
+mGUIRenderPass(nullptr),
 mEnvironmentSystem(nullptr),
 mCurrentMaterial(nullptr),
 mDiffuseTexture(nullptr),
@@ -121,6 +123,7 @@ void RenderSystem::Start()
 	mShadowsRenderPass->Init();
 	mWaterRenderPass->Init();
 	mPostProcessSubsystem->Init();
+	mGUIRenderPass->Init();
 }
 
 void RenderSystem::CreateSubSystems()
@@ -129,6 +132,7 @@ void RenderSystem::CreateSubSystems()
 	mWaterRenderPass = new WaterRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
 
 	mPostProcessSubsystem = new PostProcessSubSystem(this);
+	mGUIRenderPass = new GUIRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
 }
 
 void RenderSystem::DestroySubSystems()
@@ -136,6 +140,7 @@ void RenderSystem::DestroySubSystems()
 	delete mPostProcessSubsystem;
 	delete mWaterRenderPass;
 	delete mShadowsRenderPass;
+	delete mGUIRenderPass;
 }
 
 void RenderSystem::LoadResources()
@@ -904,6 +909,12 @@ void RenderSystem::SetWaterEnabled(bool enabled)
 void RenderSystem::SetWaterParameters(const ICamera* camera, float waterY)
 {
 	mWaterRenderPass->SetWaterParameters(camera, waterY);
+}
+
+void RenderSystem::SetGUIEnabled(bool enabled)
+{
+	assert(mGUIRenderPass != nullptr);
+	mGUIRenderPass->SetEnable(enabled);
 }
 
 ITexture* RenderSystem::CreateDepthTexture(const std::string& name, const glm::ivec2& size)

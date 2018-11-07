@@ -44,13 +44,13 @@ void ShadowsRenderPassSubSystem::Init()
 		mRenderSystem->AddCamera(mShadowCastCamera);
 		mRenderPass = CreateShadowRenderPass();
 		mRenderSystem->AddRenderPass(mRenderPass);
-		mIsInitialized = true;
+		mIsInitialized = false;
 	}
 }
 
 void ShadowsRenderPassSubSystem::Update()
 {
-	if (mIsShadowCastEnabled)
+	if (mIsInitialized && mIsShadowCastEnabled)
 	{
 		UpdateShadowCastMatrix();
 	}
@@ -68,6 +68,7 @@ void ShadowsRenderPassSubSystem::UpdateShadowCastMatrix()
 void ShadowsRenderPassSubSystem::SetCastingShadowsTarget(const GameEntity* target)
 {
 	mTarget = target;
+	mIsInitialized = true;
 }
 
 void ShadowsRenderPassSubSystem::SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter)

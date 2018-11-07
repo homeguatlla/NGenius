@@ -34,6 +34,7 @@ mCurrentRunSpeed(0.0f),
 mCurrentTurnSpeed(0.0f),
 mCurrentUpwardsSpeed(0.0f),
 mCurrentTurnAngle(0.0f),
+mOriginalTurnAngle(0.0f),
 mHasMoved(false), 
 mHasJumped(false)
 {
@@ -41,6 +42,9 @@ mHasJumped(false)
 	AddComponent(physicsComponent);
 	AddComponent(collisionComponent);
 	AddComponent(characterComponent);
+	//saving the original rotation Y because player can modify it when rotating the player and 
+	//we need to perserve the original rotation
+	mOriginalTurnAngle = transformation->GetRotation().y;
 }
 
 
@@ -207,6 +211,7 @@ void Player::UpdateMoving(float elapsedTime)
 			PhysicsComponent* physicsComponent = GetComponent<PhysicsComponent>();
 
 			float rotationAngle = CalculateTurnPosition(elapsedTime, mCurrentTurnSpeed);
+			rotationAngle += mOriginalTurnAngle;
 			glm::vec3 newVelocity = CalculateRunPosition(elapsedTime, rotationAngle, physicsComponent->GetVelocity(), mCurrentRunSpeed);
 			newVelocity = CalculateJumpPosition(elapsedTime, newVelocity, mCurrentUpwardsSpeed);
 			physicsComponent->SetVelocity(newVelocity);

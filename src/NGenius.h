@@ -62,6 +62,7 @@ class NGenius : public BaseVisitable<>
 	bool mIsSpacePartitionEnabled;
 	
 	std::function<void(float elapsedTime)> mUpdateHandler;
+	std::function<void(NGenius& engine)> mStartHandler;
 
 public:
 	explicit NGenius(std::string applicationName, float screenWidth, float screenHeight);
@@ -86,6 +87,8 @@ public:
 	GLFWwindow* GetGLWindow() const;
 
 	GameScene* CreateGameScene(const std::string& name);
+	GameScene* GetGameScene(const std::string& name);
+
 	void AddParticleEmitter(ParticlesEmitter* emitter);
 	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing);
 	void AddLight(Light* light);
@@ -97,6 +100,7 @@ public:
 	void UnRegisterInputListener(IInputListener* listener);
 	void RegisterInputHandler(std::function<void(GLFWwindow* window)> callback);
 	void RegisterUpdateHandler(std::function<void(float elapsedTime)> callback);
+	void RegisterStartHandler(std::function<void(NGenius& engine)> callback);
 
 	void OnKey(int key, int action);
 	void OnMouseScroll(int button, float scroll);
@@ -118,6 +122,9 @@ public:
 	//water
 	void SetWaterEnabled(bool enabled);
 	void SetWaterParameters(const ICamera* camera, float waterY);
+
+	//GUI
+	void SetGUIEnabled(bool enabled);
 
 	//debug
 	void SetDebugModeEnabled(bool enabled);

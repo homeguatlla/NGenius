@@ -82,6 +82,10 @@ void TexturesLibrary::Load()
 	LoadTexture("barrel_diffuse", "data/models/barrel/barrel.png", false, false);
 	LoadTexture("barrel_normalmap", "data/models/barrel/barrelNormal.png", false, false);
 
+	//UI
+	LoadTexture("item_quad_base", "data/ui/hud/item_quad_base.png", false, false);
+	LoadTexture("item_quad_selected", "data/ui/hud/item_quad_selected.png", false, false);
+
 	LoadTexturesPendingToLoad();
 }
 

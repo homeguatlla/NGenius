@@ -119,6 +119,8 @@
 
 #include "src/utils/Log.h"
 
+#include "src/game/ShooterGame.h"
+
 
 using namespace glm;
 using namespace std;
@@ -142,7 +144,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = RELEASE;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -211,6 +213,11 @@ glm::vec3 mQuadMovingPosition(0.0f);
 glm::vec3 mQuadMovingScale(1.0f);
 GameEntity* mQuadTreeMovedEntity;
 std::vector<GameEntity*> mQuadTreeEntities;
+
+
+bool mRunShooter = true;
+ShooterGame mGame;
+
 
 
 double aleatori()
@@ -1189,7 +1196,6 @@ void CreateEntities()
 {
 	const Texture* texture = static_cast<const Texture*>(mEngine.CreateDepthTexture("depth_texture", glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
 
-	mScene = mEngine.CreateGameScene("mainScene");
 	//CreateHUD();
 
 	CreatePlayer();
@@ -1341,10 +1347,6 @@ void CreateSubSystems()
 	CreateParticlesRenderPass();
 
 	CreateGUIRenderPass();
-}
-
-void DeleteEntities()
-{
 }
 
 void UpdateEnergyWallCollisions(float elapsedTime)
@@ -1551,19 +1553,42 @@ void UpdateInput(GLFWwindow* window)
 
 void Update(float elapsedTime)
 {
-	UpdateCommand(elapsedTime);
-	
-	if (mIsEnergyWallEnabled)
+	if (mRunShooter)
 	{
-		UpdateEnergyWallCollisions(elapsedTime);
+		mGame.Update(elapsedTime);
 	}
-	if (mIsStatisticsVisible && mIsTextEnabled)
+	else
 	{
-		UpdateStatitstics();
+		UpdateCommand(elapsedTime);
+
+		if (mIsEnergyWallEnabled)
+		{
+			UpdateEnergyWallCollisions(elapsedTime);
+		}
+		if (mIsStatisticsVisible && mIsTextEnabled)
+		{
+			UpdateStatitstics();
+		}
+		if (mConfiguration == QUADTREE_WITH_CAMERA)
+		{
+			UpdateCameraAABB();
+		}
 	}
-	if (mConfiguration == QUADTREE_WITH_CAMERA)
+}
+
+void Start(NGenius& engine)
+{
+	if (mRunShooter)
 	{
-		UpdateCameraAABB();
+		mGame.Start(engine);
+	}
+	else
+	{
+		mScene = mEngine.CreateGameScene("mainScene");
+		CreateEntities();
+		CreateSubSystems();
+
+		mEngine.SetCastingShadowsTarget(mPlayer);
 	}
 }
 
@@ -1769,7 +1794,7 @@ void Initialize()
 
 	mEngine.RegisterInputHandler(std::bind(&UpdateInput, std::placeholders::_1));
 	mEngine.RegisterUpdateHandler(std::bind(&Update, std::placeholders::_1));
-
+	mEngine.RegisterStartHandler(std::bind(&Start, std::placeholders::_1));
 	mEngine.Init(mIsFullScreen);
 
 	CreateCameras();
@@ -1787,6 +1812,8 @@ void Initialize()
 	glfwSetCursorPosCallback(mEngine.GetGLWindow(), &MouseCursorPosCallback);
 
 	mEngine.SetFogEnabled(mIsFogEnabled);
+
+	mEngine.SetGUIEnabled(true);
 	mEngine.Start();
 }
 
@@ -1794,14 +1821,7 @@ int main(void)
 {
 	Initialize();
 
-	CreateEntities();
-	CreateSubSystems();
-
-	mEngine.SetCastingShadowsTarget(mPlayer);
-
 	mEngine.Run();
-
-	DeleteEntities();
 
 	return 0;
 }
