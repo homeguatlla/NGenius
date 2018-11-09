@@ -70,6 +70,12 @@ const IMaterial* IRenderer::GetMaterial() const
 	return mMaterial;
 }
 
+void IRenderer::SetMaterial(IMaterial* material)
+{
+	assert(material != nullptr);
+	mMaterial = material;
+}
+
 Model* IRenderer::GetModel()
 {
 	return mModel;

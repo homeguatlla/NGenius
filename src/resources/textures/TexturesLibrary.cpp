@@ -86,6 +86,9 @@ void TexturesLibrary::Load()
 	LoadTexture("item_quad_base", "data/ui/hud/item_quad_base.png", false, false);
 	LoadTexture("item_quad_selected", "data/ui/hud/item_quad_selected.png", false, false);
 
+	LoadTexture("item_water", "data/ui/hud/items/water.png", false, false);
+	LoadTexture("item_shotgun", "data/ui/hud/items/shotgun.png", false, false);
+
 	LoadTexturesPendingToLoad();
 }
 

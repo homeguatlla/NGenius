@@ -1,12 +1,13 @@
 #pragma once
 #include "../../NGenius.h"
 
-class GameEntity;
 class GameScene;
+class ItemHUD;
 
 class ItemsListHUD
 {
-	std::vector<GameEntity*> mItemsListEntity;
+	NGenius* mEngine;
+	std::vector<ItemHUD*> mItemsList;
 	GameEntity* mSelectedItemEntity;
 	glm::vec2 mScreenCentre;
 	glm::vec2 mScreenCoord;
@@ -18,17 +19,18 @@ public:
 
 	void Show();
 	void Update(float elapsedTime);
+	void AddItem(unsigned int itemId);
 
 private:
-	void Create(NGenius& engine, GameScene* scene);
-	void CreateItem(NGenius& engine, GameScene* scene, const glm::vec2& screenCoord, const std::string& materialName, const std::string& textureName);
-	GameEntity* CreateItemBase(NGenius& engine, GameScene* scene, const glm::vec2& screenCoord, const std::string& materialName, const std::string& textureName);
-	void CreateItems(NGenius& engine, GameScene* scene);
-	void CreateSelectedItem(NGenius& engine, GameScene* scene);
+	void Create(GameScene* scene);
+	void CreateItem(GameScene* scene, const glm::vec2& screenCoord, const std::string& materialName, const std::string& textureName);
+	void CreateItems(GameScene* scene);
+	void CreateSelectedItem(GameScene* scene);
 
 	void UpdateGameEvents();
 	void UpdateSelectedItemPosition();
 
+	IMaterial* CreateMaterial(const std::string& materialName, const std::string& textureName);
 	glm::vec2 CalculateItemPosition(unsigned int item);
 };
 

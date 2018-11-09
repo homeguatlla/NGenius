@@ -220,6 +220,12 @@
     <Filter Include="Header Files\game\hud">
       <UniqueIdentifier>{b141b0b4-a886-49e5-9d7b-f676efa8b2d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game\events">
+      <UniqueIdentifier>{afbffb06-b6c4-4e2c-a256-c19d50de31b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\events">
+      <UniqueIdentifier>{9d51f7fc-c0bb-45ca-8724-5da663d3a4a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -780,6 +786,12 @@
     <ClInclude Include="src\game\hud\ItemsListHUD.h">
       <Filter>Header Files\game\hud</Filter>
     </ClInclude>
+    <ClInclude Include="src\game\hud\ItemHUD.h">
+      <Filter>Header Files\game\hud</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\events\StoreIntoInventoryEvent.h">
+      <Filter>Header Files\game\events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1309,6 +1321,12 @@
     </ClCompile>
     <ClCompile Include="src\game\hud\ItemsListHUD.cpp">
       <Filter>Source Files\game\hud</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\hud\ItemHUD.cpp">
+      <Filter>Source Files\game\hud</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\events\StoreIntoInventoryEvent.cpp">
+      <Filter>Source Files\game\events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

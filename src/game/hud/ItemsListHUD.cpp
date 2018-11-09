@@ -16,9 +16,13 @@
 #include "../../resources/components/InputComponent.h"
 
 #include "../../resources/events/characterControllerEvents/ZoomEvent.h"
+#include "../events/StoreIntoInventoryEvent.h"
 #include "../../input/bindings/MouseToEventBind.h"
+#include "../../input/bindings/KeyToEventBind.h"
 
 #include "../ShooterGameConstants.h"
+
+#include "ItemHUD.h"
 
 #include <string>
 #include <iostream>
@@ -28,18 +32,23 @@ const std::string ITEM_QUAD_SELECTED_TEXTURE("item_quad_selected");
 
 const std::string MATERIAL_ITEM("item_quad_base_material");
 const std::string MATERIAL_ITEM_SELECTED("item_quad_selected_material");
-
 const int ITEM_SIZE = 64;
 const int NUM_ITEMS = 5;
 const float OFFSET_BETWEEN_ITEMS = 0.07f;
 
+const std::string ITEMS_AVAILABLE_LIST[2] = {	
+												std::string("item_water"), 
+												std::string("item_shotgun") };
+
+
 ItemsListHUD::ItemsListHUD(NGenius& engine, GameScene* scene, const glm::vec2& screenCoord) :
+	mEngine(&engine),
 	mSelectedItemEntity(nullptr),
 	mScreenCentre(engine.GetScreenWidth(), -engine.GetScreenHeight()),
 	mScreenCoord(screenCoord),
 	mSelectedItem(0)
 {
-	Create(engine, scene);
+	Create(scene);
 }
 
 
@@ -51,10 +60,19 @@ void ItemsListHUD::Show()
 {
 }
  
-void ItemsListHUD::Create(NGenius& engine, GameScene* scene)
+void ItemsListHUD::AddItem(unsigned int itemId)
 {
-	CreateItems(engine, scene);
-	CreateSelectedItem(engine, scene);
+	ItemHUD* item = mItemsList[mSelectedItem];
+	assert(item != nullptr);
+
+	IMaterial* material = CreateMaterial(ITEMS_AVAILABLE_LIST[itemId] + std::string("_material"), ITEMS_AVAILABLE_LIST[itemId]);
+	item->SetItemMaterial(material);
+}
+
+void ItemsListHUD::Create(GameScene* scene)
+{
+	CreateItems(scene);
+	CreateSelectedItem(scene);
 }
 
 void ItemsListHUD::Update(float elapsedTime)
@@ -80,6 +98,11 @@ void ItemsListHUD::UpdateGameEvents()
 			mSelectedItem = newSelectedItem;
 			UpdateSelectedItemPosition();
 		}
+		else if (event->IsOfType<StoreIntoInventoryEvent>())
+		{
+			const StoreIntoInventoryEvent* storeIntoInventoryEvent = static_cast<const StoreIntoInventoryEvent*>(event);
+			AddItem(storeIntoInventoryEvent->GetItemId());
+		}
 	}
 }
 
@@ -96,51 +119,58 @@ glm::vec2 ItemsListHUD::CalculateItemPosition(unsigned int item)
 	return mScreenCentre * glm::vec2(mScreenCoord.x + OFFSET_BETWEEN_ITEMS * item, mScreenCoord.y);
 }
 
-void ItemsListHUD::CreateItems(NGenius& engine, GameScene* scene)
+void ItemsListHUD::CreateItems(GameScene* scene)
 {
 	for (int i = 0; i < NUM_ITEMS; ++i)
 	{
 		glm::vec2 screenCoords = CalculateItemPosition(i);
-		CreateItem(engine, scene, screenCoords, MATERIAL_ITEM, ITEM_QUAD_TEXTURE);
+		CreateItem(scene, screenCoords, MATERIAL_ITEM, ITEM_QUAD_TEXTURE);
 	}
 }
 
-void ItemsListHUD::CreateSelectedItem(NGenius& engine, GameScene* scene)
+void ItemsListHUD::CreateSelectedItem(GameScene* scene)
 {
 	glm::vec2 screenCoords = CalculateItemPosition(mSelectedItem);
-	mSelectedItemEntity = CreateItemBase(engine, scene, screenCoords, MATERIAL_ITEM_SELECTED, ITEM_QUAD_SELECTED_TEXTURE);
+	IMaterial* material = CreateMaterial(MATERIAL_ITEM_SELECTED, ITEM_QUAD_SELECTED_TEXTURE);
+	IRenderer* guiRenderer = new IndicesRenderer(mEngine->GetModel(GUI_QUAD_MODEL), material);
+	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
+
+	mSelectedItemEntity = new GameEntity(
+		new Transformation(glm::vec3(screenCoords.x, screenCoords.y, 0.0f),
+		glm::vec3(0.0f),
+		glm::vec3(ITEM_SIZE)),
+		guiRenderer);
 
 	//adding control of mouse roller
 	InputComponent* inputComponent = new InputComponent();
 	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
+	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_E, new StoreIntoInventoryEvent()));
 	mSelectedItemEntity->AddComponent(inputComponent);
 	mSelectedItemEntity->AddComponent(new CharacterComponent());
 
 	scene->AddEntity(mSelectedItemEntity);
 }
 
-GameEntity* ItemsListHUD::CreateItemBase(NGenius& engine, GameScene* scene, const glm::vec2& screenCoord, const std::string& materialName, const std::string& textureName)
+void ItemsListHUD::CreateItem(GameScene* scene, const glm::vec2& screenCoord, const std::string& materialName, const std::string& textureName)
 {
-	IMaterial* material = engine.GetMaterial(materialName);
-	if (material == nullptr)
-	{
-		material = engine.CreateMaterial(materialName, engine.GetShader("gui"));
-	}
-	material->AddEffect(new MaterialEffectDiffuseTexture(engine.GetTexture(textureName), glm::vec3(1.0f), 1.0f));
-	IRenderer* guiRenderer = new IndicesRenderer(engine.GetModel(GUI_QUAD_MODEL), material);
+	IMaterial* material = CreateMaterial(materialName, textureName);
+	IRenderer* guiRenderer = new IndicesRenderer(mEngine->GetModel(GUI_QUAD_MODEL), material);
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
-	GameEntity* itemGameEntity = new GameEntity(new Transformation(glm::vec3(screenCoord.x, screenCoord.y, 0.0f),
-		glm::vec3(0.0f),
-		glm::vec3(ITEM_SIZE)),
-		guiRenderer
-	);
-	return itemGameEntity;
+	ItemHUD* item = new ItemHUD(guiRenderer, screenCoord, ITEM_SIZE);
+	mItemsList.push_back(item);
+	scene->AddEntity(item->GetGameEntity());
 }
 
-void ItemsListHUD::CreateItem(NGenius& engine, GameScene* scene, const glm::vec2& screenCoord, const std::string& materialName, const std::string& textureName)
+IMaterial* ItemsListHUD::CreateMaterial(const std::string& materialName, const std::string& textureName)
 {
-	GameEntity* itemGameEntity = CreateItemBase(engine, scene, screenCoord, materialName, textureName);
-	mItemsListEntity.push_back(itemGameEntity);
-	scene->AddEntity(itemGameEntity);
+	IMaterial* material = mEngine->GetMaterial(materialName);
+	if (material == nullptr)
+	{
+		material = mEngine->CreateMaterial(materialName, mEngine->GetShader("gui"));
+		material->AddEffect(new MaterialEffectDiffuseTexture(mEngine->GetTexture(textureName), glm::vec3(1.0f), 1.0f));
+		std::cout << "material item hud created: " << materialName << "\n";
+	}
+
+	return material;
 }

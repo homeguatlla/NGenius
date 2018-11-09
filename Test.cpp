@@ -215,7 +215,7 @@ GameEntity* mQuadTreeMovedEntity;
 std::vector<GameEntity*> mQuadTreeEntities;
 
 
-bool mRunShooter = true;
+bool mIsShooterGameRunning = true;
 ShooterGame mGame;
 
 
@@ -1480,80 +1480,83 @@ void UpdateCameraAABB()
 
 void UpdateInput(GLFWwindow* window)
 {
-	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+	if (!mIsShooterGameRunning)
 	{
-		if (!mIsGameplayCameraEnabled)
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 		{
-			mGameplayPass->SetCamera(mGameplayCamera);
+			if (!mIsGameplayCameraEnabled)
+			{
+				mGameplayPass->SetCamera(mGameplayCamera);
+			}
+			else
+			{
+				mGameplayPass->SetCamera(mEagleEyeCamera);
+			}
+
+			mIsGameplayCameraEnabled = !mIsGameplayCameraEnabled;
 		}
-		else
+		else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
 		{
-			mGameplayPass->SetCamera(mEagleEyeCamera);
+			mIsShadowEnabled = !mIsShadowEnabled;
+			mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
+		}
+		else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+		{
+			if (mCurrentCommand == nullptr)
+			{
+				mCurrentCommand = new RiseTerrainCommand(mTerrain);
+			}
+		}
+		else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		{
+			mIsSpacePartitionEnabled = !mIsSpacePartitionEnabled;
+			mEngine.SetIsSpacePartitionEnabled(mIsSpacePartitionEnabled);
 		}
 
-		mIsGameplayCameraEnabled = !mIsGameplayCameraEnabled;
-	}
-	else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-	{
-		mIsShadowEnabled = !mIsShadowEnabled;
-		mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
-	}
-	else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-	{
-		if (mCurrentCommand == nullptr)
+		if (mConfiguration == QUADTREE)
 		{
-			mCurrentCommand = new RiseTerrainCommand(mTerrain);
+			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+			{
+				mQuadMovingPosition.x += 0.01f;
+				UpdateQuadTreeBox();
+			}
+			else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+			{
+				mQuadMovingPosition.x -= 0.01f;
+				UpdateQuadTreeBox();
+			}
+			else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+			{
+				mQuadMovingPosition.z += 0.01f;
+				UpdateQuadTreeBox();
+			}
+			else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+			{
+				mQuadMovingPosition.z -= 0.01f;
+				UpdateQuadTreeBox();
+			}
+			else if (glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_PRESS)
+			{
+				mQuadMovingScale.x += 0.01f;
+				UpdateQuadTreeBox();
+			}
+			else if (glfwGetKey(window, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS)
+			{
+				mQuadMovingScale.x -= 0.01f;
+				UpdateQuadTreeBox();
+			}
 		}
-	} 
-	else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-	{
-		mIsSpacePartitionEnabled = !mIsSpacePartitionEnabled;
-		mEngine.SetIsSpacePartitionEnabled(mIsSpacePartitionEnabled);
-	}
 
-	if (mConfiguration == QUADTREE)
-	{
-		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		if (mCurrentCommand != nullptr)
 		{
-			mQuadMovingPosition.x += 0.01f;
-			UpdateQuadTreeBox();
+			mCurrentCommand->Execute();
 		}
-		else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		{
-			mQuadMovingPosition.x -= 0.01f;
-			UpdateQuadTreeBox();
-		}
-		else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		{
-			mQuadMovingPosition.z += 0.01f;
-			UpdateQuadTreeBox();
-		}
-		else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		{
-			mQuadMovingPosition.z -= 0.01f;
-			UpdateQuadTreeBox();
-		}
-		else if (glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_PRESS)
-		{
-			mQuadMovingScale.x += 0.01f;
-			UpdateQuadTreeBox();
-		}
-		else if (glfwGetKey(window, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS)
-		{
-			mQuadMovingScale.x -= 0.01f;
-			UpdateQuadTreeBox();
-		}
-	}
-
-	if (mCurrentCommand != nullptr)
-	{
-		mCurrentCommand->Execute();
 	}
 }
 
 void Update(float elapsedTime)
 {
-	if (mRunShooter)
+	if (mIsShooterGameRunning)
 	{
 		mGame.Update(elapsedTime);
 	}
@@ -1578,7 +1581,7 @@ void Update(float elapsedTime)
 
 void Start(NGenius& engine)
 {
-	if (mRunShooter)
+	if (mIsShooterGameRunning)
 	{
 		mGame.Start(engine);
 	}

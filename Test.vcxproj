@@ -176,7 +176,9 @@
     <ClInclude Include="src\BasicTypes.h" />
     <ClInclude Include="src\BitNumber.h" />
     <ClInclude Include="src\Frustum.h" />
+    <ClInclude Include="src\game\events\StoreIntoInventoryEvent.h" />
     <ClInclude Include="src\game\hud\GameHUD.h" />
+    <ClInclude Include="src\game\hud\ItemHUD.h" />
     <ClInclude Include="src\game\hud\ItemsListHUD.h" />
     <ClInclude Include="src\game\ShooterGame.h" />
     <ClInclude Include="src\game\ShooterGameConstants.h" />
@@ -373,7 +375,9 @@
     <ClCompile Include="src\AABB.cpp" />
     <ClCompile Include="src\BitNumber.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
+    <ClCompile Include="src\game\events\StoreIntoInventoryEvent.cpp" />
     <ClCompile Include="src\game\hud\GameHUD.cpp" />
+    <ClCompile Include="src\game\hud\ItemHUD.cpp" />
     <ClCompile Include="src\game\hud\ItemsListHUD.cpp" />
     <ClCompile Include="src\game\ShooterGame.cpp" />
     <ClCompile Include="src\guiTool\GuiTool.cpp" />

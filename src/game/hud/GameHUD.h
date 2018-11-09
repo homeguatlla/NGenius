@@ -17,6 +17,7 @@ public:
 
 	void Show();
 	void Update(float elapsedTime);
+	void StoreItem(int itemId);
 
 private:
 	void Create(GameScene* scene);

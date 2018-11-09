@@ -63,6 +63,8 @@ public:
 
 	IMaterial* GetMaterial();
 	const IMaterial* GetMaterial() const;
+	void SetMaterial(IMaterial* material);
+
 	Model* GetModel();
 
 	bool HasTransformation() const;
