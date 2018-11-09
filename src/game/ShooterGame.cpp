@@ -16,7 +16,7 @@ void ShooterGame::Start(NGenius& engine)
 {
 	mScene = engine.CreateGameScene(GAME_SCENE_NAME);
 	mGameHUD = new GameHUD(engine, mScene);
-	mGameHUD->Show();
+	mGameHUD->SetVisibility(false);
 }
 
 void ShooterGame::Update(float elapsedTime)

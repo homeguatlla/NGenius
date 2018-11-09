@@ -17,7 +17,7 @@ public:
 	ItemsListHUD(NGenius& engine, GameScene* scene, const glm::vec2& screenCoord);
 	~ItemsListHUD();
 
-	void Show();
+	void SetVisibility(bool visible);
 	void Update(float elapsedTime);
 	void AddItem(unsigned int itemId);
 

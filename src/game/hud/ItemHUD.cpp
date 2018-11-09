@@ -38,3 +38,8 @@ void ItemHUD::SetItemMaterial(IMaterial* material)
 		renderer->SetMaterial(material);
 	}
 }
+
+void ItemHUD::SetVisibility(bool visible)
+{
+	mItemEntity->GetRenderer()->SetVisibility(visible);
+}

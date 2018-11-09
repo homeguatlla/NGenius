@@ -15,7 +15,7 @@ public:
 	GameHUD(NGenius& engine, GameScene* scene);
 	~GameHUD();
 
-	void Show();
+	void SetVisibility(bool visibility);
 	void Update(float elapsedTime);
 	void StoreItem(int itemId);
 

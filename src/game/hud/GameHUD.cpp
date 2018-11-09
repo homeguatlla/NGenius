@@ -24,9 +24,9 @@ GameHUD::~GameHUD()
 	
 }
 
-void GameHUD::Show()
+void GameHUD::SetVisibility(bool visible)
 {
-	mItemsList->Show();
+	mItemsList->SetVisibility(visible);
 }
 
 void GameHUD::Create(GameScene* scene)

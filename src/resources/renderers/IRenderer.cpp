@@ -74,6 +74,7 @@ void IRenderer::SetMaterial(IMaterial* material)
 {
 	assert(material != nullptr);
 	mMaterial = material;
+	mBitRenderInformation.SetMaterial(mMaterial->GetMaterialID());
 }
 
 Model* IRenderer::GetModel()

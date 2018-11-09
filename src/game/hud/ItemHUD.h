@@ -17,6 +17,7 @@ public:
 
 	void Create(IRenderer* renderer, const glm::vec2& screenCoord, int size);
 	void SetItemMaterial(IMaterial* material);
+	void SetVisibility(bool visible);
 
 	GameEntity* GetGameEntity();
 };

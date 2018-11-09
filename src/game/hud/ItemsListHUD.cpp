@@ -36,6 +36,9 @@ const int ITEM_SIZE = 64;
 const int NUM_ITEMS = 5;
 const float OFFSET_BETWEEN_ITEMS = 0.07f;
 
+const float LAYER_SELECTED_ITEM_Z = 1.0f;
+
+
 const std::string ITEMS_AVAILABLE_LIST[2] = {	
 												std::string("item_water"), 
 												std::string("item_shotgun") };
@@ -56,10 +59,15 @@ ItemsListHUD::~ItemsListHUD()
 {
 }
 
-void ItemsListHUD::Show()
+void ItemsListHUD::SetVisibility(bool visible)
 {
+	mSelectedItemEntity->GetRenderer()->SetVisibility(visible);
+	for (unsigned int i = 0; i < mItemsList.size(); ++i)
+	{
+		mItemsList[i]->SetVisibility(visible);
+	}
 }
- 
+
 void ItemsListHUD::AddItem(unsigned int itemId)
 {
 	ItemHUD* item = mItemsList[mSelectedItem];
@@ -136,7 +144,7 @@ void ItemsListHUD::CreateSelectedItem(GameScene* scene)
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
 	mSelectedItemEntity = new GameEntity(
-		new Transformation(glm::vec3(screenCoords.x, screenCoords.y, 0.0f),
+		new Transformation(glm::vec3(screenCoords.x, screenCoords.y, LAYER_SELECTED_ITEM_Z),
 		glm::vec3(0.0f),
 		glm::vec3(ITEM_SIZE)),
 		guiRenderer);
