@@ -13,14 +13,15 @@
 
 #include "../ShooterGameConstants.h"
 
-GameHUD::GameHUD(NGenius& engine, GameScene* scene)
+GameHUD::GameHUD(NGenius& engine, GameScene* scene) : mEngine(engine)
 {
-	Create(engine, scene);
+	Create(scene);
 }
 
 
 GameHUD::~GameHUD()
 {
+	
 }
 
 void GameHUD::Show()
@@ -28,9 +29,15 @@ void GameHUD::Show()
 	mItemsList->Show();
 }
 
-void GameHUD::Create(NGenius& engine, GameScene* scene)
+void GameHUD::Create(GameScene* scene)
 {
-	mItemsList = new  ItemsListHUD(engine, scene, glm::vec2(0.15f, 0.43f));
+	mItemsList = new  ItemsListHUD(mEngine, scene, glm::vec2(0.15f, 0.43f));
 	//mGameHudGameEntity->SetEnabled(true);
-
+	
 }
+
+void GameHUD::Update(float elapsedTime)
+{
+	mItemsList->Update(elapsedTime);
+}
+

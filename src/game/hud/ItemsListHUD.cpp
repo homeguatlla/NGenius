@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "ItemsListHUD.h"
+
+#include <GLFW/glfw3.h>
+
 #include "../../resources/GameEntity.h"
 #include "../../resources/materials/IMaterial.h"
 #include "../../resources/materials/MaterialsLibrary.h"
@@ -9,9 +12,16 @@
 #include "../../resources/renderers/IndicesRenderer.h"
 #include "../../resources/scene/GameScene.h"
 
+#include "../../resources/components/CharacterComponent.h"
+#include "../../resources/components/InputComponent.h"
+
+#include "../../resources/events/characterControllerEvents/ZoomEvent.h"
+#include "../../input/bindings/MouseToEventBind.h"
+
 #include "../ShooterGameConstants.h"
 
 #include <string>
+#include <iostream>
 
 const std::string ITEM_QUAD_TEXTURE("item_quad_base");
 const std::string ITEM_QUAD_SELECTED_TEXTURE("item_quad_selected");
@@ -25,6 +35,7 @@ const float OFFSET_BETWEEN_ITEMS = 0.07f;
 
 ItemsListHUD::ItemsListHUD(NGenius& engine, GameScene* scene, const glm::vec2& screenCoord) :
 	mSelectedItemEntity(nullptr),
+	mScreenCentre(engine.GetScreenWidth(), -engine.GetScreenHeight()),
 	mScreenCoord(screenCoord),
 	mSelectedItem(0)
 {
@@ -39,25 +50,72 @@ ItemsListHUD::~ItemsListHUD()
 void ItemsListHUD::Show()
 {
 }
-
+ 
 void ItemsListHUD::Create(NGenius& engine, GameScene* scene)
 {
 	CreateItems(engine, scene);
 	CreateSelectedItem(engine, scene);
 }
 
+void ItemsListHUD::Update(float elapsedTime)
+{
+	UpdateGameEvents();
+}
+
+void ItemsListHUD::UpdateGameEvents()
+{
+	CharacterComponent* characterComponent = mSelectedItemEntity->GetComponent<CharacterComponent>();
+	while (characterComponent->HasEvents())
+	{
+		const GameEvent* event = characterComponent->ConsumeEvent();
+		if (event->IsOfType<ZoomEvent>())
+		{
+			const ZoomEvent* zoomEvent = static_cast<const ZoomEvent*>(event);
+			int increment = zoomEvent->GetZoom() < 0 ? -1 : 1;
+			int newSelectedItem = (static_cast<int>(mSelectedItem) + increment) % NUM_ITEMS;
+			if (newSelectedItem < 0)
+			{
+				newSelectedItem = NUM_ITEMS + newSelectedItem;
+			}
+			mSelectedItem = newSelectedItem;
+			UpdateSelectedItemPosition();
+		}
+	}
+}
+
+void ItemsListHUD::UpdateSelectedItemPosition()
+{
+	Transformation* transformation = mSelectedItemEntity->GetTransformation();
+	glm::vec3 position = transformation->GetPosition();
+	position.x = CalculateItemPosition(mSelectedItem).x;
+	transformation->SetPosition(position);
+}
+
+glm::vec2 ItemsListHUD::CalculateItemPosition(unsigned int item)
+{
+	return mScreenCentre * glm::vec2(mScreenCoord.x + OFFSET_BETWEEN_ITEMS * item, mScreenCoord.y);
+}
+
 void ItemsListHUD::CreateItems(NGenius& engine, GameScene* scene)
 {
 	for (int i = 0; i < NUM_ITEMS; ++i)
 	{
-		glm::vec2 screenCoords(mScreenCoord.x + OFFSET_BETWEEN_ITEMS * i, mScreenCoord.y);
+		glm::vec2 screenCoords = CalculateItemPosition(i);
 		CreateItem(engine, scene, screenCoords, MATERIAL_ITEM, ITEM_QUAD_TEXTURE);
 	}
 }
 
 void ItemsListHUD::CreateSelectedItem(NGenius& engine, GameScene* scene)
 {
-	mSelectedItemEntity = CreateItemBase(engine, scene, mScreenCoord, MATERIAL_ITEM_SELECTED, ITEM_QUAD_SELECTED_TEXTURE);
+	glm::vec2 screenCoords = CalculateItemPosition(mSelectedItem);
+	mSelectedItemEntity = CreateItemBase(engine, scene, screenCoords, MATERIAL_ITEM_SELECTED, ITEM_QUAD_SELECTED_TEXTURE);
+
+	//adding control of mouse roller
+	InputComponent* inputComponent = new InputComponent();
+	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
+	mSelectedItemEntity->AddComponent(inputComponent);
+	mSelectedItemEntity->AddComponent(new CharacterComponent());
+
 	scene->AddEntity(mSelectedItemEntity);
 }
 
@@ -72,9 +130,7 @@ GameEntity* ItemsListHUD::CreateItemBase(NGenius& engine, GameScene* scene, cons
 	IRenderer* guiRenderer = new IndicesRenderer(engine.GetModel(GUI_QUAD_MODEL), material);
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
-	float x = engine.GetScreenWidth() * screenCoord.x;
-	float y = -engine.GetScreenHeight() * screenCoord.y;
-	GameEntity* itemGameEntity = new GameEntity(new Transformation(glm::vec3(x, y, 0.0f),
+	GameEntity* itemGameEntity = new GameEntity(new Transformation(glm::vec3(screenCoord.x, screenCoord.y, 0.0f),
 		glm::vec3(0.0f),
 		glm::vec3(ITEM_SIZE)),
 		guiRenderer

@@ -9,13 +9,16 @@ class GameHUD
 {
 	GameEntity* mGameHudGameEntity;
 	ItemsListHUD* mItemsList;
+	NGenius& mEngine;
 
 public:
 	GameHUD(NGenius& engine, GameScene* scene);
 	~GameHUD();
 
 	void Show();
+	void Update(float elapsedTime);
+
 private:
-	void Create(NGenius& engine, GameScene* scene);
+	void Create(GameScene* scene);
 };
 
