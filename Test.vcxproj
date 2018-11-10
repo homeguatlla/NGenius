@@ -180,6 +180,8 @@
     <ClInclude Include="src\game\hud\GameHUD.h" />
     <ClInclude Include="src\game\hud\ItemHUD.h" />
     <ClInclude Include="src\game\hud\ItemsListHUD.h" />
+    <ClInclude Include="src\game\inventory\Inventory.h" />
+    <ClInclude Include="src\game\maps\MarsPlanet.h" />
     <ClInclude Include="src\game\ShooterGame.h" />
     <ClInclude Include="src\game\ShooterGameConstants.h" />
     <ClInclude Include="src\guiTool\GuiTool.h" />
@@ -336,6 +338,7 @@
     <ClInclude Include="src\resources\textures\TextureCubemap.h" />
     <ClInclude Include="src\resources\textures\TexturesLibrary.h" />
     <ClInclude Include="src\resources\Transformation.h" />
+    <ClInclude Include="src\Singleton.h" />
     <ClInclude Include="src\statistics\Statistics.h" />
     <ClInclude Include="src\TerrainGrid.h" />
     <ClInclude Include="src\TextureGenerator.h" />
@@ -379,6 +382,8 @@
     <ClCompile Include="src\game\hud\GameHUD.cpp" />
     <ClCompile Include="src\game\hud\ItemHUD.cpp" />
     <ClCompile Include="src\game\hud\ItemsListHUD.cpp" />
+    <ClCompile Include="src\game\inventory\Inventory.cpp" />
+    <ClCompile Include="src\game\maps\MarsPlanet.cpp" />
     <ClCompile Include="src\game\ShooterGame.cpp" />
     <ClCompile Include="src\guiTool\GuiTool.cpp" />
     <ClCompile Include="src\input\bindings\KeyToEventBind.cpp" />
@@ -535,6 +540,7 @@
     <ClCompile Include="src\resources\textures\TextureGenerator.cpp" />
     <ClCompile Include="src\resources\textures\TexturesLibrary.cpp" />
     <ClCompile Include="src\resources\Transformation.cpp" />
+    <ClCompile Include="src\Singleton.cpp" />
     <ClCompile Include="src\statistics\Statistics.cpp" />
     <ClCompile Include="src\TerrainGrid.cpp" />
     <ClCompile Include="src\utils\FileReader.cpp" />

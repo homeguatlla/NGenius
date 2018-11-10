@@ -226,6 +226,18 @@
     <Filter Include="Source Files\game\events">
       <UniqueIdentifier>{9d51f7fc-c0bb-45ca-8724-5da663d3a4a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game\inventory">
+      <UniqueIdentifier>{38ea3601-883f-4132-b87a-84a1c8069e24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\inventory">
+      <UniqueIdentifier>{46157371-895a-465f-bfdd-d82716eab1d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\maps">
+      <UniqueIdentifier>{70e656e9-3268-4922-9089-308c957cf3d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game\maps">
+      <UniqueIdentifier>{4cb363da-6d13-4739-bc5d-3620aad4e448}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -774,9 +786,6 @@
     <ClInclude Include="src\game\ShooterGame.h">
       <Filter>Header Files\game</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\ShooterGameConstants.h">
-      <Filter>Source Files\game</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\systems\renderSystem\GUIRenderPassSubSystem.h">
       <Filter>Header Files\resources\systems\renderSystem</Filter>
     </ClInclude>
@@ -791,6 +800,18 @@
     </ClInclude>
     <ClInclude Include="src\game\events\StoreIntoInventoryEvent.h">
       <Filter>Header Files\game\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Singleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\inventory\Inventory.h">
+      <Filter>Header Files\game\inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\ShooterGameConstants.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\maps\MarsPlanet.h">
+      <Filter>Header Files\game\maps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1327,6 +1348,15 @@
     </ClCompile>
     <ClCompile Include="src\game\events\StoreIntoInventoryEvent.cpp">
       <Filter>Source Files\game\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Singleton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\inventory\Inventory.cpp">
+      <Filter>Source Files\game\inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\maps\MarsPlanet.cpp">
+      <Filter>Source Files\game\maps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
