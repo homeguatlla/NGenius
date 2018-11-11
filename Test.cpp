@@ -67,7 +67,7 @@
 #include "src/resources/materials/effects/MaterialEffectMatrix4Array.h"
 
 #include "src/resources/entities/Terrain.h"
-#include "src/resources/entities/Player.h"
+#include "src/resources/entities/Character.h"
 #include "src/resources/entities/Text.h"
 #include "src/resources/entities/Water.h"
 #include "src/resources/entities/Particle.h"
@@ -155,7 +155,7 @@ int muevej[] = { 0, 1, 0, -1 };
 
 
 const float Pi = 3.141592f;
-const float WaterFloor = 8.2f * TERRAIN_SCALE / 15.0f;
+const float WaterFloor = 8.2f * EngineConstants::TERRAIN_SCALE / 15.0f;
 float mWaterHeight = WaterFloor;
 
 bool mIsDebugModeEnabled = false;
@@ -175,7 +175,7 @@ bool mIsPropsEnabled = false;
 
 bool mIsSpacePartitionEnabled = false;
 
-NGenius mEngine("Demo", SCREEN_WIDTH, SCREEN_HEIGHT);
+NGenius mEngine("Demo", EngineConstants::SCREEN_WIDTH, EngineConstants::SCREEN_HEIGHT);
 ICamera* mGameplayCamera;
 ICamera* mEagleEyeCamera;
 RenderPass *mGameplayPass; 
@@ -184,7 +184,7 @@ ThirdPersonCameraComponent* mThirdPersonCameraComponent;
 RenderPass* mMapPass;
 //Light* mSunLight;
 Terrain* mTerrain;
-Player* mPlayer;
+Character* mPlayer;
 Water* mWater;
 GameEntity* mCamera;
 GameEntity* mQuadTreeBox;
@@ -215,7 +215,7 @@ GameEntity* mQuadTreeMovedEntity;
 std::vector<GameEntity*> mQuadTreeEntities;
 
 
-bool mIsShooterGameRunning = true;
+bool mIsShooterGameRunning = false;
 ShooterGame mGame;
 
 
@@ -954,7 +954,7 @@ void CreateTerrain()
 	//glm::mat4 depthModelMatrix = glm::mat4(1.0);
 	//glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
 
-	float scale = mIsTerrainFlat ? 0.0f : TERRAIN_SCALE;
+	float scale = mIsTerrainFlat ? 0.0f : EngineConstants::TERRAIN_SCALE;
 
 	IMaterial* material = mEngine.CreateMaterial("terrain", mEngine.GetShader("terrain"));
 	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_blendmap")), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f));
@@ -1004,15 +1004,15 @@ void CreatePlayer()
 	//IRenderer* renderer = new VerticesRenderer(model, material);
 	IRenderer* renderer = new IndicesRenderer(model, material);
 
-	mPlayer = new Player(	new Transformation(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.18f)),
+	mPlayer = new Character(	new Transformation(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.18f)),
 							renderer,
 							inputComponent,
 							new CharacterComponent(),
 							new PhysicsComponent(false, PhysicsSystem::GRAVITY_VALUE),
 							new CollisionComponent(),
-							PLAYER_RUN_SPEED,
-							PLAYER_TURN_SPEED,
-							PLAYER_UPWARDS_HEIGHT
+		EngineConstants::PLAYER_RUN_SPEED,
+		EngineConstants::PLAYER_TURN_SPEED,
+		EngineConstants::PLAYER_UPWARDS_HEIGHT
 						);
 	mPlayer->AddComponent(new EnergyWallCollisionComponent());
 	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
@@ -1038,9 +1038,9 @@ void CreateGameCameraEntity()
 																	mPlayer, 
 																	targetOffset, 
 																	4.0f, 
-																	PLAYER_PITCH, 
-																	PLAYER_PITCH_SPEED, 
-																	PLAYER_ZOOM_SPEED);
+																	EngineConstants::PLAYER_PITCH,
+																	EngineConstants::PLAYER_PITCH_SPEED,
+																	EngineConstants::PLAYER_ZOOM_SPEED);
 	mCamera->AddComponent(mThirdPersonCameraComponent);
 	mCamera->AddComponent(new CollisionComponent());
 
@@ -1074,7 +1074,7 @@ void CreateSkybox()
 			new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(100.0f)),
 			skyboxRenderer
 		);
-		skyBox->AddComponent(new RotationComponent(glm::vec3(0.0f, 1.0f, 0.0f), SKYBOX_ROTATION_SPEED));
+		skyBox->AddComponent(new RotationComponent(glm::vec3(0.0f, 1.0f, 0.0f), EngineConstants::SKYBOX_ROTATION_SPEED));
 		mScene->AddEntity(skyBox);
 	}
 }
@@ -1096,19 +1096,20 @@ void CreateCameras()
 	{
 		factor = 50.0f;
 	}
-	mEagleEyeCamera = new OrthogonalCamera("eagle_camera", screenWidth/factor, screenHeight/factor, NEAR_PLANE, FAR_PLANE);
+	mEagleEyeCamera = new OrthogonalCamera("eagle_camera", screenWidth/factor, screenHeight/factor, EngineConstants::NEAR_PLANE, EngineConstants::FAR_PLANE);
 	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 0.0f));
 	mEagleEyeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mEagleEyeCamera->SetUp(glm::vec3(1.0f, 0.0f, 0.0f));
 
 	mEngine.AddCamera(mEagleEyeCamera);
-
-	mGameplayCamera = new PerspectiveCamera("gameplay_camera", VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
+	mGameplayCamera = mEngine.GetCamera(EngineConstants::GAMEPLAY_CAMERA);
+	/*
+	mGameplayCamera = new PerspectiveCamera("gameplay_camera", EngineConstants::VIEW_ANGLE, aspectRatio, EngineConstants::NEAR_PLANE, EngineConstants::FAR_PLANE);
 	mGameplayCamera->SetPosition(glm::vec3(0.0f, 5.0f, 5.0f));
 	mGameplayCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 	mEngine.AddCamera(mGameplayCamera);
-
+	*/
 	/*
 	if (mConfiguration == QUADTREE_WITH_CAMERA)
 	{
@@ -1194,7 +1195,8 @@ void CreateCameraAABBEntity()
 
 void CreateEntities()
 {
-	const Texture* texture = static_cast<const Texture*>(mEngine.CreateDepthTexture("depth_texture", glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
+	//const Texture* texture = static_cast<const Texture*>(mEngine.CreateDepthTexture("depth_texture", glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
+	const Texture* texture = static_cast<const Texture*>(mEngine.GetTexture("depth_texture"));
 
 	//CreateHUD();
 
@@ -1262,7 +1264,7 @@ void DisableRenderPasses()
 void CreateHudMapRenderPass()
 {
 	//HUD MAP RENDER PASS
-	ICamera* camera = new PerspectiveCamera("map_camera", VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
+	ICamera* camera = new PerspectiveCamera("map_camera", EngineConstants::VIEW_ANGLE, mEngine.GetScreenWidth() / mEngine.GetScreenHeight(), EngineConstants::NEAR_PLANE, EngineConstants::FAR_PLANE);
 	camera->SetPosition(glm::vec3(0.0f, 100.0f, 0.0f));
 	camera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	camera->SetUp(glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1279,7 +1281,7 @@ void CreateHudMapRenderPass()
 void CreateGUIRenderPass()
 {
 	//RENDER PASS GUI
-	ICamera* camera = new OrthogonalCamera("gui_camera", mEngine.GetScreenWidth(), mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
+	ICamera* camera = new OrthogonalCamera("gui_camera", mEngine.GetScreenWidth(), mEngine.GetScreenHeight(), EngineConstants::NEAR_PLANE, EngineConstants::FAR_PLANE);
 	camera->SetPosition(glm::vec3(0.0f, 0.0f, 40.0f));
 	camera->SetTarget(glm::vec3(0.0f, 0.0f, -50.0f));
 	camera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -1340,13 +1342,13 @@ void CreateSubSystems()
 
 	CreateTerrainRenderPass();
 
-	CreateGameplayRenderPass();
+	//CreateGameplayRenderPass();
 
-	CreateTransparentRenderPass();
+	//CreateTransparentRenderPass();
 
-	CreateParticlesRenderPass();
+	//CreateParticlesRenderPass();
 
-	CreateGUIRenderPass();
+	//CreateGUIRenderPass();
 }
 
 void UpdateEnergyWallCollisions(float elapsedTime)
@@ -1372,7 +1374,7 @@ void UpdateStatitstics()
 
 	MaterialEffectText* effect = materialText->GetEffect<MaterialEffectText>();
 	int fps = static_cast<int>(statistics->GetNumberFPS());
-	if (fps < MIN_FPS_ALLOWED)
+	if (fps < EngineConstants::MIN_FPS_ALLOWED)
 	{
 		effect->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 	}
@@ -1817,6 +1819,10 @@ void Initialize()
 	mEngine.SetFogEnabled(mIsFogEnabled);
 
 	mEngine.SetGUIEnabled(true);
+	mEngine.SetGameplayEnabled(true);
+	mEngine.SetParticlesEnabled(true);
+	mEngine.SetTransparentEnabled(true);
+
 	mEngine.Start();
 }
 

@@ -45,7 +45,7 @@ void GUIRenderPassSubSystem::SetEnable(bool enable)
 
 ICamera* GUIRenderPassSubSystem::CreateCamera()
 {
-	ICamera* camera = new OrthogonalCamera("gui_camera", mScreenWidth, mScreenHeight, NEAR_PLANE, FAR_PLANE);
+	ICamera* camera = new OrthogonalCamera("gui_camera", mScreenWidth, mScreenHeight, EngineConstants::NEAR_PLANE, EngineConstants::FAR_PLANE);
 	camera->SetPosition(glm::vec3(0.0f, 0.0f, 40.0f));
 	camera->SetTarget(glm::vec3(0.0f, 0.0f, -50.0f));
 	camera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));

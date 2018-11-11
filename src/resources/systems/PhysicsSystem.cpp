@@ -11,7 +11,7 @@
 #include "../renderers/IRenderer.h"
 
 #include <iostream>
-#include "../entities/Player.h"
+#include "../entities/Character.h"
 
 const glm::vec3 PhysicsSystem::GRAVITY_VALUE(0.0f, -9.8f, 0.0f);
 
@@ -206,7 +206,7 @@ bool PhysicsSystem::ApplyCollisions(GameEntity *entity, float *groundHeight)
 
 	//is colliding
 	bool isColliding = position.y <= *groundHeight + entityBottomHeight;
-	/*if (typeid(*entity) == typeid(Player))
+	/*if (typeid(*entity) == typeid(Character))
 	{
 		std::cout << "position: " << position.y << " is colliding = " << isColliding << "\n";
 	}*/

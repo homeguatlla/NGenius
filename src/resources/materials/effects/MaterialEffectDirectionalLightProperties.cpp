@@ -4,7 +4,7 @@
 #include "../../GameConstants.h"
 
 MaterialEffectDirectionalLightProperties::MaterialEffectDirectionalLightProperties() :
-mSunLightDirection(SUN_POSITION_DEFAULT),
+mSunLightDirection(EngineConstants::SUN_POSITION_DEFAULT),
 mSunLightColor(glm::vec3(1.0f))
 {
 }

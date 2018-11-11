@@ -284,6 +284,12 @@ Animation* NGenius::GetAnimation(const std::string& name) const
 	return mRenderSystem->GetAnimation(name);
 }
 
+ICamera* NGenius::GetCamera(const std::string& name) const
+{
+	assert(mRenderSystem != nullptr);
+	return mRenderSystem->GetCamera(name);
+}
+
 GLFWwindow* NGenius::GetGLWindow() const
 {
 	assert(mRenderSystem != nullptr);
@@ -428,6 +434,24 @@ void NGenius::SetGUIEnabled(bool enabled)
 {
 	assert(mRenderSystem != nullptr);
 	mRenderSystem->SetGUIEnabled(enabled);
+}
+
+void NGenius::SetGameplayEnabled(bool enabled)
+{
+	assert(mRenderSystem != nullptr);
+	mRenderSystem->SetGameplayEnabled(enabled);
+}
+
+void NGenius::SetParticlesEnabled(bool enabled)
+{
+	assert(mRenderSystem != nullptr);
+	mRenderSystem->SetParticlesEnabled(enabled);
+}
+
+void NGenius::SetTransparentEnabled(bool enabled)
+{
+	assert(mRenderSystem != nullptr);
+	mRenderSystem->SetTransparentEnabled(enabled);
 }
 
 void NGenius::SetCastingShadowsTarget(const GameEntity* target)

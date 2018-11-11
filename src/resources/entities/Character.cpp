@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Player.h"
+#include "Character.h"
 #include "../components/InputComponent.h"
 #include "../components/CollisionComponent.h"
 #include "../components/PhysicsComponent.h"
@@ -22,7 +22,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
-Player::Player(	Transformation* transformation, IRenderer* renderer, InputComponent* inputComponent, 
+Character::Character(	Transformation* transformation, IRenderer* renderer, InputComponent* inputComponent, 
 				CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, 
 				CollisionComponent* collisionComponent, float runSpeed, float turnSpeed, float upwardsSpeed) :
 GameEntity(transformation, renderer), 
@@ -48,11 +48,11 @@ mHasJumped(false)
 }
 
 
-Player::~Player()
+Character::~Character()
 {
 }
 
-void Player::Update(float elapsedTime)
+void Character::Update(float elapsedTime)
 {
 	GameEntity::Update(elapsedTime);
 
@@ -83,7 +83,7 @@ void Player::Update(float elapsedTime)
 	//std::cout << "state: " << mState << " velocity = " << physicsComponent->GetVelocity().y << "\n";
 }
 
-void Player::UpdateAnimations()
+void Character::UpdateAnimations()
 {
 	AnimationComponent* animationComponent = GetComponent<AnimationComponent>();
 	if (animationComponent != nullptr)
@@ -99,7 +99,7 @@ void Player::UpdateAnimations()
 	}
 }
 
-void Player::UpdateGameEvents()
+void Character::UpdateGameEvents()
 {
 	CharacterComponent* characterComponent = GetComponent<CharacterComponent>();
 	while (characterComponent->HasEvents())
@@ -161,7 +161,7 @@ void Player::UpdateGameEvents()
 	}
 }
 
-void Player::UpdateIdle(float elapsedTime)
+void Character::UpdateIdle(float elapsedTime)
 {
 	bool isOnGround = GetComponent<CollisionComponent>()->IsOnGround();
 	
@@ -191,7 +191,7 @@ void Player::UpdateIdle(float elapsedTime)
 	}
 }
 
-void Player::UpdateMoving(float elapsedTime)
+void Character::UpdateMoving(float elapsedTime)
 {
 	bool isOnGround = GetComponent<CollisionComponent>()->IsOnGround();
 
@@ -227,7 +227,7 @@ void Player::UpdateMoving(float elapsedTime)
 	}
 }
 
-void Player::UpdateJumping(float elapsedTime)
+void Character::UpdateJumping(float elapsedTime)
 {
 	Transformation* transformation = GetTransformation();
 		
@@ -248,7 +248,7 @@ void Player::UpdateJumping(float elapsedTime)
 	}
 }
 
-void Player::UpdateFalling(float elapsedTime)
+void Character::UpdateFalling(float elapsedTime)
 {
 	bool isOnGround = GetComponent<CollisionComponent>()->IsOnGround();
 
@@ -258,7 +258,7 @@ void Player::UpdateFalling(float elapsedTime)
 	}
 }
 
-glm::vec3 Player::CalculateRunPosition(float elapsedTime, float rotY, glm::vec3 velocity, float runSpeed)
+glm::vec3 Character::CalculateRunPosition(float elapsedTime, float rotY, glm::vec3 velocity, float runSpeed)
 {
 	velocity.x = glm::sin(rotY) * runSpeed;
 	velocity.z = glm::cos(rotY) * runSpeed;
@@ -266,7 +266,7 @@ glm::vec3 Player::CalculateRunPosition(float elapsedTime, float rotY, glm::vec3 
 	return velocity;
 }
 
-float Player::CalculateTurnPosition(float elapsedTime, float turnSpeed)
+float Character::CalculateTurnPosition(float elapsedTime, float turnSpeed)
 {
 	if (turnSpeed != 0.0f)
 	{
@@ -275,7 +275,7 @@ float Player::CalculateTurnPosition(float elapsedTime, float turnSpeed)
 	return mCurrentTurnAngle;
 }
 
-glm::vec3 Player::CalculateJumpPosition(float elapsedTime, glm::vec3 velocity, float upwardsSpeed)
+glm::vec3 Character::CalculateJumpPosition(float elapsedTime, glm::vec3 velocity, float upwardsSpeed)
 {
 	if (upwardsSpeed != 0.0f)
 	{

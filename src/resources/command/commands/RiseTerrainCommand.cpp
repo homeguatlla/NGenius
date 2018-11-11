@@ -22,7 +22,7 @@ void RiseTerrainCommand::Execute()
 
 bool RiseTerrainCommand::HasFinished() const
 {
-	return mScale >= TERRAIN_SCALE;
+	return mScale >= EngineConstants::TERRAIN_SCALE;
 }
 
 void RiseTerrainCommand::Update(float elapsedTime)

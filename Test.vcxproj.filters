@@ -306,9 +306,6 @@
     <ClInclude Include="src\resources\GameEntity.h">
       <Filter>Header Files\resources</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\entities\Player.h">
-      <Filter>Header Files\resources\entities</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\entities\Light.h">
       <Filter>Header Files\resources\entities</Filter>
     </ClInclude>
@@ -813,6 +810,21 @@
     <ClInclude Include="src\game\maps\MarsPlanet.h">
       <Filter>Header Files\game\maps</Filter>
     </ClInclude>
+    <ClInclude Include="src\game\Player.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Character.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\renderSystem\GameplayRenderPassSubSystem.h">
+      <Filter>Header Files\resources\systems\renderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\renderSystem\ParticlesRenderPassSubSystem.h">
+      <Filter>Header Files\resources\systems\renderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\renderSystem\TransparentRenderPassSubSystem.h">
+      <Filter>Header Files\resources\systems\renderSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -874,9 +886,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\textures\TextureArray.cpp">
       <Filter>Source Files\resources\textures</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\entities\Player.cpp">
-      <Filter>Source Files\resources\entities</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\entities\Light.cpp">
       <Filter>Source Files\resources\entities</Filter>
@@ -1357,6 +1366,21 @@
     </ClCompile>
     <ClCompile Include="src\game\maps\MarsPlanet.cpp">
       <Filter>Source Files\game\maps</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\Player.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Character.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\renderSystem\GameplayRenderPassSubSystem.cpp">
+      <Filter>Source Files\resources\systems\renderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\renderSystem\ParticlesRenderPassSubSystem.cpp">
+      <Filter>Source Files\resources\systems\renderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\renderSystem\TransparentRenderPassSubSystem.cpp">
+      <Filter>Source Files\resources\systems\renderSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

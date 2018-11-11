@@ -112,13 +112,13 @@ glm::vec3 SunLight::GetSunLightDirection() const
 		float angle = glm::mix(fromAngle, toAngle, mCurrentBlendFactor);
 		glm::mat4 matrix(1.0f);
 		matrix = glm::rotate(matrix, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
-		glm::vec3 direction = glm::vec4(SUN_POSITION_DEFAULT, 1.0f) * matrix;
+		glm::vec3 direction = glm::vec4(EngineConstants::SUN_POSITION_DEFAULT, 1.0f) * matrix;
 
 		return direction;
 	}
 	else
 	{
-		return SUN_POSITION_DEFAULT;
+		return EngineConstants::SUN_POSITION_DEFAULT;
 	}
 }
 

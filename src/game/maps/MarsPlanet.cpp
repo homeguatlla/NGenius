@@ -44,7 +44,7 @@ void MarsPlanet::Create()
 
 void MarsPlanet::CreateTerrain()
 {
-	//RENDER PASS GAMEPLAY
+	//RENDER PASS TERRAIN
 	RenderPass *terrainPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TERRAIN);
 	terrainPass->EnableFog(true);
 	mEngine.AddRenderPass(terrainPass, false);

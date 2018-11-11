@@ -5,6 +5,9 @@
 
 #include "PostProcessSubSystem.h"
 #include "GUIRenderPassSubSystem.h"
+#include "GameplayRenderPassSubSystem.h"
+#include "TransparentRenderPassSubSystem.h"
+#include "ParticlesRenderPassSubSystem.h"
 
 #include "../../GameEntity.h"
 #include "../../camera/ICamera.h"
@@ -37,6 +40,8 @@
 
 #include "../environmentSystem/EnvironmentSystem.h"
 #include "../environmentSystem/SunLight.h"
+
+#include "../../camera/PerspectiveCamera.h"
 
 #include "RenderPass.h"
 #include "../../../BitNumber.h"
@@ -114,6 +119,7 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 
 	CreateResourcesLibraries();
 	LoadResources();
+	CreateCameras();
 	CreateSubSystems();
 }
 
@@ -124,6 +130,28 @@ void RenderSystem::Start()
 	mWaterRenderPass->Init();
 	mPostProcessSubsystem->Init();
 	mGUIRenderPass->Init();
+	mGameplayRenderPass->Init();
+	mTransparentRenderPass->Init();
+	mParticlesRenderPass->Init();
+}
+
+void RenderSystem::CreateCameras()
+{
+	//TODO esto no me gusta
+	//se crea una cámara por defecto para gameplay en perspectiva que ya no se puede cambiar
+	//esto se hace porque algunos renderpass (subsistemas) necesitan dicha cámara para crearse
+	//Pero bueno, en unity tenemos obligatoriamente una mainCamera... y se puede modificar
+	//supongo que se podría hacer lo mismo.
+
+	float screenWidth = static_cast<float>(GetScreenWidth());
+	float screenHeight = static_cast<float>(GetScreenHeight());
+	float aspectRatio = screenWidth / screenHeight;
+
+	ICamera* camera = new PerspectiveCamera(EngineConstants::GAMEPLAY_CAMERA, EngineConstants::VIEW_ANGLE, aspectRatio, EngineConstants::NEAR_PLANE, EngineConstants::FAR_PLANE);
+	camera->SetPosition(glm::vec3(0.0f, 25.0f, 5.0f));
+	camera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
+	camera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	AddCamera(camera);
 }
 
 void RenderSystem::CreateSubSystems()
@@ -133,6 +161,10 @@ void RenderSystem::CreateSubSystems()
 
 	mPostProcessSubsystem = new PostProcessSubSystem(this);
 	mGUIRenderPass = new GUIRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
+
+	mGameplayRenderPass = new GameplayRenderPassSubSystem(this, GetCamera(EngineConstants::GAMEPLAY_CAMERA));
+	mTransparentRenderPass = new TransparentRenderPassSubSystem(this, GetCamera(EngineConstants::GAMEPLAY_CAMERA));
+	mParticlesRenderPass = new ParticlesRenderPassSubSystem(this, GetCamera(EngineConstants::GAMEPLAY_CAMERA));
 }
 
 void RenderSystem::DestroySubSystems()
@@ -141,6 +173,9 @@ void RenderSystem::DestroySubSystems()
 	delete mWaterRenderPass;
 	delete mShadowsRenderPass;
 	delete mGUIRenderPass;
+	delete mGameplayRenderPass;
+	delete mTransparentRenderPass;
+	delete mParticlesRenderPass;
 }
 
 void RenderSystem::LoadResources()
@@ -488,7 +523,7 @@ void RenderSystem::ApplyShadows(IRenderer* renderer)
 	if (mShadowsRenderPass->IsEnabled())
 	{
 		assert(mEnvironmentSystem != nullptr);
-		SetCastingShadowsParameters(-mEnvironmentSystem->GetSunLightDirection(), SHADOWS_PFC_COUNTER);
+		SetCastingShadowsParameters(-mEnvironmentSystem->GetSunLightDirection(), EngineConstants::SHADOWS_PFC_COUNTER);
 
 		MaterialEffectShadowProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectShadowProperties>();
 		if (effect != nullptr)
@@ -916,6 +951,25 @@ void RenderSystem::SetGUIEnabled(bool enabled)
 	assert(mGUIRenderPass != nullptr);
 	mGUIRenderPass->SetEnable(enabled);
 }
+
+void RenderSystem::SetGameplayEnabled(bool enabled)
+{
+	assert(mGameplayRenderPass != nullptr);
+	mGameplayRenderPass->SetEnable(enabled);
+}
+
+void RenderSystem::SetParticlesEnabled(bool enabled)
+{
+	assert(mParticlesRenderPass != nullptr);
+	mParticlesRenderPass->SetEnable(enabled);
+}
+
+void RenderSystem::SetTransparentEnabled(bool enabled)
+{
+	assert(mTransparentRenderPass != nullptr);
+	mTransparentRenderPass->SetEnable(enabled);
+}
+
 
 ITexture* RenderSystem::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
 {

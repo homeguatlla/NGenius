@@ -78,6 +78,7 @@ public:
 	const ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
 	IMaterial* GetMaterial(const std::string& name) const;
 	Animation* GetAnimation(const std::string& name) const;
+	ICamera* GetCamera(const std::string& name) const;
 
 	FontType* GetFont(const std::string& name) const;
 	float GetNumberFPS() const;
@@ -126,6 +127,15 @@ public:
 	//GUI
 	void SetGUIEnabled(bool enabled);
 
+	//Gameplay
+	void SetGameplayEnabled(bool enabled);
+
+	//Particles
+	void SetParticlesEnabled(bool enabled);
+
+	//Transparent
+	void SetTransparentEnabled(bool enabled);
+
 	//debug
 	void SetDebugModeEnabled(bool enabled);
 
@@ -140,7 +150,7 @@ public:
 	float GetDayTime() const;
 
 private:
-	
+
 	void CreateSystems(float screenWidth, float screenHeight);
 	void DestroySystems();
 	

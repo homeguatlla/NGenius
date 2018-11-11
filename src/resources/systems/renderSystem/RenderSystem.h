@@ -35,6 +35,9 @@ class ShadowsRenderPassSubSystem;
 class WaterRenderPassSubSystem;
 class PostProcessSubSystem;
 class GUIRenderPassSubSystem;
+class GameplayRenderPassSubSystem;
+class TransparentRenderPassSubSystem;
+class ParticlesRenderPassSubSystem;
 
 class GuiTool;
 class EnvironmentSystem;
@@ -71,6 +74,9 @@ class RenderSystem : public BaseVisitable<>
 	ShadowsRenderPassSubSystem* mShadowsRenderPass;
 	WaterRenderPassSubSystem* mWaterRenderPass;
 	GUIRenderPassSubSystem* mGUIRenderPass;
+	GameplayRenderPassSubSystem* mGameplayRenderPass;
+	TransparentRenderPassSubSystem* mTransparentRenderPass;
+	ParticlesRenderPassSubSystem* mParticlesRenderPass;
 
 	PostProcessSubSystem* mPostProcessSubsystem;
 
@@ -144,6 +150,9 @@ public:
 	void SetWaterParameters(const ICamera* camera, float waterY);
 
 	void SetGUIEnabled(bool enabled);
+	void SetGameplayEnabled(bool enabled);
+	void SetTransparentEnabled(bool enabled);
+	void SetParticlesEnabled(bool enabled);
 
 	void SetFullScreen(bool isFullScreen);
 	void SetOverdrawEnabled(bool isOverdrawEnabled);
@@ -170,6 +179,8 @@ private:
 	bool InitializeWindowAndOpenGL(const std::string& applicationName, bool isFullscreen);
 	void EnableVSync(bool enable);
 	GLFWmonitor* GetCurrentMonitor(float* screenWidth, float* screenHeight);
+
+	void CreateCameras();
 
 	void LoadResources();
 

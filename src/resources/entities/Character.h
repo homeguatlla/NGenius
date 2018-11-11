@@ -8,7 +8,7 @@ class CollisionComponent;
 class PhysicsComponent;
 class CharacterComponent;
 
-class Player : public GameEntity
+class Character : public GameEntity
 {
 	enum State
 	{
@@ -33,12 +33,12 @@ class Player : public GameEntity
 	bool mHasJumped;
 
 public:
-	explicit Player(Transformation* transformation, IRenderer* renderer, InputComponent* playerInputComponent, 
+	explicit Character(Transformation* transformation, IRenderer* renderer, InputComponent* playerInputComponent, 
 					CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, 
 					CollisionComponent* collisionComponent, float runSpeed, float turnSpeed, float upwardsSpeed);
-	virtual ~Player();
+	virtual ~Character();
 
-	Player* DoClone() const override { return nullptr; }
+	Character* DoClone() const override { return nullptr; }
 	void Update(float elapsedTime) override;
 
 private:

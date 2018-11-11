@@ -5,6 +5,7 @@ class GameHUD;
 class GameScene;
 class MarsPlanet;
 class ICamera;
+class Player;
 
 class ShooterGame 
 {
@@ -12,6 +13,7 @@ class ShooterGame
 	GameHUD* mGameHUD;
 	MarsPlanet* mPlanet;
 	ICamera* mGameplayCamera;
+	Player* mPlayer;
 
 public:
 	ShooterGame();
@@ -19,8 +21,5 @@ public:
 
 	void Start(NGenius& engine);
 	void Update(float elapsedTime);
-
-private:
-	void CreateCameras(NGenius& engine);
 };
 
