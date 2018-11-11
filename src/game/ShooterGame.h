@@ -6,6 +6,7 @@ class GameScene;
 class MarsPlanet;
 class ICamera;
 class Player;
+class GameEntity;
 
 class ShooterGame 
 {
@@ -14,6 +15,7 @@ class ShooterGame
 	MarsPlanet* mPlanet;
 	ICamera* mGameplayCamera;
 	Player* mPlayer;
+	GameEntity* mThirdPersonCameraEntity;
 
 public:
 	ShooterGame();
@@ -21,5 +23,8 @@ public:
 
 	void Start(NGenius& engine);
 	void Update(float elapsedTime);
+
+private:
+	void CreateThirdpersonCamera();
 };
 

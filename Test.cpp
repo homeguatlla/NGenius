@@ -16,6 +16,8 @@
 #include <utility>
 
 #include "GameConstants.h"
+#include "src/game/ShooterGameConstants.h"
+
 #include "src/NGenius.h"
 #include "src/resources/systems/PhysicsSystem.h"
 #include "src/resources/systems/renderSystem/RenderSystem.h"
@@ -144,7 +146,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = RELEASE;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -215,7 +217,7 @@ GameEntity* mQuadTreeMovedEntity;
 std::vector<GameEntity*> mQuadTreeEntities;
 
 
-bool mIsShooterGameRunning = false;
+bool mIsShooterGameRunning = true;
 ShooterGame mGame;
 
 
@@ -1202,16 +1204,11 @@ void CreateEntities()
 
 	CreatePlayer();
 
-	CreateGameCameraEntity();
+	//CreateGameCameraEntity();
 
 	CreateTerrain();
 
 	CreateWater();
-
-	if (mIsTextEnabled)
-	{
-		CreateTextTest();
-	}
 
 	if (mIsVegetationEnabled)
 	{
@@ -1570,14 +1567,15 @@ void Update(float elapsedTime)
 		{
 			UpdateEnergyWallCollisions(elapsedTime);
 		}
-		if (mIsStatisticsVisible && mIsTextEnabled)
-		{
-			UpdateStatitstics();
-		}
 		if (mConfiguration == QUADTREE_WITH_CAMERA)
 		{
 			UpdateCameraAABB();
 		}
+	}
+
+	if (mIsStatisticsVisible && mIsTextEnabled)
+	{
+		UpdateStatitstics();
 	}
 }
 
@@ -1586,6 +1584,7 @@ void Start(NGenius& engine)
 	if (mIsShooterGameRunning)
 	{
 		mGame.Start(engine);
+		mScene = mEngine.GetGameScene(GAME_SCENE_NAME);
 	}
 	else
 	{
@@ -1594,6 +1593,11 @@ void Start(NGenius& engine)
 		CreateSubSystems();
 
 		mEngine.SetCastingShadowsTarget(mPlayer);
+	}
+
+	if (mIsTextEnabled)
+	{
+		CreateTextTest();
 	}
 }
 

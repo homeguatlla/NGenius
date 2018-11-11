@@ -148,7 +148,7 @@ void RenderSystem::CreateCameras()
 	float aspectRatio = screenWidth / screenHeight;
 
 	ICamera* camera = new PerspectiveCamera(EngineConstants::GAMEPLAY_CAMERA, EngineConstants::VIEW_ANGLE, aspectRatio, EngineConstants::NEAR_PLANE, EngineConstants::FAR_PLANE);
-	camera->SetPosition(glm::vec3(0.0f, 25.0f, 5.0f));
+	camera->SetPosition(glm::vec3(0.0f, 10.0f, 5.0f));
 	camera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	camera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 	AddCamera(camera);

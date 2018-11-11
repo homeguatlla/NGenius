@@ -37,6 +37,19 @@ void TexturesLibrary::Load()
 
 	filenames.clear();
 
+	filenames.push_back("data/terrain/mars/burnt_sand_light.png");
+	filenames.push_back("data/terrain/mars/mars_high.png");
+	filenames.push_back("data/terrain/mars/red_rock.png");
+	filenames.push_back("data/terrain/mars/dirt.png");
+
+
+	textureArray = new TextureArray();
+	textureArray->Load(filenames, ++mCurrentTextureUnit, true);
+	AddElement("terrain_mars_array", textureArray);
+
+	filenames.clear();
+
+
 	filenames.push_back("data/skybox/sky1/right.png");
 	filenames.push_back("data/skybox/sky1/left.png");
 	filenames.push_back("data/skybox/sky1/top.png");

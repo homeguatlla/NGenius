@@ -100,3 +100,8 @@ void Player::Create(Transformation* transformation)
 	mCharacter->AddComponent(animationComponent);
 	mScene->AddEntity(mCharacter);
 }
+
+GameEntity* Player::GetEntity()
+{
+	return mCharacter;
+}

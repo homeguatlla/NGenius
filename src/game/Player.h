@@ -15,6 +15,8 @@ public:
 	Player(NGenius& engine, GameScene* scene, Transformation* transformation);
 	~Player();
 
+	GameEntity* GetEntity();
+
 private:
 	void Create(Transformation* transformation);
 };

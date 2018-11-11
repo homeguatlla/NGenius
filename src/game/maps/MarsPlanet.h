@@ -12,6 +12,7 @@ class MarsPlanet
 	GameScene* mScene;
 	Terrain* mTerrain;
 	ICamera* mGameplayCamera;
+	GameEntity* mSkyBox;
 
 public:
 	MarsPlanet(NGenius& engine, GameScene* scene, ICamera* gameplayCamera);
@@ -20,5 +21,6 @@ public:
 private:
 	void Create();
 	void CreateTerrain();
+	void CreateSky();
 };
 
