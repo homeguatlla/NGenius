@@ -2,7 +2,7 @@
 #include "ParticlesRenderPassSubSystem.h"
 #include "RenderSystem.h"
 #include "RenderPass.h"
-#include "../../GameConstants.h"
+#include "../../EngineConstants.h"
 #include "../../camera/OrthogonalCamera.h"
 #include "../../renderers/IRenderer.h"
 

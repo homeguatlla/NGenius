@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "RiseTerrainCommand.h"
 #include "../../entities/Terrain.h"
-#include "../../../../GameConstants.h"
+#include "../../../../EngineConstants.h"
 
 RiseTerrainCommand::RiseTerrainCommand(GameEntity* entity) : 
 	ICommand(entity),

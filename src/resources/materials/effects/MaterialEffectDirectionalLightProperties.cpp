@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MaterialEffectDirectionalLightProperties.h"
 #include "../IMaterial.h"
-#include "../../GameConstants.h"
+#include "../../EngineConstants.h"
 
 MaterialEffectDirectionalLightProperties::MaterialEffectDirectionalLightProperties() :
 mSunLightDirection(EngineConstants::SUN_POSITION_DEFAULT),

@@ -18,6 +18,7 @@ class SpacePartitionSystem;
 class Statistics;
 class EnvironmentSystem;
 class AnimationSystem;
+class StatisticsSystem;
 
 class InputHandler;
 class IInputListener;
@@ -54,6 +55,7 @@ class NGenius : public BaseVisitable<>
 	DebugSystem* mDebugSystem;
 	EnvironmentSystem* mEnvironmentSystem;
 	AnimationSystem* mAnimationSystem;
+	StatisticsSystem* mStatisticsSystem;
 	InputHandler* mInputHandler;
 	Statistics* mStatistics;
 	GameScene* mGameScene;
@@ -92,6 +94,7 @@ public:
 
 	void AddParticleEmitter(ParticlesEmitter* emitter);
 	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing);
+	void AddRenderPassAt(unsigned int index, RenderPass* renderPass, bool addAfterPostProcessing);
 	void AddLight(Light* light);
 	void AddCamera(ICamera* camera);
 

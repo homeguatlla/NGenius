@@ -7,7 +7,6 @@
 #include "../../renderers/IRenderer.h"
 #include "../../../visitor/BaseVisitable.h"
 
-
 class ICamera;
 class RenderPass;
 class Texture;
@@ -31,9 +30,10 @@ class AnimatedModel;
 struct GLFWwindow;
 struct GLFWmonitor;
 
+class PostProcessSubSystem;
+
 class ShadowsRenderPassSubSystem;
 class WaterRenderPassSubSystem;
-class PostProcessSubSystem;
 class GUIRenderPassSubSystem;
 class GameplayRenderPassSubSystem;
 class TransparentRenderPassSubSystem;
@@ -115,6 +115,7 @@ public:
 	void AddToRender(IRenderer* renderer);
 	
 	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing = false);
+	void AddRenderPassAt(unsigned int index, RenderPass* renderPass, bool addAfterPostProcessing = false);
 	void RemoveRenderPass(RenderPass* renderPass);
 
 	void AddCamera(ICamera* camera);

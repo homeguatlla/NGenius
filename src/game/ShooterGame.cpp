@@ -2,7 +2,7 @@
 #include "ShooterGame.h"
 #include "hud/GameHUD.h"
 #include "ShooterGameConstants.h"
-#include "../GameConstants.h"
+#include "../EngineConstants.h"
 
 #include "../Singleton.h"
 #include "maps/MarsPlanet.h"

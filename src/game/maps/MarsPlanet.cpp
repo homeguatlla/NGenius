@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MarsPlanet.h"
 #include "../ShooterGameConstants.h"
-#include "../GameConstants.h"
+#include "../EngineConstants.h"
 
 #include "../../resources/scene/GameScene.h"
 
@@ -53,7 +53,7 @@ void MarsPlanet::CreateTerrain()
 	//RENDER PASS TERRAIN
 	RenderPass *terrainPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TERRAIN);
 	terrainPass->EnableFog(true);
-	mEngine.AddRenderPass(terrainPass, false);
+	mEngine.AddRenderPassAt(1, terrainPass, false);
 
 	float scale = TERRAIN_SCALE;
 

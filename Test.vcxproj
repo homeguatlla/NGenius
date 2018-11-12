@@ -159,7 +159,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameConstants.h" />
+    <ClInclude Include="EngineConstants.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_glfw.h" />
@@ -336,6 +336,7 @@
     <ClInclude Include="src\resources\systems\renderSystem\TransparentRenderPassSubSystem.h" />
     <ClInclude Include="src\resources\systems\renderSystem\WaterRenderPassSubSystem.h" />
     <ClInclude Include="src\resources\systems\SpacePartitionSystem.h" />
+    <ClInclude Include="src\resources\systems\StatisticsSystem.h" />
     <ClInclude Include="src\resources\textures\ITexture.h" />
     <ClInclude Include="src\resources\textures\Texture.h" />
     <ClInclude Include="src\resources\textures\TextureArray.h" />
@@ -539,6 +540,7 @@
     <ClCompile Include="src\resources\systems\renderSystem\TransparentRenderPassSubSystem.cpp" />
     <ClCompile Include="src\resources\systems\renderSystem\WaterRenderPassSubSystem.cpp" />
     <ClCompile Include="src\resources\systems\SpacePartitionSystem.cpp" />
+    <ClCompile Include="src\resources\systems\StatisticsSystem.cpp" />
     <ClCompile Include="src\resources\textures\ITexture.cpp" />
     <ClCompile Include="src\resources\textures\NoiseGenerator.cpp" />
     <ClCompile Include="src\resources\textures\PNGLoader.cpp" />

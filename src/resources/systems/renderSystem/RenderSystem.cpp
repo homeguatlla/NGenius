@@ -4,6 +4,7 @@
 #include "WaterRenderPassSubSystem.h"
 
 #include "PostProcessSubSystem.h"
+
 #include "GUIRenderPassSubSystem.h"
 #include "GameplayRenderPassSubSystem.h"
 #include "TransparentRenderPassSubSystem.h"
@@ -48,7 +49,7 @@
 
 #include "../../../guiTool/GuiTool.h"
 
-#include "../GameConstants.h"
+#include "../EngineConstants.h"
 
 #include "../../../utils/Log.h"
 
@@ -73,6 +74,9 @@ mShadowsRenderPass(nullptr),
 mWaterRenderPass(nullptr),
 mPostProcessSubsystem(nullptr),
 mGUIRenderPass(nullptr),
+mGameplayRenderPass(nullptr),
+mParticlesRenderPass(nullptr),
+mTransparentRenderPass(nullptr),
 mEnvironmentSystem(nullptr),
 mCurrentMaterial(nullptr),
 mDiffuseTexture(nullptr),
@@ -126,13 +130,16 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 void RenderSystem::Start()
 {
 	mGuiTool->Initialize();
+
+	//render pass initialization order is important
 	mShadowsRenderPass->Init();
 	mWaterRenderPass->Init();
-	mPostProcessSubsystem->Init();
-	mGUIRenderPass->Init();
 	mGameplayRenderPass->Init();
 	mTransparentRenderPass->Init();
 	mParticlesRenderPass->Init();
+	mGUIRenderPass->Init();
+
+	mPostProcessSubsystem->Init();
 }
 
 void RenderSystem::CreateCameras()
@@ -160,11 +167,12 @@ void RenderSystem::CreateSubSystems()
 	mWaterRenderPass = new WaterRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
 
 	mPostProcessSubsystem = new PostProcessSubSystem(this);
-	mGUIRenderPass = new GUIRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
 
 	mGameplayRenderPass = new GameplayRenderPassSubSystem(this, GetCamera(EngineConstants::GAMEPLAY_CAMERA));
+
 	mTransparentRenderPass = new TransparentRenderPassSubSystem(this, GetCamera(EngineConstants::GAMEPLAY_CAMERA));
 	mParticlesRenderPass = new ParticlesRenderPassSubSystem(this, GetCamera(EngineConstants::GAMEPLAY_CAMERA));
+	mGUIRenderPass = new GUIRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
 }
 
 void RenderSystem::DestroySubSystems()
@@ -312,6 +320,12 @@ void RenderSystem::Render(RenderPass* renderPass)
 
 void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing)
 {
+	unsigned int index = addAfterPostProcessing ? mRenderPassesAfterPostProcessing.size() : mRenderPasses.size();
+	AddRenderPassAt(index, renderPass, addAfterPostProcessing);
+}
+
+void RenderSystem::AddRenderPassAt(unsigned int index, RenderPass* renderPass, bool addAfterPostProcessing)
+{
 	assert(renderPass != nullptr);
 	assert(renderPass->GetCamera() != nullptr);
 
@@ -321,10 +335,11 @@ void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProces
 		if (!found)
 		{
 			bool isRenderPassOK = ValidateRenderPassesLayerMasks(renderPass, mRenderPassesAfterPostProcessing);
-			
+
 			if (isRenderPassOK)
 			{
-				mRenderPassesAfterPostProcessing.push_back(renderPass);
+				mRenderPassesAfterPostProcessing.insert(mRenderPassesAfterPostProcessing.begin() + index, renderPass);
+				//mRenderPassesAfterPostProcessing.push_back(renderPass);
 			}
 			else
 			{
@@ -339,10 +354,11 @@ void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProces
 		if (!found)
 		{
 			bool isRenderPassOK = ValidateRenderPassesLayerMasks(renderPass, mRenderPasses);
-			
+
 			if (isRenderPassOK)
 			{
-				mRenderPasses.push_back(renderPass);
+				mRenderPasses.insert(mRenderPasses.begin() + index, renderPass);
+				//mRenderPasses.push_back(renderPass);
 			}
 			else
 			{

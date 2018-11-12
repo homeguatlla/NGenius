@@ -15,12 +15,12 @@ TextureArray::~TextureArray()
 {
 }
 
-void TextureArray::Load(std::vector<std::string>& filenames, unsigned int textureUnit, bool hasMipmapping)
+void TextureArray::Load(std::vector<std::string>& filenames, float size, unsigned int textureUnit, bool hasMipmapping)
 {
 	PNGLoader loader;
-	//TODO esto no sé porque está así
-	int textureMaxWidth = 1024;
-	int textureMaxHeight = 1024;
+	
+	int textureMaxWidth = size;
+	int textureMaxHeight = size;
 	mTextureUnit = textureUnit;
 	mNumberTextures = filenames.size();
 

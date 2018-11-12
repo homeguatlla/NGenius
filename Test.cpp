@@ -15,7 +15,7 @@
 #include <ctime>
 #include <utility>
 
-#include "GameConstants.h"
+#include "EngineConstants.h"
 #include "src/game/ShooterGameConstants.h"
 
 #include "src/NGenius.h"
@@ -146,7 +146,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = RELEASE;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -217,7 +217,7 @@ GameEntity* mQuadTreeMovedEntity;
 std::vector<GameEntity*> mQuadTreeEntities;
 
 
-bool mIsShooterGameRunning = true;
+bool mIsShooterGameRunning = false;
 ShooterGame mGame;
 
 
@@ -1204,7 +1204,7 @@ void CreateEntities()
 
 	CreatePlayer();
 
-	//CreateGameCameraEntity();
+	CreateGameCameraEntity();
 
 	CreateTerrain();
 
@@ -1313,7 +1313,7 @@ void CreateTerrainRenderPass()
 	//RENDER PASS GAMEPLAY
 	RenderPass *terrainPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TERRAIN);
 	terrainPass->EnableFog(true);
-	mEngine.AddRenderPass(terrainPass, false);
+	mEngine.AddRenderPassAt(1, terrainPass, false);
 }
 
 void CreateParticlesRenderPass()
@@ -1573,10 +1573,10 @@ void Update(float elapsedTime)
 		}
 	}
 
-	if (mIsStatisticsVisible && mIsTextEnabled)
+	/*if (mIsStatisticsVisible && mIsTextEnabled)
 	{
 		UpdateStatitstics();
-	}
+	}*/
 }
 
 void Start(NGenius& engine)
@@ -1589,16 +1589,17 @@ void Start(NGenius& engine)
 	else
 	{
 		mScene = mEngine.CreateGameScene("mainScene");
-		CreateEntities();
 		CreateSubSystems();
+		CreateEntities();		
 
 		mEngine.SetCastingShadowsTarget(mPlayer);
 	}
-
+	
+	/*
 	if (mIsTextEnabled)
 	{
 		CreateTextTest();
-	}
+	}*/
 }
 
 void SetupConfiguration()
@@ -1734,14 +1735,14 @@ void SetupConfiguration()
 		mIsDebugModeEnabled = true;
 		mIsWaterEnabled = false;
 		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
-		mIsVegetationEnabled = true;
+		mIsFogEnabled = true;
+		mIsVegetationEnabled = false;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
 		mIsTextEnabled = false;
-		mIsStatisticsVisible = true;
+		mIsStatisticsVisible = false;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = false;
 		mIsFullScreen = false;

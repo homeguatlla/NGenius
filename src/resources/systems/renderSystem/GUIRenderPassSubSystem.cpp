@@ -2,7 +2,7 @@
 #include "GUIRenderPassSubSystem.h"
 #include "RenderSystem.h"
 #include "RenderPass.h"
-#include "../../GameConstants.h"
+#include "../../EngineConstants.h"
 #include "../../camera/OrthogonalCamera.h"
 #include "../../renderers/IRenderer.h"
 
@@ -32,7 +32,7 @@ void GUIRenderPassSubSystem::Init()
 		mRenderSystem->AddCamera(mCamera);
 
 		mRenderPass = CreateGUIRenderPass(mCamera);
-		mRenderSystem->AddRenderPass(mRenderPass);
+		mRenderSystem->AddRenderPass(mRenderPass, true);
 
 		mIsInitialized = true;
 	}

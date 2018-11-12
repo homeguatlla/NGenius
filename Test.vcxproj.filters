@@ -522,9 +522,6 @@
     <ClInclude Include="src\resources\command\ICommand.h">
       <Filter>Header Files\resources\command</Filter>
     </ClInclude>
-    <ClInclude Include="GameConstants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\systems\renderSystem\ShadowsRenderPassSubsystem.h">
       <Filter>Header Files\resources\systems\renderSystem</Filter>
     </ClInclude>
@@ -824,6 +821,12 @@
     </ClInclude>
     <ClInclude Include="src\resources\systems\renderSystem\TransparentRenderPassSubSystem.h">
       <Filter>Header Files\resources\systems\renderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineConstants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\StatisticsSystem.h">
+      <Filter>Header Files\resources\systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1381,6 +1384,9 @@
     </ClCompile>
     <ClCompile Include="src\resources\systems\renderSystem\TransparentRenderPassSubSystem.cpp">
       <Filter>Source Files\resources\systems\renderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\StatisticsSystem.cpp">
+      <Filter>Source Files\resources\systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

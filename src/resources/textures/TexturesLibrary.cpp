@@ -25,26 +25,26 @@ void TexturesLibrary::Load()
 
 	std::vector<std::string> filenames;
 
-	filenames.push_back("data/textures/sand_256.png");
-	filenames.push_back("data/textures/grass_256.png");
-	filenames.push_back("data/textures/grass_dark_256.png");	
-	filenames.push_back("data/textures/rock3.png");
+	filenames.push_back("data/terrain/island/sand_256.png");
+	filenames.push_back("data/terrain/island/grass_256.png");
+	filenames.push_back("data/terrain/island/grass_dark_256.png");	
+	filenames.push_back("data/terrain/island/rock3.png");
 	
 
 	TextureArray* textureArray = new TextureArray();
-	textureArray->Load(filenames, ++mCurrentTextureUnit, true);
+	textureArray->Load(filenames, 256.0f, ++mCurrentTextureUnit, true);
 	AddElement("terrain_array", textureArray);
 
 	filenames.clear();
 
 	filenames.push_back("data/terrain/mars/burnt_sand_light.png");
 	filenames.push_back("data/terrain/mars/mars_high.png");
-	filenames.push_back("data/terrain/mars/red_rock.png");
 	filenames.push_back("data/terrain/mars/dirt.png");
+	filenames.push_back("data/terrain/mars/red_rock.png");
 
 
 	textureArray = new TextureArray();
-	textureArray->Load(filenames, ++mCurrentTextureUnit, true);
+	textureArray->Load(filenames, 1024.0f, ++mCurrentTextureUnit, true);
 	AddElement("terrain_mars_array", textureArray);
 
 	filenames.clear();

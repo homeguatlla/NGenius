@@ -21,6 +21,9 @@
 #include "resources/systems/SpacePartitionSystem.h"
 #include "resources/systems/EnvironmentSystem/EnvironmentSystem.h"
 #include "resources/systems/AnimationSystem.h"
+#include "resources/systems/StatisticsSystem.h"
+
+#include "resources/materials/MaterialsLibrary.h"
 
 #include "resources/scene/GameScene.h"
 #include "resources/entities/ParticlesEmitter.h"
@@ -37,6 +40,8 @@ mEntitiesSystem(nullptr),
 mParticlesSystem(nullptr),
 mSpacePartitionSystem(nullptr),
 mEnvironmentSystem(nullptr),
+mAnimationSystem(nullptr),
+mStatisticsSystem(nullptr),
 mGameScene(nullptr),
 mApplicationName(applicationName),
 mIsSpacePartitionEnabled(true)
@@ -158,6 +163,8 @@ void NGenius::AcceptStatistics()
 		mPhysicsSystem->Accept(*mStatistics);
 		mSpacePartitionSystem->Accept(*mStatistics);
 		this->Accept(*mStatistics);
+
+		mStatisticsSystem->Update(*mStatistics);
 	}
 }
 
@@ -186,6 +193,7 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 	mSpacePartitionSystem = new SpacePartitionSystem();
 	mEnvironmentSystem = new EnvironmentSystem();
 	mAnimationSystem = new AnimationSystem();
+	mStatisticsSystem = new StatisticsSystem();
 }
 
 void NGenius::DestroySystems()
@@ -200,6 +208,7 @@ void NGenius::DestroySystems()
 	delete mPhysicsSystem;
 	delete mRenderSystem;
 	delete mInputHandler;
+	delete mStatisticsSystem;
 	delete mStatistics;
 }
 
@@ -336,10 +345,24 @@ GameScene* NGenius::GetGameScene(const std::string& name)
 
 GameScene* NGenius::CreateGameScene(const std::string& name)
 {
+	assert(mGameScene == nullptr);
+
 	mGameScene = new GameScene(name);
 	
 	//TODO ojo que esto es horrible, tener que crear el lightsystem cuando la escena se crea...no sé
+	//una posible solución sería que se generase un evento a listener, pero hay que tener en cuenta que te 
+	//llegarán diversas notificaciones.
+	//Seguramente, para el caso de las estadísticas lo mejor sería crear una escena a parte. Pero entonces
+	//hay que gestionar múltiples escenas.
+	//para las luces, pues de alguna manera habría que indicar a que escenas se le aplican las luces que podrían
+	//ser más de una. Por ahora lo dejamos así pues no hay múltiples escenas
 	mLightsSystem = new LightsSystem(mGameScene);
+	Transformation transformation(glm::vec3(-GetScreenWidth() * 0.5f, GetScreenHeight() * 0.5f, 0.0f),
+		glm::vec3(0.0f),
+		glm::vec3(0.70f)
+	);
+	mStatisticsSystem->Start(mGameScene, &transformation, GetFont("OCR A Extended"), GetMaterial(MaterialsLibrary::TEXT_MATERIAL_NAME));
+
 	
 	mGameScene->RegisterGameSceneListener(mDebugSystem);
 	mGameScene->RegisterGameSceneListener(mInputSystem);
@@ -364,6 +387,12 @@ void NGenius::AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing)
 {
 	assert(mRenderSystem != nullptr);
 	mRenderSystem->AddRenderPass(renderPass, addAfterPostProcessing);
+}
+
+void NGenius::AddRenderPassAt(unsigned int index, RenderPass* renderPass, bool addAfterPostProcessing)
+{
+	assert(mRenderSystem != nullptr);
+	mRenderSystem->AddRenderPassAt(index, renderPass, addAfterPostProcessing);
 }
 
 void NGenius::AddLight(Light* light)

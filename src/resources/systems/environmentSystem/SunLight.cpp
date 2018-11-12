@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SunLight.h"
 #include "glm/gtc/matrix_transform.hpp"
-#include "../../GameConstants.h"
+#include "../../EngineConstants.h"
 
 #include <algorithm>
 
