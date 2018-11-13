@@ -151,6 +151,8 @@ public:
 
 	//environment
 	float GetDayTime() const;
+	void AddSunLightFrame(float hour, const float rotationAngle, const glm::vec3& color,
+		const glm::vec3& fogColor, float fogDensity, float fogGradient, const std::string& cubemapName);
 
 private:
 

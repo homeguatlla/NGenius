@@ -1,9 +1,11 @@
 #pragma once
 #include "../../resources/events/CharacterControllerEvent.h"
 
+class Item;
+
 class StoreIntoInventoryEvent : public CharacterControllerEvent
 {
-	unsigned int mItemId;
+	Item* mItem;
 
 public:
 	StoreIntoInventoryEvent();
@@ -11,7 +13,7 @@ public:
 
 	StoreIntoInventoryEvent* DoClone(const void* data) const override;
 	
-	unsigned int GetItemId() const;
-	void SetItemId(unsigned int itemId);
+	Item* GetItem() const;
+	void SetItem(Item* item);
 };
 

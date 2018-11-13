@@ -2,7 +2,8 @@
 #include "Inventory.h"
 #include "../../utils/Log.h"
 
-Inventory::Inventory()
+Inventory::Inventory(unsigned int maxItems) :
+	mMaxItems(maxItems)
 {
 }
 
@@ -16,33 +17,56 @@ Inventory::~Inventory()
 	mItemsList.clear();
 }
 
-
-void Inventory::Store(ItemType type, unsigned int counter)
+bool Inventory::HasSpace() const
 {
-	Item* newItem = nullptr;
+	return mItemsList.size() < mMaxItems;
+}
 
-	switch (type)
+bool Inventory::ExistItem(Item::ItemType type) const
+{
+	for (Item* item : mItemsList)
 	{
-	case Inventory::ITEM_SHOT_GUN:
-		newItem = new Item(Inventory::ITEM_SHOT_GUN, counter, false, 1);
-		break;
-	case Inventory::ITEM_LIVE_CAPSULE:
-		newItem = new Item(Inventory::ITEM_LIVE_CAPSULE, counter, true, 10);
-		break;
-	case Inventory::ITEM_INVALID:
-		Log(Log::LOG_WARNING) << "Trying to store an invalid item!\n";
-		break;
-	default:
-		Log(Log::LOG_ERROR) << "Error storing an item into the inventory\n";
-		break;
+		if (item->GetType() == type)
+		{
+			return true;
+		}
 	}
 
-	if (newItem != nullptr)
+	return false;
+}
+
+
+void Inventory::Store(Item* item)
+{
+	if (HasSpace())
 	{
-		mItemsList.push_back(newItem);
+		mItemsList.push_back(item);
 	}
 }
 
+Item* Inventory::Retrieve(unsigned int id)
+{
+	Item* item = nullptr;
+
+	std::vector<Item*>::iterator it;
+	for (it = mItemsList.begin(); it != mItemsList.end();)
+	{
+		item = *it;
+		if (item->GetId() == id)
+		{
+
+			it = mItemsList.erase(it);
+			break;
+		}
+		else
+		{
+			++it;
+		}
+	}
+
+	return item;
+}
+/*
 unsigned int Inventory::Retrieve(ItemType type, unsigned int counter)
 {
 	unsigned int itemsPending = counter;
@@ -86,4 +110,4 @@ unsigned int Inventory::Retrieve(ItemType type, unsigned int counter)
 	//if itemsPending = 0 successfuly all items have been retrieved
 	//if itemsPending > 0 not all items have been retrieved, missing itemsPending items.
 	return itemsPending;
-}
+}*/

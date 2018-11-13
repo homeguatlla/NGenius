@@ -36,8 +36,7 @@ public:
 	float GetTimer() const;
 
 	void SetDayTime(float hour);
-	float GetDayTime() const;
-	
+	float GetDayTime() const;	
 
 	float GetSunLightBlendFactor() const;
 	glm::vec3 GetSunLightDirection() const;
@@ -45,6 +44,9 @@ public:
 
 	const std::string GetSkyBoxCubemapOrigin() const;
 	const std::string GetSkyBoxCubemapDestination() const;
+
+	void AddSunLightFrame(float hour, const float rotationAngle, const glm::vec3& color,
+		const glm::vec3& fogColor, float fogDensity, float fogGradient, const std::string& cubemapName);
 
 	//fog
 	glm::vec3 GetFogColor() const;

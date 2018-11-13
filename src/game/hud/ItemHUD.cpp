@@ -3,6 +3,7 @@
 #include "../../resources/Transformation.h"
 #include "../../resources/GameEntity.h"
 #include "../../resources/renderers/IRenderer.h"
+#include "../../resources/materials/IMaterial.h"
 
 ItemHUD::ItemHUD(IRenderer* renderer, const glm::vec2& screenCoord, int size)
 {
@@ -16,7 +17,7 @@ ItemHUD::~ItemHUD()
 
 void ItemHUD::Create(IRenderer* renderer, const glm::vec2& screenCoord, int size)
 {
-	mItemEntity = new GameEntity(new Transformation(glm::vec3(screenCoord.x, screenCoord.y, 0.0f),
+	mBackgroundEntity = new GameEntity(new Transformation(glm::vec3(screenCoord.x, screenCoord.y, 0.0f),
 		glm::vec3(0.0f),
 		glm::vec3(size)),
 		renderer
@@ -25,14 +26,14 @@ void ItemHUD::Create(IRenderer* renderer, const glm::vec2& screenCoord, int size
 
 GameEntity* ItemHUD::GetGameEntity()
 {
-	return mItemEntity;
+	return mBackgroundEntity;
 }
 
 void ItemHUD::SetItemMaterial(IMaterial* material)
 {
-	if (mItemEntity != nullptr)
+	if (mBackgroundEntity != nullptr)
 	{
-		IRenderer* renderer = mItemEntity->GetRenderer();
+		IRenderer* renderer = mBackgroundEntity->GetRenderer();
 		assert(renderer != nullptr);
 
 		renderer->SetMaterial(material);
@@ -41,5 +42,25 @@ void ItemHUD::SetItemMaterial(IMaterial* material)
 
 void ItemHUD::SetVisibility(bool visible)
 {
-	mItemEntity->GetRenderer()->SetVisibility(visible);
+	mBackgroundEntity->GetRenderer()->SetVisibility(visible);
+}
+
+void ItemHUD::SetCounter(unsigned int counter)
+{
+	mCounter = counter;
+}
+
+IRenderer* ItemHUD::GetRenderer() const
+{
+	return mBackgroundEntity->GetRenderer();
+}
+
+void ItemHUD::SetItemId(unsigned int id)
+{
+	mItemId = id;
+}
+
+unsigned int ItemHUD::GetItemId() const
+{
+	return mItemId;
 }

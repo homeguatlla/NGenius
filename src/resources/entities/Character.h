@@ -6,7 +6,7 @@ class Transformation;
 class InputComponent;
 class CollisionComponent;
 class PhysicsComponent;
-class CharacterComponent;
+class GameEventsComponent;
 
 class Character : public GameEntity
 {
@@ -34,7 +34,7 @@ class Character : public GameEntity
 
 public:
 	explicit Character(Transformation* transformation, IRenderer* renderer, InputComponent* playerInputComponent, 
-					CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, 
+					GameEventsComponent* characterComponent, PhysicsComponent* physicsComponent, 
 					CollisionComponent* collisionComponent, float runSpeed, float turnSpeed, float upwardsSpeed);
 	virtual ~Character();
 

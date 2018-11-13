@@ -238,6 +238,18 @@
     <Filter Include="Header Files\game\maps">
       <UniqueIdentifier>{4cb363da-6d13-4739-bc5d-3620aad4e448}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\game\controllers">
+      <UniqueIdentifier>{fab47844-1433-4781-9d31-9c40c481b1e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game\controller">
+      <UniqueIdentifier>{fbb5c732-1419-45cc-be6a-8274a2f43667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\items">
+      <UniqueIdentifier>{4557375d-0d1e-4b00-ac31-5b061ac442e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game\items">
+      <UniqueIdentifier>{e26932ed-4676-459e-960a-80a08780df20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -534,9 +546,6 @@
     <ClInclude Include="src\input\InputConverter.h">
       <Filter>Header Files\input</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\components\CharacterComponent.h">
-      <Filter>Header Files\resources\components</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\GameEvent.h">
       <Filter>Header Files\resources</Filter>
     </ClInclude>
@@ -828,6 +837,18 @@
     <ClInclude Include="src\resources\systems\StatisticsSystem.h">
       <Filter>Header Files\resources\systems</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\components\GameEventsComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\controllers\InventoryController.h">
+      <Filter>Header Files\game\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\items\Item.h">
+      <Filter>Header Files\game\items</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\items\ItemFactory.h">
+      <Filter>Header Files\game\items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1118,9 +1139,6 @@
     <ClCompile Include="src\input\InputConverter.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\components\CharacterComponent.cpp">
-      <Filter>Source Files\resources\components</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\GameEvent.cpp">
       <Filter>Source Files\resources</Filter>
     </ClCompile>
@@ -1387,6 +1405,18 @@
     </ClCompile>
     <ClCompile Include="src\resources\systems\StatisticsSystem.cpp">
       <Filter>Source Files\resources\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\GameEventsComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\controllers\InventoryController.cpp">
+      <Filter>Source Files\game\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\items\Item.cpp">
+      <Filter>Source Files\game\items</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\items\ItemFactory.cpp">
+      <Filter>Source Files\game\items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

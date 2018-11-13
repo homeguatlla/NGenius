@@ -2,7 +2,7 @@
 #include "StoreIntoInventoryEvent.h"
 #include "../../resources/systems/InputSystem.h"
 
-StoreIntoInventoryEvent::StoreIntoInventoryEvent() : mItemId(0)
+StoreIntoInventoryEvent::StoreIntoInventoryEvent() : mItem(nullptr)
 {
 }
 
@@ -14,17 +14,17 @@ StoreIntoInventoryEvent::~StoreIntoInventoryEvent()
 StoreIntoInventoryEvent* StoreIntoInventoryEvent::DoClone(const void* data) const
 {
 	StoreIntoInventoryEvent* storeInventoryEvent = new StoreIntoInventoryEvent();
-	storeInventoryEvent->SetItemId(storeInventoryEvent->mItemId);
+	storeInventoryEvent->SetItem(storeInventoryEvent->mItem);
 
 	return storeInventoryEvent;
 }
 
-void StoreIntoInventoryEvent::SetItemId(unsigned int itemId)
+void StoreIntoInventoryEvent::SetItem(Item* item)
 {
-	mItemId = itemId;
+	mItem = item;
 }
 
-unsigned int StoreIntoInventoryEvent::GetItemId() const
+Item* StoreIntoInventoryEvent::GetItem() const
 {
-	return mItemId;
+	return mItem;
 }

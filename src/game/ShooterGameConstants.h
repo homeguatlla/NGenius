@@ -21,3 +21,6 @@ static const float PLAYER_TURN_SPEED = 0.2f;
 static const float PLAYER_ZOOM_SPEED = 10.0f;
 static const float PLAYER_PITCH = 10.0f;
 static const float PLAYER_PITCH_SPEED = 10.0f;
+
+
+static const unsigned int NUM_ITEMS_INVENTORY = 5;

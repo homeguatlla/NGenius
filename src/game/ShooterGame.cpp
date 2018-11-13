@@ -7,12 +7,13 @@
 #include "../Singleton.h"
 #include "maps/MarsPlanet.h"
 #include "inventory/Inventory.h"
+#include "controllers/InventoryController.h"
 #include "Player.h"
 
 #include "../resources/camera/PerspectiveCamera.h"
 
 #include "../resources/components/InputComponent.h"
-#include "../resources/components/CharacterComponent.h"
+#include "../resources/components/GameEventsComponent.h"
 #include "../resources/components/CollisionComponent.h"
 #include "../resources/components/ThirdPersonCameraComponent.h"
 #include "../resources/components/OverWaterComponent.h"
@@ -52,10 +53,14 @@ void ShooterGame::Start(NGenius& engine)
 	mGameHUD = new GameHUD(engine, mScene);
 	mPlanet = new MarsPlanet(engine, mScene, mGameplayCamera);
 	mPlayer = new Player(engine, mScene, new Transformation(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.18f)));
-	
+	mInventory = new Inventory(NUM_ITEMS_INVENTORY);
+
+	mInventoryController = new InventoryController(engine, mInventory, mGameHUD->GetItemsListHUD());
+
 	engine.SetCastingShadowsTarget(mPlayer->GetEntity());
 
 	CreateThirdpersonCamera();
+	CreateEnvironment(engine);
 	//mGameHUD->SetVisibility(false);
 }
 
@@ -85,7 +90,7 @@ void ShooterGame::CreateThirdpersonCamera()
 	mThirdPersonCameraEntity->AddComponent(thirdPersonCameraComponent);
 	mThirdPersonCameraEntity->AddComponent(new CollisionComponent());
 
-	mThirdPersonCameraEntity->AddComponent(new CharacterComponent());
+	mThirdPersonCameraEntity->AddComponent(new GameEventsComponent());
 	mThirdPersonCameraEntity->AddComponent(inputComponent);
 
 	/*
@@ -95,4 +100,13 @@ void ShooterGame::CreateThirdpersonCamera()
 	}*/
 
 	mScene->AddEntity(mThirdPersonCameraEntity);
+}
+
+void ShooterGame::CreateEnvironment(NGenius& engine)
+{
+	//mars
+	engine.AddSunLightFrame(1200.0f, 90.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, 0.004f, 1.5f, "day_cubemap");
+	engine.AddSunLightFrame(1800.0f, 135.0f, glm::vec3(0.93f, 0.64f, 0.78f), glm::vec3(218.0f, 74.0f, 43.0f) / 255.0f, 0.04f, 1.5f, "day_cubemap");
+	engine.AddSunLightFrame(2400.0f, 270.0f, glm::vec3(0.86f, 0.64f, 0.93f), glm::vec3(0.0f), 0.004f, 1.5f, "night_cubemap");
+	engine.AddSunLightFrame(600.0f, 45.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, 0.08f, 1.5f, "day_cubemap");
 }

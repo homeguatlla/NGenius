@@ -9,7 +9,7 @@
 #include "../events/characterControllerEvents/PitchEvent.h"
 #include "CollisionComponent.h"
 #include "OverWaterComponent.h"
-#include "CharacterComponent.h"
+#include "GameEventsComponent.h"
 
 #include <iostream>
 
@@ -111,7 +111,7 @@ void ThirdPersonCameraComponent::UpdateInternal(float elapsedTime)
 
 void ThirdPersonCameraComponent::UpdateGameEvents(float elapsedTime)
 {
-	CharacterComponent* characterComponent = mParent->GetComponent<CharacterComponent>();
+	GameEventsComponent* characterComponent = mParent->GetComponent<GameEventsComponent>();
 	while (characterComponent->HasEvents())
 	{
 		const GameEvent* event = characterComponent->ConsumeEvent();

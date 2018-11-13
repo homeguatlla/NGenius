@@ -44,21 +44,6 @@ unsigned int EnvironmentSystem::GetNumberGameEntities() const
 void EnvironmentSystem::Start()
 {
 	mTimer = DAY_PERIOD_SEC * 0.5f / HOUR_DAY_SPEED;
-	
-	//green island
-	mSunLight->AddFrame(1200.0f, 90.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(255.0f, 255.0f, 255.0f) / 255.0f, 0.004f, 1.5f, "day_cubemap");
-	mSunLight->AddFrame(1800.0f, 135.0f, glm::vec3(0.93f, 0.64f, 0.78f), glm::vec3(218.0f, 74.0f, 43.0f) / 255.0f, 0.04f, 1.5f, "day_cubemap");
-	mSunLight->AddFrame(2400.0f, 270.0f, glm::vec3(0.86f, 0.64f, 0.93f), glm::vec3(0.0f), 0.004f, 1.5f, "night_cubemap");
-	mSunLight->AddFrame(600.0f, 45.0f, glm::vec3(0.36f, 0.73f, 0.82f), glm::vec3(93.0f, 188.0f, 210.0f) / 255.0f, 0.08f, 1.5f, "day_cubemap");
-	
-
-	//mars
-	/*
-	mSunLight->AddFrame(1200.0f, 90.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, 0.004f, 1.5f, "day_cubemap");
-	mSunLight->AddFrame(1800.0f, 135.0f, glm::vec3(0.93f, 0.64f, 0.78f), glm::vec3(218.0f, 74.0f, 43.0f) / 255.0f, 0.04f, 1.5f, "day_cubemap");
-	mSunLight->AddFrame(2400.0f, 270.0f, glm::vec3(0.86f, 0.64f, 0.93f), glm::vec3(0.0f), 0.004f, 1.5f, "night_cubemap");
-	mSunLight->AddFrame(600.0f, 45.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, 0.08f, 1.5f, "day_cubemap");
-	*/
 }
 
 void EnvironmentSystem::Update(float deltaTime)
@@ -115,7 +100,6 @@ void EnvironmentSystem::ApplyWind(GameEntity* entity)
 	}
 }
 
-
 void EnvironmentSystem::UpdateModificatorsVector()
 {
 	mModificatorsPositions.clear();
@@ -123,6 +107,12 @@ void EnvironmentSystem::UpdateModificatorsVector()
 	{
 		mModificatorsPositions.push_back(entity->GetTransformation()->GetPosition());
 	}
+}
+
+void EnvironmentSystem::AddSunLightFrame(float hour, const float rotationAngle, const glm::vec3& color,
+	const glm::vec3& fogColor, float fogDensity, float fogGradient, const std::string& cubemapName)
+{
+	mSunLight->AddFrame(hour, rotationAngle, color, fogColor, fogDensity, fogGradient, cubemapName);
 }
 
 void EnvironmentSystem::SetTerrain(const Terrain* terrain)

@@ -1,5 +1,6 @@
 #pragma once
 #include "../../NGenius.h"
+#include "../items/Item.h"
 
 class GameScene;
 class ItemHUD;
@@ -19,7 +20,9 @@ public:
 
 	void SetVisibility(bool visible);
 	void Update(float elapsedTime);
-	void AddItem(unsigned int itemId);
+	void AddItem(Item* item);
+	void RemoveSelectedItem();
+	unsigned int GetSelectedItemId() const;
 
 private:
 	void Create(GameScene* scene);

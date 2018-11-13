@@ -98,7 +98,7 @@
 #include "src/resources/components/LODComponent.h"
 #include "src/resources/components/BillboardComponent.h"
 #include "src/resources/components/OverWaterComponent.h"
-#include "src/resources/components/CharacterComponent.h"
+#include "src/resources/components/GameEventsComponent.h"
 #include "src/resources/components/DebugComponent.h"
 #include "src/resources/components/SpacePartitionComponent.h"
 #include "src/resources/components/EnvironmentAffectedComponent.h"
@@ -217,7 +217,7 @@ GameEntity* mQuadTreeMovedEntity;
 std::vector<GameEntity*> mQuadTreeEntities;
 
 
-bool mIsShooterGameRunning = false;
+bool mIsShooterGameRunning = true;
 ShooterGame mGame;
 
 
@@ -1009,7 +1009,7 @@ void CreatePlayer()
 	mPlayer = new Character(	new Transformation(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.18f)),
 							renderer,
 							inputComponent,
-							new CharacterComponent(),
+							new GameEventsComponent(),
 							new PhysicsComponent(false, PhysicsSystem::GRAVITY_VALUE),
 							new CollisionComponent(),
 		EngineConstants::PLAYER_RUN_SPEED,
@@ -1046,7 +1046,7 @@ void CreateGameCameraEntity()
 	mCamera->AddComponent(mThirdPersonCameraComponent);
 	mCamera->AddComponent(new CollisionComponent());
 
-	mCamera->AddComponent(new CharacterComponent());
+	mCamera->AddComponent(new GameEventsComponent());
 	mCamera->AddComponent(inputComponent);
 	
 	if (mIsWaterEnabled)
@@ -1275,39 +1275,6 @@ void CreateHudMapRenderPass()
 	mEngine.AddRenderPass(mMapPass, false);
 }
 
-void CreateGUIRenderPass()
-{
-	//RENDER PASS GUI
-	ICamera* camera = new OrthogonalCamera("gui_camera", mEngine.GetScreenWidth(), mEngine.GetScreenHeight(), EngineConstants::NEAR_PLANE, EngineConstants::FAR_PLANE);
-	camera->SetPosition(glm::vec3(0.0f, 0.0f, 40.0f));
-	camera->SetTarget(glm::vec3(0.0f, 0.0f, -50.0f));
-	camera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
-	RenderPass *guiPass = new RenderPass(static_cast<ICamera*>(camera), IRenderer::LAYER_GUI);
-	mEngine.AddRenderPass(guiPass, true);
-	mEngine.AddCamera(camera);
-}
-
-void CreateGameplayRenderPass()
-{
-	int screenWidth = static_cast<int>(mEngine.GetScreenWidth());
-	int screenHeight = static_cast<int>(mEngine.GetScreenHeight());
-	//RENDER PASS GAMEPLAY	
-	mGameplayPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
-	mGameplayPass->SetAcceptSpacePartitionOnly(true);
-
-	IFrameBuffer* frameBuffer = new IFrameBuffer(screenWidth, screenHeight);
-	Texture* depthTexture = static_cast<Texture*>(mEngine.GetTexture("depth_texture"));
-	frameBuffer->SetCopyBufferToTexture(depthTexture, 0, 0, screenWidth, screenHeight);
-	mGameplayPass->SetFrameBufferOutput(frameBuffer);
-	mGameplayPass->EnableFog(true);
-	
-	//IMaterial* material = mEngine.GetMaterial("shadow");
-	//material->AddEffect(new MaterialEffectDiffuseTexture(mEngine.GetTexture("tree_foliage_diffuse"), glm::vec3(0.0f), 1.0f));
-	//mGameplayPass->SetMaterial(material);
-
-	mEngine.AddRenderPass(mGameplayPass, false);
-}
-
 void CreateTerrainRenderPass()
 {
 	//RENDER PASS GAMEPLAY
@@ -1316,36 +1283,11 @@ void CreateTerrainRenderPass()
 	mEngine.AddRenderPassAt(1, terrainPass, false);
 }
 
-void CreateParticlesRenderPass()
-{
-	//RENDER PASS PARTICLES
-	RenderPass *particlesPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_PARTICLES);
-	particlesPass->SetCalculateDistanceToCamera(true);
-	particlesPass->EnableFog(true);
-	mEngine.AddRenderPass(particlesPass, false);
-}
-
-void CreateTransparentRenderPass()
-{
-	//RENDER PASS TRANSPARENT
-	RenderPass *transparentPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TRANSPARENT);
-	transparentPass->EnableFog(true);
-	mEngine.AddRenderPass(transparentPass, false);
-}
-
 void CreateSubSystems()
 {
 	//CreateHudMapRenderPass();
 
 	CreateTerrainRenderPass();
-
-	//CreateGameplayRenderPass();
-
-	//CreateTransparentRenderPass();
-
-	//CreateParticlesRenderPass();
-
-	//CreateGUIRenderPass();
 }
 
 void UpdateEnergyWallCollisions(float elapsedTime)
@@ -1591,6 +1533,13 @@ void Start(NGenius& engine)
 		mScene = mEngine.CreateGameScene("mainScene");
 		CreateSubSystems();
 		CreateEntities();		
+
+		//green island
+		mEngine.AddSunLightFrame(1200.0f, 90.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(255.0f, 255.0f, 255.0f) / 255.0f, 0.004f, 1.5f, "day_cubemap");
+		mEngine.AddSunLightFrame(1800.0f, 135.0f, glm::vec3(0.93f, 0.64f, 0.78f), glm::vec3(218.0f, 74.0f, 43.0f) / 255.0f, 0.04f, 1.5f, "day_cubemap");
+		mEngine.AddSunLightFrame(2400.0f, 270.0f, glm::vec3(0.86f, 0.64f, 0.93f), glm::vec3(0.0f), 0.004f, 1.5f, "night_cubemap");
+		mEngine.AddSunLightFrame(600.0f, 45.0f, glm::vec3(0.36f, 0.73f, 0.82f), glm::vec3(93.0f, 188.0f, 210.0f) / 255.0f, 0.08f, 1.5f, "day_cubemap");
+
 
 		mEngine.SetCastingShadowsTarget(mPlayer);
 	}

@@ -12,7 +12,7 @@
 #include "../../resources/renderers/IndicesRenderer.h"
 #include "../../resources/scene/GameScene.h"
 
-#include "../../resources/components/CharacterComponent.h"
+#include "../../resources/components/GameEventsComponent.h"
 #include "../../resources/components/InputComponent.h"
 
 #include "../../resources/events/characterControllerEvents/ZoomEvent.h"
@@ -39,11 +39,6 @@ const float OFFSET_BETWEEN_ITEMS = 0.07f;
 const float LAYER_SELECTED_ITEM_Z = 1.0f;
 
 
-const std::string ITEMS_AVAILABLE_LIST[2] = {	
-												std::string("item_water"), 
-												std::string("item_shotgun") };
-
-
 ItemsListHUD::ItemsListHUD(NGenius& engine, GameScene* scene, const glm::vec2& screenCoord) :
 	mEngine(&engine),
 	mSelectedItemEntity(nullptr),
@@ -68,14 +63,41 @@ void ItemsListHUD::SetVisibility(bool visible)
 	}
 }
 
-void ItemsListHUD::AddItem(unsigned int itemId)
+void ItemsListHUD::AddItem(Item* item)
+{
+	for (ItemHUD* itemHUD : mItemsList)
+	{
+		assert(itemHUD != nullptr);
+		IRenderer* renderer = itemHUD->GetRenderer();
+		IMaterial* emptyMaterial = mEngine->GetMaterial(MATERIAL_ITEM);
+		assert(renderer != nullptr);
+		bool isItemHUDEmpty = renderer->GetMaterial()->GetMaterialID() == emptyMaterial->GetMaterialID();
+		if (isItemHUDEmpty)
+		{
+			IMaterial* material = CreateMaterial(item->GetName() + std::string("_material"), item->GetName());
+			itemHUD->SetItemMaterial(material);
+			itemHUD->SetCounter(item->GetCounter());
+			itemHUD->SetItemId(item->GetId());
+			break;
+		}
+	}
+}
+void ItemsListHUD::RemoveSelectedItem()
 {
 	ItemHUD* item = mItemsList[mSelectedItem];
 	assert(item != nullptr);
 
-	IMaterial* material = CreateMaterial(ITEMS_AVAILABLE_LIST[itemId] + std::string("_material"), ITEMS_AVAILABLE_LIST[itemId]);
-	item->SetItemMaterial(material);
+	IMaterial* emptyMaterial = mEngine->GetMaterial(MATERIAL_ITEM);
+	item->SetItemMaterial(emptyMaterial);
 }
+
+unsigned int ItemsListHUD::GetSelectedItemId() const
+{
+	return mItemsList[mSelectedItem]->GetItemId();
+}
+
+
+
 
 void ItemsListHUD::Create(GameScene* scene)
 {
@@ -90,14 +112,14 @@ void ItemsListHUD::Update(float elapsedTime)
 
 void ItemsListHUD::UpdateGameEvents()
 {
-	CharacterComponent* characterComponent = mSelectedItemEntity->GetComponent<CharacterComponent>();
+	GameEventsComponent* characterComponent = mSelectedItemEntity->GetComponent<GameEventsComponent>();
 	while (characterComponent->HasEvents())
 	{
 		const GameEvent* event = characterComponent->ConsumeEvent();
 		if (event->IsOfType<ZoomEvent>())
 		{
 			const ZoomEvent* zoomEvent = static_cast<const ZoomEvent*>(event);
-			int increment = zoomEvent->GetZoom() < 0 ? -1 : 1;
+			int increment = zoomEvent->GetZoom() < 0 ? 1 : -1;
 			int newSelectedItem = (static_cast<int>(mSelectedItem) + increment) % NUM_ITEMS;
 			if (newSelectedItem < 0)
 			{
@@ -108,8 +130,8 @@ void ItemsListHUD::UpdateGameEvents()
 		}
 		else if (event->IsOfType<StoreIntoInventoryEvent>())
 		{
-			const StoreIntoInventoryEvent* storeIntoInventoryEvent = static_cast<const StoreIntoInventoryEvent*>(event);
-			AddItem(storeIntoInventoryEvent->GetItemId());
+			//const StoreIntoInventoryEvent* storeIntoInventoryEvent = static_cast<const StoreIntoInventoryEvent*>(event);
+			//AddItem(storeIntoInventoryEvent->GetItem());
 		}
 	}
 }
@@ -154,7 +176,7 @@ void ItemsListHUD::CreateSelectedItem(GameScene* scene)
 	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
 	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_E, new StoreIntoInventoryEvent()));
 	mSelectedItemEntity->AddComponent(inputComponent);
-	mSelectedItemEntity->AddComponent(new CharacterComponent());
+	mSelectedItemEntity->AddComponent(new GameEventsComponent());
 
 	scene->AddEntity(mSelectedItemEntity);
 }

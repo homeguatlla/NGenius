@@ -34,7 +34,7 @@
 #include "../resources/components/PhysicsComponent.h"
 #include "../resources/components/CollisionComponent.h"
 #include "../resources/components/RotationComponent.h"
-#include "../resources/components/CharacterComponent.h"
+#include "../resources/components/GameEventsComponent.h"
 #include "../resources/components/DebugComponent.h"
 #include "../resources/components/AnimationComponent.h"
 #include "../resources/components/EnergyWallCollisionComponent.h"
@@ -84,7 +84,7 @@ void Player::Create(Transformation* transformation)
 	mCharacter = new Character(	transformation,
 								renderer,
 								inputComponent,
-								new CharacterComponent(),
+								new GameEventsComponent(),
 								new PhysicsComponent(false, PhysicsSystem::GRAVITY_VALUE),
 								new CollisionComponent(),
 								PLAYER_RUN_SPEED,

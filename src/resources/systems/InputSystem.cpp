@@ -3,7 +3,7 @@
 #include "../GameEntity.h"
 #include "../../input/InputHandler.h"
 #include "../components/InputComponent.h"
-#include "../components/CharacterComponent.h"
+#include "../components/GameEventsComponent.h"
 
 #include <algorithm>
 
@@ -25,7 +25,7 @@ void InputSystem::Update(float elapsedTime)
 
 bool InputSystem::HasInputComponents(const GameEntity* entity) const
 {
-	return entity != nullptr && entity->HasComponent<InputComponent>() && entity->HasComponent<CharacterComponent>();
+	return entity != nullptr && entity->HasComponent<InputComponent>() && entity->HasComponent<GameEventsComponent>();
 }
 
 void InputSystem::OnGameEntityAdded(GameEntity* entity)
@@ -70,7 +70,7 @@ void InputSystem::OnKey(int key, int action)
 	for (GameEntity* entity : mEntities)
 	{
 		InputComponent* inputComponent = entity->GetComponent<InputComponent>();
-		CharacterComponent* characterComponent = entity->GetComponent<CharacterComponent>();
+		GameEventsComponent* characterComponent = entity->GetComponent<GameEventsComponent>();
 		if (inputComponent != nullptr && characterComponent != nullptr)
 		{
 			const GameEvent* event = inputComponent->ConvertKey(key, action);
@@ -108,7 +108,7 @@ void InputSystem::DispatchEvent(MouseData& data)
 	for (GameEntity* entity : mEntities)
 	{
 		InputComponent* inputComponent = entity->GetComponent<InputComponent>();
-		CharacterComponent* characterComponent = entity->GetComponent<CharacterComponent>();
+		GameEventsComponent* characterComponent = entity->GetComponent<GameEventsComponent>();
 		if (inputComponent != nullptr && characterComponent != nullptr)
 		{
 			const GameEvent* event = inputComponent->ConvertMouse(reinterpret_cast<void*>(&data));

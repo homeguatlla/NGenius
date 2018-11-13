@@ -5,18 +5,18 @@
 
 class GameEvent;
 
-class CharacterComponent : public IComponent
+class GameEventsComponent : public IComponent
 {
 	std::queue<const GameEvent*> mEvents;
 
 public:
-	explicit CharacterComponent();
-	virtual ~CharacterComponent();
+	explicit GameEventsComponent();
+	virtual ~GameEventsComponent();
 
 	void OnCharacterControllerEvent(const GameEvent* gameEvent);
 	bool HasEvents() const;
 	const GameEvent* ConsumeEvent();
 
-	CharacterComponent* DoClone() const override;
+	GameEventsComponent* DoClone() const override;
 };
 

@@ -332,6 +332,13 @@ float NGenius::GetDayTime() const
 	return mEnvironmentSystem->GetDayTime();
 }
 
+void NGenius::AddSunLightFrame(float hour, const float rotationAngle, const glm::vec3& color,
+	const glm::vec3& fogColor, float fogDensity, float fogGradient, const std::string& cubemapName) 
+{
+	assert(mEnvironmentSystem != nullptr);
+	mEnvironmentSystem->AddSunLightFrame(hour, rotationAngle, color, fogColor, fogDensity, fogGradient, cubemapName);
+}
+
 void NGenius::SetFullScreen(bool isFullScreen)
 {
 	assert(mRenderSystem != nullptr);

@@ -3,7 +3,7 @@
 #include "../components/InputComponent.h"
 #include "../components/CollisionComponent.h"
 #include "../components/PhysicsComponent.h"
-#include "../components/CharacterComponent.h"
+#include "../components/GameEventsComponent.h"
 #include "../components/ThirdPersonCameraComponent.h"
 #include "../components/AnimationComponent.h"
 
@@ -23,7 +23,7 @@
 #include <iostream>
 
 Character::Character(	Transformation* transformation, IRenderer* renderer, InputComponent* inputComponent, 
-				CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, 
+				GameEventsComponent* characterComponent, PhysicsComponent* physicsComponent, 
 				CollisionComponent* collisionComponent, float runSpeed, float turnSpeed, float upwardsSpeed) :
 GameEntity(transformation, renderer), 
 mState(IDLE), 
@@ -101,7 +101,7 @@ void Character::UpdateAnimations()
 
 void Character::UpdateGameEvents()
 {
-	CharacterComponent* characterComponent = GetComponent<CharacterComponent>();
+	GameEventsComponent* characterComponent = GetComponent<GameEventsComponent>();
 	while (characterComponent->HasEvents())
 	{
 		const GameEvent* event = characterComponent->ConsumeEvent();

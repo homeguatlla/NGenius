@@ -41,8 +41,8 @@ void GameHUD::Update(float elapsedTime)
 	mItemsList->Update(elapsedTime);
 }
 
-void GameHUD::StoreItem(int itemId)
+ItemsListHUD* GameHUD::GetItemsListHUD()
 {
-	mItemsList->AddItem(itemId);
+	return mItemsList;
 }
 

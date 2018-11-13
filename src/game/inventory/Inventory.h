@@ -1,38 +1,20 @@
 #pragma once
 #include <vector>
+#include "../items/Item.h"
 
 class Inventory
 {
-	enum ItemType
-	{
-		ITEM_SHOT_GUN,
-		ITEM_LIVE_CAPSULE,
-		ITEM_INVALID
-	};
-
-	typedef struct Item
-	{
-		ItemType mType;
-		unsigned int mCounter;
-		bool mCanAccumulate;
-		unsigned int mMaxAccumulable;
-
-		Item(ItemType type, unsigned int counter, bool canAccumulate, unsigned int maxAccumulable)
-		{
-			mType = type;
-			mCounter = counter;
-			mCanAccumulate = canAccumulate;
-			mMaxAccumulable = maxAccumulable;
-		}
-	} Item;
-
 	std::vector<Item*> mItemsList;
+	unsigned int mMaxItems;
 	
 public:
-	Inventory();
+	Inventory(unsigned int maxItems);
 	~Inventory();
 
-	void Store(ItemType type, unsigned int counter);
-	unsigned int Retrieve(ItemType type, unsigned int counter);
+	void Store(Item* item);
+	//unsigned int Retrieve(ItemType type, unsigned int counter);
+	Item* Retrieve(unsigned int id);
+	bool HasSpace() const;
+	bool ExistItem(Item::ItemType type) const;
 };
 

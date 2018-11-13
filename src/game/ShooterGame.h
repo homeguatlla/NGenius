@@ -7,6 +7,8 @@ class MarsPlanet;
 class ICamera;
 class Player;
 class GameEntity;
+class Inventory;
+class InventoryController;
 
 class ShooterGame 
 {
@@ -16,6 +18,8 @@ class ShooterGame
 	ICamera* mGameplayCamera;
 	Player* mPlayer;
 	GameEntity* mThirdPersonCameraEntity;
+	Inventory* mInventory;
+	InventoryController* mInventoryController;
 
 public:
 	ShooterGame();
@@ -26,5 +30,6 @@ public:
 
 private:
 	void CreateThirdpersonCamera();
+	void CreateEnvironment(NGenius& engine);
 };
 
