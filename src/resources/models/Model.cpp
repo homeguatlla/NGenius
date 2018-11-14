@@ -57,6 +57,16 @@ int Model::GetNumberOfIndexes() const
 	return mMesh->GetNumberOfIndexes();
 }
 
+const std::string& Model::GetMaterialName() const
+{
+	return mMesh->GetMaterialName();
+}
+
+bool Model::HasNormalmap() const
+{
+	return !mMesh->GetNormalMapTextureName().empty();
+}
+
 bool Model::IsAnimatedModel() const
 {
 	return false;

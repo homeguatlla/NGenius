@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-const float FOV_DILATATION = 5.0f;
+const float FOV_DILATATION = 12.0f;
 
 SpacePartitionSystem::SpacePartitionSystem() : 
 	mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limits<float>::max())),

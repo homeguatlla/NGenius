@@ -41,6 +41,10 @@ public:
 	virtual void BuildInternal(VertexBuffersManager& vertexBufferManager, IMaterial* material) {};
 	void UpdateVBOs();
 
+	const std::string& GetMaterialName() const;
+	
+	bool HasNormalmap() const;
+
 	virtual bool IsAnimatedModel() const;
 
 private:

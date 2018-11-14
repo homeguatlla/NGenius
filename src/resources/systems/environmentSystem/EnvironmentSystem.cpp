@@ -18,7 +18,7 @@
 
 #include <iostream>
 
-const long HOUR_DAY_SPEED = 30;
+const long HOUR_DAY_SPEED = 300;
 const long DAY_PERIOD_SEC = 3600 * 24;
 
 EnvironmentSystem::EnvironmentSystem() :

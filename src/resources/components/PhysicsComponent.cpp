@@ -2,7 +2,11 @@
 #include "PhysicsComponent.h"
 
 
-PhysicsComponent::PhysicsComponent(bool isStatic, const glm::vec3& gravity) :mIsStatic(isStatic), mVelocity(0.0f), mGravity(gravity)
+PhysicsComponent::PhysicsComponent(bool isStatic, const glm::vec3& gravity, float introductionCoef) :
+	mIsStatic(isStatic), 
+	mVelocity(0.0f), 
+	mGravity(gravity),
+	mIntroductionCoef(introductionCoef)
 {
 }
 
@@ -34,4 +38,9 @@ const glm::vec3 PhysicsComponent::GetGravity() const
 bool PhysicsComponent::IsStatic() const
 {
 	return mIsStatic;
+}
+
+float PhysicsComponent::GetIndroductionCoef() const
+{
+	return mIntroductionCoef;
 }

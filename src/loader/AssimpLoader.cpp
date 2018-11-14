@@ -41,6 +41,8 @@ Mesh* AssimpLoader::LoadModel(const std::string& filename, Animation** animation
 
 	Mesh* mesh = nullptr;
 
+	Log(Log::LOG_INFO) << "Loading Model: " << filename << "\n";
+
 	if (assimpScene != nullptr && !(assimpScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE))
 	{
 		aiNode* rootNode = assimpScene->mRootNode;

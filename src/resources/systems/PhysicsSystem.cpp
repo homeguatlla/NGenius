@@ -82,6 +82,17 @@ void PhysicsSystem::CheckCollisionTerrain(GameEntity* entity)
 		float groundHeight = 0.0f;
 		bool isColliding = ApplyCollisions(entity, &groundHeight);
 		collisionComponent->SetOnGround(isColliding);
+
+		//si tiene componente físico le bajamos la Y el coeficiente de penetración (introduction)
+		PhysicsComponent* physicsComponent = entity->GetComponent<PhysicsComponent>();
+		if (physicsComponent != nullptr)
+		{
+			Transformation* transformation = entity->GetTransformation();
+			glm::vec3 position = transformation->GetPosition();
+			position.y -= physicsComponent->GetIndroductionCoef();
+			transformation->SetPosition(position);
+		}
+	
 		collisionComponent->SetGroundHeight(groundHeight);
 		
 		//improvement, hasta el momento no tiene mucha utilidad, pero creo que debería ser útil.
@@ -201,6 +212,7 @@ bool PhysicsSystem::ApplyCollisions(GameEntity *entity, float *groundHeight)
 		min = matrix * min;
 		entityBottomHeight = glm::abs(min.y);
 	}
+
 	position.y = glm::max(position.y, *groundHeight + entityBottomHeight);
 	transformation->SetPosition(position);
 

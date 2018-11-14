@@ -17,6 +17,7 @@ public:
 	static const char* OVERDRAW_MATERIAL_NAME;
 	static const char* WIREFRAME_MATERIAL_NAME;
 	static const char* MODEL_MATERIAL_NAME;
+	static const char* MODEL_NORMALMAP_MATERIAL_NAME;
 	static const char* TEXT_MATERIAL_NAME;
 	static const char* TEXT3D_MATERIAL_NAME;
 	static const char* GUI_MATERIAL_NAME;

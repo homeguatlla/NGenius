@@ -49,8 +49,8 @@ void ModelsLibrary::Load()
 	//LoadModel("grass1", "data/models/grass/grass1.obj", false, false);
 	//LoadModel("grass2", "data/models/grass/grass2.obj", false, false);
 
-	//model = OBJLoader::LoadModel("data/models/hermes/hermes.obj");
-	//AddElement("hermes", model);
+	//mesh = OBJLoader::LoadModel("data/models/hermes/hermes.obj");
+	//AddElement("hermes", mesh);
 	
 	LoadModel("sphere", "data/models/sphere/sphere.obj", false, true);
 	
@@ -63,10 +63,16 @@ void ModelsLibrary::Load()
 	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
 	
 	LoadModel("farmer", "data/models/farmer/farmer.dae", true, true);
+
+	LoadModel("rock2", "data/models/rocks/rock2.dae", false, true);
+	LoadModel("rock3", "data/models/rocks/rock3.dae", false, true);
+	LoadModel("rock5", "data/models/rocks/rock5.dae", false, true);
+
+	LoadModel("battery", "data/models/battery/battery.dae", false, true);
 	//LoadModel("farmer", "data/models/cube/cube.dae", false, true);
 	//LoadModel("farmer", "data/models/Adventurer-Militia/Militia-Adventurer-RIGGED.dae", false, true);
 
-	//LoadModel("farmer", "data/models/ethan/model.dae", false, true);
+	//LoadModel("farmer", "data/models/ethan/mesh.dae", false, true);
 	//LoadModel("barrel2", "data/models/barrel/barrel.obj", false, true);
 	//LoadModel("wooden", "data/models/wooden/wood.fbx", false, true);
 	//LoadModel("bridge", "data/models/wooden_bridge/wooden_bridge.fbx", false, true);
@@ -82,11 +88,11 @@ void ModelsLibrary::Load()
 	//LoadModel("marine", "data/models/marine/marine.obj", true, true);
 	//LoadModel("stone", "data/models/stone/stone.obj");
 
-	//model = OBJLoader::LoadModel("data/models/tree/tree.obj");
-	//AddElement("tree", model);
+	//mesh = OBJLoader::LoadModel("data/models/tree/tree.obj");
+	//AddElement("tree", mesh);
 
-	//model = OBJLoader::LoadModel("data/models/tree2/full019.obj");
-	//AddElement("tree2", model);
+	//mesh = OBJLoader::LoadModel("data/models/tree2/full019.obj");
+	//AddElement("tree2", mesh);
 }
 
 void ModelsLibrary::LoadModel(const std::string& name, const std::string& filename, bool calculateNormals, bool calculateTangents)
@@ -94,39 +100,39 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 	Animation* animation = nullptr;
 	Joint* rootJoint = nullptr;
 
-	Mesh* model = ModelFactory::LoadModel(filename, &animation, &rootJoint);
+	Mesh* mesh = ModelFactory::LoadModel(filename, &animation, &rootJoint);
 
-	if (model != nullptr)
+	if (mesh != nullptr)
 	{
-		model->Build(calculateNormals, calculateTangents);
+		mesh->Build(calculateNormals, calculateTangents);
 
-		if (model->GetMaterialName().empty())
+		if (mesh->GetMaterialName().empty())
 		{
-			model->SetMaterialName("material_" + name);
+			mesh->SetMaterialName("material_" + name);
 		}
 
 		if (animation != nullptr && rootJoint != nullptr)
 		{
-			AnimatedModel* animatedModel = new AnimatedModel(name, model, rootJoint);
+			AnimatedModel* animatedModel = new AnimatedModel(name, mesh, rootJoint);
 			AddElement(name, animatedModel);
 			mAnimationsLibrary->AddElement(animation->GetName(), animation);
 		}
 		else
 		{
-			Model* modelRender = new Model(model);
+			Model* modelRender = new Model(mesh);
 			AddElement(name, modelRender);
 		}
 
 		std::string path = GetPath(filename) + "/";
 
-		if (!model->GetDiffuseTextureName().empty())
+		if (!mesh->GetDiffuseTextureName().empty())
 		{
-			mTexturesLibrary->AddTextureNameToLoad(model->GetMaterialName() + "_diffuse", path + model->GetDiffuseTextureName());
+			mTexturesLibrary->AddTextureNameToLoad(mesh->GetMaterialName() + "_diffuse", path + mesh->GetDiffuseTextureName());
 		}
 
-		if (!model->GetNormalMapTextureName().empty())
+		if (!mesh->GetNormalMapTextureName().empty())
 		{
-			mTexturesLibrary->AddTextureNameToLoad(model->GetMaterialName() + "_normalmap", path + model->GetNormalMapTextureName());
+			mTexturesLibrary->AddTextureNameToLoad(mesh->GetMaterialName() + "_normalmap", path + mesh->GetNormalMapTextureName());
 		}
 	}
 	else

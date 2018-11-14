@@ -11,6 +11,7 @@
 const char* MaterialsLibrary::OVERDRAW_MATERIAL_NAME = "overdraw";
 const char* MaterialsLibrary::WIREFRAME_MATERIAL_NAME = "wireframe";
 const char* MaterialsLibrary::MODEL_MATERIAL_NAME = "model";
+const char* MaterialsLibrary::MODEL_NORMALMAP_MATERIAL_NAME = "normalmap";
 const char* MaterialsLibrary::TEXT_MATERIAL_NAME = "text";
 const char* MaterialsLibrary::TEXT3D_MATERIAL_NAME = "text3d";
 const char* MaterialsLibrary::GUI_MATERIAL_NAME = "gui";
@@ -39,8 +40,12 @@ void MaterialsLibrary::Load()
 {
 	CreateMaterial(OVERDRAW_MATERIAL_NAME, mShadersLibrary->GetElement(OVERDRAW_MATERIAL_NAME));
 	CreateMaterial(WIREFRAME_MATERIAL_NAME, mShadersLibrary->GetElement("default"));
-	CreateMaterial(MODEL_MATERIAL_NAME, mShadersLibrary->GetElement("normalmap"));
+	CreateMaterial(MODEL_MATERIAL_NAME, mShadersLibrary->GetElement("model"));
+	CreateMaterial(MODEL_NORMALMAP_MATERIAL_NAME, mShadersLibrary->GetElement("normalmap"));
 	CreateMaterial(TEXT_MATERIAL_NAME, mShadersLibrary->GetElement("text"));
 	CreateMaterial(TEXT3D_MATERIAL_NAME, mShadersLibrary->GetElement("text"));
 	CreateMaterial(GUI_MATERIAL_NAME, mShadersLibrary->GetElement("gui"));
+
+	//TODO aquí podríamos crear todos los materiales de los modelos siempre que tengan texturas distintas etc...
+	//ojo que los modelos que comparten atlases nos lo complican
 }
