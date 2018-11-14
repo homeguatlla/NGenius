@@ -10,12 +10,12 @@ class ItemsListHUD
 	NGenius* mEngine;
 	std::vector<ItemHUD*> mItemsList;
 	GameEntity* mSelectedItemEntity;
-	glm::vec2 mScreenCentre;
 	glm::vec2 mScreenCoord;
 	unsigned int mSelectedItem;
+	unsigned int mNumItems;
 
 public:
-	ItemsListHUD(NGenius& engine, GameScene* scene, const glm::vec2& screenCoord);
+	ItemsListHUD(NGenius& engine, GameScene* scene, const glm::vec2& screenCoord, unsigned int numItems);
 	~ItemsListHUD();
 
 	void SetVisibility(bool visible);
@@ -31,9 +31,12 @@ private:
 	void CreateSelectedItem(GameScene* scene);
 
 	void UpdateGameEvents();
-	void UpdateSelectedItemPosition();
+	void UpdateSelectedItemPosition(unsigned int selectedItem, unsigned int newSelectedItem);
 
 	IMaterial* CreateMaterial(const std::string& materialName, const std::string& textureName);
 	glm::vec2 CalculateItemPosition(unsigned int item);
+
+	void SetSize(GameEntity* entity, int size);
+	bool IsItemHUDEmpty(ItemHUD* itemHUD) const;
 };
 

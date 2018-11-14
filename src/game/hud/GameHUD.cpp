@@ -18,7 +18,6 @@ GameHUD::GameHUD(NGenius& engine, GameScene* scene) : mEngine(engine)
 	Create(scene);
 }
 
-
 GameHUD::~GameHUD()
 {
 	
@@ -31,9 +30,18 @@ void GameHUD::SetVisibility(bool visible)
 
 void GameHUD::Create(GameScene* scene)
 {
-	mItemsList = new  ItemsListHUD(mEngine, scene, glm::vec2(0.15f, 0.43f));
-	//mGameHudGameEntity->SetEnabled(true);
-	
+	//para resolucion 1024 x 768
+	float factorX = 0.15f;
+	float factorY = 0.43f;
+
+	factorX = mEngine.GetScreenWidth() / 1024.0f * factorX;
+
+	mItemsList = new  ItemsListHUD(
+		mEngine, 
+		scene, 
+		glm::vec2(mEngine.GetScreenWidth() * factorX, -mEngine.GetScreenHeight() * factorY),
+		NUM_ITEMS_INVENTORY
+	);
 }
 
 void GameHUD::Update(float elapsedTime)

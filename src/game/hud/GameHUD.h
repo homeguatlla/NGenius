@@ -7,7 +7,6 @@ class ItemsListHUD;
 
 class GameHUD
 {
-	GameEntity* mGameHudGameEntity;
 	ItemsListHUD* mItemsList;
 	NGenius& mEngine;
 

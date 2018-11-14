@@ -177,6 +177,7 @@
     <ClInclude Include="src\BitNumber.h" />
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\game\controllers\InventoryController.h" />
+    <ClInclude Include="src\game\events\NextPreviousInventoryItemEvent.h" />
     <ClInclude Include="src\game\events\StoreIntoInventoryEvent.h" />
     <ClInclude Include="src\game\hud\GameHUD.h" />
     <ClInclude Include="src\game\hud\ItemHUD.h" />
@@ -387,6 +388,7 @@
     <ClCompile Include="src\BitNumber.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\game\controllers\InventoryController.cpp" />
+    <ClCompile Include="src\game\events\NextPreviousInventoryItemEvent.cpp" />
     <ClCompile Include="src\game\events\StoreIntoInventoryEvent.cpp" />
     <ClCompile Include="src\game\hud\GameHUD.cpp" />
     <ClCompile Include="src\game\hud\ItemHUD.cpp" />

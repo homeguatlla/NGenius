@@ -21,7 +21,6 @@
 
 #include "../resources/events/characterControllerEvents/ForwardEvent.h"
 #include "../resources/events/characterControllerEvents/BackwardEvent.h"
-#include "../resources/events/characterControllerEvents/ZoomEvent.h"
 #include "../resources/events/characterControllerEvents/JumpEvent.h"
 #include "../resources/events/characterControllerEvents/TurnEvent.h"
 #include "../resources/events/characterControllerEvents/PitchEvent.h"
@@ -75,8 +74,7 @@ void Player::Create(Transformation* transformation)
 	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_S, new BackwardEvent()));
 	inputComponent->AddConverter(new MouseToEventBind(-1, new TurnEvent()));
 	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_SPACE, new JumpEvent()));
-	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
-
+	
 	Model* model = mEngine.GetModel("farmer");
 	//IRenderer* renderer = new VerticesRenderer(model, material);
 	IRenderer* renderer = new IndicesRenderer(model, material);

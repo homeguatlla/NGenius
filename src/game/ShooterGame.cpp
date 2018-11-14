@@ -61,7 +61,8 @@ void ShooterGame::Start(NGenius& engine)
 
 	CreateThirdpersonCamera();
 	CreateEnvironment(engine);
-	//mGameHUD->SetVisibility(false);
+
+	mGameHUD->SetVisibility(true);
 }
 
 void ShooterGame::Update(float elapsedTime)
@@ -72,7 +73,7 @@ void ShooterGame::Update(float elapsedTime)
 void ShooterGame::CreateThirdpersonCamera()
 {
 	InputComponent* inputComponent = new InputComponent();
-	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
+	//inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
 	inputComponent->AddConverter(new MouseToEventBind(-1, new PitchEvent()));
 
 	mThirdPersonCameraEntity = new GameEntity(new Transformation(mGameplayCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
