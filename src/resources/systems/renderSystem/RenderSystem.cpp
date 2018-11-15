@@ -986,7 +986,6 @@ void RenderSystem::SetTransparentEnabled(bool enabled)
 	mTransparentRenderPass->SetEnable(enabled);
 }
 
-
 ITexture* RenderSystem::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
 {
 	assert(mTexturesLibrary != nullptr);

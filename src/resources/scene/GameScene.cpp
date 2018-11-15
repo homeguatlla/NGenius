@@ -24,6 +24,7 @@ GameScene::~GameScene()
 
 void GameScene::Update(float elapsedTime)
 {
+	ReleaseEntities(&mEntitiesToRemove);
 	RemoveEntities();
 	AddNewEntities();
 
@@ -53,18 +54,24 @@ std::vector<GameEntity*>& GameScene::GetAllGameEntities()
 
 void GameScene::AddEntity(GameEntity* entity)
 {
-	entity->Init();
-
-	if (entity->GetRenderer() != nullptr)
+	if (entity != nullptr)
 	{
-		mAABB = mAABB.Merge(entity->GetRenderer()->GetAABB());
+		entity->Init();
+
+		if (entity->GetRenderer() != nullptr)
+		{
+			mAABB = mAABB.Merge(entity->GetRenderer()->GetAABB());
+		}
+		mNewEntitiesToAdd.push_back(entity);
 	}
-	mNewEntitiesToAdd.push_back(entity);
 }
 
 void GameScene::RemoveEntity(GameEntity* entity)
 {
-	mEntitiesToRemove.push_back(entity);
+	if (entity != nullptr)
+	{
+		mEntitiesToNotifyRemove.push_back(entity);
+	}
 }
 
 const AABB& GameScene::GetAABB() const
@@ -119,14 +126,14 @@ void GameScene::NotifyEntityRemoved(GameEntity* entity)
 
 void GameScene::RemoveEntities()
 {
-	for (GameEntity* entity : mEntitiesToRemove)
+	for (GameEntity* entity : mEntitiesToNotifyRemove)
 	{
 		GameEntitiesIterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](GameEntity* a) { return a == entity; });
 		NotifyEntityRemoved(*it);
-		
-		mEntities.erase(it);
+		mEntitiesToRemove.push_back(*it);
+		mEntities.erase(it);		
 	}
-	mEntitiesToRemove.clear();
+	mEntitiesToNotifyRemove.clear();
 }
 
 void GameScene::ReleaseEntities(std::vector<GameEntity*>* entities)

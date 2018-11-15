@@ -29,6 +29,7 @@ const std::string ATTRIBUTE_SHADOW_PFC("pfcCount");
 
 const std::string ATTRIBUTE_LIGHT_POSITION("lightPositionWorldspace");
 const std::string ATTRIBUTE_LIGHT_COLOR("lightColor");
+const std::string ATTRIBUTE_HAS_LIGHT_ENABLED("hasLightEnabled");
 
 IShaderProgram::IShaderProgram(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename) : 
 mLocationPosition(-1),
@@ -42,6 +43,7 @@ mLocationShadowMapTextureWidth(-1),
 mLocationShadowMapPFC(-1),
 mLocationLightPosition(-1),
 mLocationLightColor(-1),
+mLocationHasLightEnabled(-1),
 mGeometryShaderID(-1)
 {
 	mVertexShaderID = Load(vertexShaderFilename, GL_VERTEX_SHADER);
@@ -132,6 +134,11 @@ void IShaderProgram::LoadData(const ICamera* camera, const Transformation* trans
 	{
 		LoadVector3(mLocationLightPosition, effectLight->GetSunLightDirection());
 		LoadVector3(mLocationLightColor, effectLight->GetSunLightColor());
+		LoadBool(mLocationHasLightEnabled, true);
+	}
+	else
+	{
+		LoadBool(mLocationHasLightEnabled, false);
 	}
 
 	MaterialEffectFogProperties* effectFog = material->GetEffect<MaterialEffectFogProperties>();
@@ -170,6 +177,7 @@ void IShaderProgram::GetAllUniformLocationsInternal()
 	mLocationShadowMapPFC = GetUniformLocation(ATTRIBUTE_SHADOW_PFC);
 	mLocationLightPosition = GetUniformLocation(ATTRIBUTE_LIGHT_POSITION);
 	mLocationLightColor = GetUniformLocation(ATTRIBUTE_LIGHT_COLOR);
+	mLocationHasLightEnabled = GetUniformLocation(ATTRIBUTE_HAS_LIGHT_ENABLED);
 
 	GetAllUniformLocations();
 }

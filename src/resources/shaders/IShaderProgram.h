@@ -55,6 +55,7 @@ protected:
 	int mLocationShadowMapPFC;
 	int mLocationLightPosition;
 	int	mLocationLightColor;
+	int mLocationHasLightEnabled;
 	
 private:
 	void BindAttributesInternal();

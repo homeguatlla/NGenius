@@ -39,6 +39,7 @@ class RenderPass;
 class Terrain;
 class ICamera;
 class GameScene;
+class Transformation;
 
 
 struct GLFWwindow;
@@ -92,6 +93,8 @@ public:
 	GameScene* CreateGameScene(const std::string& name);
 	GameScene* GetGameScene(const std::string& name);
 
+	GameEntity* CreateGameEntityFromModel(const std::string& modelName, Transformation* transformation, float introductionCoef = 0.0f, bool isInsideSpacePartition = true);
+
 	void AddParticleEmitter(ParticlesEmitter* emitter);
 	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing);
 	void AddRenderPassAt(unsigned int index, RenderPass* renderPass, bool addAfterPostProcessing);
@@ -99,6 +102,8 @@ public:
 	void AddCamera(ICamera* camera);
 
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
+
+	void FillWithGameEntitiesVisibleInsideRadius(const glm::vec3& origin, float radius, std::vector<std::pair<GameEntity*, float>>& list, bool isSorted = false);
 
 	void RegisterAllEventsInputListener(IInputListener* listener);
 	void UnRegisterInputListener(IInputListener* listener);
@@ -159,7 +164,8 @@ private:
 	void CreateSystems(float screenWidth, float screenHeight);
 	void DestroySystems();
 	
-	void UpdateSystems(float elapsedTime);
+	void UpdatePreSystems(float elapsedTime);
+	void UpdatePostSystems(float elapsedTime);
 	void AcceptStatistics();
 	void AcceptGuiTool();
 

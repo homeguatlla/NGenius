@@ -1,6 +1,8 @@
 #pragma once
 #include "../src/NGenius.h"
 
+#include <vector>
+
 class GameHUD;
 class GameScene;
 class MarsPlanet;
@@ -21,6 +23,8 @@ class ShooterGame
 	Inventory* mInventory;
 	InventoryController* mInventoryController;
 
+	std::vector<GameEntity*> mPropsEntityList;
+
 public:
 	ShooterGame();
 	~ShooterGame();
@@ -31,5 +35,6 @@ public:
 private:
 	void CreateThirdpersonCamera();
 	void CreateEnvironment(NGenius& engine);
+	void CreateInitialProps(NGenius& engine);
 };
 

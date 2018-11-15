@@ -24,10 +24,28 @@
 #include "resources/systems/StatisticsSystem.h"
 
 #include "resources/materials/MaterialsLibrary.h"
+#include "resources/materials/IMaterial.h"
+#include "resources/materials/effects/MaterialEffectClippingPlane.h"
+#include "resources/materials/effects/MaterialEffectDiffuseTexture.h"
+#include "resources/materials/effects/MaterialEffectNormalTexture.h"
+#include "resources/materials/effects/MaterialEffectDirectionalLightProperties.h"
+#include "resources/materials/effects/MaterialEffectFogProperties.h"
+#include "resources/materials/effects/MaterialEffectShadowProperties.h"
+
+#include "resources/components/CollisionComponent.h"
+#include "resources/components/PhysicsComponent.h"
+#include "resources/components/DebugComponent.h"
+#include "resources/components/SpacePartitionComponent.h"
+
+#include "resources/renderers/IndicesRenderer.h"
+#include "resources/renderers/WireframeRenderer.h"
 
 #include "resources/scene/GameScene.h"
 #include "resources/entities/ParticlesEmitter.h"
 #include "resources/textures/Texture.h"
+
+#include "resources/models/Model.h"
+
 
 #include "statistics/Statistics.h"
 #include "guiTool/GuiTool.h"
@@ -103,13 +121,15 @@ void NGenius::Run()
 
 		//while (lag >= frameTime)
 		{
-			UpdateSystems(elapsedTime);
+			UpdatePreSystems(elapsedTime);
 
 			if (mUpdateHandler != nullptr)
 			{
 				mUpdateHandler(elapsedTime);
 			}
 			lag -= frameTime;
+
+			UpdatePostSystems(elapsedTime);
 		}
 
 		Render();
@@ -168,16 +188,27 @@ void NGenius::AcceptStatistics()
 	}
 }
 
-void NGenius::UpdateSystems(float elapsedTime)
+void NGenius::UpdatePreSystems(float elapsedTime)
 {
 	mInputSystem->Update(elapsedTime);
 	mDebugSystem->Update(elapsedTime);
+	mGameScene->Update(elapsedTime);
+}
+
+void NGenius::UpdatePostSystems(float elapsedTime)
+{
+	//Post systems will be updated after the Specific Game Update
+	//the game will be updated and after that the space partition and render will be updated
+	//that way, during the game update cycle we'll have previous spacepartition list available
+	//to find game entities if the case
+	//spacePartitionSystem always must be executed after gameScene because if not, 
+	//won't have the aabb already calculated and entities won't be updated properly (removed, new entities)
+	mSpacePartitionSystem->Update(elapsedTime);
+
 	mEnvironmentSystem->Update(elapsedTime);
 	mParticlesSystem->Update(elapsedTime);
-	mGameScene->Update(elapsedTime);
 	mPhysicsSystem->Update(elapsedTime);
-	mSpacePartitionSystem->Update(elapsedTime);
-	mAnimationSystem->Update(elapsedTime);
+	mAnimationSystem->Update(elapsedTime);	
 	mRenderSystem->Update(elapsedTime);
 }
 
@@ -379,6 +410,60 @@ GameScene* NGenius::CreateGameScene(const std::string& name)
 	mGameScene->RegisterGameSceneListener(mAnimationSystem);
 
 	return mGameScene;
+}
+
+GameEntity* NGenius::CreateGameEntityFromModel(const std::string& modelName, Transformation* transformation, float introductionCoef, bool isInsideSpacePartition)
+{
+	Model* model = GetModel(modelName);
+	if (model != nullptr)
+	{
+		IMaterial* material = GetMaterial(model->GetMaterialName());
+		if (material == nullptr)
+		{
+			std::string shaderName = model->HasNormalmap() ? "normalmap" : "model";
+
+			material = CreateMaterial(model->GetMaterialName(), GetShader(shaderName));
+		}
+		material->AddEffect(new MaterialEffectDiffuseTexture(
+			static_cast<Texture*>(GetTexture(model->GetMaterialName() + "_diffuse")),
+			glm::vec3(1.0f, 1.0f, 1.0f),
+			1
+		));
+		material->AddEffect(new MaterialEffectDirectionalLightProperties());
+		material->AddEffect(new MaterialEffectFogProperties());
+		if (model->HasNormalmap())
+		{
+			material->AddEffect(new MaterialEffectNormalTexture(
+				static_cast<Texture*>(GetTexture(model->GetMaterialName() + "_normalmap")),
+				1
+			));
+		}
+		material->AddEffect(new MaterialEffectShadowProperties(1));
+		material->AddEffect(new MaterialEffectClippingPlane());
+
+
+		IRenderer* renderer = new IndicesRenderer(model, material);
+
+		GameEntity* modelEntity = new GameEntity(transformation, renderer);
+
+		modelEntity->AddComponent(new PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE, introductionCoef));
+		modelEntity->AddComponent(new CollisionComponent());
+		if (isInsideSpacePartition)
+		{
+			modelEntity->AddComponent(new SpacePartitionComponent());
+		}
+		IRenderer* boundingBoxRenderer = new WireframeRenderer(GetModel("cube"), GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
+		modelEntity->AddComponent(new DebugComponent(boundingBoxRenderer));
+
+		return modelEntity;
+	}
+
+	return nullptr;
+}
+
+void NGenius::FillWithGameEntitiesVisibleInsideRadius(const glm::vec3& origin, float radius, std::vector<std::pair<GameEntity*, float>>& list, bool isSorted)
+{
+	mSpacePartitionSystem->FillWithGameEntitiesVisibleInsideRadius(origin, radius, list, isSorted);
 }
 
 void NGenius::AddParticleEmitter(ParticlesEmitter* emitter)

@@ -5,10 +5,12 @@ class GameEntity;
 class GameScene;
 class ItemsListHUD;
 
+
 class GameHUD
 {
 	ItemsListHUD* mItemsList;
 	NGenius& mEngine;
+	
 
 public:
 	GameHUD(NGenius& engine, GameScene* scene);

@@ -102,7 +102,29 @@ public:
 	{
 		if (data != nullptr)
 		{
+			if (Contains(mRegionMin, mRegionMax, regionMin, regionMax))
+			{
+				std::vector<Element*>::iterator it = std::find_if(
+					mElements.begin(),
+					mElements.end(),
+					[&](Element* a) { return a->data == data; });
 
+				if (it != mElements.end())
+				{
+					mElements.erase(it);
+				}
+				else
+				{
+
+					for (int i = 0; i < 4; ++i)
+					{
+						if (mChildren[i] != nullptr)
+						{
+							mChildren[i]->Remove(regionMin, regionMax, data);
+						}
+					}
+				}
+			}
 		}
 	}
 

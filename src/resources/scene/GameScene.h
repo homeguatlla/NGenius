@@ -14,6 +14,7 @@ class GameScene : public BaseVisitable<>
 	std::vector<GameEntity*> mEntities;
 	std::vector<GameEntity*> mNewEntitiesToAdd;
 	std::vector<GameEntity*> mEntitiesToRemove;
+	std::vector<GameEntity*> mEntitiesToNotifyRemove;
 	typedef std::vector<GameEntity*>::iterator GameEntitiesIterator;
 	std::vector<IGameSceneListener*> mListeners;
 	typedef std::vector<IGameSceneListener*>::iterator ListenersIterator;

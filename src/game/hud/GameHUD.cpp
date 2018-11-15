@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GameHUD.h"
 #include "ItemsListHUD.h"
+#include "ItemHUD.h"
 
 #include "../../resources/GameEntity.h"
 #include "../../resources/materials/IMaterial.h"
@@ -12,6 +13,7 @@
 #include "../../resources/scene/GameScene.h"
 
 #include "../ShooterGameConstants.h"
+
 
 GameHUD::GameHUD(NGenius& engine, GameScene* scene) : mEngine(engine)
 {

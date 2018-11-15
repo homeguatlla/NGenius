@@ -18,6 +18,7 @@ uniform sampler2D shadowMap;
 uniform int shadowMapSize;
 uniform int pfcCount;
 uniform vec3 lightColor;
+uniform int hasLightEnabled;
 
 float totalTexelsShadow = (pfcCount * 2.0 + 1.0) * (pfcCount * 2.0 + 1.0);
 const float FAR_DISTANCE_CLIPPING = 50.0;
@@ -37,7 +38,8 @@ vec4 ApplyLight(vec3 ambient, vec3 materialDiffuse, vec3 materialSpecular)
 	
 	//float attenuation = length(lightPosition - positionWorldspace);
 
-	color.rgb = lightColor * (ambient * materialDiffuse + (diffuse + specular));// * (1.0f / attenuation);
+	vec3 lc = hasLightEnabled == 1 ? lightColor : vec3(1.0, 1.0, 1.0);
+	color.rgb = lc * (ambient * materialDiffuse + (diffuse + specular));// * (1.0f / attenuation);
 	color.a = 1.0f;
 	
 	return color;

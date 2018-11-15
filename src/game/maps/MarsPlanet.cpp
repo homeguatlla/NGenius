@@ -48,7 +48,6 @@ MarsPlanet::MarsPlanet(NGenius& engine, GameScene* scene, ICamera* gameplayCamer
 	Create();
 }
 
-
 MarsPlanet::~MarsPlanet()
 {
 }
@@ -124,7 +123,7 @@ void MarsPlanet::CreateRocks()
 		float x = -areaSize * 0.5f + randValue;
 		randValue = (rand() % 1000) * areaSize / 1000.0f;
 		float z = -areaSize * 0.5f + randValue;
-		float scale = 0.01f + (rand() % 5) /100.0f;
+		float scale = 0.01f + (rand() % 10) /100.0f;
 		float rotation = rand() % 360;
 		Transformation* transformation = new Transformation(glm::vec3(x, 10.0f, z), glm::vec3(0.0f, glm::radians(rotation), 0.0f), glm::vec3(scale));
 
@@ -133,58 +132,11 @@ void MarsPlanet::CreateRocks()
 		float introductionCoef = (rand() % maxCoef) / 10.0f;
 		
 		std::string modelName = rockNames[index];
-		GameEntity* rock = CreateGameEntityFromModel(modelName, transformation, introductionCoef);
+		GameEntity* rock = mEngine.CreateGameEntityFromModel(modelName, transformation, introductionCoef);
 		if (rock != nullptr)
 		{
 			mPropsEntityList.push_back(rock);
 			mScene->AddEntity(rock);
 		}
 	}
-}
-
-GameEntity* MarsPlanet::CreateGameEntityFromModel(const std::string& modelName, Transformation* transformation, float introductionCoef)
-{
-	Model* model = mEngine.GetModel(modelName);
-	if (model != nullptr)
-	{
-		IMaterial* material = mEngine.GetMaterial(model->GetMaterialName());
-		if (material == nullptr)
-		{
-			std::string shaderName = model->HasNormalmap() ? "normalmap" : "model";
-
-			material = mEngine.CreateMaterial(model->GetMaterialName(), mEngine.GetShader(shaderName));
-		}
-		material->AddEffect(new MaterialEffectDiffuseTexture(
-			static_cast<Texture*>(mEngine.GetTexture(model->GetMaterialName() + "_diffuse")),
-			glm::vec3(1.0f, 1.0f, 1.0f), 
-			1
-		));
-		material->AddEffect(new MaterialEffectDirectionalLightProperties());
-		material->AddEffect(new MaterialEffectFogProperties());
-		if (model->HasNormalmap())
-		{
-			material->AddEffect(new MaterialEffectNormalTexture(
-				static_cast<Texture*>(mEngine.GetTexture(model->GetMaterialName() + "_normalmap")),
-				1
-			));
-		}
-		material->AddEffect(new MaterialEffectShadowProperties(1));
-		material->AddEffect(new MaterialEffectClippingPlane());
-
-
-		IRenderer* renderer = new IndicesRenderer(model, material);
-
-		GameEntity* modelEntity = new GameEntity(transformation, renderer);
-
-		modelEntity->AddComponent(new PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE, introductionCoef));
-		modelEntity->AddComponent(new CollisionComponent());
-		modelEntity->AddComponent(new SpacePartitionComponent());
-
-		IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine.GetModel("cube"), mEngine.GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
-		modelEntity->AddComponent(new DebugComponent(boundingBoxRenderer));
-
-		return modelEntity;
-	}
-
-	return nullptr;
 }

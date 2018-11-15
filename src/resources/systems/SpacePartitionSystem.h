@@ -25,7 +25,8 @@ public:
 	void Start();
 	void Update(float elapsedTime);
 	void MarkGameEntitiesInsideCameraAsVisible(ICamera* camera);
-
+	
+	void FillWithGameEntitiesVisibleInsideRadius(const glm::vec3& origin, float radius, std::vector<std::pair<GameEntity*, float>>& list, bool isSorted = false);
 	void Query(const AABB& aabb, std::vector<GameEntity*>& result) const;
 	void Query(const AABB& aabb, const Frustum& frustum, std::vector<GameEntity*>& result) const;
 

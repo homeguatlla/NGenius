@@ -24,15 +24,16 @@
 
 #include "ItemHUD.h"
 
+#include "../../utils/Log.h"
+
 #include <string>
 #include <iostream>
 
 const std::string ITEM_QUAD_TEXTURE("item_quad_base");
 const std::string ITEM_QUAD_SELECTED_TEXTURE("item_quad_selected");
 
-const std::string MATERIAL_ITEM("item_quad_base_material");
-const std::string MATERIAL_ITEM_SELECTED("item_quad_selected_material");
-const int ITEM_SIZE = 64;
+const std::string ITEM_MATERIAL("item_quad_base_material");
+const std::string ITEM_SELECTED_MATERIAL("item_quad_selected_material");
 const int ITEM_SIZE_SELECTED = 75;
 const float OFFSET_BETWEEN_ITEMS = 8.0f;
 
@@ -68,7 +69,7 @@ bool ItemsListHUD::IsItemHUDEmpty(ItemHUD* itemHUD) const
 	assert(itemHUD != nullptr);
 
 	IRenderer* renderer = itemHUD->GetRenderer();
-	IMaterial* emptyMaterial = mEngine->GetMaterial(MATERIAL_ITEM);
+	IMaterial* emptyMaterial = mEngine->GetMaterial(ITEM_MATERIAL);
 	assert(renderer != nullptr);
 	bool isItemHUDEmpty = renderer->GetMaterial()->GetMaterialID() == emptyMaterial->GetMaterialID();
 
@@ -96,7 +97,7 @@ void ItemsListHUD::RemoveSelectedItem()
 	ItemHUD* item = mItemsList[mSelectedItem];
 	assert(item != nullptr);
 
-	IMaterial* emptyMaterial = mEngine->GetMaterial(MATERIAL_ITEM);
+	IMaterial* emptyMaterial = mEngine->GetMaterial(ITEM_MATERIAL);
 	item->SetItemMaterial(emptyMaterial);
 }
 
@@ -151,7 +152,7 @@ void ItemsListHUD::SetSize(GameEntity* entity, int size)
 {
 	Transformation* transformation = entity->GetTransformation();
 	glm::vec3 scale = transformation->GetScale();
-	scale = glm::vec3(size);
+	scale = glm::vec3(static_cast<float>(size));
 	transformation->SetScale(scale);
 }
 
@@ -186,17 +187,17 @@ glm::vec2 ItemsListHUD::CalculateItemPosition(unsigned int item)
 
 void ItemsListHUD::CreateItems(GameScene* scene)
 {
-	for (int i = 0; i < mNumItems; ++i)
+	for (unsigned int i = 0; i < mNumItems; ++i)
 	{
 		glm::vec2 screenCoords = CalculateItemPosition(i);
-		CreateItem(scene, screenCoords, MATERIAL_ITEM, ITEM_QUAD_TEXTURE);
+		CreateItem(scene, screenCoords, ITEM_MATERIAL, ITEM_QUAD_TEXTURE);
 	}
 }
 
 void ItemsListHUD::CreateSelectedItem(GameScene* scene)
 {
 	glm::vec2 screenCoords = CalculateItemPosition(mSelectedItem);
-	IMaterial* material = CreateMaterial(MATERIAL_ITEM_SELECTED, ITEM_QUAD_SELECTED_TEXTURE);
+	IMaterial* material = CreateMaterial(ITEM_SELECTED_MATERIAL, ITEM_QUAD_SELECTED_TEXTURE);
 	IRenderer* guiRenderer = new IndicesRenderer(mEngine->GetModel(GUI_QUAD_MODEL), material);
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
@@ -234,7 +235,7 @@ IMaterial* ItemsListHUD::CreateMaterial(const std::string& materialName, const s
 	{
 		material = mEngine->CreateMaterial(materialName, mEngine->GetShader("gui"));
 		material->AddEffect(new MaterialEffectDiffuseTexture(mEngine->GetTexture(textureName), glm::vec3(1.0f), 1.0f));
-		std::cout << "material item hud created: " << materialName << "\n";
+		Log(Log::LOG_INFO) << "created material item hud: " << materialName << "\n";
 	}
 
 	return material;

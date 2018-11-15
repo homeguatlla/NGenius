@@ -18,8 +18,8 @@ Item* ItemFactory::Create(Item::ItemType type)
 	{
 	case Item::ITEM_SHOT_GUN:
 		return new Item("item_shotgun", Item::ITEM_SHOT_GUN, 1, false, 1);
-	case Item::ITEM_LIVE_CAPSULE:
-		return new Item("item_water", Item::ITEM_LIVE_CAPSULE, 3, true, 12);
+	case Item::ITEM_WATER_BATTERY:
+		return new Item("item_water", Item::ITEM_WATER_BATTERY, 3, true, 12);
 	case Item::ITEM_INVALID:
 	default:
 		Log(Log::LOG_ERROR) << "Error, unknown item type! \n";

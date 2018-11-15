@@ -23,4 +23,7 @@ static const float PLAYER_PITCH = 10.0f;
 static const float PLAYER_PITCH_SPEED = 10.0f;
 
 
+const int ITEM_SIZE = 64;
+
 static const unsigned int NUM_ITEMS_INVENTORY = 5;
+static const float PLAYER_PICKUP_RADIUS = 1.5f;

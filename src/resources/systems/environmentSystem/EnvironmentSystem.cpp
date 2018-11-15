@@ -18,7 +18,7 @@
 
 #include <iostream>
 
-const long HOUR_DAY_SPEED = 300;
+const long HOUR_DAY_SPEED = 30;
 const long DAY_PERIOD_SEC = 3600 * 24;
 
 EnvironmentSystem::EnvironmentSystem() :
@@ -43,7 +43,7 @@ unsigned int EnvironmentSystem::GetNumberGameEntities() const
 
 void EnvironmentSystem::Start()
 {
-	mTimer = DAY_PERIOD_SEC * 0.5f / HOUR_DAY_SPEED;
+	mTimer = DAY_PERIOD_SEC * 0.25f / HOUR_DAY_SPEED;
 }
 
 void EnvironmentSystem::Update(float deltaTime)

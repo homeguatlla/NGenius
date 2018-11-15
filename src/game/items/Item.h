@@ -8,7 +8,7 @@ public:
 	enum ItemType
 	{
 		ITEM_SHOT_GUN,
-		ITEM_LIVE_CAPSULE,
+		ITEM_WATER_BATTERY,
 		ITEM_INVALID
 	};
 private:

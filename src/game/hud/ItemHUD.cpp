@@ -5,6 +5,7 @@
 #include "../../resources/renderers/IRenderer.h"
 #include "../../resources/materials/IMaterial.h"
 
+
 ItemHUD::ItemHUD(IRenderer* renderer, const glm::vec2& screenCoord, int size)
 {
 	Create(renderer, screenCoord, size);

@@ -250,6 +250,18 @@
     <Filter Include="Header Files\game\items">
       <UniqueIdentifier>{e26932ed-4676-459e-960a-80a08780df20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game\entities">
+      <UniqueIdentifier>{98d8169b-4774-4c9d-8ff8-639855e97fba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\entities">
+      <UniqueIdentifier>{7268d80a-158d-4f63-8218-c6b3d7a67542}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\components">
+      <UniqueIdentifier>{434c2aa9-94b6-4cb4-a014-5f66ae398542}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game\components">
+      <UniqueIdentifier>{88838279-02b7-455c-9389-4478666e3691}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -852,6 +864,12 @@
     <ClInclude Include="src\game\events\NextPreviousInventoryItemEvent.h">
       <Filter>Header Files\game\events</Filter>
     </ClInclude>
+    <ClInclude Include="src\game\entities\Battery.h">
+      <Filter>Header Files\game\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\components\PickedUpComponent.h">
+      <Filter>Header Files\game\components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1423,6 +1441,12 @@
     </ClCompile>
     <ClCompile Include="src\game\events\NextPreviousInventoryItemEvent.cpp">
       <Filter>Source Files\game\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\entities\Battery.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\components\PickedUpComponent.cpp">
+      <Filter>Source Files\game\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
