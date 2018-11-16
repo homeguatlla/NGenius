@@ -146,7 +146,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = RELEASE;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -1521,7 +1521,7 @@ void Update(float elapsedTime)
 	}*/
 }
 
-void Start(NGenius& engine)
+void Start(NGenius* engine)
 {
 	if (mIsShooterGameRunning)
 	{

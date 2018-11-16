@@ -9,7 +9,7 @@ Battery::Battery(Item::ItemType type, unsigned int power, GameEntity& entity) :
 	mPower(power), 
 	GameEntity(entity)
 {
-	AddComponent(new PickedUpComponent());
+	AddComponent(new PickedUpComponent(type, power));
 	//create steam
 }
 

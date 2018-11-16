@@ -27,7 +27,7 @@ public:
 
 	void Render();
 
-	void Visit(EnvironmentSystem& environmentSystem);
+	void Visit(const EnvironmentSystem& environmentSystem);
 
 private:
 	void Release();

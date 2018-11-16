@@ -28,11 +28,11 @@ public:
 	Statistics();
 	~Statistics();
 	
-	void Visit(NGenius& nGenius);
-	void Visit(RenderSystem& renderSystem);
-	void Visit(GameScene& gameScene);
-	void Visit(PhysicsSystem& physicsSystem);
-	void Visit(SpacePartitionSystem& spacePartitionSystem);
+	void Visit(const NGenius& nGenius);
+	void Visit(const RenderSystem& renderSystem);
+	void Visit(const GameScene& gameScene);
+	void Visit(const PhysicsSystem& physicsSystem);
+	void Visit(const SpacePartitionSystem& spacePartitionSystem);
 
 	unsigned int GetNumberTrianglesRendered() const;
 	unsigned int GetNumberDrawCalls() const;

@@ -1,16 +1,16 @@
 #pragma once
-#include "../../NGenius.h"
 #include "../../resources/entities/Terrain.h"
 
 #include <vector>
 
+class NGenius;
 class GameEntity;
 class GameScene;
 class ICamera;
 
 class MarsPlanet
 {
-	NGenius& mEngine;
+	NGenius* mEngine;
 	GameScene* mScene;
 	Terrain* mTerrain;
 	ICamera* mGameplayCamera;
@@ -18,7 +18,7 @@ class MarsPlanet
 	std::vector<GameEntity*> mPropsEntityList;
 
 public:
-	MarsPlanet(NGenius& engine, GameScene* scene, ICamera* gameplayCamera);
+	MarsPlanet(NGenius* engine, GameScene* scene, ICamera* gameplayCamera);
 	~MarsPlanet();
 
 private:

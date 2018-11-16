@@ -1,5 +1,5 @@
 #pragma once
-
+#include <glm/glm.hpp>
 #include <string>
 
 
@@ -13,7 +13,7 @@ static const float FAR_PLANE = 100.0f;
 static const float NEAR_PLANE = 0.1f;
 
 const float TERRAIN_SCALE = 10.0f;
-
+static glm::vec3 MARS_GRAVITY_VALUE(0.0f, -3.711f, 0.0f);
 
 static const float PLAYER_UPWARDS_HEIGHT = 2.0f;
 static const float PLAYER_RUN_SPEED = 3.0f;

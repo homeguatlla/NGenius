@@ -11,6 +11,6 @@ class Visitor
 {
 public:
 	typedef R ReturnType;
-	virtual ReturnType Visit(T&) = 0;
+	virtual ReturnType Visit(const T&) = 0;
 };
 

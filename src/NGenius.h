@@ -65,7 +65,7 @@ class NGenius : public BaseVisitable<>
 	bool mIsSpacePartitionEnabled;
 	
 	std::function<void(float elapsedTime)> mUpdateHandler;
-	std::function<void(NGenius& engine)> mStartHandler;
+	std::function<void(NGenius* engine)> mStartHandler;
 
 public:
 	explicit NGenius(std::string applicationName, float screenWidth, float screenHeight);
@@ -109,7 +109,7 @@ public:
 	void UnRegisterInputListener(IInputListener* listener);
 	void RegisterInputHandler(std::function<void(GLFWwindow* window)> callback);
 	void RegisterUpdateHandler(std::function<void(float elapsedTime)> callback);
-	void RegisterStartHandler(std::function<void(NGenius& engine)> callback);
+	void RegisterStartHandler(std::function<void(NGenius* engine)> callback);
 
 	void OnKey(int key, int action);
 	void OnMouseScroll(int button, float scroll);

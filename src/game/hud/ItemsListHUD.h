@@ -1,9 +1,16 @@
 #pragma once
-#include "../../NGenius.h"
+
 #include "../items/Item.h"
 
+#include <glm/glm.hpp>
+#include <vector>
+#include <string>
+
+class NGenius;
 class GameScene;
 class ItemHUD;
+class GameEntity;
+class IMaterial;
 
 class ItemsListHUD
 {
@@ -15,7 +22,7 @@ class ItemsListHUD
 	unsigned int mNumItems;
 
 public:
-	ItemsListHUD(NGenius& engine, GameScene* scene, const glm::vec2& screenCoord, unsigned int numItems);
+	ItemsListHUD(NGenius* engine, GameScene* scene, const glm::vec2& screenCoord, unsigned int numItems);
 	~ItemsListHUD();
 
 	void SetVisibility(bool visible);

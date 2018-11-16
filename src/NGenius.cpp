@@ -46,7 +46,6 @@
 
 #include "resources/models/Model.h"
 
-
 #include "statistics/Statistics.h"
 #include "guiTool/GuiTool.h"
 
@@ -92,7 +91,7 @@ void NGenius::Start()
 
 	if (mStartHandler != nullptr)
 	{
-		mStartHandler(*this);
+		mStartHandler(this);
 	}
 }
 
@@ -263,7 +262,7 @@ void NGenius::RegisterUpdateHandler(std::function<void(float elapsedTime)> callb
 	mUpdateHandler = callback;
 }
 
-void NGenius::RegisterStartHandler(std::function<void(NGenius& engine)> callback)
+void NGenius::RegisterStartHandler(std::function<void(NGenius* engine)> callback)
 {
 	mStartHandler = callback;
 }

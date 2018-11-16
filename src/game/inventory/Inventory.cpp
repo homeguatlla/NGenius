@@ -51,10 +51,9 @@ Item* Inventory::Retrieve(unsigned int id)
 	std::vector<Item*>::iterator it;
 	for (it = mItemsList.begin(); it != mItemsList.end();)
 	{
-		item = *it;
-		if (item->GetId() == id)
+		if ((*it)->GetId() == id)
 		{
-
+			item = *it;
 			it = mItemsList.erase(it);
 			break;
 		}

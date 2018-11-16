@@ -15,13 +15,13 @@ Statistics::~Statistics()
 {
 }
 
-void Statistics::Visit(NGenius& nGenius)
+void Statistics::Visit(const NGenius& nGenius)
 {
 	mNumberFPS = nGenius.GetNumberFPS();
 	mDayTime = nGenius.GetDayTime();
 }
 
-void Statistics::Visit(RenderSystem& renderSystem)
+void Statistics::Visit(const RenderSystem& renderSystem)
 {
 	mNumberTrianglesRendered = renderSystem.GetNumberTrianglesRendered();
 	mNumberDrawCalls = renderSystem.GetNumberDrawCalls();
@@ -29,17 +29,17 @@ void Statistics::Visit(RenderSystem& renderSystem)
 	//std::cout << "triangles: " << mNumberTrianglesRendered << " calls: " << mNumberDrawCalls << "\n";
 }
 
-void Statistics::Visit(GameScene& gameScene)
+void Statistics::Visit(const GameScene& gameScene)
 {
 	mNumberGameEntities = gameScene.GetNumberGameEntities();
 }
 
-void Statistics::Visit(PhysicsSystem& physicsSystem)
+void Statistics::Visit(const PhysicsSystem& physicsSystem)
 {
 	mNumberGameEntitiesWithPhysics = physicsSystem.GetNumberGameEntities();
 }
 
-void Statistics::Visit(SpacePartitionSystem& spacePartitionSystem)
+void Statistics::Visit(const SpacePartitionSystem& spacePartitionSystem)
 {
 	mNumberGameEntitiesInsideSpacePartition = spacePartitionSystem.GetNumberEntities();
 }

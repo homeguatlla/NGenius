@@ -2,8 +2,8 @@
 
 #include "../../input/IInputListener.h"
 #include "../inventory/Inventory.h"
-#include "../../NGenius.h"
 
+class NGenius;
 class ItemsListHUD;
 class GameEntity;
 class IMaterial;
@@ -14,7 +14,7 @@ class InventoryController : public IInputListener
 {
 	Inventory* mInventory;
 	ItemsListHUD* mItemsHudList;
-	NGenius mEngine;
+	NGenius* mEngine;
 	GameScene* mScene;
 	Player* mPlayer;
 
@@ -24,15 +24,20 @@ class InventoryController : public IInputListener
 	IMaterial* mLocalizedMaterial;
 	*/
 public:
-	InventoryController(NGenius& engine, GameScene* scene, Inventory* inventory, ItemsListHUD* itemsListHUD, Player* player);
+	InventoryController(NGenius* engine, GameScene* scene, Inventory* inventory, ItemsListHUD* itemsListHUD, Player* player);
 	~InventoryController();
 
-	void Store(Item* item);
-	void ShowElementsCanBePickedup(const glm::vec3& position);
+	//void ShowElementsCanBePickedup(const glm::vec3& position);
 
 private:
-	void CreateLocalizedMaterial(const std::string& materialName, bool hasNormalmap);
-	void ShowElementHUB(GameEntity* entity);
+	//void CreateLocalizedMaterial(const std::string& materialName, bool hasNormalmap);
+	//void ShowElementHUB(GameEntity* entity);
+	
+	void PickUp(GameEntity* pickedupEntity);
+	void Drop();
+
+	void Store(Item* item);
+	Item* Retrieve();
 
 	// Heredado vía IInputListener
 	void OnKey(int key, int action) override;

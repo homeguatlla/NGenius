@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EngineConstants.h" />
+    <ClInclude Include="EntitiesFactory.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_glfw.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="src\game\components\PickedUpComponent.h" />
     <ClInclude Include="src\game\controllers\InventoryController.h" />
     <ClInclude Include="src\game\entities\Battery.h" />
+    <ClInclude Include="src\game\entities\EntitiesFactory.h" />
     <ClInclude Include="src\game\events\NextPreviousInventoryItemEvent.h" />
     <ClInclude Include="src\game\events\StoreIntoInventoryEvent.h" />
     <ClInclude Include="src\game\hud\GameHUD.h" />
@@ -392,6 +394,7 @@
     <ClCompile Include="src\game\components\PickedUpComponent.cpp" />
     <ClCompile Include="src\game\controllers\InventoryController.cpp" />
     <ClCompile Include="src\game\entities\Battery.cpp" />
+    <ClCompile Include="src\game\entities\EntitiesFactory.cpp" />
     <ClCompile Include="src\game\events\NextPreviousInventoryItemEvent.cpp" />
     <ClCompile Include="src\game\events\StoreIntoInventoryEvent.cpp" />
     <ClCompile Include="src\game\hud\GameHUD.cpp" />

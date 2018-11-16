@@ -870,6 +870,12 @@
     <ClInclude Include="src\game\components\PickedUpComponent.h">
       <Filter>Header Files\game\components</Filter>
     </ClInclude>
+    <ClInclude Include="EntitiesFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\entities\EntitiesFactory.h">
+      <Filter>Header Files\game\entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1442,11 +1448,14 @@
     <ClCompile Include="src\game\events\NextPreviousInventoryItemEvent.cpp">
       <Filter>Source Files\game\events</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\entities\Battery.cpp">
-      <Filter>Source Files\resources\entities</Filter>
-    </ClCompile>
     <ClCompile Include="src\game\components\PickedUpComponent.cpp">
       <Filter>Source Files\game\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\entities\Battery.cpp">
+      <Filter>Source Files\game\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\entities\EntitiesFactory.cpp">
+      <Filter>Source Files\game\entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

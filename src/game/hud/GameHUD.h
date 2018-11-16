@@ -1,6 +1,6 @@
 #pragma once
-#include "../../NGenius.h"
 
+class NGenius;
 class GameEntity;
 class GameScene;
 class ItemsListHUD;
@@ -9,11 +9,11 @@ class ItemsListHUD;
 class GameHUD
 {
 	ItemsListHUD* mItemsList;
-	NGenius& mEngine;
+	NGenius* mEngine;
 	
 
 public:
-	GameHUD(NGenius& engine, GameScene* scene);
+	GameHUD(NGenius* engine, GameScene* scene);
 	~GameHUD();
 
 	void SetVisibility(bool visibility);

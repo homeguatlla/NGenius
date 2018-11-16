@@ -3,6 +3,7 @@
 
 #include <GLFW/glfw3.h>
 
+#include "../../NGenius.h"
 #include "../../resources/GameEntity.h"
 #include "../../resources/materials/IMaterial.h"
 #include "../../resources/materials/MaterialsLibrary.h"
@@ -26,9 +27,6 @@
 
 #include "../../utils/Log.h"
 
-#include <string>
-#include <iostream>
-
 const std::string ITEM_QUAD_TEXTURE("item_quad_base");
 const std::string ITEM_QUAD_SELECTED_TEXTURE("item_quad_selected");
 
@@ -40,8 +38,8 @@ const float OFFSET_BETWEEN_ITEMS = 8.0f;
 const float LAYER_SELECTED_ITEM_Z = 1.0f;
 
 
-ItemsListHUD::ItemsListHUD(NGenius& engine, GameScene* scene, const glm::vec2& screenCoord, unsigned int numItems) :
-	mEngine(&engine),
+ItemsListHUD::ItemsListHUD(NGenius* engine, GameScene* scene, const glm::vec2& screenCoord, unsigned int numItems) :
+	mEngine(engine),
 	mSelectedItemEntity(nullptr),
 	mScreenCoord(screenCoord),
 	mSelectedItem(0),
@@ -95,10 +93,13 @@ void ItemsListHUD::AddItem(Item* item)
 void ItemsListHUD::RemoveSelectedItem()
 {
 	ItemHUD* item = mItemsList[mSelectedItem];
-	assert(item != nullptr);
-
-	IMaterial* emptyMaterial = mEngine->GetMaterial(ITEM_MATERIAL);
-	item->SetItemMaterial(emptyMaterial);
+	if (item != nullptr)
+	{
+		IMaterial* emptyMaterial = mEngine->GetMaterial(ITEM_MATERIAL);
+		item->SetItemMaterial(emptyMaterial);
+		item->SetCounter(0);
+		item->SetItemId(0);
+	}
 }
 
 unsigned int ItemsListHUD::GetSelectedItemId() const

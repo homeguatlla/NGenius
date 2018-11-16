@@ -96,7 +96,7 @@ void GuiTool::ShowEnvironmentTool()
 	ImGui::End();
 }
 
-void GuiTool::Visit(EnvironmentSystem& environmentSystem)
+void GuiTool::Visit(const EnvironmentSystem& environmentSystem)
 {
 	//environmentSystem.SetDayTime(mSunHour);
 	//environmentSystem.SetFogGradient(mFogGradient);

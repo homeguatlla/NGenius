@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MarsPlanet.h"
+#include "../../NGenius.h"
 #include "../ShooterGameConstants.h"
 #include "../EngineConstants.h"
 
@@ -40,7 +41,7 @@
 #include "../../resources/models/Model.h"
 
 
-MarsPlanet::MarsPlanet(NGenius& engine, GameScene* scene, ICamera* gameplayCamera) :
+MarsPlanet::MarsPlanet(NGenius* engine, GameScene* scene, ICamera* gameplayCamera) :
 	mEngine(engine),
 	mScene(scene),
 	mGameplayCamera(gameplayCamera)
@@ -64,43 +65,43 @@ void MarsPlanet::CreateTerrain()
 	//RENDER PASS TERRAIN
 	RenderPass *terrainPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TERRAIN);
 	terrainPass->EnableFog(true);
-	mEngine.AddRenderPassAt(1, terrainPass, false);
+	mEngine->AddRenderPassAt(1, terrainPass, false);
 
 	bool isFlat = false;
 
 	float scale = isFlat ? 0.0f : TERRAIN_SCALE;
 
-	IMaterial* material = mEngine.CreateMaterial("terrain", mEngine.GetShader("terrain"));
-	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_blendmap")), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f));
+	IMaterial* material = mEngine->CreateMaterial("terrain", mEngine->GetShader("terrain"));
+	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine->GetTexture("terrain_blendmap")), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f));
 	material->AddEffect(new MaterialEffectDirectionalLightProperties());
 	material->AddEffect(new MaterialEffectFogProperties());
-	material->AddEffect(new MaterialEffectHeightMapTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")), 1.0f));
-	material->AddEffect(new MaterialEffectTextureArray(static_cast<TextureArray*>(mEngine.GetTexture("terrain_mars_array"))));
+	material->AddEffect(new MaterialEffectHeightMapTexture(static_cast<Texture*>(mEngine->GetTexture("terrain_heightmap")), 1.0f));
+	material->AddEffect(new MaterialEffectTextureArray(static_cast<TextureArray*>(mEngine->GetTexture("terrain_mars_array"))));
 	material->AddEffect(new MaterialEffectClippingPlane());
 	material->AddEffect(new MaterialEffectShadowProperties(3));
 	material->AddEffect(new MaterialEffectFloat(scale));
 
 	mTerrain = new Terrain(new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 		material,
-		static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")),
+		static_cast<Texture*>(mEngine->GetTexture("terrain_heightmap")),
 		scale);
 
 	mTerrain->SetFlat(isFlat);
 
 	mScene->AddEntity(mTerrain);
-	mEngine.SetTerrain(mTerrain);
+	mEngine->SetTerrain(mTerrain);
 }
 
 void MarsPlanet::CreateSky()
 {
-	IMaterial* material = mEngine.CreateMaterial("skybox", mEngine.GetShader("skybox"));
-	TextureCubemap* cubemap1 = static_cast<TextureCubemap*>(mEngine.GetTexture("day_cubemap"));
-	TextureCubemap* cubemap2 = static_cast<TextureCubemap*>(mEngine.GetTexture("night_cubemap"));
+	IMaterial* material = mEngine->CreateMaterial("skybox", mEngine->GetShader("skybox"));
+	TextureCubemap* cubemap1 = static_cast<TextureCubemap*>(mEngine->GetTexture("day_cubemap"));
+	TextureCubemap* cubemap2 = static_cast<TextureCubemap*>(mEngine->GetTexture("night_cubemap"));
 	material->AddEffect(new MaterialEffectTextureCubemap(cubemap1, cubemap2, 0.0f));
 	material->AddEffect(new MaterialEffectFogProperties());
 	material->AddEffect(new MaterialEffectDirectionalLightProperties());
 
-	SkyBoxRenderer* skyboxRenderer = new SkyBoxRenderer(mEngine.GetModel("skybox"), material);
+	SkyBoxRenderer* skyboxRenderer = new SkyBoxRenderer(mEngine->GetModel("skybox"), material);
 	skyboxRenderer->SetLayer(IRenderer::LAYER_PARTICLES);
 
 	mSkyBox = new GameEntity(
@@ -132,9 +133,11 @@ void MarsPlanet::CreateRocks()
 		float introductionCoef = (rand() % maxCoef) / 10.0f;
 		
 		std::string modelName = rockNames[index];
-		GameEntity* rock = mEngine.CreateGameEntityFromModel(modelName, transformation, introductionCoef);
+		GameEntity* rock = mEngine->CreateGameEntityFromModel(modelName, transformation, introductionCoef);
 		if (rock != nullptr)
 		{
+			PhysicsComponent* component = rock->GetComponent<PhysicsComponent>();
+			component->SetVelocity(MARS_GRAVITY_VALUE);
 			mPropsEntityList.push_back(rock);
 			mScene->AddEntity(rock);
 		}

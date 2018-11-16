@@ -5,9 +5,10 @@
 #include "../ShooterGameConstants.h"
 #include "../Player.h"
 #include "../hud/ItemHUD.h"
-#include "../entities/Battery.h"
+#include "../entities/EntitiesFactory.h"
 #include "../components/PickedUpComponent.h"
 
+#include "../../NGenius.h"
 #include "../../resources/renderers/IRenderer.h"
 
 #include "../../resources/GameEntity.h"
@@ -32,7 +33,7 @@
 #include <algorithm>
 
 
-InventoryController::InventoryController(NGenius& engine, GameScene* scene, Inventory* inventory, ItemsListHUD* itemsListHUD, Player* player) :
+InventoryController::InventoryController(NGenius* engine, GameScene* scene, Inventory* inventory, ItemsListHUD* itemsListHUD, Player* player) :
 	mInventory(inventory),
 	mScene(scene),
 	mItemsHudList(itemsListHUD),
@@ -42,12 +43,12 @@ InventoryController::InventoryController(NGenius& engine, GameScene* scene, Inve
 	mLocalizedOriginalMaterial(nullptr),
 	mLocalizedMaterial(nullptr)*/
 {
-	mEngine.RegisterAllEventsInputListener(this);
+	mEngine->RegisterAllEventsInputListener(this);
 }
 
 InventoryController::~InventoryController()
 {
-	mEngine.UnRegisterInputListener(this);
+	mEngine->UnRegisterInputListener(this);
 }
 
 /*void InventoryController::CreateLocalizedMaterial(const std::string& materialName, bool hasNormalmap)
@@ -183,43 +184,64 @@ void InventoryController::ShowElementHUB(GameEntity* entity)
 	mLocalizedEntity->GetRenderer()->SetMaterial(mLocalizedMaterial);
 }*/
 
+Item* InventoryController::Retrieve()
+{
+	unsigned int itemId = mItemsHudList->GetSelectedItemId();
+	mItemsHudList->RemoveSelectedItem();
+	Item* item = mInventory->Retrieve(itemId);
+
+	return item;
+}
+
+void InventoryController::Drop()
+{
+	Item* item = Retrieve();
+	if (item != nullptr)
+	{
+		EntitiesFactory factory(mEngine);
+		glm::vec3 position = mPlayer->GetEntity()->GetTransformation()->GetPosition();
+		factory.Create(item->GetType(), position, mScene);
+	}
+}
+
+void InventoryController::PickUp(GameEntity* pickedupEntity)
+{
+	if (pickedupEntity->GetRenderer()->IsVisible())
+	{
+		PickedUpComponent* component = pickedupEntity->GetComponent<PickedUpComponent>();
+		if (component != nullptr)
+		{
+			Item::ItemType type = component->GetType();
+
+			if (type != Item::ITEM_INVALID)
+			{
+				ItemFactory factory;
+				Item* itemFound = factory.Create(type);
+				if (itemFound != nullptr)
+				{
+					Store(itemFound);
+					//entonces destroy GameEntity
+					mScene->RemoveEntity(pickedupEntity);
+				}
+			}
+		}
+	}
+}
+
 void InventoryController::OnKey(int key, int action)
 {
 	if (key == GLFW_KEY_E && action == GLFW_PRESS)
 	{
 		std::vector<std::pair<GameEntity*, float>> entities;
-		mEngine.FillWithGameEntitiesVisibleInsideRadius(mPlayer->GetEntity()->GetTransformation()->GetPosition(), PLAYER_PICKUP_RADIUS, entities, true);
+		mEngine->FillWithGameEntitiesVisibleInsideRadius(mPlayer->GetEntity()->GetTransformation()->GetPosition(), PLAYER_PICKUP_RADIUS, entities, true);
 		if (!entities.empty())
 		{
-			GameEntity* pikedupEntity = entities[0].first;
-			if (pikedupEntity->GetRenderer()->IsVisible())
-			{
-				PickedUpComponent* component = pikedupEntity->GetComponent<PickedUpComponent>();
-				if (component != nullptr)
-				{
-					Item::ItemType type = Item::ITEM_INVALID;
-
-					//creamos item del tipo y lo metemos en inventory
-					if (typeid(*pikedupEntity) == typeid(Battery))
-					{
-						Battery* battery = static_cast<Battery*>(pikedupEntity);
-						type = battery->GetType();
-					}
-
-					if (type != Item::ITEM_INVALID)
-					{
-						ItemFactory factory;
-						Item* itemFound = factory.Create(type);
-						if (itemFound != nullptr)
-						{
-							Store(itemFound);
-						}
-						//entonces destroy GameEntity
-						mScene->RemoveEntity(pikedupEntity);
-					}
-				}
-			}
+			PickUp(entities[0].first);
 		}
+	}
+	else if (key == GLFW_KEY_Q && action == GLFW_PRESS)
+	{
+		Drop();
 	}
 }
 

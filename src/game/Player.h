@@ -1,18 +1,21 @@
 #pragma once
-#include "../NGenius.h"
+
 #include "../resources/Transformation.h"
 
+class NGenius;
 class GameScene;
 class Character;
+class GameEntity;
+class Transformation;
 
 class Player
 {
-	NGenius& mEngine;
+	NGenius* mEngine;
 	GameScene* mScene;
 	Character* mCharacter;
 
 public:
-	Player(NGenius& engine, GameScene* scene, Transformation* transformation);
+	Player(NGenius* engine, GameScene* scene, Transformation* transformation);
 	~Player();
 
 	GameEntity* GetEntity();

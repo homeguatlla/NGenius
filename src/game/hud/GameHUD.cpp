@@ -3,6 +3,7 @@
 #include "ItemsListHUD.h"
 #include "ItemHUD.h"
 
+#include "../../NGenius.h"
 #include "../../resources/GameEntity.h"
 #include "../../resources/materials/IMaterial.h"
 #include "../../resources/materials/MaterialsLibrary.h"
@@ -15,7 +16,7 @@
 #include "../ShooterGameConstants.h"
 
 
-GameHUD::GameHUD(NGenius& engine, GameScene* scene) : mEngine(engine)
+GameHUD::GameHUD(NGenius* engine, GameScene* scene) : mEngine(engine)
 {
 	Create(scene);
 }
@@ -36,12 +37,12 @@ void GameHUD::Create(GameScene* scene)
 	float factorX = 0.15f;
 	float factorY = 0.43f;
 
-	factorX = mEngine.GetScreenWidth() / 1024.0f * factorX;
+	factorX = mEngine->GetScreenWidth() / 1024.0f * factorX;
 
 	mItemsList = new  ItemsListHUD(
 		mEngine, 
 		scene, 
-		glm::vec2(mEngine.GetScreenWidth() * factorX, -mEngine.GetScreenHeight() * factorY),
+		glm::vec2(mEngine->GetScreenWidth() * factorX, -mEngine->GetScreenHeight() * factorY),
 		NUM_ITEMS_INVENTORY
 	);
 }
