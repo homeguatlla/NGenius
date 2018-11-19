@@ -13,6 +13,7 @@ class PhysicsSystem : public BaseVisitable<>, public IGameSceneListener
 	const Terrain* mTerrain;
 	float mEnergyWallRadius;
 	glm::vec3 mEnergyWallPosition;
+	glm::vec3 mGravity;
 
 public:
 	static const glm::vec3 GRAVITY_VALUE;
@@ -27,6 +28,11 @@ public:
 	//TODO eliminar este método cuando no haga falta
 	void SetTerrain(const Terrain* terrain);
 	void SetEnergyWall(const glm::vec3& position, float radius);
+
+	float GetHeight(glm::vec2 point) const;
+
+	const glm::vec3& GetGravity() const;
+	void SetGravity(const glm::vec3& gravity);
 
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 

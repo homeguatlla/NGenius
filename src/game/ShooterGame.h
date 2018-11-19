@@ -26,6 +26,7 @@ public:
 	ShooterGame();
 	~ShooterGame();
 
+	void Init(NGenius* engine);
 	void Start(NGenius* engine);
 	void Update(float elapsedTime);
 

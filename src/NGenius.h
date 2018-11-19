@@ -41,6 +41,8 @@ class ICamera;
 class GameScene;
 class Transformation;
 
+class Particle;
+class ParticlesEmitterLibrary;
 
 struct GLFWwindow;
 
@@ -60,18 +62,22 @@ class NGenius : public BaseVisitable<>
 	InputHandler* mInputHandler;
 	Statistics* mStatistics;
 	GameScene* mGameScene;
+	
+	ParticlesEmitterLibrary* mParticlesEmitterLibrary;
+
 	std::string mApplicationName;
 	float mNumberFPS;
 	bool mIsSpacePartitionEnabled;
 	
 	std::function<void(float elapsedTime)> mUpdateHandler;
 	std::function<void(NGenius* engine)> mStartHandler;
+	std::function<void(NGenius* enting)> mInitHandler;
 
 public:
-	explicit NGenius(std::string applicationName, float screenWidth, float screenHeight);
+	NGenius();
 	~NGenius();
 
-	void Init(bool isFullscreen);
+	void Init(const std::string& applicationName, float screenWidth, float screenHeight, bool isFullscreen);
 	void Start();
 	void Run();
 
@@ -82,8 +88,9 @@ public:
 	IMaterial* GetMaterial(const std::string& name) const;
 	Animation* GetAnimation(const std::string& name) const;
 	ICamera* GetCamera(const std::string& name) const;
-
 	FontType* GetFont(const std::string& name) const;
+	ParticlesEmitter* GetParticlesEmitter(const std::string& name);
+
 	float GetNumberFPS() const;
 	const Statistics* GetStatistics() const;
 	float GetScreenWidth() const;
@@ -94,6 +101,8 @@ public:
 	GameScene* GetGameScene(const std::string& name);
 
 	GameEntity* CreateGameEntityFromModel(const std::string& modelName, Transformation* transformation, float introductionCoef = 0.0f, bool isInsideSpacePartition = true);
+	Particle* CreateParticle(Texture* texture, bool isAffectedByPhysics = false, bool canCollide = false);
+
 
 	void AddParticleEmitter(ParticlesEmitter* emitter);
 	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing);
@@ -110,6 +119,7 @@ public:
 	void RegisterInputHandler(std::function<void(GLFWwindow* window)> callback);
 	void RegisterUpdateHandler(std::function<void(float elapsedTime)> callback);
 	void RegisterStartHandler(std::function<void(NGenius* engine)> callback);
+	void RegisterInitHandler(std::function<void(NGenius* engine)> callback);
 
 	void OnKey(int key, int action);
 	void OnMouseScroll(int button, float scroll);
@@ -158,6 +168,11 @@ public:
 	float GetDayTime() const;
 	void AddSunLightFrame(float hour, const float rotationAngle, const glm::vec3& color,
 		const glm::vec3& fogColor, float fogDensity, float fogGradient, const std::string& cubemapName);
+
+	//physics
+	void SetGravity(const glm::vec3& gravity);
+	const glm::vec3& GetGravity() const;
+	float GetHeight(const glm::vec2& point) const;
 
 private:
 

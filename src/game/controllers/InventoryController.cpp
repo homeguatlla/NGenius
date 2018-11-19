@@ -221,6 +221,9 @@ void InventoryController::PickUp(GameEntity* pickedupEntity)
 				{
 					Store(itemFound);
 					//entonces destroy GameEntity
+					//TODO El inventory controller debería trabajar con objetos de una classe que tuvieran una referencia a escena etc
+					//y que simplemente al hacer un delete se sepan quitar de las escenas etc..
+					//al igual que sepan añadirse 
 					mScene->RemoveEntity(pickedupEntity);
 				}
 			}

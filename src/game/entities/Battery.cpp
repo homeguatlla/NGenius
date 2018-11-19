@@ -4,13 +4,18 @@
 #include "../../resources/scene/GameScene.h"
 #include "../../resources/entities/ParticlesEmitter.h"
 
-Battery::Battery(Item::ItemType type, unsigned int power, GameEntity& entity) :
-	mType(type), 
-	mPower(power), 
+Battery::Battery(Item::ItemType type, unsigned int power, GameEntity& entity, ParticlesEmitter* emitter) :
+	mType(type),
+	mPower(power),
+	mSteamParticleEmitter(emitter),
 	GameEntity(entity)
 {
 	AddComponent(new PickedUpComponent(type, power));
-	//create steam
+	if (emitter != nullptr)
+	{
+		Transformation* transformation = emitter->GetTransformation();
+		transformation->SetPosition(entity.GetTransformation()->GetPosition());
+	}
 }
 
 Battery::~Battery()
@@ -27,8 +32,7 @@ unsigned int Battery::GetPower() const
 	return mPower;
 }
 
-void Battery::AddIntoScene(GameScene* scene)
+ParticlesEmitter* Battery::GetParticlesEmitter()
 {
-	scene->AddEntity(this);
-	scene->AddEntity(mSteamParticleEmitter);
+	return mSteamParticleEmitter;
 }

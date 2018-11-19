@@ -15,6 +15,6 @@ template<typename T>
 T& Singleton<T>::GetInstance()
 {
 	static T mInstance;
-	return *mInstance;
+	return mInstance;
 }
 

@@ -3,7 +3,6 @@
 #include "../../NGenius.h"
 #include "../items/Item.h"
 
-class GameScene;
 class Transformation;
 class ParticlesEmitter;
 
@@ -15,12 +14,12 @@ private:
 	ParticlesEmitter* mSteamParticleEmitter;
 
 public:
-	explicit Battery(Item::ItemType type, unsigned int power, GameEntity& entity);
+	explicit Battery(Item::ItemType type, unsigned int power, GameEntity& entity, ParticlesEmitter* emitter);
 	virtual ~Battery();
 
 	Item::ItemType GetType() const;
 	unsigned int GetPower() const;
 
-	void AddIntoScene(GameScene* scene);
+	ParticlesEmitter* GetParticlesEmitter();
 };
 

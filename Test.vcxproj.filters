@@ -876,6 +876,9 @@
     <ClInclude Include="src\game\entities\EntitiesFactory.h">
       <Filter>Header Files\game\entities</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\entities\ParticlesEmitterLibrary.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1456,6 +1459,9 @@
     </ClCompile>
     <ClCompile Include="src\game\entities\EntitiesFactory.cpp">
       <Filter>Source Files\game\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\ParticlesEmitterLibrary.cpp">
+      <Filter>Source Files\resources\entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

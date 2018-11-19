@@ -16,7 +16,8 @@
 const glm::vec3 PhysicsSystem::GRAVITY_VALUE(0.0f, -9.8f, 0.0f);
 
 PhysicsSystem::PhysicsSystem() :
-mEnergyWallRadius(0.0f)
+mEnergyWallRadius(0.0f),
+mGravity(GRAVITY_VALUE)
 {
 }
 
@@ -28,6 +29,16 @@ PhysicsSystem::~PhysicsSystem()
 unsigned int PhysicsSystem::GetNumberGameEntities() const
 {
 	return mEntities.size() + 1; //+1 terrain
+}
+
+const glm::vec3& PhysicsSystem::GetGravity() const
+{
+	return mGravity;
+}
+
+void PhysicsSystem::SetGravity(const glm::vec3& gravity)
+{
+	mGravity = gravity;
 }
 
 void PhysicsSystem::Update(float deltaTime)
@@ -131,6 +142,18 @@ void PhysicsSystem::SetTerrain(const Terrain* terrain)
 	assert(terrain != nullptr);
 
 	mTerrain = terrain;
+}
+
+float PhysicsSystem::GetHeight(glm::vec2 point) const
+{
+	if (mTerrain != nullptr)
+	{
+		return mTerrain->GetHeight(point);
+	}
+	else
+	{
+		return 0.0f;
+	}
 }
 
 void PhysicsSystem::SetEnergyWall(const glm::vec3& position, float radius)

@@ -31,6 +31,7 @@
 #include "resources/materials/effects/MaterialEffectDirectionalLightProperties.h"
 #include "resources/materials/effects/MaterialEffectFogProperties.h"
 #include "resources/materials/effects/MaterialEffectShadowProperties.h"
+#include "resources/materials/effects/MaterialEffectParticle.h"
 
 #include "resources/components/CollisionComponent.h"
 #include "resources/components/PhysicsComponent.h"
@@ -42,6 +43,7 @@
 
 #include "resources/scene/GameScene.h"
 #include "resources/entities/ParticlesEmitter.h"
+#include "resources/entities/ParticlesEmitterLibrary.h"
 #include "resources/textures/Texture.h"
 
 #include "resources/models/Model.h"
@@ -49,8 +51,11 @@
 #include "statistics/Statistics.h"
 #include "guiTool/GuiTool.h"
 
+#include "resources/entities/Particle.h"
 
-NGenius::NGenius(std::string applicationName, float screenWidth, float screenHeight) :
+
+
+NGenius::NGenius() :
 mRenderSystem(nullptr),
 mPhysicsSystem(nullptr),
 mEntitiesSystem(nullptr),
@@ -60,10 +65,11 @@ mEnvironmentSystem(nullptr),
 mAnimationSystem(nullptr),
 mStatisticsSystem(nullptr),
 mGameScene(nullptr),
-mApplicationName(applicationName),
+mParticlesEmitterLibrary(nullptr),
+mApplicationName(""),
 mIsSpacePartitionEnabled(true)
 {
-	CreateSystems(screenWidth, screenHeight);
+	
 }
 
 NGenius::~NGenius()
@@ -75,10 +81,19 @@ NGenius::~NGenius()
 	DestroySystems();
 }
 
-void NGenius::Init(bool isFullscreen)
+void NGenius::Init(const std::string& applicationName, float screenWidth, float screenHeight, bool isFullscreen)
 {
+	mApplicationName = applicationName;
+
+	CreateSystems(screenWidth, screenHeight);
+	
 	mRenderSystem->Init(mApplicationName, isFullscreen);
 	mInputHandler->Init(mRenderSystem->GetGLWindow());
+
+	if (mInitHandler != nullptr)
+	{
+		mInitHandler(this);
+	}
 }
 
 void NGenius::Start()
@@ -88,6 +103,8 @@ void NGenius::Start()
 	mRenderSystem->Start();
 	mSpacePartitionSystem->Start();
 	mDebugSystem->Start();
+
+	mParticlesEmitterLibrary->Load(this);
 
 	if (mStartHandler != nullptr)
 	{
@@ -224,6 +241,8 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 	mEnvironmentSystem = new EnvironmentSystem();
 	mAnimationSystem = new AnimationSystem();
 	mStatisticsSystem = new StatisticsSystem();
+
+	mParticlesEmitterLibrary = new ParticlesEmitterLibrary();
 }
 
 void NGenius::DestroySystems()
@@ -240,6 +259,8 @@ void NGenius::DestroySystems()
 	delete mInputHandler;
 	delete mStatisticsSystem;
 	delete mStatistics;
+
+	delete mParticlesEmitterLibrary;
 }
 
 void NGenius::RegisterAllEventsInputListener(IInputListener* listener)
@@ -265,6 +286,11 @@ void NGenius::RegisterUpdateHandler(std::function<void(float elapsedTime)> callb
 void NGenius::RegisterStartHandler(std::function<void(NGenius* engine)> callback)
 {
 	mStartHandler = callback;
+}
+
+void NGenius::RegisterInitHandler(std::function<void(NGenius* engine)> callback)
+{
+	mInitHandler = callback;
 }
 
 void NGenius::OnKey(int key, int action)
@@ -357,6 +383,12 @@ float NGenius::GetScreenHeight() const
 	return mRenderSystem->GetScreenHeight();
 }
 
+ParticlesEmitter* NGenius::GetParticlesEmitter(const std::string& name)
+{
+	assert(mParticlesEmitterLibrary != nullptr);
+	return mParticlesEmitterLibrary->GetElement(name);
+}
+
 float NGenius::GetDayTime() const
 {
 	return mEnvironmentSystem->GetDayTime();
@@ -367,6 +399,24 @@ void NGenius::AddSunLightFrame(float hour, const float rotationAngle, const glm:
 {
 	assert(mEnvironmentSystem != nullptr);
 	mEnvironmentSystem->AddSunLightFrame(hour, rotationAngle, color, fogColor, fogDensity, fogGradient, cubemapName);
+}
+
+void NGenius::SetGravity(const glm::vec3& gravity)
+{
+	assert(mPhysicsSystem != nullptr);
+	mPhysicsSystem->SetGravity(gravity);
+}
+
+const glm::vec3& NGenius::GetGravity() const
+{
+	assert(mPhysicsSystem != nullptr);
+	return mPhysicsSystem->GetGravity();
+}
+
+float NGenius::GetHeight(const glm::vec2& point) const
+{
+	assert(mPhysicsSystem != nullptr);
+	return mPhysicsSystem->GetHeight(point);
 }
 
 void NGenius::SetFullScreen(bool isFullScreen)
@@ -445,7 +495,7 @@ GameEntity* NGenius::CreateGameEntityFromModel(const std::string& modelName, Tra
 
 		GameEntity* modelEntity = new GameEntity(transformation, renderer);
 
-		modelEntity->AddComponent(new PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE, introductionCoef));
+		modelEntity->AddComponent(new PhysicsComponent(true, GetGravity(), introductionCoef));
 		modelEntity->AddComponent(new CollisionComponent());
 		if (isInsideSpacePartition)
 		{
@@ -467,39 +517,57 @@ void NGenius::FillWithGameEntitiesVisibleInsideRadius(const glm::vec3& origin, f
 
 void NGenius::AddParticleEmitter(ParticlesEmitter* emitter)
 {
-	assert(mParticlesSystem != nullptr);
-	assert(mGameScene != nullptr);
+	if (emitter != nullptr)
+	{
+		assert(mParticlesSystem != nullptr);
+		assert(mGameScene != nullptr);
 
-	emitter->SetGameScene(mGameScene);
-	mParticlesSystem->AddParticleEmitter(emitter);
+		emitter->SetGameScene(mGameScene);
+		mParticlesSystem->AddParticleEmitter(emitter);
+	}
 }
 
 void NGenius::AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing)
 {
-	assert(mRenderSystem != nullptr);
-	mRenderSystem->AddRenderPass(renderPass, addAfterPostProcessing);
+	if (renderPass != nullptr)
+	{
+		assert(mRenderSystem != nullptr);
+		mRenderSystem->AddRenderPass(renderPass, addAfterPostProcessing);
+	}
 }
 
 void NGenius::AddRenderPassAt(unsigned int index, RenderPass* renderPass, bool addAfterPostProcessing)
 {
-	assert(mRenderSystem != nullptr);
-	mRenderSystem->AddRenderPassAt(index, renderPass, addAfterPostProcessing);
+	if (renderPass != nullptr)
+	{
+		assert(mRenderSystem != nullptr);
+		mRenderSystem->AddRenderPassAt(index, renderPass, addAfterPostProcessing);
+	}
 }
 
 void NGenius::AddLight(Light* light)
 {
-	mLightsSystem->AddLight(light);
+	if (light != nullptr)
+	{
+		mLightsSystem->AddLight(light);
+	}
 }
 
 void NGenius::AddCamera(ICamera* camera)
 {
-	mRenderSystem->AddCamera(camera);
+	if (camera != nullptr)
+	{
+		mRenderSystem->AddCamera(camera);
+	}
 }
 
 void NGenius::SetTerrain(const Terrain* terrain)
 {
-	assert(mPhysicsSystem != nullptr);
-	mPhysicsSystem->SetTerrain(terrain);
+	if (terrain != nullptr)
+	{
+		assert(mPhysicsSystem != nullptr);
+		mPhysicsSystem->SetTerrain(terrain);
+	}
 }
 
 void NGenius::SetEnergyWall(const glm::vec3& position, float radius)
@@ -518,6 +586,34 @@ IMaterial* NGenius::CreateMaterial(const std::string& name, IShaderProgram* shad
 {
 	assert(mRenderSystem != nullptr);
 	return mRenderSystem->CreateMaterial(name, shader);
+}
+
+Particle* NGenius::CreateParticle(Texture* texture, bool isAffectedByPhysics, bool canCollide)
+{
+	IMaterial* material = CreateMaterial("particle", GetShader("particle"));
+	material->AddEffect(new MaterialEffectParticle(texture,
+		GetTexture("depth_texture"),
+		glm::vec2(GetScreenWidth(), GetScreenHeight()),
+		1.0f)
+	);
+	material->AddEffect(new MaterialEffectClippingPlane());
+
+	Particle* particle = new Particle(
+		new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
+		GetModel("particle_quad"),
+		material,
+		6.0f);
+	if (isAffectedByPhysics)
+	{
+		PhysicsComponent* physicsComponent = new PhysicsComponent(false, mPhysicsSystem->GetGravity());
+		particle->AddComponent(physicsComponent);
+	}
+	if (canCollide)
+	{
+		particle->AddComponent(new CollisionComponent());
+	}
+
+	return particle;
 }
 
 void NGenius::SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter)

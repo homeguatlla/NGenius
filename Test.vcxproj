@@ -236,6 +236,7 @@
     <ClInclude Include="src\resources\entities\Particle.h" />
     <ClInclude Include="src\resources\entities\ParticlesEmitter.h" />
     <ClInclude Include="src\resources\entities\Character.h" />
+    <ClInclude Include="src\resources\entities\ParticlesEmitterLibrary.h" />
     <ClInclude Include="src\resources\entities\PointsPatch.h" />
     <ClInclude Include="src\resources\entities\Terrain.h" />
     <ClInclude Include="src\resources\entities\Text.h" />
@@ -447,6 +448,7 @@
     <ClCompile Include="src\resources\entities\Particle.cpp" />
     <ClCompile Include="src\resources\entities\ParticlesEmitter.cpp" />
     <ClCompile Include="src\resources\entities\Character.cpp" />
+    <ClCompile Include="src\resources\entities\ParticlesEmitterLibrary.cpp" />
     <ClCompile Include="src\resources\entities\PointsPatch.cpp" />
     <ClCompile Include="src\resources\entities\Terrain.cpp" />
     <ClCompile Include="src\resources\entities\Text.cpp" />

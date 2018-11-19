@@ -52,6 +52,11 @@ ShooterGame::~ShooterGame()
 {
 }
 
+void ShooterGame::Init(NGenius* engine)
+{
+	engine->SetGravity(MARS_GRAVITY_VALUE);
+}
+
 void ShooterGame::Start(NGenius* engine)
 {
 	mGameplayCamera = engine->GetCamera(EngineConstants::GAMEPLAY_CAMERA);
@@ -134,7 +139,7 @@ void ShooterGame::CreateInitialProps(NGenius* engine)
 		float x = -areaSize * 0.5f + randValue;
 		randValue = (rand() % 1000) * areaSize / 1000.0f;
 		float z = -areaSize * 0.5f + randValue;
-		
-		factory.Create(Item::ITEM_WATER_BATTERY, glm::vec3(x, 10.0f, z), mScene);
+		float y = engine->GetHeight(glm::vec2(x, z));
+		factory.Create(Item::ITEM_WATER_BATTERY, glm::vec3(x, y, z), mScene);
 	}
 }
