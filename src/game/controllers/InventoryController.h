@@ -3,7 +3,6 @@
 #include "../../input/IInputListener.h"
 #include "../inventory/Inventory.h"
 
-class NGenius;
 class ItemsListHUD;
 class GameEntity;
 class IMaterial;
@@ -14,9 +13,8 @@ class InventoryController : public IInputListener
 {
 	Inventory* mInventory;
 	ItemsListHUD* mItemsHudList;
-	NGenius* mEngine;
-	GameScene* mScene;
 	Player* mPlayer;
+	GameScene* mScene;
 
 	/*GameEntity* mLocalizedEntity;
 	IMaterial* mLocalizedOriginalMaterial;
@@ -24,7 +22,7 @@ class InventoryController : public IInputListener
 	IMaterial* mLocalizedMaterial;
 	*/
 public:
-	InventoryController(NGenius* engine, GameScene* scene, Inventory* inventory, ItemsListHUD* itemsListHUD, Player* player);
+	InventoryController(GameScene* scene, Inventory* inventory, ItemsListHUD* itemsListHUD, Player* player);
 	~InventoryController();
 
 	//void ShowElementsCanBePickedup(const glm::vec3& position);

@@ -18,7 +18,7 @@ class MarsPlanet
 	std::vector<GameEntity*> mPropsEntityList;
 
 public:
-	MarsPlanet(NGenius* engine, GameScene* scene, ICamera* gameplayCamera);
+	MarsPlanet(GameScene* scene, ICamera* gameplayCamera);
 	~MarsPlanet();
 
 private:

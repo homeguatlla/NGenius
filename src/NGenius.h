@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include "visitor/BaseVisitable.h"
 #include "AABB.h"
+#include "Singleton.h"
 
 class RenderSystem;
 class PhysicsSystem;
@@ -46,7 +47,8 @@ class ParticlesEmitterLibrary;
 
 struct GLFWwindow;
 
-class NGenius : public BaseVisitable<>
+
+class NGenius : public BaseVisitable<>, public Singleton<NGenius>
 {
 	RenderSystem* mRenderSystem;
 	PhysicsSystem* mPhysicsSystem;
@@ -70,8 +72,8 @@ class NGenius : public BaseVisitable<>
 	bool mIsSpacePartitionEnabled;
 	
 	std::function<void(float elapsedTime)> mUpdateHandler;
-	std::function<void(NGenius* engine)> mStartHandler;
-	std::function<void(NGenius* enting)> mInitHandler;
+	std::function<void()> mStartHandler;
+	std::function<void()> mInitHandler;
 
 public:
 	NGenius();
@@ -118,8 +120,8 @@ public:
 	void UnRegisterInputListener(IInputListener* listener);
 	void RegisterInputHandler(std::function<void(GLFWwindow* window)> callback);
 	void RegisterUpdateHandler(std::function<void(float elapsedTime)> callback);
-	void RegisterStartHandler(std::function<void(NGenius* engine)> callback);
-	void RegisterInitHandler(std::function<void(NGenius* engine)> callback);
+	void RegisterStartHandler(std::function<void()> callback);
+	void RegisterInitHandler(std::function<void()> callback);
 
 	void OnKey(int key, int action);
 	void OnMouseScroll(int button, float scroll);

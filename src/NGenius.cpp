@@ -83,6 +83,7 @@ NGenius::~NGenius()
 
 void NGenius::Init(const std::string& applicationName, float screenWidth, float screenHeight, bool isFullscreen)
 {
+	mIsSpacePartitionEnabled = true;
 	mApplicationName = applicationName;
 
 	CreateSystems(screenWidth, screenHeight);
@@ -92,7 +93,7 @@ void NGenius::Init(const std::string& applicationName, float screenWidth, float 
 
 	if (mInitHandler != nullptr)
 	{
-		mInitHandler(this);
+		mInitHandler();
 	}
 }
 
@@ -108,7 +109,7 @@ void NGenius::Start()
 
 	if (mStartHandler != nullptr)
 	{
-		mStartHandler(this);
+		mStartHandler();
 	}
 }
 
@@ -283,12 +284,12 @@ void NGenius::RegisterUpdateHandler(std::function<void(float elapsedTime)> callb
 	mUpdateHandler = callback;
 }
 
-void NGenius::RegisterStartHandler(std::function<void(NGenius* engine)> callback)
+void NGenius::RegisterStartHandler(std::function<void()> callback)
 {
 	mStartHandler = callback;
 }
 
-void NGenius::RegisterInitHandler(std::function<void(NGenius* engine)> callback)
+void NGenius::RegisterInitHandler(std::function<void()> callback)
 {
 	mInitHandler = callback;
 }

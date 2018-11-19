@@ -38,8 +38,7 @@ const float OFFSET_BETWEEN_ITEMS = 8.0f;
 const float LAYER_SELECTED_ITEM_Z = 1.0f;
 
 
-ItemsListHUD::ItemsListHUD(NGenius* engine, GameScene* scene, const glm::vec2& screenCoord, unsigned int numItems) :
-	mEngine(engine),
+ItemsListHUD::ItemsListHUD(GameScene* scene, const glm::vec2& screenCoord, unsigned int numItems) :
 	mSelectedItemEntity(nullptr),
 	mScreenCoord(screenCoord),
 	mSelectedItem(0),
@@ -67,7 +66,7 @@ bool ItemsListHUD::IsItemHUDEmpty(ItemHUD* itemHUD) const
 	assert(itemHUD != nullptr);
 
 	IRenderer* renderer = itemHUD->GetRenderer();
-	IMaterial* emptyMaterial = mEngine->GetMaterial(ITEM_MATERIAL);
+	IMaterial* emptyMaterial = NGenius::GetInstance().GetMaterial(ITEM_MATERIAL);
 	assert(renderer != nullptr);
 	bool isItemHUDEmpty = renderer->GetMaterial()->GetMaterialID() == emptyMaterial->GetMaterialID();
 
@@ -95,7 +94,7 @@ void ItemsListHUD::RemoveSelectedItem()
 	ItemHUD* item = mItemsList[mSelectedItem];
 	if (item != nullptr)
 	{
-		IMaterial* emptyMaterial = mEngine->GetMaterial(ITEM_MATERIAL);
+		IMaterial* emptyMaterial = NGenius::GetInstance().GetMaterial(ITEM_MATERIAL);
 		item->SetItemMaterial(emptyMaterial);
 		item->SetCounter(0);
 		item->SetItemId(0);
@@ -199,7 +198,7 @@ void ItemsListHUD::CreateSelectedItem(GameScene* scene)
 {
 	glm::vec2 screenCoords = CalculateItemPosition(mSelectedItem);
 	IMaterial* material = CreateMaterial(ITEM_SELECTED_MATERIAL, ITEM_QUAD_SELECTED_TEXTURE);
-	IRenderer* guiRenderer = new IndicesRenderer(mEngine->GetModel(GUI_QUAD_MODEL), material);
+	IRenderer* guiRenderer = new IndicesRenderer(NGenius::GetInstance().GetModel(GUI_QUAD_MODEL), material);
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
 	mSelectedItemEntity = new GameEntity(
@@ -221,7 +220,7 @@ void ItemsListHUD::CreateSelectedItem(GameScene* scene)
 void ItemsListHUD::CreateItem(GameScene* scene, const glm::vec2& screenCoord, const std::string& materialName, const std::string& textureName)
 {
 	IMaterial* material = CreateMaterial(materialName, textureName);
-	IRenderer* guiRenderer = new IndicesRenderer(mEngine->GetModel(GUI_QUAD_MODEL), material);
+	IRenderer* guiRenderer = new IndicesRenderer(NGenius::GetInstance().GetModel(GUI_QUAD_MODEL), material);
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
 	ItemHUD* item = new ItemHUD(guiRenderer, screenCoord, ITEM_SIZE);
@@ -231,11 +230,11 @@ void ItemsListHUD::CreateItem(GameScene* scene, const glm::vec2& screenCoord, co
 
 IMaterial* ItemsListHUD::CreateMaterial(const std::string& materialName, const std::string& textureName)
 {
-	IMaterial* material = mEngine->GetMaterial(materialName);
+	IMaterial* material = NGenius::GetInstance().GetMaterial(materialName);
 	if (material == nullptr)
 	{
-		material = mEngine->CreateMaterial(materialName, mEngine->GetShader("gui"));
-		material->AddEffect(new MaterialEffectDiffuseTexture(mEngine->GetTexture(textureName), glm::vec3(1.0f), 1.0f));
+		material = NGenius::GetInstance().CreateMaterial(materialName, NGenius::GetInstance().GetShader("gui"));
+		material->AddEffect(new MaterialEffectDiffuseTexture(NGenius::GetInstance().GetTexture(textureName), glm::vec3(1.0f), 1.0f));
 		Log(Log::LOG_INFO) << "created material item hud: " << materialName << "\n";
 	}
 

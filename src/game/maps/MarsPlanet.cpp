@@ -41,8 +41,8 @@
 #include "../../resources/models/Model.h"
 
 
-MarsPlanet::MarsPlanet(NGenius* engine, GameScene* scene, ICamera* gameplayCamera) :
-	mEngine(engine),
+MarsPlanet::MarsPlanet(GameScene* scene, ICamera* gameplayCamera) :
+	mEngine(&NGenius::GetInstance()),
 	mScene(scene),
 	mGameplayCamera(gameplayCamera)
 {

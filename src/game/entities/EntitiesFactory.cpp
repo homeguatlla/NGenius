@@ -14,7 +14,7 @@
 
 #include "Battery.h"
 
-EntitiesFactory::EntitiesFactory(NGenius* engine) : mEngine(engine)
+EntitiesFactory::EntitiesFactory()
 {
 }
 
@@ -36,7 +36,7 @@ GameEntity* EntitiesFactory::Create(Item::ItemType type, const glm::vec3& positi
 	{
 		Transformation* transformation = new Transformation(position, glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.0003f));
 
-		entity = mEngine->CreateGameEntityFromModel("battery", transformation);
+		entity = NGenius::GetInstance().CreateGameEntityFromModel("battery", transformation);
 		entity->GetRenderer()->GetMaterial()->RemoveEffect<MaterialEffectDirectionalLightProperties>();
 
 		ParticlesEmitter* steamParticlesEmitter = nullptr;// = mEngine->GetParticlesEmitter("steam");
@@ -47,7 +47,7 @@ GameEntity* EntitiesFactory::Create(Item::ItemType type, const glm::vec3& positi
 		scene->AddEntity(battery);
 		if (steamParticlesEmitter != nullptr)
 		{
-			mEngine->AddParticleEmitter(steamParticlesEmitter);
+			NGenius::GetInstance().AddParticleEmitter(steamParticlesEmitter);
 			scene->AddEntity(steamParticlesEmitter);
 		}
 		entity = battery;

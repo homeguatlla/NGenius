@@ -47,8 +47,8 @@
 
 #include <GLFW/glfw3.h>
 
-Player::Player(NGenius* engine, GameScene* scene, Transformation* transformation) :
-	mEngine(engine),
+Player::Player(GameScene* scene, Transformation* transformation) :
+	mEngine(&NGenius::GetInstance()),
 	mScene(scene)
 {
 	Create(transformation);

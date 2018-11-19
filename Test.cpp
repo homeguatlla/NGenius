@@ -178,9 +178,6 @@ bool mIsPropsEnabled = false;
 
 bool mIsSpacePartitionEnabled = false;
 
-typedef Singleton<NGenius> SNGenius;
-
-
 ICamera* mGameplayCamera;
 ICamera* mEagleEyeCamera;
 RenderPass *mGameplayPass; 
@@ -234,7 +231,7 @@ double aleatori()
 /*
 void CreateTerrainNormals(vector<glm::vec3>& vertexs, int numVertexsSide)
 {
-	IShaderProgram* defaultShaderProgram = SNGenius::GetInstance().GetShader("default");
+	IShaderProgram* defaultShaderProgram = NGenius::GetInstance().GetShader("default");
 	NormalRenderer* normalRenderer = new NormalRenderer(defaultShaderProgram);
 
 	//TERRAIN GAME ENTITY
@@ -272,8 +269,8 @@ void CreateTerrainNormals(vector<glm::vec3>& vertexs, int numVertexsSide)
 void CreateShadowPlane()
 {
 	//QUAD
-	IRenderer* guiShadowRenderer = new GUIRenderer(	SNGenius::GetInstance().GetShader("gui"),
-														static_cast<Texture*>(SNGenius::GetInstance().GetTexture("shadow_texture")),
+	IRenderer* guiShadowRenderer = new GUIRenderer(	NGenius::GetInstance().GetShader("gui"),
+														static_cast<Texture*>(NGenius::GetInstance().GetTexture("shadow_texture")),
 														10.0f,
 														10.0f
 													);
@@ -286,8 +283,8 @@ void CreateShadowPlane()
 void CreateWaterHudPlanes()
 {
 	//QUAD
-	IRenderer* guiReflectionRenderer = new GUIRenderer(	SNGenius::GetInstance().GetShader("gui"),
-															static_cast<Texture*>(SNGenius::GetInstance().GetTexture("reflection_water")),
+	IRenderer* guiReflectionRenderer = new GUIRenderer(	NGenius::GetInstance().GetShader("gui"),
+															static_cast<Texture*>(NGenius::GetInstance().GetTexture("reflection_water")),
 															128.0f,
 															128.0f
 														);
@@ -296,8 +293,8 @@ void CreateWaterHudPlanes()
 												);
 	mScene->AddGameEntity(quadReflection);
 
-	IRenderer* guiRefractionRenderer = new GUIRenderer(SNGenius::GetInstance().GetShader("gui"),
-															static_cast<Texture*>(SNGenius::GetInstance().GetTexture("refraction_depth_water")),
+	IRenderer* guiRefractionRenderer = new GUIRenderer(NGenius::GetInstance().GetShader("gui"),
+															static_cast<Texture*>(NGenius::GetInstance().GetTexture("refraction_depth_water")),
 															128.0f,
 															128.0f
 														);
@@ -325,10 +322,10 @@ void CreateSpecificCubes()
 
 	for (unsigned long i = 0; i < positions.size(); i++)
 	{
-		ModelNormalMapRenderer* modelRenderer = new ModelNormalMapRenderer(SNGenius::GetInstance().GetModel("cube"),
-			SNGenius::GetInstance().GetShader("model"),
-			static_cast<Texture*>(SNGenius::GetInstance().GetTexture("cube_diffuse")),
-			static_cast<Texture*>(SNGenius::GetInstance().GetTexture("cube_normalmap")),
+		ModelNormalMapRenderer* modelRenderer = new ModelNormalMapRenderer(NGenius::GetInstance().GetModel("cube"),
+			NGenius::GetInstance().GetShader("model"),
+			static_cast<Texture*>(NGenius::GetInstance().GetTexture("cube_diffuse")),
+			static_cast<Texture*>(NGenius::GetInstance().GetTexture("cube_normalmap")),
 			mSunLight
 			);
 		modelRenderer->SetFogParameters(mFogColor, mFogDensity, mFogGradient);
@@ -351,23 +348,23 @@ void CreateSpecificCubes()
 
 void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 {
-	SNGenius::GetInstance().OnMouseScroll(GLFW_MOUSE_BUTTON_MIDDLE, static_cast<float>(yOffset));
+	NGenius::GetInstance().OnMouseScroll(GLFW_MOUSE_BUTTON_MIDDLE, static_cast<float>(yOffset));
 }
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	SNGenius::GetInstance().OnKey(key, action);
+	NGenius::GetInstance().OnKey(key, action);
 	//std::cout << "key = " << key << " action = " << action << "\n";
 }
 
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-	SNGenius::GetInstance().OnMouseButton(button, action, mods);
+	NGenius::GetInstance().OnMouseButton(button, action, mods);
 }
 
 void MouseCursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 {
-	SNGenius::GetInstance().OnMouseCursorPos(xpos, ypos);
+	NGenius::GetInstance().OnMouseCursorPos(xpos, ypos);
 	//std::cout << "cursor X = " << xpos  << "\n";
 }
 
@@ -378,10 +375,10 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 		nullptr
 		);
 
-	modelEntity->AddComponent(new PhysicsComponent(true, SNGenius::GetInstance().GetGravity()));
+	modelEntity->AddComponent(new PhysicsComponent(true, NGenius::GetInstance().GetGravity()));
 	modelEntity->AddComponent(new CollisionComponent());
 	modelEntity->AddComponent(new SpacePartitionComponent());
-	IRenderer* boundingBoxRenderer = new WireframeRenderer(SNGenius::GetInstance().GetModel("cube"), SNGenius::GetInstance().GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
+	IRenderer* boundingBoxRenderer = new WireframeRenderer(NGenius::GetInstance().GetModel("cube"), NGenius::GetInstance().GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	modelEntity->AddComponent(new DebugComponent(boundingBoxRenderer));
 
 	LODComponent* lodComponent = new LODComponent(mGameplayCamera);
@@ -396,7 +393,7 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 			m = materialNormalmap;
 		}
 
-		IRenderer* renderer = new VerticesRenderer(SNGenius::GetInstance().GetModel(models[i]), m);
+		IRenderer* renderer = new VerticesRenderer(NGenius::GetInstance().GetModel(models[i]), m);
 		lodComponent->AddLevelOfDetail(renderer, lod[i].first);
 		if (lod[i].second)
 		{
@@ -418,11 +415,11 @@ GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, const
 												renderer
 											);
 
-	modelEntity->AddComponent(new PhysicsComponent(true, SNGenius::GetInstance().GetGravity()));
+	modelEntity->AddComponent(new PhysicsComponent(true, NGenius::GetInstance().GetGravity()));
 	modelEntity->AddComponent(new CollisionComponent());
 	modelEntity->AddComponent(new SpacePartitionComponent());
 
-	IRenderer* boundingBoxRenderer = new WireframeRenderer(SNGenius::GetInstance().GetModel("cube"), SNGenius::GetInstance().GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
+	IRenderer* boundingBoxRenderer = new WireframeRenderer(NGenius::GetInstance().GetModel("cube"), NGenius::GetInstance().GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	modelEntity->AddComponent(new DebugComponent(boundingBoxRenderer));
 
 	return modelEntity;
@@ -430,15 +427,15 @@ GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, const
 
 GameEntity* CreateQuadTreeBoxEntity(float size, glm::vec3 position, glm::vec3 color)
 {
-	IMaterial* material = SNGenius::GetInstance().CreateMaterial("quadtree", SNGenius::GetInstance().GetShader("default"));
+	IMaterial* material = NGenius::GetInstance().CreateMaterial("quadtree", NGenius::GetInstance().GetShader("default"));
 	material->AddEffect(new MaterialEffectFloat3(color));
 
-	IRenderer* renderer = new WireframeRenderer(SNGenius::GetInstance().GetModel("cube"), material);
+	IRenderer* renderer = new WireframeRenderer(NGenius::GetInstance().GetModel("cube"), material);
 	GameEntity* quad = new GameEntity(
 		new Transformation(position, glm::vec3(0.0f), glm::vec3(size * 2.0f)),
 		renderer
 	);
-	IRenderer* boundingBoxRenderer = new WireframeRenderer(SNGenius::GetInstance().GetModel("cube"), SNGenius::GetInstance().GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
+	IRenderer* boundingBoxRenderer = new WireframeRenderer(NGenius::GetInstance().GetModel("cube"), NGenius::GetInstance().GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	quad->AddComponent(new DebugComponent(boundingBoxRenderer));
 
 	mScene->AddEntity(quad);
@@ -483,25 +480,25 @@ void CreateTrees()
 	modelsTrunk.push_back("tree_trunk_1");
 	modelsTrunk.push_back("tree_trunk_2");
 	
-	IMaterial* materialFoliage = SNGenius::GetInstance().CreateMaterial("tree_foliage", SNGenius::GetInstance().GetShader("model"));
-	materialFoliage->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(SNGenius::GetInstance().GetTexture("tree_foliage_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	IMaterial* materialFoliage = NGenius::GetInstance().CreateMaterial("tree_foliage", NGenius::GetInstance().GetShader("model"));
+	materialFoliage->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(NGenius::GetInstance().GetTexture("tree_foliage_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	materialFoliage->AddEffect(new MaterialEffectDirectionalLightProperties());
 	materialFoliage->AddEffect(new MaterialEffectFogProperties());
 	materialFoliage->AddEffect(new MaterialEffectShadowProperties(1));
 	materialFoliage->AddEffect(new MaterialEffectClippingPlane());
 
-	IMaterial* materialTrunk = SNGenius::GetInstance().CreateMaterial("tree_trunk", SNGenius::GetInstance().GetShader("model"));
-	materialTrunk->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(SNGenius::GetInstance().GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	IMaterial* materialTrunk = NGenius::GetInstance().CreateMaterial("tree_trunk", NGenius::GetInstance().GetShader("model"));
+	materialTrunk->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(NGenius::GetInstance().GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	materialTrunk->AddEffect(new MaterialEffectDirectionalLightProperties());
 	materialTrunk->AddEffect(new MaterialEffectFogProperties());
 	materialTrunk->AddEffect(new MaterialEffectShadowProperties(1));
 	materialTrunk->AddEffect(new MaterialEffectClippingPlane());
 
-	IMaterial* materialTrunkNormalmap = SNGenius::GetInstance().CreateMaterial("tree_trunk_normalmap", SNGenius::GetInstance().GetShader("normalmap"));
-	materialTrunkNormalmap->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(SNGenius::GetInstance().GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	IMaterial* materialTrunkNormalmap = NGenius::GetInstance().CreateMaterial("tree_trunk_normalmap", NGenius::GetInstance().GetShader("normalmap"));
+	materialTrunkNormalmap->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(NGenius::GetInstance().GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectDirectionalLightProperties());
 	materialTrunkNormalmap->AddEffect(new MaterialEffectFogProperties());
-	materialTrunkNormalmap->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(SNGenius::GetInstance().GetTexture("tree_trunk_normalmap")), 1));
+	materialTrunkNormalmap->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(NGenius::GetInstance().GetTexture("tree_trunk_normalmap")), 1));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectShadowProperties(1));
 	materialTrunkNormalmap->AddEffect(new MaterialEffectClippingPlane());
 
@@ -536,8 +533,8 @@ void CreateGrass()
 		}
 	}
 
-	IMaterial* materialGrass = SNGenius::GetInstance().CreateMaterial("grass1", SNGenius::GetInstance().GetShader("model"));
-	materialGrass->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(SNGenius::GetInstance().GetTexture("grass1_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	IMaterial* materialGrass = NGenius::GetInstance().CreateMaterial("grass1", NGenius::GetInstance().GetShader("model"));
+	materialGrass->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(NGenius::GetInstance().GetTexture("grass1_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	materialGrass->AddEffect(new MaterialEffectDirectionalLightProperties());
 	materialGrass->AddEffect(new MaterialEffectFogProperties());
 	materialGrass->AddEffect(new MaterialEffectShadowProperties(0));
@@ -552,7 +549,7 @@ void CreateGrass()
 
 	for (unsigned long i = 0; i < positions.size(); i++)
 	{
-		GameEntity* entity = CreateModel(positions[i], sizes[i], glm::vec3(0.0f), SNGenius::GetInstance().GetModel("grass2"), materialGrass);
+		GameEntity* entity = CreateModel(positions[i], sizes[i], glm::vec3(0.0f), NGenius::GetInstance().GetModel("grass2"), materialGrass);
 		//entity->GetRenderer()->SetBillboard(true);
 		entity->GetRenderer()->SetTransparency(true);
 		entity->GetRenderer()->SetCullingEnabled(false);
@@ -564,8 +561,8 @@ void CreateGrass()
 void CreatePoints()
 {
 	glPointSize(5.0f);
-	IShaderProgram* shader = SNGenius::GetInstance().GetShader("grass");
-	IMaterial* material = SNGenius::GetInstance().CreateMaterial("grass2_material", shader);
+	IShaderProgram* shader = NGenius::GetInstance().GetShader("grass");
+	IMaterial* material = NGenius::GetInstance().CreateMaterial("grass2_material", shader);
 
 	material->AddEffect(new MaterialEffectFogProperties());
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
@@ -573,13 +570,13 @@ void CreatePoints()
 	material->AddEffect(new MaterialEffectFloat(0.0));
 	material->AddEffect(new MaterialEffectDirectionalLightProperties());
 	material->AddEffect(new MaterialEffectFloat3Array());
-	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(SNGenius::GetInstance().GetTexture("grass2")),
-		SNGenius::GetInstance().GetTexture("depth_texture"),
-		glm::vec2(SNGenius::GetInstance().GetScreenWidth(), SNGenius::GetInstance().GetScreenHeight()),
+	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(NGenius::GetInstance().GetTexture("grass2")),
+		NGenius::GetInstance().GetTexture("depth_texture"),
+		glm::vec2(NGenius::GetInstance().GetScreenWidth(), NGenius::GetInstance().GetScreenHeight()),
 		1.0f)
 	);
 
-	Texture* windTexture = static_cast<Texture*>(SNGenius::GetInstance().GetTexture("wind_texture"));
+	Texture* windTexture = static_cast<Texture*>(NGenius::GetInstance().GetTexture("wind_texture"));
 	material->AddEffect(new MaterialEffectNormalTexture(windTexture, 1.0f));
 	material->AddEffect(new MaterialEffectClippingPlane());
 
@@ -591,15 +588,15 @@ void CreatePoints()
 	pointsPatch->AddComponent(environmentComponent);
 	mScene->AddEntity(pointsPatch);
 	/*
-	material = SNGenius::GetInstance().CreateMaterial("grass3_material", shader);
+	material = NGenius::GetInstance().CreateMaterial("grass3_material", shader);
 	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
 	material->AddEffect(new MaterialEffectShadowProperties(0));
 	material->AddEffect(new MaterialEffectFloat(0.0));
 	material->AddEffect(new MaterialEffectFloat3Array());
-	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(SNGenius::GetInstance().GetTexture("grass3")),
-		SNGenius::GetInstance().GetTexture("depth_texture"),
-		glm::vec2(SNGenius::GetInstance().GetScreenWidth(), SNGenius::GetInstance().GetScreenHeight()),
+	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(NGenius::GetInstance().GetTexture("grass3")),
+		NGenius::GetInstance().GetTexture("depth_texture"),
+		glm::vec2(NGenius::GetInstance().GetScreenWidth(), NGenius::GetInstance().GetScreenHeight()),
 		1.0f)
 	);
 
@@ -693,10 +690,10 @@ void CreateProps()
 	//std::string textureName("barrel_diffuse");
 	//std::string textureNormalName("barrel_normalmap");
 
-	Texture* texture = static_cast<Texture*>(SNGenius::GetInstance().GetTexture(textureName));
-	Texture* normal = static_cast<Texture*>(SNGenius::GetInstance().GetTexture(textureNormalName));
+	Texture* texture = static_cast<Texture*>(NGenius::GetInstance().GetTexture(textureName));
+	Texture* normal = static_cast<Texture*>(NGenius::GetInstance().GetTexture(textureNormalName));
 
-	IMaterial* material = SNGenius::GetInstance().GetMaterial(MaterialsLibrary::MODEL_MATERIAL_NAME);
+	IMaterial* material = NGenius::GetInstance().GetMaterial(MaterialsLibrary::MODEL_MATERIAL_NAME);
 	material->AddEffect(new MaterialEffectDiffuseTexture(texture, glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	material->AddEffect(new MaterialEffectDirectionalLightProperties());
 	material->AddEffect(new MaterialEffectFogProperties());
@@ -718,7 +715,7 @@ void CreateProps()
 		glm::vec3 rotation(rotations[i % rotations.size()]);
 			
 		std::string modelName = models[i % models.size()];
-		Model* model = SNGenius::GetInstance().GetModel(modelName);
+		Model* model = NGenius::GetInstance().GetModel(modelName);
 
 		GameEntity* entity = CreateModel(position, scale, rotation, model, material);
 		mScene->AddEntity(entity);
@@ -733,14 +730,14 @@ void CreateWater()
 		float waterSpeed = 0.02f;
 		glm::vec4 waterColor(0.0f, 0.3f, 0.8f, 0.0f);
 
-		IMaterial* material = SNGenius::GetInstance().CreateMaterial("water", SNGenius::GetInstance().GetShader("water"));
+		IMaterial* material = NGenius::GetInstance().CreateMaterial("water", NGenius::GetInstance().GetShader("water"));
 		material->AddEffect(new MaterialEffectFogProperties());
 		material->AddEffect(new MaterialEffectWater(
-														SNGenius::GetInstance().GetTexture("reflection_water"),
-														SNGenius::GetInstance().GetTexture("refraction_water"),
-														SNGenius::GetInstance().GetTexture("distorsion_water"),
-														SNGenius::GetInstance().GetTexture("normal_water"),
-														SNGenius::GetInstance().GetTexture("refraction_depth_water"),
+														NGenius::GetInstance().GetTexture("reflection_water"),
+														NGenius::GetInstance().GetTexture("refraction_water"),
+														NGenius::GetInstance().GetTexture("distorsion_water"),
+														NGenius::GetInstance().GetTexture("normal_water"),
+														NGenius::GetInstance().GetTexture("refraction_depth_water"),
 														waterSpeed,
 														waterColor
 													));
@@ -761,16 +758,16 @@ void CreateWater()
 
 Particle* CreateParticle(bool canCollide, Texture* texture, glm::vec3& gravity)
 {
-	IMaterial* material = SNGenius::GetInstance().CreateMaterial("particle", SNGenius::GetInstance().GetShader("particle"));
+	IMaterial* material = NGenius::GetInstance().CreateMaterial("particle", NGenius::GetInstance().GetShader("particle"));
 	material->AddEffect(new MaterialEffectParticle(	texture, 
-													SNGenius::GetInstance().GetTexture("depth_texture"), 
-													glm::vec2(SNGenius::GetInstance().GetScreenWidth(), SNGenius::GetInstance().GetScreenHeight()), 
+													NGenius::GetInstance().GetTexture("depth_texture"), 
+													glm::vec2(NGenius::GetInstance().GetScreenWidth(), NGenius::GetInstance().GetScreenHeight()), 
 													1.0f)
 						);
 	material->AddEffect(new MaterialEffectClippingPlane());
 
 	Particle* particle = new Particle(new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
-		SNGenius::GetInstance().GetModel("particle_quad"),
+		NGenius::GetInstance().GetModel("particle_quad"),
 		material,
 		6.0f);
 	PhysicsComponent* physicsComponent = new PhysicsComponent(false, gravity);
@@ -786,7 +783,7 @@ Particle* CreateParticle(bool canCollide, Texture* texture, glm::vec3& gravity)
 
 void CreateParticlesFire()
 {
-	Particle* particle = CreateParticle(false, static_cast<Texture*>(SNGenius::GetInstance().GetTexture("smoke")), glm::vec3(0.0f));
+	Particle* particle = CreateParticle(false, static_cast<Texture*>(NGenius::GetInstance().GetTexture("smoke")), glm::vec3(0.0f));
 	particle->SetLiveTime(2.0f);
 
 	float x = 4.0f;
@@ -803,35 +800,35 @@ void CreateParticlesFire()
 	particlesEmitter->SetVelocity(glm::vec3(0.0f), glm::vec3(0.04f, 0.4f, 0.04f));
 	particlesEmitter->SetSpawnArea(glm::vec3(-0.06f, 0.0f, -0.06f), glm::vec3(0.06f, 0.0f, 0.06f));
 	mScene->AddEntity(particlesEmitter);
-	SNGenius::GetInstance().AddParticleEmitter(particlesEmitter);
+	NGenius::GetInstance().AddParticleEmitter(particlesEmitter);
 }
 
 void CreateEnergyWall()
 {
-	IMaterial* material = SNGenius::GetInstance().CreateMaterial("energy_wall", SNGenius::GetInstance().GetShader("energy_wall"));
-	material->AddEffect(new MaterialEffectDiffuseTexture(SNGenius::GetInstance().GetTexture("yellow_grid"), glm::vec3(0.0f), 50.0f));
-	material->AddEffect(new MaterialEffectDepthTexture(SNGenius::GetInstance().GetTexture("depth_texture"), 1.0f));
-	material->AddEffect(new MaterialEffectFloat2(glm::vec2(SNGenius::GetInstance().GetScreenWidth(), SNGenius::GetInstance().GetScreenHeight())));
+	IMaterial* material = NGenius::GetInstance().CreateMaterial("energy_wall", NGenius::GetInstance().GetShader("energy_wall"));
+	material->AddEffect(new MaterialEffectDiffuseTexture(NGenius::GetInstance().GetTexture("yellow_grid"), glm::vec3(0.0f), 50.0f));
+	material->AddEffect(new MaterialEffectDepthTexture(NGenius::GetInstance().GetTexture("depth_texture"), 1.0f));
+	material->AddEffect(new MaterialEffectFloat2(glm::vec2(NGenius::GetInstance().GetScreenWidth(), NGenius::GetInstance().GetScreenHeight())));
 
 	mEnergyWall = new EnergyWall(	new Transformation(mEnergyWallPosition, glm::vec3(0.0f), glm::vec3(mEnergyWallRadius)),
 									material,
-									SNGenius::GetInstance().GetModel("sphere"),
+									NGenius::GetInstance().GetModel("sphere"),
 									2.0f
 								);
 	mScene->AddEntity(mEnergyWall);
-	SNGenius::GetInstance().SetEnergyWall(mEnergyWallPosition, mEnergyWallRadius);
+	NGenius::GetInstance().SetEnergyWall(mEnergyWallPosition, mEnergyWallRadius);
 }
 
 void CreateHUD()
 {
 	//QUAD
-	IMaterial* material = SNGenius::GetInstance().GetMaterial(MaterialsLibrary::GUI_MATERIAL_NAME);
-	material->AddEffect(new MaterialEffectDiffuseTexture(SNGenius::GetInstance().GetTexture("hud_map"), glm::vec3(1.0f), 1.0f));
-	IRenderer* guiRenderer = new IndicesRenderer(SNGenius::GetInstance().GetModel("gui_quad"), material);
+	IMaterial* material = NGenius::GetInstance().GetMaterial(MaterialsLibrary::GUI_MATERIAL_NAME);
+	material->AddEffect(new MaterialEffectDiffuseTexture(NGenius::GetInstance().GetTexture("hud_map"), glm::vec3(1.0f), 1.0f));
+	IRenderer* guiRenderer = new IndicesRenderer(NGenius::GetInstance().GetModel("gui_quad"), material);
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
-	float x = SNGenius::GetInstance().GetScreenWidth() * 0.5f * 0.90f;
-	float y = -SNGenius::GetInstance().GetScreenHeight() * 0.5f * 0.85f;
+	float x = NGenius::GetInstance().GetScreenWidth() * 0.5f * 0.90f;
+	float y = -NGenius::GetInstance().GetScreenHeight() * 0.5f * 0.85f;
 	GameEntity* quad = new GameEntity(	new Transformation(glm::vec3(x, y, 0.0f), 
 										glm::vec3(0.0f), 
 										glm::vec3(256.0f)),
@@ -840,8 +837,8 @@ void CreateHUD()
 	mScene->AddEntity(quad);
 
 	/*
-	IRenderer* mapRenderer = new GUIRenderer(SNGenius::GetInstance().GetShader("gui"),
-		static_cast<Texture*>(SNGenius::GetInstance().GetTexture("map")),
+	IRenderer* mapRenderer = new GUIRenderer(NGenius::GetInstance().GetShader("gui"),
+		static_cast<Texture*>(NGenius::GetInstance().GetTexture("map")),
 		87.0f,
 		73.0f
 	);
@@ -853,9 +850,9 @@ void CreateHUD()
 
 void CreateParticlesTest()
 {
-	glm::vec3 gravity = SNGenius::GetInstance().GetGravity();
+	glm::vec3 gravity = NGenius::GetInstance().GetGravity();
 
-	Particle* particle = CreateParticle(false, static_cast<Texture*>(SNGenius::GetInstance().GetTexture("smoke")), glm::vec3(0.0f));
+	Particle* particle = CreateParticle(false, static_cast<Texture*>(NGenius::GetInstance().GetTexture("smoke")), glm::vec3(0.0f));
 	particle->SetLiveTime(10.0f);
 
 	glm::vec3 position(3.0f, 0.0f, 4.0f); 
@@ -873,9 +870,9 @@ void CreateParticlesTest()
 	particlesEmitter->SetSpawnArea(glm::vec3(-3.f, 0.0f, -3.0f), glm::vec3(3.f, 0.0f, 3.0f));
 	
 	mScene->AddEntity(particlesEmitter);
-	SNGenius::GetInstance().AddParticleEmitter(particlesEmitter);	
+	NGenius::GetInstance().AddParticleEmitter(particlesEmitter);	
 	
-	particle = CreateParticle(false, static_cast<Texture*>(SNGenius::GetInstance().GetTexture("smoke")), glm::vec3(0.0f));
+	particle = CreateParticle(false, static_cast<Texture*>(NGenius::GetInstance().GetTexture("smoke")), glm::vec3(0.0f));
 	particle->SetLiveTime(1.0f);
 
 	position = glm::vec3(4.0f, 0.0f, 4.0f);
@@ -889,14 +886,14 @@ void CreateParticlesTest()
 	particlesEmitter->SetScaleValues(0.03f, 0.4f + (rand() % 4) / 10.0f);
 	particlesEmitter->SetVelocity(glm::vec3(0.0f, 0.2f, 0.0f), glm::vec3(0.0f, 0.5f, 0.0f));
 	mScene->AddEntity(particlesEmitter);
-	SNGenius::GetInstance().AddParticleEmitter(particlesEmitter);
+	NGenius::GetInstance().AddParticleEmitter(particlesEmitter);
 }
 
 void CreateTextTest()
 {
-	FontType* font = SNGenius::GetInstance().GetFont("OCR A Extended");
+	FontType* font = NGenius::GetInstance().GetFont("OCR A Extended");
 
-	materialText = SNGenius::GetInstance().GetMaterial(MaterialsLibrary::TEXT_MATERIAL_NAME);
+	materialText = NGenius::GetInstance().GetMaterial(MaterialsLibrary::TEXT_MATERIAL_NAME);
 	materialText->AddEffect(new MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
 	materialText->AddEffect(new MaterialEffectText(	glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 													glm::vec4(1.0f, 1.0f, 1.0f, 0.0f),
@@ -909,7 +906,7 @@ void CreateTextTest()
 	for (unsigned int i = 0; i < texts.size(); ++i)
 	{
 		mText[i] = new Text(
-								new Transformation(	glm::vec3(-SNGenius::GetInstance().GetScreenWidth() * 0.5f, SNGenius::GetInstance().GetScreenHeight() * 0.5f - i * 20.0f, 0.0f),
+								new Transformation(	glm::vec3(-NGenius::GetInstance().GetScreenWidth() * 0.5f, NGenius::GetInstance().GetScreenHeight() * 0.5f - i * 20.0f, 0.0f),
 								glm::vec3(0.0f),
 								glm::vec3(0.70f)
 							),
@@ -921,7 +918,7 @@ void CreateTextTest()
 	float z = 0.0f;
 	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
 
-	IMaterial* material3D = SNGenius::GetInstance().GetMaterial(MaterialsLibrary::TEXT3D_MATERIAL_NAME);
+	IMaterial* material3D = NGenius::GetInstance().GetMaterial(MaterialsLibrary::TEXT3D_MATERIAL_NAME);
 	material3D->AddEffect(new MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
 	material3D->AddEffect(new MaterialEffectText(	glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
 													glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
@@ -941,7 +938,7 @@ void CreateTextTest()
 	height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
 
 	mTestText = new Text(new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(.01f)),
-		SNGenius::GetInstance().GetShader("text"), SNGenius::GetInstance().GetFont("OCR A Extended"),
+		NGenius::GetInstance().GetShader("text"), NGenius::GetInstance().GetFont("OCR A Extended"),
 		"Market", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
 	mTestText->SetOutlineColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.8f));
 	mTestText->SetBorderParameters(0.5f, 0.1f, 0.5f, 0.4f);
@@ -961,25 +958,25 @@ void CreateTerrain()
 
 	float scale = mIsTerrainFlat ? 0.0f : EngineConstants::TERRAIN_SCALE;
 
-	IMaterial* material = SNGenius::GetInstance().CreateMaterial("terrain", SNGenius::GetInstance().GetShader("terrain"));
-	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(SNGenius::GetInstance().GetTexture("terrain_blendmap")), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f));
+	IMaterial* material = NGenius::GetInstance().CreateMaterial("terrain", NGenius::GetInstance().GetShader("terrain"));
+	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(NGenius::GetInstance().GetTexture("terrain_blendmap")), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f));
 	material->AddEffect(new MaterialEffectDirectionalLightProperties());
 	material->AddEffect(new MaterialEffectFogProperties());
-	material->AddEffect(new MaterialEffectHeightMapTexture(static_cast<Texture*>(SNGenius::GetInstance().GetTexture("terrain_heightmap")), 1.0f));
-	material->AddEffect(new MaterialEffectTextureArray(static_cast<TextureArray*>(SNGenius::GetInstance().GetTexture("terrain_array"))));
+	material->AddEffect(new MaterialEffectHeightMapTexture(static_cast<Texture*>(NGenius::GetInstance().GetTexture("terrain_heightmap")), 1.0f));
+	material->AddEffect(new MaterialEffectTextureArray(static_cast<TextureArray*>(NGenius::GetInstance().GetTexture("terrain_array"))));
 	material->AddEffect(new MaterialEffectClippingPlane());
 	material->AddEffect(new MaterialEffectShadowProperties(3));
 	material->AddEffect(new MaterialEffectFloat(scale));
 	
 	mTerrain = new Terrain(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 							material,
-							static_cast<Texture*>(SNGenius::GetInstance().GetTexture("terrain_heightmap")),
+							static_cast<Texture*>(NGenius::GetInstance().GetTexture("terrain_heightmap")),
 							scale);
 
 	mTerrain->SetFlat(mIsTerrainFlat);
 			
 	mScene->AddEntity(mTerrain);
-	SNGenius::GetInstance().SetTerrain(mTerrain);
+	NGenius::GetInstance().SetTerrain(mTerrain);
 
 	//TERRAIN NORMALS ENTITY
 	//CreateTerrainNormals(vertexs, numVertexsSide);
@@ -989,9 +986,9 @@ void CreatePlayer()
 {
 	//TODO texto color std::cout << "\033[1;31mbold red text\033[0m normal text\n";
 	//PLAYER
-	IMaterial* material = SNGenius::GetInstance().CreateMaterial("player", SNGenius::GetInstance().GetShader("animated_model"));
-	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(SNGenius::GetInstance().GetTexture("material_farmer_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	//material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(SNGenius::GetInstance().GetTexture("material_farmer_normalmap")), 1.0f));
+	IMaterial* material = NGenius::GetInstance().CreateMaterial("player", NGenius::GetInstance().GetShader("animated_model"));
+	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(NGenius::GetInstance().GetTexture("material_farmer_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
+	//material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(NGenius::GetInstance().GetTexture("material_farmer_normalmap")), 1.0f));
 	material->AddEffect(new MaterialEffectDirectionalLightProperties());
 	material->AddEffect(new MaterialEffectFogProperties());
 	material->AddEffect(new MaterialEffectShadowProperties(3));
@@ -1005,7 +1002,7 @@ void CreatePlayer()
 	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_SPACE, new JumpEvent()));
 	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
 
-	Model* model = SNGenius::GetInstance().GetModel("farmer");
+	Model* model = NGenius::GetInstance().GetModel("farmer");
 	//IRenderer* renderer = new VerticesRenderer(model, material);
 	IRenderer* renderer = new IndicesRenderer(model, material);
 
@@ -1013,18 +1010,18 @@ void CreatePlayer()
 							renderer,
 							inputComponent,
 							new GameEventsComponent(),
-							new PhysicsComponent(false, SNGenius::GetInstance().GetGravity()),
+							new PhysicsComponent(false, NGenius::GetInstance().GetGravity()),
 							new CollisionComponent(),
 		EngineConstants::PLAYER_RUN_SPEED,
 		EngineConstants::PLAYER_TURN_SPEED,
 		EngineConstants::PLAYER_UPWARDS_HEIGHT
 						);
 	mPlayer->AddComponent(new EnergyWallCollisionComponent());
-	IRenderer* boundingBoxRenderer = new WireframeRenderer(SNGenius::GetInstance().GetModel("cube"), SNGenius::GetInstance().GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
+	IRenderer* boundingBoxRenderer = new WireframeRenderer(NGenius::GetInstance().GetModel("cube"), NGenius::GetInstance().GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	mPlayer->AddComponent(new DebugComponent(boundingBoxRenderer));
 	mPlayer->AddComponent(new EnvironmentModificatorComponent());
 	AnimationComponent* animationComponent = new AnimationComponent();
-	animationComponent->AddAnimation(SNGenius::GetInstance().GetAnimation("animation_0"));
+	animationComponent->AddAnimation(NGenius::GetInstance().GetAnimation("animation_0"));
 	mPlayer->AddComponent(animationComponent);
 	mScene->AddEntity(mPlayer);
 }
@@ -1036,7 +1033,7 @@ void CreateGameCameraEntity()
 	inputComponent->AddConverter(new MouseToEventBind(-1, new PitchEvent()));
 
 	mCamera = new GameEntity(new Transformation(mGameplayCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
-		nullptr);// new CubeRenderer(SNGenius::GetInstance().GetShader("default")));
+		nullptr);// new CubeRenderer(NGenius::GetInstance().GetShader("default")));
 
 	glm::vec3 targetOffset(0.0f, 0.5f, 0.0f); //head
 	mThirdPersonCameraComponent = new ThirdPersonCameraComponent(	static_cast<PerspectiveCamera*>(mGameplayCamera), 
@@ -1065,14 +1062,14 @@ void CreateSkybox()
 	//SKYBOX the last
 	if (mIsSkyboxEnabled)
 	{
-		IMaterial* material = SNGenius::GetInstance().CreateMaterial("skybox", SNGenius::GetInstance().GetShader("skybox"));
-		TextureCubemap* cubemap1 = static_cast<TextureCubemap*>(SNGenius::GetInstance().GetTexture("day_cubemap"));
-		TextureCubemap* cubemap2 = static_cast<TextureCubemap*>(SNGenius::GetInstance().GetTexture("night_cubemap"));
+		IMaterial* material = NGenius::GetInstance().CreateMaterial("skybox", NGenius::GetInstance().GetShader("skybox"));
+		TextureCubemap* cubemap1 = static_cast<TextureCubemap*>(NGenius::GetInstance().GetTexture("day_cubemap"));
+		TextureCubemap* cubemap2 = static_cast<TextureCubemap*>(NGenius::GetInstance().GetTexture("night_cubemap"));
 		material->AddEffect(new MaterialEffectTextureCubemap(cubemap1, cubemap2, 0.0f));
 		material->AddEffect(new MaterialEffectFogProperties());
 		material->AddEffect(new MaterialEffectDirectionalLightProperties());
 
-		SkyBoxRenderer* skyboxRenderer = new SkyBoxRenderer(SNGenius::GetInstance().GetModel("skybox"), material);
+		SkyBoxRenderer* skyboxRenderer = new SkyBoxRenderer(NGenius::GetInstance().GetModel("skybox"), material);
 		skyboxRenderer->SetLayer(IRenderer::LAYER_PARTICLES);
 		
 		GameEntity* skyBox = new GameEntity(
@@ -1086,8 +1083,8 @@ void CreateSkybox()
 
 void CreateCameras()
 {
-	float screenWidth = static_cast<float>(SNGenius::GetInstance().GetScreenWidth());
-	float screenHeight = static_cast<float>(SNGenius::GetInstance().GetScreenHeight());
+	float screenWidth = static_cast<float>(NGenius::GetInstance().GetScreenWidth());
+	float screenHeight = static_cast<float>(NGenius::GetInstance().GetScreenHeight());
 	float aspectRatio = screenWidth / screenHeight;
 
 	//CAMERA
@@ -1106,14 +1103,14 @@ void CreateCameras()
 	mEagleEyeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mEagleEyeCamera->SetUp(glm::vec3(1.0f, 0.0f, 0.0f));
 
-	SNGenius::GetInstance().AddCamera(mEagleEyeCamera);
-	mGameplayCamera = SNGenius::GetInstance().GetCamera(EngineConstants::GAMEPLAY_CAMERA);
+	NGenius::GetInstance().AddCamera(mEagleEyeCamera);
+	mGameplayCamera = NGenius::GetInstance().GetCamera(EngineConstants::GAMEPLAY_CAMERA);
 	/*
 	mGameplayCamera = new PerspectiveCamera("gameplay_camera", EngineConstants::VIEW_ANGLE, aspectRatio, EngineConstants::NEAR_PLANE, EngineConstants::FAR_PLANE);
 	mGameplayCamera->SetPosition(glm::vec3(0.0f, 5.0f, 5.0f));
 	mGameplayCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
-	SNGenius::GetInstance().AddCamera(mGameplayCamera);
+	NGenius::GetInstance().AddCamera(mGameplayCamera);
 	*/
 	/*
 	if (mConfiguration == QUADTREE_WITH_CAMERA)
@@ -1122,7 +1119,7 @@ void CreateCameras()
 		mCameraTest->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 		mCameraTest->SetTarget(glm::vec3(0.0f, 0.0f, 10.0f));
 		mCameraTest->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
-		SNGenius::GetInstance().AddCamera(mCameraTest);
+		NGenius::GetInstance().AddCamera(mCameraTest);
 	}*/
 }
 
@@ -1200,8 +1197,8 @@ void CreateCameraAABBEntity()
 
 void CreateEntities()
 {
-	//const Texture* texture = static_cast<const Texture*>(SNGenius::GetInstance().CreateDepthTexture("depth_texture", glm::vec2(SNGenius::GetInstance().GetScreenWidth(), SNGenius::GetInstance().GetScreenHeight())));
-	const Texture* texture = static_cast<const Texture*>(SNGenius::GetInstance().GetTexture("depth_texture"));
+	//const Texture* texture = static_cast<const Texture*>(NGenius::GetInstance().CreateDepthTexture("depth_texture", glm::vec2(NGenius::GetInstance().GetScreenWidth(), NGenius::GetInstance().GetScreenHeight())));
+	const Texture* texture = static_cast<const Texture*>(NGenius::GetInstance().GetTexture("depth_texture"));
 
 	//CreateHUD();
 
@@ -1264,18 +1261,18 @@ void DisableRenderPasses()
 void CreateHudMapRenderPass()
 {
 	//HUD MAP RENDER PASS
-	ICamera* camera = new PerspectiveCamera("map_camera", EngineConstants::VIEW_ANGLE, SNGenius::GetInstance().GetScreenWidth() / SNGenius::GetInstance().GetScreenHeight(), EngineConstants::NEAR_PLANE, EngineConstants::FAR_PLANE);
+	ICamera* camera = new PerspectiveCamera("map_camera", EngineConstants::VIEW_ANGLE, NGenius::GetInstance().GetScreenWidth() / NGenius::GetInstance().GetScreenHeight(), EngineConstants::NEAR_PLANE, EngineConstants::FAR_PLANE);
 	camera->SetPosition(glm::vec3(0.0f, 100.0f, 0.0f));
 	camera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	camera->SetUp(glm::vec3(1.0f, 0.0f, 0.0f));
 	mMapPass = new RenderPass(camera, IRenderer::LAYER_OTHER);
-	SNGenius::GetInstance().AddCamera(camera);
+	NGenius::GetInstance().AddCamera(camera);
 	
-	IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(SNGenius::GetInstance().GetScreenWidth()), static_cast<int>(SNGenius::GetInstance().GetScreenHeight()));
-	frameBuffer->SetColorTextureAttachment(0, static_cast<Texture*>(SNGenius::GetInstance().GetTexture("map")));
+	IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(NGenius::GetInstance().GetScreenWidth()), static_cast<int>(NGenius::GetInstance().GetScreenHeight()));
+	frameBuffer->SetColorTextureAttachment(0, static_cast<Texture*>(NGenius::GetInstance().GetTexture("map")));
 	frameBuffer->Init();
 	mMapPass->SetFrameBufferOutput(frameBuffer);
-	SNGenius::GetInstance().AddRenderPass(mMapPass, false);
+	NGenius::GetInstance().AddRenderPass(mMapPass, false);
 }
 
 void CreateTerrainRenderPass()
@@ -1283,7 +1280,7 @@ void CreateTerrainRenderPass()
 	//RENDER PASS GAMEPLAY
 	RenderPass *terrainPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TERRAIN);
 	terrainPass->EnableFog(true);
-	SNGenius::GetInstance().AddRenderPassAt(1, terrainPass, false);
+	NGenius::GetInstance().AddRenderPassAt(1, terrainPass, false);
 }
 
 void CreateSubSystems()
@@ -1312,7 +1309,7 @@ void UpdateEnergyWallCollisions(float elapsedTime)
 
 void UpdateStatitstics()
 {
-	const Statistics* statistics = SNGenius::GetInstance().GetStatistics();
+	const Statistics* statistics = NGenius::GetInstance().GetStatistics();
 
 	MaterialEffectText* effect = materialText->GetEffect<MaterialEffectText>();
 	int fps = static_cast<int>(statistics->GetNumberFPS());
@@ -1442,7 +1439,7 @@ void UpdateInput(GLFWwindow* window)
 		else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
 		{
 			mIsShadowEnabled = !mIsShadowEnabled;
-			SNGenius::GetInstance().SetCastingShadowsEnabled(mIsShadowEnabled);
+			NGenius::GetInstance().SetCastingShadowsEnabled(mIsShadowEnabled);
 		}
 		else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
 		{
@@ -1454,7 +1451,7 @@ void UpdateInput(GLFWwindow* window)
 		else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 		{
 			mIsSpacePartitionEnabled = !mIsSpacePartitionEnabled;
-			SNGenius::GetInstance().SetIsSpacePartitionEnabled(mIsSpacePartitionEnabled);
+			NGenius::GetInstance().SetIsSpacePartitionEnabled(mIsSpacePartitionEnabled);
 		}
 
 		if (mConfiguration == QUADTREE)
@@ -1524,32 +1521,32 @@ void Update(float elapsedTime)
 	}*/
 }
 
-void Init(NGenius* engine)
+void Init()
 {
-	mGame.Init(engine);
+	mGame.Init();
 }
 
-void Start(NGenius* engine)
+void Start()
 {
 	if (mIsShooterGameRunning)
 	{
-		mGame.Start(engine);
-		mScene = SNGenius::GetInstance().GetGameScene(GAME_SCENE_NAME);
+		mGame.Start();
+		mScene = NGenius::GetInstance().GetGameScene(GAME_SCENE_NAME);
 	}
 	else
 	{
-		mScene = SNGenius::GetInstance().CreateGameScene("mainScene");
+		mScene = NGenius::GetInstance().CreateGameScene("mainScene");
 		CreateSubSystems();
 		CreateEntities();		
 
 		//green island
-		SNGenius::GetInstance().AddSunLightFrame(1200.0f, 90.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(255.0f, 255.0f, 255.0f) / 255.0f, 0.004f, 1.5f, "day_cubemap");
-		SNGenius::GetInstance().AddSunLightFrame(1800.0f, 135.0f, glm::vec3(0.93f, 0.64f, 0.78f), glm::vec3(218.0f, 74.0f, 43.0f) / 255.0f, 0.04f, 1.5f, "day_cubemap");
-		SNGenius::GetInstance().AddSunLightFrame(2400.0f, 270.0f, glm::vec3(0.86f, 0.64f, 0.93f), glm::vec3(0.0f), 0.004f, 1.5f, "night_cubemap");
-		SNGenius::GetInstance().AddSunLightFrame(600.0f, 45.0f, glm::vec3(0.36f, 0.73f, 0.82f), glm::vec3(93.0f, 188.0f, 210.0f) / 255.0f, 0.08f, 1.5f, "day_cubemap");
+		NGenius::GetInstance().AddSunLightFrame(1200.0f, 90.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(255.0f, 255.0f, 255.0f) / 255.0f, 0.004f, 1.5f, "day_cubemap");
+		NGenius::GetInstance().AddSunLightFrame(1800.0f, 135.0f, glm::vec3(0.93f, 0.64f, 0.78f), glm::vec3(218.0f, 74.0f, 43.0f) / 255.0f, 0.04f, 1.5f, "day_cubemap");
+		NGenius::GetInstance().AddSunLightFrame(2400.0f, 270.0f, glm::vec3(0.86f, 0.64f, 0.93f), glm::vec3(0.0f), 0.004f, 1.5f, "night_cubemap");
+		NGenius::GetInstance().AddSunLightFrame(600.0f, 45.0f, glm::vec3(0.36f, 0.73f, 0.82f), glm::vec3(93.0f, 188.0f, 210.0f) / 255.0f, 0.08f, 1.5f, "day_cubemap");
 
 
-		SNGenius::GetInstance().SetCastingShadowsTarget(mPlayer);
+		NGenius::GetInstance().SetCastingShadowsTarget(mPlayer);
 	}
 	
 	/*
@@ -1759,41 +1756,41 @@ void Initialize()
 {
 	SetupConfiguration();
 
-	SNGenius::GetInstance().Init("Demo", EngineConstants::SCREEN_WIDTH, EngineConstants::SCREEN_HEIGHT, mIsFullScreen);
-	SNGenius::GetInstance().RegisterInputHandler(std::bind(&UpdateInput, std::placeholders::_1));
-	SNGenius::GetInstance().RegisterUpdateHandler(std::bind(&Update, std::placeholders::_1));
-	SNGenius::GetInstance().RegisterStartHandler(std::bind(&Start, std::placeholders::_1));
-	SNGenius::GetInstance().RegisterInitHandler(std::bind(&Init, std::placeholders::_1));
+	NGenius::GetInstance().Init("Demo", EngineConstants::SCREEN_WIDTH, EngineConstants::SCREEN_HEIGHT, mIsFullScreen);
+	NGenius::GetInstance().RegisterInputHandler(std::bind(&UpdateInput, std::placeholders::_1));
+	NGenius::GetInstance().RegisterUpdateHandler(std::bind(&Update, std::placeholders::_1));
+	NGenius::GetInstance().RegisterStartHandler(std::bind(&Start));
+	NGenius::GetInstance().RegisterInitHandler(std::bind(&Init));
 
 	CreateCameras();
 
-	SNGenius::GetInstance().SetCastingShadowsEnabled(mIsShadowEnabled);
+	NGenius::GetInstance().SetCastingShadowsEnabled(mIsShadowEnabled);
 
-	SNGenius::GetInstance().SetWaterEnabled(mIsWaterEnabled);
-	SNGenius::GetInstance().SetWaterParameters(mGameplayCamera, mWaterHeight);
+	NGenius::GetInstance().SetWaterEnabled(mIsWaterEnabled);
+	NGenius::GetInstance().SetWaterParameters(mGameplayCamera, mWaterHeight);
 
-	SNGenius::GetInstance().SetDebugModeEnabled(mIsDebugModeEnabled);
+	NGenius::GetInstance().SetDebugModeEnabled(mIsDebugModeEnabled);
 
-	glfwSetScrollCallback(SNGenius::GetInstance().GetGLWindow(), &ScrollCallback);
-	glfwSetKeyCallback(SNGenius::GetInstance().GetGLWindow(), &KeyCallback);
-	glfwSetMouseButtonCallback(SNGenius::GetInstance().GetGLWindow(), &MouseButtonCallback);
-	glfwSetCursorPosCallback(SNGenius::GetInstance().GetGLWindow(), &MouseCursorPosCallback);
+	glfwSetScrollCallback(NGenius::GetInstance().GetGLWindow(), &ScrollCallback);
+	glfwSetKeyCallback(NGenius::GetInstance().GetGLWindow(), &KeyCallback);
+	glfwSetMouseButtonCallback(NGenius::GetInstance().GetGLWindow(), &MouseButtonCallback);
+	glfwSetCursorPosCallback(NGenius::GetInstance().GetGLWindow(), &MouseCursorPosCallback);
 
-	SNGenius::GetInstance().SetFogEnabled(mIsFogEnabled);
+	NGenius::GetInstance().SetFogEnabled(mIsFogEnabled);
 
-	SNGenius::GetInstance().SetGUIEnabled(true);
-	SNGenius::GetInstance().SetGameplayEnabled(true);
-	SNGenius::GetInstance().SetParticlesEnabled(true);
-	SNGenius::GetInstance().SetTransparentEnabled(true);
+	NGenius::GetInstance().SetGUIEnabled(true);
+	NGenius::GetInstance().SetGameplayEnabled(true);
+	NGenius::GetInstance().SetParticlesEnabled(true);
+	NGenius::GetInstance().SetTransparentEnabled(true);
 
-	SNGenius::GetInstance().Start();
+	NGenius::GetInstance().Start();
 }
 
 int main(void)
 {
 	Initialize();
 
-	SNGenius::GetInstance().Run();
+	NGenius::GetInstance().Run();
 
 	return 0;
 }

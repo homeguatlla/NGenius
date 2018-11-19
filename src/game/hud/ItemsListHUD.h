@@ -6,7 +6,6 @@
 #include <vector>
 #include <string>
 
-class NGenius;
 class GameScene;
 class ItemHUD;
 class GameEntity;
@@ -14,7 +13,6 @@ class IMaterial;
 
 class ItemsListHUD
 {
-	NGenius* mEngine;
 	std::vector<ItemHUD*> mItemsList;
 	GameEntity* mSelectedItemEntity;
 	glm::vec2 mScreenCoord;
@@ -22,7 +20,7 @@ class ItemsListHUD
 	unsigned int mNumItems;
 
 public:
-	ItemsListHUD(NGenius* engine, GameScene* scene, const glm::vec2& screenCoord, unsigned int numItems);
+	ItemsListHUD(GameScene* scene, const glm::vec2& screenCoord, unsigned int numItems);
 	~ItemsListHUD();
 
 	void SetVisibility(bool visible);

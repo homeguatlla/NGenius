@@ -26,13 +26,13 @@ public:
 	ShooterGame();
 	~ShooterGame();
 
-	void Init(NGenius* engine);
-	void Start(NGenius* engine);
+	void Init();
+	void Start();
 	void Update(float elapsedTime);
 
 private:
 	void CreateThirdpersonCamera();
-	void CreateEnvironment(NGenius* engine);
-	void CreateInitialProps(NGenius* engine);
+	void CreateEnvironment();
+	void CreateInitialProps();
 };
 

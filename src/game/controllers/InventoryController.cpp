@@ -33,22 +33,21 @@
 #include <algorithm>
 
 
-InventoryController::InventoryController(NGenius* engine, GameScene* scene, Inventory* inventory, ItemsListHUD* itemsListHUD, Player* player) :
-	mInventory(inventory),
+InventoryController::InventoryController(GameScene* scene, Inventory* inventory, ItemsListHUD* itemsListHUD, Player* player) :
 	mScene(scene),
+	mInventory(inventory),
 	mItemsHudList(itemsListHUD),
-	mEngine(engine),
 	mPlayer(player)/*,
 	mLocalizedEntity(nullptr),
 	mLocalizedOriginalMaterial(nullptr),
 	mLocalizedMaterial(nullptr)*/
 {
-	mEngine->RegisterAllEventsInputListener(this);
+	NGenius::GetInstance().RegisterAllEventsInputListener(this);
 }
 
 InventoryController::~InventoryController()
 {
-	mEngine->UnRegisterInputListener(this);
+	NGenius::GetInstance().UnRegisterInputListener(this);
 }
 
 /*void InventoryController::CreateLocalizedMaterial(const std::string& materialName, bool hasNormalmap)
@@ -198,7 +197,7 @@ void InventoryController::Drop()
 	Item* item = Retrieve();
 	if (item != nullptr)
 	{
-		EntitiesFactory factory(mEngine);
+		EntitiesFactory factory;
 		glm::vec3 position = mPlayer->GetEntity()->GetTransformation()->GetPosition();
 		factory.Create(item->GetType(), position, mScene);
 	}
@@ -236,7 +235,7 @@ void InventoryController::OnKey(int key, int action)
 	if (key == GLFW_KEY_E && action == GLFW_PRESS)
 	{
 		std::vector<std::pair<GameEntity*, float>> entities;
-		mEngine->FillWithGameEntitiesVisibleInsideRadius(mPlayer->GetEntity()->GetTransformation()->GetPosition(), PLAYER_PICKUP_RADIUS, entities, true);
+		NGenius::GetInstance().FillWithGameEntitiesVisibleInsideRadius(mPlayer->GetEntity()->GetTransformation()->GetPosition(), PLAYER_PICKUP_RADIUS, entities, true);
 		if (!entities.empty())
 		{
 			PickUp(entities[0].first);

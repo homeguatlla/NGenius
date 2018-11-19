@@ -52,29 +52,30 @@ ShooterGame::~ShooterGame()
 {
 }
 
-void ShooterGame::Init(NGenius* engine)
+void ShooterGame::Init()
 {
-	engine->SetGravity(MARS_GRAVITY_VALUE);
+	NGenius::GetInstance().SetGravity(MARS_GRAVITY_VALUE);
 }
 
-void ShooterGame::Start(NGenius* engine)
+void ShooterGame::Start()
 {
-	mGameplayCamera = engine->GetCamera(EngineConstants::GAMEPLAY_CAMERA);
+	mGameplayCamera = NGenius::GetInstance().GetCamera(EngineConstants::GAMEPLAY_CAMERA);
 	//mGameplayCamera->SetPosition(glm::vec3(0.0f, 10.0f, 5.0f));
-	mScene = engine->CreateGameScene(GAME_SCENE_NAME);
-	mGameHUD = new GameHUD(engine, mScene);
-	mPlanet = new MarsPlanet(engine, mScene, mGameplayCamera);
-	mPlayer = new Player(engine, mScene, new Transformation(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.18f)));
+	mScene = NGenius::GetInstance().CreateGameScene(GAME_SCENE_NAME);
+
+	mGameHUD = new GameHUD(mScene);
+	mPlanet = new MarsPlanet(mScene, mGameplayCamera);
+	mPlayer = new Player(mScene, new Transformation(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.18f)));
 	mInventory = new Inventory(NUM_ITEMS_INVENTORY);
 
-	mInventoryController = new InventoryController(engine, mScene, mInventory, mGameHUD->GetItemsListHUD(), mPlayer);
+	mInventoryController = new InventoryController(mScene, mInventory, mGameHUD->GetItemsListHUD(), mPlayer);
 
-	engine->SetCastingShadowsTarget(mPlayer->GetEntity());
+	NGenius::GetInstance().SetCastingShadowsTarget(mPlayer->GetEntity());
 
 	CreateThirdpersonCamera();
-	CreateEnvironment(engine);
+	CreateEnvironment();
 
-	CreateInitialProps(engine);
+	CreateInitialProps();
 
 	mGameHUD->SetVisibility(true);
 }
@@ -117,21 +118,21 @@ void ShooterGame::CreateThirdpersonCamera()
 	mScene->AddEntity(mThirdPersonCameraEntity);
 }
 
-void ShooterGame::CreateEnvironment(NGenius* engine)
+void ShooterGame::CreateEnvironment()
 {
 	//mars
-	engine->AddSunLightFrame(1200.0f, 90.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, 0.004f, 1.5f, "day_cubemap");
-	engine->AddSunLightFrame(1800.0f, 135.0f, glm::vec3(0.93f, 0.64f, 0.78f), glm::vec3(218.0f, 74.0f, 43.0f) / 255.0f, 0.04f, 1.5f, "day_cubemap");
-	engine->AddSunLightFrame(2400.0f, 270.0f, glm::vec3(0.86f, 0.64f, 0.93f), glm::vec3(0.0f), 0.004f, 1.5f, "night_cubemap");
-	engine->AddSunLightFrame(600.0f, 45.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, 0.08f, 1.5f, "day_cubemap");
+	NGenius::GetInstance().AddSunLightFrame(1200.0f, 90.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, 0.004f, 1.5f, "day_cubemap");
+	NGenius::GetInstance().AddSunLightFrame(1800.0f, 135.0f, glm::vec3(0.93f, 0.64f, 0.78f), glm::vec3(218.0f, 74.0f, 43.0f) / 255.0f, 0.04f, 1.5f, "day_cubemap");
+	NGenius::GetInstance().AddSunLightFrame(2400.0f, 270.0f, glm::vec3(0.86f, 0.64f, 0.93f), glm::vec3(0.0f), 0.004f, 1.5f, "night_cubemap");
+	NGenius::GetInstance().AddSunLightFrame(600.0f, 45.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, 0.08f, 1.5f, "day_cubemap");
 }
 
-void ShooterGame::CreateInitialProps(NGenius* engine)
+void ShooterGame::CreateInitialProps()
 {
 	unsigned int numProps = 4;
 	float areaSize = 10.0f;
 	
-	EntitiesFactory factory(engine);
+	EntitiesFactory factory;
 
 	for (unsigned int i = 0; i < numProps; ++i)
 	{
@@ -139,7 +140,7 @@ void ShooterGame::CreateInitialProps(NGenius* engine)
 		float x = -areaSize * 0.5f + randValue;
 		randValue = (rand() % 1000) * areaSize / 1000.0f;
 		float z = -areaSize * 0.5f + randValue;
-		float y = engine->GetHeight(glm::vec2(x, z));
+		float y = NGenius::GetInstance().GetHeight(glm::vec2(x, z));
 		factory.Create(Item::ITEM_WATER_BATTERY, glm::vec3(x, y, z), mScene);
 	}
 }

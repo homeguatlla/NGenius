@@ -4,11 +4,15 @@ class Singleton
 {
 public:
 	static T& GetInstance();
-private:
+
+protected:
 	Singleton() {}
+	virtual ~Singleton() {}
+
+private:
 	Singleton(const Singleton&) = delete;
 	Singleton& operator=(const Singleton&) = delete;
-	virtual ~Singleton() {}
+	
 };
 
 template<typename T>

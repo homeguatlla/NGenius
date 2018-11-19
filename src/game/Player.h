@@ -15,7 +15,7 @@ class Player
 	Character* mCharacter;
 
 public:
-	Player(NGenius* engine, GameScene* scene, Transformation* transformation);
+	Player(GameScene* scene, Transformation* transformation);
 	~Player();
 
 	GameEntity* GetEntity();
