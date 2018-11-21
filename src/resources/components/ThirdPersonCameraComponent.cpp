@@ -114,16 +114,18 @@ void ThirdPersonCameraComponent::UpdateGameEvents(float elapsedTime)
 	GameEventsComponent* characterComponent = mParent->GetComponent<GameEventsComponent>();
 	while (characterComponent->HasEvents())
 	{
-		const GameEvent* event = characterComponent->ConsumeEvent();
+		const GameEvent* event = characterComponent->GetEvent();
 		if (event->IsOfType<ZoomEvent>())
 		{
 			const ZoomEvent* zoomEvent = static_cast<const ZoomEvent*>(event);
 			UpdateZoom(zoomEvent->GetZoom(), elapsedTime);
+			characterComponent->ConsumeEvent();
 		}
 		else if (event->IsOfType<PitchEvent>())
 		{
 			const PitchEvent* pitchEvent = static_cast<const PitchEvent*>(event);
 			UpdatePitch(pitchEvent->GetPitch(), elapsedTime);
+			characterComponent->ConsumeEvent();
 		}
 	}
 }

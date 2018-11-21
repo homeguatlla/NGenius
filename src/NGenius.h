@@ -114,7 +114,7 @@ public:
 
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 
-	void FillWithGameEntitiesVisibleInsideRadius(const glm::vec3& origin, float radius, std::vector<std::pair<GameEntity*, float>>& list, bool isSorted = false);
+	void FillWithGameEntitiesVisibleInsideRadius(const glm::vec3& origin, float radius, std::vector<std::pair<GameEntity*, float>>& list, bool isSorted = false) const;
 
 	void RegisterAllEventsInputListener(IInputListener* listener);
 	void UnRegisterInputListener(IInputListener* listener);

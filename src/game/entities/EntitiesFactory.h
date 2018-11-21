@@ -1,5 +1,5 @@
 #pragma once
-#include "../items/Item.h"
+#include "../inventory/InventoryItem.h"
 
 #include <glm/glm.hpp>
 
@@ -13,6 +13,6 @@ public:
 	EntitiesFactory();
 	~EntitiesFactory();
 
-	GameEntity* Create(Item::ItemType type, const glm::vec3& position, GameScene* scene);
+	GameEntity* Create(InventoryItem::ItemType type, const glm::vec3& position, GameScene* scene);
 };
 

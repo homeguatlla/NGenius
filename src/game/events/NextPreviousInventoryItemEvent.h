@@ -1,7 +1,7 @@
 #pragma once
 #include "../../resources/events/CharacterControllerEvent.h"
 
-class Item;
+class InventoryItem;
 
 class NextPreviousInventoryItemEvent : public CharacterControllerEvent
 {

@@ -4,16 +4,16 @@
 #include "../inventory/Inventory.h"
 
 class ItemsListHUD;
-class GameEntity;
+class PickupGameEntityEvent;
+class DropItemInventoryEvent;
+class NextPreviousInventoryItemEvent;
 class IMaterial;
-class Player;
 class GameScene;
 
-class InventoryController : public IInputListener
+class InventoryController
 {
 	Inventory* mInventory;
 	ItemsListHUD* mItemsHudList;
-	Player* mPlayer;
 	GameScene* mScene;
 
 	/*GameEntity* mLocalizedEntity;
@@ -22,25 +22,19 @@ class InventoryController : public IInputListener
 	IMaterial* mLocalizedMaterial;
 	*/
 public:
-	InventoryController(GameScene* scene, Inventory* inventory, ItemsListHUD* itemsListHUD, Player* player);
+	InventoryController(GameScene* scene, Inventory* inventory, ItemsListHUD* itemsListHUD);
 	~InventoryController();
 
 	//void ShowElementsCanBePickedup(const glm::vec3& position);
+	void OnPickUp(const PickupGameEntityEvent* pickupEvent);
+	void OnDrop(DropItemInventoryEvent* dropEvent);
+	void OnNextPreviousItem(NextPreviousInventoryItemEvent* nextPreviousEvent);
 
 private:
 	//void CreateLocalizedMaterial(const std::string& materialName, bool hasNormalmap);
 	//void ShowElementHUB(GameEntity* entity);
 	
-	void PickUp(GameEntity* pickedupEntity);
-	void Drop();
-
-	void Store(Item* item);
-	Item* Retrieve();
-
-	// Heredado vía IInputListener
-	void OnKey(int key, int action) override;
-	void OnMouseScroll(int button, float scroll) override;
-	void OnMouseButton(int button, int action, int mods) override;
-	void OnMouseCursorPos(double x, double y) override;
+	void Store(InventoryItem* item);
+	InventoryItem* Retrieve();
 };
 

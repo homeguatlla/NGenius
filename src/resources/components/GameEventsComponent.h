@@ -1,21 +1,25 @@
 #pragma once
 #include "IComponent.h"
-#include <queue>
-
+#include <list>
 
 class GameEvent;
 
 class GameEventsComponent : public IComponent
 {
-	std::queue<const GameEvent*> mEvents;
+	std::list<GameEvent*> mEvents;
+	std::list<GameEvent*>::iterator mEventsIterator;
+	std::list<GameEvent*>::iterator mPreviousEventsIterator;
 
 public:
 	explicit GameEventsComponent();
 	virtual ~GameEventsComponent();
 
-	void OnCharacterControllerEvent(const GameEvent* gameEvent);
+	void OnCharacterControllerEvent(GameEvent* gameEvent);
+
+	void StartIterate();
 	bool HasEvents() const;
-	const GameEvent* ConsumeEvent();
+	void ConsumeEvent();
+	GameEvent* GetEvent();
 
 	GameEventsComponent* DoClone() const override;
 };

@@ -4,13 +4,14 @@
 
 class KeyToEventBind : public InputConverter
 {
+protected:
 	int mKey;
-	const GameEvent* mEvent;
+	GameEvent* mEvent;
 
 public:
-	KeyToEventBind(int key, const GameEvent* event);
+	KeyToEventBind(int key, GameEvent* event);
 	~KeyToEventBind();
 
-	const GameEvent* Convert(int key, int action) const;
+	virtual GameEvent* Convert(int key, int action) const;
 };
 

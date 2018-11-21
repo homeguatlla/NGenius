@@ -76,7 +76,7 @@ void SpacePartitionSystem::UpdateVisibilityLastQueryResult()
 	}
 }
 
-void SpacePartitionSystem::FillWithGameEntitiesVisibleInsideRadius(const glm::vec3& origin, float radius, std::vector<std::pair<GameEntity*, float>>& list, bool isSorted)
+void SpacePartitionSystem::FillWithGameEntitiesVisibleInsideRadius(const glm::vec3& origin, float radius, std::vector<std::pair<GameEntity*, float>>& list, bool isSorted) const
 {
 	list.clear();
 

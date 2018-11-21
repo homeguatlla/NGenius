@@ -32,9 +32,6 @@
 
 #include "entities/EntitiesFactory.h"
 
-typedef Singleton<Inventory> SInventory;
-
-
 #include <GLFW/glfw3.h>
 
 ShooterGame::ShooterGame() :
@@ -65,11 +62,16 @@ void ShooterGame::Start()
 
 	mGameHUD = new GameHUD(mScene);
 	mPlanet = new MarsPlanet(mScene, mGameplayCamera);
-	mPlayer = new Player(mScene, new Transformation(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.18f)));
+
 	mInventory = new Inventory(NUM_ITEMS_INVENTORY);
+	//el juego tiene las distintas vistas del inventory, hud tipo fortnite o hud tipo menú a fullscreen
+	//y por tanto, es quién le puede cambiar la vista en un momento dado
+	//entonces el player solo tiene la mochila (inventory) que le dan con sus instrucciones para usarla el inventory controller
+	//esto nos permite cambiar el inventory y la vista en cualquier momento
+	mInventoryController = new InventoryController(mScene, mInventory, mGameHUD->GetItemsListHUD());
+	mPlayer = new Player(mScene, new Transformation(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.18f)), mInventoryController);
 
-	mInventoryController = new InventoryController(mScene, mInventory, mGameHUD->GetItemsListHUD(), mPlayer);
-
+	
 	NGenius::GetInstance().SetCastingShadowsTarget(mPlayer->GetEntity());
 
 	CreateThirdpersonCamera();
@@ -82,6 +84,7 @@ void ShooterGame::Start()
 
 void ShooterGame::Update(float elapsedTime)
 {
+	mPlayer->Update(elapsedTime);
 	mGameHUD->Update(elapsedTime);
 }
 
@@ -141,6 +144,6 @@ void ShooterGame::CreateInitialProps()
 		randValue = (rand() % 1000) * areaSize / 1000.0f;
 		float z = -areaSize * 0.5f + randValue;
 		float y = NGenius::GetInstance().GetHeight(glm::vec2(x, z));
-		factory.Create(Item::ITEM_WATER_BATTERY, glm::vec3(x, y, z), mScene);
+		factory.Create(InventoryItem::ITEM_WATER_BATTERY, glm::vec3(x, y, z), mScene);
 	}
 }

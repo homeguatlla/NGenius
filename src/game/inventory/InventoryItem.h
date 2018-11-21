@@ -2,7 +2,7 @@
 
 #include <string>
 
-class Item
+class InventoryItem
 {
 public:
 	enum ItemType
@@ -22,11 +22,11 @@ private:
 	unsigned int mMaxAccumulable;
 
 public:
-	Item(const std::string& name, ItemType type, unsigned int counter, bool isAccumulative, unsigned int maxAccumulable);
-	~Item();
+	InventoryItem(const std::string& name, ItemType type, unsigned int counter, bool isAccumulative, unsigned int maxAccumulable);
+	~InventoryItem();
 
 	const std::string& GetName() const;
-	Item::ItemType GetType() const;
+	InventoryItem::ItemType GetType() const;
 	unsigned int GetCounter() const;
 	bool IsAccumulative() const;
 	unsigned int Accumulate(unsigned int counter);

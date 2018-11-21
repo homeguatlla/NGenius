@@ -244,12 +244,6 @@
     <Filter Include="Header Files\game\controller">
       <UniqueIdentifier>{fbb5c732-1419-45cc-be6a-8274a2f43667}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\game\items">
-      <UniqueIdentifier>{4557375d-0d1e-4b00-ac31-5b061ac442e6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\game\items">
-      <UniqueIdentifier>{e26932ed-4676-459e-960a-80a08780df20}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\game\entities">
       <UniqueIdentifier>{98d8169b-4774-4c9d-8ff8-639855e97fba}</UniqueIdentifier>
     </Filter>
@@ -261,6 +255,18 @@
     </Filter>
     <Filter Include="Header Files\game\components">
       <UniqueIdentifier>{88838279-02b7-455c-9389-4478666e3691}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game\input">
+      <UniqueIdentifier>{0ac19189-4b81-45e8-9017-b0087c8dc4eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game\input\bindings">
+      <UniqueIdentifier>{4ee5109b-dd6f-4160-aa40-e6ae8b527a49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\input">
+      <UniqueIdentifier>{053e22f2-441d-4972-83e5-0f556e6c8017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\input\bindings">
+      <UniqueIdentifier>{7073892a-0ba3-4733-8676-ec88a7609633}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -855,20 +861,11 @@
     <ClInclude Include="src\game\controllers\InventoryController.h">
       <Filter>Header Files\game\controller</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\items\Item.h">
-      <Filter>Header Files\game\items</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game\items\ItemFactory.h">
-      <Filter>Header Files\game\items</Filter>
-    </ClInclude>
     <ClInclude Include="src\game\events\NextPreviousInventoryItemEvent.h">
       <Filter>Header Files\game\events</Filter>
     </ClInclude>
     <ClInclude Include="src\game\entities\Battery.h">
       <Filter>Header Files\game\entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game\components\PickedUpComponent.h">
-      <Filter>Header Files\game\components</Filter>
     </ClInclude>
     <ClInclude Include="EntitiesFactory.h">
       <Filter>Header Files</Filter>
@@ -878,6 +875,24 @@
     </ClInclude>
     <ClInclude Include="src\resources\entities\ParticlesEmitterLibrary.h">
       <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\components\PickupGameEntityComponent.h">
+      <Filter>Header Files\game\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\input\bindings\KeyToPickUpGameEntityEventBind.h">
+      <Filter>Header Files\game\input\bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\events\PickupGameEntityEvent.h">
+      <Filter>Header Files\game\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\events\DropItemInventoryEvent.h">
+      <Filter>Header Files\game\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\inventory\InventoryItem.h">
+      <Filter>Header Files\game\inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\inventory\InventoryItemFactory.h">
+      <Filter>Header Files\game\inventory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1442,17 +1457,8 @@
     <ClCompile Include="src\game\controllers\InventoryController.cpp">
       <Filter>Source Files\game\controllers</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\items\Item.cpp">
-      <Filter>Source Files\game\items</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\items\ItemFactory.cpp">
-      <Filter>Source Files\game\items</Filter>
-    </ClCompile>
     <ClCompile Include="src\game\events\NextPreviousInventoryItemEvent.cpp">
       <Filter>Source Files\game\events</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\components\PickedUpComponent.cpp">
-      <Filter>Source Files\game\components</Filter>
     </ClCompile>
     <ClCompile Include="src\game\entities\Battery.cpp">
       <Filter>Source Files\game\entities</Filter>
@@ -1462,6 +1468,24 @@
     </ClCompile>
     <ClCompile Include="src\resources\entities\ParticlesEmitterLibrary.cpp">
       <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\components\PickupGameEntityComponent.cpp">
+      <Filter>Source Files\game\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\events\PickupGameEntityEvent.cpp">
+      <Filter>Source Files\game\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\input\bindings\KeyToPickUpGameEntityEventBind.cpp">
+      <Filter>Source Files\game\input\bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\events\DropItemInventoryEvent.cpp">
+      <Filter>Source Files\game\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\inventory\InventoryItem.cpp">
+      <Filter>Source Files\game\inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\inventory\InventoryItemFactory.cpp">
+      <Filter>Source Files\game\inventory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

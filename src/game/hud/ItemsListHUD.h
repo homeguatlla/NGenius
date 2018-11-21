@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../items/Item.h"
+#include "../inventory/InventoryItem.h"
 
 #include <glm/glm.hpp>
 #include <vector>
@@ -10,6 +10,7 @@ class GameScene;
 class ItemHUD;
 class GameEntity;
 class IMaterial;
+class NextPreviousInventoryItemEvent;
 
 class ItemsListHUD
 {
@@ -24,10 +25,11 @@ public:
 	~ItemsListHUD();
 
 	void SetVisibility(bool visible);
-	void Update(float elapsedTime);
-	void AddItem(Item* item);
+	void AddItem(InventoryItem* item);
 	void RemoveSelectedItem();
 	unsigned int GetSelectedItemId() const;
+
+	void OnNextPreviousItem(NextPreviousInventoryItemEvent* nextPreviousEvent);
 
 private:
 	void Create(GameScene* scene);
@@ -35,7 +37,6 @@ private:
 	void CreateItems(GameScene* scene);
 	void CreateSelectedItem(GameScene* scene);
 
-	void UpdateGameEvents();
 	void UpdateSelectedItemPosition(unsigned int selectedItem, unsigned int newSelectedItem);
 
 	IMaterial* CreateMaterial(const std::string& materialName, const std::string& textureName);

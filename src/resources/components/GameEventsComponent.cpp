@@ -3,12 +3,14 @@
 #include "../GameEvent.h"
 #include <assert.h>
 
-GameEventsComponent::GameEventsComponent()
+GameEventsComponent::GameEventsComponent() : 
+	mEventsIterator(mEvents.begin())
 {
 }
 
 GameEventsComponent::~GameEventsComponent()
 {
+	
 }
 
 GameEventsComponent* GameEventsComponent::DoClone() const
@@ -16,21 +18,44 @@ GameEventsComponent* GameEventsComponent::DoClone() const
 	return new GameEventsComponent(*this);
 }
 
-void GameEventsComponent::OnCharacterControllerEvent(const GameEvent* gameEvent)
+void GameEventsComponent::OnCharacterControllerEvent(GameEvent* gameEvent)
 {
 	assert(gameEvent != nullptr);
-	mEvents.push(gameEvent);
+	
+	mEvents.push_back(gameEvent);
+	StartIterate();
+}
+
+void GameEventsComponent::StartIterate()
+{
+	mEventsIterator = mEvents.begin();
+	mPreviousEventsIterator = mEvents.begin();
 }
 
 bool GameEventsComponent::HasEvents() const
 {
-	return !mEvents.empty();
+	return mEventsIterator != mEvents.end();
 }
 
-const GameEvent* GameEventsComponent::ConsumeEvent()
+void GameEventsComponent::ConsumeEvent()
 {
-	const GameEvent* event = mEvents.front();
-	mEvents.pop();
+	if (mPreviousEventsIterator != mEvents.end())
+	{
+		GameEvent* event = *mPreviousEventsIterator;
+		mEvents.erase(mPreviousEventsIterator);
+		delete event;
+	} 
+}
+
+GameEvent* GameEventsComponent::GetEvent()
+{
+	GameEvent* event = *mEventsIterator;
+	
+	if (HasEvents())
+	{
+		mPreviousEventsIterator = mEventsIterator;
+		mEventsIterator++;
+	}
 
 	return event;
 }

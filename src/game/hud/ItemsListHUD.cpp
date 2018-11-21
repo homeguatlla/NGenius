@@ -13,13 +13,7 @@
 #include "../../resources/renderers/IndicesRenderer.h"
 #include "../../resources/scene/GameScene.h"
 
-#include "../../resources/components/GameEventsComponent.h"
-#include "../../resources/components/InputComponent.h"
-
 #include "../events/NextPreviousInventoryItemEvent.h"
-#include "../events/StoreIntoInventoryEvent.h"
-#include "../../input/bindings/MouseToEventBind.h"
-#include "../../input/bindings/KeyToEventBind.h"
 
 #include "../ShooterGameConstants.h"
 
@@ -73,7 +67,7 @@ bool ItemsListHUD::IsItemHUDEmpty(ItemHUD* itemHUD) const
 	return isItemHUDEmpty;
 }
 
-void ItemsListHUD::AddItem(Item* item)
+void ItemsListHUD::AddItem(InventoryItem* item)
 {
 	for (ItemHUD* itemHUD : mItemsList)
 	{
@@ -113,39 +107,19 @@ void ItemsListHUD::Create(GameScene* scene)
 	UpdateSelectedItemPosition(mSelectedItem, mSelectedItem);
 }
 
-void ItemsListHUD::Update(float elapsedTime)
-{
-	UpdateGameEvents();
-}
-
-void ItemsListHUD::UpdateGameEvents()
+void ItemsListHUD::OnNextPreviousItem(NextPreviousInventoryItemEvent* nextPreviousEvent)
 {
 	if (!mSelectedItemEntity->GetRenderer()->IsVisible())
 	{
 		return;
 	}
-
-	GameEventsComponent* characterComponent = mSelectedItemEntity->GetComponent<GameEventsComponent>();
-	while (characterComponent->HasEvents())
+	int increment = nextPreviousEvent->IsNext() ? 1 : -1;
+	int newSelectedItem = (static_cast<int>(mSelectedItem) + increment) % static_cast<int>(mNumItems);
+	if (newSelectedItem < 0)
 	{
-		const GameEvent* event = characterComponent->ConsumeEvent();
-		if (event->IsOfType<NextPreviousInventoryItemEvent>())
-		{
-			const NextPreviousInventoryItemEvent* nextPreviousEvent = static_cast<const NextPreviousInventoryItemEvent*>(event);
-			int increment = nextPreviousEvent->IsNext() ? 1 : -1;
-			int newSelectedItem = (static_cast<int>(mSelectedItem) + increment) % static_cast<int>(mNumItems);
-			if (newSelectedItem < 0)
-			{
-				newSelectedItem = mNumItems + newSelectedItem;
-			}
-			UpdateSelectedItemPosition(mSelectedItem, newSelectedItem);
-		}
-		else if (event->IsOfType<StoreIntoInventoryEvent>())
-		{
-			//const StoreIntoInventoryEvent* storeIntoInventoryEvent = static_cast<const StoreIntoInventoryEvent*>(event);
-			//AddItem(storeIntoInventoryEvent->GetItem());
-		}
+		newSelectedItem = mNumItems + newSelectedItem;
 	}
+	UpdateSelectedItemPosition(mSelectedItem, newSelectedItem);
 }
 
 void ItemsListHUD::SetSize(GameEntity* entity, int size)
@@ -206,13 +180,6 @@ void ItemsListHUD::CreateSelectedItem(GameScene* scene)
 		glm::vec3(0.0f),
 		glm::vec3(ITEM_SIZE_SELECTED)),
 		guiRenderer);
-
-	//adding control of mouse roller
-	InputComponent* inputComponent = new InputComponent();
-	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new NextPreviousInventoryItemEvent()));
-	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_E, new StoreIntoInventoryEvent()));
-	mSelectedItemEntity->AddComponent(inputComponent);
-	mSelectedItemEntity->AddComponent(new GameEventsComponent());
 
 	scene->AddEntity(mSelectedItemEntity);
 }

@@ -24,15 +24,15 @@ EntitiesFactory::~EntitiesFactory()
 }
 
 
-GameEntity* EntitiesFactory::Create(Item::ItemType type, const glm::vec3& position, GameScene* scene)
+GameEntity* EntitiesFactory::Create(InventoryItem::ItemType type, const glm::vec3& position, GameScene* scene)
 {
 	GameEntity* entity = nullptr;
 
 	switch (type)
 	{
-	case Item::ITEM_SHOT_GUN:
+	case InventoryItem::ITEM_SHOT_GUN:
 		break;
-	case Item::ITEM_WATER_BATTERY:
+	case InventoryItem::ITEM_WATER_BATTERY:
 	{
 		Transformation* transformation = new Transformation(position, glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.0003f));
 
@@ -40,7 +40,7 @@ GameEntity* EntitiesFactory::Create(Item::ItemType type, const glm::vec3& positi
 		entity->GetRenderer()->GetMaterial()->RemoveEffect<MaterialEffectDirectionalLightProperties>();
 
 		ParticlesEmitter* steamParticlesEmitter = nullptr;// = mEngine->GetParticlesEmitter("steam");
-		Battery* battery = new Battery(Item::ITEM_WATER_BATTERY, 100, *entity, steamParticlesEmitter);
+		Battery* battery = new Battery(InventoryItem::ITEM_WATER_BATTERY, 100, *entity, steamParticlesEmitter);
 
 		assert(battery != nullptr);
 
@@ -54,7 +54,7 @@ GameEntity* EntitiesFactory::Create(Item::ItemType type, const glm::vec3& positi
 
 		break;
 	}
-	case Item::ITEM_INVALID:
+	case InventoryItem::ITEM_INVALID:
 	default:
 		Log(Log::LOG_ERROR) << "Error, unknown item type! \n";
 		break;

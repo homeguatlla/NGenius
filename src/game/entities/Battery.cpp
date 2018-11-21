@@ -1,16 +1,16 @@
 #include "stdafx.h"
 #include "Battery.h"
-#include "../components/PickedUpComponent.h"
+#include "../components/PickupGameEntityComponent.h"
 #include "../../resources/scene/GameScene.h"
 #include "../../resources/entities/ParticlesEmitter.h"
 
-Battery::Battery(Item::ItemType type, unsigned int power, GameEntity& entity, ParticlesEmitter* emitter) :
+Battery::Battery(InventoryItem::ItemType type, unsigned int power, GameEntity& entity, ParticlesEmitter* emitter) :
 	mType(type),
 	mPower(power),
 	mSteamParticleEmitter(emitter),
 	GameEntity(entity)
 {
-	AddComponent(new PickedUpComponent(type, power));
+	AddComponent(new PickupGameEntityComponent(type, power));
 	if (emitter != nullptr)
 	{
 		Transformation* transformation = emitter->GetTransformation();
@@ -22,7 +22,7 @@ Battery::~Battery()
 {
 }
 
-Item::ItemType Battery::GetType() const
+InventoryItem::ItemType Battery::GetType() const
 {
 	return mType;
 }

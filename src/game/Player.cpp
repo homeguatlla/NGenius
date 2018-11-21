@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "ShooterGameConstants.h"
+#include "controllers/InventoryController.h"
 
 #include "../NGenius.h"
 #include "../resources/scene/GameScene.h"
@@ -19,16 +20,22 @@
 #include "../resources/textures/Texture.h"
 
 #include "../resources/entities/Character.h"
+#include "../resources/events/CharacterControllerEvent.h"
+#include "../resources/GameEvent.h"
+
 
 #include "../resources/events/characterControllerEvents/ForwardEvent.h"
 #include "../resources/events/characterControllerEvents/BackwardEvent.h"
 #include "../resources/events/characterControllerEvents/JumpEvent.h"
 #include "../resources/events/characterControllerEvents/TurnEvent.h"
-#include "../resources/events/characterControllerEvents/PitchEvent.h"
+#include "events/PickupGameEntityEvent.h"
+#include "events/DropItemInventoryEvent.h"
+#include "events/NextPreviousInventoryItemEvent.h"
 
 #include "../input/IInputListener.h"
 #include "../input/bindings/KeyToEventBind.h"
 #include "../input/bindings/MouseToEventBind.h"
+#include "input/bindings/KeyToPickUpGameEntityEventBind.h"
 
 #include "../resources/components/InputComponent.h"
 #include "../resources/components/PhysicsComponent.h"
@@ -47,9 +54,11 @@
 
 #include <GLFW/glfw3.h>
 
-Player::Player(GameScene* scene, Transformation* transformation) :
+Player::Player(GameScene* scene, Transformation* transformation, InventoryController* inventoryController) :
 	mEngine(&NGenius::GetInstance()),
-	mScene(scene)
+	mScene(scene),
+	mCharacter(nullptr),
+	mInventoryController(inventoryController)
 {
 	Create(transformation);
 }
@@ -75,6 +84,10 @@ void Player::Create(Transformation* transformation)
 	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_S, new BackwardEvent()));
 	inputComponent->AddConverter(new MouseToEventBind(-1, new TurnEvent()));
 	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_SPACE, new JumpEvent()));
+
+	inputComponent->AddConverter(new KeyToPickUpGameEntityEventBind(GLFW_KEY_E, new PickupGameEntityEvent(), this));
+	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_Q, new DropItemInventoryEvent()));
+	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new NextPreviousInventoryItemEvent()));
 	
 	Model* model = mEngine->GetModel("farmer");
 	//IRenderer* renderer = new VerticesRenderer(model, material);
@@ -103,4 +116,35 @@ void Player::Create(Transformation* transformation)
 GameEntity* Player::GetEntity()
 {
 	return mCharacter;
+}
+
+void Player::Update(float elapsedTime)
+{
+	GameEventsComponent* gameEventsComponent = mCharacter->GetComponent<GameEventsComponent>();
+	
+	gameEventsComponent->StartIterate();
+	while (gameEventsComponent->HasEvents())
+	{
+		GameEvent* event = gameEventsComponent->GetEvent();
+		if (event->IsOfType<PickupGameEntityEvent>())
+		{
+			mInventoryController->OnPickUp(static_cast<const PickupGameEntityEvent*>(event));
+			gameEventsComponent->ConsumeEvent();
+		}
+		else if (event->IsOfType<DropItemInventoryEvent>())
+		{
+			DropItemInventoryEvent* dropEvent = static_cast<DropItemInventoryEvent*>(event);
+			if (dropEvent->IsPressed())
+			{
+				dropEvent->SetPosition(mCharacter->GetTransformation()->GetPosition());
+				mInventoryController->OnDrop(dropEvent);
+				gameEventsComponent->ConsumeEvent();
+			}
+		}
+		else if (event->IsOfType<NextPreviousInventoryItemEvent>())
+		{
+			mInventoryController->OnNextPreviousItem(static_cast<NextPreviousInventoryItemEvent*>(event));
+			gameEventsComponent->ConsumeEvent();
+		}
+	}
 }

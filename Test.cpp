@@ -120,8 +120,6 @@
 #include "src/input/bindings/KeyToEventBind.h"
 #include "src/input/bindings/MouseToEventBind.h"
 
-
-
 #include "src/utils/Log.h"
 
 #include "src/game/ShooterGame.h"
@@ -149,7 +147,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = RELEASE;
+Configuration mConfiguration = DEBUG;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -216,10 +214,8 @@ glm::vec3 mQuadMovingScale(1.0f);
 GameEntity* mQuadTreeMovedEntity;
 std::vector<GameEntity*> mQuadTreeEntities;
 
-
 bool mIsShooterGameRunning = true;
 ShooterGame mGame;
-
 
 
 double aleatori()
@@ -354,7 +350,7 @@ void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	NGenius::GetInstance().OnKey(key, action);
-	//std::cout << "key = " << key << " action = " << action << "\n";
+	//Log(Log::LOG_INFO) << "key = " << key << " action = " << action << "\n";
 }
 
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -365,7 +361,7 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 void MouseCursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 {
 	NGenius::GetInstance().OnMouseCursorPos(xpos, ypos);
-	//std::cout << "cursor X = " << xpos  << "\n";
+	//Log(Log::LOG_INFO) << "cursor X = " << xpos  << "\n";
 }
 
 GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string>& models, const std::vector<std::pair<float, bool>>& lod, IMaterial* material, IMaterial* materialNormalmap, bool isCullingEnabled)

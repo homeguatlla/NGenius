@@ -102,9 +102,11 @@ void Character::UpdateAnimations()
 void Character::UpdateGameEvents()
 {
 	GameEventsComponent* characterComponent = GetComponent<GameEventsComponent>();
+
+	characterComponent->StartIterate();
 	while (characterComponent->HasEvents())
 	{
-		const GameEvent* event = characterComponent->ConsumeEvent();
+		const GameEvent* event = characterComponent->GetEvent();
 		switch (mState)
 		{
 		case IDLE:
@@ -124,6 +126,7 @@ void Character::UpdateGameEvents()
 				{
 					mCurrentRunSpeed = 0.0f;
 				}
+				characterComponent->ConsumeEvent();
 			}
 			else if (event->IsOfType<BackwardEvent>())
 			{
@@ -140,6 +143,7 @@ void Character::UpdateGameEvents()
 				{
 					mCurrentRunSpeed = 0.0f;
 				}
+				characterComponent->ConsumeEvent();
 			}
 			else if (event->IsOfType<TurnEvent>())
 			{
@@ -147,12 +151,14 @@ void Character::UpdateGameEvents()
 				mHasMoved = true;
 				mCurrentTurnSpeed = mTurnSpeed * (mLastTurnX - turnEvent->GetTurn());
 				mLastTurnX = turnEvent->GetTurn();
+				characterComponent->ConsumeEvent();
 			}
 			else if (event->IsOfType<JumpEvent>())
 			{
 				mHasMoved = false;
 				mHasJumped = true;
 				mCurrentUpwardsSpeed = mUpwardsSpeed;
+				characterComponent->ConsumeEvent();
 			} 
 		break;
 		default:

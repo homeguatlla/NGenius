@@ -48,7 +48,6 @@ void GameHUD::Create(GameScene* scene)
 
 void GameHUD::Update(float elapsedTime)
 {
-	mItemsList->Update(elapsedTime);
 }
 
 ItemsListHUD* GameHUD::GetItemsListHUD()

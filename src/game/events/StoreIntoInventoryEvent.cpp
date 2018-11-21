@@ -19,12 +19,12 @@ StoreIntoInventoryEvent* StoreIntoInventoryEvent::DoClone(const void* data) cons
 	return storeInventoryEvent;
 }
 
-void StoreIntoInventoryEvent::SetItem(Item* item)
+void StoreIntoInventoryEvent::SetItem(InventoryItem* item)
 {
 	mItem = item;
 }
 
-Item* StoreIntoInventoryEvent::GetItem() const
+InventoryItem* StoreIntoInventoryEvent::GetItem() const
 {
 	return mItem;
 }

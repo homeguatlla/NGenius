@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Item.h"
+#include "InventoryItem.h"
 
 class ItemFactory
 {
@@ -8,6 +8,6 @@ public:
 	ItemFactory();
 	~ItemFactory();
 
-	Item* Create(Item::ItemType type);
+	InventoryItem* Create(InventoryItem::ItemType type);
 };
 

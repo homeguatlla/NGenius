@@ -10,7 +10,7 @@ Inventory::Inventory(unsigned int maxItems) :
 
 Inventory::~Inventory()
 {
-	for (Item* item : mItemsList)
+	for (InventoryItem* item : mItemsList)
 	{
 		delete item;
 	}
@@ -22,9 +22,9 @@ bool Inventory::HasSpace() const
 	return mItemsList.size() < mMaxItems;
 }
 
-bool Inventory::ExistItem(Item::ItemType type) const
+bool Inventory::ExistItem(InventoryItem::ItemType type) const
 {
-	for (Item* item : mItemsList)
+	for (InventoryItem* item : mItemsList)
 	{
 		if (item->GetType() == type)
 		{
@@ -36,7 +36,7 @@ bool Inventory::ExistItem(Item::ItemType type) const
 }
 
 
-void Inventory::Store(Item* item)
+void Inventory::Store(InventoryItem* item)
 {
 	if (HasSpace())
 	{
@@ -44,11 +44,11 @@ void Inventory::Store(Item* item)
 	}
 }
 
-Item* Inventory::Retrieve(unsigned int id)
+InventoryItem* Inventory::Retrieve(unsigned int id)
 {
-	Item* item = nullptr;
+	InventoryItem* item = nullptr;
 
-	std::vector<Item*>::iterator it;
+	std::vector<InventoryItem*>::iterator it;
 	for (it = mItemsList.begin(); it != mItemsList.end();)
 	{
 		if ((*it)->GetId() == id)
@@ -70,7 +70,7 @@ unsigned int Inventory::Retrieve(ItemType type, unsigned int counter)
 {
 	unsigned int itemsPending = counter;
 
-	for (Item* item : mItemsList)
+	for (InventoryItem* item : mItemsList)
 	{
 		if (item->mType == type)
 		{
@@ -93,7 +93,7 @@ unsigned int Inventory::Retrieve(ItemType type, unsigned int counter)
 	}
 
 	//remove items where mCounter = 0;
-	std::vector<Item*>::iterator it;
+	std::vector<InventoryItem*>::iterator it;
 	for (it = mItemsList.begin(); it != mItemsList.end();)
 	{
 		if ((*it)->mCounter == 0)

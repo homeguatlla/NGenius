@@ -511,7 +511,7 @@ GameEntity* NGenius::CreateGameEntityFromModel(const std::string& modelName, Tra
 	return nullptr;
 }
 
-void NGenius::FillWithGameEntitiesVisibleInsideRadius(const glm::vec3& origin, float radius, std::vector<std::pair<GameEntity*, float>>& list, bool isSorted)
+void NGenius::FillWithGameEntitiesVisibleInsideRadius(const glm::vec3& origin, float radius, std::vector<std::pair<GameEntity*, float>>& list, bool isSorted) const
 {
 	mSpacePartitionSystem->FillWithGameEntitiesVisibleInsideRadius(origin, radius, list, isSorted);
 }
