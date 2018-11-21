@@ -3,7 +3,7 @@
 #include "../../resources/GameEvent.h"
 
 
-KeyToEventBind::KeyToEventBind(int key, const GameEvent* event) : 
+KeyToEventBind::KeyToEventBind(int key, GameEvent* event) : 
 	mKey(key), 
 	mEvent(event)
 {
@@ -15,7 +15,7 @@ KeyToEventBind::~KeyToEventBind()
 	delete mEvent;
 }
 
-const GameEvent* KeyToEventBind::Convert(int key, int action) const
+GameEvent* KeyToEventBind::Convert(int key, int action) const
 {
 	if (mKey == key)
 	{
