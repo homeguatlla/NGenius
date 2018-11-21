@@ -15,7 +15,7 @@ class ParticlesEmitter : public GameEntity
 	std::vector<Particle*> mNewParticlesToBeAdded;
 	typedef std::vector<Particle*>::iterator ParticlesIterator;
 	Particle* mOriginalParticle;
-	const unsigned long MAX_PARTICLES = 512;
+	const unsigned long MAX_PARTICLES = 10;
 	float mSpawnRate;
 	float mParticlesToSpawn;
 	glm::vec4 mColorOrigin;
@@ -40,8 +40,6 @@ public:
 	ParticlesEmitter(Particle* particle, Transformation* transformation, IRenderer* renderer, float spawnRate);
 	~ParticlesEmitter();
 
-	ParticlesEmitter* DoClone() const override { return nullptr; }
-
 	void SetGameScene(GameScene* gameScene);
 
 	void Update(float elapsedTime) override;
@@ -54,9 +52,12 @@ public:
 	void SetMaxParticlesUpdate(int maxParticlesUpdate);
 
 private:
+	ParticlesEmitter* DoClone() const override;
+
 	bool CanCreateParticle() const;
 	Particle* CreateParticle();
 	void RemoveParticle(unsigned long index);
 	void SpawnNewParticles(float elapsedTime);
 	void RemoveDeadParticles();
+	void RemoveAllParticles();
 };

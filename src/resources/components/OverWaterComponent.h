@@ -9,8 +9,9 @@ public:
 	OverWaterComponent(float waterHeight);
 	~OverWaterComponent();
 
-	OverWaterComponent* DoClone() const;
-
 	float GetWaterHeight() const;
+
+private:
+	OverWaterComponent* DoClone() const;
 };
 

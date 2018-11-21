@@ -894,6 +894,9 @@
     <ClInclude Include="src\game\inventory\InventoryItemFactory.h">
       <Filter>Header Files\game\inventory</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\components\AttachGameEntityComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1486,6 +1489,9 @@
     </ClCompile>
     <ClCompile Include="src\game\inventory\InventoryItemFactory.cpp">
       <Filter>Source Files\game\inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\AttachGameEntityComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,7 @@ public:
 	CameraComponent(ICamera* camera);
 	~CameraComponent();
 
+private:
 	CameraComponent* DoClone() const override;
 };
 

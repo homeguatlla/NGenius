@@ -13,6 +13,7 @@ public:
 	bool IsVisible() const;
 	void SetVisibility(bool visibility);
 	
+private:
 	SpacePartitionComponent* DoClone() const override;
 };
 

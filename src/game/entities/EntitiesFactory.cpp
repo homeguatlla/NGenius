@@ -1,18 +1,25 @@
 #include "stdafx.h"
 #include "EntitiesFactory.h"
+#include "../ShooterGameConstants.h"
+#include "Battery.h"
+
 #include "../../NGenius.h"
 #include "../../resources/Transformation.h"
 #include "../../utils/Log.h"
-#include "../ShooterGameConstants.h"
+
 #include "../../resources/scene/GameScene.h"
+
 #include "../../resources/GameEntity.h"
-#include "../../resources/components/PhysicsComponent.h"
-#include "../../resources/materials/IMaterial.h"
-#include "../../resources/materials/effects/MaterialEffectDirectionalLightProperties.h"
-#include "../../resources/renderers/IRenderer.h"
 #include "../../resources/entities/ParticlesEmitter.h"
 
-#include "Battery.h"
+#include "../../resources/components/PhysicsComponent.h"
+#include "../../resources/components/AttachGameEntityComponent.h"
+
+#include "../../resources/materials/IMaterial.h"
+#include "../../resources/materials/effects/MaterialEffectDirectionalLightProperties.h"
+
+#include "../../resources/renderers/IRenderer.h"
+
 
 EntitiesFactory::EntitiesFactory()
 {
@@ -39,18 +46,21 @@ GameEntity* EntitiesFactory::Create(InventoryItem::ItemType type, const glm::vec
 		entity = NGenius::GetInstance().CreateGameEntityFromModel("battery", transformation);
 		entity->GetRenderer()->GetMaterial()->RemoveEffect<MaterialEffectDirectionalLightProperties>();
 
-		ParticlesEmitter* steamParticlesEmitter = nullptr;// = mEngine->GetParticlesEmitter("steam");
-		Battery* battery = new Battery(InventoryItem::ITEM_WATER_BATTERY, 100, *entity, steamParticlesEmitter);
-
+		Battery* battery = new Battery(InventoryItem::ITEM_WATER_BATTERY, 100, *entity);
 		assert(battery != nullptr);
+		
+		entity = battery;
+
+		ParticlesEmitter* steamParticlesEmitter = static_cast<ParticlesEmitter*>(NGenius::GetInstance().GetParticlesEmitter("steam")->Clone());
+		if (steamParticlesEmitter != nullptr) 
+		{
+			battery->AddComponent(new AttachGameEntityComponent(steamParticlesEmitter));
+			steamParticlesEmitter->SetGameScene(scene);
+			Transformation* transformation = steamParticlesEmitter->GetTransformation();
+			transformation->SetPosition(battery->GetTransformation()->GetPosition());
+		}
 
 		scene->AddEntity(battery);
-		if (steamParticlesEmitter != nullptr)
-		{
-			NGenius::GetInstance().AddParticleEmitter(steamParticlesEmitter);
-			scene->AddEntity(steamParticlesEmitter);
-		}
-		entity = battery;
 
 		break;
 	}

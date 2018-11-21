@@ -11,10 +11,12 @@ public:
 	explicit CollisionComponent();
 	~CollisionComponent();
 
-	CollisionComponent* DoClone() const override;
 	bool IsOnGround() const;
 	void SetOnGround(bool isOnGround);
 	void SetGroundHeight(float groundHeight);
 	float GetGroundHeight() const;
+
+private:
+	CollisionComponent* DoClone() const override;
 };
 

@@ -37,6 +37,8 @@ public:
 
 	virtual void Update(float elapsedTime);
 
+	virtual bool CanDeleteWhenRemovingFromScene() const;
+
 	template<typename T> void AddComponent(T* component)
 	{
 		static_assert(std::is_base_of<IComponent, T>::value, "The type must inherit from IComponent");

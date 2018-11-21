@@ -26,7 +26,7 @@ void ParticlesEmitterLibrary::CreateSteamParticlesEmitter(const std::string& nam
 	Particle* particle = engine->CreateParticle(texture);
 	if (particle != nullptr)
 	{
-		particle->SetLiveTime(3.0f);
+		particle->SetLiveTime(5.0f);
 
 		ParticlesEmitter* particlesEmitter = new ParticlesEmitter(particle,
 			new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),

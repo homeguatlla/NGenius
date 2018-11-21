@@ -78,6 +78,11 @@ void GameEntity::SetEnabled(bool enabled)
 	mIsEnabled = enabled;
 }
 
+bool GameEntity::CanDeleteWhenRemovingFromScene() const
+{
+	return true;
+}
+
 GameEntity* GameEntity::DoClone() const
 {
 	GameEntity* clone = new GameEntity(new Transformation(*GetTransformation()));

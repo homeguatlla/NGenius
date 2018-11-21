@@ -13,12 +13,13 @@ public:
 	PhysicsComponent(bool isStatic, const glm::vec3& gravity, float introductionCoef = 0.0f);
 	~PhysicsComponent();
 
-	PhysicsComponent* DoClone() const override;
-
 	const glm::vec3 GetVelocity() const;
 	void SetVelocity(glm::vec3& velocity);
 	const glm::vec3 GetGravity() const;
 	bool IsStatic() const;
 	float GetIndroductionCoef() const;
+
+private:
+	PhysicsComponent* DoClone() const override;
 };
 

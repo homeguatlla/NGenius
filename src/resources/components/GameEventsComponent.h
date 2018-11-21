@@ -21,6 +21,7 @@ public:
 	void ConsumeEvent();
 	GameEvent* GetEvent();
 
+private:
 	GameEventsComponent* DoClone() const override;
 };
 

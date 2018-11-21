@@ -12,7 +12,9 @@ public:
 	explicit RotationComponent(const glm::vec3& rotation, float speed);
 	~RotationComponent();
 
-	RotationComponent* DoClone() const override;
 	void UpdateInternal(float elapsedTime) override;
+
+private:
+	RotationComponent* DoClone() const override;
 };
 

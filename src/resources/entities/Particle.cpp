@@ -16,7 +16,8 @@ mRotation(0.0f),
 mDistanceToTheCamera(0.0f),
 mColor(1.0f),
 mColorOrigin(1.0f),
-mColorDestination(1.0f)
+mColorDestination(1.0f),
+mCanDeleteWhenRemovingFromScene(false)
 {
 	ParticleRenderer* renderer = new ParticleRenderer(model, material);
 	renderer->SetTransparency(true);
@@ -36,6 +37,15 @@ Particle* Particle::DoClone() const
 	return clone;
 }
 
+bool Particle::CanDeleteWhenRemovingFromScene() const
+{
+	return mCanDeleteWhenRemovingFromScene;
+}
+
+void Particle::SetDeleteWhenRemovingFromScene()
+{
+	mCanDeleteWhenRemovingFromScene = true;
+}
 
 bool Particle::IsAlive() const
 {

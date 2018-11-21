@@ -8,6 +8,7 @@
 #include "../textures/Texture.h"
 #include "../shaders/IShaderProgram.h"
 #include "../scene/GameScene.h"
+#include "../renderers/IRenderer.h"
 
 #include <iostream>
 
@@ -58,13 +59,58 @@ ParticlesEmitter::~ParticlesEmitter()
 	}
 
 	mNewParticlesToBeAdded.clear();
-	mParticles.clear();
+	RemoveAllParticles();
 }
+
+ParticlesEmitter* ParticlesEmitter::DoClone() const
+{
+	Transformation* transformation = new Transformation(*GetTransformation());
+	IRenderer* renderer = nullptr;
+
+	if (GetRenderer() != nullptr)
+	{
+		renderer = GetRenderer()->Clone();
+	}
+	ParticlesEmitter* clone = new ParticlesEmitter(mOriginalParticle, transformation, renderer, mSpawnRate);
+	clone->SetColorGradientValues(mColorOrigin, mColorDestination);
+	clone->SetScaleValues(mScale.x, mScale.y);
+	clone->SetVelocity(mVelocityMin, mVelocityMax);
+	clone->SetSpawnArea(mSpawnAreaMin, mSpawnAreaMax);
+	clone->SetRotationSpeed(mRotationSpeedMin, mRotationSpeedMax);
+	clone->SetGameScene(mGameScene);
+	clone->SetMaxParticlesUpdate(mMaxParticlesUpdate);
+
+	return clone;
+}
+
+void ParticlesEmitter::RemoveAllParticles()
+{
+	std::vector<Particle*>::iterator itVector;
+	for (itVector = mParticles.begin(); itVector != mParticles.end();)
+	{
+		Particle* particle = *itVector;
+		particle->SetDeleteWhenRemovingFromScene();
+		mGameScene->RemoveEntity(particle);
+
+		itVector = mParticles.erase(itVector);
+	}
+	mParticles.clear();
+
+	std::list<Particle*>::iterator it;
+	for (it = mParticlesPool.begin(); it != mParticlesPool.end();)
+	{
+		//delete 
+		Particle* particle = *it;
+
+		it = mParticlesPool.erase(it);
+		delete particle;
+	}
+	mParticlesPool.clear();
+}
+
 
 void ParticlesEmitter::RemoveDeadParticles()
 {
-	ParticlesIterator iterator;
-
 	for (unsigned long i = 0; i < mParticles.size();)
 	{
 		if (!mParticles[i]->IsAlive())

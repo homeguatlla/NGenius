@@ -20,6 +20,7 @@ public:
 	void PlayAnimation(const std::string& name);
 	void StopAnimation();
 
+private:
 	AnimationComponent* DoClone() const override;
 };
 

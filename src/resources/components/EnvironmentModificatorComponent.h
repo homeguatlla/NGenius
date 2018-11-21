@@ -6,6 +6,7 @@ public:
 	EnvironmentModificatorComponent();
 	virtual ~EnvironmentModificatorComponent();
 
+private:
 	EnvironmentModificatorComponent* DoClone() const;
 };
 

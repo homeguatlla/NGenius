@@ -20,6 +20,8 @@ class Particle : public GameEntity
 	glm::vec4 mColorOrigin;
 	glm::vec4 mColorDestination;
 
+	bool mCanDeleteWhenRemovingFromScene;
+
 public:
 	Particle(Transformation* transformation, Model* model, IMaterial* material, float liveTime);
 	~Particle();
@@ -35,5 +37,8 @@ public:
 	const glm::vec4& GetColor() const;
 	float GetMaxLiveTime() const;
 	float GetLiveTime() const;
+
+	bool CanDeleteWhenRemovingFromScene() const override;
+	void SetDeleteWhenRemovingFromScene();
 };
 

@@ -4,22 +4,19 @@
 #include "../inventory/InventoryItem.h"
 
 class Transformation;
-class ParticlesEmitter;
+class GameScene;
 
 class Battery :	public GameEntity
 {
 private:
 	unsigned int mPower;
 	InventoryItem::ItemType mType;
-	ParticlesEmitter* mSteamParticleEmitter;
 
 public:
-	explicit Battery(InventoryItem::ItemType type, unsigned int power, GameEntity& entity, ParticlesEmitter* emitter);
+	explicit Battery(InventoryItem::ItemType type, unsigned int power, GameEntity& entity);
 	virtual ~Battery();
 
 	InventoryItem::ItemType GetType() const;
 	unsigned int GetPower() const;
-
-	ParticlesEmitter* GetParticlesEmitter();
 };
 

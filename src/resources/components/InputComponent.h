@@ -23,6 +23,7 @@ public:
 	GameEvent* ConvertKey(int key, int action) const;
 	GameEvent* ConvertMouse(void* data) const;
 
+private:
 	InputComponent* DoClone() const override;
 };
 

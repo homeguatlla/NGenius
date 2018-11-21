@@ -23,14 +23,14 @@ public:
 	explicit ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed);
 	~ThirdPersonCameraComponent();
 
-	ThirdPersonCameraComponent* DoClone() const;
-
 	void UpdateInternal(float elapsedTime) override;
 	const GameEntity* GetTarget() const;
 	glm::vec3 GetCameraPosition() const;
 	float GetCameraPitch() const;
 
 private:
+	ThirdPersonCameraComponent* DoClone() const;
+
 	void UpdateGameEvents(float elapsedTime);
 	void UpdateZoom(float scroll, float elapsedTime);
 	void UpdatePitch(float pitch, float elapsedTime);

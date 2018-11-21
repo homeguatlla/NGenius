@@ -2,6 +2,7 @@
 #include "KeyToPickUpGameEntityEventBind.h"
 #include "../../events/PickupGameEntityEvent.h"
 #include "../../../resources/GameEntity.h"
+#include "../../components/PickupGameEntityComponent.h"
 #include "../../../NGenius.h"
 #include "../../ShooterGameConstants.h"
 #include "../../Player.h"
@@ -33,11 +34,16 @@ GameEvent* KeyToPickUpGameEntityEventBind::Convert(int key, int action) const
 				true);
 			if (!entities.empty())
 			{
-				const void* data = reinterpret_cast<const void*>(action);
-				PickupGameEntityEvent* event = static_cast<PickupGameEntityEvent*>(mEvent->Clone(data));
-				event->SetGameEntity(entities[0].first);
+				GameEntity* pickedupEntity = entities[0].first;
+				PickupGameEntityComponent* component = pickedupEntity->GetComponent<PickupGameEntityComponent>();
+				if (component != nullptr)
+				{
+					const void* data = reinterpret_cast<const void*>(action);
+					PickupGameEntityEvent* event = static_cast<PickupGameEntityEvent*>(mEvent->Clone(data));
+					event->SetGameEntity(entities[0].first);
 
-				return event;
+					return event;
+				}
 			}
 		}
 	}

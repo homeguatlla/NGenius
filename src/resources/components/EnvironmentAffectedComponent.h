@@ -11,11 +11,12 @@ public:
 	EnvironmentAffectedComponent();
 	~EnvironmentAffectedComponent();
 
-	EnvironmentAffectedComponent* DoClone() const override;
-
 	float GetWindResistence() const;
 	void SetWindResistence(float resistence);
 	void SetAffectedByWind(bool isAffected);
 	bool IsAffectedByWind() const;
+
+private:
+	EnvironmentAffectedComponent* DoClone() const override;
 };
 

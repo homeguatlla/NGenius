@@ -218,6 +218,7 @@
     <ClInclude Include="src\resources\command\commands\RiseTerrainCommand.h" />
     <ClInclude Include="src\resources\command\ICommand.h" />
     <ClInclude Include="src\resources\components\AnimationComponent.h" />
+    <ClInclude Include="src\resources\components\AttachGameEntityComponent.h" />
     <ClInclude Include="src\resources\components\BillboardComponent.h" />
     <ClInclude Include="src\resources\components\CameraComponent.h" />
     <ClInclude Include="src\resources\components\GameEventsComponent.h" />
@@ -433,6 +434,7 @@
     <ClCompile Include="src\resources\command\commands\RiseTerrainCommand.cpp" />
     <ClCompile Include="src\resources\command\ICommand.cpp" />
     <ClCompile Include="src\resources\components\AnimationComponent.cpp" />
+    <ClCompile Include="src\resources\components\AttachGameEntityComponent.cpp" />
     <ClCompile Include="src\resources\components\BillboardComponent.cpp" />
     <ClCompile Include="src\resources\components\CameraComponent.cpp" />
     <ClCompile Include="src\resources\components\GameEventsComponent.cpp" />

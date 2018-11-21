@@ -6,6 +6,7 @@
 #include "../renderers/IRenderer.h"
 #include "../components/LODComponent.h"
 #include "../components/SpacePartitionComponent.h"
+#include "../components/AttachGameEntityComponent.h"
 
 #include <algorithm>
 
@@ -63,6 +64,12 @@ void GameScene::AddEntity(GameEntity* entity)
 			mAABB = mAABB.Merge(entity->GetRenderer()->GetAABB());
 		}
 		mNewEntitiesToAdd.push_back(entity);
+
+		AttachGameEntityComponent* component = entity->GetComponent<AttachGameEntityComponent>();
+		if (component != nullptr)
+		{
+			AddEntity(component->GetGameEntityAttached());
+		}
 	}
 }
 
@@ -71,6 +78,11 @@ void GameScene::RemoveEntity(GameEntity* entity)
 	if (entity != nullptr)
 	{
 		mEntitiesToNotifyRemove.push_back(entity);
+		AttachGameEntityComponent* component = entity->GetComponent<AttachGameEntityComponent>();
+		if (component != nullptr)
+		{
+			RemoveEntity(component->GetGameEntityAttached());
+		}
 	}
 }
 
@@ -129,9 +141,16 @@ void GameScene::RemoveEntities()
 	for (GameEntity* entity : mEntitiesToNotifyRemove)
 	{
 		GameEntitiesIterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](GameEntity* a) { return a == entity; });
-		NotifyEntityRemoved(*it);
-		mEntitiesToRemove.push_back(*it);
-		mEntities.erase(it);		
+		if (it != mEntities.end())
+		{
+			NotifyEntityRemoved(*it);
+			mEntitiesToRemove.push_back(*it);
+			mEntities.erase(it);
+		}
+		else
+		{
+			assert("Game entity not found when removing it!");
+		}
 	}
 	mEntitiesToNotifyRemove.clear();
 }
@@ -140,7 +159,10 @@ void GameScene::ReleaseEntities(std::vector<GameEntity*>* entities)
 {
 	for (GameEntity* entity : *entities)
 	{
-		delete entity;
+		if (entity->CanDeleteWhenRemovingFromScene())
+		{
+			delete entity;
+		}
 	}
 	entities->clear();
 }
