@@ -15,7 +15,7 @@ class ParticlesEmitter : public GameEntity
 	std::vector<Particle*> mNewParticlesToBeAdded;
 	typedef std::vector<Particle*>::iterator ParticlesIterator;
 	Particle* mOriginalParticle;
-	const unsigned long MAX_PARTICLES = 10;
+	const unsigned long MAX_PARTICLES = 256;
 	float mSpawnRate;
 	float mParticlesToSpawn;
 	glm::vec4 mColorOrigin;

@@ -132,7 +132,7 @@ void ShooterGame::CreateEnvironment()
 
 void ShooterGame::CreateInitialProps()
 {
-	unsigned int numProps = 1;
+	unsigned int numProps = 4;
 	float areaSize = 10.0f;
 	
 	EntitiesFactory factory;

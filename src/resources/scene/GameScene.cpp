@@ -18,7 +18,9 @@ mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limi
 
 GameScene::~GameScene()
 {
-	mEntitiesToRemove.clear(); //these entities were removed when releasing mEntities.
+	RemoveEntities();
+	ReleaseEntities(&mEntitiesToRemove);
+
 	ReleaseEntities(&mEntities);
 	ReleaseEntities(&mNewEntitiesToAdd);	
 }
@@ -144,7 +146,10 @@ void GameScene::RemoveEntities()
 		if (it != mEntities.end())
 		{
 			NotifyEntityRemoved(*it);
-			mEntitiesToRemove.push_back(*it);
+			if (entity->CanDeleteWhenRemovingFromScene())
+			{
+				mEntitiesToRemove.push_back(*it);
+			}
 			mEntities.erase(it);
 		}
 		else

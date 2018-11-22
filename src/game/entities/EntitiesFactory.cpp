@@ -54,6 +54,8 @@ GameEntity* EntitiesFactory::Create(InventoryItem::ItemType type, const glm::vec
 		ParticlesEmitter* steamParticlesEmitter = static_cast<ParticlesEmitter*>(NGenius::GetInstance().GetParticlesEmitter("steam")->Clone());
 		if (steamParticlesEmitter != nullptr) 
 		{
+			steamParticlesEmitter->SetRotationSpeed(0.1f, .05f);
+			steamParticlesEmitter->SetSpawnArea(glm::vec3(-0.0, 0.0f, -0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 			battery->AddComponent(new AttachGameEntityComponent(steamParticlesEmitter));
 			steamParticlesEmitter->SetGameScene(scene);
 			Transformation* transformation = steamParticlesEmitter->GetTransformation();

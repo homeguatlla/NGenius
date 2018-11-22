@@ -91,7 +91,6 @@ void ParticlesEmitter::RemoveAllParticles()
 		Particle* particle = *itVector;
 		particle->SetDeleteWhenRemovingFromScene();
 		mGameScene->RemoveEntity(particle);
-
 		itVector = mParticles.erase(itVector);
 	}
 	mParticles.clear();
