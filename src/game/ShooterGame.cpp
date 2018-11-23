@@ -133,7 +133,7 @@ void ShooterGame::CreateEnvironment()
 void ShooterGame::CreateInitialProps()
 {
 	unsigned int numProps = 4;
-	float areaSize = 10.0f;
+	float areaSize = 20.0f;
 	
 	EntitiesFactory factory;
 
@@ -143,7 +143,10 @@ void ShooterGame::CreateInitialProps()
 		float x = -areaSize * 0.5f + randValue;
 		randValue = (rand() % 1000) * areaSize / 1000.0f;
 		float z = -areaSize * 0.5f + randValue;
+
+		x = 0.0f; z = 0.0f;
 		float y = NGenius::GetInstance().GetHeight(glm::vec2(x, z));
+		
 		factory.Create(InventoryItem::ITEM_WATER_BATTERY, glm::vec3(x, y, z), mScene);
 	}
 }

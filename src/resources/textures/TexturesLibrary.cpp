@@ -82,6 +82,7 @@ void TexturesLibrary::Load()
 	LoadTexture("normal_water", "data/textures/normal_water.png", false, true);
 
 	LoadTexture("smoke", "data/textures/smoke_64_.png", false, false);
+	LoadTexture("smoke_white", "data/textures/smoke_white_64.png", false, false);
 	LoadTexture("yellow_grid", "data/textures/grid_64.png", false, true);
 	LoadTexture("stall", "data/models/stall/stall.png", false, false);
 	

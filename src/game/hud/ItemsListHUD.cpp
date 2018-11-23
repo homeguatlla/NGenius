@@ -113,7 +113,7 @@ void ItemsListHUD::OnNextPreviousItem(NextPreviousInventoryItemEvent* nextPrevio
 	{
 		return;
 	}
-	int increment = nextPreviousEvent->IsNext() ? 1 : -1;
+	int increment = nextPreviousEvent->IsNext() ? -1 : 1;
 	int newSelectedItem = (static_cast<int>(mSelectedItem) + increment) % static_cast<int>(mNumItems);
 	if (newSelectedItem < 0)
 	{

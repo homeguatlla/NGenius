@@ -46,7 +46,8 @@ void main()
 	//vec2 ndc = (clipSpace.xy / clipSpace.w) / 2.0 + 0.5;
 	
 	vec4 textureColor = texture2D(texture, textureCoords * tile);
-	color = (textureColor + vec4(luminiscence.r, luminiscence.g, luminiscence.b, textureColor.a) )* luminiscence.a;
+	//textures can't be black, other wise will remain black
+	color = (textureColor * luminiscence); // vec4(luminiscence.r, luminiscence.g, luminiscence.b, textureColor.a) ) * luminiscence.a;
 	color.a = ApplySoftParticle(color.a);
 
 	//color = ApplyFog(color);

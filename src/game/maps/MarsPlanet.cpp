@@ -125,7 +125,7 @@ void MarsPlanet::CreateRocks()
 		randValue = (rand() % 1000) * areaSize / 1000.0f;
 		float z = -areaSize * 0.5f + randValue;
 		float scale = 0.01f + (rand() % 10) /100.0f;
-		float rotation = rand() % 360;
+		float rotation = static_cast<float>(rand() % 360);
 		float y = mEngine->GetHeight(glm::vec2(x, z));
 		Transformation* transformation = new Transformation(glm::vec3(x, y, z), glm::vec3(0.0f, glm::radians(rotation), 0.0f), glm::vec3(scale));
 

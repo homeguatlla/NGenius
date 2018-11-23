@@ -10,6 +10,8 @@
 #include "../scene/GameScene.h"
 #include "../renderers/IRenderer.h"
 
+#include "../../utils/Log.h"
+
 #include <iostream>
 
 ParticlesEmitter::ParticlesEmitter(Particle* particle, Transformation* transformation, IRenderer* renderer, float spawnRate) :
@@ -176,15 +178,21 @@ Particle* ParticlesEmitter::CreateParticle()
 
 	//POSITION
 	glm::vec3 position = GetTransformation()->GetPosition();
+	//Log(Log::LOG_WARNING) << "pos(" << position.x << ", " << position.y << ", " << position.z << ")\n";
+
 	float lambda = static_cast<float>(rand() % 100) / 100.0f;
 	position.x += mSpawnAreaMin.x + lambda * (mSpawnAreaMax.x - mSpawnAreaMin.x);
+
 	lambda = static_cast<float>(rand() % 100) / 100.0f;
 	position.y += mSpawnAreaMin.y + lambda * (mSpawnAreaMax.y - mSpawnAreaMin.y);
+
 	lambda = static_cast<float>(rand() % 100) / 100.0f;
 	position.z += mSpawnAreaMin.x + lambda * (mSpawnAreaMax.z - mSpawnAreaMin.z);
 	
 	particle->GetTransformation()->SetPosition(position);
 	
+	//Log(Log::LOG_WARNING) << "new pos(" << position.x << ", " << position.y << ", " << position.z << ")\n";
+
 	//LIVE
 	particle->SetLiveTime(particle->GetMaxLiveTime());
 	
