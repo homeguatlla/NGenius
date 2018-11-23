@@ -54,7 +54,7 @@ GameEntity* EntitiesFactory::Create(InventoryItem::ItemType type, const glm::vec
 		ParticlesEmitter* steamParticlesEmitter = static_cast<ParticlesEmitter*>(NGenius::GetInstance().GetParticlesEmitter("steam")->Clone());
 		if (steamParticlesEmitter != nullptr) 
 		{
-			steamParticlesEmitter->SetColorGradientValues(glm::vec4(0.5f, 0.8f, 1.0f, 0.0f), glm::vec4(0.5f, 0.8f, 1.0f, 1.0f));
+			steamParticlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 0.8f, 0.2f, 0.0f), glm::vec4(0.3f, 0.6f, 1.0f, 1.0f));
 			steamParticlesEmitter->SetRotationSpeed(0.1f, .05f);
 			steamParticlesEmitter->SetSpawnArea(glm::vec3(-0.15, 0.0f, -0.15f), glm::vec3(0.15f, 0.1f, 0.15f));
 			steamParticlesEmitter->SetVelocity(glm::vec3(0.0f), glm::vec3(7.0f));

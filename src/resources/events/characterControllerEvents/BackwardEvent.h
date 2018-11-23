@@ -12,6 +12,7 @@ public:
 	void SetPressed(bool pressed);
 	bool IsPressed() const;
 
+private:
 	BackwardEvent* DoClone(const void* data) const;
 };
 

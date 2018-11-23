@@ -155,9 +155,13 @@ void Character::UpdateGameEvents()
 			}
 			else if (event->IsOfType<JumpEvent>())
 			{
-				mHasMoved = false;
-				mHasJumped = true;
-				mCurrentUpwardsSpeed = mUpwardsSpeed;
+				const JumpEvent* jumpEvent = static_cast<const JumpEvent*>(event);
+				if (jumpEvent->IsPressed())
+				{
+					mHasMoved = false;
+					mHasJumped = true;
+					mCurrentUpwardsSpeed = mUpwardsSpeed;
+				}
 				characterComponent->ConsumeEvent();
 			} 
 		break;

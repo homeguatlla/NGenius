@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "BackwardEvent.h"
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 BackwardEvent::BackwardEvent() : mIsPressed(false)
 {
