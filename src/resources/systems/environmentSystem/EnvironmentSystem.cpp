@@ -23,6 +23,7 @@ const long DAY_PERIOD_SEC = 3600 * 24;
 
 EnvironmentSystem::EnvironmentSystem() :
 	mTimer(DAY_PERIOD_SEC * 0.5f / HOUR_DAY_SPEED),
+	mInitialTimer(DAY_PERIOD_SEC * 0.5f),
 	mSunLight(new SunLight()),
 	mDayTime(0)
 {
@@ -43,7 +44,12 @@ unsigned int EnvironmentSystem::GetNumberGameEntities() const
 
 void EnvironmentSystem::Start()
 {
-	mTimer = DAY_PERIOD_SEC * 0.25f / HOUR_DAY_SPEED;
+	mTimer = mInitialTimer / HOUR_DAY_SPEED;
+}
+
+void EnvironmentSystem::SetInitialTimer(float time)
+{
+	mInitialTimer = time;
 }
 
 void EnvironmentSystem::Update(float deltaTime)

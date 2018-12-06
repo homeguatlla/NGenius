@@ -122,6 +122,7 @@ float Terrain::GetHeight(glm::vec2 point) const
 	return height;
 }
 
+//not used
 float Terrain::GetHeightFromColor(glm::vec2 point) const
 {
 	float height = -std::numeric_limits<float>::infinity();
@@ -183,7 +184,7 @@ void Terrain::CalculateY()
 
 		int gridX = static_cast<int>(glm::floor(X / gridSquareSize));
 		int gridZ = static_cast<int>(glm::floor(Z / gridSquareSize));
-		mVertexs[i].y = mHeightmap->GetColor(glm::vec2(gridX *conversionToTextureValue, gridZ*conversionToTextureValue)).a * mScale / 256.0f;
+		mVertexs[i].y = mHeightmap->GetColor(glm::vec2(gridX *conversionToTextureValue, gridZ*conversionToTextureValue)).r * mScale / 256.0f;
 	}
 }
 

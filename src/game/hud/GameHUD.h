@@ -3,11 +3,12 @@
 class GameEntity;
 class GameScene;
 class ItemsListHUD;
-
+class HealthHUD;
 
 class GameHUD
 {
 	ItemsListHUD* mItemsList;
+	HealthHUD* mHealthHUD;
 
 public:
 	GameHUD(GameScene* scene);

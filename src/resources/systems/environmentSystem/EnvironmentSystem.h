@@ -16,6 +16,7 @@ class EnvironmentSystem : public BaseVisitable<>, public IGameSceneListener
 	std::vector<GameEntity*> mModificators;
 	const Terrain* mTerrain;
 	float mTimer;
+	float mInitialTimer;
 	std::vector<glm::vec3> mModificatorsPositions;
 	SunLight* mSunLight;
 	long mDayTime;
@@ -34,6 +35,7 @@ public:
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
 	float GetTimer() const;
+	void SetInitialTimer(float time);
 
 	void SetDayTime(float hour);
 	float GetDayTime() const;	

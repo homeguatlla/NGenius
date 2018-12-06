@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "ShooterGameConstants.h"
 #include "controllers/InventoryController.h"
+#include "components/HealthComponent.h"
 
 #include "../NGenius.h"
 #include "../resources/scene/GameScene.h"
@@ -110,6 +111,9 @@ void Player::Create(Transformation* transformation)
 	AnimationComponent* animationComponent = new AnimationComponent();
 	animationComponent->AddAnimation(mEngine->GetAnimation("animation_0"));
 	mCharacter->AddComponent(animationComponent);
+	
+	mCharacter->AddComponent(new HealthComponent(MAX_PLAYER_LIFE));
+
 	mScene->AddEntity(mCharacter);
 }
 

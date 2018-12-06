@@ -168,7 +168,6 @@ bool mIsEnergyWallEnabled = true;
 bool mIsSkyboxEnabled = true;
 bool mIsTerrainFlat = false;
 bool mIsTextEnabled = false;
-bool mIsStatisticsVisible = false;
 bool mIsShadowEnabled = false;
 bool mIsParticlesEnabled = false;
 bool mIsFullScreen = false;
@@ -779,7 +778,7 @@ Particle* CreateParticle(bool canCollide, Texture* texture, glm::vec3& gravity)
 
 void CreateParticlesFire()
 {
-	Particle* particle = CreateParticle(false, static_cast<Texture*>(NGenius::GetInstance().GetTexture("smoke")), glm::vec3(0.0f));
+	Particle* particle = CreateParticle(false, static_cast<Texture*>(NGenius::GetInstance().GetTexture("smoke_white")), glm::vec3(0.0f));
 	particle->SetLiveTime(2.0f);
 
 	float x = 4.0f;
@@ -1568,7 +1567,6 @@ void SetupConfiguration()
 		mIsTerrainFlat = true;
 		//mWaterHeight = 0.0f;
 		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = true;
 		break;
@@ -1583,7 +1581,6 @@ void SetupConfiguration()
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = true;
 		mIsShadowEnabled = true;
 		break;
@@ -1598,7 +1595,6 @@ void SetupConfiguration()
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = false;
-		mIsStatisticsVisible = false;
 		mIsShadowEnabled = true;
 		mIsParticlesEnabled = false;
 		break;
@@ -1613,7 +1609,6 @@ void SetupConfiguration()
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
 		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = false;
 		break;
@@ -1628,7 +1623,6 @@ void SetupConfiguration()
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
 		mEnergyWallRadius = 22.0f;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = false;
@@ -1645,7 +1639,6 @@ void SetupConfiguration()
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = true;
 		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = true;
 		mIsShadowEnabled = false;
 		mIsFullScreen = false;
@@ -1661,7 +1654,6 @@ void SetupConfiguration()
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = false;
-		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = false;
 		mIsFullScreen = false;
@@ -1677,7 +1669,6 @@ void SetupConfiguration()
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = false;
-		mIsStatisticsVisible = false;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = true;
 		break;
@@ -1692,7 +1683,6 @@ void SetupConfiguration()
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
 		mIsTextEnabled = false;
-		mIsStatisticsVisible = false;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = false;
 		mIsFullScreen = false;
@@ -1709,7 +1699,6 @@ void SetupConfiguration()
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
 		mIsTextEnabled = false;
-		mIsStatisticsVisible = false;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = false;
 		break;
@@ -1724,7 +1713,6 @@ void SetupConfiguration()
 		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
 		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = false;
 		mIsFullScreen = false;
@@ -1740,7 +1728,6 @@ void SetupConfiguration()
 		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
 		mIsParticlesEnabled = false;
 		mIsShadowEnabled = true;
 		mIsFullScreen = true;

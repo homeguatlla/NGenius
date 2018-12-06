@@ -14,6 +14,7 @@ public:
 	InventoryItem::ItemType GetType() const;
 	unsigned int GetValue() const;
 
+private:
 	// Heredado vía IComponent
 	IComponent * DoClone() const override;
 };

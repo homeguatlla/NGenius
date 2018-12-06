@@ -2,6 +2,9 @@
 #include "Inventory.h"
 #include "../../utils/Log.h"
 
+#include <algorithm>
+
+
 Inventory::Inventory(unsigned int maxItems) :
 	mMaxItems(maxItems)
 {
@@ -48,19 +51,15 @@ InventoryItem* Inventory::Retrieve(unsigned int id)
 {
 	InventoryItem* item = nullptr;
 
-	std::vector<InventoryItem*>::iterator it;
-	for (it = mItemsList.begin(); it != mItemsList.end();)
+	std::vector<InventoryItem*>::iterator it = std::find_if(
+		mItemsList.begin(), 
+		mItemsList.end(), 
+		[&](InventoryItem* item) { return item->GetId() == id; });
+
+	if (it != mItemsList.end())
 	{
-		if ((*it)->GetId() == id)
-		{
-			item = *it;
-			it = mItemsList.erase(it);
-			break;
-		}
-		else
-		{
-			++it;
-		}
+		item = *it;
+		it = mItemsList.erase(it);
 	}
 
 	return item;

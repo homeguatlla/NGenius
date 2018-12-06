@@ -20,8 +20,8 @@ TexturesLibrary::~TexturesLibrary()
 void TexturesLibrary::Load()
 {
 	LoadTexture("stone", "data/models/stone/diffuse.png", true, false);
-	LoadTexture("terrain_heightmap", "data/textures/terrain_heightmap_1024.png", false, false);
-	LoadTexture("terrain_blendmap", "data/textures/terrain_blendmap_1024.png", false, false);
+	LoadTexture("terrain_heightmap", "data/terrain/mars/heighmap.png", false, false);
+	LoadTexture("terrain_blendmap", "data/terrain/island/blendmap.png", false, false);
 
 	std::vector<std::string> filenames;
 
@@ -74,8 +74,6 @@ void TexturesLibrary::Load()
 	cubemap->Load(filenames, ++mCurrentTextureUnit);
 	AddElement("night_cubemap", cubemap);
 
-	LoadTexture("hud_map", "data/ui/hud/hud_map.png", false, false);
-
 	CreateColorTexture("map", glm::vec2(256, 256));
 
 	LoadTexture("distorsion_water", "data/textures/waterDUDV.png", false, true);
@@ -97,11 +95,15 @@ void TexturesLibrary::Load()
 	LoadTexture("barrel_normalmap", "data/models/barrel/barrelNormal.png", false, false);
 
 	//UI
+	LoadTexture("hud_map", "data/ui/hud/hud_map.png", false, false);
+
 	LoadTexture("item_quad_base", "data/ui/hud/item_quad_base.png", false, false);
 	LoadTexture("item_quad_selected", "data/ui/hud/item_quad_selected.png", false, false);
 
 	LoadTexture("item_water", "data/ui/hud/items/water.png", false, false);
 	LoadTexture("item_shotgun", "data/ui/hud/items/shotgun.png", false, false);
+
+	LoadTexture("gradient", "data/ui/hud/gradient.png", false, true);
 
 	LoadTexturesPendingToLoad();
 }

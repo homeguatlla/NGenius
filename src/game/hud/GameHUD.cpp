@@ -2,6 +2,7 @@
 #include "GameHUD.h"
 #include "ItemsListHUD.h"
 #include "ItemHUD.h"
+#include "HealthHUD.h"
 
 #include "../../NGenius.h"
 #include "../../resources/GameEntity.h"
@@ -38,12 +39,16 @@ void GameHUD::Create(GameScene* scene)
 	float factorY = 0.43f;
 
 	factorX = NGenius::GetInstance().GetScreenWidth() / 1024.0f * factorX;
-
+	
 	mItemsList = new  ItemsListHUD(
 		scene, 
 		glm::vec2(NGenius::GetInstance().GetScreenWidth() * factorX, -NGenius::GetInstance().GetScreenHeight() * factorY),
 		NUM_ITEMS_INVENTORY
 	);
+	
+	factorX = -0.3f;
+	factorY = 0.51f;
+	mHealthHUD = new HealthHUD(scene, glm::vec2(NGenius::GetInstance().GetScreenWidth() * factorX, -NGenius::GetInstance().GetScreenHeight() * factorY));
 }
 
 void GameHUD::Update(float elapsedTime)

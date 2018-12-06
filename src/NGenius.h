@@ -113,6 +113,7 @@ public:
 	void AddCamera(ICamera* camera);
 
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
+	IMaterial* CreateDiffuseGUIMaterial(const std::string& materialName, const std::string& textureName);
 
 	void FillWithGameEntitiesVisibleInsideRadius(const glm::vec3& origin, float radius, std::vector<std::pair<GameEntity*, float>>& list, bool isSorted = false) const;
 
@@ -170,6 +171,7 @@ public:
 	float GetDayTime() const;
 	void AddSunLightFrame(float hour, const float rotationAngle, const glm::vec3& color,
 		const glm::vec3& fogColor, float fogDensity, float fogGradient, const std::string& cubemapName);
+	void SetInitialEnvironmentTimer(float timer);
 
 	//physics
 	void SetGravity(const glm::vec3& gravity);

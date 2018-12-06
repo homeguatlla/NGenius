@@ -128,6 +128,7 @@ void ShooterGame::CreateEnvironment()
 	NGenius::GetInstance().AddSunLightFrame(1800.0f, 135.0f, glm::vec3(0.93f, 0.64f, 0.78f), glm::vec3(218.0f, 74.0f, 43.0f) / 255.0f, 0.04f, 1.5f, "day_cubemap");
 	NGenius::GetInstance().AddSunLightFrame(2400.0f, 270.0f, glm::vec3(0.86f, 0.64f, 0.93f), glm::vec3(0.0f), 0.004f, 1.5f, "night_cubemap");
 	NGenius::GetInstance().AddSunLightFrame(600.0f, 45.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, 0.08f, 1.5f, "day_cubemap");
+	NGenius::GetInstance().SetInitialEnvironmentTimer(3600 * 12);
 }
 
 void ShooterGame::CreateInitialProps()

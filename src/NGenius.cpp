@@ -402,6 +402,11 @@ void NGenius::AddSunLightFrame(float hour, const float rotationAngle, const glm:
 	mEnvironmentSystem->AddSunLightFrame(hour, rotationAngle, color, fogColor, fogDensity, fogGradient, cubemapName);
 }
 
+void NGenius::SetInitialEnvironmentTimer(float timer)
+{
+	mEnvironmentSystem->SetInitialTimer(timer);
+}
+
 void NGenius::SetGravity(const glm::vec3& gravity)
 {
 	assert(mPhysicsSystem != nullptr);
@@ -587,6 +592,18 @@ IMaterial* NGenius::CreateMaterial(const std::string& name, IShaderProgram* shad
 {
 	assert(mRenderSystem != nullptr);
 	return mRenderSystem->CreateMaterial(name, shader);
+}
+
+IMaterial* NGenius::CreateDiffuseGUIMaterial(const std::string& materialName, const std::string& textureName)
+{
+	IMaterial* material = NGenius::GetInstance().GetMaterial(materialName);
+	if (material == nullptr)
+	{
+		material = NGenius::GetInstance().CreateMaterial(materialName, NGenius::GetInstance().GetShader("gui"));
+		material->AddEffect(new MaterialEffectDiffuseTexture(NGenius::GetInstance().GetTexture(textureName), glm::vec3(1.0f), 1.0f));
+	}
+
+	return material;
 }
 
 Particle* NGenius::CreateParticle(Texture* texture, bool isAffectedByPhysics, bool canCollide)

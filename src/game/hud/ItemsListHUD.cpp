@@ -74,7 +74,7 @@ void ItemsListHUD::AddItem(InventoryItem* item)
 		bool isItemHUDEmpty = IsItemHUDEmpty(itemHUD);
 		if (isItemHUDEmpty)
 		{
-			IMaterial* material = CreateMaterial(item->GetName() + std::string("_material"), item->GetName());
+			IMaterial* material = NGenius::GetInstance().CreateDiffuseGUIMaterial(item->GetName() + std::string("_material"), item->GetName());
 			itemHUD->SetItemMaterial(material);
 			itemHUD->SetCounter(item->GetCounter());
 			itemHUD->SetItemId(item->GetId());
@@ -171,7 +171,7 @@ void ItemsListHUD::CreateItems(GameScene* scene)
 void ItemsListHUD::CreateSelectedItem(GameScene* scene)
 {
 	glm::vec2 screenCoords = CalculateItemPosition(mSelectedItem);
-	IMaterial* material = CreateMaterial(ITEM_SELECTED_MATERIAL, ITEM_QUAD_SELECTED_TEXTURE);
+	IMaterial* material = NGenius::GetInstance().CreateDiffuseGUIMaterial(ITEM_SELECTED_MATERIAL, ITEM_QUAD_SELECTED_TEXTURE);
 	IRenderer* guiRenderer = new IndicesRenderer(NGenius::GetInstance().GetModel(GUI_QUAD_MODEL), material);
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
@@ -186,24 +186,11 @@ void ItemsListHUD::CreateSelectedItem(GameScene* scene)
 
 void ItemsListHUD::CreateItem(GameScene* scene, const glm::vec2& screenCoord, const std::string& materialName, const std::string& textureName)
 {
-	IMaterial* material = CreateMaterial(materialName, textureName);
+	IMaterial* material = NGenius::GetInstance().CreateDiffuseGUIMaterial(materialName, textureName);
 	IRenderer* guiRenderer = new IndicesRenderer(NGenius::GetInstance().GetModel(GUI_QUAD_MODEL), material);
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
 	ItemHUD* item = new ItemHUD(guiRenderer, screenCoord, ITEM_SIZE);
 	mItemsList.push_back(item);
 	scene->AddEntity(item->GetGameEntity());
-}
-
-IMaterial* ItemsListHUD::CreateMaterial(const std::string& materialName, const std::string& textureName)
-{
-	IMaterial* material = NGenius::GetInstance().GetMaterial(materialName);
-	if (material == nullptr)
-	{
-		material = NGenius::GetInstance().CreateMaterial(materialName, NGenius::GetInstance().GetShader("gui"));
-		material->AddEffect(new MaterialEffectDiffuseTexture(NGenius::GetInstance().GetTexture(textureName), glm::vec3(1.0f), 1.0f));
-		Log(Log::LOG_INFO) << "created material item hud: " << materialName << "\n";
-	}
-
-	return material;
 }

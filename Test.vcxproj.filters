@@ -897,6 +897,12 @@
     <ClInclude Include="src\resources\components\AttachGameEntityComponent.h">
       <Filter>Header Files\resources\components</Filter>
     </ClInclude>
+    <ClInclude Include="src\game\components\HealthComponent.h">
+      <Filter>Header Files\game\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\hud\HealthHUD.h">
+      <Filter>Header Files\game\hud</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1492,6 +1498,12 @@
     </ClCompile>
     <ClCompile Include="src\resources\components\AttachGameEntityComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\components\HealthComponent.cpp">
+      <Filter>Source Files\game\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\hud\HealthHUD.cpp">
+      <Filter>Source Files\game\hud</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

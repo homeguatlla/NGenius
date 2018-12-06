@@ -39,7 +39,6 @@ private:
 
 	void UpdateSelectedItemPosition(unsigned int selectedItem, unsigned int newSelectedItem);
 
-	IMaterial* CreateMaterial(const std::string& materialName, const std::string& textureName);
 	glm::vec2 CalculateItemPosition(unsigned int item);
 
 	void SetSize(GameEntity* entity, int size);
