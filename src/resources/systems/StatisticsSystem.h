@@ -24,7 +24,7 @@ public:
 
 private:
 
-	void Create(GameScene* scene, Transformation* transformation, FontType* font);
+	void Create(Transformation* transformation, FontType* font);
 	void UpdateEnable();
 };
 

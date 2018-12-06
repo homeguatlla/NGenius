@@ -19,6 +19,7 @@
 #include <iostream>
 #include <typeinfo.h>
 
+
 IRenderer::IRenderer(Model* model, IMaterial* material) :
 mParent(nullptr),
 mModel(model),
@@ -155,6 +156,12 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 			{
 				ModifyModelMatrixToAvoidRotations(viewMatrix, scale, angleZ, modelMatrix);
 			}
+
+			if (mLayer == LAYER_GUI)
+			{
+				TranslateCenterFromBottomLeftToCenter(modelMatrix);
+			}
+
 			matrices.push_back(modelMatrix);
 		}
 	}
@@ -165,11 +172,25 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 	{
 		mModel->Apply(colors);
 	}
-	material->Apply(camera, mInstances[0]->GetParent()->GetTransformation());
+
+	Transformation transformation = GetParentTransformation();
+	material->Apply(camera, &transformation);
 	
 	Draw();
 
 	glBindVertexArray(0); 
+}
+
+Transformation IRenderer::GetParentTransformation()
+{
+	Transformation transformation = *mInstances[0]->GetParent()->GetTransformation();
+	if (mLayer == LAYER_GUI)
+	{
+		glm::vec3 newPosition = TranslateCenterFromBottomLeftToCenter(transformation.GetPosition());
+		transformation.SetPosition(newPosition);
+	}
+
+	return transformation;
 }
 
 void IRenderer::Draw()
@@ -304,4 +325,22 @@ void IRenderer::ModifyModelMatrixToAvoidRotations(const glm::mat4& viewMatrix, c
 
 	modelMatrix = glm::rotate(modelMatrix, angleZ, glm::vec3(0.0f, 0.0f, 1.0f));
 	modelMatrix = glm::scale(modelMatrix, scale);
+}
+
+void IRenderer::TranslateCenterFromBottomLeftToCenter(glm::mat4& modelMatrix)
+{
+	modelMatrix[3][0] -= 1024.0f * 0.5f;
+	modelMatrix[3][1] -= 768.0f * 0.5f;
+	modelMatrix[3][1] = -modelMatrix[3][1];
+}
+
+glm::vec3 IRenderer::TranslateCenterFromBottomLeftToCenter(glm::vec3& position)
+{
+	glm::vec3 newPosition(position);
+
+	newPosition.x -= 1024.0f * 0.5f;
+	newPosition.y -= 768.0f * 0.5f;
+	newPosition.y = -newPosition.y;
+
+	return newPosition;
 }

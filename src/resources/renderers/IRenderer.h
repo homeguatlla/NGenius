@@ -106,5 +106,8 @@ protected:
 	virtual IRenderer* DoClone() const = 0;
 private:
 	void ModifyModelMatrixToAvoidRotations(const glm::mat4& viewMatrix, const glm::vec3& scale, float angleZ, glm::mat4& modelMatrix);
+	void TranslateCenterFromBottomLeftToCenter(glm::mat4& modelMatrix);
+	glm::vec3 TranslateCenterFromBottomLeftToCenter(glm::vec3& position);
+	Transformation IRenderer::GetParentTransformation();
 };
 

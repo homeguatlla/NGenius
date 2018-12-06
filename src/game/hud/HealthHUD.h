@@ -15,6 +15,7 @@ class HealthHUD
 public:
 	HealthHUD(GameScene* scene, const glm::vec2& screenCoord);
 	~HealthHUD();
+	void UpdateValues();
 
 private:
 	void Create(GameScene* scene);

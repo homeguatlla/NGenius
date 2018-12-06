@@ -31,8 +31,8 @@ void DebugComponent::Init()
 	glm::vec3 scale = max - min;
 
 	Transformation transformation(min + scale * 0.5f, glm::vec3(0.0f), scale);
-	mBoundingBoxRenderer->SetTransformation(transformation);
 	mBoundingBoxRenderer->SetLayer(IRenderer::LAYER_DEBUG);
+	mBoundingBoxRenderer->SetTransformation(transformation);
 	SetBoundingBoxVisibility(false);
 }
 

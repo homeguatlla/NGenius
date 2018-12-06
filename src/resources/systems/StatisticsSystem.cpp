@@ -29,6 +29,7 @@ StatisticsSystem::StatisticsSystem() :
 
 StatisticsSystem::~StatisticsSystem()
 {
+	mTextList.clear();
 }
 
 void StatisticsSystem::Start(GameScene* scene, Transformation* transformation, FontType* font, IMaterial* material)
@@ -40,7 +41,7 @@ void StatisticsSystem::Start(GameScene* scene, Transformation* transformation, F
 	
 	mTextMaterial = material;
 	mGameScene = scene;
-	Create(scene, transformation, font);
+	Create(transformation, font);
 }
 
 void StatisticsSystem::Update(const Statistics& statistics)
@@ -102,7 +103,7 @@ void StatisticsSystem::UpdateEnable()
 	}
 }
 
-void StatisticsSystem::Create(GameScene* scene, Transformation* transformation, FontType* font)
+void StatisticsSystem::Create(Transformation* transformation, FontType* font)
 {
 	mTextMaterial->AddEffect(new MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
 	mTextMaterial->AddEffect(new MaterialEffectText(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
@@ -115,13 +116,12 @@ void StatisticsSystem::Create(GameScene* scene, Transformation* transformation, 
 
 	for (unsigned int i = 0; i < texts.size(); ++i)
 	{
-		glm::vec3 position = transformation->GetPosition() + glm::vec3(0.0f, -20.0f * i, 0.0f);
+		glm::vec3 position = transformation->GetPosition() + glm::vec3(0.0f, 20.0f * i, 0.0f);
 		Text* text = new Text(
 			new Transformation(position, transformation->GetRotation(), transformation->GetScale()),
 			mTextMaterial, font,
 			texts[i], false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
 
-		scene->AddEntity(text);
 		mTextList.push_back(text);
 	}
 }

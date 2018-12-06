@@ -295,7 +295,7 @@
     <ClInclude Include="src\resources\models\ModelsLibrary.h" />
     <ClInclude Include="src\resources\postprocesseffects\PostProcessEffect.h" />
     <ClInclude Include="src\resources\renderers\EnergyWallRenderer.h" />
-    <ClInclude Include="src\resources\renderers\GUITextRenderer.h" />
+    <ClInclude Include="src\resources\renderers\GUIRenderer.h" />
     <ClInclude Include="src\resources\renderers\ImageRenderer.h" />
     <ClInclude Include="src\resources\renderers\ParticleRenderer.h" />
     <ClInclude Include="src\resources\renderers\PointsRenderer.h" />
@@ -513,7 +513,7 @@
     <ClCompile Include="src\resources\models\ModelsLibrary.cpp" />
     <ClCompile Include="src\resources\postprocesseffects\PostProcessEffect.cpp" />
     <ClCompile Include="src\resources\renderers\EnergyWallRenderer.cpp" />
-    <ClCompile Include="src\resources\renderers\GUITextRenderer.cpp" />
+    <ClCompile Include="src\resources\renderers\GUIRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\ImageRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\ParticleRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\PointsRenderer.cpp" />

@@ -17,7 +17,9 @@
 #include "../ShooterGameConstants.h"
 
 
-GameHUD::GameHUD(GameScene* scene)
+GameHUD::GameHUD(GameScene* scene) :
+	mItemsList(nullptr),
+	mHealthHUD(nullptr)
 {
 	Create(scene);
 }
@@ -33,22 +35,14 @@ void GameHUD::SetVisibility(bool visible)
 }
 
 void GameHUD::Create(GameScene* scene)
-{
-	//para resolucion 1024 x 768
-	float factorX = 0.15f;
-	float factorY = 0.43f;
-
-	factorX = NGenius::GetInstance().GetScreenWidth() / 1024.0f * factorX;
-	
+{	
 	mItemsList = new  ItemsListHUD(
 		scene, 
-		glm::vec2(NGenius::GetInstance().GetScreenWidth() * factorX, -NGenius::GetInstance().GetScreenHeight() * factorY),
+		glm::vec2(665.0f, 700.0f),
 		NUM_ITEMS_INVENTORY
 	);
 	
-	factorX = -0.3f;
-	factorY = 0.51f;
-	mHealthHUD = new HealthHUD(scene, glm::vec2(NGenius::GetInstance().GetScreenWidth() * factorX, -NGenius::GetInstance().GetScreenHeight() * factorY));
+	mHealthHUD = new HealthHUD(scene, glm::vec2(100.0f, 700.0f));
 }
 
 void GameHUD::Update(float elapsedTime)

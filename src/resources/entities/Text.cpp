@@ -3,7 +3,7 @@
 #include "../Transformation.h"
 #include "../renderers/IRenderer.h"
 #include "../renderers/TextRenderer.h"
-#include "../renderers/GUITextRenderer.h"
+#include "../renderers/GUIRenderer.h"
 #include "../models/Model.h"
 #include "../models/Mesh.h"
 #include "../font/FontType.h"
@@ -27,7 +27,7 @@ Text::Text(Transformation* transformation, IMaterial* material, FontType* font,
 	mMesh = new Mesh();
 	mModel = new Model(mMesh);
 
-	isText3D ? SetRenderer(new TextRenderer(mModel, material)) : SetRenderer(new GUITextRenderer(mModel, material));
+	isText3D ? SetRenderer(new TextRenderer(mModel, material)) : SetRenderer(new GUIRenderer(mModel, material));
 	UpdateText(text);
 }
 

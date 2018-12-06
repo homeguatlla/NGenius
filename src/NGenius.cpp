@@ -450,7 +450,9 @@ GameScene* NGenius::CreateGameScene(const std::string& name)
 	//para las luces, pues de alguna manera habría que indicar a que escenas se le aplican las luces que podrían
 	//ser más de una. Por ahora lo dejamos así pues no hay múltiples escenas
 	mLightsSystem = new LightsSystem(mGameScene);
-	Transformation transformation(glm::vec3(-GetScreenWidth() * 0.5f, GetScreenHeight() * 0.5f, 0.0f),
+	Transformation transformation(
+		glm::vec3(10.0f, 20.0f, 0.0f),
+		//glm::vec3(-GetScreenWidth() * 0.5f, GetScreenHeight() * 0.5f, 0.0f),
 		glm::vec3(0.0f),
 		glm::vec3(0.70f)
 	);

@@ -57,7 +57,7 @@ void MarsPlanet::Create()
 {
 	CreateTerrain();
 	CreateSky();
-	CreateRocks();
+	//CreateRocks();
 }
 
 void MarsPlanet::CreateTerrain()

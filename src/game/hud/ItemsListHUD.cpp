@@ -10,7 +10,7 @@
 #include "../../resources/materials/effects/MaterialEffectDiffuseTexture.h"
 
 #include "../../resources/renderers/IRenderer.h"
-#include "../../resources/renderers/IndicesRenderer.h"
+#include "../../resources/renderers/GUIRenderer.h"
 #include "../../resources/scene/GameScene.h"
 
 #include "../events/NextPreviousInventoryItemEvent.h"
@@ -172,7 +172,7 @@ void ItemsListHUD::CreateSelectedItem(GameScene* scene)
 {
 	glm::vec2 screenCoords = CalculateItemPosition(mSelectedItem);
 	IMaterial* material = NGenius::GetInstance().CreateDiffuseGUIMaterial(ITEM_SELECTED_MATERIAL, ITEM_QUAD_SELECTED_TEXTURE);
-	IRenderer* guiRenderer = new IndicesRenderer(NGenius::GetInstance().GetModel(GUI_QUAD_MODEL), material);
+	IRenderer* guiRenderer = new GUIRenderer(NGenius::GetInstance().GetModel(GUI_QUAD_MODEL), material);
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
 	mSelectedItemEntity = new GameEntity(
@@ -187,7 +187,7 @@ void ItemsListHUD::CreateSelectedItem(GameScene* scene)
 void ItemsListHUD::CreateItem(GameScene* scene, const glm::vec2& screenCoord, const std::string& materialName, const std::string& textureName)
 {
 	IMaterial* material = NGenius::GetInstance().CreateDiffuseGUIMaterial(materialName, textureName);
-	IRenderer* guiRenderer = new IndicesRenderer(NGenius::GetInstance().GetModel(GUI_QUAD_MODEL), material);
+	IRenderer* guiRenderer = new GUIRenderer(NGenius::GetInstance().GetModel(GUI_QUAD_MODEL), material);
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
 	ItemHUD* item = new ItemHUD(guiRenderer, screenCoord, ITEM_SIZE);

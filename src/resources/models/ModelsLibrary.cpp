@@ -36,22 +36,23 @@ void ModelsLibrary::Load()
 	//LoadModel("cube2", "data/models/cube/cube.obj", false, true);
 	//LoadModel("enano", "data/models/enano/enano.obj", false, true);
 	//LoadModel("mazo", "data/models/mazo/mazo.obj", false, true);
-
-	LoadModel("barrel", "data/models/props/barrel.obj", true, true);
-	LoadModel("chest", "data/models/props/chest.obj", true, true);
-	LoadModel("brazier", "data/models/props/brazier.obj", true, true);
 	//LoadModel("stall", "data/models/stall/stall.obj", false, true);
 	//LoadModel("cube3", "data/models/props/cube.obj", false, true);
-	LoadModel("crate", "data/models/props/crate.obj", true, true);
 	//LoadModel("floor", "data/models/props/floor.obj", true, true);
-	LoadModel("statue", "data/models/props/statue.obj", true, true);
 
 	//LoadModel("grass1", "data/models/grass/grass1.obj", false, false);
 	//LoadModel("grass2", "data/models/grass/grass2.obj", false, false);
 
 	//mesh = OBJLoader::LoadModel("data/models/hermes/hermes.obj");
 	//AddElement("hermes", mesh);
-	
+
+/*
+	LoadModel("barrel", "data/models/props/barrel.obj", true, true);
+	LoadModel("chest", "data/models/props/chest.obj", true, true);
+	LoadModel("brazier", "data/models/props/brazier.obj", true, true);
+	LoadModel("crate", "data/models/props/crate.obj", true, true);
+	LoadModel("statue", "data/models/props/statue.obj", true, true);
+
 	LoadModel("sphere", "data/models/sphere/sphere.obj", false, true);
 	
 	LoadModel("tree_foliage_0", "data/models/tree4/tree_foliage_lod0.obj", false, true);
@@ -61,7 +62,7 @@ void ModelsLibrary::Load()
 	LoadModel("tree_trunk_0", "data/models/tree4/tree_trunk_lod0.obj", false, true);
 	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", false, true);
 	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
-	
+*/	
 	LoadModel("farmer", "data/models/farmer/farmer.dae", true, true);
 
 	LoadModel("rock2", "data/models/rocks/rock2.dae", false, true);
