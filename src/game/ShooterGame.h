@@ -10,6 +10,8 @@ class Player;
 class GameEntity;
 class Inventory;
 class InventoryController;
+class HealthController;
+struct GLFWwindow;
 
 class ShooterGame 
 {
@@ -21,6 +23,7 @@ class ShooterGame
 	GameEntity* mThirdPersonCameraEntity;
 	Inventory* mInventory;
 	InventoryController* mInventoryController;
+	HealthController* mHealthController;
 
 public:
 	ShooterGame();
@@ -29,8 +32,10 @@ public:
 	void Init();
 	void Start();
 	void Update(float elapsedTime);
+	void UpdateInput(GLFWwindow* window);
 
 private:
+	void CreatePlayer();
 	void CreateThirdpersonCamera();
 	void CreateEnvironment();
 	void CreateInitialProps();

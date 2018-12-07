@@ -3,16 +3,19 @@
 
 class HealthComponent :	public IComponent
 {
-	float mLife;
-	float mMaxLife;
+	float mHealth;
+	float mMaxHealth;
 
 public:
 	
-	HealthComponent(float maxLife);
+	HealthComponent(float maxHealth);
 	virtual ~HealthComponent();
 
-	float GetLife() const;
-	void SetLife(float life);
+	float GetHealth() const;
+	float GetMaxHealth() const;
+	void SetHealth(float life);
+	void ApplyDamage(float damage);
+	bool IsDeath() const;
 
 private:
 	// Heredado vía IComponent

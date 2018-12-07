@@ -1488,6 +1488,10 @@ void UpdateInput(GLFWwindow* window)
 			mCurrentCommand->Execute();
 		}
 	}
+	else
+	{
+		mGame.UpdateInput(window);
+	}
 }
 
 void Update(float elapsedTime)

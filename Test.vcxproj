@@ -178,6 +178,7 @@
     <ClInclude Include="src\BitNumber.h" />
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\game\components\PickupGameEntityComponent.h" />
+    <ClInclude Include="src\game\controllers\HealthController.h" />
     <ClInclude Include="src\game\controllers\InventoryController.h" />
     <ClInclude Include="src\game\entities\Battery.h" />
     <ClInclude Include="src\game\entities\EntitiesFactory.h" />
@@ -403,6 +404,7 @@
     <ClCompile Include="src\BitNumber.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\game\components\PickupGameEntityComponent.cpp" />
+    <ClCompile Include="src\game\controllers\HealthController.cpp" />
     <ClCompile Include="src\game\controllers\InventoryController.cpp" />
     <ClCompile Include="src\game\entities\Battery.cpp" />
     <ClCompile Include="src\game\entities\EntitiesFactory.cpp" />

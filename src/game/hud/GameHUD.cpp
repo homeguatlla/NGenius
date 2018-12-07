@@ -55,3 +55,7 @@ ItemsListHUD* GameHUD::GetItemsListHUD()
 	return mItemsList;
 }
 
+HealthHUD* GameHUD::GetHealthHUD()
+{
+	return mHealthHUD;
+}

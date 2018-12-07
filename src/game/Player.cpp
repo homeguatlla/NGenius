@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "ShooterGameConstants.h"
 #include "controllers/InventoryController.h"
-
+#include "controllers/HealthController.h"
 
 #include "../NGenius.h"
 #include "../resources/scene/GameScene.h"
@@ -59,13 +59,17 @@
 #include "../resources/systems/PhysicsSystem.h"
 
 #include <GLFW/glfw3.h>
+#include <assert.h>
 
-Player::Player(GameScene* scene, Transformation* transformation, InventoryController* inventoryController) :
+Player::Player(GameScene* scene, Transformation* transformation, InventoryController* inventoryController, HealthController* healthController) :
 	mEngine(&NGenius::GetInstance()),
 	mScene(scene),
 	mCharacter(nullptr),
-	mInventoryController(inventoryController)
+	mInventoryController(inventoryController),
+	mHealthController(healthController)
 {
+	assert(inventoryController != nullptr);
+	assert(healthController != nullptr);
 	Create(transformation);
 }
 
@@ -158,7 +162,8 @@ void Player::Update(float elapsedTime)
 		}
 		else if (event->IsOfType<HealthEvent>())
 		{
-			//mHealthController->OnHealt(static_cast<HealthEvent*>(event));
+			mHealthController->OnHealthEvent(static_cast<HealthEvent*>(event));
+			gameEventsComponent->ConsumeEvent();
 		}
 	}
 }

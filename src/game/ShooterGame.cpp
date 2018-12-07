@@ -8,6 +8,7 @@
 #include "maps/MarsPlanet.h"
 #include "inventory/Inventory.h"
 #include "controllers/InventoryController.h"
+#include "controllers/HealthController.h"
 #include "Player.h"
 
 #include "../src/NGenius.h"
@@ -18,6 +19,8 @@
 #include "../resources/components/CollisionComponent.h"
 #include "../resources/components/ThirdPersonCameraComponent.h"
 #include "../resources/components/OverWaterComponent.h"
+#include "../resources/components/DamageComponent.h"
+
 #include "../input/bindings/MouseToEventBind.h"
 
 #include "../resources/events/characterControllerEvents/PitchEvent.h"
@@ -47,6 +50,11 @@ ShooterGame::ShooterGame() :
 
 ShooterGame::~ShooterGame()
 {
+	delete mGameHUD;
+	delete mPlanet;
+	delete mInventory;
+	delete mInventoryController;
+	delete mHealthController;
 }
 
 void ShooterGame::Init()
@@ -64,13 +72,8 @@ void ShooterGame::Start()
 	mPlanet = new MarsPlanet(mScene, mGameplayCamera);
 
 	mInventory = new Inventory(NUM_ITEMS_INVENTORY);
-	//el juego tiene las distintas vistas del inventory, hud tipo fortnite o hud tipo menú a fullscreen
-	//y por tanto, es quién le puede cambiar la vista en un momento dado
-	//entonces el player solo tiene la mochila (inventory) que le dan con sus instrucciones para usarla el inventory controller
-	//esto nos permite cambiar el inventory y la vista en cualquier momento
-	mInventoryController = new InventoryController(mScene, mInventory, mGameHUD->GetItemsListHUD());
-	mPlayer = new Player(mScene, new Transformation(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.18f)), mInventoryController);
 
+	CreatePlayer();
 	
 	NGenius::GetInstance().SetCastingShadowsTarget(mPlayer->GetEntity());
 
@@ -86,6 +89,34 @@ void ShooterGame::Update(float elapsedTime)
 {
 	mPlayer->Update(elapsedTime);
 	mGameHUD->Update(elapsedTime);
+}
+
+void ShooterGame::UpdateInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
+	{
+		DamageComponent* damageComponent = mPlayer->GetEntity()->GetComponent<DamageComponent>();
+		if (damageComponent != nullptr)
+		{
+			damageComponent->SetDamage(10.0f);
+		}
+	}
+}
+
+void ShooterGame::CreatePlayer()
+{
+	//el juego tiene las distintas vistas del inventory, hud tipo fortnite o hud tipo menú a fullscreen
+	//y por tanto, es quién le puede cambiar la vista en un momento dado
+	//entonces el player solo tiene la mochila (inventory) que le dan con sus instrucciones para usarla el inventory controller
+	//esto nos permite cambiar el inventory y la vista en cualquier momento
+	mInventoryController = new InventoryController(mScene, mInventory, mGameHUD->GetItemsListHUD());
+	mHealthController = new HealthController(mScene, mGameHUD->GetHealthHUD());
+	mPlayer = new Player(
+		mScene,
+		new Transformation(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.18f)),
+		mInventoryController,
+		mHealthController
+	);
 }
 
 void ShooterGame::CreateThirdpersonCamera()

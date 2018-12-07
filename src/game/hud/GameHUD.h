@@ -17,6 +17,7 @@ public:
 	void SetVisibility(bool visibility);
 	void Update(float elapsedTime);
 	ItemsListHUD* GetItemsListHUD();
+	HealthHUD* GetHealthHUD();
 
 private:
 	void Create(GameScene* scene);

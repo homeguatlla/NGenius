@@ -921,6 +921,9 @@
     <ClInclude Include="src\resources\events\characterControllerEvents\HealthEvent.h">
       <Filter>Header Files\resources\events\characterControllerEvents</Filter>
     </ClInclude>
+    <ClInclude Include="src\game\controllers\HealthController.h">
+      <Filter>Header Files\game\controller</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1534,6 +1537,9 @@
     </ClCompile>
     <ClCompile Include="src\resources\events\characterControllerEvents\HealthEvent.cpp">
       <Filter>Source Files\resources\events\characterControllerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\controllers\HealthController.cpp">
+      <Filter>Source Files\game\controllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

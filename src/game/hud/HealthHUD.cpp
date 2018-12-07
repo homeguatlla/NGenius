@@ -32,6 +32,7 @@ const std::string HEALTH_MATERIAL_NAME("health_material");
 
 static const glm::vec3 HEALTH_HUD_SCALE(440.0f, 128.0f, 1.0f);
 static const glm::vec3 HEALTH_BAR_SCALE(200.0f, 15.0f, 1.0f);
+static const float HEALTH_BAR_X = 100.0f;
 
 /*
 int factorD;
@@ -126,7 +127,7 @@ void HealthHUD::CreateHealthBar(GameScene* scene)
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
 	mHealthBarEntity = new GameEntity(
-		new Transformation(glm::vec3(mScreenCoord.x + 100.0f, mScreenCoord.y - 35.0f, 0.0f),
+		new Transformation(glm::vec3(mScreenCoord.x + HEALTH_BAR_X, mScreenCoord.y - 35.0f, 0.0f),
 			glm::vec3(0.0f),
 			HEALTH_BAR_SCALE),
 		guiRenderer);
@@ -141,9 +142,15 @@ void HealthHUD::UpdateHealthBar(float health)
 	scale.x = HEALTH_BAR_SCALE.x * health;
 
 	transformation->SetScale(scale);
+
+	//TODO hay que desplazar la x, o posicionarlo siempre en x - ancho y ancho = (HEALTH_BAR_SCALE.x-scala) * 0.5f;
+	glm::vec3 position = transformation->GetPosition();
+	float healthBarX = mScreenCoord.x + HEALTH_BAR_X;
+	position.x = healthBarX - (HEALTH_BAR_SCALE.x - scale.x) * 0.5f;
+	transformation->SetPosition(position);
 }
 
-void HealthHUD::OnHealthEvent(HealthEvent* health)
+void HealthHUD::OnHealthEvent(const HealthEvent* health)
 {
 	UpdateHealthBar(health->GetHealth() / health->GetMaxHealth());
 }

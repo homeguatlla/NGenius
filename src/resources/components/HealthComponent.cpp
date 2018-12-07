@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "HealthComponent.h"
 
+#include <glm/glm.hpp>
 
-HealthComponent::HealthComponent(float maxLife) : mMaxLife(maxLife), mLife(maxLife)
+HealthComponent::HealthComponent(float maxHealth) : mMaxHealth(maxHealth), mHealth(maxHealth)
 {
 }
 
@@ -11,16 +12,30 @@ HealthComponent::~HealthComponent()
 {
 }
 
-float HealthComponent::GetLife() const
+float HealthComponent::GetHealth() const
 {
-	return mLife;
+	return mHealth;
 }
 
-void HealthComponent::SetLife(float life)
+float HealthComponent::GetMaxHealth() const
 {
-	mLife = life;
+	return mMaxHealth;
 }
 
+void HealthComponent::SetHealth(float health)
+{
+	mHealth = health;
+}
+
+void HealthComponent::ApplyDamage(float damage)
+{
+	mHealth = glm::max(0.0f, mHealth - damage);
+}
+
+bool HealthComponent::IsDeath() const
+{
+	return mHealth <= 0.0f;
+}
 
 IComponent * HealthComponent::DoClone() const
 {

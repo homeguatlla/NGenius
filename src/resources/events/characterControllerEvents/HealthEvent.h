@@ -10,15 +10,16 @@ class HealthEvent : public CharacterControllerEvent
 	float mMaxHealth;
 
 public:
-	HealthEvent(bool isDamage, float maxHealth, float health);
+	HealthEvent(bool isDamage, float health, float MaxHealth);
 	~HealthEvent();
 
 	HealthEvent* DoClone(const void* data) const override;
 
 	bool IsDamage() const;
 	float GetHealth() const;
-	float GetMaxHealth() const;
 	void SetDamage(bool damage);
-	void SetHealth(float maxHealth, float health);
+	void SetHealth(float health);
+	void SetMaxHealth(float maxHealth);
+	float GetMaxHealth() const;
 };
 

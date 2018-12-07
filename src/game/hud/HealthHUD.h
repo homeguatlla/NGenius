@@ -19,7 +19,7 @@ public:
 	HealthHUD(GameScene* scene, const glm::vec2& screenCoord);
 	~HealthHUD();
 
-	void OnHealthEvent(HealthEvent* health);
+	void OnHealthEvent(const HealthEvent* health);
 
 private:
 	void Create(GameScene* scene);

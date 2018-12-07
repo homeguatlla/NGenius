@@ -4,6 +4,8 @@
 #include "../../resources/components/GameEventsComponent.h"
 #include "../components/DamageComponent.h"
 #include "../components/HealthComponent.h"
+#include "../events/characterControllerEvents/HealthEvent.h"
+
 #include <algorithm>
 #include <assert.h>
 
@@ -31,6 +33,20 @@ void DamageSystem::Update(float elapsedTime)
 		DamageComponent* damageComponent = entity->GetComponent<DamageComponent>();
 		if(damageComponent->GetDamage() > 0)
 		{
+			GameEventsComponent* gameEventsComponent = entity->GetComponent<GameEventsComponent>();
+			HealthComponent* healthComponent = entity->GetComponent<HealthComponent>();
+			float damage = damageComponent->GetDamage();
+			if (gameEventsComponent != nullptr && healthComponent != nullptr)
+			{
+				healthComponent->ApplyDamage(damage);
+				gameEventsComponent->OnCharacterControllerEvent(new HealthEvent(true, healthComponent->GetHealth(), healthComponent->GetMaxHealth()));
+			}
+			damageComponent->SetDamage(0.0f);
+
+			if (healthComponent->IsDeath())
+			{
+				//TODO enviar un evento de deathevent
+			}
 		}
 	}
 }
