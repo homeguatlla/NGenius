@@ -177,14 +177,11 @@
     <ClInclude Include="src\BasicTypes.h" />
     <ClInclude Include="src\BitNumber.h" />
     <ClInclude Include="src\Frustum.h" />
-    <ClInclude Include="src\game\components\DamageComponent.h" />
-    <ClInclude Include="src\game\components\HealthComponent.h" />
     <ClInclude Include="src\game\components\PickupGameEntityComponent.h" />
     <ClInclude Include="src\game\controllers\InventoryController.h" />
     <ClInclude Include="src\game\entities\Battery.h" />
     <ClInclude Include="src\game\entities\EntitiesFactory.h" />
     <ClInclude Include="src\game\events\DropItemInventoryEvent.h" />
-    <ClInclude Include="src\game\events\HealthEvent.h" />
     <ClInclude Include="src\game\events\NextPreviousInventoryItemEvent.h" />
     <ClInclude Include="src\game\events\PickupGameEntityEvent.h" />
     <ClInclude Include="src\game\events\StoreIntoInventoryEvent.h" />
@@ -200,7 +197,6 @@
     <ClInclude Include="src\game\Player.h" />
     <ClInclude Include="src\game\ShooterGame.h" />
     <ClInclude Include="src\game\ShooterGameConstants.h" />
-    <ClInclude Include="src\game\systems\DamageSystem.h" />
     <ClInclude Include="src\guiTool\GuiTool.h" />
     <ClInclude Include="src\input\bindings\KeyToEventBind.h" />
     <ClInclude Include="src\input\bindings\MouseToEventBind.h" />
@@ -226,11 +222,13 @@
     <ClInclude Include="src\resources\components\AttachGameEntityComponent.h" />
     <ClInclude Include="src\resources\components\BillboardComponent.h" />
     <ClInclude Include="src\resources\components\CameraComponent.h" />
+    <ClInclude Include="src\resources\components\DamageComponent.h" />
     <ClInclude Include="src\resources\components\GameEventsComponent.h" />
     <ClInclude Include="src\resources\components\DebugComponent.h" />
     <ClInclude Include="src\resources\components\EnergyWallCollisionComponent.h" />
     <ClInclude Include="src\resources\components\EnvironmentAffectedComponent.h" />
     <ClInclude Include="src\resources\components\EnvironmentModificatorComponent.h" />
+    <ClInclude Include="src\resources\components\HealthComponent.h" />
     <ClInclude Include="src\resources\components\IComponent.h" />
     <ClInclude Include="src\resources\components\InputComponent.h" />
     <ClInclude Include="src\resources\components\LODComponent.h" />
@@ -255,6 +253,7 @@
     <ClInclude Include="src\resources\events\characterControllerEvents\ButtonLeftEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\ButtonRightEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\ForwardEvent.h" />
+    <ClInclude Include="src\resources\events\characterControllerEvents\HealthEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\JumpEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\PitchEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\TurnEvent.h" />
@@ -336,6 +335,7 @@
     <ClInclude Include="src\resources\shaders\VerticalBlurShader.h" />
     <ClInclude Include="src\resources\shaders\WaterShader.h" />
     <ClInclude Include="src\resources\systems\AnimationSystem.h" />
+    <ClInclude Include="src\resources\systems\DamageSystem.h" />
     <ClInclude Include="src\resources\systems\DebugSystem.h" />
     <ClInclude Include="src\resources\systems\environmentSystem\EnvironmentSystem.h" />
     <ClInclude Include="src\resources\systems\environmentSystem\SunLight.h" />
@@ -402,14 +402,11 @@
     <ClCompile Include="src\AABB.cpp" />
     <ClCompile Include="src\BitNumber.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
-    <ClCompile Include="src\game\components\DamageComponent.cpp" />
-    <ClCompile Include="src\game\components\HealthComponent.cpp" />
     <ClCompile Include="src\game\components\PickupGameEntityComponent.cpp" />
     <ClCompile Include="src\game\controllers\InventoryController.cpp" />
     <ClCompile Include="src\game\entities\Battery.cpp" />
     <ClCompile Include="src\game\entities\EntitiesFactory.cpp" />
     <ClCompile Include="src\game\events\DropItemInventoryEvent.cpp" />
-    <ClCompile Include="src\game\events\HealthEvent.cpp" />
     <ClCompile Include="src\game\events\NextPreviousInventoryItemEvent.cpp" />
     <ClCompile Include="src\game\events\PickupGameEntityEvent.cpp" />
     <ClCompile Include="src\game\events\StoreIntoInventoryEvent.cpp" />
@@ -424,7 +421,6 @@
     <ClCompile Include="src\game\maps\MarsPlanet.cpp" />
     <ClCompile Include="src\game\Player.cpp" />
     <ClCompile Include="src\game\ShooterGame.cpp" />
-    <ClCompile Include="src\game\systems\DamageSystem.cpp" />
     <ClCompile Include="src\guiTool\GuiTool.cpp" />
     <ClCompile Include="src\input\bindings\KeyToEventBind.cpp" />
     <ClCompile Include="src\input\bindings\MouseToEventBind.cpp" />
@@ -448,11 +444,13 @@
     <ClCompile Include="src\resources\components\AttachGameEntityComponent.cpp" />
     <ClCompile Include="src\resources\components\BillboardComponent.cpp" />
     <ClCompile Include="src\resources\components\CameraComponent.cpp" />
+    <ClCompile Include="src\resources\components\DamageComponent.cpp" />
     <ClCompile Include="src\resources\components\GameEventsComponent.cpp" />
     <ClCompile Include="src\resources\components\DebugComponent.cpp" />
     <ClCompile Include="src\resources\components\EnergyWallCollisionComponent.cpp" />
     <ClCompile Include="src\resources\components\EnvironmentAffectedComponent.cpp" />
     <ClCompile Include="src\resources\components\EnvironmentModificatorComponent.cpp" />
+    <ClCompile Include="src\resources\components\HealthComponent.cpp" />
     <ClCompile Include="src\resources\components\IComponent.cpp" />
     <ClCompile Include="src\resources\components\InputComponent.cpp" />
     <ClCompile Include="src\resources\components\LODComponent.cpp" />
@@ -477,6 +475,7 @@
     <ClCompile Include="src\resources\events\characterControllerEvents\ButtonLeftEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\ButtonRightEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\ForwardEvent.cpp" />
+    <ClCompile Include="src\resources\events\characterControllerEvents\HealthEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\JumpEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\PitchEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\TurnEvent.cpp" />
@@ -558,6 +557,7 @@
     <ClCompile Include="src\resources\shaders\VerticalBlurShader.cpp" />
     <ClCompile Include="src\resources\shaders\WaterShader.cpp" />
     <ClCompile Include="src\resources\systems\AnimationSystem.cpp" />
+    <ClCompile Include="src\resources\systems\DamageSystem.cpp" />
     <ClCompile Include="src\resources\systems\DebugSystem.cpp" />
     <ClCompile Include="src\resources\systems\environmentSystem\EnvironmentSystem.cpp" />
     <ClCompile Include="src\resources\systems\environmentSystem\SunLight.cpp" />

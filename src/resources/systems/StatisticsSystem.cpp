@@ -20,7 +20,7 @@ const std::vector<std::string> texts = { "FPS: ", "Triangles: ", "Drawcalls: ", 
 
 StatisticsSystem::StatisticsSystem() :
 	mTextMaterial(nullptr),
-	mIsEnabled(false),
+	mIsEnabled(true),
 	mIsDirty(true)
 {
 	
@@ -66,6 +66,11 @@ void StatisticsSystem::Update(const Statistics& statistics)
 
 		unsigned int numGameEntities = statistics.GetNumberGameEntities();
 		unsigned int numGameEntitiesInsideSpacePartition = statistics.GetNumberGameEntitiesInsideSpacePartition();
+
+		//TODO
+		//esto podría ser un system heredando de ISystem y que la lista de entities fueran exactamente
+		//Tex entities que se pudieran agregar desde fuera.
+		//habría que ver como se haría el updateText con los datos que le hacen falta.
 
 		mTextList[0]->UpdateText(texts[0] + std::to_string(fps));
 		mTextList[1]->UpdateText(texts[1] + std::to_string(statistics.GetNumberTrianglesRendered()));

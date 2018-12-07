@@ -1,5 +1,5 @@
 #pragma once
-#include "../scene/IGameSceneListener.h"
+#include "ISystem.h"
 #include "../../input/IInputListener.h"
 #include <vector>
 
@@ -7,9 +7,8 @@ class GameEntity;
 class InputHandler;
 class RenderSystem;
 
-class DebugSystem : public IInputListener, public IGameSceneListener
+class DebugSystem : public IInputListener, public ISystem
 {
-	std::vector<GameEntity*> mEntities;
 	typedef std::vector<GameEntity*>::iterator GameEntitiesIterator;
 
 	bool mIsDebugModeEnabled;
@@ -28,7 +27,8 @@ public:
 
 	void Start();
 
-	void Update(float elapsedTime);
+	void Update(float elapsedTime) override;
+	bool HasToBeRegisteredToGameScene() const override;
 
 	void OnKey(int key, int action) override;
 	void OnMouseScroll(int button, float scroll) {};
@@ -39,12 +39,10 @@ public:
 	bool IsDebugModeEnabled() const;
 
 private:
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
+	
+	bool HasSpecificComponents(const GameEntity* entity) const;
 
-	bool HasDebugComponents(const GameEntity* entity) const;
-
-	void OnGameEntityAdded(GameEntity* entity) override;
-	void OnGameEntityRemoved(GameEntity* entity) override;
+	// Heredado vía ISystem
+	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor & guest) override;
 };
 

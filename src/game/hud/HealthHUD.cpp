@@ -3,7 +3,7 @@
 
 #include "../ShooterGameConstants.h"
 #include "../../NGenius.h"
-#include "../events/HealthEvent.h"
+#include "../../resources/events/characterControllerEvents/HealthEvent.h"
 
 #include "../../resources/materials/IMaterial.h"
 #include "../../resources/materials/MaterialsLibrary.h"

@@ -1,6 +1,5 @@
 #pragma once
-#include "../../visitor/BaseVisitable.h"
-#include "../scene/IGameSceneListener.h"
+#include "ISystem.h"
 
 #include "glm/glm.hpp"
 
@@ -11,7 +10,7 @@ class GameEntity;
 class Animator;
 class Animation;
 
-class AnimationSystem : public BaseVisitable<>, public IGameSceneListener
+class AnimationSystem : public ISystem
 {
 	std::vector<std::pair<GameEntity*, Animator*>> mEntities;
 	//std::map<std::string, std::vector<Animation*>> mAnimations;
@@ -20,18 +19,16 @@ public:
 	AnimationSystem();
 	~AnimationSystem();
 
-	void Update(float deltaTime);
-
-	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
-
+	void Update(float deltaTime) override;
+	bool HasToBeRegisteredToGameScene() const override;
+	
 private:
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
-	bool HasAnimationComponents(const GameEntity* entity) const;
+	void AddEntity(GameEntity* entity) override;
+	bool HasSpecificComponents(const GameEntity* entity) const override;
 
 	void SetAnimationData(GameEntity* entity, const std::vector<glm::mat4x4>& data);
 
-	void OnGameEntityAdded(GameEntity* entity) override;
-	void OnGameEntityRemoved(GameEntity* entity) override;
+	// Heredado vía ISystem
+	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor & guest) override;
 };
 

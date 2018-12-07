@@ -1,5 +1,5 @@
 #pragma once
-#include "../../resources/events/CharacterControllerEvent.h"
+#include "../CharacterControllerEvent.h"
 
 class InventoryItem;
 

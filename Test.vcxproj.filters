@@ -900,26 +900,26 @@
     <ClInclude Include="src\resources\components\AttachGameEntityComponent.h">
       <Filter>Header Files\resources\components</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\components\HealthComponent.h">
-      <Filter>Header Files\game\components</Filter>
-    </ClInclude>
     <ClInclude Include="src\game\hud\HealthHUD.h">
       <Filter>Header Files\game\hud</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\renderers\GUIRenderer.h">
       <Filter>Header Files\resources\renderers</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\events\HealthEvent.h">
-      <Filter>Header Files\game\events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game\systems\DamageSystem.h">
-      <Filter>Header Files\game\systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game\components\DamageComponent.h">
-      <Filter>Header Files\game\components</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\systems\ISystem.h">
       <Filter>Header Files\resources\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\DamageComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\HealthComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\DamageSystem.h">
+      <Filter>Header Files\resources\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\events\characterControllerEvents\HealthEvent.h">
+      <Filter>Header Files\resources\events\characterControllerEvents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1514,26 +1514,26 @@
     <ClCompile Include="src\resources\components\AttachGameEntityComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\components\HealthComponent.cpp">
-      <Filter>Source Files\game\components</Filter>
-    </ClCompile>
     <ClCompile Include="src\game\hud\HealthHUD.cpp">
       <Filter>Source Files\game\hud</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\renderers\GUIRenderer.cpp">
       <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\events\HealthEvent.cpp">
-      <Filter>Source Files\game\events</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\systems\DamageSystem.cpp">
-      <Filter>Source Files\game\systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\components\DamageComponent.cpp">
-      <Filter>Source Files\game\components</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\systems\ISystem.cpp">
       <Filter>Source Files\resources\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\DamageComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\HealthComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\DamageSystem.cpp">
+      <Filter>Source Files\resources\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\characterControllerEvents\HealthEvent.cpp">
+      <Filter>Source Files\resources\events\characterControllerEvents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

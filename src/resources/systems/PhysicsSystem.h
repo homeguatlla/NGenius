@@ -21,7 +21,8 @@ public:
 	PhysicsSystem();
 	~PhysicsSystem();
 
-	void Update(float deltaTime);
+	void Update(float deltaTime) override;
+	bool HasToBeRegisteredToGameScene() const override;
 	
 	unsigned int GetNumberGameEntities() const;
 
@@ -45,5 +46,8 @@ private:
 
 	void CheckCollisionTerrain(GameEntity* entity);
 	void CheckCollisionEnergyWall(GameEntity* entity);
+
+	// Heredado vía ISystem
+	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor & guest) override;
 };
 

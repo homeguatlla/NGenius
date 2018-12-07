@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "ShooterGameConstants.h"
 #include "controllers/InventoryController.h"
-#include "components/HealthComponent.h"
+
 
 #include "../NGenius.h"
 #include "../resources/scene/GameScene.h"
@@ -29,9 +29,12 @@
 #include "../resources/events/characterControllerEvents/BackwardEvent.h"
 #include "../resources/events/characterControllerEvents/JumpEvent.h"
 #include "../resources/events/characterControllerEvents/TurnEvent.h"
+#include "../resources/events/characterControllerEvents/HealthEvent.h"
+
 #include "events/PickupGameEntityEvent.h"
 #include "events/DropItemInventoryEvent.h"
 #include "events/NextPreviousInventoryItemEvent.h"
+
 
 #include "../input/IInputListener.h"
 #include "../input/bindings/KeyToEventBind.h"
@@ -47,6 +50,8 @@
 #include "../resources/components/AnimationComponent.h"
 #include "../resources/components/EnergyWallCollisionComponent.h"
 #include "../resources/components/EnvironmentModificatorComponent.h"
+#include "../resources/components/HealthComponent.h"
+#include "../resources/components/DamageComponent.h"
 
 #include "../resources/renderers/IndicesRenderer.h"
 #include "../resources/renderers/WireframeRenderer.h"
@@ -113,6 +118,7 @@ void Player::Create(Transformation* transformation)
 	mCharacter->AddComponent(animationComponent);
 	
 	mCharacter->AddComponent(new HealthComponent(MAX_PLAYER_LIFE));
+	mCharacter->AddComponent(new DamageComponent(0.0f));
 
 	mScene->AddEntity(mCharacter);
 }
@@ -149,6 +155,10 @@ void Player::Update(float elapsedTime)
 		{
 			mInventoryController->OnNextPreviousItem(static_cast<NextPreviousInventoryItemEvent*>(event));
 			gameEventsComponent->ConsumeEvent();
+		}
+		else if (event->IsOfType<HealthEvent>())
+		{
+			//mHealthController->OnHealt(static_cast<HealthEvent*>(event));
 		}
 	}
 }

@@ -3,15 +3,15 @@
 #include "../scene/GameScene.h"
 #include "../scene/IGameSceneListener.h"
 #include "../../Frustum.h"
+#include "ISystem.h"
 #include <vector>
 
 class GameEntity;
 class GameEntityQuadTree;
 class ICamera;
 
-class SpacePartitionSystem : public IGameSceneListener, BaseVisitable<>
+class SpacePartitionSystem : public ISystem
 {
-	std::vector<GameEntity*> mNewEntitiesToAdd;
 	std::vector<GameEntity*> mEntitiesToRemove;
 	std::vector<GameEntity*> mLastQueryResult;
 	GameEntityQuadTree* mQuadTree;
@@ -22,8 +22,10 @@ public:
 	SpacePartitionSystem();
 	~SpacePartitionSystem();
 
-	void Start();
-	void Update(float elapsedTime);
+	void Start() override;
+	void Update(float elapsedTime) override;
+	bool HasToBeRegisteredToGameScene() const override;
+
 	void MarkGameEntitiesInsideCameraAsVisible(ICamera* camera);
 	
 	void FillWithGameEntitiesVisibleInsideRadius(const glm::vec3& origin, float radius, std::vector<std::pair<GameEntity*, float>>& list, bool isSorted = false) const;
@@ -33,17 +35,14 @@ public:
 	unsigned int GetNumberEntities() const;
 
 	void SetSpacePartitionComponentsEnabled(bool enable);
-
 	BaseVisitable<>::ReturnType Accept(BaseVisitor& guest) override;
 
 private:
-	bool HasSpacePartitionComponents(const GameEntity* entity);
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
-	
+	bool HasSpecificComponents(const GameEntity* entity) const override;
+
 	void OnGameEntityAdded(GameEntity* entity) override;
-	void OnGameEntityRemoved(GameEntity* entity) override;
-	
+	void RemoveEntity(GameEntity* entity) override;
+
 	void RemoveEntities();
 	void AddNewEntities();
 

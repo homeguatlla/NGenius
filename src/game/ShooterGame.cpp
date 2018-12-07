@@ -77,7 +77,7 @@ void ShooterGame::Start()
 	CreateThirdpersonCamera();
 	CreateEnvironment();
 
-	//CreateInitialProps();
+	CreateInitialProps();
 
 	mGameHUD->SetVisibility(true);
 }

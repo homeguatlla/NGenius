@@ -37,6 +37,11 @@ void AnimationSystem::Update(float deltaTime)
 	}
 }
 
+bool AnimationSystem::HasToBeRegisteredToGameScene() const
+{
+	return true;
+}
+
 void AnimationSystem::SetAnimationData(GameEntity* entity, const std::vector<glm::mat4x4>& data)
 {
 	//Set animation parameters
@@ -50,9 +55,14 @@ void AnimationSystem::SetAnimationData(GameEntity* entity, const std::vector<glm
 	}
 }
 
+BaseVisitable<>::ReturnType AnimationSystem::Accept(BaseVisitor & guest)
+{
+	return BaseVisitable<>::ReturnType();
+}
+
 void AnimationSystem::AddEntity(GameEntity* entity)
 {
-	if (HasAnimationComponents(entity))
+	if (HasSpecificComponents(entity))
 	{
 		AnimatedModel* model = static_cast<AnimatedModel*>(entity->GetRenderer()->GetModel());
 		Animator* animator = new Animator(model);
@@ -63,24 +73,7 @@ void AnimationSystem::AddEntity(GameEntity* entity)
 	}
 }
 
-void AnimationSystem::RemoveEntity(GameEntity* entity)
-{
-	if (HasAnimationComponents(entity))
-	{
-		std::vector<std::pair<GameEntity*, Animator*>>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](std::pair<GameEntity*, Animator*> a) { return a.first == entity; });
-		if (it != mEntities.end())
-		{
-			delete it->second;
-			mEntities.erase(it);
-		}
-		else
-		{
-			assert(false);
-		}
-	}
-}
-
-bool AnimationSystem::HasAnimationComponents(const GameEntity* entity) const
+bool AnimationSystem::HasSpecificComponents(const GameEntity* entity) const
 {
 	if (entity != nullptr)
 	{
@@ -92,25 +85,4 @@ bool AnimationSystem::HasAnimationComponents(const GameEntity* entity) const
 	}
 
 	return false;
-}
-
-void AnimationSystem::OnGameEntityAdded(GameEntity* entity)
-{
-	if (HasAnimationComponents(entity))
-	{
-		AddEntity(entity);
-	}
-}
-
-void AnimationSystem::OnGameEntityRemoved(GameEntity* entity)
-{
-	if (HasAnimationComponents(entity))
-	{
-		RemoveEntity(entity);
-	}
-}
-
-BaseVisitable<>::ReturnType AnimationSystem::Accept(BaseVisitor& guest)
-{
-	return AcceptImpl(*this, guest);
 }

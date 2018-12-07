@@ -51,30 +51,19 @@ void DebugSystem::Update(float elapsedTime)
 	}
 }
 
-bool DebugSystem::HasDebugComponents(const GameEntity* entity) const
+bool DebugSystem::HasToBeRegisteredToGameScene() const
+{
+	return true;
+}
+
+bool DebugSystem::HasSpecificComponents(const GameEntity* entity) const
 {
 	return entity != nullptr && entity->HasComponent<DebugComponent>();
 }
 
-void DebugSystem::AddEntity(GameEntity* entity)
+BaseVisitable<>::ReturnType DebugSystem::Accept(BaseVisitor & guest)
 {
-	mEntities.push_back(entity);
-}
-
-void DebugSystem::RemoveEntity(GameEntity* entity)
-{
-	if (HasDebugComponents(entity))
-	{
-		std::vector<GameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](GameEntity* a) { return a == entity; });
-		if (it != mEntities.end())
-		{
-			mEntities.erase(it);
-		}
-		else
-		{
-			assert(false);
-		}
-	}
+	return BaseVisitable<>::ReturnType();
 }
 
 void DebugSystem::OnKey(int key, int action)
@@ -128,18 +117,3 @@ bool DebugSystem::IsDebugModeEnabled() const
 	return mIsDebugModeEnabled;
 }
 
-void DebugSystem::OnGameEntityAdded(GameEntity* entity)
-{
-	if (HasDebugComponents(entity))
-	{
-		AddEntity(entity);
-	}
-}
-
-void DebugSystem::OnGameEntityRemoved(GameEntity* entity)
-{
-	if (HasDebugComponents(entity))
-	{
-		RemoveEntity(entity);
-	}
-}

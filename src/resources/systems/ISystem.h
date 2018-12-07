@@ -14,16 +14,19 @@ public:
 	ISystem();
 	virtual ~ISystem();
 
+	virtual void Start() {};
 	virtual void Update(float deltaTime) = 0;
-	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
-
+	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest) = 0;
+	virtual bool HasToBeRegisteredToGameScene() const = 0;
 private:
 
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
 	virtual bool HasSpecificComponents(const GameEntity* entity) const = 0;
 
-	void OnGameEntityAdded(GameEntity* entity) override;
-	void OnGameEntityRemoved(GameEntity* entity) override;
+	virtual void OnGameEntityAdded(GameEntity* entity);
+	virtual void OnGameEntityRemoved(GameEntity* entity);
+
+protected:
+	virtual void AddEntity(GameEntity* entity);
+	virtual void RemoveEntity(GameEntity* entity);
 };
 

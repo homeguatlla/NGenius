@@ -1,14 +1,13 @@
 #pragma once
 #include "../../input/IInputListener.h"
-#include "../scene/IGameSceneListener.h"
+#include "ISystem.h"
 #include <vector>
 
 class GameEntity;
 class InputHandler;
 
-class InputSystem : public IInputListener, public IGameSceneListener
+class InputSystem : public IInputListener, public ISystem
 {
-	std::vector<GameEntity*> mEntities;
 	typedef std::vector<GameEntity*>::iterator GameEntitiesIterator;
 
 	InputHandler* mInputHandler;
@@ -34,7 +33,8 @@ public:
 	InputSystem(InputHandler* inputHandler);
 	~InputSystem();
 
-	void Update(float elapsedTime);
+	void Update(float elapsedTime) override;
+	bool HasToBeRegisteredToGameScene() const override;
 
 	void OnKey(int key, int action) override;
 	void OnMouseScroll(int button, float scroll) override;
@@ -42,12 +42,10 @@ public:
 	void OnMouseCursorPos(double x, double y) override;
 
 private:
-	bool HasInputComponents(const GameEntity* entity) const;
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
+	bool HasSpecificComponents(const GameEntity* entity) const override;
 	void DispatchEvent(MouseData& data);
 
-	void OnGameEntityAdded(GameEntity* entity) override;
-	void OnGameEntityRemoved(GameEntity* entity) override;
+	// Heredado vía ISystem
+	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor & guest) override;
 };
 

@@ -23,46 +23,14 @@ void InputSystem::Update(float elapsedTime)
 {
 }
 
-bool InputSystem::HasInputComponents(const GameEntity* entity) const
+bool InputSystem::HasToBeRegisteredToGameScene() const
+{
+	return true;
+}
+
+bool InputSystem::HasSpecificComponents(const GameEntity* entity) const
 {
 	return entity != nullptr && entity->HasComponent<InputComponent>() && entity->HasComponent<GameEventsComponent>();
-}
-
-void InputSystem::OnGameEntityAdded(GameEntity* entity)
-{
-	if (HasInputComponents(entity))
-	{
-		AddEntity(entity);
-	}
-}
-
-void InputSystem::OnGameEntityRemoved(GameEntity* entity)
-{
-	if (HasInputComponents(entity))
-	{
-		RemoveEntity(entity);
-	}
-}
-
-void InputSystem::AddEntity(GameEntity* entity)
-{
-	mEntities.push_back(entity);
-}
-
-void InputSystem::RemoveEntity(GameEntity* entity)
-{
-	if (HasInputComponents(entity))
-	{
-		std::vector<GameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](GameEntity* a) { return a == entity; });
-		if (it != mEntities.end())
-		{
-			mEntities.erase(it);
-		}
-		else
-		{
-			assert(false);
-		}
-	}
 }
 
 void InputSystem::OnKey(int key, int action)
@@ -118,4 +86,9 @@ void InputSystem::DispatchEvent(MouseData& data)
 			}
 		}
 	}
+}
+
+BaseVisitable<>::ReturnType InputSystem::Accept(BaseVisitor & guest)
+{
+	return BaseVisitable<>::ReturnType();
 }

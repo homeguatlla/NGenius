@@ -1443,7 +1443,7 @@ void UpdateInput(GLFWwindow* window)
 				mCurrentCommand = new RiseTerrainCommand(mTerrain);
 			}
 		}
-		else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
 		{
 			mIsSpacePartitionEnabled = !mIsSpacePartitionEnabled;
 			NGenius::GetInstance().SetIsSpacePartitionEnabled(mIsSpacePartitionEnabled);

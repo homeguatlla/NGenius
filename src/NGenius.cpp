@@ -23,6 +23,7 @@
 #include "resources/systems/EnvironmentSystem/EnvironmentSystem.h"
 #include "resources/systems/AnimationSystem.h"
 #include "resources/systems/StatisticsSystem.h"
+#include "resources/systems/DamageSystem.h"
 
 #include "resources/materials/MaterialsLibrary.h"
 #include "resources/materials/IMaterial.h"
@@ -59,11 +60,9 @@
 NGenius::NGenius() :
 mRenderSystem(nullptr),
 mPhysicsSystem(nullptr),
-mEntitiesSystem(nullptr),
 mParticlesSystem(nullptr),
 mSpacePartitionSystem(nullptr),
 mEnvironmentSystem(nullptr),
-mAnimationSystem(nullptr),
 mStatisticsSystem(nullptr),
 mGameScene(nullptr),
 mParticlesEmitterLibrary(nullptr),
@@ -100,11 +99,11 @@ void NGenius::Init(const std::string& applicationName, float screenWidth, float 
 
 void NGenius::Start()
 {
-	mEnvironmentSystem->Start();
+	StartSystems(mPreSystems);
+	StartSystems(mPostSystems);
+
 	mRenderSystem->SetEnvironmentSystem(mEnvironmentSystem);
 	mRenderSystem->Start();
-	mSpacePartitionSystem->Start();
-	mDebugSystem->Start();
 
 	mParticlesEmitterLibrary->Load(this);
 
@@ -134,8 +133,6 @@ void NGenius::Run()
 		lag += elapsedTime;
 
 		mInputHandler->Update(elapsedTime);
-
-		AcceptGuiTool();
 
 		//while (lag >= frameTime)
 		{
@@ -183,23 +180,15 @@ void NGenius::Render()
 	mRenderSystem->Render();
 }
 
-void NGenius::AcceptGuiTool()
-{
-	if (mDebugSystem->IsDebugModeEnabled())
-	{
-		mEnvironmentSystem->Accept(*mRenderSystem->GetGuiTool());
-	}
-}
-
 void NGenius::AcceptStatistics()
 {
 	if (mDebugSystem->IsDebugModeEnabled())
 	{
-		mAnimationSystem->Accept(*mStatistics);
+		AcceptSystems(mPreSystems);
+		AcceptSystems(mPostSystems);
+
 		mRenderSystem->Accept(*mStatistics);
 		mGameScene->Accept(*mStatistics);
-		mPhysicsSystem->Accept(*mStatistics);
-		mSpacePartitionSystem->Accept(*mStatistics);
 		this->Accept(*mStatistics);
 
 		mStatisticsSystem->Update(*mStatistics);
@@ -208,8 +197,7 @@ void NGenius::AcceptStatistics()
 
 void NGenius::UpdatePreSystems(float elapsedTime)
 {
-	mInputSystem->Update(elapsedTime);
-	mDebugSystem->Update(elapsedTime);
+	UpdateSystems(mPreSystems, elapsedTime);
 	mGameScene->Update(elapsedTime);
 }
 
@@ -221,13 +209,45 @@ void NGenius::UpdatePostSystems(float elapsedTime)
 	//to find game entities if the case
 	//spacePartitionSystem always must be executed after gameScene because if not, 
 	//won't have the aabb already calculated and entities won't be updated properly (removed, new entities)
-	mSpacePartitionSystem->Update(elapsedTime);
+	
+	UpdateSystems(mPostSystems, elapsedTime);
 
-	mEnvironmentSystem->Update(elapsedTime);
 	mParticlesSystem->Update(elapsedTime);
-	mPhysicsSystem->Update(elapsedTime);
-	mAnimationSystem->Update(elapsedTime);	
 	mRenderSystem->Update(elapsedTime);
+}
+
+void NGenius::ReleaseSystems(std::vector<ISystem*>& systems)
+{
+	for (ISystem* system : systems)
+	{
+		delete system;
+	}
+	systems.clear();
+}
+
+void NGenius::StartSystems(std::vector<ISystem*>& systems)
+{
+	for (ISystem* system : systems)
+	{
+		system->Start();
+	}
+}
+
+void NGenius::AcceptSystems(std::vector<ISystem*>& systems)
+{
+	for (ISystem* system : systems)
+	{
+		(*system).Accept(*mStatistics);
+		(*system).Accept(*mRenderSystem->GetGuiTool());
+	}
+}
+
+void NGenius::UpdateSystems(std::vector<ISystem*>& systems, float elapsedTime)
+{
+	for (ISystem* system : systems)
+	{
+		system->Update(elapsedTime);
+	}
 }
 
 void NGenius::CreateSystems(float screenWidth, float screenHeight)
@@ -236,27 +256,31 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 	mInputHandler = new InputHandler();
 	mRenderSystem = new RenderSystem(screenWidth, screenHeight);
 	mPhysicsSystem = new PhysicsSystem();
-	mInputSystem = new InputSystem(mInputHandler);
 	mDebugSystem = new DebugSystem(mRenderSystem, mInputHandler);
 	mParticlesSystem = new ParticlesSystem();
 	mSpacePartitionSystem = new SpacePartitionSystem();
 	mEnvironmentSystem = new EnvironmentSystem();
-	mAnimationSystem = new AnimationSystem();
 	mStatisticsSystem = new StatisticsSystem();
 
 	mParticlesEmitterLibrary = new ParticlesEmitterLibrary();
+
+	AddSystem(new InputSystem(mInputHandler), false);
+	AddSystem(mDebugSystem, false);
+
+	AddSystem(mSpacePartitionSystem, true);
+	AddSystem(mEnvironmentSystem, true);
+	AddSystem(mPhysicsSystem, true);
+	AddSystem(new AnimationSystem, true);
+	AddSystem(new DamageSystem(), true);
 }
 
 void NGenius::DestroySystems()
 {
-	delete mAnimationSystem;
-	delete mEnvironmentSystem;
-	delete mSpacePartitionSystem;
-	delete mDebugSystem;
-	delete mInputSystem;
+	ReleaseSystems(mPostSystems);
+	ReleaseSystems(mPreSystems);
+
 	delete mLightsSystem;
 	delete mParticlesSystem;
-	delete mPhysicsSystem;
 	delete mRenderSystem;
 	delete mInputHandler;
 	delete mStatisticsSystem;
@@ -459,15 +483,21 @@ GameScene* NGenius::CreateGameScene(const std::string& name)
 	);
 	mStatisticsSystem->Start(mGameScene, &transformation, GetFont("OCR A Extended"), GetMaterial(MaterialsLibrary::TEXT_MATERIAL_NAME));
 
-	
-	mGameScene->RegisterGameSceneListener(mDebugSystem);
-	mGameScene->RegisterGameSceneListener(mInputSystem);
-	mGameScene->RegisterGameSceneListener(mPhysicsSystem);
-	mGameScene->RegisterGameSceneListener(mSpacePartitionSystem);
-	mGameScene->RegisterGameSceneListener(mEnvironmentSystem);
-	mGameScene->RegisterGameSceneListener(mAnimationSystem);
+	RegisterSystemsToGameScene(mPreSystems);
+	RegisterSystemsToGameScene(mPostSystems);
 
 	return mGameScene;
+}
+
+void NGenius::RegisterSystemsToGameScene(std::vector<ISystem*> systems)
+{
+	for (ISystem* system : systems)
+	{
+		if (system->HasToBeRegisteredToGameScene())
+		{
+			mGameScene->RegisterGameSceneListener(system);
+		}
+	}
 }
 
 GameEntity* NGenius::CreateGameEntityFromModel(const std::string& modelName, Transformation* transformation, float introductionCoef, bool isInsideSpacePartition)
@@ -570,16 +600,19 @@ void NGenius::AddCamera(ICamera* camera)
 	}
 }
 
-void NGenius::AddSystem(ISystem* system)
+void NGenius::AddSystem(ISystem* system, bool isPostGameUpdate)
 {
+	std::vector<ISystem*>* mSystems;
+	isPostGameUpdate ? mSystems = &mPostSystems : mSystems = &mPreSystems;
+
 	bool found = std::find_if(
-		mSystems.begin(),
-		mSystems.end(),
-		[&](ISystem* sys) { return sys == system; }) != mSystems.end();
+		mSystems->begin(),
+		mSystems->end(),
+		[&](ISystem* sys) { return sys == system; }) != mSystems->end();
 
 	if (!found)
 	{
-		mSystems.push_back(system);
+		mSystems->push_back(system);
 	}
 }
 

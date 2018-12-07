@@ -50,6 +50,11 @@ void PhysicsSystem::Update(float deltaTime)
 	}
 }
 
+bool PhysicsSystem::HasToBeRegisteredToGameScene() const
+{
+	return true;
+}
+
 void PhysicsSystem::ApplyMRU(float deltaTime, GameEntity* entity)
 {
 	if (entity->HasComponent<PhysicsComponent>())
@@ -135,6 +140,11 @@ void PhysicsSystem::CheckCollisionEnergyWall(GameEntity* entity)
 
 	collisionComponent->SetCollision(isColliding);
 	collisionComponent->SetCollisionPoint(collisionPoint);
+}
+
+BaseVisitable<>::ReturnType PhysicsSystem::Accept(BaseVisitor & guest)
+{
+	return BaseVisitable<>::ReturnType();
 }
 
 void PhysicsSystem::SetTerrain(const Terrain* terrain)

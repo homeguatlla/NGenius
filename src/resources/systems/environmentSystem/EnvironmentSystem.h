@@ -1,7 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
-#include "../../../visitor/BaseVisitable.h"
-#include "../../scene/IGameSceneListener.h"
+#include "../ISystem.h"
 #include <vector>
 #include <memory>
 #include <string>
@@ -10,9 +9,8 @@ class GameEntity;
 class Terrain;
 class SunLight;
 
-class EnvironmentSystem : public BaseVisitable<>, public IGameSceneListener
+class EnvironmentSystem : public ISystem
 {
-	std::vector<GameEntity*> mEntities;
 	std::vector<GameEntity*> mModificators;
 	const Terrain* mTerrain;
 	float mTimer;
@@ -25,15 +23,14 @@ public:
 	EnvironmentSystem();
 	~EnvironmentSystem();
 
-	void Start();
-	void Update(float deltaTime);
+	void Start() override;
+	void Update(float deltaTime) override;
+	bool HasToBeRegisteredToGameScene() const override;
 	
 	unsigned int GetNumberGameEntities() const;
 
 	void SetTerrain(const Terrain* terrain);
 	
-	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
-
 	float GetTimer() const;
 	void SetInitialTimer(float time);
 
@@ -60,17 +57,18 @@ public:
 	void SetFogGradient(float gradient);
 
 private:
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
+	void AddEntity(GameEntity* entity) override;
+	void RemoveEntity(GameEntity* entity) override;
+
 	void RemoveEntityVector(GameEntity* entity, std::vector<GameEntity*>& vector);
-	bool HasEnvironmentComponents(const GameEntity* entity) const;
+	bool HasSpecificComponents(const GameEntity* entity) const;
 
 	void UpdateModificatorsVector();
 
 	void UpdateTime();
 	void ApplyWind(GameEntity* entity);
 
-	void OnGameEntityAdded(GameEntity* entity) override;
-	void OnGameEntityRemoved(GameEntity* entity) override;
+	// Heredado vía ISystem
+	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor & guest) override;
 };
 

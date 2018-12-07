@@ -69,6 +69,11 @@ void EnvironmentSystem::Update(float deltaTime)
 	}
 }
 
+bool EnvironmentSystem::HasToBeRegisteredToGameScene() const
+{
+	return true;
+}
+
 void EnvironmentSystem::UpdateTime()
 {
 	mDayTime = static_cast<long>(mTimer * HOUR_DAY_SPEED);
@@ -104,6 +109,11 @@ void EnvironmentSystem::ApplyWind(GameEntity* entity)
 			effectModificators->SetValues(mModificatorsPositions);
 		}
 	}
+}
+
+BaseVisitable<>::ReturnType EnvironmentSystem::Accept(BaseVisitor & guest)
+{
+	return BaseVisitable<>::ReturnType();
 }
 
 void EnvironmentSystem::UpdateModificatorsVector()
@@ -165,32 +175,12 @@ void EnvironmentSystem::RemoveEntity(GameEntity* entity)
 	}
 }
 
-bool EnvironmentSystem::HasEnvironmentComponents(const GameEntity* entity) const
+bool EnvironmentSystem::HasSpecificComponents(const GameEntity* entity) const
 {
 	return entity != nullptr && (	entity->HasComponent<EnvironmentAffectedComponent>() || 
 									entity->HasComponent<EnvironmentModificatorComponent>());
 }
 
-void EnvironmentSystem::OnGameEntityAdded(GameEntity* entity)
-{
-	if (HasEnvironmentComponents(entity))
-	{
-		AddEntity(entity);
-	}
-}
-
-void EnvironmentSystem::OnGameEntityRemoved(GameEntity* entity)
-{
-	if (HasEnvironmentComponents(entity))
-	{
-		RemoveEntity(entity);
-	}
-}
-
-BaseVisitable<>::ReturnType EnvironmentSystem::Accept(BaseVisitor& guest)
-{
-	return AcceptImpl(*this, guest);
-}
 
 float EnvironmentSystem::GetTimer() const
 {

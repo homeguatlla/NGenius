@@ -52,8 +52,3 @@ void ISystem::OnGameEntityRemoved(GameEntity* entity)
 		RemoveEntity(entity);
 	}
 }
-
-BaseVisitable<>::ReturnType ISystem::Accept(BaseVisitor& guest)
-{
-	return AcceptImpl(*this, guest);
-}

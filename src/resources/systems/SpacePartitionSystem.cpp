@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SpacePartitionSystem.h"
+#include "ISystem.h"
 #include "renderSystem/RenderSystem.h"
 #include "../scene/quadtree/GameEntityQuadTree.h"
 #include "../GameEntity.h"
@@ -19,7 +20,7 @@ SpacePartitionSystem::SpacePartitionSystem() :
 
 SpacePartitionSystem::~SpacePartitionSystem()
 {
-	mNewEntitiesToAdd.clear();
+	mEntities.clear();
 	mEntitiesToRemove.clear();
 }
 
@@ -45,6 +46,12 @@ void SpacePartitionSystem::Update(float elapsedTime)
 	RemoveEntities();
 	AddNewEntities();
 }
+
+bool SpacePartitionSystem::HasToBeRegisteredToGameScene() const
+{
+	return true;
+}
+
 
 void SpacePartitionSystem::MarkGameEntitiesInsideCameraAsVisible(ICamera* camera)
 {
@@ -126,17 +133,7 @@ unsigned int SpacePartitionSystem::GetNumberEntities() const
 	return mQuadTree->GetNumEntities();
 }
 
-void SpacePartitionSystem::AddEntity(GameEntity* entity)
-{
-	mNewEntitiesToAdd.push_back(entity);
-}
-
-void SpacePartitionSystem::RemoveEntity(GameEntity* entity)
-{
-	mEntitiesToRemove.push_back(entity);
-}
-
-bool SpacePartitionSystem::HasSpacePartitionComponents(const GameEntity* entity)
+bool SpacePartitionSystem::HasSpecificComponents(const GameEntity* entity) const 
 {
 	return	entity->GetRenderer() != nullptr && entity->HasComponent<SpacePartitionComponent>() && 
 			entity->GetRenderer()->GetLayer() != IRenderer::LAYER_GUI;
@@ -144,30 +141,27 @@ bool SpacePartitionSystem::HasSpacePartitionComponents(const GameEntity* entity)
 
 void SpacePartitionSystem::OnGameEntityAdded(GameEntity* entity)
 {
-	if (HasSpacePartitionComponents(entity))
+	if (HasSpecificComponents(entity))
 	{
 		mAABB = mAABB.Merge(entity->GetRenderer()->GetAABB());
 		AddEntity(entity);
 	}
 }
 
-void SpacePartitionSystem::OnGameEntityRemoved(GameEntity* entity)
+void SpacePartitionSystem::RemoveEntity(GameEntity* entity)
 {
-	if (HasSpacePartitionComponents(entity))
-	{
-		RemoveEntity(entity);
-	}
+	mEntitiesToRemove.push_back(entity);
 }
 
 void SpacePartitionSystem::AddNewEntities()
 {
 	assert(mQuadTree != nullptr);
 
-	for (GameEntity* entity : mNewEntitiesToAdd)
+	for (GameEntity* entity : mEntities)
 	{
 		mQuadTree->AddGameEntity(entity);
 	}
-	mNewEntitiesToAdd.clear();
+	mEntities.clear();
 }
 
 void SpacePartitionSystem::RemoveEntities()

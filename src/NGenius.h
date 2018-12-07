@@ -10,15 +10,12 @@
 
 class RenderSystem;
 class PhysicsSystem;
-class EntitiesSystem;
 class ParticlesSystem;
 class LightsSystem;
-class InputSystem;
 class DebugSystem;
 class SpacePartitionSystem;
 class Statistics;
 class EnvironmentSystem;
-class AnimationSystem;
 class StatisticsSystem;
 
 class InputHandler;
@@ -51,17 +48,16 @@ class ISystem;
 
 class NGenius : public BaseVisitable<>, public Singleton<NGenius>
 {
-	std::vector<ISystem*> mSystems;
+	std::vector<ISystem*> mPostSystems;
+	std::vector<ISystem*> mPreSystems;
+
 	RenderSystem* mRenderSystem;
 	PhysicsSystem* mPhysicsSystem;
-	EntitiesSystem* mEntitiesSystem;
 	ParticlesSystem* mParticlesSystem;
 	LightsSystem* mLightsSystem;
-	InputSystem* mInputSystem;
 	SpacePartitionSystem* mSpacePartitionSystem;
 	DebugSystem* mDebugSystem;
 	EnvironmentSystem* mEnvironmentSystem;
-	AnimationSystem* mAnimationSystem;
 	StatisticsSystem* mStatisticsSystem;
 	InputHandler* mInputHandler;
 	Statistics* mStatistics;
@@ -113,7 +109,7 @@ public:
 	void AddRenderPassAt(unsigned int index, RenderPass* renderPass, bool addAfterPostProcessing);
 	void AddLight(Light* light);
 	void AddCamera(ICamera* camera);
-	void AddSystem(ISystem* system);
+	void AddSystem(ISystem* system, bool isPostGameUpdate);
 
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 	IMaterial* CreateDiffuseGUIMaterial(const std::string& materialName, const std::string& textureName);
@@ -189,8 +185,13 @@ private:
 	void UpdatePreSystems(float elapsedTime);
 	void UpdatePostSystems(float elapsedTime);
 	void AcceptStatistics();
-	void AcceptGuiTool();
 
 	void Render();
+
+	void ReleaseSystems(std::vector<ISystem*>& systems);
+	void UpdateSystems(std::vector<ISystem*>& systems, float elapsedTime);
+	void RegisterSystemsToGameScene(std::vector<ISystem*> systems);
+	void StartSystems(std::vector<ISystem*>& systems);
+	void AcceptSystems(std::vector<ISystem*>& systems);
 };
 

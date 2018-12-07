@@ -35,7 +35,12 @@ void DamageSystem::Update(float elapsedTime)
 	}
 }
 
-bool DamageSystem::HasDamageComponents(const GameEntity* entity) const
+bool DamageSystem::HasToBeRegisteredToGameScene() const
+{
+	return true;
+}
+
+bool DamageSystem::HasSpecificComponents(const GameEntity* entity) const
 {
 	return entity != nullptr && 
 		entity->HasComponent<DamageComponent>() && 
@@ -43,39 +48,7 @@ bool DamageSystem::HasDamageComponents(const GameEntity* entity) const
 		entity->HasComponent<GameEventsComponent>();
 }
 
-void DamageSystem::AddEntity(GameEntity* entity)
+BaseVisitable<>::ReturnType DamageSystem::Accept(BaseVisitor & guest)
 {
-	mEntities.push_back(entity);
-}
-
-void DamageSystem::RemoveEntity(GameEntity* entity)
-{
-	if (HasDamageComponents(entity))
-	{
-		std::vector<GameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](GameEntity* a) { return a == entity; });
-		if (it != mEntities.end())
-		{
-			mEntities.erase(it);
-		}
-		else
-		{
-			assert(false);
-		}
-	}
-}
-
-void DamageSystem::OnGameEntityAdded(GameEntity* entity)
-{
-	if (HasDamageComponents(entity))
-	{
-		AddEntity(entity);
-	}
-}
-
-void DamageSystem::OnGameEntityRemoved(GameEntity* entity)
-{
-	if (HasDamageComponents(entity))
-	{
-		RemoveEntity(entity);
-	}
+	return BaseVisitable<>::ReturnType();
 }
