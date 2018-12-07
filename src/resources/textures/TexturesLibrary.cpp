@@ -103,7 +103,8 @@ void TexturesLibrary::Load()
 	LoadTexture("item_water", "data/ui/hud/items/water.png", false, false);
 	LoadTexture("item_shotgun", "data/ui/hud/items/shotgun.png", false, false);
 
-	LoadTexture("gradient", "data/ui/hud/gradient.png", false, true);
+	LoadTexture("gradient", "data/ui/hud/gradient.png", false, false);
+	LoadTexture("white_line", "data/ui/hud/white_line.png", false, false);
 
 	LoadTexturesPendingToLoad();
 }

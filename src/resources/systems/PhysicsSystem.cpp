@@ -162,29 +162,7 @@ void PhysicsSystem::SetEnergyWall(const glm::vec3& position, float radius)
 	mEnergyWallPosition = position;
 }
 
-void PhysicsSystem::AddEntity(GameEntity* entity)
-{
-	if (HasPhysicsComponents(entity))
-	{
-		mEntities.push_back(entity);
-	}
-}
 
-void PhysicsSystem::RemoveEntity(GameEntity* entity)
-{
-	if (HasPhysicsComponents(entity))
-	{
-		std::vector<GameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](GameEntity* a) { return a == entity; });
-		if (it != mEntities.end())
-		{
-			mEntities.erase(it);
-		}
-		else
-		{
-			assert(false);
-		}
-	}
-}
 
 bool PhysicsSystem::IsInsideTerrain(GameEntity *entity)
 {
@@ -194,28 +172,12 @@ bool PhysicsSystem::IsInsideTerrain(GameEntity *entity)
 	return mTerrain->IsPointInside(glm::vec2(position.x, position.z));
 }
 
-bool PhysicsSystem::HasPhysicsComponents(const GameEntity* entity) const
+bool PhysicsSystem::HasSpecificComponents(const GameEntity* entity) const
 {
 	return entity != nullptr && (	entity->HasComponent<CollisionComponent>() ||
 									entity->HasComponent<PhysicsComponent>() ||
 									entity->HasComponent<EnergyWallCollisionComponent>()
 								);
-}
-
-void PhysicsSystem::OnGameEntityAdded(GameEntity* entity)
-{
-	if (HasPhysicsComponents(entity))
-	{
-		AddEntity(entity);
-	}
-}
-
-void PhysicsSystem::OnGameEntityRemoved(GameEntity* entity)
-{
-	if (HasPhysicsComponents(entity))
-	{
-		RemoveEntity(entity);
-	}
 }
 
 bool PhysicsSystem::ApplyCollisions(GameEntity *entity, float *groundHeight)
@@ -298,9 +260,4 @@ bool PhysicsSystem::ApplyEnergyWallCollision(GameEntity *entity, glm::vec3& coll
 
 	//is colliding
 	return isColliding;
-}
-
-BaseVisitable<>::ReturnType PhysicsSystem::Accept(BaseVisitor& guest)
-{
-	return AcceptImpl(*this, guest);
 }

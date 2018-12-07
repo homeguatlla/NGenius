@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <algorithm>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -566,6 +567,19 @@ void NGenius::AddCamera(ICamera* camera)
 	if (camera != nullptr)
 	{
 		mRenderSystem->AddCamera(camera);
+	}
+}
+
+void NGenius::AddSystem(ISystem* system)
+{
+	bool found = std::find_if(
+		mSystems.begin(),
+		mSystems.end(),
+		[&](ISystem* sys) { return sys == system; }) != mSystems.end();
+
+	if (!found)
+	{
+		mSystems.push_back(system);
 	}
 }
 

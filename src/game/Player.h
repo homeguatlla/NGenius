@@ -15,7 +15,7 @@ class Player
 	GameScene* mScene;
 	Character* mCharacter;
 	InventoryController *mInventoryController;
-	
+
 public:
 	Player(GameScene* scene, Transformation* transformation, InventoryController* inventoryController);
 	~Player();

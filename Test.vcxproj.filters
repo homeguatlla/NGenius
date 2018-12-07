@@ -268,6 +268,12 @@
     <Filter Include="Source Files\game\input\bindings">
       <UniqueIdentifier>{7073892a-0ba3-4733-8676-ec88a7609633}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game\systems">
+      <UniqueIdentifier>{b4ae389f-30f8-4fbd-af61-8b9b6c172218}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\systems">
+      <UniqueIdentifier>{c23f3c51-17ce-415a-82a6-873455c81b76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -903,6 +909,18 @@
     <ClInclude Include="src\resources\renderers\GUIRenderer.h">
       <Filter>Header Files\resources\renderers</Filter>
     </ClInclude>
+    <ClInclude Include="src\game\events\HealthEvent.h">
+      <Filter>Header Files\game\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\systems\DamageSystem.h">
+      <Filter>Header Files\game\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\components\DamageComponent.h">
+      <Filter>Header Files\game\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\systems\ISystem.h">
+      <Filter>Header Files\resources\systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1504,6 +1522,18 @@
     </ClCompile>
     <ClCompile Include="src\resources\renderers\GUIRenderer.cpp">
       <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\events\HealthEvent.cpp">
+      <Filter>Source Files\game\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\systems\DamageSystem.cpp">
+      <Filter>Source Files\game\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\components\DamageComponent.cpp">
+      <Filter>Source Files\game\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\systems\ISystem.cpp">
+      <Filter>Source Files\resources\systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

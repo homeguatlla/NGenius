@@ -16,6 +16,8 @@
 
 #include "../ShooterGameConstants.h"
 
+#include "../events/HealthEvent.h"
+
 
 GameHUD::GameHUD(GameScene* scene) :
 	mItemsList(nullptr),
@@ -47,6 +49,7 @@ void GameHUD::Create(GameScene* scene)
 
 void GameHUD::Update(float elapsedTime)
 {
+	mHealthHUD->OnHealthEvent(new HealthEvent(true, 100, 80));
 }
 
 ItemsListHUD* GameHUD::GetItemsListHUD()

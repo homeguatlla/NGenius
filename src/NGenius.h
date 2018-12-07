@@ -46,10 +46,12 @@ class Particle;
 class ParticlesEmitterLibrary;
 
 struct GLFWwindow;
+class ISystem;
 
 
 class NGenius : public BaseVisitable<>, public Singleton<NGenius>
 {
+	std::vector<ISystem*> mSystems;
 	RenderSystem* mRenderSystem;
 	PhysicsSystem* mPhysicsSystem;
 	EntitiesSystem* mEntitiesSystem;
@@ -111,6 +113,7 @@ public:
 	void AddRenderPassAt(unsigned int index, RenderPass* renderPass, bool addAfterPostProcessing);
 	void AddLight(Light* light);
 	void AddCamera(ICamera* camera);
+	void AddSystem(ISystem* system);
 
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 	IMaterial* CreateDiffuseGUIMaterial(const std::string& materialName, const std::string& textureName);

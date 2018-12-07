@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include "ISystem.h"
 #include "../../visitor/BaseVisitable.h"
 #include "../scene/IGameSceneListener.h"
 #include <vector>
@@ -7,9 +8,8 @@
 class GameEntity;
 class Terrain;
 
-class PhysicsSystem : public BaseVisitable<>, public IGameSceneListener
+class PhysicsSystem : public ISystem
 {
-	std::vector<GameEntity*> mEntities;
 	const Terrain* mTerrain;
 	float mEnergyWallRadius;
 	glm::vec3 mEnergyWallPosition;
@@ -34,15 +34,8 @@ public:
 	const glm::vec3& GetGravity() const;
 	void SetGravity(const glm::vec3& gravity);
 
-	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
-
 private:
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
-	bool HasPhysicsComponents(const GameEntity* entity) const;
-
-	void OnGameEntityAdded(GameEntity* entity) override;
-	void OnGameEntityRemoved(GameEntity* entity) override;
+	bool HasSpecificComponents(const GameEntity* entity) const override;
 
 	void ApplyMRU(float deltaTime, GameEntity* entity);
 	bool ApplyCollisions(GameEntity* entity, float *groundHeight);

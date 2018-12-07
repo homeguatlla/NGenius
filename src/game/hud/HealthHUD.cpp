@@ -3,6 +3,8 @@
 
 #include "../ShooterGameConstants.h"
 #include "../../NGenius.h"
+#include "../events/HealthEvent.h"
+
 #include "../../resources/materials/IMaterial.h"
 #include "../../resources/materials/MaterialsLibrary.h"
 #include "../../resources/materials/effects/MaterialEffectDiffuseTexture.h"
@@ -21,12 +23,17 @@
 
 const std::string GRADIENT_MATERIAL("gradient_material");
 const std::string GRADIENT_TEXTURE("gradient");
+
+const std::string HEALTH_BAR_MATERIAL("health_bar_material");
+const std::string HEALTH_BAR_TEXTURE("white_line");
+
 const std::string HEALTH_TEXT("Health:");
 const std::string HEALTH_MATERIAL_NAME("health_material");
 
-static const glm::vec3 HEALTH_HUD_SCALE(300.0f, 128.0f, 1.0f);
+static const glm::vec3 HEALTH_HUD_SCALE(440.0f, 128.0f, 1.0f);
+static const glm::vec3 HEALTH_BAR_SCALE(200.0f, 15.0f, 1.0f);
 
-
+/*
 int factorD;
 int factorS;
 const int factors[14] = { GL_ZERO,
@@ -44,8 +51,14 @@ const int factors[14] = { GL_ZERO,
 							GL_CONSTANT_ALPHA,
 							GL_ONE_MINUS_CONSTANT_ALPHA
 };
+*/
 
-HealthHUD::HealthHUD(GameScene* scene, const glm::vec2& screenCoord) : mScreenCoord(screenCoord)
+HealthHUD::HealthHUD(GameScene* scene, const glm::vec2& screenCoord) : 
+	mScreenCoord(screenCoord),
+	mBackgroundEntity(nullptr),
+	mHealthBarEntity(nullptr),
+	mHealthTransitionBarEntity(nullptr),
+	mHealthTextEntity(nullptr)
 {
 	Create(scene);
 }
@@ -60,6 +73,7 @@ void HealthHUD::Create(GameScene* scene)
 {
 	CreateBackground(scene);
 	CreateText(scene);
+	CreateHealthBar(scene);
 }
 
 void HealthHUD::CreateBackground(GameScene* scene)
@@ -68,34 +82,13 @@ void HealthHUD::CreateBackground(GameScene* scene)
 	IMaterial* material = NGenius::GetInstance().CreateDiffuseGUIMaterial(GRADIENT_MATERIAL, GRADIENT_TEXTURE);
 	IRenderer* guiRenderer = new GUIRenderer(NGenius::GetInstance().GetModel(GUI_QUAD_MODEL), material);
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
-	//guiRenderer->SetTransparency(true);
-
+	
 	mBackgroundEntity = new GameEntity(
 		new Transformation(glm::vec3(mScreenCoord.x, mScreenCoord.y, 0.0f),
 			glm::vec3(0.0f),
 			HEALTH_HUD_SCALE),
 		guiRenderer);
-	//GUIRenderer* renderer = static_cast<GUIRenderer*>(mBackgroundEntity->GetRenderer());
-	//renderer->SetBlendFactors(GL_SRC_ALPHA, GL_DST_COLOR);
 	scene->AddEntity(mBackgroundEntity);
-}
-
-void HealthHUD::UpdateValues()
-{
-	GUIRenderer* renderer = static_cast<GUIRenderer*>(mHealthTextEntity->GetRenderer());
-	renderer->SetBlendFactors(GL_SRC_ALPHA, factors[factorS]);
-
-	//renderer = static_cast<GUIRenderer*>(mBackgroundEntity->GetRenderer());
-	//renderer->SetBlendFactors(factors[factorS], GL_DST_COLOR);
-
-	Log(Log::LOG_INFO) << "factorS " << factorS << " factorD " << factorD << "\n";
-
-	factorS = factorS + 1;
-	if (factorS > 13)
-	{
-		factorS = 0;
-		factorD++;
-	}
 }
 
 void HealthHUD::CreateText(GameScene* scene)
@@ -114,7 +107,7 @@ void HealthHUD::CreateText(GameScene* scene)
 		glm::vec2(0.0f)));
 
 	mHealthTextEntity = new Text(
-		new Transformation(glm::vec3(mScreenCoord.x - 80.0f, mScreenCoord.y - 50.0f, 1.0f),
+		new Transformation(glm::vec3(mScreenCoord.x - 90.0f, mScreenCoord.y - 50.0f, 1.0f),
 			glm::vec3(0.0f),
 			glm::vec3(0.20f)
 		),
@@ -124,4 +117,33 @@ void HealthHUD::CreateText(GameScene* scene)
 	renderer->SetBlendFactors(GL_SRC_ALPHA, GL_CONSTANT_ALPHA);
 	renderer->SetDepthTestEnabled(true);
 	scene->AddEntity(mHealthTextEntity);
+}
+
+void HealthHUD::CreateHealthBar(GameScene* scene)
+{
+	IMaterial* material = NGenius::GetInstance().CreateDiffuseGUIMaterial(HEALTH_BAR_MATERIAL, HEALTH_BAR_TEXTURE);
+	IRenderer* guiRenderer = new GUIRenderer(NGenius::GetInstance().GetModel(GUI_QUAD_MODEL), material);
+	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
+
+	mHealthBarEntity = new GameEntity(
+		new Transformation(glm::vec3(mScreenCoord.x + 100.0f, mScreenCoord.y - 35.0f, 0.0f),
+			glm::vec3(0.0f),
+			HEALTH_BAR_SCALE),
+		guiRenderer);
+	scene->AddEntity(mHealthBarEntity);
+}
+
+void HealthHUD::UpdateHealthBar(float health)
+{
+	Transformation* transformation = mHealthBarEntity->GetTransformation();
+	glm::vec3 scale = transformation->GetScale();
+
+	scale.x = HEALTH_BAR_SCALE.x * health;
+
+	transformation->SetScale(scale);
+}
+
+void HealthHUD::OnHealthEvent(HealthEvent* health)
+{
+	UpdateHealthBar(health->GetHealth() / health->GetMaxHealth());
 }
