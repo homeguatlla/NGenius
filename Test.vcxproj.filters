@@ -924,6 +924,12 @@
     <ClInclude Include="src\game\controllers\HealthController.h">
       <Filter>Header Files\game\controller</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\events\characterControllerEvents\DieEvent.h">
+      <Filter>Header Files\resources\events\characterControllerEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\hud\HorizontalBar.h">
+      <Filter>Header Files\game\hud</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1540,6 +1546,12 @@
     </ClCompile>
     <ClCompile Include="src\game\controllers\HealthController.cpp">
       <Filter>Source Files\game\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\events\characterControllerEvents\DieEvent.cpp">
+      <Filter>Source Files\resources\events\characterControllerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\hud\HorizontalBar.cpp">
+      <Filter>Source Files\game\hud</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

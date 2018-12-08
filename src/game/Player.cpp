@@ -30,6 +30,7 @@
 #include "../resources/events/characterControllerEvents/JumpEvent.h"
 #include "../resources/events/characterControllerEvents/TurnEvent.h"
 #include "../resources/events/characterControllerEvents/HealthEvent.h"
+#include "../resources/events/characterControllerEvents/DieEvent.h"
 
 #include "events/PickupGameEntityEvent.h"
 #include "events/DropItemInventoryEvent.h"
@@ -163,6 +164,11 @@ void Player::Update(float elapsedTime)
 		else if (event->IsOfType<HealthEvent>())
 		{
 			mHealthController->OnHealthEvent(static_cast<HealthEvent*>(event));
+			gameEventsComponent->ConsumeEvent();
+		}
+		else if (event->IsOfType<DieEvent>())
+		{
+			//TODO: hacer lo que sea cuando muere el player
 			gameEventsComponent->ConsumeEvent();
 		}
 	}

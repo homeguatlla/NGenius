@@ -188,6 +188,7 @@
     <ClInclude Include="src\game\events\StoreIntoInventoryEvent.h" />
     <ClInclude Include="src\game\hud\GameHUD.h" />
     <ClInclude Include="src\game\hud\HealthHUD.h" />
+    <ClInclude Include="src\game\hud\HorizontalBar.h" />
     <ClInclude Include="src\game\hud\ItemHUD.h" />
     <ClInclude Include="src\game\hud\ItemsListHUD.h" />
     <ClInclude Include="src\game\input\bindings\KeyToPickUpGameEntityEventBind.h" />
@@ -253,6 +254,7 @@
     <ClInclude Include="src\resources\events\characterControllerEvents\BackwardEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\ButtonLeftEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\ButtonRightEvent.h" />
+    <ClInclude Include="src\resources\events\characterControllerEvents\DieEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\ForwardEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\HealthEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\JumpEvent.h" />
@@ -414,6 +416,7 @@
     <ClCompile Include="src\game\events\StoreIntoInventoryEvent.cpp" />
     <ClCompile Include="src\game\hud\GameHUD.cpp" />
     <ClCompile Include="src\game\hud\HealthHUD.cpp" />
+    <ClCompile Include="src\game\hud\HorizontalBar.cpp" />
     <ClCompile Include="src\game\hud\ItemHUD.cpp" />
     <ClCompile Include="src\game\hud\ItemsListHUD.cpp" />
     <ClCompile Include="src\game\input\bindings\KeyToPickUpGameEntityEventBind.cpp" />
@@ -476,6 +479,7 @@
     <ClCompile Include="src\resources\events\characterControllerEvents\BackwardEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\ButtonLeftEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\ButtonRightEvent.cpp" />
+    <ClCompile Include="src\resources\events\characterControllerEvents\DieEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\ForwardEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\HealthEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\JumpEvent.cpp" />

@@ -4,16 +4,14 @@
 
 class GameScene;
 class GameEntity;
-class Text;
 class HealthEvent;
+class HorizontalBar;
 
 class HealthHUD
 {
 	GameEntity* mBackgroundEntity;
-	GameEntity* mHealthBarEntity;
-	GameEntity* mHealthTransitionBarEntity;
-	Text* mHealthTextEntity;
 	glm::vec2 mScreenCoord;
+	HorizontalBar* mHorizontalBar;
 
 public:
 	HealthHUD(GameScene* scene, const glm::vec2& screenCoord);
@@ -24,8 +22,6 @@ public:
 private:
 	void Create(GameScene* scene);
 	void CreateBackground(GameScene* scene);
-	void CreateText(GameScene* scene);
-	void CreateHealthBar(GameScene* scene);
-	void UpdateHealthBar(float health);
+	void CreateHorizontalBar(GameScene* scene);
 };
 

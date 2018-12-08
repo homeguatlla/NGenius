@@ -1,0 +1,65 @@
+Juego: Mars scape
+
+
+- Eres un prisionero en una prision de alta seguridad en Marte.
+- Hay otros prisioneros. Mismo personajes distintas skins.
+- Hay guardias robots como los de Elysium. Te pueden disparar y matar.
+
+- Tu personaje puede ir vestido normal o con traje espacial para salir fuera.
+- Existen baterías que convierten el aire de marte en oxígeno.
+- Existen baterías que convierten el aire de marte en agua.
+
+- La prisión consta de:
+	- Barracones donde están los presos. 
+	- Un Hangar o Helipuerto donde hay una nave.
+	- Un Centro de mandos.
+	- Un Hospital.
+	- Una Cantina o Bar.
+	- Un edificio de suministros.
+	- Un edificio de reparación robots.
+	- Unas ballas de energía que separan los distintos edificios y accesos.
+	- Campo de trabajo. Picar minerales.
+	
+- Hay ciclos de 24h que se repiten.
+	- Durante el día hay que seguir una serie de reglas
+	- Durante la noche no se puede salir de los barracones.
+	
+- El campo está rodeado de una barrera de energía que se tiene que desactivar para escapar.
+
+- El jugador:
+	- Dispone de barra de vida
+	- Dispone de barra de oxígeno o tiempo de oxígeno cuando lleva el traje puesto.
+	- Su salud disminuye si le falta oxígeno. 
+	- Su salud disminuye en otras circumstancias.
+	
+- Robots:
+	- Se mueven solos siguiendo sus ciclos de movimiento
+	- Si algun jugador no obedece o se salta las normas le dan un aviso. 
+	- Si algun jugador no obedece o se salta las normas y le han dado un aviso le disparan hasta que esté obedeciendo.
+	- Son voladores, no són terrestres.
+	- Se pueden averiar.
+	- Se pueden reparar.
+	- Usan baterías de agua.
+	
+- Los RPC:
+	- Son estrictos en todas sus acciones. 
+	- Obedecen fielmente las normas del campo.
+	- No interactuan con el jugador.
+	
+- Objetos que se pueden recoger:
+	- Baterías de oxígeno.
+	- Baterías de agua.
+	- Traje espacial.
+	- Una cura.
+	- Pase para entrar en el centro de mando.
+	- Pase para entrar en los suministros.
+	- Pase para entrar en hospital.
+	- Herramientas de trabajo para reparar/modificar robots.
+	- Pico
+	- Pala
+	- Botiquín
+	- Una especie de moneda acumulable.
+	
+	
+	
+	

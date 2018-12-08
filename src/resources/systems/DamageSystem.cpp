@@ -5,6 +5,7 @@
 #include "../components/DamageComponent.h"
 #include "../components/HealthComponent.h"
 #include "../events/characterControllerEvents/HealthEvent.h"
+#include "../events/characterControllerEvents/DieEvent.h"
 
 #include <algorithm>
 #include <assert.h>
@@ -45,7 +46,7 @@ void DamageSystem::Update(float elapsedTime)
 
 			if (healthComponent->IsDeath())
 			{
-				//TODO enviar un evento de deathevent
+				gameEventsComponent->OnCharacterControllerEvent(new DieEvent());
 			}
 		}
 	}
