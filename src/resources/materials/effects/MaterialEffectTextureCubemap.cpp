@@ -42,11 +42,13 @@ void MaterialEffectTextureCubemap::SetBlendFactor(float blendFactor)
 
 void MaterialEffectTextureCubemap::SetCubemap1(TextureCubemap* texture)
 {
+	assert(texture != nullptr);
 	mTexture1 = texture;
 }
 
 void MaterialEffectTextureCubemap::SetCubemap2(TextureCubemap* texture)
 {
+	assert(texture != nullptr);
 	mTexture2 = texture;
 }
 

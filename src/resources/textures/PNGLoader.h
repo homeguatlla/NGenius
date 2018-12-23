@@ -22,6 +22,7 @@ class PNGLoader
 	png_infop mInfoPtr;
 	int mNumberOfPasses;
 	png_bytep * mRowPointers;
+	bool mHasAlpha;
 
 	unsigned char* mData;
 
@@ -36,7 +37,7 @@ public:
 	unsigned char GetG(int u, int v) const;
 	unsigned char GetB(int u, int v) const;
 	unsigned char GetA(int u, int v) const;
-
+	bool HasAlpha() const { return mHasAlpha; }
 
 	void SetHeight(int height) { mHeight = height;  }
 	void SetWidth(int width) { mWidth = width;  }

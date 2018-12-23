@@ -528,8 +528,16 @@ void RenderSystem::ApplyLights(IRenderer* renderer)
 	MaterialEffectTextureCubemap* textureCubemapMaterial = mCurrentMaterial->GetEffect<MaterialEffectTextureCubemap>();
 	if (textureCubemapMaterial != nullptr)
 	{
-		textureCubemapMaterial->SetCubemap1(static_cast<TextureCubemap*>(mTexturesLibrary->GetElement(mEnvironmentSystem->GetSkyBoxCubemapOrigin())));
-		textureCubemapMaterial->SetCubemap2(static_cast<TextureCubemap*>(mTexturesLibrary->GetElement(mEnvironmentSystem->GetSkyBoxCubemapDestination())));
+		TextureCubemap*  texture1 = static_cast<TextureCubemap*>(mTexturesLibrary->GetElement(mEnvironmentSystem->GetSkyBoxCubemapOrigin()));
+		TextureCubemap * texture2 = static_cast<TextureCubemap*>(mTexturesLibrary->GetElement(mEnvironmentSystem->GetSkyBoxCubemapDestination()));
+		if (texture1 != nullptr)
+		{
+			textureCubemapMaterial->SetCubemap1(texture1);
+		}
+		if (texture2 != nullptr)
+		{
+			textureCubemapMaterial->SetCubemap2(texture2);
+		}
 		textureCubemapMaterial->SetBlendFactor(mEnvironmentSystem->GetSunLightBlendFactor());
 	}
 }
@@ -640,7 +648,10 @@ void RenderSystem::SelectTextures()
 	MaterialEffectTextureCubemap* textureCubemapMaterial = mCurrentMaterial->GetEffect<MaterialEffectTextureCubemap>();
 	if (textureCubemapMaterial != nullptr)
 	{
-		textureCubemapMaterial->GetCubemap1()->SetActive(true);
+		if (textureCubemapMaterial->GetCubemap1() != nullptr)
+		{
+			textureCubemapMaterial->GetCubemap1()->SetActive(true);
+		}
 		if (textureCubemapMaterial->GetCubemap2() != nullptr)
 		{
 			textureCubemapMaterial->GetCubemap2()->SetActive(true);

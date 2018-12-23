@@ -32,7 +32,9 @@ bool Texture::Load(const std::string& filename, unsigned int textureUnit, bool h
 	glGenTextures(1, &mTextureID);
 	glActiveTexture(GL_TEXTURE0 + mTextureUnit);
 	glBindTexture(GL_TEXTURE_2D, mTextureID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, mLoader.GetData());
+	int colorMode = mLoader.HasAlpha() ? GL_RGBA : GL_RGB;
+
+	glTexImage2D(GL_TEXTURE_2D, 0, colorMode, mWidth, mHeight, 0, colorMode, GL_UNSIGNED_BYTE, mLoader.GetData());
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, hasWrapping ? GL_REPEAT : GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, hasWrapping ? GL_REPEAT : GL_CLAMP_TO_EDGE);

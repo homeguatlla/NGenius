@@ -84,21 +84,21 @@ Mesh* OBJLoader::LoadModel(const std::string& filename)
 			{
 				continue;
 			}
-			indexes.push_back(f.vertex.x);
-			indexes.push_back(f.vertex.y);
+			indexes.push_back(f.vertex.x - 1);
+			indexes.push_back(f.vertex.y - 1);
 			if (f.vertex.z > 0)
 			{
 				//there is normal information
-				indexes.push_back(f.vertex.z);
+				indexes.push_back(f.vertex.z - 1);
 				hasNormals = true;
 			}
 
-			vertexs.push_back(tempVertexs[f.vertex.x - 1]);
+			/*vertexs.push_back(tempVertexs[f.vertex.x - 1]);
 			vertexs.push_back(tempVertexs[f.vertex.y - 1]);
 			if (hasNormals)
 			{
 				vertexs.push_back(tempVertexs[f.vertex.z - 1]);
-			}
+			}*/
 
 			if (!tempUvs.empty())
 			{
@@ -118,9 +118,9 @@ Mesh* OBJLoader::LoadModel(const std::string& filename)
 			}
 		}
 
-		if (vertexs.size() > 0)
+		if (tempVertexs.size() > 0)
 		{
-			Mesh* model = new Mesh(vertexs, uvs, indexes, normals);
+			Mesh* model = new Mesh(tempVertexs, tempUvs, indexes, tempNormals);
 
 			if (!materialFilename.empty())
 			{

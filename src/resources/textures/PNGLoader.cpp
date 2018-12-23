@@ -18,7 +18,7 @@ PNGLoader::~PNGLoader(void)
 
 bool PNGLoader::ReadPNGFile(const char* file_name)
 {
-	bool hasAlpha = false;
+	mHasAlpha = false;
 
 	Log(Log::LOG_INFO) << file_name << "\n";
 	
@@ -75,10 +75,10 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 	
 	switch (mInfoPtr->color_type) {
 	case PNG_COLOR_TYPE_RGBA:
-		hasAlpha = true;
+		mHasAlpha = true;
 		break;
 	case PNG_COLOR_TYPE_RGB:
-		hasAlpha = false;
+		mHasAlpha = false;
 		break;
 	default:
 		png_destroy_read_struct(&mPngPtr, &mInfoPtr, NULL);
@@ -105,7 +105,7 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 	int colorMode = 3;			// 4 for RGBA, 3 for RGB
 	unsigned char *imageData;	// the PNG data
 
-	if (hasAlpha)
+	if (mHasAlpha)
 	{
 		colorMode = 4;
 	}

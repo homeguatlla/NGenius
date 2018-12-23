@@ -1,5 +1,5 @@
 #pragma once
-#include "VerticesRenderer.h"
+#include "IndicesRenderer.h"
 #include<string>
 
 class Model;
@@ -7,7 +7,7 @@ class IMaterial;
 class Texture;
 class ICamera;
 
-class EnergyWallRenderer : public VerticesRenderer
+class EnergyWallRenderer : public IndicesRenderer
 {
 	unsigned int mMatrixVBO;
 
