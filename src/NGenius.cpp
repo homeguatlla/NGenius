@@ -505,15 +505,39 @@ GameEntity* NGenius::CreateGameEntityFromModel(const std::string& modelName, Tra
 	Model* model = GetModel(modelName);
 	if (model != nullptr)
 	{
-		IMaterial* material = GetMaterial(model->GetMaterialName());
+		return CreateGameEntityFromModelAndTextures(
+			modelName, 
+			transformation, 
+			model->GetMaterialName() + "_diffuse", 
+			model->GetMaterialName() + "_normalmap", 
+			introductionCoef, 
+			isInsideSpacePartition);
+	}
+
+	return nullptr;
+}
+
+GameEntity* NGenius::CreateGameEntityFromModelAndTextures(const std::string& modelName, Transformation* transformation, std::string& textureName, std::string& normalTextureName, float introductionCoef, bool isInsideSpacePartition)
+{
+	Model* model = GetModel(modelName);
+	if (model != nullptr)
+	{
+		std::string materialName(model->GetMaterialName());
+
+		if (!textureName.empty())
+		{
+			materialName = textureName + "_material";
+		}
+
+		IMaterial* material = GetMaterial(materialName);
 		if (material == nullptr)
 		{
 			std::string shaderName = model->HasNormalmap() ? "normalmap" : "model";
 
-			material = CreateMaterial(model->GetMaterialName(), GetShader(shaderName));
+			material = CreateMaterial(materialName, GetShader(shaderName));
 		}
 		material->AddEffect(new MaterialEffectDiffuseTexture(
-			static_cast<Texture*>(GetTexture(model->GetMaterialName() + "_diffuse")),
+			static_cast<Texture*>(GetTexture(textureName)),
 			glm::vec3(1.0f, 1.0f, 1.0f),
 			1
 		));
@@ -522,7 +546,7 @@ GameEntity* NGenius::CreateGameEntityFromModel(const std::string& modelName, Tra
 		if (model->HasNormalmap())
 		{
 			material->AddEffect(new MaterialEffectNormalTexture(
-				static_cast<Texture*>(GetTexture(model->GetMaterialName() + "_normalmap")),
+				static_cast<Texture*>(GetTexture(normalTextureName)),
 				1
 			));
 		}

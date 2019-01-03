@@ -177,6 +177,7 @@
     <ClInclude Include="src\BasicTypes.h" />
     <ClInclude Include="src\BitNumber.h" />
     <ClInclude Include="src\Frustum.h" />
+    <ClInclude Include="src\game\building\BuildingBuilder.h" />
     <ClInclude Include="src\game\components\PickupGameEntityComponent.h" />
     <ClInclude Include="src\game\controllers\HealthController.h" />
     <ClInclude Include="src\game\controllers\InventoryController.h" />
@@ -405,6 +406,7 @@
     <ClCompile Include="src\AABB.cpp" />
     <ClCompile Include="src\BitNumber.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
+    <ClCompile Include="src\game\building\BuildingBuilder.cpp" />
     <ClCompile Include="src\game\components\PickupGameEntityComponent.cpp" />
     <ClCompile Include="src\game\controllers\HealthController.cpp" />
     <ClCompile Include="src\game\controllers\InventoryController.cpp" />

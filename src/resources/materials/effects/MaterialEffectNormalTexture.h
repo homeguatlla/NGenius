@@ -13,7 +13,9 @@ public:
 	virtual ~MaterialEffectNormalTexture();
 
 	ITexture* GetNormalTexture() const;
+	void SetNormalTexture(ITexture* texture);
 	float GetTile() const;
+	void SetTile(float tile);
 
 	void CopyValuesFrom(IMaterial* material) override;
 

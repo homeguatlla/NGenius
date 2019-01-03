@@ -16,6 +16,7 @@ class MarsPlanet
 	ICamera* mGameplayCamera;
 	GameEntity* mSkyBox;
 	std::vector<GameEntity*> mPropsEntityList;
+	std::vector<GameEntity*> mFloorEntityList;
 
 public:
 	MarsPlanet(GameScene* scene, ICamera* gameplayCamera);
@@ -26,7 +27,7 @@ private:
 	void CreateTerrain();
 	void CreateSky();
 	void CreateRocks();
-
-	GameEntity* CreateGameEntityFromModel(const std::string& modelName, Transformation* transformation, float introductionCoef);
+	void CreateCamp();
+	void CreateCampTest();
 };
 

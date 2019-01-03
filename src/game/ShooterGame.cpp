@@ -28,10 +28,15 @@
 
 #include "../resources/materials/IMaterial.h"
 #include "../resources/materials/effects/MaterialEffectDirectionalLightProperties.h"
+#include "../resources/materials/effects/MaterialEffectDiffuseTexture.h"
+#include "../resources/materials/effects/MaterialEffectDepthTexture.h"
+#include "../resources/materials/effects/MaterialEffectFloat2.h"
 
 #include "../resources/renderers/IRenderer.h"
 
 #include "../resources/scene/GameScene.h"
+
+#include "../resources/entities/EnergyWall.h"
 
 #include "entities/EntitiesFactory.h"
 
@@ -46,7 +51,6 @@ ShooterGame::ShooterGame() :
 	mThirdPersonCameraEntity(nullptr)
 {
 }
-
 
 ShooterGame::~ShooterGame()
 {
@@ -79,8 +83,9 @@ void ShooterGame::Start()
 
 	CreateThirdpersonCamera();
 	CreateEnvironment();
+	//CreateEnergyWall();
 
-	CreateInitialProps();
+	//CreateInitialProps();
 
 	mGameHUD->SetVisibility(true);
 }
@@ -155,11 +160,19 @@ void ShooterGame::CreateThirdpersonCamera()
 void ShooterGame::CreateEnvironment()
 {
 	//mars
+	
 	NGenius::GetInstance().AddSunLightFrame(1200.0f, 90.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, 0.004f, 1.5f, "day_cubemap");
 	NGenius::GetInstance().AddSunLightFrame(1800.0f, 135.0f, glm::vec3(0.93f, 0.64f, 0.78f), glm::vec3(218.0f, 74.0f, 43.0f) / 255.0f, 0.04f, 1.5f, "day_cubemap");
 	NGenius::GetInstance().AddSunLightFrame(2400.0f, 270.0f, glm::vec3(0.86f, 0.64f, 0.93f), glm::vec3(0.0f), 0.004f, 1.5f, "night_cubemap");
 	NGenius::GetInstance().AddSunLightFrame(600.0f, 45.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, glm::vec3(251.0f, 114.0f, 55.0f) / 255.0f, 0.08f, 1.5f, "day_cubemap");
+	
 	NGenius::GetInstance().SetInitialEnvironmentTimer(3600 * 12);
+	/*
+	NGenius::GetInstance().AddSunLightFrame(1200.0f, 90.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, 1.5f, "day_cubemap");
+	NGenius::GetInstance().AddSunLightFrame(1800.0f, 135.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, 1.5f, "day_cubemap");
+	NGenius::GetInstance().AddSunLightFrame(2400.0f, 270.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, 1.5f, "night_cubemap");
+	NGenius::GetInstance().AddSunLightFrame(600.0f, 45.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, 1.5f, "day_cubemap");
+	*/
 }
 
 void ShooterGame::CreateInitialProps()
@@ -179,4 +192,22 @@ void ShooterGame::CreateInitialProps()
 		
 		factory.Create(InventoryItem::ITEM_WATER_BATTERY, glm::vec3(x, y, z), mScene);
 	}
+}
+
+void ShooterGame::CreateEnergyWall()
+{
+	IMaterial* material = NGenius::GetInstance().CreateMaterial("energy_wall", NGenius::GetInstance().GetShader("energy_wall"));
+	material->AddEffect(new MaterialEffectDiffuseTexture(NGenius::GetInstance().GetTexture("energy_wall"), glm::vec3(0.0f), 10.0f));
+	material->AddEffect(new MaterialEffectDepthTexture(NGenius::GetInstance().GetTexture("depth_texture"), 1.0f));
+	material->AddEffect(new MaterialEffectFloat2(glm::vec2(NGenius::GetInstance().GetScreenWidth(), NGenius::GetInstance().GetScreenHeight())));
+
+	float radius = 60.0f;
+
+	mEnergyWall = new EnergyWall(new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(radius)),
+		material,
+		NGenius::GetInstance().GetModel("sphere"),
+		2.0f
+	);
+	mScene->AddEntity(mEnergyWall);
+	NGenius::GetInstance().SetEnergyWall(glm::vec3(0.0f), radius);
 }

@@ -101,6 +101,7 @@ public:
 	GameScene* GetGameScene(const std::string& name);
 
 	GameEntity* CreateGameEntityFromModel(const std::string& modelName, Transformation* transformation, float introductionCoef = 0.0f, bool isInsideSpacePartition = true);
+	GameEntity* CreateGameEntityFromModelAndTextures(const std::string& modelName, Transformation* transformation, std::string& textureName, std::string& normalTextureName, float introductionCoef = 0.0f, bool isInsideSpacePartition = true);
 	Particle* CreateParticle(Texture* texture, bool isAffectedByPhysics = false, bool canCollide = false);
 
 

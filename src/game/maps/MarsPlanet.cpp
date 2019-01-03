@@ -4,6 +4,8 @@
 #include "../ShooterGameConstants.h"
 #include "../EngineConstants.h"
 
+#include "../building/BuildingBuilder.h"
+
 #include "../../resources/scene/GameScene.h"
 
 #include "../../resources/materials/MaterialsLibrary.h"
@@ -57,7 +59,8 @@ void MarsPlanet::Create()
 {
 	CreateTerrain();
 	CreateSky();
-	CreateRocks();
+	//CreateRocks();
+	CreateCamp();
 }
 
 void MarsPlanet::CreateTerrain()
@@ -67,7 +70,7 @@ void MarsPlanet::CreateTerrain()
 	terrainPass->EnableFog(true);
 	mEngine->AddRenderPassAt(1, terrainPass, false);
 
-	bool isFlat = false;
+	bool isFlat = true;
 
 	float scale = isFlat ? 0.0f : TERRAIN_SCALE;
 
@@ -105,7 +108,7 @@ void MarsPlanet::CreateSky()
 	skyboxRenderer->SetLayer(IRenderer::LAYER_PARTICLES);
 
 	mSkyBox = new GameEntity(
-								new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(100.0f)),
+								new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(200.0f)),
 								skyboxRenderer
 							);
 	mSkyBox->AddComponent(new RotationComponent(glm::vec3(0.0f, 1.0f, 0.0f), EngineConstants::SKYBOX_ROTATION_SPEED));
@@ -143,4 +146,469 @@ void MarsPlanet::CreateRocks()
 			mScene->AddEntity(rock);
 		}
 	}
+}
+
+void MarsPlanet::CreateCamp()
+{
+	BuildingBuilder builder(mScene);
+
+	std::vector<std::vector<unsigned int>> matrix;
+	std::vector<unsigned int> row;
+	row.push_back(57);
+	row.push_back(49);
+	row.push_back(51);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(57);
+	row.push_back(51);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(57);
+	row.push_back(49);
+	row.push_back(49);
+	row.push_back(51);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(3);
+
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(60);
+	row.push_back(48);
+	row.push_back(54);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(56);
+	row.push_back(48);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(60);
+	row.push_back(48);
+	row.push_back(52);
+	row.push_back(54);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(1);
+
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(8);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(60);
+	row.push_back(54);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(1);
+
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(8);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(8);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(57);
+	row.push_back(49);
+	row.push_back(49);
+	row.push_back(51);
+
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(8);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(60);
+	row.push_back(48);
+	row.push_back(52);
+	row.push_back(54);
+
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(8);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(9);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(1);
+	row.push_back(3);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(56);
+	row.push_back(50);
+	row.push_back(0);
+
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(8);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(8);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(2);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(48);
+	row.push_back(50);
+	row.push_back(0);
+
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(8);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(8);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(56);
+	row.push_back(50);
+	row.push_back(0);
+
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(8);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(8);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(2);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(57);
+	row.push_back(48);
+	row.push_back(49);
+	row.push_back(51);
+
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(8);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(12);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(6);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(60);
+	row.push_back(52);
+	row.push_back(52);
+	row.push_back(54);
+
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(57);
+	row.push_back(49);
+	row.push_back(48);
+	row.push_back(49);
+	row.push_back(51);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(8);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(2);
+
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(60);
+	row.push_back(48);
+	row.push_back(13);
+	row.push_back(7);
+	row.push_back(50);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(16);
+	row.push_back(16);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(57);
+	row.push_back(49);
+	row.push_back(49);
+	row.push_back(49);
+	row.push_back(14);
+
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(57);
+	row.push_back(48);
+	row.push_back(48);
+	row.push_back(48);
+	row.push_back(50);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(16);
+	row.push_back(16);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(0);
+	row.push_back(48);
+	row.push_back(48);
+	row.push_back(48);
+	row.push_back(48);
+	row.push_back(50);
+
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(60);
+	row.push_back(52);
+	row.push_back(54);
+	row.push_back(52);
+	row.push_back(54);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(12);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(4);
+	row.push_back(60);
+	row.push_back(52);
+	row.push_back(52);
+	row.push_back(52);
+	row.push_back(54);
+
+	matrix.push_back(row);
+
+	builder.SetWallsMatrix(matrix);
+	builder.SetCentre(glm::vec3(12.5f, 0.0f, 0.0f));
+	builder.Build();
+}
+
+void MarsPlanet::CreateCampTest()
+{
+	BuildingBuilder builder(mScene);
+
+	std::vector<std::vector<unsigned int>> matrix;
+	std::vector<unsigned int> row;
+	row.push_back(1);
+	row.push_back(0);
+	row.push_back(2);
+	row.push_back(0);
+	row.push_back(4);
+	row.push_back(0);
+	row.push_back(8);
+
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(0);
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(3);
+	row.push_back(0);
+	row.push_back(6);
+	row.push_back(0);
+	row.push_back(12);
+	row.push_back(0);
+	row.push_back(9);
+
+	matrix.push_back(row);
+	row.clear();
+	row.push_back(0);
+	matrix.push_back(row);
+
+	row.clear();
+	row.push_back(11);
+	row.push_back(0);
+	row.push_back(7);
+	row.push_back(0);
+	row.push_back(14);
+	row.push_back(0);
+	row.push_back(13);
+
+	matrix.push_back(row);
+
+	builder.SetWallsMatrix(matrix);
+	builder.Build();
 }

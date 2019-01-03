@@ -11,9 +11,10 @@ class GameEntity;
 class Inventory;
 class InventoryController;
 class HealthController;
+class EnergyWall;
 struct GLFWwindow;
 
-class ShooterGame 
+class ShooterGame
 {
 	GameScene* mScene;
 	GameHUD* mGameHUD;
@@ -24,6 +25,7 @@ class ShooterGame
 	Inventory* mInventory;
 	InventoryController* mInventoryController;
 	HealthController* mHealthController;
+	EnergyWall* mEnergyWall;
 
 public:
 	ShooterGame();
@@ -39,5 +41,6 @@ private:
 	void CreateThirdpersonCamera();
 	void CreateEnvironment();
 	void CreateInitialProps();
+	void CreateEnergyWall();
 };
 

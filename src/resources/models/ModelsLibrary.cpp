@@ -33,6 +33,8 @@ void ModelsLibrary::Load()
 	CreateQuad("gui_quad", 0.5f, 0.5f);
 	CreateQuad("particle_quad", 0.5f, 0.5f);
 
+	LoadModel("sphere", "data/models/sphere/sphere.obj", false, true);
+
 	//LoadModel("cube2", "data/models/cube/cube.obj", false, true);
 	//LoadModel("enano", "data/models/enano/enano.obj", false, true);
 	//LoadModel("mazo", "data/models/mazo/mazo.obj", false, true);
@@ -53,7 +55,7 @@ void ModelsLibrary::Load()
 	LoadModel("crate", "data/models/props/crate.obj", true, true);
 	LoadModel("statue", "data/models/props/statue.obj", true, true);
 
-	LoadModel("sphere", "data/models/sphere/sphere.obj", false, true);
+	
 	
 	LoadModel("tree_foliage_0", "data/models/tree4/tree_foliage_lod0.obj", false, true);
 	LoadModel("tree_foliage_1", "data/models/tree4/tree_foliage_lod1.obj", false, true);
@@ -79,7 +81,7 @@ void ModelsLibrary::Load()
 	//LoadModel("bridge", "data/models/wooden_bridge/wooden_bridge.fbx", false, true);
 
 
-	//LoadModel("cubeSimple", "data/models/cube/untitled.dae", false, true);
+	LoadModel("cubeTexture", "data/models/cube/cubeTextured.dae", false, true);
 
 	//LoadModel("cube_animated", "data/models/cube/cube.fbx", false, true);
 	/*

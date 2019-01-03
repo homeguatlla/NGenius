@@ -81,7 +81,8 @@ void TexturesLibrary::Load()
 
 	LoadTexture("smoke", "data/textures/smoke_64_.png", false, false);
 	LoadTexture("smoke_white", "data/textures/smoke_white_64.png", false, false);
-	LoadTexture("yellow_grid", "data/textures/grid_64.png", false, true);
+	//LoadTexture("yellow_grid", "data/textures/grid_64.png", false, true);
+	LoadTexture("energy_wall", "data/terrain/mars/energy_wall.png", false, true);
 	LoadTexture("stall", "data/models/stall/stall.png", false, false);
 	
 	LoadTexture("grass2", "data/textures/grass2.png", false, false);
@@ -93,6 +94,31 @@ void TexturesLibrary::Load()
 
 	LoadTexture("barrel_diffuse", "data/models/barrel/barrel.png", false, false);
 	LoadTexture("barrel_normalmap", "data/models/barrel/barrelNormal.png", false, false);
+
+	//Building
+	LoadTexture("floor1", "data/building/floor1.png", true, true);
+	LoadTexture("floor5", "data/building/floor5.png", true, true);
+	LoadTexture("floor6", "data/building/floor6.png", true, true);
+	LoadTexture("floor7", "data/building/floor7.png", true, true);
+	LoadTexture("floor9", "data/building/floor9.png", true, true);
+	LoadTexture("floor1_normal", "data/building/floor1_normal.png", true, true);
+	LoadTexture("floor5_normal", "data/building/floor5_normal.png", true, true);
+	LoadTexture("floor6_normal", "data/building/floor6_normal.png", true, true);
+	LoadTexture("floor7_normal", "data/building/floor7_normal.png", true, true);
+	LoadTexture("floor9_normal", "data/building/floor9_normal.png", true, true);
+
+	LoadTexture("wall1", "data/building/wall1.png", true, true);
+	LoadTexture("wall2", "data/building/wall2.png", true, true);
+	LoadTexture("wall3", "data/building/wall3.png", true, true);
+	LoadTexture("wall4", "data/building/wall4.png", true, true);
+	LoadTexture("wall5", "data/building/wall5.png", true, true);
+	LoadTexture("wall6", "data/building/wall6.png", true, true);
+	LoadTexture("wall1_normal", "data/building/wall1_normal.png", true, true);
+	LoadTexture("wall2_normal", "data/building/wall2_normal.png", true, true);
+	LoadTexture("wall3_normal", "data/building/wall3_normal.png", true, true);
+	LoadTexture("wall4_normal", "data/building/wall4_normal.png", true, true);
+	LoadTexture("wall5_normal", "data/building/wall5_normal.png", true, true);
+	LoadTexture("wall6_normal", "data/building/wall6_normal.png", true, true);
 
 	//UI
 	LoadTexture("hud_map", "data/ui/hud/hud_map.png", false, false);

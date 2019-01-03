@@ -20,9 +20,20 @@ ITexture* MaterialEffectNormalTexture::GetNormalTexture() const
 	return mTexture;
 }
 
+void MaterialEffectNormalTexture::SetNormalTexture(ITexture* texture)
+{
+	assert(texture != nullptr);
+	mTexture = texture;
+}
+
 float MaterialEffectNormalTexture::GetTile() const
 {
 	return mTile;
+}
+
+void MaterialEffectNormalTexture::SetTile(float tile)
+{
+	mTile = tile;
 }
 
 void MaterialEffectNormalTexture::CopyValuesFrom(IMaterial* material)

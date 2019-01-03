@@ -274,6 +274,12 @@
     <Filter Include="Source Files\game\systems">
       <UniqueIdentifier>{c23f3c51-17ce-415a-82a6-873455c81b76}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game\building">
+      <UniqueIdentifier>{c3171e15-cb3a-4681-80e0-9786a4a61527}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\building">
+      <UniqueIdentifier>{02e2f8c1-a450-4b91-817f-2771dffdc8c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -930,6 +936,9 @@
     <ClInclude Include="src\game\hud\HorizontalBar.h">
       <Filter>Header Files\game\hud</Filter>
     </ClInclude>
+    <ClInclude Include="src\game\building\BuildingBuilder.h">
+      <Filter>Header Files\game\building</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1552,6 +1561,9 @@
     </ClCompile>
     <ClCompile Include="src\game\hud\HorizontalBar.cpp">
       <Filter>Source Files\game\hud</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\building\BuildingBuilder.cpp">
+      <Filter>Source Files\game\building</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -49,6 +49,6 @@ void main()
 	float distance = length(contactPoint_ - positionWorldspace);
 	float value = step(radius, distance);
 
-	color.a = color.a * (1.0 - value) * clamp(newTime, 0.0, 1.0);
+	//color.a = color.a * (1.0 - value) * clamp(newTime, 0.0, 1.0);
 }
 
