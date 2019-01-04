@@ -213,7 +213,7 @@ glm::vec3 mQuadMovingScale(1.0f);
 GameEntity* mQuadTreeMovedEntity;
 std::vector<GameEntity*> mQuadTreeEntities;
 
-bool mIsShooterGameRunning = true;
+bool mIsShooterGameRunning = false;
 ShooterGame mGame;
 
 
@@ -388,7 +388,7 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 			m = materialNormalmap;
 		}
 
-		IRenderer* renderer = new VerticesRenderer(NGenius::GetInstance().GetModel(models[i]), m);
+		IRenderer* renderer = new IndicesRenderer(NGenius::GetInstance().GetModel(models[i]), m);
 		lodComponent->AddLevelOfDetail(renderer, lod[i].first);
 		if (lod[i].second)
 		{
@@ -403,7 +403,7 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 
 GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, const glm::vec3& rotation, Model* model, IMaterial* material)
 {
-	IRenderer* renderer = new VerticesRenderer(model, material);
+	IRenderer* renderer = new IndicesRenderer(model, material);
 
 	GameEntity* modelEntity = new GameEntity(
 												new Transformation(position, rotation, scale),
@@ -801,7 +801,7 @@ void CreateParticlesFire()
 void CreateEnergyWall()
 {
 	IMaterial* material = NGenius::GetInstance().CreateMaterial("energy_wall", NGenius::GetInstance().GetShader("energy_wall"));
-	material->AddEffect(new MaterialEffectDiffuseTexture(NGenius::GetInstance().GetTexture("yellow_grid"), glm::vec3(0.0f), 50.0f));
+	material->AddEffect(new MaterialEffectDiffuseTexture(NGenius::GetInstance().GetTexture("energy_wall"), glm::vec3(0.0f), 50.0f));
 	material->AddEffect(new MaterialEffectDepthTexture(NGenius::GetInstance().GetTexture("depth_texture"), 1.0f));
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(NGenius::GetInstance().GetScreenWidth(), NGenius::GetInstance().GetScreenHeight())));
 

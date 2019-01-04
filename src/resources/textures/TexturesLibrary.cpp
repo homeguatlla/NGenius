@@ -81,7 +81,6 @@ void TexturesLibrary::Load()
 
 	LoadTexture("smoke", "data/textures/smoke_64_.png", false, false);
 	LoadTexture("smoke_white", "data/textures/smoke_white_64.png", false, false);
-	//LoadTexture("yellow_grid", "data/textures/grid_64.png", false, true);
 	LoadTexture("energy_wall", "data/terrain/mars/energy_wall.png", false, true);
 	LoadTexture("stall", "data/models/stall/stall.png", false, false);
 	

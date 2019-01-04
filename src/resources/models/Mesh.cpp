@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Mesh.h"
 
+#include "../../utils/Log.h"
+
 #include <algorithm>
 
 int Mesh::IDCounter = 0;
@@ -112,12 +114,13 @@ long Mesh::GetNumberOfIndexes() const
 
 void Mesh::Build(bool calculateNormals, bool calculateTangents)
 {
-	if (calculateNormals)
+	if (calculateNormals && !calculateTangents)
 	{
 		CalculateNormals();
 	}
 	if (calculateTangents && mTextureCoords.size() > 0)
 	{
+		CalculateNormals();
 		CalculateTangents();
 	}
 
@@ -291,6 +294,7 @@ void Mesh::CalculateNormals()
 		vertex += 3;
 	}
 
+	mNormals.clear();
 	for (unsigned int i = 0; i < mVertexs.size(); ++i)
 	{
 		glm::vec3 normal(0.0f);
@@ -304,7 +308,7 @@ void Mesh::CalculateNormals()
 			}
 		}
 		normal = glm::normalize(normal);
-		mNormals[i] = normal;
+		mNormals.push_back(normal);
 	}
 }
 
@@ -337,33 +341,41 @@ void Mesh::CalculateTangents()
 		glm::vec3 v2 = mVertexs[index2];
 		glm::vec3 v3 = mVertexs[index3];
 
-		glm::vec2 w1= mTextureCoords[index1];
-		glm::vec2 w2= mTextureCoords[index2];
-		glm::vec2 w3 = mTextureCoords[index3];
+		if (mTextureCoords.size() > index1 && mTextureCoords.size() > index2 && mTextureCoords.size() > index3)
+		{
+			glm::vec2 w1 = mTextureCoords[index1];
+			glm::vec2 w2 = mTextureCoords[index2];
+			glm::vec2 w3 = mTextureCoords[index3];
 
-		float x1 = v2.x - v1.x;
-		float x2 = v3.x - v1.x;
-		float y1 = v2.y - v1.y;
-		float y2 = v3.y - v1.y;
-		float z1 = v2.z - v1.z;
-		float z2 = v3.z - v1.z;
+			float x1 = v2.x - v1.x;
+			float x2 = v3.x - v1.x;
+			float y1 = v2.y - v1.y;
+			float y2 = v3.y - v1.y;
+			float z1 = v2.z - v1.z;
+			float z2 = v3.z - v1.z;
 
-		float s1 = w2.x - w1.x;
-		float s2 = w3.x - w1.x;
-		float t1 = w2.y - w1.y;
-		float t2 = w3.y - w1.y;
+			float s1 = w2.x - w1.x;
+			float s2 = w3.x - w1.x;
+			float t1 = w2.y - w1.y;
+			float t2 = w3.y - w1.y;
 
-		float r = 1.0f / (s1 * t2 - s2 * t1);
-		glm::vec3 sdir((t2 * x1 - t1 * x2) * r, (t2 * y1 - t1 * y2) * r, (t2 * z1 - t1 * z2) * r);
-		glm::vec3 tdir((s1 * x2 - s2 * x1) * r, (s1 * y2 - s2 * y1) * r, (s1 * z2 - s2 * z1) * r);
+			float r = 1.0f / (s1 * t2 - s2 * t1);
+			glm::vec3 sdir((t2 * x1 - t1 * x2) * r, (t2 * y1 - t1 * y2) * r, (t2 * z1 - t1 * z2) * r);
+			glm::vec3 tdir((s1 * x2 - s2 * x1) * r, (s1 * y2 - s2 * y1) * r, (s1 * z2 - s2 * z1) * r);
 
-		tan1[index1] += sdir;
-		tan1[index2] += sdir;
-		tan1[index3] += sdir;
+			tan1[index1] += sdir;
+			tan1[index2] += sdir;
+			tan1[index3] += sdir;
 
-		tan2[index1] += tdir;
-		tan2[index2] += tdir;
-		tan2[index3] += tdir;
+			tan2[index1] += tdir;
+			tan2[index2] += tdir;
+			tan2[index3] += tdir;
+		}
+		else
+		{
+			Log(Log::LOG_WARNING) << "Mesh::CalculateTangents There is missing uv information to calculate tangent information. Stopping calculate." << "\n";
+			break;
+		}
 	}
 
 	if (mNormals.size() > 0)

@@ -48,7 +48,7 @@ void ModelsLibrary::Load()
 	//mesh = OBJLoader::LoadModel("data/models/hermes/hermes.obj");
 	//AddElement("hermes", mesh);
 
-/*
+/**/
 	LoadModel("barrel", "data/models/props/barrel.obj", true, true);
 	LoadModel("chest", "data/models/props/chest.obj", true, true);
 	LoadModel("brazier", "data/models/props/brazier.obj", true, true);
@@ -57,14 +57,14 @@ void ModelsLibrary::Load()
 
 	
 	
-	LoadModel("tree_foliage_0", "data/models/tree4/tree_foliage_lod0.obj", false, true);
-	LoadModel("tree_foliage_1", "data/models/tree4/tree_foliage_lod1.obj", false, true);
-	LoadModel("tree_foliage_2", "data/models/tree4/tree_foliage_lod2.obj", false, true);
+	LoadModel("tree_foliage_0", "data/models/tree4/tree_foliage_lod0.obj", true, false);
+	LoadModel("tree_foliage_1", "data/models/tree4/tree_foliage_lod1.obj", true, false);
+	LoadModel("tree_foliage_2", "data/models/tree4/tree_foliage_lod2.obj", true, false);
 
-	LoadModel("tree_trunk_0", "data/models/tree4/tree_trunk_lod0.obj", false, true);
-	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", false, true);
-	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
-*/	
+	LoadModel("tree_trunk_0", "data/models/tree4/tree_trunk_lod0.obj", true, true);
+	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", true, true);
+	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", true, true);
+/**/	
 	LoadModel("farmer", "data/models/farmer/farmer.dae", true, true);
 
 	LoadModel("rock2", "data/models/rocks/rock2.dae", false, true);
