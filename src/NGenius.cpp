@@ -29,6 +29,8 @@
 #include "statistics/Statistics.h"
 #include "guiTool/GuiTool.h"
 
+#include "utils/serializer/XMLSerializer.h"
+
 
 NGenius::NGenius(std::string applicationName, float screenWidth, float screenHeight) :
 mRenderSystem(nullptr),
@@ -133,6 +135,28 @@ void NGenius::Render()
 
 	mGameScene->Render(mRenderSystem);
 	mRenderSystem->Render();
+}
+
+void NGenius::SaveToFile()
+{
+	core::utils::XMLSerializer xmlSerializer;
+	WriteTo(&xmlSerializer);
+
+	xmlSerializer.Save(std::string("ngenius.xml"));
+
+	mGameScene->SaveToFile();
+}
+
+void NGenius::ReadFrom(core::utils::IDeserializer* source)
+{
+}
+
+void NGenius::WriteTo(core::utils::ISerializer* destination)
+{
+	destination->BeginAttribute("Configuration");
+		destination->WriteParameter(std::string("version"), std::string("0.0.1"));
+		destination->WriteParameter(std::string("position"), glm::vec3(1.0f, 3.0f, 3.4f));
+	destination->EndAttribute();
 }
 
 void NGenius::AcceptGuiTool()

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "IComponent.h"
 #include "../GameEntity.h"
+#include "../../utils/serializer/XMLSerializer.h"
 
 IComponent::IComponent() : mIsEnabled(true)
 {
@@ -40,4 +41,16 @@ IComponent* IComponent::Clone() const
 	assert(typeid(*clone) == typeid(*this));
 
 	return clone;
+}
+
+void IComponent::ReadFrom(core::utils::IDeserializer* source)
+{
+}
+
+void IComponent::WriteTo(core::utils::ISerializer* destination)
+{
+	destination->BeginAttribute(std::string("component"));
+	destination->WriteParameter(std::string("enabled"), mIsEnabled);
+	DoWriteTo(destination);
+	destination->EndAttribute();
 }

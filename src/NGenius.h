@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include "visitor/BaseVisitable.h"
 #include "AABB.h"
+#include "utils/serializer/ISerializable.h"
 
 class RenderSystem;
 class PhysicsSystem;
@@ -42,7 +43,7 @@ class GameScene;
 
 struct GLFWwindow;
 
-class NGenius : public BaseVisitable<>
+class NGenius : public core::utils::ISerializable, BaseVisitable<>
 {
 	RenderSystem* mRenderSystem;
 	PhysicsSystem* mPhysicsSystem;
@@ -132,6 +133,9 @@ public:
 	//environment
 	float GetDayTime() const;
 
+	//serialize
+	void SaveToFile();
+
 private:
 	
 	void CreateSystems(float screenWidth, float screenHeight);
@@ -142,5 +146,9 @@ private:
 	void AcceptGuiTool();
 
 	void Render();
+
+	// Heredado vía ISerializable
+	void ReadFrom(core::utils::IDeserializer* source) override;
+	void WriteTo(core::utils::ISerializer* destination) override;
 };
 

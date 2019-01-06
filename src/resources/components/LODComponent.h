@@ -24,9 +24,13 @@ public:
 	LODComponent(const ICamera* camera);
 	~LODComponent();
 
-	IComponent* DoClone() const override;
 	void UpdateInternal(float elapsedTime) override;
 
 	void AddLevelOfDetail(IRenderer* renderer, float distance);
+
+private:
+	void DoReadFrom(core::utils::IDeserializer* source);
+	void DoWriteTo(core::utils::ISerializer* destination);
+	IComponent* DoClone() const override;
 };
 

@@ -17,6 +17,9 @@ public:
 	bool HasEvents() const;
 	const GameEvent* ConsumeEvent();
 
+private:
+	void DoReadFrom(core::utils::IDeserializer* source);
+	void DoWriteTo(core::utils::ISerializer* destination);
 	CharacterComponent* DoClone() const override;
 };
 

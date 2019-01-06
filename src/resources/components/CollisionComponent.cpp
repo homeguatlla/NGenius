@@ -3,6 +3,7 @@
 
 #include "../GameEntity.h"
 #include "../Transformation.h"
+#include "../../utils/serializer/XMLSerializer.h"
 
 CollisionComponent::CollisionComponent() :
 mIsOnGround(false),
@@ -38,4 +39,14 @@ void CollisionComponent::SetGroundHeight(float groundHeight)
 float CollisionComponent::GetGroundHeight() const
 {
 	return mGroundHeight;
+}
+
+void CollisionComponent::DoReadFrom(core::utils::IDeserializer* source)
+{
+
+}
+
+void CollisionComponent::DoWriteTo(core::utils::ISerializer* destination)
+{
+	destination->WriteParameter(std::string("type"), std::string("collision_component"));
 }

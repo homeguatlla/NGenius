@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "AnimationComponent.h"
 #include "../models/animation/Animation.h"
+#include "../../utils/serializer/XMLSerializer.h"
+
 #include <assert.h>
 #include <algorithm>
 
@@ -49,4 +51,14 @@ void AnimationComponent::PlayAnimation(const std::string& name)
 void AnimationComponent::StopAnimation()
 {
 	mCurrentAnimation = nullptr;
+}
+
+void AnimationComponent::DoReadFrom(core::utils::IDeserializer* source)
+{
+
+}
+
+void AnimationComponent::DoWriteTo(core::utils::ISerializer* destination)
+{
+	destination->WriteParameter(std::string("type"), std::string("animation_component"));
 }

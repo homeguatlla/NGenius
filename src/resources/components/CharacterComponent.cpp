@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "CharacterComponent.h"
 #include "../GameEvent.h"
+#include "../../utils/serializer/XMLSerializer.h"
+
 #include <assert.h>
 
 CharacterComponent::CharacterComponent()
@@ -33,4 +35,14 @@ const GameEvent* CharacterComponent::ConsumeEvent()
 	mEvents.pop();
 
 	return event;
+}
+
+void CharacterComponent::DoReadFrom(core::utils::IDeserializer* source)
+{
+
+}
+
+void CharacterComponent::DoWriteTo(core::utils::ISerializer* destination)
+{
+	destination->WriteParameter(std::string("type"), std::string("character_component"));
 }

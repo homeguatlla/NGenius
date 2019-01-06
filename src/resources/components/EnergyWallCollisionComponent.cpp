@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EnergyWallCollisionComponent.h"
+#include "../../utils/serializer/XMLSerializer.h"
 
 #include "../GameEntity.h"
 #include "../Transformation.h"
@@ -38,4 +39,14 @@ void EnergyWallCollisionComponent::SetCollisionPoint(glm::vec3& point)
 glm::vec3 EnergyWallCollisionComponent::GetCollisionPoint() const
 {
 	return mCollisionPoint;
+}
+
+void EnergyWallCollisionComponent::DoReadFrom(core::utils::IDeserializer* source)
+{
+
+}
+
+void EnergyWallCollisionComponent::DoWriteTo(core::utils::ISerializer* destination)
+{
+	destination->WriteParameter(std::string("type"), std::string("energy_wall_collision_component"));
 }

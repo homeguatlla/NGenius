@@ -23,6 +23,9 @@ public:
 	const GameEvent* ConvertKey(int key, int action) const;
 	const GameEvent* ConvertMouse(void* data) const;
 
+private:
+	void DoReadFrom(core::utils::IDeserializer* source);
+	void DoWriteTo(core::utils::ISerializer* destination);
 	InputComponent* DoClone() const override;
 };
 

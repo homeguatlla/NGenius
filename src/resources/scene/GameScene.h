@@ -4,12 +4,13 @@
 
 #include "../../visitor/BaseVisitable.h"
 #include "../../AABB.h"
+#include "../../utils/serializer/ISerializable.h"
 
 class GameEntity;
 class IGameSceneListener;
 class RenderSystem;
 
-class GameScene : public BaseVisitable<>
+class GameScene : public core::utils::ISerializable, BaseVisitable<>
 {
 	std::vector<GameEntity*> mEntities;
 	std::vector<GameEntity*> mNewEntitiesToAdd;
@@ -39,6 +40,8 @@ public:
 	void RegisterGameSceneListener(IGameSceneListener* listener);
 	void UnRegisterGameSceneListener(IGameSceneListener* listener);
 
+	void SaveToFile();
+
 	BaseVisitable<>::ReturnType Accept(BaseVisitor& guest) override;
 
 private:
@@ -47,5 +50,9 @@ private:
 	void AddNewEntities();
 	void NotifyEntityAdded(GameEntity* entity);
 	void NotifyEntityRemoved(GameEntity* entity);
+
+	// Heredado vía ISerializable
+	void ReadFrom(core::utils::IDeserializer* source) override;
+	void WriteTo(core::utils::ISerializer* destination) override;
 };
 

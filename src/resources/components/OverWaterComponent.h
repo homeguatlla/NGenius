@@ -9,8 +9,11 @@ public:
 	OverWaterComponent(float waterHeight);
 	~OverWaterComponent();
 
-	OverWaterComponent* DoClone() const;
-
 	float GetWaterHeight() const;
+
+private:
+	void DoReadFrom(core::utils::IDeserializer* source);
+	void DoWriteTo(core::utils::ISerializer* destination);
+	OverWaterComponent* DoClone() const;
 };
 

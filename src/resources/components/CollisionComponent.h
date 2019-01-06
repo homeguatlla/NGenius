@@ -11,10 +11,15 @@ public:
 	explicit CollisionComponent();
 	~CollisionComponent();
 
-	CollisionComponent* DoClone() const override;
+	
 	bool IsOnGround() const;
 	void SetOnGround(bool isOnGround);
 	void SetGroundHeight(float groundHeight);
 	float GetGroundHeight() const;
+
+private:
+	void DoReadFrom(core::utils::IDeserializer* source);
+	void DoWriteTo(core::utils::ISerializer* destination);
+	CollisionComponent* DoClone() const override;
 };
 

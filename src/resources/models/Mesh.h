@@ -20,7 +20,7 @@ class Mesh
 	std::vector<std::vector<float>> mTempVertexWeights;
 	std::vector<std::vector<int>> mTempVertexJointsIds;
 
-	int mModelID;
+	int mMeshID;
 	std::string mMaterialName;
 	std::string mDiffuseTextureName;
 	std::string mNormalMapTextureName;

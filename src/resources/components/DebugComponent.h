@@ -12,10 +12,14 @@ public:
 	explicit DebugComponent(IRenderer* renderer);
 	~DebugComponent();
 
-	DebugComponent* DoClone() const override;
 	void Init();
 	bool IsBoundingBoxVisible() const;
 	void SetBoundingBoxVisibility(bool visible);
 	IRenderer* GetBoundingBoxRenderer();
+
+private:
+	void DoReadFrom(core::utils::IDeserializer* source);
+	void DoWriteTo(core::utils::ISerializer* destination);
+	DebugComponent* DoClone() const override;
 };
 

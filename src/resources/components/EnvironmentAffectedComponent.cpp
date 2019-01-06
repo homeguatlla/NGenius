@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "EnvironmentAffectedComponent.h"
-
+#include "../../utils/serializer/XMLSerializer.h"
 
 EnvironmentAffectedComponent::EnvironmentAffectedComponent() : 
 	mIsAffectedByWind(false),
@@ -36,4 +36,14 @@ void EnvironmentAffectedComponent::SetAffectedByWind(bool isAffected)
 bool EnvironmentAffectedComponent::IsAffectedByWind() const
 {
 	return mIsAffectedByWind;
+}
+
+void EnvironmentAffectedComponent::DoReadFrom(core::utils::IDeserializer* source)
+{
+}
+
+void EnvironmentAffectedComponent::DoWriteTo(core::utils::ISerializer* destination)
+{
+	destination->WriteParameter(std::string("type"), std::string("environment_affected_component"));
+	destination->WriteParameter(std::string("is_affected_by_wind"), mIsAffectedByWind);
 }

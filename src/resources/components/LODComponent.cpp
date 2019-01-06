@@ -3,6 +3,10 @@
 #include "../GameEntity.h"
 #include "../camera/ICamera.h"
 #include "../renderers/IRenderer.h"
+#include "../models/Model.h"
+#include "../materials/IMaterial.h"
+#include "../../utils/serializer/XMLSerializer.h"
+
 #include <glm/gtx/norm.hpp>
 #include <algorithm>
 
@@ -53,11 +57,7 @@ void LODComponent::UpdateInternal(float elapsedTime)
 	mLastLODIndex = lod;
 
 	mParent->SetRenderer(mLODS[lod]->renderer);
-
-	
 }
-
-
 
 void LODComponent::AddLevelOfDetail(IRenderer* renderer, float distance)
 {
@@ -83,4 +83,28 @@ void LODComponent::AddLevelOfDetail(IRenderer* renderer, float distance)
 		//assign a renderer by default the closer. It will be needed for the CollisionComponent if is the case. Should always be one assigned.
 		mParent->SetRenderer(mLODS[0]->renderer);
 	}
+}
+
+
+void LODComponent::DoReadFrom(core::utils::IDeserializer* source)
+{
+
+}
+
+void LODComponent::DoWriteTo(core::utils::ISerializer* destination)
+{
+	destination->WriteParameter(std::string("type"), std::string("lod_component"));
+	destination->WriteParameter(std::string("camera_name"), mCamera->GetName());
+	destination->BeginAttribute(std::string("lods"));
+	for (unsigned int i = 0; i < mLODS.size(); ++i)
+	{
+		destination->BeginAttribute(std::string("lod"));
+		destination->WriteParameter(std::string("distance"), mLODS[i]->distance);
+		unsigned int modelID = mLODS[i]->renderer->GetModel()->GetID();
+		unsigned int materialID = mLODS[i]->renderer->GetMaterial()->GetMaterialID();
+		destination->WriteParameter(std::string("modelID"), modelID);
+		destination->WriteParameter(std::string("materialID"), materialID);
+		destination->EndAttribute();
+	}
+	destination->EndAttribute();
 }

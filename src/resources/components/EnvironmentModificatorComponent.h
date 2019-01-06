@@ -6,6 +6,9 @@ public:
 	EnvironmentModificatorComponent();
 	virtual ~EnvironmentModificatorComponent();
 
+private:
+	void DoReadFrom(core::utils::IDeserializer* source);
+	void DoWriteTo(core::utils::ISerializer* destination);
 	EnvironmentModificatorComponent* DoClone() const;
 };
 

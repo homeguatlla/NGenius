@@ -3,10 +3,10 @@
 #include<map>
 #include<typeinfo>
 #include "components/IComponent.h"
-
+#include "../utils/serializer/ISerializable.h"
 class IRenderer;
 
-class GameEntity
+class GameEntity : public core::utils::ISerializable
 {
 	typedef std::map<const std::type_info*, IComponent*> ComponentsMap;
 	typedef ComponentsMap::iterator IComponentsIterator;
@@ -81,6 +81,10 @@ public:
 			return nullptr;
 		}
 	}
+
+	// Heredado vía ISerializable
+	void ReadFrom(core::utils::IDeserializer* source) override;
+	void WriteTo(core::utils::ISerializer* destination) override;
 
 private:
 	template<typename T> void AddComponent(const std::type_info* type, T* component)

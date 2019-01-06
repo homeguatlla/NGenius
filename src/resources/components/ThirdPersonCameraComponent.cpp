@@ -11,6 +11,7 @@
 #include "OverWaterComponent.h"
 #include "CharacterComponent.h"
 
+#include "../../utils/serializer/XMLSerializer.h"
 #include <iostream>
 
 //WARNING!! hay que tener en cuenta que, si subimos este valor la cámara por colisión subirá y no mantendrá el ángulo pitch que le hemos definido.
@@ -195,4 +196,22 @@ void ThirdPersonCameraComponent::UpdatePitch(float pitch, float elapsedTime)
 	mCurrentPitch += pitchSpeed;
 	mCurrentPitch = glm::max(MIN_PITCH, glm::min(MAX_PITCH, mCurrentPitch));
 	mLastPitch = pitch;
+}
+
+void ThirdPersonCameraComponent::DoReadFrom(core::utils::IDeserializer* source)
+{
+
+}
+
+void ThirdPersonCameraComponent::DoWriteTo(core::utils::ISerializer* destination)
+{
+	destination->WriteParameter(std::string("type"), std::string("third_person_camera_component"));
+	destination->WriteParameter(std::string("camera_name"), mCamera->GetName());
+	//TODO
+	destination->WriteParameter(std::string("target"), std::string("missingID"));
+	destination->WriteParameter(std::string("target_offset"), mTargetOffset);
+	destination->WriteParameter(std::string("distance_from_target"), mDistanceFromTarget);
+	destination->WriteParameter(std::string("pitch"), mPitch);
+	destination->WriteParameter(std::string("pitch_speed"), mPitchSpeed);
+	destination->WriteParameter(std::string("zoom_speed"), mZoomSpeed);
 }

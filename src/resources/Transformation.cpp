@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Transformation.h"
+#include "../utils/serializer/XMLSerializer.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <assert.h>
 
@@ -90,4 +91,19 @@ const glm::mat4& Transformation::GetModelMatrix()
 		mIsDirty = false;
 	}
 	return mModelMatrix;
+}
+
+void Transformation::ReadFrom(core::utils::IDeserializer* source)
+{
+}
+
+void Transformation::WriteTo(core::utils::ISerializer* destination)
+{
+	destination->BeginAttribute(std::string("transformation"));
+	
+	destination->WriteParameter(std::string("position"), mPosition);
+	destination->WriteParameter(std::string("rotation"), mRotation);
+	destination->WriteParameter(std::string("scale"), mScale);
+
+	destination->EndAttribute();
 }

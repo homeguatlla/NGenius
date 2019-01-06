@@ -23,8 +23,6 @@ public:
 	explicit ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed);
 	~ThirdPersonCameraComponent();
 
-	ThirdPersonCameraComponent* DoClone() const;
-
 	void UpdateInternal(float elapsedTime) override;
 	const GameEntity* GetTarget() const;
 	glm::vec3 GetCameraPosition() const;
@@ -37,5 +35,9 @@ private:
 	float CalculateHorizontalDistance() const;
 	float CalculateVerticalDistance() const;
 	glm::vec3 CalculateCameraPosition(float horizontalDistance, float verticalDistance) const;
+
+	void DoReadFrom(core::utils::IDeserializer* source);
+	void DoWriteTo(core::utils::ISerializer* destination);
+	ThirdPersonCameraComponent* DoClone() const;
 };
 

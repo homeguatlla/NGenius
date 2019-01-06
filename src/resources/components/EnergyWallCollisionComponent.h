@@ -11,11 +11,14 @@ public:
 	explicit EnergyWallCollisionComponent();
 	~EnergyWallCollisionComponent();
 
-	EnergyWallCollisionComponent* DoClone() const override;
-	
 	bool IsColliding() const;
 	void SetCollision(bool isColliding);
 	void SetCollisionPoint(glm::vec3& position);
 	glm::vec3 GetCollisionPoint() const;
+
+private:
+	void DoReadFrom(core::utils::IDeserializer* source);
+	void DoWriteTo(core::utils::ISerializer* destination);
+	EnergyWallCollisionComponent* DoClone() const override;
 };
 

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SpacePartitionComponent.h"
-
+#include "../../utils/serializer/XMLSerializer.h"
 
 SpacePartitionComponent::SpacePartitionComponent() : mIsVisible(false)
 {
@@ -24,4 +24,14 @@ void SpacePartitionComponent::SetVisibility(bool visibility)
 SpacePartitionComponent* SpacePartitionComponent::DoClone() const
 {
 	return new SpacePartitionComponent(*this);
+}
+
+void SpacePartitionComponent::DoReadFrom(core::utils::IDeserializer* source)
+{
+
+}
+
+void SpacePartitionComponent::DoWriteTo(core::utils::ISerializer* destination)
+{
+	destination->WriteParameter(std::string("type"), std::string("space_partition_component"));
 }

@@ -2,6 +2,7 @@
 #include "InputComponent.h"
 #include "../GameEvent.h"
 #include "../../input/InputConverter.h"
+#include "../../utils/serializer/XMLSerializer.h"
 
 InputComponent::InputComponent()
 {
@@ -61,4 +62,17 @@ void InputComponent::RemoveConverter(const InputConverter* converter)
 	{
 		mConverters.erase(it);
 	}
+}
+
+void InputComponent::DoReadFrom(core::utils::IDeserializer* source)
+{
+
+}
+
+void InputComponent::DoWriteTo(core::utils::ISerializer* destination)
+{
+	destination->WriteParameter(std::string("type"), std::string("input_component"));
+	destination->BeginAttribute(std::string("converters"));
+	//TODO
+	destination->EndAttribute();
 }

@@ -208,6 +208,12 @@
     <Filter Include="Header Files\utils">
       <UniqueIdentifier>{d6dd4c34-edb5-4b31-a92c-7e5c24d08851}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\utils\serializer">
+      <UniqueIdentifier>{3e2d5c8d-c06a-459d-88f4-b60769654409}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils\serializer">
+      <UniqueIdentifier>{23af9e1f-ba6b-4fa8-930a-c818be5361bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -753,6 +759,18 @@
     <ClInclude Include="src\utils\FileReader.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\serializer\ISerializer.h">
+      <Filter>Header Files\utils\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\serializer\ISerializable.h">
+      <Filter>Header Files\utils\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\serializer\XMLSerializer.h">
+      <Filter>Header Files\utils\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\serializer\IDeserializer.h">
+      <Filter>Header Files\utils\serializer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1270,6 +1288,9 @@
     </ClCompile>
     <ClCompile Include="src\utils\FileReader.cpp">
       <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\serializer\XMLSerializer.cpp">
+      <Filter>Source Files\utils\serializer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

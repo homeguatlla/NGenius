@@ -9,7 +9,7 @@ const float EPSILON2 = EPSILON * EPSILON;
 
 Mesh::Mesh()
 {
-	mModelID = ++IDCounter;
+	mMeshID = ++IDCounter;
 }
 
 Mesh::Mesh(const std::vector<glm::vec3>& vertexs,
@@ -19,7 +19,7 @@ Mesh::Mesh(const std::vector<glm::vec3>& vertexs,
 	mTextureCoords(textureCoords),
 	mIndexes(indexes)
 {
-	mModelID = ++IDCounter;
+	mMeshID = ++IDCounter;
 	assert(vertexs.size() > 0);
 }
 
@@ -32,7 +32,7 @@ Mesh::Mesh(const std::vector<glm::vec3>& vertexs,
 	mIndexes(indexes),
 	mNormals(normals)
 {
-	mModelID = ++IDCounter;
+	mMeshID = ++IDCounter;
 	assert(vertexs.size() > 0);
 }
 
@@ -42,7 +42,7 @@ Mesh::~Mesh()
 
 unsigned int Mesh::GetID() const
 {
-	return mModelID;
+	return mMeshID;
 }
 
 void Mesh::SetVertexs(std::vector<glm::vec3>& vertexs)

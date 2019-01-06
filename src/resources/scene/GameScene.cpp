@@ -7,6 +7,8 @@
 #include "../components/LODComponent.h"
 #include "../components/SpacePartitionComponent.h"
 
+#include "../../utils/serializer/XMLSerializer.h"
+
 #include <algorithm>
 
 GameScene::GameScene(const std::string& name) :
@@ -115,6 +117,34 @@ void GameScene::NotifyEntityRemoved(GameEntity* entity)
 	{
 		(*it)->OnGameEntityRemoved(entity);
 	}
+}
+
+void GameScene::SaveToFile()
+{
+	core::utils::XMLSerializer xmlSerializer;
+	WriteTo(&xmlSerializer);
+
+	std::string filename;
+	filename = mName + ".xml";
+	xmlSerializer.Save(filename);
+}
+
+void GameScene::ReadFrom(core::utils::IDeserializer* source)
+{
+}
+
+void GameScene::WriteTo(core::utils::ISerializer* destination)
+{
+	destination->BeginAttribute(std::string("game_scene"));
+		destination->WriteParameter(std::string("name"), mName);
+		destination->BeginAttribute(std::string("entities"));
+		destination->WriteParameter(std::string("counter"), mEntities.size());
+			for (GameEntity* entity : mEntities)
+			{
+				entity->WriteTo(destination);
+			}
+		destination->EndAttribute();
+	destination->EndAttribute();
 }
 
 void GameScene::RemoveEntities()

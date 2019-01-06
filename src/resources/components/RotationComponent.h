@@ -12,7 +12,11 @@ public:
 	explicit RotationComponent(const glm::vec3& rotation, float speed);
 	~RotationComponent();
 
-	RotationComponent* DoClone() const override;
 	void UpdateInternal(float elapsedTime) override;
+
+private:
+	void DoReadFrom(core::utils::IDeserializer* source);
+	void DoWriteTo(core::utils::ISerializer* destination);
+	RotationComponent* DoClone() const override;
 };
 

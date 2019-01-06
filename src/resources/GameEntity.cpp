@@ -2,6 +2,10 @@
 #include "GameEntity.h"
 #include "renderers/IRenderer.h"
 
+#include "materials/IMaterial.h"
+#include "models/Model.h"
+#include "../utils/serializer/XMLSerializer.h"
+
 GameEntity::GameEntity(Transformation* transformation, IRenderer* renderer) :
 mTransformation(transformation),
 mRenderer(renderer),
@@ -112,6 +116,33 @@ void GameEntity::Update(float elapsedTime)
 			it->second->Update(elapsedTime);
 		}
 	}
+}
+
+void GameEntity::ReadFrom(core::utils::IDeserializer* source)
+{
+}
+
+void GameEntity::WriteTo(core::utils::ISerializer* destination)
+{
+	destination->BeginAttribute(std::string("entity"));
+	destination->WriteParameter(std::string("is_enabled"), mIsEnabled);
+	if (GetRenderer() != nullptr)
+	{
+		IRenderer* renderer = GetRenderer();
+		unsigned int modelID = renderer->GetModel()->GetID();
+		unsigned int materialID = renderer->GetMaterial()->GetMaterialID();
+		destination->WriteParameter(std::string("modelID"), modelID);
+		destination->WriteParameter(std::string("materialID"), materialID);
+	}
+	mTransformation->WriteTo(destination);
+
+	destination->BeginAttribute(std::string("components"));
+	for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
+	{
+		it->second->WriteTo(destination);
+	}
+	destination->EndAttribute();
+	destination->EndAttribute();
 }
 
 

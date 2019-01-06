@@ -11,11 +11,14 @@ public:
 	EnvironmentAffectedComponent();
 	~EnvironmentAffectedComponent();
 
-	EnvironmentAffectedComponent* DoClone() const override;
-
 	float GetWindResistence() const;
 	void SetWindResistence(float resistence);
 	void SetAffectedByWind(bool isAffected);
 	bool IsAffectedByWind() const;
+
+private:
+	void DoReadFrom(core::utils::IDeserializer* source);
+	void DoWriteTo(core::utils::ISerializer* destination);
+	EnvironmentAffectedComponent* DoClone() const override;
 };
 
