@@ -15,6 +15,9 @@ class GameEntity : public core::utils::ISerializable
 	IRenderer* mRenderer;
 	ComponentsMap mComponents;
 	bool mIsEnabled;
+	int mID;
+
+	static unsigned int IDCounter;
 
 protected:
 	
@@ -26,6 +29,8 @@ public:
 	virtual ~GameEntity();
 
 	void Init();
+	int GetID();
+
 	IRenderer* GetRenderer() const;
 	void SetRenderer(IRenderer* renderer);
 	Transformation* GetTransformation();

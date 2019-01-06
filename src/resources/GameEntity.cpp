@@ -6,6 +6,8 @@
 #include "models/Model.h"
 #include "../utils/serializer/XMLSerializer.h"
 
+unsigned GameEntity::IDCounter = 0;
+
 GameEntity::GameEntity(Transformation* transformation, IRenderer* renderer) :
 mTransformation(transformation),
 mRenderer(renderer),
@@ -15,6 +17,7 @@ mIsEnabled(true)
 	{
 		renderer->SetParent(this);
 	}
+	mID = ++IDCounter;
 }
 
 GameEntity::GameEntity(Transformation* transformation) : GameEntity(transformation, nullptr)
@@ -46,6 +49,11 @@ void GameEntity::Init()
 	{
 		it->second->Init();
 	}
+}
+
+int GameEntity::GetID()
+{
+	return mID;
 }
 
 Transformation* GameEntity::GetTransformation()
@@ -125,6 +133,7 @@ void GameEntity::ReadFrom(core::utils::IDeserializer* source)
 void GameEntity::WriteTo(core::utils::ISerializer* destination)
 {
 	destination->BeginAttribute(std::string("entity"));
+	destination->WriteParameter(std::string("id"), mID, "");
 	destination->WriteParameter(std::string("is_enabled"), mIsEnabled);
 	if (GetRenderer() != nullptr)
 	{

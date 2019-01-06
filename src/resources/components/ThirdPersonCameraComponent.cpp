@@ -207,8 +207,7 @@ void ThirdPersonCameraComponent::DoWriteTo(core::utils::ISerializer* destination
 {
 	destination->WriteParameter(std::string("type"), std::string("third_person_camera_component"));
 	destination->WriteParameter(std::string("camera_name"), mCamera->GetName());
-	//TODO
-	destination->WriteParameter(std::string("target"), std::string("missingID"));
+	destination->WriteParameter(std::string("target_entity_id"), mTarget->GetID(), "");
 	destination->WriteParameter(std::string("target_offset"), mTargetOffset);
 	destination->WriteParameter(std::string("distance_from_target"), mDistanceFromTarget);
 	destination->WriteParameter(std::string("pitch"), mPitch);
