@@ -5,6 +5,7 @@
 #include "../textures/TexturesLibrary.h"
 #include "../textures/ITexture.h"
 #include "FontType.h"
+#include "../../utils/serializer/IDeserializer.h"
 
 FontsLibrary::FontsLibrary(TexturesLibrary* texturesLibrary) : mTexturesLibrary(texturesLibrary)
 {
@@ -17,10 +18,10 @@ FontsLibrary::~FontsLibrary()
 
 void FontsLibrary::Load()
 {
-	LoadFont("data/fonts/quartzMS.fnt");
-	LoadFont("data/fonts/CourierNew.fnt");
 	LoadFont("data/fonts/OCRAExtended.fnt");
-	LoadFont("data/fonts/OCRAExtended_DField.fnt");
+	//LoadFont("data/fonts/quartzMS.fnt");
+	//LoadFont("data/fonts/CourierNew.fnt");	
+	//LoadFont("data/fonts/OCRAExtended_DField.fnt");
 }
 
 void FontsLibrary::LoadFont(const std::string& filename)
@@ -45,4 +46,29 @@ void FontsLibrary::OnTextureFontLoaded(const std::string& textureName, ITexture*
 	{
 		fontType->SetTexture(texture);
 	}
+}
+
+void FontsLibrary::ReadFrom(core::utils::IDeserializer *source)
+{
+	source->BeginAttribute(std::string("fonts_library"));
+	unsigned int numElements = source->ReadNumberOfElements();
+
+	source->BeginAttribute(std::string("font"));
+	do
+	{
+		std::string nodeName = source->GetCurrentNodeName();
+		std::string filename;
+		source->ReadParameter("filename", filename);
+		LoadFont(filename);
+		source->NextAttribute();
+		numElements--;
+
+	} while (numElements > 0);
+
+	source->EndAttribute();
+	source->EndAttribute();
+}
+
+void FontsLibrary::WriteTo(core::utils::ISerializer *destination)
+{
 }

@@ -939,6 +939,7 @@ void RenderSystem::CheckGLError()
 void RenderSystem::ReadFrom(core::utils::IDeserializer* source)
 {
 	source->BeginAttribute("libraries");
+		mFontsLibrary->ReadFrom(source);
 		mModelsLibrary->ReadFrom(source);
 		mTexturesLibrary->ReadFrom(source);
 	source->EndAttribute();
