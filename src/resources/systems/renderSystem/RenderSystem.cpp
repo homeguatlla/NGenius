@@ -111,7 +111,7 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 	mGuiTool = new GuiTool(mWindow);
 
 	CreateResourcesLibraries();
-	LoadResources();
+	//LoadResources();
 	CreateSubSystems();
 }
 
@@ -138,12 +138,12 @@ void RenderSystem::DestroySubSystems()
 	delete mShadowsRenderPass;
 }
 
-void RenderSystem::LoadResources()
+void RenderSystem::LoadDefaultResources()
 {
 	mShadersLibrary->Load();
 	mModelsLibrary->Load();
 	mFontsLibrary->Load();
-	mTexturesLibrary->Load();
+	//mTexturesLibrary->Load();
 	mMaterialsLibrary->Load();
 }
 
@@ -934,6 +934,20 @@ void RenderSystem::CheckGLError()
 	while ((err = glGetError()) != GL_NO_ERROR) {
 		Log(Log::LOG_ERROR) << "OpenGL error: " << err;
 	}
+}
+
+void RenderSystem::ReadFrom(core::utils::IDeserializer* source)
+{
+	LoadDefaultResources();
+
+	source->BeginAttribute("libraries");
+		mModelsLibrary->ReadFrom(source);
+		mTexturesLibrary->ReadFrom(source);
+	source->EndAttribute();
+}
+
+void RenderSystem::WriteTo(core::utils::ISerializer* destination)
+{
 }
 
 BaseVisitable<>::ReturnType RenderSystem::Accept(BaseVisitor& guest)

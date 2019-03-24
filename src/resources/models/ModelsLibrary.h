@@ -3,10 +3,11 @@
 #include "../BaseLibrary.h"
 #include "../textures/TexturesLibrary.h"
 #include "../models/animation/AnimationsLibrary.h"
+#include "../../utils/serializer/ISerializable.h"
 
 class Model;
 
-class ModelsLibrary : public BaseLibrary<Model*>
+class ModelsLibrary : public core::utils::ISerializable, public BaseLibrary<Model*>
 {
 	TexturesLibrary* mTexturesLibrary;
 	AnimationsLibrary* mAnimationsLibrary;
@@ -16,6 +17,9 @@ public:
 	~ModelsLibrary();
 
 	void Load();
+	// Heredado vía ISerializable
+	virtual void ReadFrom(core::utils::IDeserializer* source) override;
+	virtual void WriteTo(core::utils::ISerializer* destination) override;
 
 private:
 	void LoadModel(const std::string& name, const std::string& filename, bool calculateNormals, bool calculateTangents);

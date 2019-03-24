@@ -30,6 +30,7 @@
 #include "guiTool/GuiTool.h"
 
 #include "utils/serializer/XMLSerializer.h"
+#include "utils/serializer/XMLDeserializer.h"
 
 
 NGenius::NGenius(std::string applicationName, float screenWidth, float screenHeight) :
@@ -147,8 +148,21 @@ void NGenius::SaveToFile()
 	mGameScene->SaveToFile();
 }
 
+void NGenius::LoadFromFile()
+{
+	core::utils::XMLDeserializer xmlDeserializer;
+
+	xmlDeserializer.Load("data/levels/test.xml");
+	ReadFrom(&xmlDeserializer);
+}
+
+
 void NGenius::ReadFrom(core::utils::IDeserializer* source)
 {
+	source->BeginAttribute("ngenius");
+	mRenderSystem->ReadFrom(source);
+	//mGameScene->ReadFrom(source);
+	source->EndAttribute();
 }
 
 void NGenius::WriteTo(core::utils::ISerializer* destination)

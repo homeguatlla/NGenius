@@ -1792,6 +1792,9 @@ void Initialize()
 	glfwSetCursorPosCallback(mEngine.GetGLWindow(), &MouseCursorPosCallback);
 
 	mEngine.SetFogEnabled(mIsFogEnabled);
+
+	mEngine.LoadFromFile();
+
 	mEngine.Start();
 }
 
@@ -1801,10 +1804,10 @@ int main(void)
 
 	CreateEntities();
 	CreateSubSystems();
+	mEngine.Run();
 
 	mEngine.SetCastingShadowsTarget(mPlayer);
 
-	mEngine.Run();
 
 	DeleteEntities();
 

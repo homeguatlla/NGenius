@@ -4,6 +4,8 @@
 #include "Texture.h"
 #include "TextureArray.h"
 #include "TextureCubemap.h"
+#include "../../utils/serializer/IDeserializer.h"
+#include "../../utils/Log.h"
 #include <GL/glew.h>
 
 #include <algorithm>
@@ -20,8 +22,8 @@ TexturesLibrary::~TexturesLibrary()
 void TexturesLibrary::Load()
 {
 	LoadTexture("stone", "data/models/stone/diffuse.png", true, false);
-	LoadTexture("terrain_heightmap", "data/textures/terrain_heightmap_1024.png", false, false);
-	LoadTexture("terrain_blendmap", "data/textures/terrain_blendmap_1024.png", false, false);
+	//LoadTexture("terrain_heightmap", "data/textures/terrain_heightmap_1024.png", false, false);
+	//LoadTexture("terrain_blendmap", "data/textures/terrain_blendmap_1024.png", false, false);
 
 	std::vector<std::string> filenames;
 
@@ -65,8 +67,8 @@ void TexturesLibrary::Load()
 
 	CreateColorTexture("map", glm::vec2(256, 256));
 
-	LoadTexture("distorsion_water", "data/textures/waterDUDV.png", false, true);
-	LoadTexture("normal_water", "data/textures/normal_water.png", false, true);
+	//LoadTexture("distorsion_water", "data/textures/waterDUDV.png", false, true);
+	//LoadTexture("normal_water", "data/textures/normal_water.png", false, true);
 
 	LoadTexture("smoke", "data/textures/smoke_64_.png", false, false);
 	LoadTexture("yellow_grid", "data/textures/grid_64.png", false, true);
@@ -76,7 +78,6 @@ void TexturesLibrary::Load()
 	LoadTexture("grass3", "data/textures/grass3.png", false, false);
 	LoadTexture("grass5", "data/textures/grass5.png", false, false);
 
-	//LoadTexture("wind_texture", "data/textures/wind_256.png", true, true);
 	LoadTexture("wind_texture", "data/wind_map.png", false, true);
 
 	LoadTexture("barrel_diffuse", "data/models/barrel/barrel.png", false, false);
@@ -141,6 +142,84 @@ void TexturesLibrary::LoadTexturesPendingToLoad()
 		}
 	}
 	mTexturesPendingToLoad.clear();
+}
+
+void TexturesLibrary::ReadFrom(core::utils::IDeserializer * source)
+{
+	source->BeginAttribute(std::string("textures_library"));
+	unsigned int numElements = source->ReadNumberOfElements();
+
+	source->BeginAttribute(std::string("texture"));
+	do
+	{
+		std::string nodeName = source->GetCurrentNodeName();
+
+		if (nodeName == "texture")
+		{
+			ReadTextureFrom(source);
+		}
+		else if(nodeName == "texture_array")
+		{
+			ReadTextureArrayFrom(source);
+		}
+		source->NextAttribute();
+		numElements--;
+
+	} while (numElements > 0);
+
+	source->EndAttribute();
+	source->EndAttribute();
+}
+
+void TexturesLibrary::ReadTextureFrom(core::utils::IDeserializer * source)
+{
+	std::string textureName;
+	source->ReadParameter("name", textureName);
+
+	std::string filename;
+	source->ReadParameter("filename", filename);
+	bool hasMippaming = false;
+	bool hasWrapping = false;
+	source->ReadParameter("has_mippaing", &hasMippaming);
+	source->ReadParameter("has_wrapping", &hasWrapping);
+
+	LoadTexture(textureName, filename, hasMippaming, hasWrapping);
+}
+
+void TexturesLibrary::ReadTextureArrayFrom(core::utils::IDeserializer * source)
+{
+	std::string textureName;
+	source->ReadParameter("name", textureName);
+
+	unsigned int numTextures = source->ReadNumberOfElements();
+	source->BeginAttribute(std::string("texture"));
+
+	std::vector<std::string> filenames;
+	for (int i = 0; i < numTextures; ++i)
+	{
+		std::string filename;
+		bool found = source->ReadParameter("filename", filename);
+		if (found)
+		{
+			filenames.push_back(filename);
+		}
+		source->NextAttribute();
+	}
+	if (!filenames.empty())
+	{
+		TextureArray* textureArray = new TextureArray();
+		textureArray->Load(filenames, ++mCurrentTextureUnit, true);
+		AddElement(textureName, textureArray);
+	}
+	else
+	{
+		Log(Log::LOG_WARNING) << "Texture array " << textureName << " empty!";
+	}
+	source->EndAttribute();
+}
+
+void TexturesLibrary::WriteTo(core::utils::ISerializer * destination)
+{
 }
 
 void TexturesLibrary::AddTextureNameToLoad(const std::string& name, const std::string& filename, std::function<void(const std::string& textureName, ITexture* texture)> callback)

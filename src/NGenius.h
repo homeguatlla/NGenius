@@ -136,6 +136,9 @@ public:
 	//serialize
 	void SaveToFile();
 
+	//deserialize
+	void LoadFromFile();
+
 private:
 	
 	void CreateSystems(float screenWidth, float screenHeight);

@@ -7,9 +7,9 @@
 #include <glm/glm.hpp>
 #include "../BaseLibrary.h"
 #include "ITexture.h"
+#include "../../utils/serializer/ISerializable.h"
 
-
-class TexturesLibrary : public BaseLibrary<ITexture*>
+class TexturesLibrary : public core::utils::ISerializable, public BaseLibrary<ITexture*>
 {
 	typedef std::tuple<std::string, std::string, std::function<void(const std::string& fontName, ITexture* texture)>> TextureTuple;
 	std::vector<TextureTuple> mTexturesPendingToLoad;
@@ -24,9 +24,16 @@ public:
 	ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
 	ITexture* CreateColorTexture(std::string name, const glm::vec2& size);
 
+	// Heredado vía ISerializable
+	virtual void ReadFrom(core::utils::IDeserializer * source) override;
+	virtual void WriteTo(core::utils::ISerializer * destination) override;
+
 private:
 	void LoadTexture(std::string name, std::string filename, bool hasMipmapping, bool hasWrapping);
 	void CreateDepthTexture(std::string name, unsigned int width, unsigned int height);
 	void LoadTexturesPendingToLoad();
+
+	void ReadTextureFrom(core::utils::IDeserializer * source);
+	void ReadTextureArrayFrom(core::utils::IDeserializer * source);
 };
 

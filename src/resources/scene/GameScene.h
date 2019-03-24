@@ -42,6 +42,10 @@ public:
 
 	void SaveToFile();
 
+	// Heredado vía ISerializable
+	void ReadFrom(core::utils::IDeserializer* source) override;
+	void WriteTo(core::utils::ISerializer* destination) override;
+
 	BaseVisitable<>::ReturnType Accept(BaseVisitor& guest) override;
 
 private:
@@ -50,9 +54,5 @@ private:
 	void AddNewEntities();
 	void NotifyEntityAdded(GameEntity* entity);
 	void NotifyEntityRemoved(GameEntity* entity);
-
-	// Heredado vía ISerializable
-	void ReadFrom(core::utils::IDeserializer* source) override;
-	void WriteTo(core::utils::ISerializer* destination) override;
 };
 

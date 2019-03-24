@@ -6,7 +6,7 @@
 #include "../../../VertexBuffersManager.h"
 #include "../../renderers/IRenderer.h"
 #include "../../../visitor/BaseVisitable.h"
-
+#include "../../../utils/serializer/IDeserializer.h"
 
 class ICamera;
 class RenderPass;
@@ -38,7 +38,7 @@ class PostProcessSubSystem;
 class GuiTool;
 class EnvironmentSystem;
 
-class RenderSystem : public BaseVisitable<>
+class RenderSystem : public core::utils::ISerializable, public BaseVisitable<>
 {
 	typedef std::vector<IRenderer*> RenderersList;
 	typedef std::vector<RenderPass*>::iterator RenderPassesIterator;
@@ -154,6 +154,10 @@ public:
 
 	GuiTool* GetGuiTool();
 
+	// Heredado vía ISerializable
+	virtual void ReadFrom(core::utils::IDeserializer* source) override;
+	virtual void WriteTo(core::utils::ISerializer* destination) override;
+
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
 private:
@@ -167,7 +171,7 @@ private:
 	void EnableVSync(bool enable);
 	GLFWmonitor* GetCurrentMonitor(float* screenWidth, float* screenHeight);
 
-	void LoadResources();
+	void LoadDefaultResources();
 
 	void AddToRender(IRenderer* renderer, std::vector<RenderPass*>& renderPasses);
 

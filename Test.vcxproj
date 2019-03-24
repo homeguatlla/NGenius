@@ -337,6 +337,7 @@
     <ClInclude Include="src\utils\serializer\IDeserializer.h" />
     <ClInclude Include="src\utils\serializer\ISerializable.h" />
     <ClInclude Include="src\utils\serializer\ISerializer.h" />
+    <ClInclude Include="src\utils\serializer\XMLDeserializer.h" />
     <ClInclude Include="src\utils\serializer\XMLSerializer.h" />
     <ClInclude Include="src\VertexBuffersManager.h" />
     <ClInclude Include="src\visitor\BaseVisitable.h" />
@@ -530,6 +531,7 @@
     <ClCompile Include="src\TerrainGrid.cpp" />
     <ClCompile Include="src\utils\FileReader.cpp" />
     <ClCompile Include="src\utils\Log.cpp" />
+    <ClCompile Include="src\utils\serializer\XMLDeserializer.cpp" />
     <ClCompile Include="src\utils\serializer\XMLSerializer.cpp" />
     <ClCompile Include="src\VertexBuffersManager.cpp" />
     <ClCompile Include="src\visitor\BaseVisitable.cpp" />

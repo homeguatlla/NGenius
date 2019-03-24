@@ -6,6 +6,8 @@
 #include "animation/AnimatedModel.h"
 #include "animation/Animation.h"
 
+#include "../../utils/serializer/IDeserializer.h"
+
 #include "../../utils/Log.h"
 
 #include <iostream>
@@ -37,14 +39,26 @@ void ModelsLibrary::Load()
 	//LoadModel("enano", "data/models/enano/enano.obj", false, true);
 	//LoadModel("mazo", "data/models/mazo/mazo.obj", false, true);
 
-	LoadModel("barrel", "data/models/props/barrel.obj", true, true);
-	LoadModel("chest", "data/models/props/chest.obj", true, true);
-	LoadModel("brazier", "data/models/props/brazier.obj", true, true);
+	///LoadModel("barrel", "data/models/props/barrel.obj", true, true);
+	///LoadModel("chest", "data/models/props/chest.obj", true, true);
+///	LoadModel("brazier", "data/models/props/brazier.obj", true, true);
 	//LoadModel("stall", "data/models/stall/stall.obj", false, true);
 	//LoadModel("cube3", "data/models/props/cube.obj", false, true);
-	LoadModel("crate", "data/models/props/crate.obj", true, true);
+	///LoadModel("crate", "data/models/props/crate.obj", true, true);
 	//LoadModel("floor", "data/models/props/floor.obj", true, true);
-	LoadModel("statue", "data/models/props/statue.obj", true, true);
+	///LoadModel("statue", "data/models/props/statue.obj", true, true);
+
+	///LoadModel("sphere", "data/models/sphere/sphere.obj", false, true);
+
+	/*LoadModel("tree_foliage_0", "data/models/tree4/tree_foliage_lod0.obj", false, true);
+	LoadModel("tree_foliage_1", "data/models/tree4/tree_foliage_lod1.obj", false, true);
+	LoadModel("tree_foliage_2", "data/models/tree4/tree_foliage_lod2.obj", false, true);
+
+	LoadModel("tree_trunk_0", "data/models/tree4/tree_trunk_lod0.obj", false, true);
+	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", false, true);
+	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
+	*/
+	///LoadModel("farmer", "data/models/farmer/farmer.dae", true, true);
 
 	//LoadModel("grass1", "data/models/grass/grass1.obj", false, false);
 	//LoadModel("grass2", "data/models/grass/grass2.obj", false, false);
@@ -52,17 +66,7 @@ void ModelsLibrary::Load()
 	//model = OBJLoader::LoadModel("data/models/hermes/hermes.obj");
 	//AddElement("hermes", model);
 	
-	LoadModel("sphere", "data/models/sphere/sphere.obj", false, true);
 	
-	LoadModel("tree_foliage_0", "data/models/tree4/tree_foliage_lod0.obj", false, true);
-	LoadModel("tree_foliage_1", "data/models/tree4/tree_foliage_lod1.obj", false, true);
-	LoadModel("tree_foliage_2", "data/models/tree4/tree_foliage_lod2.obj", false, true);
-
-	LoadModel("tree_trunk_0", "data/models/tree4/tree_trunk_lod0.obj", false, true);
-	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", false, true);
-	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
-	
-	LoadModel("farmer", "data/models/farmer/farmer.dae", true, true);
 	//LoadModel("farmer", "data/models/cube/cube.dae", false, true);
 	//LoadModel("farmer", "data/models/Adventurer-Militia/Militia-Adventurer-RIGGED.dae", false, true);
 
@@ -149,6 +153,38 @@ std::string ModelsLibrary::GetPath(const std::string& filename)
 	}
 	
 	return "";
+}
+
+void ModelsLibrary::ReadFrom(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute(std::string("models_library"));
+	unsigned int numElements = source->ReadNumberOfElements();
+
+	source->BeginAttribute("model");
+	do
+	{	
+		std::string filename;
+		source->ReadParameter("filename", filename);
+
+		std::string modelName;
+		source->ReadParameter("name", modelName);
+
+		bool calculateNormals = false;
+		bool calculateTangents = false;
+		source->ReadParameter("calculate_normals", &calculateNormals);
+		source->ReadParameter("calculate_tangents", &calculateTangents);
+
+		LoadModel(modelName, filename, calculateNormals, calculateTangents);
+		
+		source->NextAttribute();
+		numElements--;
+	} while (numElements > 0);
+	source->EndAttribute();
+	source->EndAttribute();
+}
+
+void ModelsLibrary::WriteTo(core::utils::ISerializer* destination)
+{
 }
 
 void ModelsLibrary::CreateSkyBox()
