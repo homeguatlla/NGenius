@@ -21,67 +21,18 @@ TexturesLibrary::~TexturesLibrary()
 
 void TexturesLibrary::Load()
 {
-	LoadTexture("stone", "data/models/stone/diffuse.png", true, false);
-	//LoadTexture("terrain_heightmap", "data/textures/terrain_heightmap_1024.png", false, false);
-	//LoadTexture("terrain_blendmap", "data/textures/terrain_blendmap_1024.png", false, false);
+	//LoadTexture("stone", "data/models/stone/diffuse.png", true, false);
 
-	std::vector<std::string> filenames;
+	//LoadTexture("hud_map", "data/ui/hud/hud_map.png", false, false);
 
-	filenames.push_back("data/textures/sand_256.png");
-	filenames.push_back("data/textures/grass_256.png");
-	filenames.push_back("data/textures/grass_dark_256.png");	
-	filenames.push_back("data/textures/rock3.png");
-	
+	//CreateColorTexture("map", glm::vec2(256, 256));
 
-	TextureArray* textureArray = new TextureArray();
-	textureArray->Load(filenames, ++mCurrentTextureUnit, true);
-	AddElement("terrain_array", textureArray);
+	//LoadTexture("grass2", "data/textures/grass2.png", false, false);
+	//LoadTexture("grass3", "data/textures/grass3.png", false, false);
+	//LoadTexture("grass5", "data/textures/grass5.png", false, false);
 
-	filenames.clear();
-
-	filenames.push_back("data/skybox/sky1/right.png");
-	filenames.push_back("data/skybox/sky1/left.png");
-	filenames.push_back("data/skybox/sky1/top.png");
-	filenames.push_back("data/skybox/sky1/bottom.png");
-	filenames.push_back("data/skybox/sky1/back.png");
-	filenames.push_back("data/skybox/sky1/front.png");
-
-	TextureCubemap* cubemap = new TextureCubemap();
-	cubemap->Load(filenames, ++mCurrentTextureUnit);
-	AddElement("day_cubemap", cubemap);
-
-	filenames.clear();
-
-	filenames.push_back("data/skybox/sky2/right.png");
-	filenames.push_back("data/skybox/sky2/left.png");
-	filenames.push_back("data/skybox/sky2/top.png");
-	filenames.push_back("data/skybox/sky2/bottom.png");
-	filenames.push_back("data/skybox/sky2/back.png");
-	filenames.push_back("data/skybox/sky2/front.png");
-
-	cubemap = new TextureCubemap();
-	cubemap->Load(filenames, ++mCurrentTextureUnit);
-	AddElement("night_cubemap", cubemap);
-
-	LoadTexture("hud_map", "data/ui/hud/hud_map.png", false, false);
-
-	CreateColorTexture("map", glm::vec2(256, 256));
-
-	//LoadTexture("distorsion_water", "data/textures/waterDUDV.png", false, true);
-	//LoadTexture("normal_water", "data/textures/normal_water.png", false, true);
-
-	LoadTexture("smoke", "data/textures/smoke_64_.png", false, false);
-	LoadTexture("yellow_grid", "data/textures/grid_64.png", false, true);
-	LoadTexture("stall", "data/models/stall/stall.png", false, false);
-	
-	LoadTexture("grass2", "data/textures/grass2.png", false, false);
-	LoadTexture("grass3", "data/textures/grass3.png", false, false);
-	LoadTexture("grass5", "data/textures/grass5.png", false, false);
-
-	LoadTexture("wind_texture", "data/wind_map.png", false, true);
-
-	LoadTexture("barrel_diffuse", "data/models/barrel/barrel.png", false, false);
-	LoadTexture("barrel_normalmap", "data/models/barrel/barrelNormal.png", false, false);
+	//LoadTexture("barrel_diffuse", "data/models/barrel/barrel.png", false, false);
+	//LoadTexture("barrel_normalmap", "data/models/barrel/barrelNormal.png", false, false);
 
 	LoadTexturesPendingToLoad();
 }
@@ -162,6 +113,10 @@ void TexturesLibrary::ReadFrom(core::utils::IDeserializer * source)
 		{
 			ReadTextureArrayFrom(source);
 		}
+		else if (nodeName == "texture_cubemap")
+		{
+			ReadTextureCubemapFrom(source);
+		}
 		source->NextAttribute();
 		numElements--;
 
@@ -186,16 +141,12 @@ void TexturesLibrary::ReadTextureFrom(core::utils::IDeserializer * source)
 	LoadTexture(textureName, filename, hasMippaming, hasWrapping);
 }
 
-void TexturesLibrary::ReadTextureArrayFrom(core::utils::IDeserializer * source)
+void TexturesLibrary::ReadFilenamesFrom(core::utils::IDeserializer * source, std::vector<std::string>& filenames)
 {
-	std::string textureName;
-	source->ReadParameter("name", textureName);
-
-	unsigned int numTextures = source->ReadNumberOfElements();
+	unsigned int numFilenames = source->ReadNumberOfElements();
 	source->BeginAttribute(std::string("texture"));
 
-	std::vector<std::string> filenames;
-	for (int i = 0; i < numTextures; ++i)
+	for (int i = 0; i < numFilenames; ++i)
 	{
 		std::string filename;
 		bool found = source->ReadParameter("filename", filename);
@@ -205,6 +156,35 @@ void TexturesLibrary::ReadTextureArrayFrom(core::utils::IDeserializer * source)
 		}
 		source->NextAttribute();
 	}
+}
+
+void TexturesLibrary::ReadTextureCubemapFrom(core::utils::IDeserializer* source)
+{
+	std::string textureName;
+	source->ReadParameter("name", textureName);
+	std::vector<std::string> filenames;
+	ReadFilenamesFrom(source, filenames);
+
+	if (!filenames.empty())
+	{
+		TextureCubemap* cubemap = new TextureCubemap();
+		cubemap->Load(filenames, ++mCurrentTextureUnit);
+		AddElement(textureName, cubemap);
+	}
+	else
+	{
+		Log(Log::LOG_WARNING) << "Texture array " << textureName << " empty!";
+	}
+	source->EndAttribute();
+}
+
+void TexturesLibrary::ReadTextureArrayFrom(core::utils::IDeserializer * source)
+{
+	std::string textureName;
+	source->ReadParameter("name", textureName);
+	std::vector<std::string> filenames;
+	ReadFilenamesFrom(source, filenames);
+	
 	if (!filenames.empty())
 	{
 		TextureArray* textureArray = new TextureArray();

@@ -111,7 +111,7 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 	mGuiTool = new GuiTool(mWindow);
 
 	CreateResourcesLibraries();
-	//LoadResources();
+	LoadDefaultResources();
 	CreateSubSystems();
 }
 
@@ -143,7 +143,7 @@ void RenderSystem::LoadDefaultResources()
 	mShadersLibrary->Load();
 	mModelsLibrary->Load();
 	mFontsLibrary->Load();
-	//mTexturesLibrary->Load();
+	mTexturesLibrary->Load();
 	mMaterialsLibrary->Load();
 }
 
@@ -938,12 +938,13 @@ void RenderSystem::CheckGLError()
 
 void RenderSystem::ReadFrom(core::utils::IDeserializer* source)
 {
-	LoadDefaultResources();
-
 	source->BeginAttribute("libraries");
 		mModelsLibrary->ReadFrom(source);
 		mTexturesLibrary->ReadFrom(source);
 	source->EndAttribute();
+
+	//there will be textures pending because of reading the scene
+	mTexturesLibrary->LoadTexturesPendingToLoad();
 }
 
 void RenderSystem::WriteTo(core::utils::ISerializer* destination)

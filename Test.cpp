@@ -1804,10 +1804,9 @@ int main(void)
 
 	CreateEntities();
 	CreateSubSystems();
-	mEngine.Run();
 
 	mEngine.SetCastingShadowsTarget(mPlayer);
-
+	mEngine.Run();
 
 	DeleteEntities();
 
