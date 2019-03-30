@@ -53,3 +53,8 @@ void AnimatedModelShader::GetAllUniformLocations()
 	mLocationJointTransformMatrixs = GetUniformLocation(ATTRIBUTE_JOINT_TRANSFORM_MATRIXS);
 	mLocationJointTransformSize = GetUniformLocation(ATTRIBUTE_JOINT_TRANSFORM_SIZE);
 }
+
+IShaderProgram * AnimatedModelShader::CreateShader()
+{
+	return new AnimatedModelShader();
+}

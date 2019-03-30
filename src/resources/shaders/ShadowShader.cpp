@@ -78,3 +78,8 @@ void ShadowShader::GetAllUniformLocations()
 	mLocationJointTransformMatrixs = GetUniformLocation(ATTRIBUTE_JOINT_TRANSFORM_MATRIXS);
 	mLocationJointTransformSize = GetUniformLocation(ATTRIBUTE_JOINT_TRANSFORM_SIZE);
 }
+
+IShaderProgram* ShadowShader::CreateShader()
+{
+	return new ShadowShader();
+}

@@ -89,3 +89,8 @@ void WaterShader::GetAllUniformLocations()
 	mLocationWaterColor = GetUniformLocation(ATTRIBUTE_WATER_COLOR);
 	mLocationCameraPosition = GetUniformLocation(ATTRIBUTE_CAMERA_POSITION);
 }
+
+IShaderProgram* WaterShader::CreateShader()
+{
+	return new WaterShader();
+}

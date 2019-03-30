@@ -48,3 +48,8 @@ void BloomShader::GetAllUniformLocations()
 	mLocationTexture = GetUniformLocation(ATTRIBUTE_TEXTURE);
 	mLocationBrightTexture = GetUniformLocation(ATTRIBUTE_BRIGHT_TEXTURE);
 }
+
+IShaderProgram* BloomShader::CreateShader()
+{
+	return new BloomShader();
+}

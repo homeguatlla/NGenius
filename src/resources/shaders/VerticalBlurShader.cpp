@@ -47,3 +47,8 @@ void VerticalBlurShader::GetAllUniformLocations()
 	mLocationTexture = GetUniformLocation(ATTRIBUTE_TEXTURE);
 	mLocationHeight = GetUniformLocation(ATTRIBUTE_HEIGHT);
 }
+
+IShaderProgram* VerticalBlurShader::CreateShader()
+{
+	return new VerticalBlurShader();
+}

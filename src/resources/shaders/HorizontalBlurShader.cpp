@@ -47,3 +47,8 @@ void HorizontalBlurShader::GetAllUniformLocations()
 	mLocationTexture = GetUniformLocation(ATTRIBUTE_TEXTURE);
 	mLocationWidth = GetUniformLocation(ATTRIBUTE_WIDTH);
 }
+
+IShaderProgram* HorizontalBlurShader::CreateShader()
+{
+	return new HorizontalBlurShader();
+}

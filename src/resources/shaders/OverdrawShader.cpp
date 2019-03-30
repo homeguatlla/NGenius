@@ -39,3 +39,8 @@ void OverdrawShader::GetAllUniformLocations()
 	mLocationP = GetUniformLocation(ATTRIBUTE_PROJECTION_MATRIX);
 	mLocationV = GetUniformLocation(ATTRIBUTE_VIEW_MATRIX);
 }
+
+IShaderProgram* OverdrawShader::CreateShader()
+{
+	return new OverdrawShader();
+}

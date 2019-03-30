@@ -1,8 +1,8 @@
 #pragma once
 #include "IShaderProgram.h"
+#include "../IFactory.h"
 
-
-class WaterShader :	public IShaderProgram
+class WaterShader :	public IShaderProgram, public IFactory
 {
 	static const std::string VERTEX_FILE;
 	static const std::string FRAGMENT_FILE;
@@ -29,12 +29,8 @@ public:
 
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
-	void LoadReflectionTexture(int unit);
-	void LoadRefractionTexture(int unit);
-	void LoadDistorsionTexture(int unit);
-	void LoadNormalTexture(int unit);
-	void LoadDepthTexture(int unit);
-	void LoadWaterSpeed(float speed);
-	void LoadWaterColor(const glm::vec4& color);
+
+private:
+	IShaderProgram* CreateShader() override;
 };
 

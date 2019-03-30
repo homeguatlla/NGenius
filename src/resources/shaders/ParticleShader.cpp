@@ -77,3 +77,8 @@ void ParticleShader::GetAllUniformLocations()
 	mLocationTime = GetUniformLocation(ATTRIBUTE_TIME);
 	mLocationScreenSize = GetUniformLocation(ATTRIBTUTE_SCREEN_SIZE);
 }
+
+IShaderProgram* ParticleShader::CreateShader()
+{
+	return new ParticleShader();
+}

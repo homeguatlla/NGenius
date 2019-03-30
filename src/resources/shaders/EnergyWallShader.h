@@ -17,5 +17,8 @@ public:
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
 	void GetAllUniformLocations();
+
+private:
+	IShaderProgram* CreateShader() override;
 };
 

@@ -55,3 +55,8 @@ void GUIShader::GetAllUniformLocations()
 	mLocationViewMatrix = GetUniformLocation(ATTRIBUTE_VIEW_MATRIX);
 	mLocationTexture = GetUniformLocation(ATTRIBUTE_TEXTURE);
 }
+
+IShaderProgram* GUIShader::CreateShader()
+{
+	return new GUIShader();
+}

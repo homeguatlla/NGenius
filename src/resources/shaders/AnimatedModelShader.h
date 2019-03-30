@@ -17,5 +17,8 @@ public:
 	
 	void BindAttributes();
 	void GetAllUniformLocations();
+
+	// Heredado vía IFactory
+	IShaderProgram* CreateShader() override;
 };
 

@@ -17,5 +17,8 @@ public:
 	
 	void BindAttributes();
 	void GetAllUniformLocations();
+
+private:
+	IShaderProgram* CreateShader() override;
 };
 

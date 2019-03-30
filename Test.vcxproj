@@ -236,6 +236,8 @@
     <ClInclude Include="src\resources\font\FontType.h" />
     <ClInclude Include="src\resources\GameEntity.h" />
     <ClInclude Include="src\resources\GameEvent.h" />
+    <ClInclude Include="src\resources\IFactory.h" />
+    <ClInclude Include="src\resources\InstantiableObject.h" />
     <ClInclude Include="src\resources\materials\BasicMaterial.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectClippingPlane.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectDepthTexture.h" />
@@ -431,6 +433,7 @@
     <ClCompile Include="src\resources\font\FontType.cpp" />
     <ClCompile Include="src\resources\GameEntity.cpp" />
     <ClCompile Include="src\resources\GameEvent.cpp" />
+    <ClCompile Include="src\resources\InstantiableObject.cpp" />
     <ClCompile Include="src\resources\materials\BasicMaterial.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectClippingPlane.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectDepthTexture.cpp" />

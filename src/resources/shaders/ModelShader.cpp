@@ -23,6 +23,7 @@ const std::string ATTRIBUTE_TILE("tile");
 ModelShader::ModelShader() :
 ModelShader(VERTEX_FILE, FRAGMENT_FILE)
 {
+	
 }
 
 ModelShader::ModelShader(const std::string& vertexFile, const std::string& fragmentFile) :
@@ -76,4 +77,9 @@ void ModelShader::GetAllUniformLocations()
 	mLocationTexture = GetUniformLocation(ATTRIBUTE_TEXTURE);
 	
 	mLocationTile = GetUniformLocation(ATTRIBUTE_TILE);
+}
+
+IShaderProgram * ModelShader::CreateShader()
+{
+	return new ModelShader();
 }

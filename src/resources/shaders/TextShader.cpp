@@ -89,3 +89,8 @@ void TextShader::GetAllUniformLocations()
 	mLocationBorderEdge = GetUniformLocation(ATTRIBUTE_BORDER_EDGE);
 	mLocationShadowOffset = GetUniformLocation(ATTRIBUTE_SHADOW_OFFSET);
 }
+
+IShaderProgram* TextShader::CreateShader()
+{
+	return new TextShader();
+}

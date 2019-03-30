@@ -144,7 +144,7 @@ void RenderSystem::LoadDefaultResources()
 	mModelsLibrary->Load();
 	mFontsLibrary->Load();
 	mTexturesLibrary->Load();
-	mMaterialsLibrary->Load();
+	//mMaterialsLibrary->Load();
 }
 
 void RenderSystem::Update(float elapsedTime)
@@ -940,9 +940,13 @@ void RenderSystem::ReadFrom(core::utils::IDeserializer* source)
 {
 	source->BeginAttribute("libraries");
 		mFontsLibrary->ReadFrom(source);
+		mShadersLibrary->ReadFrom(source);
 		mModelsLibrary->ReadFrom(source);
 		mTexturesLibrary->ReadFrom(source);
 	source->EndAttribute();
+
+	//TODO remove from here
+	mMaterialsLibrary->Load();
 
 	//there will be textures pending because of reading the scene
 	mTexturesLibrary->LoadTexturesPendingToLoad();

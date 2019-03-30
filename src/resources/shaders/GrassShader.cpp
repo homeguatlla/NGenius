@@ -165,3 +165,8 @@ int GrassShader::GetGeometryShaderNumTriangles() const
 {
 	return 10;
 }
+
+IShaderProgram* GrassShader::CreateShader()
+{
+	return new GrassShader();
+}

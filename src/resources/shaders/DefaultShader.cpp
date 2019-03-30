@@ -55,3 +55,8 @@ void DefaultShader::GetAllUniformLocations()
 	mLocationV = GetUniformLocation(ATTRIBUTE_VIEW_MATRIX);
 	mLocationColor = GetUniformLocation(ATTRIBUTE_COLOR);
 }
+
+IShaderProgram* DefaultShader::CreateShader()
+{
+	return new DefaultShader();
+}

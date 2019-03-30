@@ -20,7 +20,6 @@ public:
 	int GetProgramID() { return mProgramID; }
 	void Use();
 	void UnUse();
-
 	
 	void BindAttribute(int attribute, const std::string& variableName);
 	int GetUniformLocation(const std::string& uniformName);

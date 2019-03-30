@@ -1,7 +1,8 @@
 #pragma once
 #include "IShaderProgram.h"
+#include "../IFactory.h"
 
-class BloomShader : public IShaderProgram
+class BloomShader : public IShaderProgram, public IFactory
 {
 	static const std::string VERTEX_FILE;
 	static const std::string FRAGMENT_FILE;
@@ -14,6 +15,9 @@ public:
 	
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
+
+private:
+	IShaderProgram* CreateShader() override;
 
 private:
 	int mLocationTexture;

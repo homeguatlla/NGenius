@@ -774,6 +774,12 @@
     <ClInclude Include="src\utils\serializer\XMLDeserializer.h">
       <Filter>Header Files\utils\serializer</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\IFactory.h">
+      <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\InstantiableObject.h">
+      <Filter>Header Files\resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1297,6 +1303,9 @@
     </ClCompile>
     <ClCompile Include="src\utils\serializer\XMLDeserializer.cpp">
       <Filter>Source Files\utils\serializer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\InstantiableObject.cpp">
+      <Filter>Source Files\resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
