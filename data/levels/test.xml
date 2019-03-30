@@ -4,6 +4,22 @@
 		<fonts_library>
 			<font filename = "data/fonts/quartzMS.fnt"/>
 		</fonts_library>
+		<shaders_library>
+			<shader name="model"/>
+			<shader name="terrain"/>
+			<shader name="normalmap"/>
+			<shader name="skybox"/>
+			<shader name="particle"/>
+			<shader name="water"/>
+			<shader name="energy_wall"/>
+			<shader name="contrast"/>
+			<shader name="horizontal_blur"/>
+			<shader name="vertical_blur"/>
+			<shader name="bright"/>
+			<shader name="bloom"/>
+			<shader name="grass"/>
+			<shader name="animated_model"/>
+		</shaders_library>
 		<textures_library>
 			<texture name = "terrain_heightmap" filename = "data/textures/terrain_heightmap_1024.png" />
 			<texture name = "terrain_blendmap" filename = "data/textures/terrain_blendmap_1024.png" />			

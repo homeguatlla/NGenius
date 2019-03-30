@@ -33,11 +33,8 @@ ShadersLibrary::ShadersLibrary()
 	InstantiableObject::RegisterType("normalmap", new NormalMapShader());
 	InstantiableObject::RegisterType("skybox", new SkyBoxShader());
 	InstantiableObject::RegisterType("particle", new ParticleShader());
-	InstantiableObject::RegisterType("gui", new GUIShader());
 	InstantiableObject::RegisterType("water", new WaterShader());
 	InstantiableObject::RegisterType("energy_wall", new EnergyWallShader());
-	InstantiableObject::RegisterType("text", new TextShader());
-	InstantiableObject::RegisterType("shadow", new ShadowShader());
 	InstantiableObject::RegisterType("contrast", new ContrastShader());
 	InstantiableObject::RegisterType("horizontal_blur", new HorizontalBlurShader());
 	InstantiableObject::RegisterType("vertical_blur", new VerticalBlurShader());
@@ -55,6 +52,9 @@ void ShadersLibrary::Load()
 {
 	AddShader("default", new DefaultShader());
 	AddShader("overdraw", new OverdrawShader());
+	AddShader("text", new TextShader());
+	AddShader("shadow", new ShadowShader());
+	AddShader("gui", new GUIShader());
 }
 
 void ShadersLibrary::AddShader(const char* name, IShaderProgram* shader)
