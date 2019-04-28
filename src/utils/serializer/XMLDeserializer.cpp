@@ -94,7 +94,7 @@ namespace core
 			return found;
 		}
 
-		bool XMLDeserializer::ReadParameter(const std::string& name, int* value, std::string& readable)
+		bool XMLDeserializer::ReadParameter(const std::string& name, int* value)
 		{
 			assert(mCurrentXMLNode != nullptr);
 
@@ -126,7 +126,7 @@ namespace core
 		bool XMLDeserializer::ReadParameter(const std::string& name, unsigned int* value)
 		{
 			int v = 0;
-			bool found = ReadParameter(name, &v, std::string());
+			bool found = ReadParameter(name, &v);
 			*value = v;
 			return found;
 		}
@@ -154,7 +154,14 @@ namespace core
 
 			if (found)
 			{
-				//*value = std::stof(stringValue);
+				std::stringstream stream(stringValue);
+				float x, y, z;
+
+				stream >> x;
+				stream >> y;
+				stream >> z;
+
+				value = glm::vec3(x, y, z);
 			}
 			return found;
 		}

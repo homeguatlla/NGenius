@@ -9,6 +9,7 @@ class MaterialEffectDepthTexture : public IMaterialEffect
 	float mTile;
 
 public:
+	MaterialEffectDepthTexture();
 	MaterialEffectDepthTexture(ITexture* texture, float tile);
 	virtual ~MaterialEffectDepthTexture();
 
@@ -18,5 +19,10 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectDepthTexture* DoClone() const override;
+	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+
+	// Heredado vía IMaterialEffect
+	void ReadFrom(core::utils::IDeserializer * source) override;
+	void WriteTo(core::utils::ISerializer * destination) override;
 };
 

@@ -42,11 +42,6 @@ mLocationCameraPosition(-1)
 {
 }
 
-
-WaterShader::~WaterShader()
-{
-}
-
 void WaterShader::BindAttributes()
 {
 	BindAttribute(mLocationTextureCoords, ATTRIBUTE_TEXTURE_COORDS);

@@ -2,6 +2,11 @@
 #include "MaterialEffectFloat.h"
 #include "../IMaterial.h"
 
+MaterialEffectFloat::MaterialEffectFloat()
+	: mValue(0.0f)
+{
+}
+
 MaterialEffectFloat::MaterialEffectFloat(float value) :
 mValue(value)
 {
@@ -35,4 +40,21 @@ void MaterialEffectFloat::CopyValuesFrom(IMaterial* material)
 MaterialEffectFloat* MaterialEffectFloat::DoClone() const
 {
 	return new MaterialEffectFloat(*this);
+}
+
+IMaterialEffect* MaterialEffectFloat::AddNewEffectToMaterial(IMaterial* material)
+{
+	MaterialEffectFloat* materialEffect = new MaterialEffectFloat();
+
+	material->AddEffect(materialEffect);
+
+	return materialEffect;
+}
+
+void MaterialEffectFloat::ReadFrom(core::utils::IDeserializer * source)
+{
+}
+
+void MaterialEffectFloat::WriteTo(core::utils::ISerializer * destination)
+{
 }

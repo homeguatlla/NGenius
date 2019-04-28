@@ -15,7 +15,7 @@ class GUIShader : public IShaderProgram, public IFactory
 public:
 
 	GUIShader();
-	~GUIShader();
+	virtual ~GUIShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 

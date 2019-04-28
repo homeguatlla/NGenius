@@ -12,7 +12,7 @@ class EnergyWallShader : public ModelShader
 
 public:
 	explicit EnergyWallShader();
-	~EnergyWallShader();
+	virtual ~EnergyWallShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 

@@ -121,6 +121,9 @@ void RenderSystem::Start()
 	mShadowsRenderPass->Init();
 	mWaterRenderPass->Init();
 	mPostProcessSubsystem->Init();
+
+	mTexturesLibrary->LoadTexturesPendingToLoad();
+	mMaterialsLibrary->Build();
 }
 
 void RenderSystem::CreateSubSystems()
@@ -144,7 +147,7 @@ void RenderSystem::LoadDefaultResources()
 	mModelsLibrary->Load();
 	mFontsLibrary->Load();
 	mTexturesLibrary->Load();
-	//mMaterialsLibrary->Load();
+	mMaterialsLibrary->Load();
 }
 
 void RenderSystem::Update(float elapsedTime)
@@ -832,7 +835,7 @@ void RenderSystem::CreateResourcesLibraries()
 	mAnimationsLibrary = new AnimationsLibrary();
 	mModelsLibrary = new ModelsLibrary(mTexturesLibrary, mAnimationsLibrary);
 	mFontsLibrary = new FontsLibrary(mTexturesLibrary);
-	mMaterialsLibrary = new MaterialsLibrary(mShadersLibrary);
+	mMaterialsLibrary = new MaterialsLibrary(mTexturesLibrary, mShadersLibrary);
 }
 
 void RenderSystem::DestroyResourcesLibraries()
@@ -943,13 +946,8 @@ void RenderSystem::ReadFrom(core::utils::IDeserializer* source)
 		mShadersLibrary->ReadFrom(source);
 		mModelsLibrary->ReadFrom(source);
 		mTexturesLibrary->ReadFrom(source);
+		mMaterialsLibrary->ReadFrom(source);
 	source->EndAttribute();
-
-	//TODO remove from here
-	mMaterialsLibrary->Load();
-
-	//there will be textures pending because of reading the scene
-	mTexturesLibrary->LoadTexturesPendingToLoad();
 }
 
 void RenderSystem::WriteTo(core::utils::ISerializer* destination)

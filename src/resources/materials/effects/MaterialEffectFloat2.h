@@ -8,6 +8,7 @@ class MaterialEffectFloat2 : public IMaterialEffect
 	glm::vec2 mValue;
 
 public:
+	MaterialEffectFloat2();
 	MaterialEffectFloat2(const glm::vec2& value);
 	virtual ~MaterialEffectFloat2();
 
@@ -17,5 +18,10 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectFloat2* DoClone() const override;
+	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+
+	// Heredado vía IMaterialEffect
+	void ReadFrom(core::utils::IDeserializer * source) override;
+	void WriteTo(core::utils::ISerializer * destination) override;
 };
 

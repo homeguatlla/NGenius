@@ -35,7 +35,7 @@ class GrassShader : public IShaderProgram, public IFactory
 
 public:
 	GrassShader();
-	~GrassShader();
+	virtual ~GrassShader() = default;
 
 	virtual void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 

@@ -64,6 +64,16 @@ void IMaterial::CopyMaterialEffectsValuesFrom(IMaterial* material)
 	}
 }
 
+void IMaterial::Build(TexturesLibrary* texturesLibrary)
+{
+	IMaterialEffectIterator it;
+
+	for (it = mEffects.begin(); it != mEffects.end(); it++)
+	{
+		it->second->Build(texturesLibrary);
+	}
+}
+
 IMaterial* IMaterial::Clone() const
 {
 	IMaterial* clone = DoClone();

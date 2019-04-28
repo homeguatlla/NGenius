@@ -471,13 +471,16 @@ void CreateTrees()
 	modelsTrunk.push_back("tree_trunk_1");
 	modelsTrunk.push_back("tree_trunk_2");
 	
-	IMaterial* materialFoliage = mEngine.CreateMaterial("tree_foliage", mEngine.GetShader("model"));
+	IMaterial* materialFoliage = mEngine.GetMaterial("tree_foliage");
+	
+	/*IMaterial* materialFoliage = mEngine.CreateMaterial("tree_foliage", mEngine.GetShader("model"));
+	
 	materialFoliage->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_foliage_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	materialFoliage->AddEffect(new MaterialEffectDirectionalLightProperties());
 	materialFoliage->AddEffect(new MaterialEffectFogProperties());
 	materialFoliage->AddEffect(new MaterialEffectShadowProperties(1));
 	materialFoliage->AddEffect(new MaterialEffectClippingPlane());
-
+	*/
 	IMaterial* materialTrunk = mEngine.CreateMaterial("tree_trunk", mEngine.GetShader("model"));
 	materialTrunk->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
 	materialTrunk->AddEffect(new MaterialEffectDirectionalLightProperties());

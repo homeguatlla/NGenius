@@ -32,11 +32,6 @@ mLocationBlendFactor(-1)
 {
 }
 
-
-SkyBoxShader::~SkyBoxShader()
-{
-}
-
 void SkyBoxShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	IShaderProgram::LoadData(camera, transformation, material);

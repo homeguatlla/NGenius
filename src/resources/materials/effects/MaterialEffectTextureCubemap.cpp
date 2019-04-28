@@ -4,6 +4,13 @@
 
 #include <assert.h>
 
+MaterialEffectTextureCubemap::MaterialEffectTextureCubemap() :
+	mTexture1(nullptr),
+	mTexture2(nullptr),
+	mBlendFactor(0.0f)
+{
+}
+
 MaterialEffectTextureCubemap::MaterialEffectTextureCubemap(TextureCubemap* textureCubemap1, TextureCubemap* textureCubemap2, float blendFactor) :
 mTexture1(textureCubemap1),
 mTexture2(textureCubemap2),
@@ -64,4 +71,21 @@ void MaterialEffectTextureCubemap::CopyValuesFrom(IMaterial* material)
 MaterialEffectTextureCubemap* MaterialEffectTextureCubemap::DoClone() const
 {
 	return new MaterialEffectTextureCubemap(*this);
+}
+
+IMaterialEffect* MaterialEffectTextureCubemap::AddNewEffectToMaterial(IMaterial* material)
+{
+	MaterialEffectTextureCubemap* materialEffect = new MaterialEffectTextureCubemap();
+
+	material->AddEffect(materialEffect);
+
+	return materialEffect;
+}
+
+void MaterialEffectTextureCubemap::ReadFrom(core::utils::IDeserializer * source)
+{
+}
+
+void MaterialEffectTextureCubemap::WriteTo(core::utils::ISerializer * destination)
+{
 }

@@ -11,7 +11,7 @@ class AnimatedModelShader : public ModelShader
 
 public:
 	AnimatedModelShader();
-	~AnimatedModelShader();
+	virtual ~AnimatedModelShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 	

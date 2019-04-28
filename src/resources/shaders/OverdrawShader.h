@@ -9,7 +9,7 @@ class OverdrawShader : public IShaderProgram, public IFactory
 
 public:
 	OverdrawShader();
-	~OverdrawShader();
+	virtual ~OverdrawShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 	

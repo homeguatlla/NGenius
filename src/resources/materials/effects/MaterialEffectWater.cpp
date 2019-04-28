@@ -2,6 +2,17 @@
 #include "MaterialEffectWater.h"
 #include "../IMaterial.h"
 
+MaterialEffectWater::MaterialEffectWater() :
+	mReflectionTexture(nullptr),
+	mRefractionTexture(nullptr),
+	mDistorsionTexture(nullptr),
+	mDepthTexture(nullptr),
+	mNormalTexture(nullptr),
+	mColor(1.0f),
+	mSpeed(0.0f)
+{
+}
+
 MaterialEffectWater::MaterialEffectWater(ITexture* reflectionTexture, ITexture* refractionTexture,
 	ITexture* distorsionTexture, ITexture* normalTexture, ITexture* depthTexture, float waterSpeed, const glm::vec4& waterColor) :
 mReflectionTexture(reflectionTexture),
@@ -76,4 +87,21 @@ void MaterialEffectWater::CopyValuesFrom(IMaterial* material)
 MaterialEffectWater* MaterialEffectWater::DoClone() const
 {
 	return new MaterialEffectWater(*this);
+}
+
+IMaterialEffect* MaterialEffectWater::AddNewEffectToMaterial(IMaterial* material)
+{
+	MaterialEffectWater* materialEffect = new MaterialEffectWater();
+
+	material->AddEffect(materialEffect);
+
+	return materialEffect;
+}
+
+void MaterialEffectWater::ReadFrom(core::utils::IDeserializer * source)
+{
+}
+
+void MaterialEffectWater::WriteTo(core::utils::ISerializer * destination)
+{
 }

@@ -9,7 +9,7 @@ class DefaultShader : public IShaderProgram, public IFactory
 
 public:
 	DefaultShader();
-	~DefaultShader();
+	virtual ~DefaultShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 

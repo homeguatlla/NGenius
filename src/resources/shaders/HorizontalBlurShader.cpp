@@ -19,11 +19,6 @@ mLocationWidth(-1)
 {
 }
 
-
-HorizontalBlurShader::~HorizontalBlurShader()
-{
-}
-
 void HorizontalBlurShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	MaterialEffectDiffuseTexture* effectDiffuse = material->GetEffect<MaterialEffectDiffuseTexture>();

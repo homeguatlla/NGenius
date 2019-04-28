@@ -146,7 +146,7 @@ void TexturesLibrary::ReadFilenamesFrom(core::utils::IDeserializer * source, std
 	unsigned int numFilenames = source->ReadNumberOfElements();
 	source->BeginAttribute(std::string("texture"));
 
-	for (int i = 0; i < numFilenames; ++i)
+	for (unsigned int i = 0; i < numFilenames; ++i)
 	{
 		std::string filename;
 		bool found = source->ReadParameter("filename", filename);

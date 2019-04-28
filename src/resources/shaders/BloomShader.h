@@ -9,7 +9,7 @@ class BloomShader : public IShaderProgram, public IFactory
 
 public:
 	BloomShader();
-	~BloomShader();
+	virtual ~BloomShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 	

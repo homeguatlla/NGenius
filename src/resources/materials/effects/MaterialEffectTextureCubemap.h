@@ -10,6 +10,7 @@ class MaterialEffectTextureCubemap : public IMaterialEffect
 	float mBlendFactor;
 
 public:
+	MaterialEffectTextureCubemap();
 	MaterialEffectTextureCubemap(TextureCubemap* textureCubemap1, TextureCubemap* textureCubemap2, float blendFactor);
 	virtual ~MaterialEffectTextureCubemap();
 
@@ -23,5 +24,10 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectTextureCubemap* DoClone() const override;
+	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+
+	// Heredado vía IMaterialEffect
+	void ReadFrom(core::utils::IDeserializer * source) override;
+	void WriteTo(core::utils::ISerializer * destination) override;
 };
 

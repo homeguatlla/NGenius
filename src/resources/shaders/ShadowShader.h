@@ -9,7 +9,7 @@ class ShadowShader : public IShaderProgram, public IFactory
 
 public:
 	ShadowShader();
-	~ShadowShader();
+	virtual ~ShadowShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 	

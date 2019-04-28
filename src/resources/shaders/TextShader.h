@@ -22,7 +22,7 @@ class TextShader : public IShaderProgram, public IFactory
 
 public:
 	TextShader();
-	~TextShader();
+	virtual ~TextShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 

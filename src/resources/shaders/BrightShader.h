@@ -9,7 +9,7 @@ class BrightShader : public IShaderProgram, public IFactory
 
 public:
 	BrightShader();
-	~BrightShader();
+	virtual ~BrightShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 	

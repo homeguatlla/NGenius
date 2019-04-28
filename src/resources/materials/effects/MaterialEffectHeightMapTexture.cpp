@@ -3,6 +3,12 @@
 #include "../IMaterial.h"
 #include <assert.h>
 
+MaterialEffectHeightMapTexture::MaterialEffectHeightMapTexture() :
+	mTexture(nullptr),
+	mTile(1.0f)
+{
+}
+
 MaterialEffectHeightMapTexture::MaterialEffectHeightMapTexture(ITexture* texture, float tile) :
 mTexture(texture),
 mTile(tile)
@@ -38,4 +44,21 @@ void MaterialEffectHeightMapTexture::CopyValuesFrom(IMaterial* material)
 MaterialEffectHeightMapTexture* MaterialEffectHeightMapTexture::DoClone() const
 {
 	return new MaterialEffectHeightMapTexture(*this);
+}
+
+IMaterialEffect* MaterialEffectHeightMapTexture::AddNewEffectToMaterial(IMaterial* material)
+{
+	MaterialEffectHeightMapTexture* materialEffect = new MaterialEffectHeightMapTexture();
+
+	material->AddEffect(materialEffect);
+
+	return materialEffect;
+}
+
+void MaterialEffectHeightMapTexture::ReadFrom(core::utils::IDeserializer * source)
+{
+}
+
+void MaterialEffectHeightMapTexture::WriteTo(core::utils::ISerializer * destination)
+{
 }

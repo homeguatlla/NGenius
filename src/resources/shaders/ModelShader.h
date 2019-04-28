@@ -10,7 +10,7 @@ class ModelShader :	public IShaderProgram, public IFactory
 public:
 	ModelShader();
 	ModelShader(const std::string& vertexFile, const std::string& fragmentFile);
-	~ModelShader();
+	virtual ~ModelShader() = default;
 
 	virtual void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 

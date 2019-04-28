@@ -1,9 +1,11 @@
 #pragma once
 #include <map>
+#include <string>
 
 template<class T> 
 class BaseLibrary
 {
+protected:
 	std::map<const std::string, T> mElements;
 
 public:
@@ -18,6 +20,8 @@ public:
 		}
 		mElements.clear();
 	}
+
+	typedef typename std::map<const std::string, T>::iterator BaseLibraryIterator;
 
 	T GetElement(const std::string& key)
 	{

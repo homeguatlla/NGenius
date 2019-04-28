@@ -13,6 +13,7 @@ class MaterialEffectText : public IMaterialEffect
 	glm::vec2 mShadowOffset;
 
 public:
+	MaterialEffectText();
 	MaterialEffectText(const glm::vec4& color, const glm::vec4& outlineColor, float width, float edge, 
 		float borderWidth, float borderEdge, const glm::vec2& shadowOffset);
 	virtual ~MaterialEffectText();
@@ -29,5 +30,10 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectText* DoClone() const override;
+	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+
+	// Heredado vía IMaterialEffect
+	void ReadFrom(core::utils::IDeserializer * source) override;
+	void WriteTo(core::utils::ISerializer * destination) override;
 };
 

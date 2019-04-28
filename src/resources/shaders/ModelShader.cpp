@@ -37,11 +37,6 @@ mLocationTile(-1)
 {
 }
 
-
-ModelShader::~ModelShader()
-{
-}
-
 void ModelShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	IShaderProgram::LoadData(camera, transformation, material);

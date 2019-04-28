@@ -15,6 +15,7 @@ class MaterialEffectWater : public IMaterialEffect
 	float mSpeed;	
 
 public:
+	MaterialEffectWater();
 	MaterialEffectWater(ITexture* reflectionTexture, ITexture* refractionTexture, ITexture* distorsionTexture,
 		ITexture* normalTexture, ITexture* depthTexture, float waterSpeed, const glm::vec4& waterColor);
 	virtual ~MaterialEffectWater();
@@ -32,5 +33,10 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectWater* DoClone() const override;
+	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+
+	// Heredado vía IMaterialEffect
+	void ReadFrom(core::utils::IDeserializer * source) override;
+	void WriteTo(core::utils::ISerializer * destination) override;
 };
 

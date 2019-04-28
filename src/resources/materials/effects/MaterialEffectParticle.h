@@ -12,6 +12,7 @@ class MaterialEffectParticle : public IMaterialEffect
 	float mTile;
 
 public:
+	MaterialEffectParticle();
 	MaterialEffectParticle(ITexture* texture, ITexture* depthTexture, const glm::vec2& screenSize, float tile);
 	virtual ~MaterialEffectParticle();
 
@@ -23,5 +24,10 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectParticle* DoClone() const override;
+	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+
+	// Heredado vía IMaterialEffect
+	void ReadFrom(core::utils::IDeserializer * source) override;
+	void WriteTo(core::utils::ISerializer * destination) override;
 };
 

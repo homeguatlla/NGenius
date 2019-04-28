@@ -9,6 +9,7 @@ class MaterialEffectHeightMapTexture : public IMaterialEffect
 	float mTile;
 
 public:
+	MaterialEffectHeightMapTexture();
 	MaterialEffectHeightMapTexture(ITexture* texture, float tile);
 	virtual ~MaterialEffectHeightMapTexture();
 
@@ -18,5 +19,10 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectHeightMapTexture* DoClone() const override;
+	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+
+	// Heredado vía IMaterialEffect
+	void ReadFrom(core::utils::IDeserializer * source) override;
+	void WriteTo(core::utils::ISerializer * destination) override;
 };
 

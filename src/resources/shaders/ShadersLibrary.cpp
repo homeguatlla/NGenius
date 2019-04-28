@@ -44,10 +44,6 @@ ShadersLibrary::ShadersLibrary()
 	InstantiableObject::RegisterType("animated_model", new AnimatedModelShader());
 }
 
-ShadersLibrary::~ShadersLibrary()
-{
-}
-
 void ShadersLibrary::Load()
 {
 	AddShader("default", new DefaultShader());
@@ -55,6 +51,7 @@ void ShadersLibrary::Load()
 	AddShader("text", new TextShader());
 	AddShader("shadow", new ShadowShader());
 	AddShader("gui", new GUIShader());
+	AddShader("normalmap", new NormalMapShader());
 }
 
 void ShadersLibrary::AddShader(const char* name, IShaderProgram* shader)

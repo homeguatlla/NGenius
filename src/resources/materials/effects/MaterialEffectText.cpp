@@ -2,6 +2,17 @@
 #include "MaterialEffectText.h"
 #include "../IMaterial.h"
 
+MaterialEffectText::MaterialEffectText() :
+	mColor(1.0f, 1.0f, 1.0f, 1.0f),
+	mOutlineColor(1.0f, 1.0f, 1.0f, 0.0f),
+	mWidth(1.0f),
+	mEdge(0.0f),
+	mBorderWidth(0.0f),
+	mBorderEdge(0.0f),
+	mShadowOffset(0.0f)
+{
+}
+
 MaterialEffectText::MaterialEffectText(const glm::vec4& color, const glm::vec4& outlineColor, float width, float edge,
 	float borderWidth, float borderEdge, const glm::vec2& shadowOffset) :
 mColor(color),
@@ -76,4 +87,21 @@ void MaterialEffectText::CopyValuesFrom(IMaterial* material)
 MaterialEffectText* MaterialEffectText::DoClone() const
 {
 	return new MaterialEffectText(*this);
+}
+
+IMaterialEffect* MaterialEffectText::AddNewEffectToMaterial(IMaterial* material)
+{
+	MaterialEffectText* materialEffect = new MaterialEffectText();
+
+	material->AddEffect(materialEffect);
+
+	return materialEffect;
+}
+
+void MaterialEffectText::ReadFrom(core::utils::IDeserializer * source)
+{
+}
+
+void MaterialEffectText::WriteTo(core::utils::ISerializer * destination)
+{
 }

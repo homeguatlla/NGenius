@@ -9,7 +9,7 @@ class ContrastShader : public IShaderProgram, public IFactory
 
 public:
 	ContrastShader();
-	~ContrastShader();
+	virtual ~ContrastShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 	

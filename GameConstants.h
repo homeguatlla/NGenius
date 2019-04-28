@@ -8,8 +8,8 @@ static const float PLAYER_PITCH_SPEED = 10.0f;
 static const float VIEW_ANGLE = 45.0f;
 static const float FAR_PLANE = 100.0f;
 static const float NEAR_PLANE = 0.1f;
-static const float SCREEN_WIDTH = 1024.0f;
-static const float SCREEN_HEIGHT = 768.0f;
+static const float SCREEN_WIDTH = 1920.0f;// 1024.0f;
+static const float SCREEN_HEIGHT = 1080.0f;// 768.0f;
 
 static const float SKYBOX_ROTATION_SPEED = 0.01f;
 static const float MIN_FPS_ALLOWED = 30.0f;

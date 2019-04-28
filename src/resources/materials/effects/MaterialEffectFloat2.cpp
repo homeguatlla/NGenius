@@ -2,6 +2,11 @@
 #include "MaterialEffectFloat2.h"
 #include "../IMaterial.h"
 
+MaterialEffectFloat2::MaterialEffectFloat2() :
+	mValue(0.0f)
+{
+}
+
 MaterialEffectFloat2::MaterialEffectFloat2(const glm::vec2& value) : mValue(value)
 {
 }
@@ -33,4 +38,21 @@ void MaterialEffectFloat2::CopyValuesFrom(IMaterial* material)
 MaterialEffectFloat2* MaterialEffectFloat2::DoClone() const
 {
 	return new MaterialEffectFloat2(*this);
+}
+
+IMaterialEffect* MaterialEffectFloat2::AddNewEffectToMaterial(IMaterial* material)
+{
+	MaterialEffectFloat2* materialEffect = new MaterialEffectFloat2();
+
+	material->AddEffect(materialEffect);
+
+	return materialEffect;
+}
+
+void MaterialEffectFloat2::ReadFrom(core::utils::IDeserializer * source)
+{
+}
+
+void MaterialEffectFloat2::WriteTo(core::utils::ISerializer * destination)
+{
 }

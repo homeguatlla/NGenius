@@ -9,7 +9,7 @@ class HorizontalBlurShader : public IShaderProgram, public IFactory
 
 public:
 	HorizontalBlurShader();
-	~HorizontalBlurShader();
+	virtual ~HorizontalBlurShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 	

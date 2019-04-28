@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 #include "../../visitor/BaseVisitable.h"
 #include "../../AABB.h"

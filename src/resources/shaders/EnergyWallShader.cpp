@@ -24,11 +24,6 @@ mLocationTimer(-1)
 {
 }
 
-
-EnergyWallShader::~EnergyWallShader()
-{
-}
-
 void EnergyWallShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	ModelShader::LoadData(camera, transformation, material);

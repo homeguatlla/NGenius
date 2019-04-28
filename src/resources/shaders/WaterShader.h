@@ -23,7 +23,7 @@ class WaterShader :	public IShaderProgram, public IFactory
 
 public:
 	WaterShader();
-	~WaterShader();
+	virtual ~WaterShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 

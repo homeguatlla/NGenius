@@ -80,6 +80,40 @@
 				<lod model_name="tree_trunk_2" distance = "1000.0" />
 			</lods>
 		</lods_library>
+		<materials_library>
+			<material name= "tree_foliage" shader = "model">
+				<effect name="effect_diffuse_texture" texture="tree_foliage_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="effect_directional_light_properties" />
+				<effect name="effect_fog_properties" />
+				<effect name="effect_shadow_properties" pfc_counter = "1" />
+				<effect name="effect_clipping_plane" />
+			</material>
+			<material name= "tree_trunk" shader = "model">
+				<effect name="effect_diffuse_texture" texture="tree_trunk_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="effect_directional_light_properties" />
+				<effect name="effect_fog_properties" />
+				<effect name="effect_shadow_properties" pfc_counter = "1" />
+				<effect name="effect_clipping_plane" />
+			</material>
+			<material name= "tree_trunk_normalmap" shader = "normalmap">
+				<effect name="effect_diffuse_texture" texture="tree_trunk_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="effect_directional_light_properties" />
+				<effect name="effect_normal_texture" texture="tree_trunk_normalmap" tile="1.0"/>
+				<effect name="effect_fog_properties" />
+				<effect name="effect_shadow_properties" pfc_counter = "1" />
+				<effect name="effect_clipping_plane" />
+			</material>
+			<material name="grass2_material" shader="grass">
+				<effect name="effect_fog_properties"/>
+				<effect name="effect_float_2" values="4.0, 4.0" />
+				<effect name="effect_shadow_properties" pfc_counter="0"/>
+				<effect name="effect_directional_light_properties" />
+				<effect name="effect_float_3_array" />
+				<effect name="effect_particle" texture="grass2" depth_texture="depth_texture" screen_size="1920, 1080" tile="1.0"/>
+				<effect name="effect_normal_texture" texture="wind_texture" tile="1.0"/>
+				<effect name="effect_material_clip_plane" />				
+			</material>
+		</materials_library>
 	</libraries>
 	<game_scene name="mainScene">
 		<entities counter="412">

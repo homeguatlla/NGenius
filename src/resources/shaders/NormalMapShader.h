@@ -11,7 +11,7 @@ class NormalMapShader : public ModelShader
 
 public:
 	NormalMapShader();
-	~NormalMapShader();
+	virtual ~NormalMapShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 	

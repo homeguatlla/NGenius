@@ -14,4 +14,20 @@ IShaderProgram* InstantiableObject::CreateShader(const std::string& name)
 	{
 		return mFactories[name]->CreateShader();
 	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+IMaterialEffect* InstantiableObject::AddNewEffectToMaterial(const std::string& name, IMaterial* material)
+{
+	if (mFactories.find(name) != mFactories.end())
+	{
+		return mFactories[name]->AddNewEffectToMaterial(material);
+	}
+	else
+	{
+		return nullptr;
+	}
 }

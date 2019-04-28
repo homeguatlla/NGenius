@@ -16,7 +16,7 @@ class SkyBoxShader : public IShaderProgram, public IFactory
 
 public:
 	SkyBoxShader();
-	~SkyBoxShader();
+	virtual ~SkyBoxShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 

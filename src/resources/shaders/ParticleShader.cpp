@@ -39,10 +39,6 @@ mLocationScreenSize(-1)
 
 }
 
-ParticleShader::~ParticleShader()
-{
-}
-
 void ParticleShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	IShaderProgram::LoadData(camera, transformation, material);

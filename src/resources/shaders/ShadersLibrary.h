@@ -10,7 +10,7 @@ class ShadersLibrary : public core::utils::ISerializable, public BaseLibrary<ISh
 {
 public:
 	ShadersLibrary();
-	~ShadersLibrary();
+	virtual ~ShadersLibrary() = default;
 
 	void Load();
 

@@ -3,6 +3,14 @@
 #include "../IMaterial.h"
 #include <assert.h>
 
+MaterialEffectParticle::MaterialEffectParticle() :
+	mTexture(nullptr),
+	mDepthTexture(nullptr),
+	mScreenSize(0.0f, 0.0f),
+	mTile(1.0f)
+{
+}
+
 MaterialEffectParticle::MaterialEffectParticle(ITexture* texture, ITexture* depthTexture, const glm::vec2& screenSize, float tile) :
 mTexture(texture),
 mDepthTexture(depthTexture),
@@ -52,4 +60,21 @@ void MaterialEffectParticle::CopyValuesFrom(IMaterial* material)
 MaterialEffectParticle* MaterialEffectParticle::DoClone() const
 {
 	return new MaterialEffectParticle(*this);
+}
+
+IMaterialEffect* MaterialEffectParticle::AddNewEffectToMaterial(IMaterial* material)
+{
+	MaterialEffectParticle* materialEffect = new MaterialEffectParticle();
+
+	material->AddEffect(materialEffect);
+
+	return materialEffect;
+}
+
+void MaterialEffectParticle::ReadFrom(core::utils::IDeserializer * source)
+{
+}
+
+void MaterialEffectParticle::WriteTo(core::utils::ISerializer * destination)
+{
 }

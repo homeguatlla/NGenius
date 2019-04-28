@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MaterialEffectShadowProperties.h"
 #include "../IMaterial.h"
+#include "../../../utils/serializer/XMLDeserializer.h"
 
 MaterialEffectShadowProperties::MaterialEffectShadowProperties(int pfcCounter) :
 	mDepthTexture(nullptr),
@@ -50,4 +51,22 @@ void MaterialEffectShadowProperties::CopyValuesFrom(IMaterial* material)
 MaterialEffectShadowProperties* MaterialEffectShadowProperties::DoClone() const
 {
 	return new MaterialEffectShadowProperties(*this);
+}
+
+IMaterialEffect* MaterialEffectShadowProperties::AddNewEffectToMaterial(IMaterial* material)
+{
+	MaterialEffectShadowProperties* materialEffect = new MaterialEffectShadowProperties();
+
+	material->AddEffect(materialEffect);
+
+	return materialEffect;
+}
+
+void MaterialEffectShadowProperties::ReadFrom(core::utils::IDeserializer *source)
+{
+	source->ReadParameter("pfc_counter", &mPFCCounter);
+}
+
+void MaterialEffectShadowProperties::WriteTo(core::utils::ISerializer *destination)
+{
 }

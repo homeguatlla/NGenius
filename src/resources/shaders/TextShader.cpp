@@ -40,10 +40,6 @@ mLocationShadowOffset(-1)
 {
 }
 
-TextShader::~TextShader()
-{
-}
-
 void TextShader::BindAttributes()
 {
 	BindAttribute(mLocationTextureCoords, ATTRIBUTE_TEXTURE_COORDS);

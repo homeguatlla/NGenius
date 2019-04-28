@@ -203,7 +203,7 @@ std::vector<glm::ivec4>& Mesh::GetVertexsJointsIDs()
 
 void Mesh::CreateWeightsAndJointsVectors()
 {
-	for (int i = 0; i < mTempVertexWeights.size(); ++i)
+	for (unsigned int i = 0; i < mTempVertexWeights.size(); ++i)
 	{
 		if (mTempVertexWeights[i].size() > 4)
 		{
@@ -211,7 +211,7 @@ void Mesh::CreateWeightsAndJointsVectors()
 		}
 
 		float totalValue = 0.0f;
-		for (int j = 0; j < mTempVertexWeights[i].size() && j < 4; ++j)
+		for (unsigned int j = 0; j < mTempVertexWeights[i].size() && j < 4; ++j)
 		{
 			totalValue += mTempVertexWeights[i][j];
 		}
@@ -247,7 +247,7 @@ void Mesh::ReorderVertexWeightAndJointIdsToHaveGreaterFirst(std::vector<float>& 
 {
 	std::vector<std::pair<float, int>> tempVector;
 
-	for (int i = 0; i < weights.size(); ++i)
+	for (unsigned int i = 0; i < weights.size(); ++i)
 	{
 		tempVector.push_back(std::pair<float, int>(weights[i], joints[i]));
 	}
@@ -260,7 +260,7 @@ void Mesh::ReorderVertexWeightAndJointIdsToHaveGreaterFirst(std::vector<float>& 
 		return a.first > b.first;
 	});
 
-	for (int i = 0; i < tempVector.size(); ++i)
+	for (unsigned int i = 0; i < tempVector.size(); ++i)
 	{
 		weights.push_back(tempVector[i].first);
 		joints.push_back(tempVector[i].second);
@@ -322,8 +322,8 @@ void Mesh::CalculateTangents()
 	assert(mVertexs.size() > 0);
 	assert(mTextureCoords.size() > 0);
 
-	std::vector<glm::vec3> tan1(0.0f);
-	std::vector<glm::vec3> tan2(0.0f);
+	std::vector<glm::vec3> tan1(0.0);
+	std::vector<glm::vec3> tan2(0.0);
 
 	tan1.resize(mVertexs.size());
 	tan2.resize(mVertexs.size());

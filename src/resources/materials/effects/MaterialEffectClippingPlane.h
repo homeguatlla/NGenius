@@ -17,5 +17,10 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectClippingPlane* DoClone() const override;
+	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+
+	// Heredado vía IMaterialEffect
+	void ReadFrom(core::utils::IDeserializer * source) override;
+	void WriteTo(core::utils::ISerializer * destination) override;
 };
 
