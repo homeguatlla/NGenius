@@ -2,6 +2,8 @@
 #include "../IMaterialEffect.h"
 #include "glm/glm.hpp"
 
+#include <string>
+
 class ITexture;
 
 class MaterialEffectParticle : public IMaterialEffect
@@ -10,6 +12,9 @@ class MaterialEffectParticle : public IMaterialEffect
 	ITexture* mDepthTexture;
 	glm::vec2 mScreenSize;
 	float mTile;
+
+	std::string mTextureName;
+	std::string mDepthTextureName;
 
 public:
 	MaterialEffectParticle();
@@ -25,6 +30,7 @@ public:
 
 	MaterialEffectParticle* DoClone() const override;
 	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+	void Build(TexturesLibrary* texturesLibrary) override;
 
 	// Heredado vía IMaterialEffect
 	void ReadFrom(core::utils::IDeserializer * source) override;

@@ -14,9 +14,10 @@ class TexturesLibrary : public core::utils::ISerializable, public BaseLibrary<IT
 	typedef std::tuple<std::string, std::string, std::function<void(const std::string& fontName, ITexture* texture)>> TextureTuple;
 	std::vector<TextureTuple> mTexturesPendingToLoad;
 	int mCurrentTextureUnit;
+	const glm::vec2 mScreenSize;
 
 public:
-	TexturesLibrary();
+	TexturesLibrary(const glm::vec2& screenSize);
 	virtual ~TexturesLibrary();
 
 	void Load();

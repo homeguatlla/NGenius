@@ -831,7 +831,7 @@ void RenderSystem::EnableVSync(bool enable)
 void RenderSystem::CreateResourcesLibraries()
 {
 	mShadersLibrary = new ShadersLibrary();
-	mTexturesLibrary = new TexturesLibrary();
+	mTexturesLibrary = new TexturesLibrary(glm::vec2(mScreenWidth, mScreenHeight));
 	mAnimationsLibrary = new AnimationsLibrary();
 	mModelsLibrary = new ModelsLibrary(mTexturesLibrary, mAnimationsLibrary);
 	mFontsLibrary = new FontsLibrary(mTexturesLibrary);

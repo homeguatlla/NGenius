@@ -472,30 +472,9 @@ void CreateTrees()
 	modelsTrunk.push_back("tree_trunk_2");
 	
 	IMaterial* materialFoliage = mEngine.GetMaterial("tree_foliage");
+	IMaterial* materialTrunk = mEngine.GetMaterial("tree_trunk");
+	IMaterial* materialTrunkNormalmap = mEngine.GetMaterial("tree_trunk_normalmap");
 	
-	/*IMaterial* materialFoliage = mEngine.CreateMaterial("tree_foliage", mEngine.GetShader("model"));
-	
-	materialFoliage->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_foliage_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	materialFoliage->AddEffect(new MaterialEffectDirectionalLightProperties());
-	materialFoliage->AddEffect(new MaterialEffectFogProperties());
-	materialFoliage->AddEffect(new MaterialEffectShadowProperties(1));
-	materialFoliage->AddEffect(new MaterialEffectClippingPlane());
-	*/
-	IMaterial* materialTrunk = mEngine.CreateMaterial("tree_trunk", mEngine.GetShader("model"));
-	materialTrunk->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	materialTrunk->AddEffect(new MaterialEffectDirectionalLightProperties());
-	materialTrunk->AddEffect(new MaterialEffectFogProperties());
-	materialTrunk->AddEffect(new MaterialEffectShadowProperties(1));
-	materialTrunk->AddEffect(new MaterialEffectClippingPlane());
-
-	IMaterial* materialTrunkNormalmap = mEngine.CreateMaterial("tree_trunk_normalmap", mEngine.GetShader("normalmap"));
-	materialTrunkNormalmap->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	materialTrunkNormalmap->AddEffect(new MaterialEffectDirectionalLightProperties());
-	materialTrunkNormalmap->AddEffect(new MaterialEffectFogProperties());
-	materialTrunkNormalmap->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("tree_trunk_normalmap")), 1));
-	materialTrunkNormalmap->AddEffect(new MaterialEffectShadowProperties(1));
-	materialTrunkNormalmap->AddEffect(new MaterialEffectClippingPlane());
-
 	for (unsigned long i = 0; i < positions.size(); i++)
 	{
 		GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], modelsFoliage, lod, materialFoliage, nullptr, true);
@@ -506,57 +485,12 @@ void CreateTrees()
 	}
 }
 
-void CreateGrass()
-{
-	std::vector<glm::vec3> positions;
-	std::vector<glm::vec3> sizes;
-
-	float areaSize = 10.0f;
-	int numGrass = 2000;
-	for (int i = 0; i < numGrass; i++)
-	{
-		float x = -areaSize * 0.5f + (rand() % 1000) * (areaSize / 1000.0f);
-		float z = -areaSize * 0.5f + (rand() % 1000) * (areaSize / 1000.0f);
-		float height = mTerrain->GetHeight(glm::vec2(x, z));
-
-		if (mConfiguration == QUADTREE_WITH_CAMERA || (height > mWaterHeight - 0.1f))
-		{
-			positions.push_back(glm::vec3(x, height, z));
-			float scale = 0.1f + (rand() % 5) / 20.0f;// (rand() % 5) / 20.0f + 0.02f;
-			sizes.push_back(glm::vec3(scale*2.0f, scale, scale));
-		}
-	}
-
-	IMaterial* materialGrass = mEngine.CreateMaterial("grass1", mEngine.GetShader("model"));
-	materialGrass->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("grass1_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	materialGrass->AddEffect(new MaterialEffectDirectionalLightProperties());
-	materialGrass->AddEffect(new MaterialEffectFogProperties());
-	materialGrass->AddEffect(new MaterialEffectShadowProperties(0));
-
-	std::vector<std::pair<float, bool>> lod;
-	lod.push_back(std::pair<float, bool>(25.0f, false));
-	lod.push_back(std::pair<float, bool>(100.0f, true));
-
-	std::vector<std::string> models;
-	models.push_back("grass1");
-	models.push_back("grass2"); // modelo simplificado
-
-	for (unsigned long i = 0; i < positions.size(); i++)
-	{
-		GameEntity* entity = CreateModel(positions[i], sizes[i], glm::vec3(0.0f), mEngine.GetModel("grass2"), materialGrass);
-		//entity->GetRenderer()->SetBillboard(true);
-		entity->GetRenderer()->SetTransparency(true);
-		entity->GetRenderer()->SetCullingEnabled(false);
-		//GameEntity* entity = CreateModelWithLod(positions[i], sizes[i], models, lod, materialGrass, nullptr, false);
-		mScene->AddEntity(entity);
-	}
-}
-
 void CreatePoints()
 {
 	glPointSize(5.0f);
 	IShaderProgram* shader = mEngine.GetShader("grass");
-	IMaterial* material = mEngine.CreateMaterial("grass2_material", shader);
+	IMaterial* material = mEngine.GetMaterial("grass2_material");
+	/*IMaterial* material = mEngine.CreateMaterial("grass2_material", shader);
 
 	material->AddEffect(new MaterialEffectFogProperties());
 	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
@@ -572,7 +506,7 @@ void CreatePoints()
 
 	Texture* windTexture = static_cast<Texture*>(mEngine.GetTexture("wind_texture"));
 	material->AddEffect(new MaterialEffectNormalTexture(windTexture, 1.0f));
-	material->AddEffect(new MaterialEffectClippingPlane());
+	material->AddEffect(new MaterialEffectClippingPlane());*/
 
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
 												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 50.0f, 50.0f, 150.0f);
@@ -581,28 +515,6 @@ void CreatePoints()
 	environmentComponent->SetAffectedByWind(true);
 	pointsPatch->AddComponent(environmentComponent);
 	mScene->AddEntity(pointsPatch);
-	/*
-	material = mEngine.CreateMaterial("grass3_material", shader);
-	material->AddEffect(new MaterialEffectFogProperties(mFogColor, mFogDensity, mFogGradient));
-	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
-	material->AddEffect(new MaterialEffectShadowProperties(0));
-	material->AddEffect(new MaterialEffectFloat(0.0));
-	material->AddEffect(new MaterialEffectFloat3Array());
-	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(mEngine.GetTexture("grass3")),
-		mEngine.GetTexture("depth_texture"),
-		glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight()),
-		1.0f)
-	);
-
-	material->AddEffect(new MaterialEffectNormalTexture(windTexture, 1.0f));
-	material->AddEffect(new MaterialEffectClippingPlane());
-
-	pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
-									material, mTerrain, mWaterHeight - 0.1f, mWaterHeight + 0.2f, 50.0f, 50.0f, 100.0f);
-	environmentComponent = new EnvironmentAffectedComponent();
-	environmentComponent->SetAffectedByWind(true);
-	pointsPatch->AddComponent(environmentComponent);
-	mScene->AddEntity(pointsPatch);*/
 }
 
 void CreateProps()
@@ -1190,8 +1102,6 @@ void CreateCameraAABBEntity()
 
 void CreateEntities()
 {
-	const Texture* texture = static_cast<const Texture*>(mEngine.CreateDepthTexture("depth_texture", glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
-
 	mScene = mEngine.CreateGameScene("mainScene");
 	//CreateHUD();
 

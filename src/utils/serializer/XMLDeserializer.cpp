@@ -145,6 +145,28 @@ namespace core
 			return found;
 		}
 
+		bool XMLDeserializer::ReadParameter(const std::string& name, glm::vec4& value)
+		{
+			assert(mCurrentXMLNode != nullptr);
+			std::string stringValue;
+
+			bool found = FillWithValue(name, stringValue);
+
+			if (found)
+			{
+				std::stringstream stream(stringValue);
+				float x, y, z, t;
+
+				stream >> x;
+				stream >> y;
+				stream >> z;
+				stream >> t;
+
+				value = glm::vec4(x, y, z, t);
+			}
+			return found;
+		}
+
 		bool XMLDeserializer::ReadParameter(const std::string& name, glm::vec3& value)
 		{
 			assert(mCurrentXMLNode != nullptr);
@@ -162,6 +184,26 @@ namespace core
 				stream >> z;
 
 				value = glm::vec3(x, y, z);
+			}
+			return found;
+		}
+
+		bool XMLDeserializer::ReadParameter(const std::string& name, glm::vec2& value)
+		{
+			assert(mCurrentXMLNode != nullptr);
+			std::string stringValue;
+
+			bool found = FillWithValue(name, stringValue);
+
+			if (found)
+			{
+				std::stringstream stream(stringValue);
+				float x, y;
+
+				stream >> x;
+				stream >> y;
+
+				value = glm::vec2(x, y);
 			}
 			return found;
 		}

@@ -9,7 +9,8 @@
 MaterialEffectDiffuseTexture::MaterialEffectDiffuseTexture() :
 	mTexture(nullptr),
 	mColor(glm::vec3(0.0f)),
-	mTile(1.0f)
+	mTile(1.0f),
+	mTextureName("")
 {
 
 }
@@ -17,7 +18,8 @@ MaterialEffectDiffuseTexture::MaterialEffectDiffuseTexture() :
 MaterialEffectDiffuseTexture::MaterialEffectDiffuseTexture(ITexture* texture, const glm::vec3& color, float tile) :
 mTexture(texture),
 mColor(color),
-mTile(tile)
+mTile(tile),
+mTextureName("")
 {
 	assert(texture != nullptr);
 }

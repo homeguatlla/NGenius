@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MaterialEffectFloat4.h"
 #include "../IMaterial.h"
+#include "../../../utils/serializer/XMLDeserializer.h"
 
 MaterialEffectFloat4::MaterialEffectFloat4() :
 	mValue(0.0f)
@@ -51,6 +52,7 @@ IMaterialEffect* MaterialEffectFloat4::AddNewEffectToMaterial(IMaterial* materia
 
 void MaterialEffectFloat4::ReadFrom(core::utils::IDeserializer * source)
 {
+	source->ReadParameter("values", mValue);
 }
 
 void MaterialEffectFloat4::WriteTo(core::utils::ISerializer * destination)

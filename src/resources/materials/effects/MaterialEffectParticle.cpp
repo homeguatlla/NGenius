@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "MaterialEffectParticle.h"
 #include "../IMaterial.h"
+#include "../../../utils/serializer/XMLDeserializer.h"
+#include "../../textures/TexturesLibrary.h"
 #include <assert.h>
 
 MaterialEffectParticle::MaterialEffectParticle() :
@@ -71,8 +73,21 @@ IMaterialEffect* MaterialEffectParticle::AddNewEffectToMaterial(IMaterial* mater
 	return materialEffect;
 }
 
+void MaterialEffectParticle::Build(TexturesLibrary* texturesLibrary)
+{
+	mTexture = texturesLibrary->GetElement(mTextureName);
+	mDepthTexture = texturesLibrary->GetElement(mDepthTextureName);
+
+	assert(mTexture != nullptr);
+	assert(mDepthTexture != nullptr);
+}
+
 void MaterialEffectParticle::ReadFrom(core::utils::IDeserializer * source)
 {
+	source->ReadParameter("tile", &mTile);
+	source->ReadParameter("screen_size", mScreenSize);
+	source->ReadParameter("depth_texture", mDepthTextureName);
+	source->ReadParameter("texture", mTextureName);
 }
 
 void MaterialEffectParticle::WriteTo(core::utils::ISerializer * destination)

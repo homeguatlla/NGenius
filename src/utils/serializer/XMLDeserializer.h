@@ -25,7 +25,10 @@ namespace core
 			bool ReadParameter(const std::string& name, bool* value) override;
 			bool ReadParameter(const std::string& name, unsigned int* value) override;
 			bool ReadParameter(const std::string& name, float* value) override;
+			bool ReadParameter(const std::string& name, glm::vec2& value) override;
 			bool ReadParameter(const std::string& name, glm::vec3& value) override;
+			bool ReadParameter(const std::string& name, glm::vec4& value) override;
+
 			void EndAttribute() override;
 		private:
 			bool FillWithValue(const std::string& attributeName, std::string& value);

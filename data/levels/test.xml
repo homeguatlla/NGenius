@@ -105,13 +105,14 @@
 			</material>
 			<material name="grass2_material" shader="grass">
 				<effect name="effect_fog_properties"/>
-				<effect name="effect_float_2" values="4.0, 4.0" />
+				<effect name="effect_float2" values="4.0 4.0" />
 				<effect name="effect_shadow_properties" pfc_counter="0"/>
+				<effect name="effect_float" values="0.0"/>
 				<effect name="effect_directional_light_properties" />
-				<effect name="effect_float_3_array" />
-				<effect name="effect_particle" texture="grass2" depth_texture="depth_texture" screen_size="1920, 1080" tile="1.0"/>
+				<effect name="effect_float3_array" />
+				<effect name="effect_particle" texture="grass2" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
 				<effect name="effect_normal_texture" texture="wind_texture" tile="1.0"/>
-				<effect name="effect_material_clip_plane" />				
+				<effect name="effect_clipping_plane" />				
 			</material>
 		</materials_library>
 	</libraries>

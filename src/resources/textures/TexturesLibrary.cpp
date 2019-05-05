@@ -10,7 +10,9 @@
 
 #include <algorithm>
 
-TexturesLibrary::TexturesLibrary() : mCurrentTextureUnit(0)
+TexturesLibrary::TexturesLibrary(const glm::vec2& screenSize) : 
+	mCurrentTextureUnit(0),
+	mScreenSize(screenSize)
 {
 }
 
@@ -21,6 +23,7 @@ TexturesLibrary::~TexturesLibrary()
 
 void TexturesLibrary::Load()
 {
+	CreateDepthTexture("depth_texture", mScreenSize);
 	//LoadTexture("stone", "data/models/stone/diffuse.png", true, false);
 
 	//LoadTexture("hud_map", "data/ui/hud/hud_map.png", false, false);

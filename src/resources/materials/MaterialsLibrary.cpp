@@ -157,6 +157,10 @@ void MaterialsLibrary::ReadMaterialEffects(IMaterial* material, core::utils::IDe
 			{
 				materialEffect->ReadFrom(source);
 			}
+			else
+			{
+				Log(Log::LOG_WARNING) << "Material effect couldn't be read " << effectName << "\n";
+			}
 		}
 		source->NextAttribute();
 	}

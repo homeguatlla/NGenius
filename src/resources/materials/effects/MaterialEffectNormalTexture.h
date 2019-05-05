@@ -1,5 +1,6 @@
 #pragma once
 #include "../IMaterialEffect.h"
+#include <string>
 
 class ITexture;
 
@@ -7,6 +8,7 @@ class MaterialEffectNormalTexture : public IMaterialEffect
 {
 	ITexture* mTexture;
 	float mTile;
+	std::string mTextureName;
 
 public:
 	MaterialEffectNormalTexture();
@@ -17,6 +19,8 @@ public:
 	float GetTile() const;
 
 	void CopyValuesFrom(IMaterial* material) override;
+
+	void Build(TexturesLibrary* texturesLibrary);
 
 	MaterialEffectNormalTexture* DoClone() const override;
 

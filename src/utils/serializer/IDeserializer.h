@@ -24,7 +24,9 @@ namespace core
 			virtual bool ReadParameter(const std::string& name, bool* value) = 0;
 			virtual bool ReadParameter(const std::string& name, unsigned int* value) = 0;
 			virtual bool ReadParameter(const std::string& name, float* value) = 0;
+			virtual bool ReadParameter(const std::string& name, glm::vec2& value) = 0;
 			virtual bool ReadParameter(const std::string& name, glm::vec3& value) = 0;
+			virtual bool ReadParameter(const std::string& name, glm::vec4& value) = 0;
 
 			virtual void EndAttribute() = 0;
 		};
