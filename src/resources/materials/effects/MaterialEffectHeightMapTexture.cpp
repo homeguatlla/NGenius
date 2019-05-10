@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "MaterialEffectHeightMapTexture.h"
 #include "../IMaterial.h"
+#include "../../../utils/serializer/XMLDeserializer.h"
+#include "../../../utils/Log.h"
+#include "../../textures/TexturesLibrary.h"
+
 #include <assert.h>
 
 MaterialEffectHeightMapTexture::MaterialEffectHeightMapTexture() :
@@ -55,8 +59,22 @@ IMaterialEffect* MaterialEffectHeightMapTexture::AddNewEffectToMaterial(IMateria
 	return materialEffect;
 }
 
+void MaterialEffectHeightMapTexture::Build(TexturesLibrary* texturesLibrary)
+{
+	if (!mTextureName.empty())
+	{
+		mTexture = texturesLibrary->GetElement(mTextureName);
+		if (mTexture == nullptr)
+		{
+			Log(Log::LOG_WARNING) << "TextureHeightmap " << mTextureName << " not found. Material Effect couldn't be build \n";
+		}
+	}
+}
+
 void MaterialEffectHeightMapTexture::ReadFrom(core::utils::IDeserializer * source)
 {
+	source->ReadParameter("tile", &mTile);
+	source->ReadParameter("texture", mTextureName);
 }
 
 void MaterialEffectHeightMapTexture::WriteTo(core::utils::ISerializer * destination)

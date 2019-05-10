@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "MaterialEffectDepthTexture.h"
 #include "../IMaterial.h"
+#include "../../../utils/serializer/XMLDeserializer.h"
+#include "../../../utils/Log.h"
+#include "../../textures/TexturesLibrary.h"
+
 #include <assert.h>
 
 MaterialEffectDepthTexture::MaterialEffectDepthTexture() :
@@ -55,8 +59,22 @@ IMaterialEffect* MaterialEffectDepthTexture::AddNewEffectToMaterial(IMaterial* m
 	return materialEffect;
 }
 
+void MaterialEffectDepthTexture::Build(TexturesLibrary* texturesLibrary)
+{
+	if (!mTextureName.empty())
+	{
+		mTexture = texturesLibrary->GetElement(mTextureName);
+		if (mTexture == nullptr)
+		{
+			Log(Log::LOG_WARNING) << "Texture " << mTextureName << " not found. Material Effect couldn't be build \n";
+		}
+	}
+}
+
 void MaterialEffectDepthTexture::ReadFrom(core::utils::IDeserializer * source)
 {
+	source->ReadParameter("texture", mTextureName);
+	source->ReadParameter("tile", &mTile);
 }
 
 void MaterialEffectDepthTexture::WriteTo(core::utils::ISerializer * destination)

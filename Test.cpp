@@ -490,24 +490,6 @@ void CreatePoints()
 	glPointSize(5.0f);
 	IShaderProgram* shader = mEngine.GetShader("grass");
 	IMaterial* material = mEngine.GetMaterial("grass2_material");
-	/*IMaterial* material = mEngine.CreateMaterial("grass2_material", shader);
-
-	material->AddEffect(new MaterialEffectFogProperties());
-	material->AddEffect(new MaterialEffectFloat2(glm::vec2(4.0f, 4.0f)));
-	material->AddEffect(new MaterialEffectShadowProperties(0));
-	material->AddEffect(new MaterialEffectFloat(0.0));
-	material->AddEffect(new MaterialEffectDirectionalLightProperties());
-	material->AddEffect(new MaterialEffectFloat3Array());
-	material->AddEffect(new MaterialEffectParticle(static_cast<Texture*>(mEngine.GetTexture("grass2")),
-		mEngine.GetTexture("depth_texture"),
-		glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight()),
-		1.0f)
-	);
-
-	Texture* windTexture = static_cast<Texture*>(mEngine.GetTexture("wind_texture"));
-	material->AddEffect(new MaterialEffectNormalTexture(windTexture, 1.0f));
-	material->AddEffect(new MaterialEffectClippingPlane());*/
-
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
 												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 50.0f, 50.0f, 150.0f);
 
@@ -589,24 +571,8 @@ void CreateProps()
 	scales.push_back(1.0f);
 	scales.push_back(1.0f);
 
-
-	std::string textureName("MedievalDungeonPropsAtlas02_diffuse");
-	std::string textureNormalName("MedievalDungeonPropsAtlas02_normalmap");
-
-	//std::string textureName("barrel_diffuse");
-	//std::string textureNormalName("barrel_normalmap");
-
-	Texture* texture = static_cast<Texture*>(mEngine.GetTexture(textureName));
-	Texture* normal = static_cast<Texture*>(mEngine.GetTexture(textureNormalName));
-
-	IMaterial* material = mEngine.GetMaterial(MaterialsLibrary::MODEL_MATERIAL_NAME);
-	material->AddEffect(new MaterialEffectDiffuseTexture(texture, glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	material->AddEffect(new MaterialEffectDirectionalLightProperties());
-	material->AddEffect(new MaterialEffectFogProperties());
-	material->AddEffect(new MaterialEffectNormalTexture(normal, 1));
-	material->AddEffect(new MaterialEffectShadowProperties(1));
-	material->AddEffect(new MaterialEffectClippingPlane());
-
+	IMaterial* material = mEngine.GetMaterial("props_material");
+	
 	for (int i = 0; i < numProps; i++)
 	{
 		float x = static_cast<float>(-areaSize / 2 + 2 * rand() % areaSize);
@@ -711,11 +677,7 @@ void CreateParticlesFire()
 
 void CreateEnergyWall()
 {
-	IMaterial* material = mEngine.CreateMaterial("energy_wall", mEngine.GetShader("energy_wall"));
-	material->AddEffect(new MaterialEffectDiffuseTexture(mEngine.GetTexture("yellow_grid"), glm::vec3(0.0f), 50.0f));
-	material->AddEffect(new MaterialEffectDepthTexture(mEngine.GetTexture("depth_texture"), 1.0f));
-	material->AddEffect(new MaterialEffectFloat2(glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight())));
-
+	IMaterial* material = mEngine.GetMaterial("energy_wall");
 	mEnergyWall = new EnergyWall(	new Transformation(mEnergyWallPosition, glm::vec3(0.0f), glm::vec3(mEnergyWallRadius)),
 									material,
 									mEngine.GetModel("sphere"),
@@ -864,16 +826,7 @@ void CreateTerrain()
 
 	float scale = mIsTerrainFlat ? 0.0f : TERRAIN_SCALE;
 
-	IMaterial* material = mEngine.CreateMaterial("terrain", mEngine.GetShader("terrain"));
-	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_blendmap")), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f));
-	material->AddEffect(new MaterialEffectDirectionalLightProperties());
-	material->AddEffect(new MaterialEffectFogProperties());
-	material->AddEffect(new MaterialEffectHeightMapTexture(static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")), 1.0f));
-	material->AddEffect(new MaterialEffectTextureArray(static_cast<TextureArray*>(mEngine.GetTexture("terrain_array"))));
-	material->AddEffect(new MaterialEffectClippingPlane());
-	material->AddEffect(new MaterialEffectShadowProperties(3));
-	material->AddEffect(new MaterialEffectFloat(scale));
-	
+	IMaterial* material = mEngine.GetMaterial("terrain");
 	mTerrain = new Terrain(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 							material,
 							static_cast<Texture*>(mEngine.GetTexture("terrain_heightmap")),
@@ -892,14 +845,7 @@ void CreatePlayer()
 {
 	//TODO texto color std::cout << "\033[1;31mbold red text\033[0m normal text\n";
 	//PLAYER
-	IMaterial* material = mEngine.CreateMaterial("player", mEngine.GetShader("animated_model"));
-	material->AddEffect(new MaterialEffectDiffuseTexture(static_cast<Texture*>(mEngine.GetTexture("material_farmer_diffuse")), glm::vec3(1.0f, 1.0f, 1.0f), 1));
-	//material->AddEffect(new MaterialEffectNormalTexture(static_cast<Texture*>(mEngine.GetTexture("material_farmer_normalmap")), 1.0f));
-	material->AddEffect(new MaterialEffectDirectionalLightProperties());
-	material->AddEffect(new MaterialEffectFogProperties());
-	material->AddEffect(new MaterialEffectShadowProperties(3));
-	material->AddEffect(new MaterialEffectClippingPlane());
-	material->AddEffect(new MaterialEffectMatrix4Array());
+	IMaterial* material = mEngine.GetMaterial("player");
 
 	InputComponent* inputComponent = new InputComponent();
 	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_W, new ForwardEvent()));
@@ -968,12 +914,7 @@ void CreateSkybox()
 	//SKYBOX the last
 	if (mIsSkyboxEnabled)
 	{
-		IMaterial* material = mEngine.CreateMaterial("skybox", mEngine.GetShader("skybox"));
-		TextureCubemap* cubemap1 = static_cast<TextureCubemap*>(mEngine.GetTexture("day_cubemap"));
-		TextureCubemap* cubemap2 = static_cast<TextureCubemap*>(mEngine.GetTexture("night_cubemap"));
-		material->AddEffect(new MaterialEffectTextureCubemap(cubemap1, cubemap2, 0.0f));
-		material->AddEffect(new MaterialEffectFogProperties());
-		material->AddEffect(new MaterialEffectDirectionalLightProperties());
+		IMaterial* material = mEngine.GetMaterial("skybox");
 
 		SkyBoxRenderer* skyboxRenderer = new SkyBoxRenderer(mEngine.GetModel("skybox"), material);
 		skyboxRenderer->SetLayer(IRenderer::LAYER_PARTICLES);

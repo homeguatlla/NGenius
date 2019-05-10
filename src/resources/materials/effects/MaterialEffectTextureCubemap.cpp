@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "MaterialEffectTextureCubemap.h"
 #include "../IMaterial.h"
+#include "../../../utils/serializer/XMLDeserializer.h"
+#include "../../../utils/Log.h"
+#include "../../textures/TexturesLibrary.h"
+#include "../../textures/TextureCubemap.h"
 
 #include <assert.h>
 
@@ -82,8 +86,31 @@ IMaterialEffect* MaterialEffectTextureCubemap::AddNewEffectToMaterial(IMaterial*
 	return materialEffect;
 }
 
+void MaterialEffectTextureCubemap::Build(TexturesLibrary* texturesLibrary)
+{
+	if (!mTexture1Name.empty())
+	{
+		mTexture1 = static_cast<TextureCubemap*>(texturesLibrary->GetElement(mTexture1Name));
+		if (mTexture1 == nullptr)
+		{
+			Log(Log::LOG_WARNING) << "Texture " << mTexture1Name << " not found. Material Effect couldn't be build \n";
+		}
+	}
+	if (!mTexture2Name.empty())
+	{
+		mTexture2 = static_cast<TextureCubemap*>(texturesLibrary->GetElement(mTexture2Name));
+		if (mTexture2 == nullptr)
+		{
+			Log(Log::LOG_WARNING) << "Texture " << mTexture2Name << " not found. Material Effect couldn't be build \n";
+		}
+	}
+}
+
 void MaterialEffectTextureCubemap::ReadFrom(core::utils::IDeserializer * source)
 {
+	source->ReadParameter("texture1", mTexture1Name);
+	source->ReadParameter("texture2", mTexture2Name);
+	source->ReadParameter("blend_factor", &mBlendFactor);
 }
 
 void MaterialEffectTextureCubemap::WriteTo(core::utils::ISerializer * destination)

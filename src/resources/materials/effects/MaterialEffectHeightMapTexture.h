@@ -1,5 +1,6 @@
 #pragma once
 #include "../IMaterialEffect.h"
+#include <string>
 
 class ITexture;
 
@@ -7,6 +8,7 @@ class MaterialEffectHeightMapTexture : public IMaterialEffect
 {
 	ITexture* mTexture;
 	float mTile;
+	std::string mTextureName;
 
 public:
 	MaterialEffectHeightMapTexture();
@@ -20,6 +22,8 @@ public:
 
 	MaterialEffectHeightMapTexture* DoClone() const override;
 	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+
+	void Build(TexturesLibrary* texturesLibrary) override;
 
 	// Heredado vía IMaterialEffect
 	void ReadFrom(core::utils::IDeserializer * source) override;

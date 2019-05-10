@@ -2,8 +2,9 @@
 #include "MaterialEffectDiffuseTexture.h"
 #include "../IMaterial.h"
 #include "../../../utils/serializer/XMLDeserializer.h"
-#include "../../textures/TexturesLibrary.h"
 #include "../../../utils/Log.h"
+#include "../../textures/TexturesLibrary.h"
+
 
 
 MaterialEffectDiffuseTexture::MaterialEffectDiffuseTexture() :

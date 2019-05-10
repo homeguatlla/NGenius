@@ -1,11 +1,13 @@
 #pragma once
 #include "../IMaterialEffect.h"
+#include <string>
 
 class TextureArray;
 
 class MaterialEffectTextureArray : public IMaterialEffect
 {
 	TextureArray* mTexture;
+	std::string mTextureName;
 
 public:
 	MaterialEffectTextureArray();
@@ -18,6 +20,8 @@ public:
 
 	MaterialEffectTextureArray* DoClone() const override;
 	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+
+	void Build(TexturesLibrary* texturesLibrary) override;
 
 	// Heredado vía IMaterialEffect
 	void ReadFrom(core::utils::IDeserializer * source) override;

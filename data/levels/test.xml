@@ -114,6 +114,43 @@
 				<effect name="effect_normal_texture" texture="wind_texture" tile="1.0"/>
 				<effect name="effect_clipping_plane" />				
 			</material>
+			<material name="props_material" shader="normalmap">
+				<effect name="effect_fog_properties"/>
+				<effect name="effect_shadow_properties" pfc_counter="1"/>
+				<effect name="effect_directional_light_properties" />
+				<effect name="effect_diffuse_texture" texture="MedievalDungeonPropsAtlas02_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="effect_normal_texture" texture="MedievalDungeonPropsAtlas02_normalmap" tile="1.0"/>
+				<effect name="effect_clipping_plane" />				
+			</material>
+			<material name="terrain" shader="terrain">
+				<effect name="effect_fog_properties"/>
+				<effect name="effect_shadow_properties" pfc_counter="3"/>
+				<effect name="effect_directional_light_properties" />
+				<effect name="effect_diffuse_texture" texture="terrain_blendmap" color="1.0 1.0 1.0" tile="50.0" />
+				<effect name="effect_clipping_plane" />
+				<effect name="effect_float" value="10"/>
+				<effect name="effect_heightmap_texture" texture="terrain_heightmap" tile="1.0" />
+				<effect name="effect_texture_array" texture="terrain_array"/>				
+			</material>
+			<material name="player" shader="animated_model">
+				<effect name="effect_fog_properties"/>
+				<effect name="effect_shadow_properties" pfc_counter="3"/>
+				<effect name="effect_directional_light_properties" />
+				<effect name="effect_diffuse_texture" texture="material_farmer_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<!--effect name="effect_normal_texture" texture="material_farmer_normalmap" tile="1.0"/-->
+				<effect name="effect_clipping_plane" />
+				<effect name="effect_matrix_array" />					
+			</material>
+			<material name="skybox" shader="skybox">
+				<effect name="effect_fog_properties"/>
+				<effect name="effect_directional_light_properties" />
+				<effect name="effect_texture_cubemap" texture1="day_cubemap" texture2="night_cubemap" blend_factor="0.0"/>				
+			</material>
+			<material name="energy_wall" shader="energy_wall">
+				<effect name="effect_diffuse_texture" texture="yellow_grid" color="0.0 0.0 0.0" tile="50.0" />
+				<effect name="effect_float2" values="1920 1080" />
+				<effect name="effect_depth_texture" texture="depth_texture" tile="1.0"/>
+			</material>
 		</materials_library>
 	</libraries>
 	<game_scene name="mainScene">
