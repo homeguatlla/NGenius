@@ -151,6 +151,21 @@
 				<effect name="effect_float2" values="1920 1080" />
 				<effect name="effect_depth_texture" texture="depth_texture" tile="1.0"/>
 			</material>
+			<material name="water" shader="water">
+				<effect name="effect_fog_properties"/>
+				<effect name="effect_directional_light_properties" />
+				<effect name="effect_water" 
+						reflection_texture="reflection_water" 
+						refraction_texture="refraction_water"
+						distorsion_texture="distorsion_water" 
+						normal_texture="normal_water" 
+						depth_texture="refraction_depth_water" 
+						color="0.0 0.3 0.8" speed="0.02" />
+			</material>
+			<material name="smoke_particle" shader="particle">
+				<effect name="effect_particle" texture="smoke" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
+				<effect name="effect_clipping_plane" />				
+			</material>
 		</materials_library>
 	</libraries>
 	<game_scene name="mainScene">

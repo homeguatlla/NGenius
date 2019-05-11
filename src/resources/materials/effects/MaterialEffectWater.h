@@ -1,6 +1,7 @@
 #pragma once
 #include "../IMaterialEffect.h"
 #include <glm/glm.hpp>
+#include <string>
 
 class ITexture;
 
@@ -13,6 +14,12 @@ class MaterialEffectWater : public IMaterialEffect
 	ITexture* mNormalTexture;
 	glm::vec4 mColor;
 	float mSpeed;	
+
+	std::string mReflectionTextureName;
+	std::string mRefractionTextureName;
+	std::string mDistorsionTextureName;
+	std::string mDepthTextureName;
+	std::string mNormalTextureName;
 
 public:
 	MaterialEffectWater();
@@ -34,6 +41,7 @@ public:
 
 	MaterialEffectWater* DoClone() const override;
 	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+	void Build(TexturesLibrary* texturesLibrary) override;
 
 	// Heredado vía IMaterialEffect
 	void ReadFrom(core::utils::IDeserializer * source) override;

@@ -599,22 +599,7 @@ void CreateWater()
 	//WATER
 	if (mIsWaterEnabled)
 	{
-		float waterSpeed = 0.02f;
-		glm::vec4 waterColor(0.0f, 0.3f, 0.8f, 0.0f);
-
-		IMaterial* material = mEngine.CreateMaterial("water", mEngine.GetShader("water"));
-		material->AddEffect(new MaterialEffectFogProperties());
-		material->AddEffect(new MaterialEffectWater(
-														mEngine.GetTexture("reflection_water"),
-														mEngine.GetTexture("refraction_water"),
-														mEngine.GetTexture("distorsion_water"),
-														mEngine.GetTexture("normal_water"),
-														mEngine.GetTexture("refraction_depth_water"),
-														waterSpeed,
-														waterColor
-													));
-		material->AddEffect(new MaterialEffectDirectionalLightProperties());
-
+		IMaterial* material = mEngine.GetMaterial("water");
 		mWater = new Water(		new Transformation(
 													glm::vec3(4.0f, mWaterHeight, 4.5f), 
 													glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), 
@@ -622,22 +607,15 @@ void CreateWater()
 								material,
 								50.0f,
 								50.0f,
-								waterSpeed
+								material->GetEffect<MaterialEffectWater>()->GetSpeed()
 							);
 		mScene->AddEntity(mWater);
 	}
 }
 
-Particle* CreateParticle(bool canCollide, Texture* texture, glm::vec3& gravity)
+Particle* CreateParticle(bool canCollide, std::string& materialName, glm::vec3& gravity)
 {
-	IMaterial* material = mEngine.CreateMaterial("particle", mEngine.GetShader("particle"));
-	material->AddEffect(new MaterialEffectParticle(	texture, 
-													mEngine.GetTexture("depth_texture"), 
-													glm::vec2(mEngine.GetScreenWidth(), mEngine.GetScreenHeight()), 
-													1.0f)
-						);
-	material->AddEffect(new MaterialEffectClippingPlane());
-
+	IMaterial* material = mEngine.GetMaterial(materialName);
 	Particle* particle = new Particle(new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
 		mEngine.GetModel("particle_quad"),
 		material,
@@ -655,7 +633,8 @@ Particle* CreateParticle(bool canCollide, Texture* texture, glm::vec3& gravity)
 
 void CreateParticlesFire()
 {
-	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
+	std::string materialName("smoke_particle");
+	Particle* particle = CreateParticle(false, materialName, glm::vec3(0.0f));
 	particle->SetLiveTime(2.0f);
 
 	float x = 4.0f;
@@ -719,8 +698,8 @@ void CreateHUD()
 void CreateParticlesTest()
 {
 	glm::vec3 gravity = PhysicsSystem::GRAVITY_VALUE;
-
-	Particle* particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
+	std::string materialName = "smoke_particle";
+	Particle* particle = CreateParticle(false, materialName, glm::vec3(0.0f));
 	particle->SetLiveTime(10.0f);
 
 	glm::vec3 position(3.0f, 0.0f, 4.0f); 
@@ -740,7 +719,7 @@ void CreateParticlesTest()
 	mScene->AddEntity(particlesEmitter);
 	mEngine.AddParticleEmitter(particlesEmitter);	
 	
-	particle = CreateParticle(false, static_cast<Texture*>(mEngine.GetTexture("smoke")), glm::vec3(0.0f));
+	particle = CreateParticle(false, materialName, glm::vec3(0.0f));
 	particle->SetLiveTime(1.0f);
 
 	position = glm::vec3(4.0f, 0.0f, 4.0f);
