@@ -418,7 +418,7 @@ GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, const
 
 GameEntity* CreateQuadTreeBoxEntity(float size, glm::vec3 position, glm::vec3 color)
 {
-	IMaterial* material = mEngine.CreateMaterial("quadtree", mEngine.GetShader("default"));
+	IMaterial* material = mEngine.GetMaterial(MaterialsLibrary::QUADTREE_MATERIAL_NAME);
 	material->AddEffect(new MaterialEffectFloat3(color));
 
 	IRenderer* renderer = new WireframeRenderer(mEngine.GetModel("cube"), material);
