@@ -7,6 +7,7 @@
 #include "visitor/BaseVisitable.h"
 #include "AABB.h"
 #include "utils/serializer/ISerializable.h"
+#include "resources/scene/GameScene.h"
 
 class RenderSystem;
 class PhysicsSystem;
@@ -38,7 +39,6 @@ class ParticlesEmitter;
 class RenderPass;
 class Terrain;
 class ICamera;
-class GameScene;
 
 
 struct GLFWwindow;
@@ -57,7 +57,7 @@ class NGenius : public core::utils::ISerializable, BaseVisitable<>
 	AnimationSystem* mAnimationSystem;
 	InputHandler* mInputHandler;
 	Statistics* mStatistics;
-	GameScene* mGameScene;
+	GameScene mGameScene;
 	std::string mApplicationName;
 	float mNumberFPS;
 	bool mIsSpacePartitionEnabled;

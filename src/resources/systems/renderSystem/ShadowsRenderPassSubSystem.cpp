@@ -50,7 +50,7 @@ void ShadowsRenderPassSubSystem::Init()
 
 void ShadowsRenderPassSubSystem::Update()
 {
-	if (mIsShadowCastEnabled)
+	if (mIsInitialized && mIsShadowCastEnabled && HasTarget())
 	{
 		UpdateShadowCastMatrix();
 	}

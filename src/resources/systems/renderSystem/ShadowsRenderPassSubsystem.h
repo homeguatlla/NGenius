@@ -44,5 +44,6 @@ private:
 	glm::mat4 CalculateShadowMapMatrix(const ICamera* camera);
 	RenderPass* CreateShadowRenderPass();
 	void UpdateShadowCastMatrix();
+	bool HasTarget() const { return mTarget != nullptr; }
 };
 

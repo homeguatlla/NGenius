@@ -1182,18 +1182,21 @@ void DeleteEntities()
 
 void UpdateEnergyWallCollisions(float elapsedTime)
 {
-	EnergyWallCollisionComponent* component = mPlayer->GetComponent<EnergyWallCollisionComponent>();
-	if (component->IsColliding())
+	if (mPlayer != nullptr)
 	{
-		glm::vec3 collisionPoint = component->GetCollisionPoint();
-		mEnergyWall->SetContactPoint(collisionPoint);
-		mEnergyWall->SetLiveTime(mEnergyWall->GetMaxLiveTime());
-		//mEnergyWall->GetRenderer()->SetVisibility(true);
-	}
-	else if (!mEnergyWall->IsAlive())
-	{
-		mEnergyWall->SetContactPoint(glm::vec3(0.0f));
-		//mEnergyWall->GetRenderer()->SetVisibility(false);
+		EnergyWallCollisionComponent* component = mPlayer->GetComponent<EnergyWallCollisionComponent>();
+		if (component->IsColliding())
+		{
+			glm::vec3 collisionPoint = component->GetCollisionPoint();
+			mEnergyWall->SetContactPoint(collisionPoint);
+			mEnergyWall->SetLiveTime(mEnergyWall->GetMaxLiveTime());
+			//mEnergyWall->GetRenderer()->SetVisibility(true);
+		}
+		else if (!mEnergyWall->IsAlive())
+		{
+			mEnergyWall->SetContactPoint(glm::vec3(0.0f));
+			//mEnergyWall->GetRenderer()->SetVisibility(false);
+		}
 	}
 }
 
@@ -1201,30 +1204,33 @@ void UpdateStatitstics()
 {
 	const Statistics* statistics = mEngine.GetStatistics();
 
-	MaterialEffectText* effect = materialText->GetEffect<MaterialEffectText>();
-	int fps = static_cast<int>(statistics->GetNumberFPS());
-	if (fps < MIN_FPS_ALLOWED)
+	if (materialText != nullptr)
 	{
-		effect->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		MaterialEffectText* effect = materialText->GetEffect<MaterialEffectText>();
+		int fps = static_cast<int>(statistics->GetNumberFPS());
+		if (fps < MIN_FPS_ALLOWED)
+		{
+			effect->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+		else
+		{
+			effect->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		}
+
+		unsigned int numGameEntities = statistics->GetNumberGameEntities();
+		unsigned int numGameEntitiesInsideSpacePartition = statistics->GetNumberGameEntitiesInsideSpacePartition();
+
+		mText[0]->UpdateText(texts[0] + std::to_string(fps));
+		mText[1]->UpdateText(texts[1] + std::to_string(statistics->GetNumberTrianglesRendered()));
+		mText[2]->UpdateText(texts[2] + std::to_string(statistics->GetNumberDrawCalls()));
+		mText[3]->UpdateText(texts[3] + std::to_string(numGameEntities));
+		mText[4]->UpdateText(texts[4] + std::to_string(numGameEntitiesInsideSpacePartition));
+		mText[5]->UpdateText(texts[5] + std::to_string(statistics->GetNumberRenderers()));
+		mText[6]->UpdateText(texts[6] + std::to_string(statistics->GetNumberGameEntitiesWithPhysics()));
+		mText[7]->UpdateText(texts[7] + std::to_string(statistics->GetDayTime()));
+
+		//std::cout << "entities rendered: " << statistics->GetNumberRenderers() << "\n";
 	}
-	else
-	{
-		effect->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	}
-
-	unsigned int numGameEntities = statistics->GetNumberGameEntities();
-	unsigned int numGameEntitiesInsideSpacePartition = statistics->GetNumberGameEntitiesInsideSpacePartition();
-
-	mText[0]->UpdateText(texts[0] + std::to_string(fps));
-	mText[1]->UpdateText(texts[1] + std::to_string(statistics->GetNumberTrianglesRendered()));
-	mText[2]->UpdateText(texts[2] + std::to_string(statistics->GetNumberDrawCalls()));
-	mText[3]->UpdateText(texts[3] + std::to_string(numGameEntities));
-	mText[4]->UpdateText(texts[4] + std::to_string(numGameEntitiesInsideSpacePartition));
-	mText[5]->UpdateText(texts[5] + std::to_string(statistics->GetNumberRenderers()));
-	mText[6]->UpdateText(texts[6] + std::to_string(statistics->GetNumberGameEntitiesWithPhysics()));
-	mText[7]->UpdateText(texts[7] + std::to_string(statistics->GetDayTime()));
-
-	//std::cout << "entities rendered: " << statistics->GetNumberRenderers() << "\n";
 }
 
 void UpdateCommand(float elapsedTime)
@@ -1635,7 +1641,7 @@ int main(void)
 {
 	Initialize();
 
-	CreateEntities();
+	//CreateEntities();
 	CreateSubSystems();
 
 	mEngine.SetCastingShadowsTarget(mPlayer);
