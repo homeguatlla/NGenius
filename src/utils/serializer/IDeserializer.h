@@ -13,6 +13,7 @@ namespace core
 			IDeserializer() {}
 			virtual ~IDeserializer() {}
 
+			virtual void BeginAttribute() = 0;
 			virtual void BeginAttribute(const std::string& name) = 0;
 
 			virtual unsigned int ReadNumberOfElements() const = 0;

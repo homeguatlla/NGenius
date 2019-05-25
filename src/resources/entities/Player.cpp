@@ -22,6 +22,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
+Player::Player() : 
+	GameEntity(),
+	mState(IDLE),
+	mRunSpeed(0.0f),
+	mTurnSpeed(0.0f),
+	mUpwardsSpeed(0.0f),
+	mCurrentRunSpeed(0.0f),
+	mCurrentTurnSpeed(0.0f),
+	mCurrentUpwardsSpeed(0.0f),
+	mCurrentTurnAngle(0.0f),
+	mHasMoved(false),
+	mHasJumped(false)
+{
+}
+
 Player::Player(	Transformation* transformation, IRenderer* renderer, InputComponent* inputComponent, 
 				CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, 
 				CollisionComponent* collisionComponent, float runSpeed, float turnSpeed, float upwardsSpeed) :
@@ -77,6 +92,11 @@ void Player::Update(float elapsedTime)
 	UpdateAnimations();
 	//PhysicsComponent* physicsComponent = GetComponent<PhysicsComponent>();
 	//std::cout << "state: " << mState << " velocity = " << physicsComponent->GetVelocity().y << "\n";
+}
+
+GameEntity* Player::CreateGameEntity()
+{
+	return new Player();
 }
 
 void Player::UpdateAnimations()

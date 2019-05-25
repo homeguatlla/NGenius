@@ -28,30 +28,30 @@
 
 ShadersLibrary::ShadersLibrary()
 {
-	InstantiableObject::RegisterType("terrain", new TerrainShader());
-	InstantiableObject::RegisterType("model", new ModelShader());
-	InstantiableObject::RegisterType("normalmap", new NormalMapShader());
-	InstantiableObject::RegisterType("skybox", new SkyBoxShader());
-	InstantiableObject::RegisterType("particle", new ParticleShader());
-	InstantiableObject::RegisterType("water", new WaterShader());
-	InstantiableObject::RegisterType("energy_wall", new EnergyWallShader());
-	InstantiableObject::RegisterType("contrast", new ContrastShader());
-	InstantiableObject::RegisterType("horizontal_blur", new HorizontalBlurShader());
-	InstantiableObject::RegisterType("vertical_blur", new VerticalBlurShader());
-	InstantiableObject::RegisterType("bright", new BrightShader());
-	InstantiableObject::RegisterType("bloom", new BloomShader());
-	InstantiableObject::RegisterType("grass", new GrassShader());
-	InstantiableObject::RegisterType("animated_model", new AnimatedModelShader());
+	InstantiableObject::RegisterType("s_terrain", new TerrainShader());
+	InstantiableObject::RegisterType("s_model", new ModelShader());
+	InstantiableObject::RegisterType("s_normalmap", new NormalMapShader());
+	InstantiableObject::RegisterType("s_skybox", new SkyBoxShader());
+	InstantiableObject::RegisterType("s_particle", new ParticleShader());
+	InstantiableObject::RegisterType("s_water", new WaterShader());
+	InstantiableObject::RegisterType("s_energy_wall", new EnergyWallShader());
+	InstantiableObject::RegisterType("s_contrast", new ContrastShader());
+	InstantiableObject::RegisterType("s_horizontal_blur", new HorizontalBlurShader());
+	InstantiableObject::RegisterType("s_vertical_blur", new VerticalBlurShader());
+	InstantiableObject::RegisterType("s_bright", new BrightShader());
+	InstantiableObject::RegisterType("s_bloom", new BloomShader());
+	InstantiableObject::RegisterType("s_grass", new GrassShader());
+	InstantiableObject::RegisterType("s_animated_model", new AnimatedModelShader());
 }
 
 void ShadersLibrary::Load()
 {
-	AddShader("default", new DefaultShader());
-	AddShader("overdraw", new OverdrawShader());
-	AddShader("text", new TextShader());
-	AddShader("shadow", new ShadowShader());
-	AddShader("gui", new GUIShader());
-	AddShader("normalmap", new NormalMapShader());
+	AddShader("s_default", new DefaultShader());
+	AddShader("s_overdraw", new OverdrawShader());
+	AddShader("s_text", new TextShader());
+	AddShader("s_shadow", new ShadowShader());
+	AddShader("s_gui", new GUIShader());
+	AddShader("s_normalmap", new NormalMapShader());
 }
 
 void ShadersLibrary::AddShader(const char* name, IShaderProgram* shader)

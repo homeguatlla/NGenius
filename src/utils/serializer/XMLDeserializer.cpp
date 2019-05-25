@@ -54,6 +54,19 @@ namespace core
 			}
 		}
 
+		void XMLDeserializer::BeginAttribute()
+		{
+			if (mCurrentXMLNode == nullptr)
+			{
+				mCurrentXMLNode = mXMLDocument.first_node();
+			}
+			else
+			{
+				mCurrentXMLNode = mCurrentXMLNode->first_node();
+			}
+			assert(mCurrentXMLNode != nullptr);
+		}
+
 		void XMLDeserializer::BeginAttribute(const std::string& name)
 		{
 			if (mCurrentXMLNode == nullptr)

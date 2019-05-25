@@ -8,6 +8,10 @@
 #include "../components/SpacePartitionComponent.h"
 
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../InstantiableObject.h"
+
+#include "../entities/Player.h"
+#include "../entities/Terrain.h"
 
 #include <algorithm>
 
@@ -15,6 +19,9 @@ GameScene::GameScene(const std::string& name) :
 mName(name),
 mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limits<float>::max()))
 {
+	//InstantiableObject::RegisterType("entity", new GameEntity());
+	//InstantiableObject::RegisterType("player", new Player());
+	InstantiableObject::RegisterType("terrain", new Terrain());
 }
 
 GameScene::~GameScene()
@@ -22,6 +29,14 @@ GameScene::~GameScene()
 	mEntitiesToRemove.clear(); //these entities were removed when releasing mEntities.
 	ReleaseEntities(&mEntities);
 	ReleaseEntities(&mNewEntitiesToAdd);	
+}
+
+void GameScene::Start(RenderSystem* renderSystem)
+{
+	for (GameEntity* entity : mNewEntitiesToAdd)
+	{
+		entity->Build(renderSystem);
+	}
 }
 
 void GameScene::Update(float elapsedTime)
@@ -131,6 +146,25 @@ void GameScene::SaveToFile()
 
 void GameScene::ReadFrom(core::utils::IDeserializer* source)
 {
+	source->BeginAttribute(std::string("game_scene"));
+	source->ReadParameter("name", mName);
+
+	source->BeginAttribute(std::string("entities"));
+	unsigned int numElements = source->ReadNumberOfElements();
+
+	source->BeginAttribute();
+	do
+	{
+		ReadEntityFrom(source);
+
+		source->NextAttribute();
+		numElements--;
+
+	} while (numElements > 0);
+
+	//source->EndAttribute();
+	source->EndAttribute();
+	source->EndAttribute();
 }
 
 void GameScene::WriteTo(core::utils::ISerializer* destination)
@@ -145,6 +179,19 @@ void GameScene::WriteTo(core::utils::ISerializer* destination)
 			}
 		destination->EndAttribute();
 	destination->EndAttribute();
+}
+
+void GameScene::ReadEntityFrom(core::utils::IDeserializer* source)
+{
+	GameEntity* gameEntity = nullptr;
+	
+	std::string nodeName = source->GetCurrentNodeName();
+	gameEntity = InstantiableObject::CreateEntity(nodeName);
+	if (gameEntity != nullptr)
+	{
+		gameEntity->ReadFrom(source);
+		AddEntity(gameEntity);
+	}
 }
 
 void GameScene::RemoveEntities()

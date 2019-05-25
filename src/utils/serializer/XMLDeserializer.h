@@ -15,6 +15,7 @@ namespace core
 			void Load(const std::string& filename);
 
 			// Heredado vía ISerializer
+			void BeginAttribute() override;
 			void BeginAttribute(const std::string& name) override;
 			unsigned int ReadNumberOfElements() const override;
 			void NextAttribute() override;

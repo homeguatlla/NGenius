@@ -4,6 +4,7 @@ class IShaderProgram;
 class IMaterialEffect;
 class IMaterial;
 class GameEntity;
+class Transformation;
 
 class IFactory
 {

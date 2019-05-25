@@ -11,42 +11,28 @@
 #include "../materials/effects/MaterialEffectFloat.h"
 #include <ctime>
 
+#include "../systems/renderSystem/RenderSystem.h"
+
+#include "../../utils/serializer/IDeserializer.h"
+#include "../../utils/serializer/XMLDeserializer.h"
+
 #include <glm/gtc/matrix_transform.hpp>
+
+Terrain::Terrain(Transformation* transformation) :
+	GameEntity(transformation),
+	mHeightmap(nullptr),
+	mScale(1.0f),
+	mIsFlat(false)
+{
+}
 
 Terrain::Terrain(Transformation* transformation, IMaterial* material, Texture* heightmap, float scale) :
 GameEntity(transformation),
-mHeightmap(heightmap),
+mHeightmap(nullptr),
 mScale(scale),
 mIsFlat(false)
 {
-	//better generate texture high resolution.
-	//With 256 num vertexs side seems not so much different than with 1024. With 1024 there are more bumps and in fact is worst and the performance downs 50%.
-	//TextureGenerator tg;
-	//tg.Generate("data/terrain_heightmap_256.png", mNumVertexsSide, scale, true);
-	//tg.GenerateOnlyBlendmap("data/terrain_blendmap_1024.png", mNumVertexsSide);
-	//return;
-	assert(material != nullptr);
-
-	srand(static_cast<unsigned int>(time(NULL)));
-
-	std::vector<glm::vec2> uv;
-	std::vector<unsigned int> indices;
-
-	mGridSize = 120;
-	mNumVertexsSide = 256;
-	TerrainGrid terrainGrid;
-	terrainGrid.GeneratePointsRectangular(mVertexs, uv, mNumVertexsSide, mGridSize, 0, true);
-	terrainGrid.GenerateIndicesRectangular(indices);
-	
-	CalculateY();
-	
-	mModel = new Model(new Mesh(mVertexs, uv, indices));
-	SetRenderer(new IndicesRenderer(mModel, material));
-
-	GetRenderer()->SetLayer(IRenderer::LAYER_TERRAIN);
-
-	mMaterialEffectFloat = material->GetEffect<MaterialEffectFloat>();
-	assert(mMaterialEffectFloat != nullptr);
+	Create(material, heightmap);
 }
 
 Terrain::~Terrain()
@@ -63,6 +49,28 @@ void Terrain::SetScale(float scale)
 {
 	mScale = scale;
 	mMaterialEffectFloat->SetValue(mScale);
+}
+
+GameEntity* Terrain::CreateGameEntity()
+{
+	return new Terrain();
+}
+
+void Terrain::Build(RenderSystem* renderSystem)
+{
+	IMaterial* material = renderSystem->GetMaterial(mMaterialName);
+	ITexture* heighmap = static_cast<Texture*>(renderSystem->GetTexture(mHeightmapName));
+
+	Create(material, heighmap);
+}
+
+void Terrain::ReadFrom(core::utils::IDeserializer* source)
+{
+	GameEntity::ReadFrom(source);
+
+	source->ReadParameter("is_flat", &mIsFlat);
+	source->ReadParameter("heighmap_texture", mHeightmapName);
+	source->ReadParameter("scale", &mScale);
 }
 
 bool Terrain::IsPointInside(glm::vec2 point) const
@@ -195,4 +203,43 @@ float Terrain::CalculateBarryCenter(glm::vec3& p1, glm::vec3& p2, glm::vec3& p3,
 	float l3 = 1.0f - l1 - l2;
 
 	return l1 * p1.y + l2 * p2.y + l3 *p3.y;
+}
+
+void Terrain::Create(IMaterial* material, ITexture* heighmap)
+{
+	//better generate texture high resolution.
+	//With 256 num vertexs side seems not so much different than with 1024. With 1024 there are more bumps and in fact is worst and the performance downs 50%.
+	//TextureGenerator tg;
+	//tg.Generate("data/terrain_heightmap_256.png", mNumVertexsSide, scale, true);
+	//tg.GenerateOnlyBlendmap("data/terrain_blendmap_1024.png", mNumVertexsSide);
+	//return;
+
+	assert(material != nullptr);
+
+	srand(static_cast<unsigned int>(time(NULL)));
+
+	if (mModel == nullptr)
+	{
+		assert(heighmap != nullptr);
+
+		std::vector<glm::vec2> uv;
+		std::vector<unsigned int> indices;
+
+		mGridSize = 120;
+		mNumVertexsSide = 256;
+		TerrainGrid terrainGrid;
+		terrainGrid.GeneratePointsRectangular(mVertexs, uv, mNumVertexsSide, mGridSize, 0, true);
+		terrainGrid.GenerateIndicesRectangular(indices);
+
+		mHeightmap = static_cast<Texture*>(heighmap);
+		CalculateY();
+
+		mModel = new Model(new Mesh(mVertexs, uv, indices));
+	}
+
+	SetRenderer(new IndicesRenderer(mModel, material));
+	GetRenderer()->SetLayer(IRenderer::LAYER_TERRAIN);
+
+	mMaterialEffectFloat = material->GetEffect<MaterialEffectFloat>();
+	assert(mMaterialEffectFloat != nullptr);
 }

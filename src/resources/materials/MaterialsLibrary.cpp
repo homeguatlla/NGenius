@@ -76,13 +76,13 @@ IMaterial* MaterialsLibrary::CreateMaterial(const std::string& name, IShaderProg
 
 void MaterialsLibrary::Load()
 {
-	CreateMaterial(OVERDRAW_MATERIAL_NAME, mShadersLibrary->GetElement(OVERDRAW_MATERIAL_NAME));
-	CreateMaterial(WIREFRAME_MATERIAL_NAME, mShadersLibrary->GetElement("default"));
-	CreateMaterial(QUADTREE_MATERIAL_NAME, mShadersLibrary->GetElement("default"));
-	CreateMaterial(MODEL_MATERIAL_NAME, mShadersLibrary->GetElement("normalmap"));
-	CreateMaterial(TEXT_MATERIAL_NAME, mShadersLibrary->GetElement("text"));
-	CreateMaterial(TEXT3D_MATERIAL_NAME, mShadersLibrary->GetElement("text"));
-	CreateMaterial(GUI_MATERIAL_NAME, mShadersLibrary->GetElement("gui"));
+	CreateMaterial(OVERDRAW_MATERIAL_NAME, mShadersLibrary->GetElement("s_overdraw"));
+	CreateMaterial(WIREFRAME_MATERIAL_NAME, mShadersLibrary->GetElement("s_default"));
+	CreateMaterial(QUADTREE_MATERIAL_NAME, mShadersLibrary->GetElement("s_default"));
+	CreateMaterial(MODEL_MATERIAL_NAME, mShadersLibrary->GetElement("s_normalmap"));
+	CreateMaterial(TEXT_MATERIAL_NAME, mShadersLibrary->GetElement("s_text"));
+	CreateMaterial(TEXT3D_MATERIAL_NAME, mShadersLibrary->GetElement("s_text"));
+	CreateMaterial(GUI_MATERIAL_NAME, mShadersLibrary->GetElement("s_gui"));
 }
 
 void MaterialsLibrary::Build()

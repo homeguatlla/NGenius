@@ -103,7 +103,7 @@ void TexturesLibrary::ReadFrom(core::utils::IDeserializer * source)
 	source->BeginAttribute(std::string("textures_library"));
 	unsigned int numElements = source->ReadNumberOfElements();
 
-	source->BeginAttribute(std::string("texture"));
+	source->BeginAttribute();
 	do
 	{
 		std::string nodeName = source->GetCurrentNodeName();

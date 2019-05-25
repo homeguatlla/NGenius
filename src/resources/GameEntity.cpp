@@ -4,7 +4,10 @@
 
 #include "materials/IMaterial.h"
 #include "models/Model.h"
+#include "systems/renderSystem/RenderSystem.h"
+#include "renderers/VerticesRenderer.h"
 #include "../utils/serializer/XMLSerializer.h"
+#include "../utils/serializer/IDeserializer.h"
 
 unsigned GameEntity::IDCounter = 0;
 
@@ -90,6 +93,11 @@ void GameEntity::SetEnabled(bool enabled)
 	mIsEnabled = enabled;
 }
 
+GameEntity* GameEntity::CreateGameEntity()
+{
+	return new GameEntity();
+}
+
 GameEntity* GameEntity::DoClone() const
 {
 	GameEntity* clone = new GameEntity(new Transformation(*GetTransformation()));
@@ -126,8 +134,26 @@ void GameEntity::Update(float elapsedTime)
 	}
 }
 
+void GameEntity::Build(RenderSystem* renderSystem)
+{
+	Model* model = renderSystem->GetModel(mModelName);
+	IMaterial* material = renderSystem->GetMaterial(mMaterialName);
+	if (model != nullptr && material != nullptr)
+	{
+		//TODO hay que decidir el tipo de renderer
+		IRenderer* renderer = new VerticesRenderer(model, material);
+		SetRenderer(renderer);
+	}
+}
+
 void GameEntity::ReadFrom(core::utils::IDeserializer* source)
 {
+	source->ReadParameter("model", mModelName);
+	source->ReadParameter("material", mMaterialName);
+	source->ReadParameter("renderer", mRendererName);
+	source->ReadParameter("is_enabled", &mIsEnabled);
+	mTransformation = new Transformation();
+	mTransformation->ReadFrom(source);
 }
 
 void GameEntity::WriteTo(core::utils::ISerializer* destination)
@@ -140,8 +166,8 @@ void GameEntity::WriteTo(core::utils::ISerializer* destination)
 		IRenderer* renderer = GetRenderer();
 		unsigned int modelID = renderer->GetModel()->GetID();
 		unsigned int materialID = renderer->GetMaterial()->GetMaterialID();
-		destination->WriteParameter(std::string("modelID"), modelID);
-		destination->WriteParameter(std::string("materialID"), materialID);
+		destination->WriteParameter(std::string("model"), modelID);
+		destination->WriteParameter(std::string("material"), materialID);
 	}
 	mTransformation->WriteTo(destination);
 

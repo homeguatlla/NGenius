@@ -65,6 +65,8 @@ void NGenius::Start()
 	mRenderSystem->Start();
 	mSpacePartitionSystem->Start();
 	mDebugSystem->Start();
+
+	mGameScene.Start(mRenderSystem);
 }
 
 void NGenius::Run()

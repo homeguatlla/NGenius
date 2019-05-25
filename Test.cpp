@@ -222,7 +222,7 @@ double aleatori()
 /*
 void CreateTerrainNormals(vector<glm::vec3>& vertexs, int numVertexsSide)
 {
-	IShaderProgram* defaultShaderProgram = mEngine.GetShader("default");
+	IShaderProgram* defaultShaderProgram = mEngine.GetShader("s_default");
 	NormalRenderer* normalRenderer = new NormalRenderer(defaultShaderProgram);
 
 	//TERRAIN GAME ENTITY
@@ -260,7 +260,7 @@ void CreateTerrainNormals(vector<glm::vec3>& vertexs, int numVertexsSide)
 void CreateShadowPlane()
 {
 	//QUAD
-	IRenderer* guiShadowRenderer = new GUIRenderer(	mEngine.GetShader("gui"),
+	IRenderer* guiShadowRenderer = new GUIRenderer(	mEngine.GetShader("s_gui"),
 														static_cast<Texture*>(mEngine.GetTexture("shadow_texture")),
 														10.0f,
 														10.0f
@@ -274,7 +274,7 @@ void CreateShadowPlane()
 void CreateWaterHudPlanes()
 {
 	//QUAD
-	IRenderer* guiReflectionRenderer = new GUIRenderer(	mEngine.GetShader("gui"),
+	IRenderer* guiReflectionRenderer = new GUIRenderer(	mEngine.GetShader("s_gui"),
 															static_cast<Texture*>(mEngine.GetTexture("reflection_water")),
 															128.0f,
 															128.0f
@@ -284,7 +284,7 @@ void CreateWaterHudPlanes()
 												);
 	mScene->AddGameEntity(quadReflection);
 
-	IRenderer* guiRefractionRenderer = new GUIRenderer(mEngine.GetShader("gui"),
+	IRenderer* guiRefractionRenderer = new GUIRenderer(mEngine.GetShader("s_gui"),
 															static_cast<Texture*>(mEngine.GetTexture("refraction_depth_water")),
 															128.0f,
 															128.0f
@@ -314,7 +314,7 @@ void CreateSpecificCubes()
 	for (unsigned long i = 0; i < positions.size(); i++)
 	{
 		ModelNormalMapRenderer* modelRenderer = new ModelNormalMapRenderer(mEngine.GetModel("cube"),
-			mEngine.GetShader("model"),
+			mEngine.GetShader("s_model"),
 			static_cast<Texture*>(mEngine.GetTexture("cube_diffuse")),
 			static_cast<Texture*>(mEngine.GetTexture("cube_normalmap")),
 			mSunLight
@@ -488,7 +488,7 @@ void CreateTrees()
 void CreatePoints()
 {
 	glPointSize(5.0f);
-	IShaderProgram* shader = mEngine.GetShader("grass");
+	IShaderProgram* shader = mEngine.GetShader("s_grass");
 	IMaterial* material = mEngine.GetMaterial("grass2_material");
 	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
 												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 50.0f, 50.0f, 150.0f);
@@ -684,7 +684,7 @@ void CreateHUD()
 	mScene->AddEntity(quad);
 
 	/*
-	IRenderer* mapRenderer = new GUIRenderer(mEngine.GetShader("gui"),
+	IRenderer* mapRenderer = new GUIRenderer(mEngine.GetShader("s_gui"),
 		static_cast<Texture*>(mEngine.GetTexture("map")),
 		87.0f,
 		73.0f
@@ -785,7 +785,7 @@ void CreateTextTest()
 	height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
 
 	mTestText = new Text(new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(.01f)),
-		mEngine.GetShader("text"), mEngine.GetFont("OCR A Extended"),
+		mEngine.GetShader("s_text"), mEngine.GetFont("OCR A Extended"),
 		"Market", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
 	mTestText->SetOutlineColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.8f));
 	mTestText->SetBorderParameters(0.5f, 0.1f, 0.5f, 0.4f);
@@ -864,7 +864,7 @@ void CreateGameCameraEntity()
 	inputComponent->AddConverter(new MouseToEventBind(-1, new PitchEvent()));
 
 	mCamera = new GameEntity(new Transformation(mGameplayCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
-		nullptr);// new CubeRenderer(mEngine.GetShader("default")));
+		nullptr);// new CubeRenderer(mEngine.GetShader("s_default")));
 
 	glm::vec3 targetOffset(0.0f, 0.5f, 0.0f); //head
 	mThirdPersonCameraComponent = new ThirdPersonCameraComponent(	static_cast<PerspectiveCamera*>(mGameplayCamera), 

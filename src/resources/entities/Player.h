@@ -33,6 +33,7 @@ class Player : public GameEntity
 	bool mHasJumped;
 
 public:
+	explicit Player();
 	explicit Player(Transformation* transformation, IRenderer* renderer, InputComponent* playerInputComponent, 
 					CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, 
 					CollisionComponent* collisionComponent, float runSpeed, float turnSpeed, float upwardsSpeed);
@@ -40,6 +41,8 @@ public:
 
 	Player* DoClone() const override { return nullptr; }
 	void Update(float elapsedTime) override;
+
+	GameEntity* CreateGameEntity()  override;
 
 private:
 	void UpdateGameEvents();

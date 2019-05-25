@@ -26,6 +26,8 @@ public:
 	GameScene(const std::string& name);
 	~GameScene();
 
+	void Start(RenderSystem* renderSystem);
+
 	void Update(float elapsedTime);
 	void AddEntity(GameEntity* entity);
 	void RemoveEntity(GameEntity* entity);
@@ -55,5 +57,7 @@ private:
 	void AddNewEntities();
 	void NotifyEntityAdded(GameEntity* entity);
 	void NotifyEntityRemoved(GameEntity* entity);
+
+	void ReadEntityFrom(core::utils::IDeserializer* source);
 };
 

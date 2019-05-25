@@ -31,3 +31,15 @@ IMaterialEffect* InstantiableObject::AddNewEffectToMaterial(const std::string& n
 		return nullptr;
 	}
 }
+
+GameEntity* InstantiableObject::CreateEntity(const std::string& name)
+{
+	if (mFactories.find(name) != mFactories.end())
+	{
+		return mFactories[name]->CreateGameEntity();
+	}
+	else
+	{
+		return nullptr;
+	}
+}

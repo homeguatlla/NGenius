@@ -2,11 +2,16 @@
 #include "Transformation.h"
 #include<map>
 #include<typeinfo>
+#include<string>
+
 #include "components/IComponent.h"
 #include "../utils/serializer/ISerializable.h"
-class IRenderer;
+#include "IFactory.h"
 
-class GameEntity : public core::utils::ISerializable
+class IRenderer;
+class RenderSystem;
+
+class GameEntity : public core::utils::ISerializable, public IFactory
 {
 	typedef std::map<const std::type_info*, IComponent*> ComponentsMap;
 	typedef ComponentsMap::iterator IComponentsIterator;
@@ -20,10 +25,14 @@ class GameEntity : public core::utils::ISerializable
 	static unsigned int IDCounter;
 
 protected:
-	
+	std::string mModelName;
+	std::string mMaterialName;
+	std::string mRendererName;
+
 	virtual GameEntity* DoClone() const;
 
 public:
+	GameEntity() = default;
 	explicit GameEntity(Transformation* transformation, IRenderer* renderer);
 	explicit GameEntity(Transformation* transformation);
 	virtual ~GameEntity();
@@ -40,7 +49,10 @@ public:
 	bool IsEnabled() const;
 	void SetEnabled(bool enabled);
 
+	GameEntity* CreateGameEntity() override;
+
 	virtual void Update(float elapsedTime);
+	virtual void Build(RenderSystem* renderSystem);
 
 	template<typename T> void AddComponent(T* component)
 	{
