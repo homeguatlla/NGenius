@@ -4,8 +4,10 @@
 #include <vector>
 #include "../../AABB.h"
 #include "../../Frustum.h"
+#include "../../utils/serializer/ISerializable.h"
+#include "../IFactory.h"
 
-class ICamera
+class ICamera : public core::utils::ISerializable, public IFactory
 {
 public:
 	virtual ~ICamera();
@@ -29,6 +31,10 @@ public:
 	virtual AABB GetAABB() const = 0;
 	virtual void CalculateFrustum() = 0;
 
+	// Heredado vía ISerializable
+	void ReadFrom(core::utils::IDeserializer* source) override;
+	void WriteTo(core::utils::ISerializer* destination) override;
+
 private:
 	void UpdateDirty();
 	virtual void CreateViewMatrix() = 0;
@@ -45,5 +51,7 @@ protected:
 
 	Frustum mFrustum;
 	float mFrustumDilatation;
+
+	
 };
 

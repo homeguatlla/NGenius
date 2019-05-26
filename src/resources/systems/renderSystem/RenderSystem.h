@@ -191,6 +191,8 @@ private:
 	void ApplyFog(IRenderer* renderer);
 	void ApplyLights(IRenderer* renderer);
 
+	void ReadCamerasFrom(core::utils::IDeserializer* source);
+	void ReadCameraFrom(core::utils::IDeserializer* source);
 	void DestroyCameras();
 
 	void CheckGLError();

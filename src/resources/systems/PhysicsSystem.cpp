@@ -174,6 +174,12 @@ void PhysicsSystem::OnGameEntityAdded(GameEntity* entity)
 	{
 		AddEntity(entity);
 	}
+
+	//TODO esto no funcionará así, pero por ahora sí. 
+	if (typeid(*entity) == typeid(Terrain))
+	{
+		SetTerrain(static_cast<Terrain*>(entity));
+	}
 }
 
 void PhysicsSystem::OnGameEntityRemoved(GameEntity* entity)

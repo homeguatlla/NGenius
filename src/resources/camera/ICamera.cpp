@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "ICamera.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "../../utils/serializer/IDeserializer.h"
+#include "../../utils/serializer/XMLDeserializer.h"
 
 
 ICamera::~ICamera()
@@ -16,6 +18,30 @@ const glm::mat4& ICamera::GetViewMatrix()
 {
 	UpdateDirty();
 	return mViewMatrix;
+}
+
+void ICamera::ReadFrom(core::utils::IDeserializer* source)
+{
+	source->ReadParameter("name", mName);
+	source->BeginAttribute("position");
+		source->ReadParameter("X", &mPosition.x);
+		source->ReadParameter("Y", &mPosition.y);
+		source->ReadParameter("Z", &mPosition.z);
+	source->EndAttribute();
+	source->BeginAttribute("target");
+		source->ReadParameter("X", &mTarget.x);
+		source->ReadParameter("Y", &mTarget.y);
+		source->ReadParameter("Z", &mTarget.z);
+	source->EndAttribute();
+	source->BeginAttribute("up");
+		source->ReadParameter("X", &mUp.x);
+		source->ReadParameter("Y", &mUp.y);
+		source->ReadParameter("Z", &mUp.z);
+	source->EndAttribute();
+}
+
+void ICamera::WriteTo(core::utils::ISerializer* destination)
+{
 }
 
 void ICamera::UpdateDirty()

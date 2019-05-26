@@ -7,6 +7,8 @@
 
 #include "../../GameEntity.h"
 #include "../../camera/ICamera.h"
+#include "../../camera/PerspectiveCamera.h"
+#include "../../camera/OrthogonalCamera.h"
 
 #include "../../models/ModelsLibrary.h"
 #include "../../models/Model.h"
@@ -38,12 +40,11 @@
 #include "../environmentSystem/SunLight.h"
 
 #include "RenderPass.h"
+
 #include "../../../BitNumber.h"
-
 #include "../../../guiTool/GuiTool.h"
-
 #include "../GameConstants.h"
-
+#include "../../InstantiableObject.h"
 #include "../../../utils/Log.h"
 
 #include <iostream>
@@ -84,6 +85,9 @@ mNumberRenderers(0)
 {
 	BitNumber bit;
 	bit.Test();
+
+	InstantiableObject::RegisterType("perspective_camera", new PerspectiveCamera());
+	InstantiableObject::RegisterType("orthogonal_camera", new OrthogonalCamera());
 }
 
 RenderSystem::~RenderSystem()
@@ -385,6 +389,43 @@ ICamera* RenderSystem::GetCamera(const std::string name)
 	{
 		return nullptr;
 	}
+}
+
+void RenderSystem::ReadCamerasFrom(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute(std::string("cameras"));
+	unsigned int numElements = source->ReadNumberOfElements();
+
+	source->BeginAttribute(std::string("camera"));
+	do
+	{
+		ReadCameraFrom(source);
+
+		source->NextAttribute();
+		numElements--;
+
+	} while (numElements > 0);
+
+	source->EndAttribute();
+	source->EndAttribute();
+}
+
+void RenderSystem::ReadCameraFrom(core::utils::IDeserializer* source)
+{
+	ICamera* camera;
+	float fov;
+	if (source->ReadParameter("fov", &fov))
+	{
+		camera = InstantiableObject::CreateCamera("perspective_camera");
+	}
+	else 
+	{
+		//orthogonal camera
+		camera = InstantiableObject::CreateCamera("orthogonal_camera");
+	}
+
+	camera->ReadFrom(source);
+	AddCamera(camera);
 }
 
 void RenderSystem::DestroyCameras()
@@ -947,6 +988,7 @@ void RenderSystem::ReadFrom(core::utils::IDeserializer* source)
 		mModelsLibrary->ReadFrom(source);
 		mTexturesLibrary->ReadFrom(source);
 		mMaterialsLibrary->ReadFrom(source);
+		ReadCamerasFrom(source);
 	source->EndAttribute();
 }
 

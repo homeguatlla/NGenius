@@ -43,3 +43,15 @@ GameEntity* InstantiableObject::CreateEntity(const std::string& name)
 		return nullptr;
 	}
 }
+
+ICamera* InstantiableObject::CreateCamera(const std::string& name)
+{
+	if (mFactories.find(name) != mFactories.end())
+	{
+		return mFactories[name]->CreateCamera();
+	}
+	else
+	{
+		return nullptr;
+	}
+}

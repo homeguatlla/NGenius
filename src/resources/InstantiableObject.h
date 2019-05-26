@@ -16,6 +16,8 @@ class InstantiableObject
 		static IShaderProgram* CreateShader(const std::string& name);
 		static IMaterialEffect* AddNewEffectToMaterial(const std::string& name, IMaterial* material);
 		static GameEntity* CreateEntity(const std::string& name);
+		static ICamera* CreateCamera(const std::string& name);
+
 	private:
 		static std::map<std::string, IFactory*> mFactories;
 };

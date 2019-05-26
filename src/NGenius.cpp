@@ -66,6 +66,8 @@ void NGenius::Start()
 	mSpacePartitionSystem->Start();
 	mDebugSystem->Start();
 
+
+	AddListenersToGameScene();
 	mGameScene.Start(mRenderSystem);
 }
 
@@ -310,6 +312,12 @@ Animation* NGenius::GetAnimation(const std::string& name) const
 	return mRenderSystem->GetAnimation(name);
 }
 
+ICamera* NGenius::GetCamera(const std::string& name) const
+{
+	assert(mRenderSystem != nullptr);
+	return mRenderSystem->GetCamera(name);
+}
+
 GLFWwindow* NGenius::GetGLWindow() const
 {
 	assert(mRenderSystem != nullptr);
@@ -349,19 +357,23 @@ void NGenius::SetFullScreen(bool isFullScreen)
 	mRenderSystem->SetFullScreen(isFullScreen);
 }
 
-GameScene* NGenius::CreateGameScene(const std::string& name)
+void NGenius::AddListenersToGameScene()
 {
-	//mGameScene = new GameScene(name);
-	
-	//TODO ojo que esto es horrible, tener que crear el lightsystem cuando la escena se crea...no sé
-	mLightsSystem = new LightsSystem(&mGameScene);
-	
 	mGameScene.RegisterGameSceneListener(mDebugSystem);
 	mGameScene.RegisterGameSceneListener(mInputSystem);
 	mGameScene.RegisterGameSceneListener(mPhysicsSystem);
 	mGameScene.RegisterGameSceneListener(mSpacePartitionSystem);
 	mGameScene.RegisterGameSceneListener(mEnvironmentSystem);
 	mGameScene.RegisterGameSceneListener(mAnimationSystem);
+}
+
+GameScene* NGenius::CreateGameScene(const std::string& name)
+{
+	//mGameScene = new GameScene(name);
+	
+	//TODO ojo que esto es horrible, tener que crear el lightsystem cuando la escena se crea...no sé
+	mLightsSystem = new LightsSystem(&mGameScene);
+	AddListenersToGameScene();	
 
 	return &mGameScene;
 }

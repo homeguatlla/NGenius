@@ -78,6 +78,7 @@ public:
 	const ITexture* CreateDepthTexture(const std::string& name, const glm::ivec2& size);
 	IMaterial* GetMaterial(const std::string& name) const;
 	Animation* GetAnimation(const std::string& name) const;
+	ICamera* GetCamera(const std::string& name) const;
 
 	FontType* GetFont(const std::string& name) const;
 	float GetNumberFPS() const;
@@ -149,6 +150,8 @@ private:
 	void AcceptGuiTool();
 
 	void Render();
+
+	void AddListenersToGameScene();
 
 	// Heredado vía ISerializable
 	void ReadFrom(core::utils::IDeserializer* source) override;

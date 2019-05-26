@@ -1120,7 +1120,8 @@ void CreateGameplayRenderPass()
 	int screenWidth = static_cast<int>(mEngine.GetScreenWidth());
 	int screenHeight = static_cast<int>(mEngine.GetScreenHeight());
 	//RENDER PASS GAMEPLAY	
-	mGameplayPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
+	ICamera* camera = mEngine.GetCamera("gameplay_camera");
+	mGameplayPass = new RenderPass(camera, IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
 	mGameplayPass->SetAcceptSpacePartitionOnly(true);
 
 	IFrameBuffer* frameBuffer = new IFrameBuffer(screenWidth, screenHeight);
@@ -1139,7 +1140,8 @@ void CreateGameplayRenderPass()
 void CreateTerrainRenderPass()
 {
 	//RENDER PASS GAMEPLAY
-	RenderPass *terrainPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TERRAIN);
+	ICamera* camera = mEngine.GetCamera("gameplay_camera");
+	RenderPass *terrainPass = new RenderPass(camera, IRenderer::LAYER_TERRAIN);
 	terrainPass->EnableFog(true);
 	mEngine.AddRenderPass(terrainPass, false);
 }
@@ -1147,7 +1149,8 @@ void CreateTerrainRenderPass()
 void CreateParticlesRenderPass()
 {
 	//RENDER PASS PARTICLES
-	RenderPass *particlesPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_PARTICLES);
+	ICamera* camera = mEngine.GetCamera("gameplay_camera");
+	RenderPass *particlesPass = new RenderPass(camera, IRenderer::LAYER_PARTICLES);
 	particlesPass->SetCalculateDistanceToCamera(true);
 	particlesPass->EnableFog(true);
 	mEngine.AddRenderPass(particlesPass, false);
@@ -1156,7 +1159,8 @@ void CreateParticlesRenderPass()
 void CreateTransparentRenderPass()
 {
 	//RENDER PASS TRANSPARENT
-	RenderPass *transparentPass = new RenderPass(static_cast<ICamera*>(mGameplayCamera), IRenderer::LAYER_TRANSPARENT);
+	ICamera* camera = mEngine.GetCamera("gameplay_camera");
+	RenderPass *transparentPass = new RenderPass(camera, IRenderer::LAYER_TRANSPARENT);
 	transparentPass->EnableFog(true);
 	mEngine.AddRenderPass(transparentPass, false);
 }
@@ -1616,12 +1620,9 @@ void Initialize()
 
 	mEngine.Init(mIsFullScreen);
 
-	CreateCameras();
+	//CreateCameras();
 
 	mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
-
-	mEngine.SetWaterEnabled(mIsWaterEnabled);
-	mEngine.SetWaterParameters(mGameplayCamera, mWaterHeight);
 
 	mEngine.SetDebugModeEnabled(mIsDebugModeEnabled);
 
@@ -1633,6 +1634,9 @@ void Initialize()
 	mEngine.SetFogEnabled(mIsFogEnabled);
 
 	mEngine.LoadFromFile();
+
+	mEngine.SetWaterEnabled(mIsWaterEnabled);
+	mEngine.SetWaterParameters(mEngine.GetCamera("gameplay_camera"), mWaterHeight);
 
 	mEngine.Start();
 }
