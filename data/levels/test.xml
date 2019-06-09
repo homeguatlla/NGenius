@@ -169,17 +169,56 @@
 		</materials_library>
 		<cameras>
 			<camera name="gameplay_camera" fov="45" aspect_ratio="1.7" near_plane="0.1" far_plane="100">
-				<position X="0" Y="25" Z="5"/>
-				<target X="0" Y="0" Z="0"/>
+				<position X="0" Y="15" Z="5"/>
+				<target X="20" Y="0" Z="20"/>
 				<up X="0" Y="1" Z="0"/>
 			</camera>
 			<camera name="eagle_camera" screen_width="96" screen_height="54" near_plane="0.1" far_plane="100">
-				<position X="0" Y="15" Z="0"/>
+				<position X="0" Y="25" Z="0"/>
 				<target X="0" Y="0" Z="0"/>
 				<up X="1" Y="0" Z="0"/>
 			</camera>
+			<camera name="gui_camera" screen_width="1920" screen_height="1080" near_plane="0.1" far_plane="100">
+				<position X="0" Y="0" Z="40"/>
+				<target X="0" Y="0" Z="-50"/>
+				<up X="0" Y="1" Z="0"/>
+			</camera>
 		</cameras>
 	</libraries>
+	<renderer>
+		<water is_enabled = "false" camera="gameplay_camera" height="5.4"/>
+		<shadows is_enabled = "false"/>
+		<debug is_enabled = "false" />
+		<fog is_enabled = "false" />
+		<render_layers>
+			<layer name="GUI" value="1"/>
+			<layer name="PARTICLES" value="2"/>
+			<layer name="TRANSPARENT" value="4"/>
+			<layer name="OTHER" value="8"/>
+			<layer name="WATER" value="16"/>
+			<layer name="TERRAIN" value="32"/>
+			<layer name="REFLEXION" value="64"/>
+			<layer name="DEBUG" value="128"/>
+		</render_layers>
+		<render_passes>
+			<render_pass 	name = "gui_render_pass"
+							is_enabled = "true" camera_name="gui_camera" layer_mask="1"
+							add_after_post_processing="true"
+							is_fog_enabled = "false" 
+							is_clipping_enabled="false" clipping_plane_number="0" 
+							has_to_calculate_distance_to_camera ="false" 
+							can_accept_space_partition_renderers_only = "false">
+			</render_pass>
+			<render_pass 	name = "terrain_render_pass"
+							is_enabled = "true" camera_name="gameplay_camera" layer_mask="32"
+							add_after_post_processing="false"
+							is_fog_enabled = "true" 
+							is_clipping_enabled="false" clipping_plane_number="0" 
+							has_to_calculate_distance_to_camera ="false" 
+							can_accept_space_partition_renderers_only = "false">
+			</render_pass>
+		</render_passes>
+	</renderer>
 	<game_scene name="mainScene">
 		<entities counter="412">
 			<player is_enabled="1" model="farmer" material="player">

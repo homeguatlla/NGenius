@@ -4,6 +4,7 @@
 #include "../../renderers/IRenderer.h"
 #include "../../GameEntity.h"
 #include "../../components/SpacePartitionComponent.h"
+#include "../../../utils/serializer/XMLDeserializer.h"
 
 RenderPass::RenderPass(const ICamera* camera, char layersMask) :
 mLayersMask(layersMask),
@@ -166,4 +167,18 @@ void RenderPass::SetClippingPlane(const glm::vec4& clippingPlane)
 const glm::vec4 RenderPass::GetClippingPlane() const
 {
 	return mClippingPlane;
+}
+
+void RenderPass::ReadFrom(core::utils::IDeserializer* source)
+{
+	source->ReadParameter("is_enabled", &mIsEnabled);
+	source->ReadParameter("is_fog_enabled", &mIsFogEnabled);
+	source->ReadParameter("is_clipping_enabled", &mIsClippingEnabled);
+	source->ReadParameter("clipping_plane_number", &mClippingPlaneNumber);
+	source->ReadParameter("has_to_calculate_distance_to_camera", &mHasToCalculateDistanceToCamera);
+	source->ReadParameter("can_accept_space_partition_renderers_only", &mCanAcceptSpacePartitionRenderersOnly);
+}
+
+void RenderPass::WriteTo(core::utils::ISerializer* destination)
+{
 }

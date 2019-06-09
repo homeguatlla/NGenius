@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include "../../../utils/serializer/ISerializable.h"
 
 class ICamera;
 class IFrameBuffer;
@@ -7,7 +8,7 @@ class IMaterial;
 class Texture;
 class IRenderer;
 
-class RenderPass
+class RenderPass : public core::utils::ISerializable
 {
 	char mLayersMask;
 	const ICamera* mCamera;
@@ -56,5 +57,9 @@ public:
 	int GetClippingPlaneNumber() const;
 	void SetClippingPlane(const glm::vec4& clippingPlane);
 	const glm::vec4 GetClippingPlane() const;
+
+	// Heredado vía ISerializable
+	virtual void ReadFrom(core::utils::IDeserializer* source) override;
+	virtual void WriteTo(core::utils::ISerializer* destination) override;
 };
 

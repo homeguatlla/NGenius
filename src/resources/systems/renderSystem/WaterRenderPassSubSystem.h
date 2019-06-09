@@ -1,12 +1,14 @@
 #pragma once
 #include <glm/glm.hpp>
+#include "../../../utils/serializer/ISerializable.h"
+#include <string>
 
 class ICamera;
 class Texture;
 class RenderPass;
 class RenderSystem;
 
-class WaterRenderPassSubSystem
+class WaterRenderPassSubSystem : public core::utils::ISerializable
 {
 	ICamera* mReflectionCamera;
 	ICamera* mRefractionCamera;
@@ -20,6 +22,8 @@ class WaterRenderPassSubSystem
 	bool mIsInitialized;
 	float mWaterY;
 
+	std::string mCameraName;
+
 public:
 	WaterRenderPassSubSystem(RenderSystem* renderSystem, float screenWidth, float screenHeight);
 	~WaterRenderPassSubSystem();
@@ -30,6 +34,10 @@ public:
 	void SetWaterParameters(const ICamera* gameplayCamera, float waterY);
 	void SetEnable(bool enable);
 	bool IsEnabled() const;
+
+	// Heredado vía ISerializable
+	virtual void ReadFrom(core::utils::IDeserializer* source) override;
+	virtual void WriteTo(core::utils::ISerializer* destination) override;
 
 private:
 	ICamera* CreateReflectionCamera();

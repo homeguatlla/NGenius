@@ -188,12 +188,18 @@ private:
 	void SelectTextures();
 	void SelectClippingPlane(RenderPass* renderPass);
 	void ApplyShadows(IRenderer* renderer);
-	void ApplyFog(IRenderer* renderer);
+	void ApplyFog(RenderPass* renderPass, IRenderer* renderer);
 	void ApplyLights(IRenderer* renderer);
 
 	void ReadCamerasFrom(core::utils::IDeserializer* source);
 	void ReadCameraFrom(core::utils::IDeserializer* source);
 	void DestroyCameras();
+
+	void ReadRenderPassesFrom(core::utils::IDeserializer* source);
+	void ReadRenderPassFrom(core::utils::IDeserializer* source);
+	void ReadRenderLayersFrom(core::utils::IDeserializer* source);
+	
+	void ReadFogParameters(core::utils::IDeserializer* source);
 
 	void CheckGLError();
 };

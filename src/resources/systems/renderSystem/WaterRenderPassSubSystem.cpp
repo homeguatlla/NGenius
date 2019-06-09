@@ -12,6 +12,8 @@
 #include "../../materials/IMaterial.h"
 #include "../../materials/effects/MaterialEffectDiffuseTexture.h"
 #include "../../textures/ITexture.h"
+#include "../../../utils/serializer/XMLDeserializer.h"
+#include "../../../utils/Log.h"
 
 #include <GL/glew.h>
 #include <glm/glm.hpp> 
@@ -42,6 +44,15 @@ void WaterRenderPassSubSystem::Init()
 {
 	if (mIsWaterEnabled)
 	{
+		ICamera* camera = mRenderSystem->GetCamera(mCameraName);
+		if (camera != nullptr)
+		{
+			SetWaterParameters(camera, mWaterY);
+		}
+		else
+		{
+			Log(Log::LOG_ERROR) << "Could not find the water camera " << mCameraName << "\n";
+		}
 		mReflectionCamera = CreateReflectionCamera();
 		mRenderSystem->AddCamera(mReflectionCamera);
 		mRefractionCamera = CreateRefractionCamera();
@@ -156,6 +167,19 @@ void WaterRenderPassSubSystem::ApplyRefractionCameras(const ICamera* camera, ICa
 	cameraRefracted->SetPosition(camera->GetPosition());
 	cameraRefracted->SetTarget(camera->GetTarget());
 	cameraRefracted->SetUp(camera->GetUp());
+}
+
+void WaterRenderPassSubSystem::ReadFrom(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute("water");
+		source->ReadParameter("is_enabled", &mIsWaterEnabled);
+		source->ReadParameter("camera", mCameraName);
+		source->ReadParameter("height", &mWaterY);
+	source->EndAttribute();	
+}
+
+void WaterRenderPassSubSystem::WriteTo(core::utils::ISerializer* destination)
+{
 }
 
 void WaterRenderPassSubSystem::Update()

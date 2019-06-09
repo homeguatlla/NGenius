@@ -15,6 +15,7 @@
 #include "../../materials/effects/MaterialEffectMatrix4Array.h"
 #include "../../textures/ITexture.h"
 #include "../../textures/Texture.h"
+#include "../../../utils/serializer/XMLDeserializer.h"
 
 static const int SHADOWS_TEXTURE_SIZE = 2048;
 
@@ -63,6 +64,17 @@ void ShadowsRenderPassSubSystem::UpdateShadowCastMatrix()
 	mShadowCastCamera->SetTarget(position);
 	mShadowCastCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 	mShadowMapMatrix = CalculateShadowMapMatrix(mShadowCastCamera);
+}
+
+void ShadowsRenderPassSubSystem::ReadFrom(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute("shadows");
+		source->ReadParameter("is_enabled", &mIsShadowCastEnabled);
+	source->EndAttribute();
+}
+
+void ShadowsRenderPassSubSystem::WriteTo(core::utils::ISerializer *destination)
+{
 }
 
 void ShadowsRenderPassSubSystem::SetCastingShadowsTarget(const GameEntity* target)

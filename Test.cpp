@@ -1169,15 +1169,15 @@ void CreateSubSystems()
 {
 	//CreateHudMapRenderPass();
 
-	CreateTerrainRenderPass();
+	//CreateTerrainRenderPass();
 
-	CreateGameplayRenderPass();
+	//CreateGameplayRenderPass();
 
-	CreateTransparentRenderPass();
+	//CreateTransparentRenderPass();
 
-	CreateParticlesRenderPass();
+	//CreateParticlesRenderPass();
 
-	CreateGUIRenderPass();
+	//CreateGUIRenderPass();
 }
 
 void DeleteEntities()
@@ -1622,21 +1622,21 @@ void Initialize()
 
 	//CreateCameras();
 
-	mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
+	//mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
 
-	mEngine.SetDebugModeEnabled(mIsDebugModeEnabled);
+	//mEngine.SetDebugModeEnabled(mIsDebugModeEnabled);
 
 	glfwSetScrollCallback(mEngine.GetGLWindow(), &ScrollCallback);
 	glfwSetKeyCallback(mEngine.GetGLWindow(), &KeyCallback);
 	glfwSetMouseButtonCallback(mEngine.GetGLWindow(), &MouseButtonCallback);
 	glfwSetCursorPosCallback(mEngine.GetGLWindow(), &MouseCursorPosCallback);
 
-	mEngine.SetFogEnabled(mIsFogEnabled);
+	//mEngine.SetFogEnabled(mIsFogEnabled);
 
 	mEngine.LoadFromFile();
 
-	mEngine.SetWaterEnabled(mIsWaterEnabled);
-	mEngine.SetWaterParameters(mEngine.GetCamera("gameplay_camera"), mWaterHeight);
+	//mEngine.SetWaterEnabled(mIsWaterEnabled);
+	//mEngine.SetWaterParameters(mEngine.GetCamera("gameplay_camera"), mWaterHeight);
 
 	mEngine.Start();
 }

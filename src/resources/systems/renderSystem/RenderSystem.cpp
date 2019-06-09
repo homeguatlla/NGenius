@@ -463,7 +463,7 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 
 	ApplyShadows(renderer);
 
-	ApplyFog(renderer);
+	ApplyFog(renderPass, renderer);
 
 	mCurrentMaterial->Use();
 
@@ -540,14 +540,18 @@ void RenderSystem::ApplyShadows(IRenderer* renderer)
 	}
 }
 
-void RenderSystem::ApplyFog(IRenderer* renderer)
+void RenderSystem::ApplyFog(RenderPass* renderPass, IRenderer* renderer)
 {
-	if (mIsFogEnabled)
+	MaterialEffectFogProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectFogProperties>();
+	if (effect != nullptr)
 	{
-		MaterialEffectFogProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectFogProperties>();
-		if (effect != nullptr)
+		if (mIsFogEnabled && renderPass->IsFogEnabled())
 		{
 			effect->SetProperties(mEnvironmentSystem->GetFogColor(), mEnvironmentSystem->GetFogDensity(), mEnvironmentSystem->GetFogGradient());
+		}
+		else 
+		{
+			effect->SetProperties(glm::vec3(0.0f), 0.0f, 1.0f); // to make fog not enabled
 		}
 	}
 }
@@ -990,6 +994,70 @@ void RenderSystem::ReadFrom(core::utils::IDeserializer* source)
 		mMaterialsLibrary->ReadFrom(source);
 		ReadCamerasFrom(source);
 	source->EndAttribute();
+	source->BeginAttribute("renderer");
+		ReadRenderLayersFrom(source);
+		mWaterRenderPass->ReadFrom(source);
+		mShadowsRenderPass->ReadFrom(source);
+		ReadFogParameters(source);
+		ReadRenderPassesFrom(source);
+	source->EndAttribute();
+}
+
+void RenderSystem::ReadRenderLayersFrom(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute("render_layers");
+	
+	source->EndAttribute();
+}
+
+void RenderSystem::ReadFogParameters(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute("fog");
+		source->ReadParameter("is_enabled", &mIsFogEnabled);
+	source->EndAttribute();
+}
+
+void RenderSystem::ReadRenderPassesFrom(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute(std::string("render_passes"));
+	unsigned int numElements = source->ReadNumberOfElements();
+
+	source->BeginAttribute(std::string("render_pass"));
+	do
+	{
+		ReadRenderPassFrom(source);
+
+		source->NextAttribute();
+		numElements--;
+
+	} while (numElements > 0);
+
+	source->EndAttribute();
+	source->EndAttribute();
+}
+
+void RenderSystem::ReadRenderPassFrom(core::utils::IDeserializer* source)
+{
+	bool addAfterPostProcessing = false;
+	std::string cameraName, renderPassName;
+	int layerMask = IRenderer::LAYER_OTHER;
+
+	source->ReadParameter("name", renderPassName);
+	source->ReadParameter("camera_name", cameraName);
+	source->ReadParameter("layer_mask", &layerMask);
+	source->ReadParameter("add_after_post_processing", &addAfterPostProcessing);
+
+	ICamera* camera = GetCamera(cameraName);
+	if (camera != nullptr)
+	{
+		RenderPass* renderPass = new RenderPass(camera, layerMask);
+		renderPass->ReadFrom(source);
+		AddRenderPass(renderPass, addAfterPostProcessing);
+	}
+	else
+	{
+		Log(Log::LOG_ERROR) << "Couldn't load render pass " << renderPassName << " because camera " << cameraName << " not available." <<"\n";
+	}
 }
 
 void RenderSystem::WriteTo(core::utils::ISerializer* destination)

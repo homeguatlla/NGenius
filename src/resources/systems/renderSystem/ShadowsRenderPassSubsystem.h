@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include "../../../utils/serializer/ISerializable.h"
 
 class ICamera;
 class Texture;
@@ -7,7 +8,7 @@ class RenderPass;
 class RenderSystem;
 class GameEntity;
 
-class ShadowsRenderPassSubSystem
+class ShadowsRenderPassSubSystem : public core::utils::ISerializable
 {
 	RenderSystem* mRenderSystem;
 	ICamera* mShadowCastCamera;
@@ -38,6 +39,10 @@ public:
 	const Texture* GetShadowMapTexture() const;
 	int GetShadowMapPFCCounter() const;
 	void UpdateState();
+
+	// Heredado vía ISerializable
+	virtual void ReadFrom(core::utils::IDeserializer* source) override;
+	virtual void WriteTo(core::utils::ISerializer* destination) override;
 
 private:
 	ICamera* CreateShadowCastCamera(const glm::vec3& directionalLightDirection);
