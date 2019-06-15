@@ -15,6 +15,7 @@
 
 #include "../../utils/serializer/IDeserializer.h"
 #include "../../utils/serializer/XMLDeserializer.h"
+#include "../../utils/Log.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -61,6 +62,14 @@ void Terrain::Build(RenderSystem* renderSystem)
 	IMaterial* material = renderSystem->GetMaterial(mMaterialName);
 	ITexture* heighmap = static_cast<Texture*>(renderSystem->GetTexture(mHeightmapName));
 
+	if (!mModelName.empty())
+	{
+		mModel = renderSystem->GetModel(mModelName);
+		if (mModel == nullptr)
+		{
+			Log(Log::LOG_ERROR) << "Couldn't found terrain model " << mModelName << "\n";
+		}
+	}
 	Create(material, heighmap);
 }
 
@@ -71,6 +80,7 @@ void Terrain::ReadFrom(core::utils::IDeserializer* source)
 	source->ReadParameter("is_flat", &mIsFlat);
 	source->ReadParameter("heighmap_texture", mHeightmapName);
 	source->ReadParameter("scale", &mScale);
+	source->ReadParameter("model", mModelName);
 }
 
 bool Terrain::IsPointInside(glm::vec2 point) const

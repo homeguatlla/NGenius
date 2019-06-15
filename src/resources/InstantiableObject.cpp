@@ -3,6 +3,8 @@
 
 std::map<std::string, IFactory*> InstantiableObject::mFactories;
 
+//TODO igual podríamos registrar una función statica de creación o algo así. Así, no tenemos que hacer un new Terrain por ejemplo y 
+//podemos mantener el constructor por defecto privado.
 void InstantiableObject::RegisterType(const std::string& name, IFactory* factory)
 {
 	mFactories[name] = factory;

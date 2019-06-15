@@ -12,6 +12,7 @@
 
 #include "../entities/Player.h"
 #include "../entities/Terrain.h"
+#include "../entities/Water.h"
 
 #include <algorithm>
 
@@ -22,6 +23,7 @@ mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limi
 	//InstantiableObject::RegisterType("entity", new GameEntity());
 	//InstantiableObject::RegisterType("player", new Player());
 	InstantiableObject::RegisterType("terrain", new Terrain());
+	InstantiableObject::RegisterType("water", new Water());
 }
 
 GameScene::~GameScene()

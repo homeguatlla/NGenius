@@ -1103,18 +1103,6 @@ void CreateHudMapRenderPass()
 	mEngine.AddRenderPass(mMapPass, false);
 }
 
-void CreateGUIRenderPass()
-{
-	//RENDER PASS GUI
-	ICamera* camera = new OrthogonalCamera("gui_camera", mEngine.GetScreenWidth(), mEngine.GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
-	camera->SetPosition(glm::vec3(0.0f, 0.0f, 40.0f));
-	camera->SetTarget(glm::vec3(0.0f, 0.0f, -50.0f));
-	camera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
-	RenderPass *guiPass = new RenderPass(static_cast<ICamera*>(camera), IRenderer::LAYER_GUI);
-	mEngine.AddRenderPass(guiPass, true);
-	mEngine.AddCamera(camera);
-}
-
 void CreateGameplayRenderPass()
 {
 	int screenWidth = static_cast<int>(mEngine.GetScreenWidth());
@@ -1127,6 +1115,7 @@ void CreateGameplayRenderPass()
 	IFrameBuffer* frameBuffer = new IFrameBuffer(screenWidth, screenHeight);
 	Texture* depthTexture = static_cast<Texture*>(mEngine.GetTexture("depth_texture"));
 	frameBuffer->SetCopyBufferToTexture(depthTexture, 0, 0, screenWidth, screenHeight);
+
 	mGameplayPass->SetFrameBufferOutput(frameBuffer);
 	mGameplayPass->EnableFog(true);
 	
@@ -1135,15 +1124,6 @@ void CreateGameplayRenderPass()
 	//mGameplayPass->SetMaterial(material);
 
 	mEngine.AddRenderPass(mGameplayPass, false);
-}
-
-void CreateTerrainRenderPass()
-{
-	//RENDER PASS GAMEPLAY
-	ICamera* camera = mEngine.GetCamera("gameplay_camera");
-	RenderPass *terrainPass = new RenderPass(camera, IRenderer::LAYER_TERRAIN);
-	terrainPass->EnableFog(true);
-	mEngine.AddRenderPass(terrainPass, false);
 }
 
 void CreateParticlesRenderPass()
@@ -1622,27 +1602,18 @@ void Initialize()
 
 	//CreateCameras();
 
-	//mEngine.SetCastingShadowsEnabled(mIsShadowEnabled);
-
-	//mEngine.SetDebugModeEnabled(mIsDebugModeEnabled);
-
 	glfwSetScrollCallback(mEngine.GetGLWindow(), &ScrollCallback);
 	glfwSetKeyCallback(mEngine.GetGLWindow(), &KeyCallback);
 	glfwSetMouseButtonCallback(mEngine.GetGLWindow(), &MouseButtonCallback);
 	glfwSetCursorPosCallback(mEngine.GetGLWindow(), &MouseCursorPosCallback);
 
-	//mEngine.SetFogEnabled(mIsFogEnabled);
-
 	mEngine.LoadFromFile();
-
-	//mEngine.SetWaterEnabled(mIsWaterEnabled);
-	//mEngine.SetWaterParameters(mEngine.GetCamera("gameplay_camera"), mWaterHeight);
-
 	mEngine.Start();
 }
 
 int main(void)
 {
+	
 	Initialize();
 
 	//CreateEntities();

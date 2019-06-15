@@ -17,6 +17,8 @@ namespace core
 			// Heredado vía ISerializer
 			void BeginAttribute() override;
 			void BeginAttribute(const std::string& name) override;
+			bool HasAttribute(const std::string& name) override;
+
 			unsigned int ReadNumberOfElements() const override;
 			void NextAttribute() override;
 			std::string GetCurrentNodeName() const override;

@@ -128,6 +128,20 @@ void RenderSystem::Start()
 
 	mTexturesLibrary->LoadTexturesPendingToLoad();
 	mMaterialsLibrary->Build();
+	
+	BuildRenderPasses();
+}
+
+void RenderSystem::BuildRenderPasses()
+{
+	for (RenderPass* pass : mRenderPasses)
+	{
+		pass->Build(this);
+	}
+	for (RenderPass* pass : mRenderPassesAfterPostProcessing)
+	{
+		pass->Build(this);
+	}
 }
 
 void RenderSystem::CreateSubSystems()
@@ -642,11 +656,18 @@ void RenderSystem::SelectTextures()
 	MaterialEffectWater* effectWater = mCurrentMaterial->GetEffect<MaterialEffectWater>();
 	if (effectWater != nullptr)
 	{
-		effectWater->GetReflectionTexture()->SetActive(true);
-		effectWater->GetRefractionTexture()->SetActive(true);
-		effectWater->GetDistorsionTexture()->SetActive(true);
-		effectWater->GetNormalTexture()->SetActive(true);
-		effectWater->GetDepthTexture()->SetActive(true);
+		if (mWaterRenderPass->IsEnabled())
+		{
+			effectWater->GetReflectionTexture()->SetActive(true);
+			effectWater->GetRefractionTexture()->SetActive(true);
+			effectWater->GetDistorsionTexture()->SetActive(true);
+			effectWater->GetNormalTexture()->SetActive(true);
+			effectWater->GetDepthTexture()->SetActive(true);
+		}
+		else
+		{
+			Log(Log::LOG_ERROR) << "Water is not enabled and there is a entity trying to use it. Try to enable water or remove the water material from that entity.\n";
+		}
 	}
 
 	MaterialEffectParticle* effectParticle = mCurrentMaterial->GetEffect<MaterialEffectParticle>();

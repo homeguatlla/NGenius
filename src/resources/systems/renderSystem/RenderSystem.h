@@ -173,6 +173,8 @@ private:
 
 	void LoadDefaultResources();
 
+	void BuildRenderPasses();
+
 	void AddToRender(IRenderer* renderer, std::vector<RenderPass*>& renderPasses);
 
 	bool ValidateRenderPassesLayerMasks(RenderPass* renderPass, std::vector<RenderPass*>& renderPasses) const;

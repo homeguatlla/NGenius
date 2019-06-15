@@ -22,6 +22,7 @@ class Terrain :	public GameEntity
 	std::vector<glm::vec3> mVertexs;
 
 	std::string mHeightmapName;
+	std::string mModelName;
 
 public:
 	Terrain() = default;

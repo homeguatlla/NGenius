@@ -7,6 +7,7 @@ class IFrameBuffer;
 class IMaterial;
 class Texture;
 class IRenderer;
+class RenderSystem;
 
 class RenderPass : public core::utils::ISerializable
 {
@@ -58,8 +59,13 @@ public:
 	void SetClippingPlane(const glm::vec4& clippingPlane);
 	const glm::vec4 GetClippingPlane() const;
 
+	void Build(RenderSystem* renderSystem);
+
 	// Heredado vía ISerializable
 	virtual void ReadFrom(core::utils::IDeserializer* source) override;
 	virtual void WriteTo(core::utils::ISerializer* destination) override;
+private:
+	void ReadFrameBuffersFrom(core::utils::IDeserializer* source);
+	void ReadFrameBufferFrom(core::utils::IDeserializer* source);
 };
 

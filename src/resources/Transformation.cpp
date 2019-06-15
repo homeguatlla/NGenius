@@ -106,6 +106,11 @@ void Transformation::ReadFrom(core::utils::IDeserializer* source)
 		source->ReadParameter("X", &mRotation.x);
 		source->ReadParameter("Y", &mRotation.y);
 		source->ReadParameter("Z", &mRotation.z);
+
+		mRotation.x = glm::radians(mRotation.x);
+		mRotation.y = glm::radians(mRotation.y);
+		mRotation.z = glm::radians(mRotation.z);
+
 		source->EndAttribute();
 		source->BeginAttribute("scale");
 		source->ReadParameter("X", &mScale.x);

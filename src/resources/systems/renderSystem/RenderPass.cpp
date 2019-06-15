@@ -169,6 +169,14 @@ const glm::vec4 RenderPass::GetClippingPlane() const
 	return mClippingPlane;
 }
 
+void RenderPass::Build(RenderSystem* renderSystem)
+{
+	if (mFrameBufferOutput != nullptr)
+	{
+		mFrameBufferOutput->Build(renderSystem);
+	}
+}
+
 void RenderPass::ReadFrom(core::utils::IDeserializer* source)
 {
 	source->ReadParameter("is_enabled", &mIsEnabled);
@@ -177,6 +185,40 @@ void RenderPass::ReadFrom(core::utils::IDeserializer* source)
 	source->ReadParameter("clipping_plane_number", &mClippingPlaneNumber);
 	source->ReadParameter("has_to_calculate_distance_to_camera", &mHasToCalculateDistanceToCamera);
 	source->ReadParameter("can_accept_space_partition_renderers_only", &mCanAcceptSpacePartitionRenderersOnly);
+	ReadFrameBuffersFrom(source);	
+}
+
+void RenderPass::ReadFrameBuffersFrom(core::utils::IDeserializer* source)
+{
+	if (source->HasAttribute(std::string("frame_buffers")))
+	{
+		source->BeginAttribute(std::string("frame_buffers"));
+		unsigned int numElements = source->ReadNumberOfElements();
+
+		source->BeginAttribute(std::string("frame_buffer"));
+		do
+		{
+			ReadFrameBufferFrom(source);
+
+			source->NextAttribute();
+			numElements--;
+
+		} while (numElements > 0);
+
+		source->EndAttribute();
+		source->EndAttribute();
+	}
+}
+
+void RenderPass::ReadFrameBufferFrom(core::utils::IDeserializer* source)
+{
+	float width = 0.0f, height = 0.0f;
+	source->ReadParameter("width", &width);
+	source->ReadParameter("height", &height);
+
+	IFrameBuffer* buffer = new IFrameBuffer(width, height);
+	buffer->ReadFrom(source);
+	SetFrameBufferOutput(buffer);
 }
 
 void RenderPass::WriteTo(core::utils::ISerializer* destination)

@@ -80,6 +80,18 @@ namespace core
 			assert(mCurrentXMLNode != nullptr);
 		}
 		
+		bool XMLDeserializer::HasAttribute(const std::string& name)
+		{
+			if (mCurrentXMLNode == nullptr)
+			{
+				return false;
+			}
+			else
+			{
+				return mCurrentXMLNode->first_node(name.c_str()) != nullptr;
+			}
+		}
+
 		void XMLDeserializer::NextAttribute()
 		{
 			assert(mCurrentXMLNode != nullptr);
@@ -114,7 +126,6 @@ namespace core
 			std::string stringValue;
 			bool found = FillWithValue(name, stringValue);
 
-			assert(found);
 			if (found)
 			{
 				*value = std::stoi(stringValue);

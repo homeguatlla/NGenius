@@ -4,6 +4,7 @@
 class IMaterial;
 class Model;
 class MaterialEffectWater;
+class RenderSystem;
 
 class Water :	public GameEntity
 {
@@ -15,12 +16,21 @@ class Water :	public GameEntity
 	MaterialEffectWater* mWaterEffect;
 
 public:
+	Water() = default; 
 	explicit Water(Transformation* transformation, IMaterial* material, float wide, float length, float speed);
 	~Water();
 	void Update(float elapsedTime) override;
 	Water* DoClone() const override { return nullptr; }
 
+	GameEntity* CreateGameEntity()  override;
+	void Build(RenderSystem* renderSystem) override;
+
+	// Heredado vía ISerializable
+	void ReadFrom(core::utils::IDeserializer* source) override;
+
 private:
-	void Create();
+	
+	void Create(IMaterial* material);
+	void CreateModel();
 };
 

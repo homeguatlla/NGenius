@@ -15,6 +15,7 @@ namespace core
 
 			virtual void BeginAttribute() = 0;
 			virtual void BeginAttribute(const std::string& name) = 0;
+			virtual bool HasAttribute(const std::string& name) = 0;
 
 			virtual unsigned int ReadNumberOfElements() const = 0;
 			virtual void NextAttribute() = 0;

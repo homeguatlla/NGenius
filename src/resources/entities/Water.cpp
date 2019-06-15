@@ -1,11 +1,16 @@
 #include "stdafx.h"
 #include "Water.h"
+#include "../systems/renderSystem/RenderSystem.h"
 #include "../renderers/IndicesRenderer.h"
 #include "../models/Mesh.h"
 #include "../models/Model.h"
 
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectWater.h"
+
+#include "../../utils/serializer/IDeserializer.h"
+#include "../../utils/serializer/XMLDeserializer.h"
+#include "../../utils/Log.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -16,14 +21,7 @@ mLength(length),
 mWaterSpeed(speed),
 mCurrentWaterSpeed(speed)
 {
-	Create();
-	SetRenderer(new IndicesRenderer(mModel, material));
-
-	GetRenderer()->SetLayer(IRenderer::LAYER_WATER);
-	if (material->HasEffect<MaterialEffectWater>())
-	{
-		mWaterEffect = material->GetEffect<MaterialEffectWater>();
-	}
+	Create(material);
 }
 
 Water::~Water()
@@ -38,7 +36,27 @@ void Water::Update(float elapsedTime)
 	mWaterEffect->SetSpeed(mCurrentWaterSpeed);
 }
 
-void Water::Create()
+GameEntity* Water::CreateGameEntity()
+{
+	return new Water();
+}
+
+void Water::Build(RenderSystem* renderSystem)
+{
+	IMaterial* material = renderSystem->GetMaterial(mMaterialName);
+	Create(material);
+}
+
+void Water::ReadFrom(core::utils::IDeserializer* source)
+{
+	GameEntity::ReadFrom(source);
+
+	source->ReadParameter("material", mMaterialName);
+	source->ReadParameter("wide", &mWide);
+	source->ReadParameter("length", &mLength);
+}
+
+void Water::CreateModel()
 {
 	std::vector<glm::vec3> vertexs;
 	std::vector<glm::vec2> uv;
@@ -64,3 +82,18 @@ void Water::Create()
 
 	mModel = new Model(new Mesh(vertexs, uv, indices));
 }
+
+void Water::Create(IMaterial* material)
+{
+	CreateModel();
+	
+	SetRenderer(new IndicesRenderer(mModel, material));
+
+	GetRenderer()->SetLayer(IRenderer::LAYER_WATER);
+	if (material->HasEffect<MaterialEffectWater>())
+	{
+		mWaterEffect = material->GetEffect<MaterialEffectWater>();
+		mWaterSpeed = mWaterEffect->GetSpeed();
+	}
+}
+
