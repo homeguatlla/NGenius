@@ -975,6 +975,11 @@ void RenderSystem::SetWaterParameters(const ICamera* camera, float waterY)
 	mWaterRenderPass->SetWaterParameters(camera, waterY);
 }
 
+float RenderSystem::GetWaterHeight() const
+{
+	return mWaterRenderPass->GetWaterHeight();
+}
+
 ITexture* RenderSystem::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
 {
 	assert(mTexturesLibrary != nullptr);

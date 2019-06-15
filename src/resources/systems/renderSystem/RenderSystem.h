@@ -140,6 +140,7 @@ public:
 
 	void SetWaterEnabled(bool enabled);
 	void SetWaterParameters(const ICamera* camera, float waterY);
+	float GetWaterHeight() const;
 
 	void SetFullScreen(bool isFullScreen);
 	void SetOverdrawEnabled(bool isOverdrawEnabled);

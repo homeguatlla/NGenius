@@ -45,6 +45,12 @@ void Water::Build(RenderSystem* renderSystem)
 {
 	IMaterial* material = renderSystem->GetMaterial(mMaterialName);
 	Create(material);
+
+	//Setting the y of the water entity into the water position the renderer says.
+	//Remember that can only exist ONE water entity at moment
+	glm::vec3 position = GetTransformation()->GetPosition();
+	position.y = renderSystem->GetWaterHeight();
+	GetTransformation()->SetPosition(position);
 }
 
 void Water::ReadFrom(core::utils::IDeserializer* source)

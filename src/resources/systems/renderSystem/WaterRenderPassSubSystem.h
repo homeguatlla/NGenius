@@ -33,7 +33,9 @@ public:
 
 	void SetWaterParameters(const ICamera* gameplayCamera, float waterY);
 	void SetEnable(bool enable);
+	
 	bool IsEnabled() const;
+	float GetWaterHeight() const;
 
 	// Heredado vía ISerializable
 	virtual void ReadFrom(core::utils::IDeserializer* source) override;

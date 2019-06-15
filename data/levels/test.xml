@@ -256,7 +256,7 @@
 			</terrain>
 			<water is_enabled="true" material="water" wide="50" length="50">
 				<transformation>
-					<position X="4.000000" Y="5.400000" Z="4.500000"/>
+					<position X="4.000000" Y="0.000000" Z="4.500000"/>
 					<rotation X="-90.000000" Y="0.000000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>

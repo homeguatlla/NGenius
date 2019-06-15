@@ -80,6 +80,11 @@ bool WaterRenderPassSubSystem::IsEnabled() const
 	return mIsWaterEnabled;
 }
 
+float WaterRenderPassSubSystem::GetWaterHeight() const
+{
+	return mWaterY;
+}
+
 void WaterRenderPassSubSystem::SetWaterParameters(const ICamera* gameplayCamera, float waterY)
 {
 	assert(gameplayCamera != nullptr);
