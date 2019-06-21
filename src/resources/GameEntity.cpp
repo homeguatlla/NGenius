@@ -8,6 +8,7 @@
 #include "renderers/VerticesRenderer.h"
 #include "../utils/serializer/XMLSerializer.h"
 #include "../utils/serializer/IDeserializer.h"
+#include "InstantiableObject.h"
 
 unsigned GameEntity::IDCounter = 0;
 
@@ -140,8 +141,17 @@ void GameEntity::Build(RenderSystem* renderSystem)
 	IMaterial* material = renderSystem->GetMaterial(mMaterialName);
 	if (model != nullptr && material != nullptr)
 	{
-		//TODO hay que decidir el tipo de renderer
-		IRenderer* renderer = new VerticesRenderer(model, material);
+		IRenderer* renderer = nullptr;
+		if (!mRendererName.empty())
+		{
+			renderer = InstantiableObject::CreateRenderer(mRendererName, model, material);
+		}
+		else
+		{
+			//By default
+			renderer = new VerticesRenderer(model, material);
+		}
+		renderer->SetLayer(mRendererLayer);
 		SetRenderer(renderer);
 	}
 }
@@ -152,6 +162,7 @@ void GameEntity::ReadFrom(core::utils::IDeserializer* source)
 	source->ReadParameter("material", mMaterialName);
 	source->ReadParameter("renderer", mRendererName);
 	source->ReadParameter("is_enabled", &mIsEnabled);
+	source->ReadParameter("layer", &mRendererLayer);
 	mTransformation = new Transformation();
 	mTransformation->ReadFrom(source);
 }

@@ -2,6 +2,7 @@
 #include "InstantiableObject.h"
 
 std::map<std::string, IFactory*> InstantiableObject::mFactories;
+std::map<std::string, InstantiableObject::RendererCreatorFunction> InstantiableObject::mRenderersFactory;
 
 //TODO igual podríamos registrar una función statica de creación o algo así. Así, no tenemos que hacer un new Terrain por ejemplo y 
 //podemos mantener el constructor por defecto privado.
@@ -51,6 +52,18 @@ ICamera* InstantiableObject::CreateCamera(const std::string& name)
 	if (mFactories.find(name) != mFactories.end())
 	{
 		return mFactories[name]->CreateCamera();
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+IRenderer* InstantiableObject::CreateRenderer(const std::string& name, Model* model, IMaterial* material)
+{
+	if (mRenderersFactory.find(name) != mRenderersFactory.end())
+	{
+		return mRenderersFactory[name](model, material);
 	}
 	else
 	{

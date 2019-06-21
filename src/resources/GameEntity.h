@@ -25,9 +25,12 @@ class GameEntity : public core::utils::ISerializable, public IFactory
 	static unsigned int IDCounter;
 
 protected:
+	//To load an entity
 	std::string mModelName;
 	std::string mMaterialName;
 	std::string mRendererName;
+
+	int mRendererLayer;
 
 	virtual GameEntity* DoClone() const;
 

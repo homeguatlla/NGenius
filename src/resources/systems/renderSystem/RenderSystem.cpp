@@ -5,6 +5,8 @@
 
 #include "PostProcessSubSystem.h"
 
+#include "../../renderers/SkyBoxRenderer.h"
+
 #include "../../GameEntity.h"
 #include "../../camera/ICamera.h"
 #include "../../camera/PerspectiveCamera.h"
@@ -88,6 +90,8 @@ mNumberRenderers(0)
 
 	InstantiableObject::RegisterType("perspective_camera", new PerspectiveCamera());
 	InstantiableObject::RegisterType("orthogonal_camera", new OrthogonalCamera());
+
+	InstantiableObject::RegisterType<SkyBoxRenderer>();
 }
 
 RenderSystem::~RenderSystem()

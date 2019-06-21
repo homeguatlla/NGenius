@@ -169,7 +169,7 @@
 		</materials_library>
 		<cameras>
 			<camera name="gameplay_camera" fov="45" aspect_ratio="1.7" near_plane="0.1" far_plane="200">
-				<position X="25" Y="10" Z="25"/>
+				<position X="25" Y="15" Z="25"/>
 				<target X="0" Y="0" Z="0"/>
 				<up X="0" Y="1" Z="0"/>
 			</camera>
@@ -222,6 +222,12 @@
 								copy_x="0" copy_y="0" copy_width="1920" copy_height="1080"/>
 				</frame_buffers>
 			</render_pass>
+			<render_pass 	name = "particles_render_pass"
+							is_enabled = "true" camera_name="gameplay_camera" layer_mask="2"
+							add_after_post_processing="false"
+							has_to_calculate_distance_to_camera ="true"
+							is_fog_enabled = "true"
+							/>
 		</render_passes>
 	</renderer>
 	<game_scene name="mainScene">
@@ -261,6 +267,18 @@
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 			</water>
+			<entity is_enabled="true" model="skybox" material="skybox" renderer="SkyBoxRenderer" layer="2">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="100.0" Y="100.0" Z="100.0"/>
+				</transformation>
+				<components>
+					<component enabled="1" type="rotation_component" rotation_axis="" rotation_speed="0.01">
+						<axis X="0.0" Y="0.0" Z="0.0"/>
+					</component>
+				</components>
+			</entity>
 			<entity>
 				<transformation>
 					<position X="2.042026" Y="5.874854" Z="-5.824761"/>

@@ -6,7 +6,6 @@
 #include "../../AABB.h"
 #include "../Transformation.h"
 
-
 class ICamera;
 class GameEntity;
 class Texture;
@@ -63,7 +62,10 @@ public:
 
 	IMaterial* GetMaterial();
 	const IMaterial* GetMaterial() const;
+	void SetMaterial(IMaterial* material);
+
 	Model* GetModel();
+	void SetModel(Model* model);
 
 	bool HasTransformation() const;
 	void SetTransformation(Transformation& transformation);

@@ -20,7 +20,7 @@ GameScene::GameScene(const std::string& name) :
 mName(name),
 mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limits<float>::max()))
 {
-	//InstantiableObject::RegisterType("entity", new GameEntity());
+	InstantiableObject::RegisterType("entity", new GameEntity());
 	//InstantiableObject::RegisterType("player", new Player());
 	InstantiableObject::RegisterType("terrain", new Terrain());
 	InstantiableObject::RegisterType("water", new Water());
