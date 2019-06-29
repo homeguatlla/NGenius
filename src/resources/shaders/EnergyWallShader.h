@@ -18,7 +18,7 @@ public:
 
 	void GetAllUniformLocations();
 
-private:
-	IShaderProgram* CreateShader() override;
+	static std::string GetClassName() { return std::string("EnergyWallShader"); }
+	static IShaderProgram* Create() { return new EnergyWallShader(); }
 };
 

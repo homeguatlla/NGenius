@@ -88,10 +88,10 @@ mNumberRenderers(0)
 	BitNumber bit;
 	bit.Test();
 
-	InstantiableObject::RegisterType("perspective_camera", new PerspectiveCamera());
-	InstantiableObject::RegisterType("orthogonal_camera", new OrthogonalCamera());
+	InstantiableObject::RegisterCameraType<PerspectiveCamera>();
+	InstantiableObject::RegisterCameraType<OrthogonalCamera>();
 
-	InstantiableObject::RegisterType<SkyBoxRenderer>();
+	InstantiableObject::RegisterRendererType<SkyBoxRenderer>();
 }
 
 RenderSystem::~RenderSystem()
@@ -430,16 +430,18 @@ void RenderSystem::ReadCamerasFrom(core::utils::IDeserializer* source)
 
 void RenderSystem::ReadCameraFrom(core::utils::IDeserializer* source)
 {
+	//TODO esto no me termina de gustar. Veo una solución que es leer aquí los datos de la cámara, lo que tampoco es estupendo
+	//crear un constructor vacío y meter un Build dentro de la cámara, pero no me convence tampoco.
 	ICamera* camera;
 	float fov;
 	if (source->ReadParameter("fov", &fov))
 	{
-		camera = InstantiableObject::CreateCamera("perspective_camera");
+		camera = InstantiableObject::CreatePerspectiveCamera("PerspectiveCamera", fov, 0.0f, 0.0f, 0.0f);
 	}
 	else 
 	{
 		//orthogonal camera
-		camera = InstantiableObject::CreateCamera("orthogonal_camera");
+		camera = InstantiableObject::CreateOrthogonalCamera("OrthogonalCamera", 0.0f, 0.0f, 0.0f, 0.0f);
 	}
 
 	camera->ReadFrom(source);

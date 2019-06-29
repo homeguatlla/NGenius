@@ -61,8 +61,3 @@ void EnergyWallShader::GetAllUniformLocations()
 	mLocationScreenSize = GetUniformLocation(ATTRIBUTE_SCREEN_SIZE);
 	mLocationTimer = GetUniformLocation(ATTRIBUTE_TIMER);
 }
-
-IShaderProgram* EnergyWallShader::CreateShader()
-{
-	return new EnergyWallShader();
-}

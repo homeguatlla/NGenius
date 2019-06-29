@@ -1,8 +1,7 @@
 #pragma once
 #include "IShaderProgram.h"
-#include "../IFactory.h"
 
-class ModelShader :	public IShaderProgram, public IFactory
+class ModelShader :	public IShaderProgram
 {
 	static const std::string VERTEX_FILE;
 	static const std::string FRAGMENT_FILE;
@@ -17,6 +16,9 @@ public:
 	void BindAttributes();
 	void GetAllUniformLocations();
 
+	static std::string GetClassName() { return std::string("ModelShader"); }
+	static IShaderProgram* Create() { return new ModelShader(); }
+
 private:
 	int mLocationModelMatrix;
 	int mLocationViewMatrix;
@@ -27,7 +29,5 @@ private:
 	int mLocationTexture;
 	int mLocationTile;
 
-	// Heredado vía IFactory
-	virtual IShaderProgram* CreateShader() override;
 };
 

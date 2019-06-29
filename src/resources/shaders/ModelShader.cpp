@@ -73,8 +73,3 @@ void ModelShader::GetAllUniformLocations()
 	
 	mLocationTile = GetUniformLocation(ATTRIBUTE_TILE);
 }
-
-IShaderProgram * ModelShader::CreateShader()
-{
-	return new ModelShader();
-}

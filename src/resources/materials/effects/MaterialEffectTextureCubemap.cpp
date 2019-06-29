@@ -77,15 +77,6 @@ MaterialEffectTextureCubemap* MaterialEffectTextureCubemap::DoClone() const
 	return new MaterialEffectTextureCubemap(*this);
 }
 
-IMaterialEffect* MaterialEffectTextureCubemap::AddNewEffectToMaterial(IMaterial* material)
-{
-	MaterialEffectTextureCubemap* materialEffect = new MaterialEffectTextureCubemap();
-
-	material->AddEffect(materialEffect);
-
-	return materialEffect;
-}
-
 void MaterialEffectTextureCubemap::Build(TexturesLibrary* texturesLibrary)
 {
 	if (!mTexture1Name.empty())

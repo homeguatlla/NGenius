@@ -99,8 +99,3 @@ void TerrainShader::GetAllUniformLocations()
 	mLocationTile = GetUniformLocation(ATTRIBUTE_TILE);
 	mLocationScale = GetUniformLocation(ATTRIBUTE_SCALE);
 }
-
-IShaderProgram* TerrainShader::CreateShader()
-{
-	return new TerrainShader();
-}

@@ -1,8 +1,7 @@
 #pragma once
 #include "IShaderProgram.h"
-#include "../IFactory.h"
 
-class WaterShader :	public IShaderProgram, public IFactory
+class WaterShader :	public IShaderProgram
 {
 	static const std::string VERTEX_FILE;
 	static const std::string FRAGMENT_FILE;
@@ -30,7 +29,7 @@ public:
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
 
-private:
-	IShaderProgram* CreateShader() override;
+	static std::string GetClassName() { return std::string("WaterShader"); }
+	static IShaderProgram* Create() { return new WaterShader(); }
 };
 

@@ -50,15 +50,6 @@ MaterialEffectDepthTexture* MaterialEffectDepthTexture::DoClone() const
 	return new MaterialEffectDepthTexture(*this);
 }
 
-IMaterialEffect* MaterialEffectDepthTexture::AddNewEffectToMaterial(IMaterial* material)
-{
-	MaterialEffectDepthTexture* materialEffect = new MaterialEffectDepthTexture();
-
-	material->AddEffect(materialEffect);
-
-	return materialEffect;
-}
-
 void MaterialEffectDepthTexture::Build(TexturesLibrary* texturesLibrary)
 {
 	if (!mTextureName.empty())

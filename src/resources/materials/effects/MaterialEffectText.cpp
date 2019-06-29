@@ -89,15 +89,6 @@ MaterialEffectText* MaterialEffectText::DoClone() const
 	return new MaterialEffectText(*this);
 }
 
-IMaterialEffect* MaterialEffectText::AddNewEffectToMaterial(IMaterial* material)
-{
-	MaterialEffectText* materialEffect = new MaterialEffectText();
-
-	material->AddEffect(materialEffect);
-
-	return materialEffect;
-}
-
 void MaterialEffectText::ReadFrom(core::utils::IDeserializer * source)
 {
 }

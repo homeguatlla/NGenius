@@ -19,7 +19,8 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectTextureArray* DoClone() const override;
-	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+	static std::string GetClassName() { return std::string("MaterialEffectTextureArray"); }
+	static IMaterialEffect* Create() { return new MaterialEffectTextureArray(); }
 
 	void Build(TexturesLibrary* texturesLibrary) override;
 

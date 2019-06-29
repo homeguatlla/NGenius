@@ -1,11 +1,11 @@
 #pragma once
-#include "../IFactory.h"
 #include "../../utils/serializer/ISerializable.h"
+#include <string>
 
 class IMaterial;
 class TexturesLibrary;
 
-class IMaterialEffect : public core::utils::ISerializable, public IFactory
+class IMaterialEffect : public core::utils::ISerializable
 {
 protected:
 	IMaterial * mParent;

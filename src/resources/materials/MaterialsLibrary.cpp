@@ -43,25 +43,25 @@ MaterialsLibrary::MaterialsLibrary(TexturesLibrary* texturesLibrary, ShadersLibr
 	mTexturesLibrary(texturesLibrary),
 	mShadersLibrary(shadersLibrary)
 {
-	InstantiableObject::RegisterType("effect_normal_texture", new MaterialEffectNormalTexture());
-	InstantiableObject::RegisterType("effect_diffuse_texture", new MaterialEffectDiffuseTexture());
-	InstantiableObject::RegisterType("effect_directional_light_properties", new MaterialEffectDirectionalLightProperties());
-	InstantiableObject::RegisterType("effect_clipping_plane", new MaterialEffectClippingPlane());
-	InstantiableObject::RegisterType("effect_depth_texture", new MaterialEffectDepthTexture());
-	InstantiableObject::RegisterType("effect_float", new MaterialEffectFloat());
-	InstantiableObject::RegisterType("effect_float2", new MaterialEffectFloat2());
-	InstantiableObject::RegisterType("effect_float3", new MaterialEffectFloat3());
-	InstantiableObject::RegisterType("effect_float4", new MaterialEffectFloat4());
-	InstantiableObject::RegisterType("effect_float3_array", new MaterialEffectFloat3Array());
-	InstantiableObject::RegisterType("effect_fog_properties", new MaterialEffectFogProperties());
-	InstantiableObject::RegisterType("effect_heightmap_texture", new MaterialEffectHeightMapTexture());
-	InstantiableObject::RegisterType("effect_matrix_array", new MaterialEffectMatrix4Array());
-	InstantiableObject::RegisterType("effect_particle", new MaterialEffectParticle());
-	InstantiableObject::RegisterType("effect_shadow_properties", new MaterialEffectShadowProperties());
-	InstantiableObject::RegisterType("effect_text", new MaterialEffectText());
-	InstantiableObject::RegisterType("effect_texture_array", new MaterialEffectTextureArray());
-	InstantiableObject::RegisterType("effect_texture_cubemap", new MaterialEffectTextureCubemap());
-	InstantiableObject::RegisterType("effect_water", new MaterialEffectWater());
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectNormalTexture>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectDiffuseTexture>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectDirectionalLightProperties>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectClippingPlane>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectDepthTexture>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectFloat>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectFloat2>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectFloat3>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectFloat4>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectFloat3Array>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectFogProperties>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectHeightMapTexture>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectMatrix4Array>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectParticle>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectShadowProperties>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectText>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectTextureArray>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectTextureCubemap>();
+	InstantiableObject::RegisterMaterialEffectType<MaterialEffectWater>();
 }
 
 IMaterial* MaterialsLibrary::CreateMaterial(const std::string& name, IShaderProgram* shader)
@@ -76,13 +76,13 @@ IMaterial* MaterialsLibrary::CreateMaterial(const std::string& name, IShaderProg
 
 void MaterialsLibrary::Load()
 {
-	CreateMaterial(OVERDRAW_MATERIAL_NAME, mShadersLibrary->GetElement("s_overdraw"));
-	CreateMaterial(WIREFRAME_MATERIAL_NAME, mShadersLibrary->GetElement("s_default"));
-	CreateMaterial(QUADTREE_MATERIAL_NAME, mShadersLibrary->GetElement("s_default"));
-	CreateMaterial(MODEL_MATERIAL_NAME, mShadersLibrary->GetElement("s_normalmap"));
-	CreateMaterial(TEXT_MATERIAL_NAME, mShadersLibrary->GetElement("s_text"));
-	CreateMaterial(TEXT3D_MATERIAL_NAME, mShadersLibrary->GetElement("s_text"));
-	CreateMaterial(GUI_MATERIAL_NAME, mShadersLibrary->GetElement("s_gui"));
+	CreateMaterial(OVERDRAW_MATERIAL_NAME, mShadersLibrary->GetElement("OverdrawShader"));
+	CreateMaterial(WIREFRAME_MATERIAL_NAME, mShadersLibrary->GetElement("DefaultShader"));
+	CreateMaterial(QUADTREE_MATERIAL_NAME, mShadersLibrary->GetElement("DefaultShader"));
+	CreateMaterial(MODEL_MATERIAL_NAME, mShadersLibrary->GetElement("NormalMapShader"));
+	CreateMaterial(TEXT_MATERIAL_NAME, mShadersLibrary->GetElement("TextShader"));
+	CreateMaterial(TEXT3D_MATERIAL_NAME, mShadersLibrary->GetElement("TextShader"));
+	CreateMaterial(GUI_MATERIAL_NAME, mShadersLibrary->GetElement("GUIShader"));
 }
 
 void MaterialsLibrary::Build()
@@ -154,7 +154,7 @@ void MaterialsLibrary::ReadMaterialEffects(IMaterial* material, core::utils::IDe
 		bool found = source->ReadParameter("name", effectName);
 		if (found)
 		{
-			IMaterialEffect* materialEffect = InstantiableObject::AddNewEffectToMaterial(effectName, material);
+			IMaterialEffect* materialEffect = InstantiableObject::CreateMaterialEffect(effectName, material);
 			if (materialEffect != nullptr)
 			{
 				materialEffect->ReadFrom(source);

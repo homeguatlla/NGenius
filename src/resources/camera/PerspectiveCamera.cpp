@@ -77,11 +77,6 @@ AABB PerspectiveCamera::GetAABB() const
 	return aabb;
 }
 
-ICamera* PerspectiveCamera::CreateCamera()
-{
-	return new PerspectiveCamera();
-}
-
 void PerspectiveCamera::ReadFrom(core::utils::IDeserializer* source)
 {
 	ICamera::ReadFrom(source);

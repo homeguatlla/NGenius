@@ -18,7 +18,7 @@ public:
 	void BindAttributes();
 	void GetAllUniformLocations();
 
-	// Heredado vía IFactory
-	IShaderProgram* CreateShader() override;
+	static std::string GetClassName() { return std::string("AnimatedModelShader"); }
+	static IShaderProgram* Create() { return new AnimatedModelShader(); }
 };
 

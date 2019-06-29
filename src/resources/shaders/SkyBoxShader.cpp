@@ -64,8 +64,3 @@ void SkyBoxShader::GetAllUniformLocations()
 	mLocationCubemap2Texture = GetUniformLocation(ATTRIBUTE_CUBEMAP2_TEXTURE);
 	mLocationBlendFactor = GetUniformLocation(ATTRIBUTE_BLENDER_FACTOR);
 }
-
-IShaderProgram* SkyBoxShader::CreateShader()
-{
-	return new SkyBoxShader();
-}

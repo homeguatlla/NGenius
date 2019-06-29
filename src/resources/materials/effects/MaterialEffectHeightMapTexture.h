@@ -21,7 +21,8 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectHeightMapTexture* DoClone() const override;
-	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+	static std::string GetClassName() { return std::string("MaterialEffectHeightMapTexture"); }
+	static IMaterialEffect* Create() { return new MaterialEffectHeightMapTexture(); }
 
 	void Build(TexturesLibrary* texturesLibrary) override;
 

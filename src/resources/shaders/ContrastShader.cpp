@@ -43,8 +43,3 @@ void ContrastShader::GetAllUniformLocations()
 	mLocationTexture = GetUniformLocation(ATTRIBUTE_TEXTURE);
 	mLocationContrast = GetUniformLocation(ATTRIBUTE_CONTRAST);
 }
-
-IShaderProgram* ContrastShader::CreateShader()
-{
-	return new ContrastShader();
-}

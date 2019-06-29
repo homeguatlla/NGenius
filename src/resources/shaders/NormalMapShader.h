@@ -18,7 +18,7 @@ public:
 	void BindAttributes();
 	void GetAllUniformLocations();
 
-private:
-	IShaderProgram* CreateShader() override;
+	static std::string GetClassName() { return std::string("NormalMapShader"); }
+	static IShaderProgram* Create() { return new NormalMapShader(); }
 };
 

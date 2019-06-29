@@ -36,11 +36,6 @@ AABB OrthogonalCamera::GetAABB() const
 	return aabb;
 }
 
-ICamera* OrthogonalCamera::CreateCamera()
-{
-	return new OrthogonalCamera();
-}
-
 void OrthogonalCamera::ReadFrom(core::utils::IDeserializer* source)
 {
 	ICamera::ReadFrom(source);

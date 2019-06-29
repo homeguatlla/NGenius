@@ -21,7 +21,8 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectDepthTexture* DoClone() const override;
-	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+	static std::string GetClassName() { return std::string("MaterialEffectDepthTexture"); }
+	static IMaterialEffect* Create() { return new MaterialEffectDepthTexture(); }
 	void Build(TexturesLibrary* texturesLibrary) override;
 
 	// Heredado vía IMaterialEffect

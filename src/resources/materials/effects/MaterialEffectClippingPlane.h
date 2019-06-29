@@ -17,7 +17,8 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectClippingPlane* DoClone() const override;
-	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+	static std::string GetClassName() { return std::string("MaterialEffectClippingPlane"); }
+	static IMaterialEffect* Create() { return new MaterialEffectClippingPlane(); }
 
 	// Heredado vía IMaterialEffect
 	void ReadFrom(core::utils::IDeserializer * source) override;

@@ -19,7 +19,8 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectDirectionalLightProperties* DoClone() const override;
-	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+	static std::string GetClassName() { return std::string("MaterialEffectDirectionalLightProperties"); }
+	static IMaterialEffect* Create() { return new MaterialEffectDirectionalLightProperties(); }
 
 	// Heredado vía IMaterialEffect
 	void ReadFrom(core::utils::IDeserializer * source) override;

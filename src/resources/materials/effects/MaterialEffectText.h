@@ -30,7 +30,8 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectText* DoClone() const override;
-	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+	static std::string GetClassName() { return std::string("MaterialEffectText"); }
+	static IMaterialEffect* Create() { return new MaterialEffectText(); }
 
 	// Heredado vía IMaterialEffect
 	void ReadFrom(core::utils::IDeserializer * source) override;

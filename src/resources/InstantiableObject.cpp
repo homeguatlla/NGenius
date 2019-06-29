@@ -3,31 +3,20 @@
 
 std::map<std::string, IFactory*> InstantiableObject::mFactories;
 std::map<std::string, InstantiableObject::RendererCreatorFunction> InstantiableObject::mRenderersFactory;
+std::map<std::string, InstantiableObject::CameraCreatorFunction> InstantiableObject::mCamerasFactory;
+std::map<std::string, InstantiableObject::ShaderCreatorFunction> InstantiableObject::mShadersFactory;
+std::map < std::string, InstantiableObject::MaterialEffectCreatorFunction> InstantiableObject::mMaterialEffectFactory;
 
-//TODO igual podríamos registrar una función statica de creación o algo así. Así, no tenemos que hacer un new Terrain por ejemplo y 
-//podemos mantener el constructor por defecto privado.
 void InstantiableObject::RegisterType(const std::string& name, IFactory* factory)
 {
 	mFactories[name] = factory;
 }
 
-IShaderProgram* InstantiableObject::CreateShader(const std::string& name)
+IMaterialEffect* InstantiableObject::CreateMaterialEffect(const std::string& name, IMaterial* material)
 {
-	if (mFactories.find(name) != mFactories.end())
+	if (mMaterialEffectFactory.find(name) != mMaterialEffectFactory.end())
 	{
-		return mFactories[name]->CreateShader();
-	}
-	else
-	{
-		return nullptr;
-	}
-}
-
-IMaterialEffect* InstantiableObject::AddNewEffectToMaterial(const std::string& name, IMaterial* material)
-{
-	if (mFactories.find(name) != mFactories.end())
-	{
-		return mFactories[name]->AddNewEffectToMaterial(material);
+		return mMaterialEffectFactory[name](material);
 	}
 	else
 	{
@@ -47,11 +36,23 @@ GameEntity* InstantiableObject::CreateEntity(const std::string& name)
 	}
 }
 
-ICamera* InstantiableObject::CreateCamera(const std::string& name)
+ICamera* InstantiableObject::CreateOrthogonalCamera(const std::string& name, float screenWidth, float screenHeight, float nearPlane, float farPlane)
 {
-	if (mFactories.find(name) != mFactories.end())
+	if (mCamerasFactory.find(name) != mCamerasFactory.end())
 	{
-		return mFactories[name]->CreateCamera();
+		return mCamerasFactory[name](name, screenWidth, screenHeight, nearPlane, farPlane);
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+ICamera* InstantiableObject::CreatePerspectiveCamera(const std::string& name, float fov, float aspectRatio, float nearPlane, float farPlane)
+{
+	if (mCamerasFactory.find(name) != mCamerasFactory.end())
+	{
+		return mCamerasFactory[name](name, fov, aspectRatio, nearPlane, farPlane);
 	}
 	else
 	{
@@ -64,6 +65,18 @@ IRenderer* InstantiableObject::CreateRenderer(const std::string& name, Model* mo
 	if (mRenderersFactory.find(name) != mRenderersFactory.end())
 	{
 		return mRenderersFactory[name](model, material);
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+IShaderProgram* InstantiableObject::CreateShader(const std::string& name)
+{
+	if (mShadersFactory.find(name) != mShadersFactory.end())
+	{
+		return mShadersFactory[name]();
 	}
 	else
 	{

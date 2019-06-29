@@ -43,8 +43,3 @@ void BrightShader::GetAllUniformLocations()
 	mLocationTexture = GetUniformLocation(ATTRIBUTE_TEXTURE);
 	mLocationBright = GetUniformLocation(ATTRIBUTE_BRIGHT);
 }
-
-IShaderProgram* BrightShader::CreateShader()
-{
-	return new BrightShader();
-}

@@ -40,7 +40,8 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectWater* DoClone() const override;
-	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+	static std::string GetClassName() { return std::string("MaterialEffectWater"); }
+	static IMaterialEffect* Create() { return new MaterialEffectWater(); }
 	void Build(TexturesLibrary* texturesLibrary) override;
 
 	// Heredado vía IMaterialEffect

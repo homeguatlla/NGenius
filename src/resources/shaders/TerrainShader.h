@@ -1,8 +1,7 @@
 #pragma once
 #include "IShaderProgram.h"
-#include "../IFactory.h"
 
-class TerrainShader : public IShaderProgram, public IFactory
+class TerrainShader : public IShaderProgram
 {
 	static const std::string VERTEX_FILE;
 	static const std::string FRAGMENT_FILE;
@@ -16,8 +15,8 @@ public:
 	void BindAttributes();
 	void GetAllUniformLocations();
 
-private:
-	IShaderProgram* CreateShader() override;
+	static std::string GetClassName() { return std::string("TerrainShader"); }
+	static IShaderProgram* Create() { return new TerrainShader(); }
 
 private:
 	int mLocationMVPMatrix;

@@ -72,12 +72,3 @@ void MaterialEffectNormalTexture::ReadFrom(core::utils::IDeserializer * source)
 void MaterialEffectNormalTexture::WriteTo(core::utils::ISerializer * destination)
 {
 }
-
-IMaterialEffect* MaterialEffectNormalTexture::AddNewEffectToMaterial(IMaterial* material)
-{
-	MaterialEffectNormalTexture* materialEffect = new MaterialEffectNormalTexture();
-
-	material->AddEffect(materialEffect);
-
-	return materialEffect;
-}

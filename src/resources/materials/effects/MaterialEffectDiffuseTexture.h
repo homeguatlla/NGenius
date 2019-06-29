@@ -25,7 +25,8 @@ public:
 	void SetTile(float tile);
 
 	void CopyValuesFrom(IMaterial* material) override;
-	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+	static std::string GetClassName() { return std::string("MaterialEffectDiffuseTexture"); }
+	static IMaterialEffect* Create() { return new MaterialEffectDiffuseTexture(); }
 	void Build(TexturesLibrary* texturesLibrary) override;
 
 	MaterialEffectDiffuseTexture* DoClone() const override;

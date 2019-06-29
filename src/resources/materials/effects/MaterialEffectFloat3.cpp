@@ -41,15 +41,6 @@ MaterialEffectFloat3* MaterialEffectFloat3::DoClone() const
 	return new MaterialEffectFloat3(*this);
 }
 
-IMaterialEffect* MaterialEffectFloat3::AddNewEffectToMaterial(IMaterial* material)
-{
-	MaterialEffectFloat3* materialEffect = new MaterialEffectFloat3();
-
-	material->AddEffect(materialEffect);
-
-	return materialEffect;
-}
-
 void MaterialEffectFloat3::ReadFrom(core::utils::IDeserializer * source)
 {
 	source->ReadParameter("values", mValue);

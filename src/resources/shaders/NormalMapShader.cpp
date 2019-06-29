@@ -44,8 +44,3 @@ void NormalMapShader::GetAllUniformLocations()
 	mLocationTangent = GetAttributeLocation(ATTRIBUTE_VERTEX_TANGENT);
 	mLocationNormalmapTexture = GetUniformLocation(ATTRIBUTE_NORMALMAP_TEXTURE);
 }
-
-IShaderProgram* NormalMapShader::CreateShader()
-{
-	return new NormalMapShader();
-}

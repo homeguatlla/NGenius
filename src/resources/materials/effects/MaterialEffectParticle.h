@@ -29,7 +29,8 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectParticle* DoClone() const override;
-	IMaterialEffect* AddNewEffectToMaterial(IMaterial* material) override;
+	static std::string GetClassName() { return std::string("MaterialEffectParticle"); }
+	static IMaterialEffect* Create() { return new MaterialEffectParticle(); }
 	void Build(TexturesLibrary* texturesLibrary) override;
 
 	// Heredado vía IMaterialEffect

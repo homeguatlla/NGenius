@@ -3,14 +3,18 @@
 class OrthogonalCamera : public ICamera
 {
 public:
-	OrthogonalCamera() = default;
 	explicit OrthogonalCamera(std::string name, float screenWidth, float screenHeight, float nearPlane, float farPlane);
 	~OrthogonalCamera();
 	AABB GetAABB() const override;
-	ICamera* CreateCamera() override;
 
 	// Heredado vía ISerializable
 	void ReadFrom(core::utils::IDeserializer* source) override;
+
+	static std::string GetClassName() { return std::string("OrthogonalCamera"); }
+	static ICamera* Create(std::string name, float screenWidth, float screenHeight, float nearPlane, float farPlane)
+	{
+		return new OrthogonalCamera(name, screenWidth, screenHeight, nearPlane, farPlane);
+	}
 
 private:
 	void Initialize();
