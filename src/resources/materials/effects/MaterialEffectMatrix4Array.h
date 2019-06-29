@@ -19,7 +19,7 @@ public:
 
 	MaterialEffectMatrix4Array* DoClone() const override;
 	static std::string GetClassName() { return std::string("MaterialEffectMatrix4Array"); }
-	static IMaterialEffect* Create() { return new MaterialEffectMatrix4Array(); }
+	static IMaterialEffect* Create(IMaterial* material);
 
 	// Heredado vía IMaterialEffect
 	void ReadFrom(core::utils::IDeserializer * source) override;

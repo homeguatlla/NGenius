@@ -23,7 +23,7 @@ public:
 
 	MaterialEffectFogProperties* DoClone() const override;
 	static std::string GetClassName() { return std::string("MaterialEffectFogProperties"); }
-	static IMaterialEffect* Create() { return new MaterialEffectFogProperties(); }
+	static IMaterialEffect* Create(IMaterial* material);
 
 	// Heredado vía IMaterialEffect
 	void ReadFrom(core::utils::IDeserializer * source) override;

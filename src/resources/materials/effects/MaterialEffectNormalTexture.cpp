@@ -63,6 +63,13 @@ MaterialEffectNormalTexture* MaterialEffectNormalTexture::DoClone() const
 	return new MaterialEffectNormalTexture(*this);
 }
 
+IMaterialEffect* MaterialEffectNormalTexture::Create(IMaterial* material)
+{
+	MaterialEffectNormalTexture* effect = new MaterialEffectNormalTexture();
+	material->AddEffect(effect);
+	return effect;
+}
+
 void MaterialEffectNormalTexture::ReadFrom(core::utils::IDeserializer * source)
 {
 	source->ReadParameter("texture", mTextureName);

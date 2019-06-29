@@ -31,7 +31,7 @@ public:
 
 	MaterialEffectText* DoClone() const override;
 	static std::string GetClassName() { return std::string("MaterialEffectText"); }
-	static IMaterialEffect* Create() { return new MaterialEffectText(); }
+	static IMaterialEffect* Create(IMaterial* material);
 
 	// Heredado vía IMaterialEffect
 	void ReadFrom(core::utils::IDeserializer * source) override;

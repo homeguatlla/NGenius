@@ -53,6 +53,13 @@ MaterialEffectShadowProperties* MaterialEffectShadowProperties::DoClone() const
 	return new MaterialEffectShadowProperties(*this);
 }
 
+IMaterialEffect* MaterialEffectShadowProperties::Create(IMaterial* material)
+{
+	MaterialEffectShadowProperties* effect = new MaterialEffectShadowProperties();
+	material->AddEffect(effect);
+	return effect;
+}
+
 void MaterialEffectShadowProperties::ReadFrom(core::utils::IDeserializer *source)
 {
 	source->ReadParameter("pfc_counter", &mPFCCounter);

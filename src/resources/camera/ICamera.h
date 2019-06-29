@@ -5,9 +5,8 @@
 #include "../../AABB.h"
 #include "../../Frustum.h"
 #include "../../utils/serializer/ISerializable.h"
-#include "../IFactory.h"
 
-class ICamera : public core::utils::ISerializable, public IFactory
+class ICamera : public core::utils::ISerializable
 {
 public:
 	virtual ~ICamera();

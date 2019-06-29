@@ -50,6 +50,13 @@ MaterialEffectHeightMapTexture* MaterialEffectHeightMapTexture::DoClone() const
 	return new MaterialEffectHeightMapTexture(*this);
 }
 
+IMaterialEffect* MaterialEffectHeightMapTexture::Create(IMaterial* material)
+{
+	MaterialEffectHeightMapTexture* effect = new MaterialEffectHeightMapTexture();
+	material->AddEffect(effect);
+	return effect;
+}
+
 void MaterialEffectHeightMapTexture::Build(TexturesLibrary* texturesLibrary)
 {
 	if (!mTextureName.empty())

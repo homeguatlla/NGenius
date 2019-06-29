@@ -20,7 +20,7 @@ public:
 
 	MaterialEffectDirectionalLightProperties* DoClone() const override;
 	static std::string GetClassName() { return std::string("MaterialEffectDirectionalLightProperties"); }
-	static IMaterialEffect* Create() { return new MaterialEffectDirectionalLightProperties(); }
+	static IMaterialEffect* Create(IMaterial* material);
 
 	// Heredado vía IMaterialEffect
 	void ReadFrom(core::utils::IDeserializer * source) override;

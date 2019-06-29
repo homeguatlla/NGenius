@@ -22,7 +22,7 @@ public:
 
 	MaterialEffectDepthTexture* DoClone() const override;
 	static std::string GetClassName() { return std::string("MaterialEffectDepthTexture"); }
-	static IMaterialEffect* Create() { return new MaterialEffectDepthTexture(); }
+	static IMaterialEffect* Create(IMaterial* material);
 	void Build(TexturesLibrary* texturesLibrary) override;
 
 	// Heredado vía IMaterialEffect

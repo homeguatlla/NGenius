@@ -19,11 +19,12 @@ private:
 	using CameraCreatorFunction = std::function<ICamera* (const std::string& name, float, float, float, float)>;
 	using ShaderCreatorFunction = std::function<IShaderProgram* ()>;
 	using MaterialEffectCreatorFunction = std::function<IMaterialEffect* (IMaterial*)>;
+
 	public:
 		template<class T>
 		static void RegisterMaterialEffectType()
 		{
-			mMaterialEffectFactory[T::GetClassName()] = std::bind<IMaterialEffect*>(&T::Create);
+			mMaterialEffectFactory[T::GetClassName()] = std::bind<IMaterialEffect*>(&T::Create, std::placeholders::_1);
 		}
 
 		template<class T>

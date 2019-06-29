@@ -64,6 +64,13 @@ MaterialEffectParticle* MaterialEffectParticle::DoClone() const
 	return new MaterialEffectParticle(*this);
 }
 
+IMaterialEffect* MaterialEffectParticle::Create(IMaterial* material)
+{
+	MaterialEffectParticle* effect = new MaterialEffectParticle();
+	material->AddEffect(effect);
+	return effect;
+}
+
 void MaterialEffectParticle::Build(TexturesLibrary* texturesLibrary)
 {
 	mTexture = texturesLibrary->GetElement(mTextureName);

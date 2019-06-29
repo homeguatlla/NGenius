@@ -20,7 +20,7 @@ public:
 
 	MaterialEffectTextureArray* DoClone() const override;
 	static std::string GetClassName() { return std::string("MaterialEffectTextureArray"); }
-	static IMaterialEffect* Create() { return new MaterialEffectTextureArray(); }
+	static IMaterialEffect* Create(IMaterial* material);
 
 	void Build(TexturesLibrary* texturesLibrary) override;
 

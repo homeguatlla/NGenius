@@ -36,6 +36,13 @@ MaterialEffectClippingPlane* MaterialEffectClippingPlane::DoClone() const
 	return new MaterialEffectClippingPlane(*this);
 }
 
+IMaterialEffect* MaterialEffectClippingPlane::Create(IMaterial* material)
+{
+	MaterialEffectClippingPlane* effect = new MaterialEffectClippingPlane();
+	material->AddEffect(effect);
+	return effect;
+}
+
 void MaterialEffectClippingPlane::ReadFrom(core::utils::IDeserializer * source)
 {
 }

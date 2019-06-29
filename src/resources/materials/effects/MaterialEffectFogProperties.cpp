@@ -52,6 +52,13 @@ MaterialEffectFogProperties* MaterialEffectFogProperties::DoClone() const
 	return new MaterialEffectFogProperties(*this);
 }
 
+IMaterialEffect* MaterialEffectFogProperties::Create(IMaterial* material)
+{
+	MaterialEffectFogProperties* effect = new MaterialEffectFogProperties();
+	material->AddEffect(effect);
+	return effect;
+}
+
 void MaterialEffectFogProperties::ReadFrom(core::utils::IDeserializer * source)
 {
 }

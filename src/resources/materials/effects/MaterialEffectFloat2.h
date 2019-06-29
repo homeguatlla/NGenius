@@ -19,7 +19,7 @@ public:
 
 	MaterialEffectFloat2* DoClone() const override;
 	static std::string GetClassName() { return std::string("MaterialEffectFloat2"); }
-	static IMaterialEffect* Create() { return new MaterialEffectFloat2(); }
+	static IMaterialEffect* Create(IMaterial* material);
 
 	// Heredado vía IMaterialEffect
 	void ReadFrom(core::utils::IDeserializer * source) override;

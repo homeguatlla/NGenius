@@ -41,6 +41,13 @@ MaterialEffectMatrix4Array* MaterialEffectMatrix4Array::DoClone() const
 	return new MaterialEffectMatrix4Array(*this);
 }
 
+IMaterialEffect* MaterialEffectMatrix4Array::Create(IMaterial* material)
+{
+	MaterialEffectMatrix4Array* effect = new MaterialEffectMatrix4Array();
+	material->AddEffect(effect);
+	return effect;
+}
+
 void MaterialEffectMatrix4Array::ReadFrom(core::utils::IDeserializer * source)
 {
 }

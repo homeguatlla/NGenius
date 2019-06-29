@@ -18,7 +18,7 @@ public:
 
 	MaterialEffectClippingPlane* DoClone() const override;
 	static std::string GetClassName() { return std::string("MaterialEffectClippingPlane"); }
-	static IMaterialEffect* Create() { return new MaterialEffectClippingPlane(); }
+	static IMaterialEffect* Create(IMaterial* material);
 
 	// Heredado vía IMaterialEffect
 	void ReadFrom(core::utils::IDeserializer * source) override;

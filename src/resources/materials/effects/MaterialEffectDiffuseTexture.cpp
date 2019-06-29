@@ -67,6 +67,13 @@ void MaterialEffectDiffuseTexture::CopyValuesFrom(IMaterial* material)
 	}
 }
 
+IMaterialEffect* MaterialEffectDiffuseTexture::Create(IMaterial* material)
+{
+	MaterialEffectDiffuseTexture* effect = new MaterialEffectDiffuseTexture();
+	material->AddEffect(effect);
+	return effect;
+}
+
 void MaterialEffectDiffuseTexture::Build(TexturesLibrary* texturesLibrary)
 {
 	if (!mTextureName.empty())

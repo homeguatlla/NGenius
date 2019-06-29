@@ -30,7 +30,7 @@ public:
 
 	MaterialEffectParticle* DoClone() const override;
 	static std::string GetClassName() { return std::string("MaterialEffectParticle"); }
-	static IMaterialEffect* Create() { return new MaterialEffectParticle(); }
+	static IMaterialEffect* Create(IMaterial* material);
 	void Build(TexturesLibrary* texturesLibrary) override;
 
 	// Heredado vía IMaterialEffect

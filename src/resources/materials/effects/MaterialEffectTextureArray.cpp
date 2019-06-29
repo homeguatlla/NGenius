@@ -42,6 +42,13 @@ MaterialEffectTextureArray* MaterialEffectTextureArray::DoClone() const
 	return new MaterialEffectTextureArray(*this);
 }
 
+IMaterialEffect* MaterialEffectTextureArray::Create(IMaterial* material)
+{
+	MaterialEffectTextureArray* effect = new MaterialEffectTextureArray();
+	material->AddEffect(effect);
+	return effect;
+}
+
 void MaterialEffectTextureArray::Build(TexturesLibrary* texturesLibrary)
 {
 	if (!mTextureName.empty())

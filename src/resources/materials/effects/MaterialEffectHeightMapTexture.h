@@ -22,7 +22,7 @@ public:
 
 	MaterialEffectHeightMapTexture* DoClone() const override;
 	static std::string GetClassName() { return std::string("MaterialEffectHeightMapTexture"); }
-	static IMaterialEffect* Create() { return new MaterialEffectHeightMapTexture(); }
+	static IMaterialEffect* Create(IMaterial* material);
 
 	void Build(TexturesLibrary* texturesLibrary) override;
 

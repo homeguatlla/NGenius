@@ -45,6 +45,13 @@ MaterialEffectDirectionalLightProperties* MaterialEffectDirectionalLightProperti
 	return new MaterialEffectDirectionalLightProperties(*this);
 }
 
+IMaterialEffect* MaterialEffectDirectionalLightProperties::Create(IMaterial* material)
+{
+	MaterialEffectDirectionalLightProperties* effect = new MaterialEffectDirectionalLightProperties();
+	material->AddEffect(effect);
+	return effect;
+}
+
 void MaterialEffectDirectionalLightProperties::ReadFrom(core::utils::IDeserializer * source)
 {
 }

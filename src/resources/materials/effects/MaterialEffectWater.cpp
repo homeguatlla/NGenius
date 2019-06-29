@@ -92,6 +92,13 @@ MaterialEffectWater* MaterialEffectWater::DoClone() const
 	return new MaterialEffectWater(*this);
 }
 
+IMaterialEffect* MaterialEffectWater::Create(IMaterial* material)
+{
+	MaterialEffectWater* effect = new MaterialEffectWater();
+	material->AddEffect(effect);
+	return effect;
+}
+
 void MaterialEffectWater::Build(TexturesLibrary* texturesLibrary)
 {
 	if (!mReflectionTextureName.empty())

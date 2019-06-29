@@ -39,6 +39,13 @@ MaterialEffectFloat3Array* MaterialEffectFloat3Array::DoClone() const
 	return new MaterialEffectFloat3Array(*this);
 }
 
+IMaterialEffect* MaterialEffectFloat3Array::Create(IMaterial* material)
+{
+	MaterialEffectFloat3Array* effect = new MaterialEffectFloat3Array();
+	material->AddEffect(effect);
+	return effect;
+}
+
 void MaterialEffectFloat3Array::ReadFrom(core::utils::IDeserializer * source)
 {
 }

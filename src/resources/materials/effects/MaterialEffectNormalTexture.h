@@ -25,7 +25,7 @@ public:
 	MaterialEffectNormalTexture* DoClone() const override;
 
 	static std::string GetClassName() { return std::string("MaterialEffectNormalTexture"); }
-	static IMaterialEffect* Create() { return new MaterialEffectNormalTexture(); }
+	static IMaterialEffect* Create(IMaterial* material);
 
 	// Heredado vía ISerializable
 	virtual void ReadFrom(core::utils::IDeserializer * source) override;

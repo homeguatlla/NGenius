@@ -41,7 +41,7 @@ public:
 
 	MaterialEffectWater* DoClone() const override;
 	static std::string GetClassName() { return std::string("MaterialEffectWater"); }
-	static IMaterialEffect* Create() { return new MaterialEffectWater(); }
+	static IMaterialEffect* Create(IMaterial* material);
 	void Build(TexturesLibrary* texturesLibrary) override;
 
 	// Heredado vía IMaterialEffect
