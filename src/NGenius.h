@@ -3,10 +3,13 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <memory>
 #include <glm/glm.hpp>
 #include "visitor/BaseVisitable.h"
 #include "AABB.h"
+#include "FSMContext.h"
 #include "utils/serializer/ISerializable.h"
+#include "utils/fsm/StatesMachine.h"
 #include "resources/scene/GameScene.h"
 
 class RenderSystem;
@@ -58,6 +61,10 @@ class NGenius : public core::utils::ISerializable, BaseVisitable<>
 	InputHandler* mInputHandler;
 	Statistics* mStatistics;
 	GameScene mGameScene;
+
+	std::unique_ptr<core::utils::FSM::StatesMachine<int, FSMContext>> mStatesMachine;
+	std::shared_ptr<FSMContext> mFSMContext;
+
 	std::string mApplicationName;
 	float mNumberFPS;
 	bool mIsSpacePartitionEnabled;
@@ -152,6 +159,8 @@ private:
 	void Render();
 
 	void AddListenersToGameScene();
+
+	void CreateStatesMachine();
 
 	// Heredado vía ISerializable
 	void ReadFrom(core::utils::IDeserializer* source) override;

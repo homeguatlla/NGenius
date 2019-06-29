@@ -214,6 +214,9 @@
     <Filter Include="Header Files\utils\serializer">
       <UniqueIdentifier>{23af9e1f-ba6b-4fa8-930a-c818be5361bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\utils\fsm">
+      <UniqueIdentifier>{2b9d4ee6-ef32-449e-bd1d-eaec16a05966}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -780,6 +783,24 @@
     <ClInclude Include="src\resources\InstantiableObject.h">
       <Filter>Header Files\resources</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\fsm\BaseState.h">
+      <Filter>Header Files\utils\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fsm\BaseTransition.h">
+      <Filter>Header Files\utils\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fsm\IState.h">
+      <Filter>Header Files\utils\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fsm\ITransition.h">
+      <Filter>Header Files\utils\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fsm\StatesMachine.h">
+      <Filter>Header Files\utils\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FSMContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1306,6 +1327,9 @@
     </ClCompile>
     <ClCompile Include="src\resources\InstantiableObject.cpp">
       <Filter>Source Files\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FSMContext.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

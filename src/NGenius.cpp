@@ -56,6 +56,7 @@ void NGenius::Init(bool isFullscreen)
 {
 	mRenderSystem->Init(mApplicationName, isFullscreen);
 	mInputHandler->Init(mRenderSystem->GetGLWindow());
+	CreateStatesMachine();
 }
 
 void NGenius::Start()
@@ -219,6 +220,12 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 	mSpacePartitionSystem = new SpacePartitionSystem();
 	mEnvironmentSystem = new EnvironmentSystem();
 	mAnimationSystem = new AnimationSystem();
+}
+
+void NGenius::CreateStatesMachine()
+{
+	mFSMContext = std::make_shared<FSMContext>();
+	mStatesMachine = std::make_unique<core::utils::FSM::StatesMachine<int, FSMContext>>(mFSMContext);
 }
 
 void NGenius::DestroySystems()

@@ -176,6 +176,7 @@
     <ClInclude Include="src\BasicTypes.h" />
     <ClInclude Include="src\BitNumber.h" />
     <ClInclude Include="src\Frustum.h" />
+    <ClInclude Include="src\FSMContext.h" />
     <ClInclude Include="src\guiTool\GuiTool.h" />
     <ClInclude Include="src\input\bindings\KeyToEventBind.h" />
     <ClInclude Include="src\input\bindings\MouseToEventBind.h" />
@@ -335,6 +336,11 @@
     <ClInclude Include="src\TerrainGrid.h" />
     <ClInclude Include="src\TextureGenerator.h" />
     <ClInclude Include="src\utils\FileReader.h" />
+    <ClInclude Include="src\utils\fsm\BaseState.h" />
+    <ClInclude Include="src\utils\fsm\BaseTransition.h" />
+    <ClInclude Include="src\utils\fsm\IState.h" />
+    <ClInclude Include="src\utils\fsm\ITransition.h" />
+    <ClInclude Include="src\utils\fsm\StatesMachine.h" />
     <ClInclude Include="src\utils\Log.h" />
     <ClInclude Include="src\utils\serializer\IDeserializer.h" />
     <ClInclude Include="src\utils\serializer\ISerializable.h" />
@@ -375,6 +381,7 @@
     <ClCompile Include="src\AABB.cpp" />
     <ClCompile Include="src\BitNumber.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
+    <ClCompile Include="src\FSMContext.cpp" />
     <ClCompile Include="src\guiTool\GuiTool.cpp" />
     <ClCompile Include="src\input\bindings\KeyToEventBind.cpp" />
     <ClCompile Include="src\input\bindings\MouseToEventBind.cpp" />
