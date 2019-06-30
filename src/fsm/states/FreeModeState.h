@@ -4,6 +4,10 @@
 #include "../FSMContext.h"
 #include "StateTypes.h"
 
+#include <glm/glm.hpp>
+
+class ICamera;
+
 class FreeModeState : public core::utils::FSM::BaseState<NGeniusState, FSMContext>, public IInputListener
 {
 public:
@@ -16,18 +20,28 @@ public:
 	void OnExit(float deltaTime) override;
 	void OnUpdate(float deltaTime) override;
 
-	bool IsFreeModeActive() const { return mIsFreeModeActivated; }
+	bool IsNormalModeKeyPressed() const { return mIsNormalModeKeyPressed; }
 private:
-	void CreateFreeCamera();
-
-private:
-	std::shared_ptr<NGenius> mEngine;
-	bool mIsFreeModeActivated;
+	ICamera* CreateFreeCamera();
+	void CalculateCameraOrientation(float deltaTime);
+	void CalculateCameraPosition(float deltaTime);	
 
 	// Heredado vía IInputListener
 	void OnKey(int key, int action) override;
 	void OnMouseScroll(int button, float scroll) override;
 	void OnMouseButton(int button, int action, int mods) override;
 	void OnMouseCursorPos(double x, double y) override;
+
+private:
+	std::shared_ptr<NGenius> mEngine;
+	ICamera* mFreeCamera;
+	glm::vec3 mCameraPosition;
+	glm::vec3 mCameraDirection;
+	bool mIsNormalModeKeyPressed;
+	float mPitch;
+	float mLastPitch;
+	float mRoll;
+	float mLastRoll;
+	float mForwardSpeed;
 };
 

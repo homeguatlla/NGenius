@@ -12,6 +12,6 @@ public:
 	TurnEvent* DoClone(const void* data) const;
 
 	float GetTurn() const;
-	void SetTurn(float pitch);
+	void SetTurn(float turn);
 };
 

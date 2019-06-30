@@ -111,10 +111,12 @@ const Frustum& ICamera::GetFrustum()
 void ICamera::Move(float speed)
 {
 	glm::vec3 position = GetPosition();
-	position += glm::normalize(mTarget - position) * speed;
+	glm::vec3 direction = mTarget - position;
+	position += glm::normalize(direction) * speed;
 	mIsDirty = true;
 
 	SetPosition(position);
+	SetTarget(position + direction);
 }
 
 void ICamera::Rotate(float angle, const glm::vec3& axis)
@@ -123,7 +125,12 @@ void ICamera::Rotate(float angle, const glm::vec3& axis)
 	glm::vec3 direction = mTarget - position;
 	direction = glm::vec3(glm::rotate(glm::mat4(1.0f), angle, axis) * glm::vec4(direction, 1.0));
 	mTarget = position + direction;
+
+	mUp = glm::vec3(glm::rotate(glm::mat4(1.0f), angle, axis) * glm::vec4(mUp, 1.0));
+
 	mIsDirty = true;
 
+	SetUp(mUp);
 	SetPosition(position);
+	SetTarget(position + direction);
 }

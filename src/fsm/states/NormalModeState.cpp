@@ -5,7 +5,8 @@
 
 #include <GLFW\glfw3.h>
 
-NormalModeState::NormalModeState() : mIsNormalModeActivated(false)
+
+NormalModeState::NormalModeState() : mIsFreeModeKeyPressed(false)
 {
 
 }
@@ -18,28 +19,26 @@ NormalModeState::~NormalModeState()
 void NormalModeState::OnInit()
 {
 	mEngine = GetContext()->GetEngine();
-	mEngine->RegisterAllEventsInputListener(this);
 }
 
 void NormalModeState::OnEnter(float deltaTime)
 {
+	mIsFreeModeKeyPressed = false;
+	mEngine->RegisterAllEventsInputListener(this);
 	mEngine->ChangeToCamera(mEngine->GetFreeCamera()->GetName(), mEngine->GetGameplayCamera()->GetName());
 }
 
 void NormalModeState::OnExit(float deltaTime)
 {
+	mEngine->UnRegisterInputListener(this);
+	mIsFreeModeKeyPressed = false;
 }
 
 void NormalModeState::OnUpdate(float deltaTime)
 {
 }
 
-bool NormalModeState::IsNormalModeActivated() const
-{
-	return mIsNormalModeActivated;
-}
-
 void NormalModeState::OnKey(int key, int action)
 {
-	mIsNormalModeActivated = (key == GLFW_KEY_F10 && action == GLFW_PRESS);
+	mIsFreeModeKeyPressed = (key == GLFW_KEY_F10 && action == GLFW_RELEASE);
 }

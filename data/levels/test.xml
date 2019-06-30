@@ -160,7 +160,7 @@
 						distorsion_texture="distorsion_water" 
 						normal_texture="normal_water" 
 						depth_texture="refraction_depth_water" 
-						color="1.0 0.3 0.8" speed="0.02" />
+						color="0.0 0.3 0.8" speed="0.02" />
 			</material>
 			<material name="smoke_particle" shader="ParticleShader">
 				<effect name="MaterialEffectParticle" texture="smoke" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
@@ -174,8 +174,8 @@
 				<up X="0" Y="1" Z="0"/>
 			</camera>
 			<camera name="free_camera" fov="45" aspect_ratio="1.7" near_plane="0.1" far_plane="200" is_free_camera="true">
-				<position X="25" Y="25" Z="0"/>
-				<target X="0" Y="0" Z="0"/>
+				<position X="0" Y="15" Z="0"/>
+				<target X="0" Y="15" Z="25"/>
 				<up X="0" Y="1" Z="0"/>
 			</camera>
 			<camera name="gui_camera" screen_width="1920" screen_height="1080" near_plane="0.1" far_plane="100">

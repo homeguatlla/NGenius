@@ -3,7 +3,7 @@
 #include "../../fsm/states/StateTypes.h"
 #include "../../fsm/FSMContext.h"
 
-class FreeModeState;
+class NormalModeState;
 
 class EnterFreeModeTransition : public core::utils::FSM::BaseTransition<NGeniusState, FSMContext>
 {
@@ -16,5 +16,5 @@ public:
 
 private:
 	std::shared_ptr<NGenius> mEngine;
-	std::shared_ptr<FreeModeState> mOriginState;
+	std::shared_ptr<NormalModeState> mOriginState;
 };
