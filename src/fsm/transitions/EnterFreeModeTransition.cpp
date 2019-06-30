@@ -9,8 +9,13 @@ EnterFreeModeTransition::EnterFreeModeTransition(StatePtr origin, StatePtr desti
 	core::utils::FSM::BaseTransition<NGeniusState, FSMContext>(origin, destination),
 	mIsFreeModeActive(false)
 {
-	mNGenius = GetContext()->GetNGenius();
-	mNGenius->RegisterInputHandler(std::bind(&EnterFreeModeTransition::UpdateInput, this, std::placeholders::_1));
+	mEngine = GetContext()->GetEngine();
+	mEngine->RegisterAllEventsInputListener(this);
+}
+
+EnterFreeModeTransition::~EnterFreeModeTransition()
+{
+	mEngine->UnRegisterInputListener(this);
 }
 
 void EnterFreeModeTransition::OnInit()
@@ -18,9 +23,21 @@ void EnterFreeModeTransition::OnInit()
 
 }
 
-void EnterFreeModeTransition::UpdateInput(GLFWwindow* window)
+void EnterFreeModeTransition::OnKey(int key, int action)
 {
-	mIsFreeModeActive = glfwGetKey(window, GLFW_KEY_F10) == GLFW_PRESS;
+	mIsFreeModeActive = (key == GLFW_KEY_F10 && action == GLFW_PRESS);
+}
+
+void EnterFreeModeTransition::OnMouseScroll(int button, float scroll)
+{
+}
+
+void EnterFreeModeTransition::OnMouseButton(int button, int action, int mods)
+{
+}
+
+void EnterFreeModeTransition::OnMouseCursorPos(double x, double y)
+{
 }
 
 bool EnterFreeModeTransition::CanPerformTransition() const

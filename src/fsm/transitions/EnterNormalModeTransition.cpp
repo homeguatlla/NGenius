@@ -12,18 +12,23 @@ EnterNormalModeTransition::EnterNormalModeTransition(StatePtr origin, StatePtr d
 		
 }
 
+EnterNormalModeTransition::~EnterNormalModeTransition()
+{
+	mEngine->UnRegisterInputListener(this);
+}
+
 void EnterNormalModeTransition::OnInit()
 {
-	mNGenius = GetContext()->GetNGenius();
-	mNGenius->RegisterInputHandler(std::bind(&EnterNormalModeTransition::UpdateInput, this, std::placeholders::_1));
+	mEngine = GetContext()->GetEngine();
+	mEngine->RegisterAllEventsInputListener(this);
+}
+
+void EnterNormalModeTransition::OnKey(int key, int action)
+{
+	mIsNormalModeActive = (key == GLFW_KEY_F10 && action == GLFW_PRESS);
 }
 
 bool EnterNormalModeTransition::CanPerformTransition() const
 {
 	return mIsNormalModeActive;
-}
-
-void EnterNormalModeTransition::UpdateInput(GLFWwindow* window)
-{
-	mIsNormalModeActive = glfwGetKey(window, GLFW_KEY_F10) == GLFW_PRESS;
 }

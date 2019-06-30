@@ -228,6 +228,23 @@ void RenderSystem::RenderPasses(std::vector<RenderPass*>& renderPasses)
 	}
 }
 
+RenderPass* RenderSystem::GetRenderPass(const std::string& renderPassName) const
+{
+	RenderPassesConstIterator it = std::find_if(
+		mRenderPasses.begin(), 
+		mRenderPasses.end(), 
+		[&] (RenderPass* renderPass) { return renderPass->GetName() == renderPassName; });
+
+	if (it != mRenderPasses.end())
+	{
+		return *it;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
 void RenderSystem::Render(RenderPass* renderPass)
 {
 	RenderersList renderers = mRenderersPerPass[renderPass->GetLayersMask()];
@@ -1008,6 +1025,17 @@ GuiTool* RenderSystem::GetGuiTool()
 	return mGuiTool;
 }
 
+void RenderSystem::ChangeToCamera(std::string& renderPassName, const ICamera* camera)
+{
+	assert(camera != nullptr);
+
+	RenderPass* renderPass = GetRenderPass(renderPassName);
+	if (renderPass != nullptr)
+	{
+		renderPass->SetCamera(camera);
+	}
+}
+
 void RenderSystem::CheckGLError()
 {
 	GLenum err;
@@ -1082,7 +1110,7 @@ void RenderSystem::ReadRenderPassFrom(core::utils::IDeserializer* source)
 	ICamera* camera = GetCamera(cameraName);
 	if (camera != nullptr)
 	{
-		RenderPass* renderPass = new RenderPass(camera, layerMask);
+		RenderPass* renderPass = new RenderPass(renderPassName, camera, layerMask);
 		renderPass->ReadFrom(source);
 		AddRenderPass(renderPass, addAfterPostProcessing);
 	}

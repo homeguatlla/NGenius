@@ -173,10 +173,10 @@
 				<target X="0" Y="0" Z="0"/>
 				<up X="0" Y="1" Z="0"/>
 			</camera>
-			<camera name="eagle_camera" screen_width="96" screen_height="54" near_plane="0.1" far_plane="100">
+			<camera name="free_camera" screen_width="96" screen_height="54" near_plane="0.1" far_plane="100">
 				<position X="0" Y="25" Z="0"/>
 				<target X="0" Y="0" Z="0"/>
-				<up X="1" Y="0" Z="0"/>
+				<up X="0" Y="1" Z="0"/>
 			</camera>
 			<camera name="gui_camera" screen_width="1920" screen_height="1080" near_plane="0.1" far_plane="100">
 				<position X="0" Y="0" Z="40"/>

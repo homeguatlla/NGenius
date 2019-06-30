@@ -6,12 +6,12 @@ class NGenius;
 class FSMContext
 {
 public:
-	FSMContext(std::shared_ptr<NGenius> nGenius) : mNGenius(nGenius) {}
+	FSMContext(std::shared_ptr<NGenius> nGenius) : mEngine(nGenius) {}
 	virtual ~FSMContext() = default;
 
-	std::shared_ptr<NGenius> GetNGenius() { return mNGenius; }
+	std::shared_ptr<NGenius> GetEngine() { return mEngine; }
 
 private:
-	std::shared_ptr<NGenius> mNGenius;
+	std::shared_ptr<NGenius> mEngine;
 };
 

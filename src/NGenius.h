@@ -139,6 +139,9 @@ public:
 	void Query(const AABB& aabb, std::vector<GameEntity*>& result);
 	void SetIsSpacePartitionEnabled(bool enable);
 
+	//cameras
+	void ChangeToCamera(std::string& renderPassName, const ICamera* camera);
+
 	//environment
 	float GetDayTime() const;
 

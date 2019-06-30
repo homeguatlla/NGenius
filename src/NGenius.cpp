@@ -61,7 +61,6 @@ void NGenius::Init(bool isFullscreen)
 {
 	mRenderSystem->Init(mApplicationName, isFullscreen);
 	mInputHandler->Init(mRenderSystem->GetGLWindow());
-	CreateStatesMachine();
 }
 
 void NGenius::Start()
@@ -72,6 +71,7 @@ void NGenius::Start()
 	mSpacePartitionSystem->Start();
 	mDebugSystem->Start();
 
+	CreateStatesMachine();
 
 	AddListenersToGameScene();
 	mGameScene.Start(mRenderSystem);
@@ -506,4 +506,9 @@ void NGenius::SetIsSpacePartitionEnabled(bool enable)
 {
 	mIsSpacePartitionEnabled = enable;
 	mSpacePartitionSystem->SetSpacePartitionComponentsEnabled(enable);
+}
+
+void NGenius::ChangeToCamera(std::string& renderPassName, const ICamera* camera)
+{
+	mRenderSystem->ChangeToCamera(renderPassName, camera);
 }

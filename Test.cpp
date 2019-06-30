@@ -1093,7 +1093,7 @@ void CreateHudMapRenderPass()
 	camera->SetPosition(glm::vec3(0.0f, 100.0f, 0.0f));
 	camera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	camera->SetUp(glm::vec3(1.0f, 0.0f, 0.0f));
-	mMapPass = new RenderPass(camera, IRenderer::LAYER_OTHER);
+	mMapPass = new RenderPass("map_hud_render_pass", camera, IRenderer::LAYER_OTHER);
 	mEngine->AddCamera(camera);
 	
 	IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(mEngine->GetScreenWidth()), static_cast<int>(mEngine->GetScreenHeight()));
@@ -1109,7 +1109,7 @@ void CreateGameplayRenderPass()
 	int screenHeight = static_cast<int>(mEngine->GetScreenHeight());
 	//RENDER PASS GAMEPLAY	
 	ICamera* camera = mEngine->GetCamera("gameplay_camera");
-	mGameplayPass = new RenderPass(camera, IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
+	mGameplayPass = new RenderPass("gameplay_render_pass", camera, IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
 	mGameplayPass->SetAcceptSpacePartitionOnly(true);
 
 	IFrameBuffer* frameBuffer = new IFrameBuffer(screenWidth, screenHeight);
@@ -1130,7 +1130,7 @@ void CreateParticlesRenderPass()
 {
 	//RENDER PASS PARTICLES
 	ICamera* camera = mEngine->GetCamera("gameplay_camera");
-	RenderPass *particlesPass = new RenderPass(camera, IRenderer::LAYER_PARTICLES);
+	RenderPass *particlesPass = new RenderPass("particles_render_pass", camera, IRenderer::LAYER_PARTICLES);
 	particlesPass->SetCalculateDistanceToCamera(true);
 	particlesPass->EnableFog(true);
 	mEngine->AddRenderPass(particlesPass, false);
@@ -1140,7 +1140,7 @@ void CreateTransparentRenderPass()
 {
 	//RENDER PASS TRANSPARENT
 	ICamera* camera = mEngine->GetCamera("gameplay_camera");
-	RenderPass *transparentPass = new RenderPass(camera, IRenderer::LAYER_TRANSPARENT);
+	RenderPass *transparentPass = new RenderPass("transparent_render_pass", camera, IRenderer::LAYER_TRANSPARENT);
 	transparentPass->EnableFog(true);
 	mEngine->AddRenderPass(transparentPass, false);
 }

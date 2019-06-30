@@ -3,6 +3,8 @@
 #include "../FSMContext.h"
 #include "StateTypes.h"
 
+class ICamera;
+
 class NormalModeState : public core::utils::FSM::BaseState<NGeniusState, FSMContext>
 {
 public:
@@ -11,5 +13,9 @@ public:
 	void OnEnter(float deltaTime) override;
 	void OnExit(float deltaTime) override;
 	void OnUpdate(float deltaTime) override;
+
+private:
+	std::shared_ptr<NGenius> mEngine;
+	ICamera* mGameplayCamera;
 };
 

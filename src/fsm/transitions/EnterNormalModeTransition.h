@@ -2,24 +2,26 @@
 #include "../../utils/fsm/BaseTransition.h"
 #include "../../fsm/states/StateTypes.h"
 #include "../../fsm/FSMContext.h"
+#include "../../input/IInputListener.h"
 
 
-struct GLFWwindow;
-
-class EnterNormalModeTransition : public core::utils::FSM::BaseTransition<NGeniusState, FSMContext>
+class EnterNormalModeTransition : public core::utils::FSM::BaseTransition<NGeniusState, FSMContext>, public IInputListener
 {
 public:
 	EnterNormalModeTransition(StatePtr origin, StatePtr destination);
-	virtual ~EnterNormalModeTransition() = default;
+	virtual ~EnterNormalModeTransition();
 
 	bool CanPerformTransition() const override;
 	void OnInit() override;
 
 private:
-	void UpdateInput(GLFWwindow* window);
-
 private:
-private:
-	std::shared_ptr<NGenius> mNGenius;
+	std::shared_ptr<NGenius> mEngine;
 	bool mIsNormalModeActive;
+
+	// Heredado vía IInputListener
+	void OnKey(int key, int action) override;
+	void OnMouseScroll(int button, float scroll) override {}
+	void OnMouseButton(int button, int action, int mods) override {}
+	void OnMouseCursorPos(double x, double y) override {}
 };

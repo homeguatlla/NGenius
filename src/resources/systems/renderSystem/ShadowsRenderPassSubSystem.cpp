@@ -164,7 +164,7 @@ RenderPass* ShadowsRenderPassSubSystem::CreateShadowRenderPass()
 	frameShadowBuffer->SetDepthTextureAttachment(mShadowMapTexture);
 	frameShadowBuffer->Init();
 
-	RenderPass* shadowPass = new RenderPass(static_cast<ICamera*>(mShadowCastCamera), IRenderer::LAYER_OTHER);
+	RenderPass* shadowPass = new RenderPass("shadows_render_pass", static_cast<ICamera*>(mShadowCastCamera), IRenderer::LAYER_OTHER);
 	shadowPass->SetFrameBufferOutput(frameShadowBuffer);
 
 	IMaterial* material = mRenderSystem->CreateMaterial("shadow", mRenderSystem->GetShader("s_shadow"));

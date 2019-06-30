@@ -6,7 +6,7 @@
 #include "../../components/SpacePartitionComponent.h"
 #include "../../../utils/serializer/XMLDeserializer.h"
 
-RenderPass::RenderPass(const ICamera* camera, char layersMask) :
+RenderPass::RenderPass(const std::string& name, const ICamera* camera, char layersMask) :
 mLayersMask(layersMask),
 mCamera(camera),
 mFrameBufferOutput(nullptr),
@@ -17,7 +17,8 @@ mHasToCalculateDistanceToCamera(false),
 mCanAcceptSpacePartitionRenderersOnly(false),
 mClippingPlaneNumber(0),
 mClippingPlane(0.0f, 0.0f, 0.0f, 0.0f),
-mMaterial(nullptr)
+mMaterial(nullptr),
+mName(name)
 {
 }
 

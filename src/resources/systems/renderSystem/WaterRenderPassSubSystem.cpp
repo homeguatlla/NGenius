@@ -115,7 +115,7 @@ RenderPass* WaterRenderPassSubSystem::CreateRefractionRenderPass()
 	frameRefractionBuffer->SetDepthTextureAttachment(refractionDepthTexture);
 	frameRefractionBuffer->Init();
 
-	RenderPass* refractionWaterPass = new RenderPass(static_cast<ICamera*>(mRefractionCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES | IRenderer::LAYER_TRANSPARENT);
+	RenderPass* refractionWaterPass = new RenderPass("water_refraction_render_pass", static_cast<ICamera*>(mRefractionCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES | IRenderer::LAYER_TRANSPARENT);
 	refractionWaterPass->SetFrameBufferOutput(frameRefractionBuffer);
 	refractionWaterPass->EnableClipping(true);
 	refractionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);
@@ -142,7 +142,7 @@ RenderPass* WaterRenderPassSubSystem::CreateReflectionRenderPass()
 
 	frameReflectionBuffer->Init();
 
-	RenderPass* reflectionWaterPass = new RenderPass(static_cast<ICamera*>(mReflectionCamera), IRenderer::LAYER_REFLEXION | IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES | IRenderer::LAYER_TRANSPARENT);
+	RenderPass* reflectionWaterPass = new RenderPass("water_reflection_render_pass", static_cast<ICamera*>(mReflectionCamera), IRenderer::LAYER_REFLEXION | IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES | IRenderer::LAYER_TRANSPARENT);
 	reflectionWaterPass->SetFrameBufferOutput(frameReflectionBuffer);
 	reflectionWaterPass->EnableClipping(true);
 	reflectionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);

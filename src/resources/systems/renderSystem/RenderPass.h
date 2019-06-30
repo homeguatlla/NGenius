@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include "../../../utils/serializer/ISerializable.h"
+#include <string>
 
 class ICamera;
 class IFrameBuffer;
@@ -22,9 +23,10 @@ class RenderPass : public core::utils::ISerializable
 	int mClippingPlaneNumber;
 	glm::vec4 mClippingPlane;
 	IMaterial* mMaterial;
+	std::string mName;
 
 public:
-	explicit RenderPass(const ICamera* camera, char layersMask);
+	explicit RenderPass(const std::string& name, const ICamera* camera, char layersMask);
 	~RenderPass();
 
 	bool HasFrameBufferOutput() const;
@@ -33,6 +35,7 @@ public:
 	void UnbindOutput() const;
 	Texture* CopyDepthBuffer();
 
+	const std::string GetName() const { return mName; }
 	void SetCamera(const ICamera* camera);
 	const ICamera* GetCamera() const;
 	char GetLayersMask() const;

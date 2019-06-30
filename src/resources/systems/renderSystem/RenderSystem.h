@@ -42,6 +42,7 @@ class RenderSystem : public core::utils::ISerializable, public BaseVisitable<>
 {
 	typedef std::vector<IRenderer*> RenderersList;
 	typedef std::vector<RenderPass*>::iterator RenderPassesIterator;
+	typedef std::vector<RenderPass*>::const_iterator RenderPassesConstIterator;
 
 	VertexBuffersManager mVertexsBuffersManager;
 
@@ -155,6 +156,8 @@ public:
 
 	GuiTool* GetGuiTool();
 
+	void ChangeToCamera(std::string& renderPassName, const ICamera* camera);
+
 	// Heredado vía ISerializable
 	virtual void ReadFrom(core::utils::IDeserializer* source) override;
 	virtual void WriteTo(core::utils::ISerializer* destination) override;
@@ -182,6 +185,7 @@ private:
 
 	void Render(RenderPass* renderPass);
 	void RenderPasses(std::vector<RenderPass*>& renderPasses);
+	RenderPass* GetRenderPass(const std::string& renderPassName) const;
 
 	void UpdateSubsystems();
 	void UpdateDistancesToCamera(const ICamera* camera, RenderersList* renderers);
