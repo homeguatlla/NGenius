@@ -3,8 +3,6 @@
 #include "../FSMContext.h"
 #include "StateTypes.h"
 
-class ICamera;
-
 class FreeModeState : public core::utils::FSM::BaseState<NGeniusState, FSMContext>
 {
 public:
@@ -19,6 +17,5 @@ private:
 
 private:
 	std::shared_ptr<NGenius> mEngine;
-	ICamera* mFreeCamera;
 };
 

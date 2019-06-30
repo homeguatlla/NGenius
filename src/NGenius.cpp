@@ -343,6 +343,18 @@ ICamera* NGenius::GetCamera(const std::string& name) const
 	return mRenderSystem->GetCamera(name);
 }
 
+ICamera* NGenius::GetGameplayCamera() const
+{
+	assert(mRenderSystem != nullptr);
+	return mRenderSystem->GetGameplayCamera();
+}
+
+ICamera* NGenius::GetFreeCamera() const
+{
+	assert(mRenderSystem != nullptr);
+	return mRenderSystem->GetFreeCamera();
+}
+
 GLFWwindow* NGenius::GetGLWindow() const
 {
 	assert(mRenderSystem != nullptr);
@@ -508,7 +520,12 @@ void NGenius::SetIsSpacePartitionEnabled(bool enable)
 	mSpacePartitionSystem->SetSpacePartitionComponentsEnabled(enable);
 }
 
-void NGenius::ChangeToCamera(std::string& renderPassName, const ICamera* camera)
+void NGenius::ChangeToCamera(const std::string& renderPassName, const ICamera* camera)
 {
 	mRenderSystem->ChangeToCamera(renderPassName, camera);
+}
+
+void NGenius::ChangeToCamera(const std::string& cameraName, const std::string& newCameraName)
+{
+	mRenderSystem->ChangeToCamera(cameraName, newCameraName);
 }

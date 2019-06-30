@@ -87,6 +87,8 @@ public:
 	IMaterial* GetMaterial(const std::string& name) const;
 	Animation* GetAnimation(const std::string& name) const;
 	ICamera* GetCamera(const std::string& name) const;
+	ICamera* GetGameplayCamera() const;
+	ICamera* GetFreeCamera() const;
 
 	FontType* GetFont(const std::string& name) const;
 	float GetNumberFPS() const;
@@ -140,7 +142,8 @@ public:
 	void SetIsSpacePartitionEnabled(bool enable);
 
 	//cameras
-	void ChangeToCamera(std::string& renderPassName, const ICamera* camera);
+	void ChangeToCamera(const std::string& renderPassName, const ICamera* camera);
+	void ChangeToCamera(const std::string& cameraName, const std::string& newCameraName);
 
 	//environment
 	float GetDayTime() const;

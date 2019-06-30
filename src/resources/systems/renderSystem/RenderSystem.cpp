@@ -461,6 +461,21 @@ void RenderSystem::ReadCameraFrom(core::utils::IDeserializer* source)
 		camera = InstantiableObject::CreateOrthogonalCamera("OrthogonalCamera", 0.0f, 0.0f, 0.0f, 0.0f);
 	}
 
+	bool isGameplayCamera = false;
+	bool isFreeCamera = false;
+	source->ReadParameter("is_gameplay_camera", &isGameplayCamera);
+	source->ReadParameter("is_free_camera", &isFreeCamera);
+
+	if (isGameplayCamera)
+	{
+		mGameplayCamera = camera;
+	}
+	else if (isFreeCamera)
+	{
+		mFreeCamera = camera;
+	}
+
+
 	camera->ReadFrom(source);
 	AddCamera(camera);
 }
@@ -1025,7 +1040,7 @@ GuiTool* RenderSystem::GetGuiTool()
 	return mGuiTool;
 }
 
-void RenderSystem::ChangeToCamera(std::string& renderPassName, const ICamera* camera)
+void RenderSystem::ChangeToCamera(const std::string& renderPassName, const ICamera* camera)
 {
 	assert(camera != nullptr);
 
@@ -1033,6 +1048,23 @@ void RenderSystem::ChangeToCamera(std::string& renderPassName, const ICamera* ca
 	if (renderPass != nullptr)
 	{
 		renderPass->SetCamera(camera);
+	}
+}
+
+void RenderSystem::ChangeToCamera(const std::string& cameraName, const std::string& newCameraName)
+{
+	ICamera* camera = GetCamera(cameraName);
+	ICamera* newCamera = GetCamera(newCameraName);
+
+	assert(camera != nullptr);
+	assert(newCamera != nullptr);
+
+	for (RenderPass* pass : mRenderPasses)
+	{
+		if (pass->GetCamera()->GetName() == cameraName)
+		{
+			pass->SetCamera(newCamera);
+		}
 	}
 }
 

@@ -12,7 +12,7 @@ void FreeModeState::OnInit()
 
 void FreeModeState::OnEnter(float deltaTime)
 {
-	mEngine->ChangeToCamera(std::string("gameplay_render_pass"), mFreeCamera);
+	mEngine->ChangeToCamera(mEngine->GetGameplayCamera()->GetName(), mEngine->GetFreeCamera()->GetName());
 }
 
 void FreeModeState::OnExit(float deltaTime)
@@ -25,16 +25,16 @@ void FreeModeState::OnUpdate(float deltaTime)
 
 void FreeModeState::CreateFreeCamera()
 {
-	mFreeCamera = mEngine->GetCamera("free_camera");
-	if (mFreeCamera == nullptr)
+	if (mEngine->GetCamera("free_camera") == nullptr)
 	{
 		float screenWidth = static_cast<float>(mEngine->GetScreenWidth());
 		float screenHeight = static_cast<float>(mEngine->GetScreenHeight());
 		float aspectRatio = screenWidth / screenHeight;
 
-		mFreeCamera = new PerspectiveCamera("free_camera", 45.0f, aspectRatio, NEAR_PLANE, FAR_PLANE);
-		mFreeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 0.0f));
-		mFreeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
-		mFreeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+		ICamera* freeCamera = new PerspectiveCamera("free_camera", 45.0f, aspectRatio, NEAR_PLANE, FAR_PLANE);
+		freeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 0.0f));
+		freeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
+		freeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+		mEngine->AddCamera(freeCamera);
 	}
 }

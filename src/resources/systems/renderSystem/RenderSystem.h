@@ -78,6 +78,9 @@ class RenderSystem : public core::utils::ISerializable, public BaseVisitable<>
 	ITexture* mDiffuseTexture;
 	ITexture* mNormalTexture;
 
+	ICamera* mGameplayCamera;
+	ICamera* mFreeCamera;
+
 	GuiTool* mGuiTool;
 
 	int mLastClipPlaneNumberUsed;
@@ -112,6 +115,8 @@ public:
 
 	void AddCamera(ICamera* camera);
 	ICamera* GetCamera(const std::string name);
+	ICamera* GetGameplayCamera() const { return mGameplayCamera; }
+	ICamera* GetFreeCamera() const { return mFreeCamera; }
 
 	float GetScreenWidth() const;
 	float GetScreenHeight() const;
@@ -156,7 +161,8 @@ public:
 
 	GuiTool* GetGuiTool();
 
-	void ChangeToCamera(std::string& renderPassName, const ICamera* camera);
+	void ChangeToCamera(const std::string& renderPassName, const ICamera* camera);
+	void ChangeToCamera(const std::string& cameraName, const std::string& newCameraName);
 
 	// Heredado vía ISerializable
 	virtual void ReadFrom(core::utils::IDeserializer* source) override;

@@ -168,13 +168,13 @@
 			</material>
 		</materials_library>
 		<cameras>
-			<camera name="gameplay_camera" fov="45" aspect_ratio="1.7" near_plane="0.1" far_plane="200">
+			<camera name="gameplay_camera" fov="45" aspect_ratio="1.7" near_plane="0.1" far_plane="200" is_gameplay_camera = "true">
 				<position X="25" Y="17" Z="25"/>
 				<target X="0" Y="0" Z="0"/>
 				<up X="0" Y="1" Z="0"/>
 			</camera>
-			<camera name="free_camera" screen_width="96" screen_height="54" near_plane="0.1" far_plane="100">
-				<position X="0" Y="25" Z="0"/>
+			<camera name="free_camera" fov="45" aspect_ratio="1.7" near_plane="0.1" far_plane="200" is_free_camera="true">
+				<position X="25" Y="25" Z="0"/>
 				<target X="0" Y="0" Z="0"/>
 				<up X="0" Y="1" Z="0"/>
 			</camera>
