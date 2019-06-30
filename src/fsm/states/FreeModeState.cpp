@@ -4,9 +4,21 @@
 #include "../../NGenius.h"
 #include "../../GameConstants.h"
 
+#include <GLFW\glfw3.h>
+
+FreeModeState::FreeModeState() : mIsFreeModeActivated(false)
+{
+}
+
+FreeModeState::~FreeModeState()
+{
+	mEngine->UnRegisterInputListener(this);
+}
+
 void FreeModeState::OnInit()
 {
 	mEngine = GetContext()->GetEngine();
+	mEngine->RegisterAllEventsInputListener(this);
 	CreateFreeCamera();
 }
 
@@ -37,4 +49,21 @@ void FreeModeState::CreateFreeCamera()
 		freeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 		mEngine->AddCamera(freeCamera);
 	}
+}
+
+void FreeModeState::OnKey(int key, int action)
+{
+	mIsFreeModeActivated = (key == GLFW_KEY_F10 && action == GLFW_PRESS);
+}
+
+void FreeModeState::OnMouseScroll(int button, float scroll)
+{
+}
+
+void FreeModeState::OnMouseButton(int button, int action, int mods)
+{
+}
+
+void FreeModeState::OnMouseCursorPos(double x, double y)
+{
 }

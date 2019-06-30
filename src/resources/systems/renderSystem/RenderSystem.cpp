@@ -1066,6 +1066,7 @@ void RenderSystem::ChangeToCamera(const std::string& cameraName, const std::stri
 			pass->SetCamera(newCamera);
 		}
 	}
+	mWaterRenderPass->SetWaterParameters(newCamera, mWaterRenderPass->GetWaterHeight());
 }
 
 void RenderSystem::CheckGLError()
