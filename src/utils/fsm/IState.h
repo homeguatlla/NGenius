@@ -25,7 +25,7 @@ namespace core {
 				virtual void OnInit() = 0;
 				virtual void OnEnter(float deltaTime) = 0;
 				virtual void OnExit(float deltaTime) = 0;
-				virtual void OnTick(float deltaTime) = 0;
+				virtual void OnUpdate(float deltaTime) = 0;
 			};
 		}
 	}

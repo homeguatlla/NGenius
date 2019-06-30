@@ -26,6 +26,11 @@
 #include "resources/entities/ParticlesEmitter.h"
 #include "resources/textures/Texture.h"
 
+#include "fsm/states/NormalModeState.h"
+#include "fsm/states/FreeModeState.h"
+#include "fsm/transitions/EnterNormalModeTransition.h"
+#include "fsm/transitions/EnterFreeModeTransition.h"
+
 #include "statistics/Statistics.h"
 #include "guiTool/GuiTool.h"
 
@@ -206,6 +211,8 @@ void NGenius::UpdateSystems(float elapsedTime)
 	mSpacePartitionSystem->Update(elapsedTime);
 	mAnimationSystem->Update(elapsedTime);
 	mRenderSystem->Update(elapsedTime);
+
+	mStatesMachine->Update(elapsedTime);
 }
 
 void NGenius::CreateSystems(float screenWidth, float screenHeight)
@@ -224,8 +231,19 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 
 void NGenius::CreateStatesMachine()
 {
-	mFSMContext = std::make_shared<FSMContext>();
-	mStatesMachine = std::make_unique<core::utils::FSM::StatesMachine<int, FSMContext>>(mFSMContext);
+	mFSMContext = std::make_shared<FSMContext>(shared_from_this());
+	mStatesMachine = std::make_unique<core::utils::FSM::StatesMachine<NGeniusState, FSMContext>>(mFSMContext);
+
+	auto normalState = std::make_shared<NormalModeState>();
+	auto freeState = std::make_shared<FreeModeState>();
+
+	mStatesMachine->AddState(normalState);
+	mStatesMachine->AddState(freeState);
+
+	mStatesMachine->AddTransition(std::make_unique<EnterNormalModeTransition>(freeState, normalState));
+	mStatesMachine->AddTransition(std::make_unique<EnterFreeModeTransition>(normalState, freeState));
+
+	mStatesMachine->SetInitialState(normalState->GetID());
 }
 
 void NGenius::DestroySystems()

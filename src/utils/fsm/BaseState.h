@@ -19,7 +19,7 @@ namespace core {
 				virtual void OnInit() override {}
 				virtual void OnEnter(float deltaTime) override {}
 				virtual void OnExit(float deltaTime) override {}
-				virtual void OnTick(float /*deltaTime*/) override {}
+				virtual void OnUpdate(float /*deltaTime*/) override {}
 
 			protected:
 				ContextPtr GetContext() const override final

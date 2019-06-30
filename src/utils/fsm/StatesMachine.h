@@ -23,12 +23,12 @@ namespace core {
 				explicit StatesMachine(ContextPtr context);
 				virtual ~StatesMachine();
 
-				void SetInitialState(TStateID state);
+				void SetInitialState(const TStateID state);
 				void ForceState(TStateID state, float deltaTime);
 
 				StatePtr GetCurrentState() const { return currentState; }
 
-				void Tick(float deltaTime);
+				void Update(float deltaTime);
 
 				void AddState(StatePtr state);
 				void AddTransition(std::unique_ptr<ITransition<TStateID, TContext>> transition);
@@ -74,7 +74,7 @@ namespace core {
 			}
 
 			template<typename TStateID, class TContext>
-			void StatesMachine<TStateID, TContext>::SetInitialState(TStateID state)
+			void StatesMachine<TStateID, TContext>::SetInitialState(const TStateID state)
 			{
 				auto existState = ExistState(state);
 				assert(existState);
@@ -86,7 +86,7 @@ namespace core {
 			}
 
 			template<typename TStateID, class TContext>
-			void StatesMachine<TStateID, TContext>::Tick(float deltaTime)
+			void StatesMachine<TStateID, TContext>::Update(float deltaTime)
 			{
 				assert(initialState != nullptr);
 
@@ -96,7 +96,7 @@ namespace core {
 					currentState->OnEnter(deltaTime);
 				}
 
-				currentState->OnTick(deltaTime);
+				currentState->OnUpdate(deltaTime);
 
 				bool performed = PerformFromAnyTransitions(deltaTime);
 				if (!performed)

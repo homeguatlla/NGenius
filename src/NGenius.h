@@ -7,9 +7,10 @@
 #include <glm/glm.hpp>
 #include "visitor/BaseVisitable.h"
 #include "AABB.h"
-#include "FSMContext.h"
+#include "fsm/FSMContext.h"
 #include "utils/serializer/ISerializable.h"
 #include "utils/fsm/StatesMachine.h"
+#include "fsm/states/StateTypes.h"
 #include "resources/scene/GameScene.h"
 
 class RenderSystem;
@@ -46,7 +47,7 @@ class ICamera;
 
 struct GLFWwindow;
 
-class NGenius : public core::utils::ISerializable, BaseVisitable<>
+class NGenius : public core::utils::ISerializable, BaseVisitable<>, public std::enable_shared_from_this<NGenius>
 {
 	RenderSystem* mRenderSystem;
 	PhysicsSystem* mPhysicsSystem;
@@ -62,7 +63,7 @@ class NGenius : public core::utils::ISerializable, BaseVisitable<>
 	Statistics* mStatistics;
 	GameScene mGameScene;
 
-	std::unique_ptr<core::utils::FSM::StatesMachine<int, FSMContext>> mStatesMachine;
+	std::unique_ptr<core::utils::FSM::StatesMachine<NGeniusState, FSMContext>> mStatesMachine;
 	std::shared_ptr<FSMContext> mFSMContext;
 
 	std::string mApplicationName;

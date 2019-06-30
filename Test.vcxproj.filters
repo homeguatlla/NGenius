@@ -217,6 +217,24 @@
     <Filter Include="Header Files\utils\fsm">
       <UniqueIdentifier>{2b9d4ee6-ef32-449e-bd1d-eaec16a05966}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\fsm">
+      <UniqueIdentifier>{7293c6d7-a7f5-45fe-bfed-8a90b4cc6b66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\fsm\states">
+      <UniqueIdentifier>{37352e3c-09db-481e-91b4-f9f3cc5be0e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\fsm\transitions">
+      <UniqueIdentifier>{64ce4154-a9e5-437e-a0cc-62fcebe71d20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\fsm">
+      <UniqueIdentifier>{1295bcfd-9843-4cec-83c5-731b7a01a152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\fsm\states">
+      <UniqueIdentifier>{9698c588-1335-48ce-bf68-f6570d0eec0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\fsm\transitions">
+      <UniqueIdentifier>{f2098de1-1308-4059-9e30-61e7a8a01204}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -798,8 +816,26 @@
     <ClInclude Include="src\utils\fsm\StatesMachine.h">
       <Filter>Header Files\utils\fsm</Filter>
     </ClInclude>
-    <ClInclude Include="src\FSMContext.h">
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\states\StateTypes.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\transitions\EnterFreeModeTransition.h">
+      <Filter>Header Files\fsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\transitions\EnterNormalModeTransition.h">
+      <Filter>Header Files\fsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\FSMContext.h">
+      <Filter>Header Files\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\FreeModeState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\NormalModeState.h">
+      <Filter>Header Files\fsm\states</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1328,8 +1364,20 @@
     <ClCompile Include="src\resources\InstantiableObject.cpp">
       <Filter>Source Files\resources</Filter>
     </ClCompile>
-    <ClCompile Include="src\FSMContext.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\fsm\FSMContext.cpp">
+      <Filter>Source Files\fsm</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\FreeModeState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\NormalModeState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\transitions\EnterFreeModeTransition.cpp">
+      <Filter>Source Files\fsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\transitions\EnterNormalModeTransition.cpp">
+      <Filter>Source Files\fsm\transitions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1456,5 +1504,10 @@
     <None Include="data\shaders\vertex\v_model_animated.cg">
       <Filter>Source Files\shaders\vertex</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Test.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
