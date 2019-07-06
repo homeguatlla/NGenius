@@ -78,6 +78,13 @@ void FreeModeState::CalculateCameraOrientation(float deltaTime)
 	glm::vec3 direction = glm::normalize(mFreeCamera->GetTarget() - mFreeCamera->GetPosition());
 	glm::vec3 orthogonal = glm::cross(mFreeCamera->GetUp(), direction);
 	mFreeCamera->Rotate(currentPitch, -orthogonal);
+
+	//Forcing the up vector in Y the roll and pitch are always related to Y vertical. 
+	//if not, roll and pitch will move related a Up vector that can be different of Y vertical and
+	//is more difficult to move the free camera.
+	mFreeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	mRoll = 0.0f;
+	mPitch = 0.0f;
 }
 
 void FreeModeState::CalculateCameraPosition(float deltaTime)

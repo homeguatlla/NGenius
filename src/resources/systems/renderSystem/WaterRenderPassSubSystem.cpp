@@ -164,14 +164,16 @@ void WaterRenderPassSubSystem::ApplyReflectionCameras(float yReflectionPlane, co
 	glm::vec3 target = camera->GetTarget();
 	target.y -= distance;
 	cameraReflected->SetTarget(target);
-	cameraReflected->SetUp(camera->GetUp());
+	//camera reflected will calculate related a Y positive vector.
+	cameraReflected->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 void WaterRenderPassSubSystem::ApplyRefractionCameras(const ICamera* camera, ICamera* cameraRefracted)
 {
 	cameraRefracted->SetPosition(camera->GetPosition());
 	cameraRefracted->SetTarget(camera->GetTarget());
-	cameraRefracted->SetUp(camera->GetUp());
+	//camera refracted will be calculated related an Y positive vector.
+	cameraRefracted->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 void WaterRenderPassSubSystem::ReadFrom(core::utils::IDeserializer* source)

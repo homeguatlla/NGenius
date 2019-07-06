@@ -271,7 +271,7 @@
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>
-					<scale X="100.0" Y="100.0" Z="100.0"/>
+					<scale X="500.0" Y="500.0" Z="500.0"/>
 				</transformation>
 				<components>
 					<component enabled="1" type="rotation_component" rotation_axis="" rotation_speed="0.01">
