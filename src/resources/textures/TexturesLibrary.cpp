@@ -44,14 +44,14 @@ void TexturesLibrary::LoadTexture(std::string name, std::string filename, bool h
 {
 	Texture* texture = new Texture();
 	texture->Load(filename, ++mCurrentTextureUnit, hasMipmapping, hasWrapping);
-	AddElement(name, texture);
+	AddOrReplaceElement(name, texture);
 }
 
 ITexture* TexturesLibrary::CreateColorTexture(std::string name, const glm::vec2& size)
 {
 	Texture* texture = new Texture();
 	texture->CreateTexture(++mCurrentTextureUnit, static_cast<int>(size.x), static_cast<int>(size.y));
-	AddElement(name, texture);
+	AddOrReplaceElement(name, texture);
 
 	return texture;
 }
@@ -60,14 +60,14 @@ void TexturesLibrary::CreateDepthTexture(std::string name, unsigned int width, u
 {
 	Texture* texture = new Texture();
 	texture->CreateDepthTexture(++mCurrentTextureUnit, width, height);
-	AddElement(name, texture);
+	AddOrReplaceElement(name, texture);
 }
 
 ITexture* TexturesLibrary::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
 {
 	Texture* texture = new Texture();
 	texture->CreateDepthTexture(++mCurrentTextureUnit, size.x, size.y);
-	AddElement(name, texture);
+	AddOrReplaceElement(name, texture);
 
 	return texture;
 }
@@ -84,7 +84,7 @@ void TexturesLibrary::LoadTexturesPendingToLoad()
 		bool loaded = texture->Load(std::get<1>(tuple), ++mCurrentTextureUnit, true, true);
 		if (loaded)
 		{
-			AddElement(std::get<0>(tuple), texture);
+			AddOrReplaceElement(std::get<0>(tuple), texture);
 			if (std::get<2>(tuple) != nullptr)
 			{
 				std::get<2>(tuple)(std::get<0>(tuple), texture);
@@ -172,7 +172,7 @@ void TexturesLibrary::ReadTextureCubemapFrom(core::utils::IDeserializer* source)
 	{
 		TextureCubemap* cubemap = new TextureCubemap();
 		cubemap->Load(filenames, ++mCurrentTextureUnit);
-		AddElement(textureName, cubemap);
+		AddOrReplaceElement(textureName, cubemap);
 	}
 	else
 	{
@@ -192,7 +192,7 @@ void TexturesLibrary::ReadTextureArrayFrom(core::utils::IDeserializer * source)
 	{
 		TextureArray* textureArray = new TextureArray();
 		textureArray->Load(filenames, ++mCurrentTextureUnit, true);
-		AddElement(textureName, textureArray);
+		AddOrReplaceElement(textureName, textureArray);
 	}
 	else
 	{

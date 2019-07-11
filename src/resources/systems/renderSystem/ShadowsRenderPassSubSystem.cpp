@@ -44,7 +44,7 @@ void ShadowsRenderPassSubSystem::Init()
 		mShadowCastCamera = CreateShadowCastCamera(mDirectionalLightDirection);
 		mRenderSystem->AddCamera(mShadowCastCamera);
 		mRenderPass = CreateShadowRenderPass();
-		mRenderSystem->AddRenderPass(mRenderPass);
+		mRenderSystem->AddOrReplaceRenderPass(mRenderPass);
 		mIsInitialized = true;
 	}
 }
@@ -104,7 +104,7 @@ void ShadowsRenderPassSubSystem::UpdateState()
 		}
 		else
 		{
-			mRenderSystem->AddRenderPass(mRenderPass);
+			mRenderSystem->AddOrReplaceRenderPass(mRenderPass);
 		}
 		mShadowMapTexture->SetActive(mIsShadowCastEnabled);
 	}

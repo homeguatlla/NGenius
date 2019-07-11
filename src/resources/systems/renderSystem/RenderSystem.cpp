@@ -96,16 +96,33 @@ mNumberRenderers(0)
 
 RenderSystem::~RenderSystem()
 {
-	for (const RenderPass* pass : mRenderPasses)
-	{
-		delete pass;
-	}
+	ReleaseRenderPasses();
 
 	DestroyCameras();
 	DestroyResourcesLibraries();
 	DestroySubSystems();
 	delete mGuiTool;
 	glfwDestroyWindow(mWindow);
+}
+
+void RenderSystem::ReleaseRenderPasses()
+{
+	for (const RenderPass* pass : mRenderPasses)
+	{
+		delete pass;
+	}
+
+	for (const RenderPass* pass : mRenderPassesAfterPostProcessing)
+	{
+		delete pass;
+	}
+	mRenderPasses.clear();
+	mRenderPassesAfterPostProcessing.clear();
+}
+
+void RenderSystem::ReleaseRenderers()
+{
+	mRenderersPerPass.clear();
 }
 
 //Initializing the engine basic stuff. The subsystems which need information apart will be initialized later
@@ -125,6 +142,8 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 
 void RenderSystem::Start()
 {
+	ReleaseRenderers();
+
 	mGuiTool->Initialize();
 	mShadowsRenderPass->Init();
 	mWaterRenderPass->Init();
@@ -312,6 +331,12 @@ void RenderSystem::Render(RenderPass* renderPass)
 	}
 }
 
+void RenderSystem::AddOrReplaceRenderPass(RenderPass* renderPass, bool addAfterPostProcessing)
+{
+	RemoveRenderPass(renderPass);
+	AddRenderPass(renderPass, addAfterPostProcessing);
+}
+
 void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing)
 {
 	assert(renderPass != nullptr);
@@ -370,7 +395,7 @@ bool RenderSystem::ValidateRenderPassesLayerMasks(RenderPass* renderPass, std::v
 
 void RenderSystem::RemoveRenderPass(RenderPass* renderPass)
 {
-	RenderPassesIterator it = std::find(mRenderPasses.begin(), mRenderPasses.end(), renderPass);
+	RenderPassesIterator it = std::find_if(mRenderPasses.begin(), mRenderPasses.end(), [&](RenderPass* pass) { return pass->GetName() == renderPass->GetName(); });
 	bool found = it != mRenderPasses.end();
 	if (found)
 	{
@@ -378,7 +403,7 @@ void RenderSystem::RemoveRenderPass(RenderPass* renderPass)
 	}
 	else
 	{
-		RenderPassesIterator it = std::find(mRenderPassesAfterPostProcessing.begin(), mRenderPassesAfterPostProcessing.end(), renderPass);
+		RenderPassesIterator it = std::find_if(mRenderPassesAfterPostProcessing.begin(), mRenderPassesAfterPostProcessing.end(), [&](RenderPass* pass) { return pass->GetName() == renderPass->GetName(); });
 		bool found = it != mRenderPassesAfterPostProcessing.end();
 		if (found)
 		{
@@ -414,7 +439,29 @@ void RenderSystem::AddCamera(ICamera* camera)
 	mCamerasList[camera->GetName()] = camera;
 }
 
-ICamera* RenderSystem::GetCamera(const std::string name)
+void RenderSystem::RemoveCamera(const std::string& key)
+{
+	if (HasCamera(key))
+	{
+		mCamerasList.erase(key);
+	}
+}
+
+bool RenderSystem::HasCamera(const std::string& key)
+{
+	return mCamerasList.find(key) != mCamerasList.end();
+}
+
+void RenderSystem::AddOrReplaceCamera(ICamera* camera)
+{
+	if (HasCamera(camera->GetName()))
+	{
+		RemoveCamera(camera->GetName());
+	}
+	AddCamera(camera);
+}
+
+ICamera* RenderSystem::GetCamera(const std::string& name)
 {
 	if (mCamerasList.find(name) != mCamerasList.end())
 	{
@@ -451,6 +498,7 @@ void RenderSystem::ReadCameraFrom(core::utils::IDeserializer* source)
 	//crear un constructor vacío y meter un Build dentro de la cámara, pero no me convence tampoco.
 	ICamera* camera;
 	float fov;
+
 	if (source->ReadParameter("fov", &fov))
 	{
 		camera = InstantiableObject::CreatePerspectiveCamera("PerspectiveCamera", fov, 0.0f, 0.0f, 0.0f);
@@ -474,10 +522,9 @@ void RenderSystem::ReadCameraFrom(core::utils::IDeserializer* source)
 	{
 		mFreeCamera = camera;
 	}
-
-
+	
 	camera->ReadFrom(source);
-	AddCamera(camera);
+	AddOrReplaceCamera(camera);
 }
 
 void RenderSystem::DestroyCameras()
@@ -1145,7 +1192,7 @@ void RenderSystem::ReadRenderPassFrom(core::utils::IDeserializer* source)
 	{
 		RenderPass* renderPass = new RenderPass(renderPassName, camera, layerMask);
 		renderPass->ReadFrom(source);
-		AddRenderPass(renderPass, addAfterPostProcessing);
+		AddOrReplaceRenderPass(renderPass, addAfterPostProcessing);
 	}
 	else
 	{

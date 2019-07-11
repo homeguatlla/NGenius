@@ -111,10 +111,14 @@ public:
 	void AddToRender(IRenderer* renderer);
 	
 	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing = false);
+	void AddOrReplaceRenderPass(RenderPass* renderPass, bool addAfterPostProcessing = false);
 	void RemoveRenderPass(RenderPass* renderPass);
 
 	void AddCamera(ICamera* camera);
-	ICamera* GetCamera(const std::string name);
+	void AddOrReplaceCamera(ICamera* camera);
+	void RemoveCamera(const std::string& name);
+	ICamera* GetCamera(const std::string& name);
+	bool HasCamera(const std::string& key);
 	ICamera* GetGameplayCamera() const { return mGameplayCamera; }
 	ICamera* GetFreeCamera() const { return mFreeCamera; }
 
@@ -167,6 +171,10 @@ public:
 	// Heredado vía ISerializable
 	virtual void ReadFrom(core::utils::IDeserializer* source) override;
 	virtual void WriteTo(core::utils::ISerializer* destination) override;
+
+	//release
+	void ReleaseRenderPasses();
+	void ReleaseRenderers();
 
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 

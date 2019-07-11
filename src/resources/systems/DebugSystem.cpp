@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "DebugSystem.h"
+#include "../../NGenius.h"
 #include "../GameEntity.h"
 #include "../../input/InputHandler.h"
 #include "../components/DebugComponent.h"
@@ -8,13 +9,14 @@
 #include "GLFW/glfw3.h"
 #include <algorithm>
 
-DebugSystem::DebugSystem(RenderSystem* renderSystem, InputHandler* inputHandler) :
+DebugSystem::DebugSystem(NGenius* engine, RenderSystem* renderSystem, InputHandler* inputHandler) :
 	mIsDebugModeEnabled(false),
 	mIsBoundingBoxVisible(false),
 	mIsOverdrawEnabled(false),
 	mIsWireframeEnabled(false),
 	mIsPostProcessEnabled(true),
 	mInputHandler(inputHandler),
+	mEngine(engine),
 	mRenderSystem(renderSystem),
 	mIsInitialized(false)
 {
@@ -115,6 +117,11 @@ void DebugSystem::OnKey(int key, int action)
 	{
 		GuiTool* guiTool = mRenderSystem->GetGuiTool();
 		guiTool->IsVisible() ? guiTool->Hide() : guiTool->Show();
+	}
+
+	if (key == GLFW_KEY_R && action == GLFW_PRESS)
+	{
+		mEngine->Reload();
 	}
 }
 

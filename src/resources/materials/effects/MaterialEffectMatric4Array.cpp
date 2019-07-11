@@ -44,7 +44,7 @@ MaterialEffectMatrix4Array* MaterialEffectMatrix4Array::DoClone() const
 IMaterialEffect* MaterialEffectMatrix4Array::Create(IMaterial* material)
 {
 	MaterialEffectMatrix4Array* effect = new MaterialEffectMatrix4Array();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 

@@ -28,6 +28,11 @@ PostProcessSubSystem::~PostProcessSubSystem()
 	{
 		delete mFrameBuffer;
 	}
+	ReleaseEffects();
+}
+
+void PostProcessSubSystem::ReleaseEffects()
+{
 	for (PostProcessEffect* effect : mEffects)
 	{
 		delete effect;
@@ -48,7 +53,7 @@ void PostProcessSubSystem::Init()
 void PostProcessSubSystem::LoadContrastPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, unsigned int width, unsigned int height)
 {
 	IMaterial* material = mRenderSystem->CreateMaterial("contrast", mRenderSystem->GetShader("ContrastShader"));
-	material->AddEffect(new MaterialEffectFloat(0.3f));
+	material->AddOrReplaceEffect(new MaterialEffectFloat(0.3f));
 
 	ImageRenderer* renderer = new ImageRenderer(model, material);
 	PostProcessEffect* postProcessEffect = new PostProcessEffect(type, texture,	renderer);
@@ -60,7 +65,7 @@ void PostProcessSubSystem::LoadContrastPostProcess(Model* model, Texture* textur
 void PostProcessSubSystem::LoadBrightPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, const glm::vec3& bright, unsigned int width, unsigned int height)
 {
 	IMaterial* material = mRenderSystem->CreateMaterial("bright", mRenderSystem->GetShader("BrightShader"));
-	material->AddEffect(new MaterialEffectFloat3(bright));
+	material->AddOrReplaceEffect(new MaterialEffectFloat3(bright));
 
 	ImageRenderer* renderer = new ImageRenderer(model, material);
 	PostProcessEffect* postProcessEffect = new PostProcessEffect(type, texture, renderer);
@@ -72,7 +77,7 @@ void PostProcessSubSystem::LoadBrightPostProcess(Model* model, Texture* texture,
 void PostProcessSubSystem::LoadHorizontalBlurPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, float blurGranularity, unsigned int width, unsigned int height)
 {
 	IMaterial* material = mRenderSystem->CreateMaterial("horizontal_blur", mRenderSystem->GetShader("HorizontalBlurShader"));
-	material->AddEffect(new MaterialEffectFloat(blurGranularity));
+	material->AddOrReplaceEffect(new MaterialEffectFloat(blurGranularity));
 
 	ImageRenderer* renderer = new ImageRenderer(model, material);
 	PostProcessEffect* postProcessEffect = new PostProcessEffect(type, texture, renderer);
@@ -83,7 +88,7 @@ void PostProcessSubSystem::LoadHorizontalBlurPostProcess(Model* model, Texture* 
 void PostProcessSubSystem::LoadVerticalBlurPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, float blurGranularity, unsigned int width, unsigned int height)
 {
 	IMaterial* material = mRenderSystem->CreateMaterial("vertical_blur", mRenderSystem->GetShader("VerticalBlurShader"));
-	material->AddEffect(new MaterialEffectFloat(blurGranularity));
+	material->AddOrReplaceEffect(new MaterialEffectFloat(blurGranularity));
 
 	ImageRenderer* renderer = new ImageRenderer(model, material);
 	PostProcessEffect* postProcessEffect = new PostProcessEffect(type, texture,	renderer);
@@ -94,7 +99,7 @@ void PostProcessSubSystem::LoadVerticalBlurPostProcess(Model* model, Texture* te
 void PostProcessSubSystem::LoadBloomPostProcess(Model* model, Texture* texture, Texture* bright, PostProcessEffect::PostProcessEffectType type, unsigned int width, unsigned int height)
 {
 	IMaterial* material = mRenderSystem->CreateMaterial("bloom", mRenderSystem->GetShader("BloomShader"));
-	material->AddEffect(new MaterialEffectDepthTexture(bright, 1.0f));
+	material->AddOrReplaceEffect(new MaterialEffectDepthTexture(bright, 1.0f));
 
 	ImageRenderer* renderer = new ImageRenderer(model, material);
 	PostProcessEffect* postProcessEffect = new PostProcessEffect(type, texture, renderer);
@@ -104,6 +109,8 @@ void PostProcessSubSystem::LoadBloomPostProcess(Model* model, Texture* texture, 
 
 void PostProcessSubSystem::Load()
 {
+	ReleaseEffects();
+
 	unsigned int screenWidth = static_cast<unsigned int>(mRenderSystem->GetScreenWidth());
 	unsigned int screenHeight = static_cast<unsigned int>(mRenderSystem->GetScreenHeight());
 

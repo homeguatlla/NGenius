@@ -69,7 +69,7 @@ IMaterial* MaterialsLibrary::CreateMaterial(const std::string& name, IShaderProg
 	assert(shader != nullptr);
 
 	IMaterial* material = new BasicMaterial(shader);
-	AddElement(name, material);
+	AddOrReplaceElement(name, material);
 
 	return material;
 }
@@ -131,16 +131,9 @@ void MaterialsLibrary::ReadMaterialFrom(core::utils::IDeserializer * source)
 	source->ReadParameter("shader", shaderName);
 	IShaderProgram* shader =  mShadersLibrary->GetElement(shaderName);
 
-	if (GetElement(materialName) == nullptr)
-	{
-		IMaterial* material = CreateMaterial(materialName, shader);
-		ReadMaterialEffects(material, source);
-	}
-	else
-	{
-		Log(Log::LOG_WARNING) << "Material already loaded " << materialName << "\n";
-	}
-
+	IMaterial* material = CreateMaterial(materialName, shader);
+	ReadMaterialEffects(material, source);
+	
 	source->EndAttribute();
 }
 void MaterialsLibrary::ReadMaterialEffects(IMaterial* material, core::utils::IDeserializer * source)

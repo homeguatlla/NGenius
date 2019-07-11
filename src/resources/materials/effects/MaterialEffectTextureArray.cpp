@@ -45,7 +45,7 @@ MaterialEffectTextureArray* MaterialEffectTextureArray::DoClone() const
 IMaterialEffect* MaterialEffectTextureArray::Create(IMaterial* material)
 {
 	MaterialEffectTextureArray* effect = new MaterialEffectTextureArray();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 

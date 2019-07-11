@@ -95,7 +95,7 @@ MaterialEffectWater* MaterialEffectWater::DoClone() const
 IMaterialEffect* MaterialEffectWater::Create(IMaterial* material)
 {
 	MaterialEffectWater* effect = new MaterialEffectWater();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 

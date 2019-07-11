@@ -222,7 +222,7 @@ void NGenius::CreateSystems(float screenWidth, float screenHeight)
 	mRenderSystem = new RenderSystem(screenWidth, screenHeight);
 	mPhysicsSystem = new PhysicsSystem();
 	mInputSystem = new InputSystem(mInputHandler);
-	mDebugSystem = new DebugSystem(mRenderSystem, mInputHandler);
+	mDebugSystem = new DebugSystem(this, mRenderSystem, mInputHandler);
 	mParticlesSystem = new ParticlesSystem();
 	mSpacePartitionSystem = new SpacePartitionSystem();
 	mEnvironmentSystem = new EnvironmentSystem();
@@ -426,7 +426,7 @@ void NGenius::AddParticleEmitter(ParticlesEmitter* emitter)
 void NGenius::AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing)
 {
 	assert(mRenderSystem != nullptr);
-	mRenderSystem->AddRenderPass(renderPass, addAfterPostProcessing);
+	mRenderSystem->AddOrReplaceRenderPass(renderPass, addAfterPostProcessing);
 }
 
 void NGenius::AddLight(Light* light)
@@ -507,6 +507,12 @@ void NGenius::SetDebugModeEnabled(bool enabled)
 BaseVisitable<>::ReturnType NGenius::Accept(BaseVisitor& guest)
 {
 	return AcceptImpl(*this, guest);
+}
+
+void NGenius::Reload()
+{
+	LoadFromFile();
+	Start();
 }
 
 void NGenius::Query(const AABB& aabb, std::vector<GameEntity*>& result)

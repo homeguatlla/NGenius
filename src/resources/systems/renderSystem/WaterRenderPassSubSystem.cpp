@@ -63,8 +63,8 @@ void WaterRenderPassSubSystem::Init()
 		//lo que quiere decir que tienen que tener alguna layer_mask distinta como ahora
 		//que la reflexion tiene la skybox y la refracción no.
 		//sino, una de las dos renderpass no se renderizará bien, o la refracción o la relflexión. No sé el motivo.
-		mRenderSystem->AddRenderPass(mReflectionRenderPass);
-		mRenderSystem->AddRenderPass(mRefractionRenderPass);		
+		mRenderSystem->AddOrReplaceRenderPass(mReflectionRenderPass);
+		mRenderSystem->AddOrReplaceRenderPass(mRefractionRenderPass);		
 		
 		mIsInitialized = true;
 	}

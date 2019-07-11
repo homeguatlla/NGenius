@@ -28,13 +28,19 @@ mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limi
 
 GameScene::~GameScene()
 {
+	Release();
+}
+
+void GameScene::Release()
+{
 	mEntitiesToRemove.clear(); //these entities were removed when releasing mEntities.
 	ReleaseEntities(&mEntities);
-	ReleaseEntities(&mNewEntitiesToAdd);	
+	ReleaseEntities(&mNewEntitiesToAdd);
 }
 
 void GameScene::Start(RenderSystem* renderSystem)
 {
+	
 	for (GameEntity* entity : mNewEntitiesToAdd)
 	{
 		entity->Build(renderSystem);
@@ -148,6 +154,7 @@ void GameScene::SaveToFile()
 
 void GameScene::ReadFrom(core::utils::IDeserializer* source)
 {
+	Release();
 	source->BeginAttribute(std::string("game_scene"));
 	source->ReadParameter("name", mName);
 

@@ -42,7 +42,7 @@ MaterialEffectFloat3Array* MaterialEffectFloat3Array::DoClone() const
 IMaterialEffect* MaterialEffectFloat3Array::Create(IMaterial* material)
 {
 	MaterialEffectFloat3Array* effect = new MaterialEffectFloat3Array();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 

@@ -5,6 +5,7 @@
 
 class GameEntity;
 class InputHandler;
+class NGenius;
 class RenderSystem;
 
 class DebugSystem : public IInputListener, public IGameSceneListener
@@ -18,12 +19,13 @@ class DebugSystem : public IInputListener, public IGameSceneListener
 	bool mIsWireframeEnabled;
 	bool mIsPostProcessEnabled;
 	InputHandler* mInputHandler;
+	NGenius* mEngine;
 	RenderSystem* mRenderSystem;
 	bool mIsInitialized;
 
 public:
 
-	DebugSystem(RenderSystem* renderSystem, InputHandler* inputHandler);
+	DebugSystem(NGenius* engine, RenderSystem* renderSystem, InputHandler* inputHandler);
 	~DebugSystem();
 
 	void Start();

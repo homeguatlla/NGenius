@@ -55,7 +55,7 @@ MaterialEffectFogProperties* MaterialEffectFogProperties::DoClone() const
 IMaterialEffect* MaterialEffectFogProperties::Create(IMaterial* material)
 {
 	MaterialEffectFogProperties* effect = new MaterialEffectFogProperties();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 

@@ -39,7 +39,7 @@ MaterialEffectClippingPlane* MaterialEffectClippingPlane::DoClone() const
 IMaterialEffect* MaterialEffectClippingPlane::Create(IMaterial* material)
 {
 	MaterialEffectClippingPlane* effect = new MaterialEffectClippingPlane();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 

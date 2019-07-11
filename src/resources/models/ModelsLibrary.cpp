@@ -112,13 +112,13 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 		if (animation != nullptr && rootJoint != nullptr)
 		{
 			AnimatedModel* animatedModel = new AnimatedModel(name, model, rootJoint);
-			AddElement(name, animatedModel);
-			mAnimationsLibrary->AddElement(animation->GetName(), animation);
+			AddOrReplaceElement(name, animatedModel);
+			mAnimationsLibrary->AddOrReplaceElement(animation->GetName(), animation);
 		}
 		else
 		{
 			Model* modelRender = new Model(model);
-			AddElement(name, modelRender);
+			AddOrReplaceElement(name, modelRender);
 		}
 
 		std::string path = GetPath(filename) + "/";
@@ -255,7 +255,7 @@ void ModelsLibrary::CreateSkyBox()
 	Mesh* mMesh = new Mesh(vertexs, uv, indexes);
 	Model* model = new Model(mMesh);
 
-	AddElement("skybox", model);
+	AddOrReplaceElement("skybox", model);
 }
 
 void ModelsLibrary::CreateCube()
@@ -314,7 +314,7 @@ void ModelsLibrary::CreateCube()
 	Mesh* mMesh = new Mesh(vertexs, uv, indexes);
 	Model* model = new Model(mMesh);
 
-	AddElement("cube", model);
+	AddOrReplaceElement("cube", model);
 }
 
 void ModelsLibrary::CreateQuad(const std::string& name, float width, float height)
@@ -343,5 +343,5 @@ void ModelsLibrary::CreateQuad(const std::string& name, float width, float heigh
 	Mesh* mMesh = new Mesh(vertexs, uv, indexs);
 	Model* model = new Model(mMesh);
 
-	AddElement(name, model);
+	AddOrReplaceElement(name, model);
 }

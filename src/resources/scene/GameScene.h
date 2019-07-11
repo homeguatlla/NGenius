@@ -44,7 +44,7 @@ public:
 	void UnRegisterGameSceneListener(IGameSceneListener* listener);
 
 	void SaveToFile();
-
+	
 	// Heredado vía ISerializable
 	void ReadFrom(core::utils::IDeserializer* source) override;
 	void WriteTo(core::utils::ISerializer* destination) override;
@@ -52,6 +52,7 @@ public:
 	BaseVisitable<>::ReturnType Accept(BaseVisitor& guest) override;
 
 private:
+	void Release();
 	void ReleaseEntities(std::vector<GameEntity*>* entities);
 	void RemoveEntities();
 	void AddNewEntities();

@@ -57,6 +57,21 @@ public:
 		}
 	}
 
+	template<typename T> void AddOrReplaceEffect(T* effect)
+	{
+		static_assert(std::is_base_of<IMaterialEffect, T>::value, "The type must inherit from IMaterialEffect");
+		assert(effect != nullptr);
+
+		if (HasEffect<T>())
+		{
+			RemoveEffect<T>();
+		}
+		else
+		{
+			AddEffect(effect);
+		}
+	}
+
 	template<typename T> void RemoveEffect()
 	{
 		static_assert(std::is_base_of<IMaterialEffect, T>::value, "The type must inherit from IMaterialEffect");

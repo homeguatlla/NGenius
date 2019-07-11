@@ -148,6 +148,9 @@ public:
 	//environment
 	float GetDayTime() const;
 
+	//reload
+	void Reload();
+
 	//serialize
 	void SaveToFile();
 

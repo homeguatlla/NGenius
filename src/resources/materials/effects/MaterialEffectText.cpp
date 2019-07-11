@@ -92,7 +92,7 @@ MaterialEffectText* MaterialEffectText::DoClone() const
 IMaterialEffect* MaterialEffectText::Create(IMaterial* material)
 {
 	MaterialEffectText* effect = new MaterialEffectText();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 

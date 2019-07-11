@@ -80,7 +80,7 @@ MaterialEffectTextureCubemap* MaterialEffectTextureCubemap::DoClone() const
 IMaterialEffect* MaterialEffectTextureCubemap::Create(IMaterial* material)
 {
 	MaterialEffectTextureCubemap* effect = new MaterialEffectTextureCubemap();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 

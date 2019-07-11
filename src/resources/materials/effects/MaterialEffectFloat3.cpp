@@ -44,7 +44,7 @@ MaterialEffectFloat3* MaterialEffectFloat3::DoClone() const
 IMaterialEffect* MaterialEffectFloat3::Create(IMaterial* material)
 {
 	MaterialEffectFloat3* effect = new MaterialEffectFloat3();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 

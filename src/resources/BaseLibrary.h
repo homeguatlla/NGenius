@@ -9,10 +9,12 @@ protected:
 	std::map<const std::string, T> mElements;
 
 public:
+	typedef typename std::map<const std::string, T>::iterator BaseLibraryIterator;
+
 	BaseLibrary() {}
 	virtual ~BaseLibrary() 
 	{
-		std::map<const std::string, T>::iterator it;
+		BaseLibraryIterator it;
 
 		for (it = mElements.begin(); it != mElements.end(); ++it)
 		{
@@ -21,8 +23,7 @@ public:
 		mElements.clear();
 	}
 
-	typedef typename std::map<const std::string, T>::iterator BaseLibraryIterator;
-
+	
 	T GetElement(const std::string& key)
 	{
 		if (mElements.find(key) != mElements.end())
@@ -45,6 +46,22 @@ public:
 		if (mElements.find(key) == mElements.end())
 		{
 			mElements[key] = element;
+		}
+	}
+
+	void AddOrReplaceElement(const std::string& key, T element)
+	{
+		RemoveElement(key);
+		AddElement(key, element);
+	}
+
+	void RemoveElement(const std::string& key)
+	{
+		BaseLibraryIterator it = mElements.find(key);
+		if(it != mElements.end())
+		{
+			delete it->second;
+			mElements.erase(key);						
 		}
 	}
 };

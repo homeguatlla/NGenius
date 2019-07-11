@@ -57,7 +57,7 @@ void ShadersLibrary::Load()
 void ShadersLibrary::AddShader(const char* name, IShaderProgram* shader)
 {
 	shader->Init();
-	AddElement(name, shader);
+	AddOrReplaceElement(name, shader);
 }
 
 void ShadersLibrary::ReadFrom(core::utils::IDeserializer * source)

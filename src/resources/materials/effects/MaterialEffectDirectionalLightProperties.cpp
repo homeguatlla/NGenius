@@ -48,7 +48,7 @@ MaterialEffectDirectionalLightProperties* MaterialEffectDirectionalLightProperti
 IMaterialEffect* MaterialEffectDirectionalLightProperties::Create(IMaterial* material)
 {
 	MaterialEffectDirectionalLightProperties* effect = new MaterialEffectDirectionalLightProperties();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 

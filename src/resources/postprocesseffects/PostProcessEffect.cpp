@@ -42,8 +42,10 @@ void PostProcessEffect::Init()
 
 	//Creating the materialEffectDiffuse with the Input Texture equal to the Output Texture only because of creation
 	IMaterial* material = mRenderer->GetMaterial();
+	assert(material != nullptr);
+
 	mMaterialEffectDiffuseTexture = new MaterialEffectDiffuseTexture(mOutTexture, glm::vec3(0.0f), 0);
-	material->AddEffect(mMaterialEffectDiffuseTexture);
+	material->AddOrReplaceEffect(mMaterialEffectDiffuseTexture);
 }
 
 void PostProcessEffect::SetBufferSize(unsigned int width, unsigned int height)

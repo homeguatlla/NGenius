@@ -56,7 +56,7 @@ MaterialEffectShadowProperties* MaterialEffectShadowProperties::DoClone() const
 IMaterialEffect* MaterialEffectShadowProperties::Create(IMaterial* material)
 {
 	MaterialEffectShadowProperties* effect = new MaterialEffectShadowProperties();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 

@@ -67,7 +67,7 @@ MaterialEffectParticle* MaterialEffectParticle::DoClone() const
 IMaterialEffect* MaterialEffectParticle::Create(IMaterial* material)
 {
 	MaterialEffectParticle* effect = new MaterialEffectParticle();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 

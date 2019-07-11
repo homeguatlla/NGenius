@@ -53,7 +53,7 @@ MaterialEffectDepthTexture* MaterialEffectDepthTexture::DoClone() const
 IMaterialEffect* MaterialEffectDepthTexture::Create(IMaterial* material)
 {
 	MaterialEffectDepthTexture* effect = new MaterialEffectDepthTexture();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 

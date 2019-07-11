@@ -66,7 +66,7 @@ MaterialEffectNormalTexture* MaterialEffectNormalTexture::DoClone() const
 IMaterialEffect* MaterialEffectNormalTexture::Create(IMaterial* material)
 {
 	MaterialEffectNormalTexture* effect = new MaterialEffectNormalTexture();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 

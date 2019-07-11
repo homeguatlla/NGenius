@@ -30,7 +30,8 @@ void FontsLibrary::LoadFont(const std::string& filename)
 	std::string filepath = FileReader::GetFilepath(filename);
 	if (font != nullptr)
 	{
-		AddElement(font->GetName(), font);
+		AddOrReplaceElement(font->GetName(), font);
+	
 		if (!font->GetTextureFilename().empty())
 		{
 			mTexturesLibrary->AddTextureNameToLoad(font->GetName(), filepath + font->GetTextureFilename(), std::bind(&FontsLibrary::OnTextureFontLoaded, this, std::placeholders::_1, std::placeholders::_2));

@@ -70,7 +70,7 @@ void MaterialEffectDiffuseTexture::CopyValuesFrom(IMaterial* material)
 IMaterialEffect* MaterialEffectDiffuseTexture::Create(IMaterial* material)
 {
 	MaterialEffectDiffuseTexture* effect = new MaterialEffectDiffuseTexture();
-	material->AddEffect(effect);
+	material->AddOrReplaceEffect(effect);
 	return effect;
 }
 
