@@ -1613,13 +1613,8 @@ int main(void)
 {	
 	Initialize();
 
-	//CreateEntities();
-	CreateSubSystems();
-
 	mEngine->SetCastingShadowsTarget(mPlayer);
 	mEngine->Run();
-
-	DeleteEntities();
 
 	_CrtDumpMemoryLeaks();
 	return 0;
