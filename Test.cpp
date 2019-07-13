@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include <Windows.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -118,7 +117,6 @@
 #include "src/input/bindings/MouseToEventBind.h"
 
 #include "src/utils/Log.h"
-
 
 using namespace glm;
 using namespace std;
@@ -1612,8 +1610,7 @@ void Initialize()
 }
 
 int main(void)
-{
-	
+{	
 	Initialize();
 
 	//CreateEntities();
@@ -1624,6 +1621,7 @@ int main(void)
 
 	DeleteEntities();
 
+	_CrtDumpMemoryLeaks();
 	return 0;
 }
 

@@ -152,6 +152,11 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 	imageData = NULL;
 	//delete header;
 
+	for (mY = 0; mY < mHeight; mY++)
+		delete mRowPointers[mY];
+	
+	delete mRowPointers;
+
 	return true;
 }
 
