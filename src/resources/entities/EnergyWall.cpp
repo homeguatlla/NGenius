@@ -5,6 +5,7 @@
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectFloat3.h"
 #include "../materials/effects/MaterialEffectFloat.h"
+#include "../Memory.h"
 
 EnergyWall::EnergyWall(Transformation* transformation, IMaterial* material, Model* model, float maxLiveTime) : 
 GameEntity(transformation),
@@ -18,7 +19,7 @@ mMaterialEffectFloat(nullptr)
 	assert(model != nullptr);
 	assert(material != nullptr);
 	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
-	mMaterialEffectFloat = new MaterialEffectFloat(mLiveTime);
+	mMaterialEffectFloat = DBG_NEW MaterialEffectFloat(mLiveTime);
 	material->AddEffect(mMaterialEffectFloat);
 	SetRenderer(new EnergyWallRenderer(model, material));
 	GetRenderer()->SetLayer(IRenderer::LAYER_PARTICLES);
@@ -31,7 +32,7 @@ EnergyWall::~EnergyWall()
 
 EnergyWall* EnergyWall::DoClone() const
 {
-	EnergyWall* clone = new EnergyWall(new Transformation(*GetTransformation()), mMaterial, mModel, mLiveTime);
+	EnergyWall* clone = DBG_NEW EnergyWall(new Transformation(*GetTransformation()), mMaterial, mModel, mLiveTime);
 
 	return clone;
 

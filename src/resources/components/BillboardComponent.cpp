@@ -5,6 +5,7 @@
 #include "../GameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "../Memory.h"
 
 BillboardComponent::BillboardComponent(const ICamera* camera) :
 mCamera(camera)
@@ -18,7 +19,7 @@ BillboardComponent::~BillboardComponent()
 
 BillboardComponent* BillboardComponent::DoClone() const
 {
-	return new BillboardComponent(*this);
+	return DBG_NEW BillboardComponent(*this);
 }
 
 void BillboardComponent::UpdateInternal(float elapsedTime)

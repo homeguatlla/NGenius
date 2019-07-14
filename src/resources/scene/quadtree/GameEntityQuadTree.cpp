@@ -3,6 +3,7 @@
 #include "../../GameEntity.h"
 #include "../../renderers/IRenderer.h"
 #include "../../Transformation.h"
+#include "../Memory.h"
 
 const int GameEntityQuadTree::MAX_QUADTREE_LEVELS = 6;
 
@@ -10,7 +11,7 @@ GameEntityQuadTree::GameEntityQuadTree(const AABB& boundingBox)
 {
 	glm::vec2 regionMin(boundingBox.GetVertexMin().x, boundingBox.GetVertexMin().z);
 	glm::vec2 regionMax(boundingBox.GetVertexMax().x, boundingBox.GetVertexMax().z);
-	mQuadTree = new QuadTree<GameEntity>(regionMin, regionMax, MAX_QUADTREE_LEVELS, nullptr);
+	mQuadTree = DBG_NEW QuadTree<GameEntity>(regionMin, regionMax, MAX_QUADTREE_LEVELS, nullptr);
 }
 
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "IRenderer.h"
+#include "../../Memory.h"
 
 class Model;
 class IMaterial;
@@ -18,7 +19,7 @@ public:
 	static std::string GetClassName() { return std::string("SkyBoxRenderer"); }
 	static IRenderer* Create(Model* model, IMaterial* material)
 	{
-		return new SkyBoxRenderer(model, material);
+		return DBG_NEW SkyBoxRenderer(model, material);
 	}
 
 private:

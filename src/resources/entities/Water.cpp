@@ -11,6 +11,7 @@
 #include "../../utils/serializer/IDeserializer.h"
 #include "../../utils/serializer/XMLDeserializer.h"
 #include "../../utils/Log.h"
+#include "../Memory.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -38,7 +39,7 @@ void Water::Update(float elapsedTime)
 
 GameEntity* Water::CreateGameEntity()
 {
-	return new Water();
+	return DBG_NEW Water();
 }
 
 void Water::Build(RenderSystem* renderSystem)
@@ -86,7 +87,7 @@ void Water::CreateModel()
 	indices.push_back(2);
 	indices.push_back(1);
 
-	mModel = new Model(new Mesh(vertexs, uv, indices));
+	mModel = DBG_NEW Model(new Mesh(vertexs, uv, indices));
 }
 
 void Water::Create(IMaterial* material)

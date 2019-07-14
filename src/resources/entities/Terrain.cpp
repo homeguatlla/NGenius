@@ -17,6 +17,8 @@
 #include "../../utils/serializer/XMLDeserializer.h"
 #include "../../utils/Log.h"
 
+#include "../Memory.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 
 Terrain::Terrain(Transformation* transformation) :
@@ -54,7 +56,7 @@ void Terrain::SetScale(float scale)
 
 GameEntity* Terrain::CreateGameEntity()
 {
-	return new Terrain();
+	return DBG_NEW Terrain();
 }
 
 void Terrain::Build(RenderSystem* renderSystem)
@@ -244,7 +246,7 @@ void Terrain::Create(IMaterial* material, ITexture* heighmap)
 		mHeightmap = static_cast<Texture*>(heighmap);
 		CalculateY();
 
-		mModel = new Model(new Mesh(mVertexs, uv, indices));
+		mModel = DBG_NEW Model(new Mesh(mVertexs, uv, indices));
 	}
 
 	SetRenderer(new IndicesRenderer(mModel, material));

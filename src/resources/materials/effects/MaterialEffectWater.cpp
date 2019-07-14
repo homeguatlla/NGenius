@@ -4,6 +4,7 @@
 #include "../../../utils/serializer/XMLDeserializer.h"
 #include "../../../utils/Log.h"
 #include "../../textures/TexturesLibrary.h"
+#include "../Memory.h"
 
 MaterialEffectWater::MaterialEffectWater() :
 	mReflectionTexture(nullptr),
@@ -89,12 +90,12 @@ void MaterialEffectWater::CopyValuesFrom(IMaterial* material)
 
 MaterialEffectWater* MaterialEffectWater::DoClone() const
 {
-	return new MaterialEffectWater(*this);
+	return DBG_NEW MaterialEffectWater(*this);
 }
 
 IMaterialEffect* MaterialEffectWater::Create(IMaterial* material)
 {
-	MaterialEffectWater* effect = new MaterialEffectWater();
+	MaterialEffectWater* effect = DBG_NEW MaterialEffectWater();
 	material->AddOrReplaceEffect(effect);
 	return effect;
 }

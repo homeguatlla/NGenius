@@ -2,6 +2,7 @@
 #include "MaterialEffectShadowProperties.h"
 #include "../IMaterial.h"
 #include "../../../utils/serializer/XMLDeserializer.h"
+#include "../Memory.h"
 
 MaterialEffectShadowProperties::MaterialEffectShadowProperties(int pfcCounter) :
 	mDepthTexture(nullptr),
@@ -50,12 +51,12 @@ void MaterialEffectShadowProperties::CopyValuesFrom(IMaterial* material)
 
 MaterialEffectShadowProperties* MaterialEffectShadowProperties::DoClone() const
 {
-	return new MaterialEffectShadowProperties(*this);
+	return DBG_NEW MaterialEffectShadowProperties(*this);
 }
 
 IMaterialEffect* MaterialEffectShadowProperties::Create(IMaterial* material)
 {
-	MaterialEffectShadowProperties* effect = new MaterialEffectShadowProperties();
+	MaterialEffectShadowProperties* effect = DBG_NEW MaterialEffectShadowProperties();
 	material->AddOrReplaceEffect(effect);
 	return effect;
 }

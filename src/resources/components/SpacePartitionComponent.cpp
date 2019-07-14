@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SpacePartitionComponent.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../Memory.h"
 
 SpacePartitionComponent::SpacePartitionComponent() : mIsVisible(false)
 {
@@ -23,7 +24,7 @@ void SpacePartitionComponent::SetVisibility(bool visibility)
 
 SpacePartitionComponent* SpacePartitionComponent::DoClone() const
 {
-	return new SpacePartitionComponent(*this);
+	return DBG_NEW SpacePartitionComponent(*this);
 }
 
 void SpacePartitionComponent::DoReadFrom(core::utils::IDeserializer* source)

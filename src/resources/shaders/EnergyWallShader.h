@@ -1,5 +1,6 @@
 #pragma once
 #include "ModelShader.h"
+#include "../Memory.h"
 
 class EnergyWallShader : public ModelShader
 {
@@ -19,6 +20,6 @@ public:
 	void GetAllUniformLocations();
 
 	static std::string GetClassName() { return std::string("EnergyWallShader"); }
-	static IShaderProgram* Create() { return new EnergyWallShader(); }
+	static IShaderProgram* Create() { return DBG_NEW EnergyWallShader(); }
 };
 

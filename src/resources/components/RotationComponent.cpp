@@ -3,6 +3,7 @@
 #include "../GameEntity.h"
 #include "../Transformation.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../Memory.h"
 
 RotationComponent::RotationComponent(const glm::vec3& rotation, float speed) :
 mRotation(rotation),
@@ -17,7 +18,7 @@ RotationComponent::~RotationComponent()
 
 RotationComponent* RotationComponent::DoClone() const
 {
-	return new RotationComponent(*this);
+	return DBG_NEW RotationComponent(*this);
 }
 
 void RotationComponent::UpdateInternal(float elapsedTime)

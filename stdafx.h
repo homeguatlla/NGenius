@@ -7,10 +7,7 @@
 
 #include "targetver.h"
 
-//detecion de memory leaks:
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
-
-
 // TODO: reference additional headers your program requires here
+
+//detecion de memory leaks:
+

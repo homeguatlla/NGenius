@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "TurnEvent.h"
 #include "../../systems/InputSystem.h"
+#include "../Memory.h"
 
 TurnEvent::TurnEvent()
 {
@@ -15,7 +16,7 @@ TurnEvent* TurnEvent::DoClone(const void* data) const
 {
 	const InputSystem::MouseData* mouseData = reinterpret_cast<const InputSystem::MouseData*>(data);
 
-	TurnEvent* turnEvent = new TurnEvent();
+	TurnEvent* turnEvent = DBG_NEW TurnEvent();
 	turnEvent->SetTurn(static_cast<float>(mouseData->mCursorX));
 
 	return turnEvent;

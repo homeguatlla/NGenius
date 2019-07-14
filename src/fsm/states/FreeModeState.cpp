@@ -1,14 +1,24 @@
 #include "stdafx.h"
 #include "FreeModeState.h"
 #include "../../resources/camera/PerspectiveCamera.h"
+#include "../../resources/materials/MaterialsLibrary.h"
+#include "../../resources/materials/IMaterial.h"
+#include "../../resources/materials/effects/MaterialEffectDiffuseTexture.h"
+#include "../../resources/materials/effects/MaterialEffectText.h"
+#include "../../resources/entities/Text.h"
+#include "../../resources/font/FontType.h"
+
 #include "../../NGenius.h"
 #include "../../GameConstants.h"
 #include "../../utils/Log.h"
+
 #include <GLFW\glfw3.h>
+#include <string>
 
 const float FORWARD_SPEED = 0.3f;
 const float ROLL_SPEED = 2.0f;
 const float PITCH_SPEED = 2.0f;
+const std::string TEXT("Free Mode");
 
 FreeModeState::FreeModeState() : 
 	mIsNormalModeKeyPressed(false),
@@ -28,20 +38,23 @@ FreeModeState::~FreeModeState()
 void FreeModeState::OnInit()
 {
 	mEngine = GetContext()->GetEngine();
-	mFreeCamera = CreateFreeCamera();
+	CreateFreeModeStateUI();
 }
 
 void FreeModeState::OnEnter(float deltaTime)
 {
+	mFreeCamera = CreateFreeCamera();
 	mIsNormalModeKeyPressed = false;
 	mEngine->RegisterAllEventsInputListener(this);
 	mEngine->ChangeToCamera(mEngine->GetGameplayCamera()->GetName(), mEngine->GetFreeCamera()->GetName());
+	mFreeModeText->SetEnabled(true);
 }
 
 void FreeModeState::OnExit(float deltaTime)
 {
 	mEngine->UnRegisterInputListener(this);
 	mIsNormalModeKeyPressed = false;
+	mFreeModeText->SetEnabled(false);
 }
 
 void FreeModeState::OnUpdate(float deltaTime)
@@ -59,7 +72,7 @@ ICamera* FreeModeState::CreateFreeCamera()
 		float screenHeight = static_cast<float>(mEngine->GetScreenHeight());
 		float aspectRatio = screenWidth / screenHeight;
 
-		freeCamera = new PerspectiveCamera("free_camera", 45.0f, aspectRatio, NEAR_PLANE, FAR_PLANE);
+		freeCamera = DBG_NEW  PerspectiveCamera("free_camera", 45.0f, aspectRatio, NEAR_PLANE, FAR_PLANE);
 		freeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 0.0f));
 		freeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 		freeCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -124,4 +137,29 @@ void FreeModeState::OnMouseCursorPos(double x, double y)
 	mRoll = mLastRoll - static_cast<float>(x);
 	mLastPitch = static_cast<float>(y);
 	mLastRoll = static_cast<float>(x);
+}
+
+void FreeModeState::CreateFreeModeStateUI()
+{
+	FontType* font = mEngine->GetFont("OCR A Extended");
+	IMaterial* materialText = mEngine->GetMaterial(MaterialsLibrary::TEXT_MATERIAL_NAME);
+	materialText->AddEffect(DBG_NEW MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
+	materialText->AddEffect(DBG_NEW MaterialEffectText(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+		glm::vec4(1.0f, 1.0f, 1.0f, 0.0f),
+		0.4f,
+		0.1f, 
+		0.0f,
+		0.0f,
+		glm::vec2(0.0f)));
+
+	mFreeModeText = DBG_NEW Text(
+		DBG_NEW Transformation(
+			glm::vec3(-mEngine->GetScreenWidth() * 0.5f, mEngine->GetScreenHeight() * 0.5f, 0.0f),
+			glm::vec3(0.0f),
+			glm::vec3(0.70f)
+		),
+		materialText, font,
+		TEXT, false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
+	
+	mEngine->AddEntity(mFreeModeText);
 }

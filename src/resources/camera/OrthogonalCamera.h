@@ -1,5 +1,7 @@
 #pragma once
 #include "ICamera.h"
+#include "../Memory.h"
+
 class OrthogonalCamera : public ICamera
 {
 public:
@@ -13,7 +15,7 @@ public:
 	static std::string GetClassName() { return std::string("OrthogonalCamera"); }
 	static ICamera* Create(std::string name, float screenWidth, float screenHeight, float nearPlane, float farPlane)
 	{
-		return new OrthogonalCamera(name, screenWidth, screenHeight, nearPlane, farPlane);
+		return DBG_NEW OrthogonalCamera(name, screenWidth, screenHeight, nearPlane, farPlane);
 	}
 
 private:

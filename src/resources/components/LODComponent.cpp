@@ -6,6 +6,7 @@
 #include "../models/Model.h"
 #include "../materials/IMaterial.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../Memory.h"
 
 #include <glm/gtx/norm.hpp>
 #include <algorithm>
@@ -33,7 +34,7 @@ LODComponent::~LODComponent()
 
 IComponent* LODComponent::DoClone() const
 {
-	return new LODComponent(*this);
+	return DBG_NEW LODComponent(*this);
 }
 
 void LODComponent::UpdateInternal(float elapsedTime)
@@ -70,7 +71,7 @@ void LODComponent::AddLevelOfDetail(IRenderer* renderer, float distance)
 
 	if (totalLODS < MAX_LODS)
 	{
-		LOD* lod = new LOD(renderer, distance);
+		LOD* lod = DBG_NEW LOD(renderer, distance);
 		renderer->SetParent(mParent);
 		mLODS.push_back(lod);
 	}

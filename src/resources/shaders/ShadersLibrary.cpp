@@ -46,12 +46,13 @@ ShadersLibrary::ShadersLibrary()
 
 void ShadersLibrary::Load()
 {
-	AddShader("DefaultShader", new DefaultShader());
-	AddShader("OverdrawShader", new OverdrawShader());
-	AddShader("TextShader", new TextShader());
-	AddShader("ShadowShader", new ShadowShader());
-	AddShader("GUIShader", new GUIShader());
-	AddShader("NormalMapShader", new NormalMapShader());
+	AddShader("DefaultShader", DBG_NEW DefaultShader());
+	AddShader("OverdrawShader", DBG_NEW OverdrawShader());
+	AddShader("TextShader", DBG_NEW TextShader());
+	AddShader("ShadowShader", DBG_NEW ShadowShader());
+	AddShader("GUIShader", DBG_NEW GUIShader());
+	AddShader("NormalMapShader", DBG_NEW NormalMapShader());
+	AddShader("ContrastShader", DBG_NEW ContrastShader());
 }
 
 void ShadersLibrary::AddShader(const char* name, IShaderProgram* shader)

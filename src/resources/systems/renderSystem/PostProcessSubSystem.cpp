@@ -10,6 +10,7 @@
 #include "../../materials/effects/MaterialEffectFloat.h"
 #include "../../materials/effects/MaterialEffectFloat3.h"
 #include "../../systems/renderSystem/IFrameBuffer.h"
+#include "../Memory.h"
 
 #include <GL/glew.h>
 
@@ -55,8 +56,8 @@ void PostProcessSubSystem::LoadContrastPostProcess(Model* model, Texture* textur
 	IMaterial* material = mRenderSystem->CreateMaterial("contrast", mRenderSystem->GetShader("ContrastShader"));
 	material->AddOrReplaceEffect(new MaterialEffectFloat(0.3f));
 
-	ImageRenderer* renderer = new ImageRenderer(model, material);
-	PostProcessEffect* postProcessEffect = new PostProcessEffect(type, texture,	renderer);
+	ImageRenderer* renderer = DBG_NEW ImageRenderer(model, material);
+	PostProcessEffect* postProcessEffect = DBG_NEW PostProcessEffect(type, texture,	renderer);
 
 	postProcessEffect->SetBufferSize(width, height);
 	AddPostProcessEffect(postProcessEffect);
@@ -67,8 +68,8 @@ void PostProcessSubSystem::LoadBrightPostProcess(Model* model, Texture* texture,
 	IMaterial* material = mRenderSystem->CreateMaterial("bright", mRenderSystem->GetShader("BrightShader"));
 	material->AddOrReplaceEffect(new MaterialEffectFloat3(bright));
 
-	ImageRenderer* renderer = new ImageRenderer(model, material);
-	PostProcessEffect* postProcessEffect = new PostProcessEffect(type, texture, renderer);
+	ImageRenderer* renderer = DBG_NEW ImageRenderer(model, material);
+	PostProcessEffect* postProcessEffect = DBG_NEW PostProcessEffect(type, texture, renderer);
 
 	postProcessEffect->SetBufferSize(width, height);
 	AddPostProcessEffect(postProcessEffect);
@@ -79,8 +80,8 @@ void PostProcessSubSystem::LoadHorizontalBlurPostProcess(Model* model, Texture* 
 	IMaterial* material = mRenderSystem->CreateMaterial("horizontal_blur", mRenderSystem->GetShader("HorizontalBlurShader"));
 	material->AddOrReplaceEffect(new MaterialEffectFloat(blurGranularity));
 
-	ImageRenderer* renderer = new ImageRenderer(model, material);
-	PostProcessEffect* postProcessEffect = new PostProcessEffect(type, texture, renderer);
+	ImageRenderer* renderer = DBG_NEW ImageRenderer(model, material);
+	PostProcessEffect* postProcessEffect = DBG_NEW PostProcessEffect(type, texture, renderer);
 	postProcessEffect->SetBufferSize(width, height);
 	AddPostProcessEffect(postProcessEffect);
 }
@@ -90,8 +91,8 @@ void PostProcessSubSystem::LoadVerticalBlurPostProcess(Model* model, Texture* te
 	IMaterial* material = mRenderSystem->CreateMaterial("vertical_blur", mRenderSystem->GetShader("VerticalBlurShader"));
 	material->AddOrReplaceEffect(new MaterialEffectFloat(blurGranularity));
 
-	ImageRenderer* renderer = new ImageRenderer(model, material);
-	PostProcessEffect* postProcessEffect = new PostProcessEffect(type, texture,	renderer);
+	ImageRenderer* renderer = DBG_NEW ImageRenderer(model, material);
+	PostProcessEffect* postProcessEffect = DBG_NEW PostProcessEffect(type, texture,	renderer);
 	postProcessEffect->SetBufferSize(width, height);
 	AddPostProcessEffect(postProcessEffect);
 }
@@ -101,8 +102,8 @@ void PostProcessSubSystem::LoadBloomPostProcess(Model* model, Texture* texture, 
 	IMaterial* material = mRenderSystem->CreateMaterial("bloom", mRenderSystem->GetShader("BloomShader"));
 	material->AddOrReplaceEffect(new MaterialEffectDepthTexture(bright, 1.0f));
 
-	ImageRenderer* renderer = new ImageRenderer(model, material);
-	PostProcessEffect* postProcessEffect = new PostProcessEffect(type, texture, renderer);
+	ImageRenderer* renderer = DBG_NEW ImageRenderer(model, material);
+	PostProcessEffect* postProcessEffect = DBG_NEW PostProcessEffect(type, texture, renderer);
 	postProcessEffect->SetBufferSize(width, height);
 	AddPostProcessEffect(postProcessEffect);
 }
@@ -135,7 +136,7 @@ void PostProcessSubSystem::Load()
 	}
 
 	//creating frame buffer
-	mFrameBuffer = new IFrameBuffer(screenWidth, screenHeight);
+	mFrameBuffer = DBG_NEW IFrameBuffer(screenWidth, screenHeight);
 	mFrameBuffer->SetCopyBufferToTexture(originalTexture, 0, 0, originalTexture->GetWidth(), originalTexture->GetHeight());
 }
 

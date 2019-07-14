@@ -1,5 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
+#include "../Memory.h"
 
 class GrassShader : public IShaderProgram
 {
@@ -43,6 +44,6 @@ public:
 	int GetGeometryShaderNumTriangles() const override;
 
 	static std::string GetClassName() { return std::string("GrassShader"); }
-	static IShaderProgram* Create() { return new GrassShader(); }
+	static IShaderProgram* Create() { return DBG_NEW GrassShader(); }
 };
 

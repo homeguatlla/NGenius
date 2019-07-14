@@ -14,6 +14,7 @@
 #include "../resources/models/animation/JointTransform.h"
 
 #include "../utils/Log.h"
+#include "../Memory.h"
 
 #include <iostream>
 
@@ -185,7 +186,7 @@ void AssimpLoader::TransformAssimpAnimationsToEngineAnimations(aiAnimation** ani
 				std::multimap<float, KeyFrame*>::iterator it = keyFramesMap.find(timestamp);
 				if (it == keyFramesMap.end())
 				{
-					keyFrame = new KeyFrame();
+					keyFrame = DBG_NEW  KeyFrame();
 					keyFrame->SetTimestamp(timestamp);
 					keyFramesMap.insert(std::make_pair(timestamp, keyFrame));
 					keyFrameList.push_back(keyFrame);
@@ -195,7 +196,7 @@ void AssimpLoader::TransformAssimpAnimationsToEngineAnimations(aiAnimation** ani
 					keyFrame = it->second;
 				}
 
-				JointTransform* joint = new JointTransform( 
+				JointTransform* joint = DBG_NEW  JointTransform( 
 					glm::vec3(position.mValue.x, position.mValue.y, position.mValue.z), 
 					glm::quat(rotation.mValue.w, rotation.mValue.x, rotation.mValue.y, rotation.mValue.z)
 				);
@@ -224,7 +225,7 @@ void AssimpLoader::TransformAssimpAnimationsToEngineAnimations(aiAnimation** ani
 		{
 			return a->GetTimestamp() < b->GetTimestamp();
 		});
-		(*animation) = new Animation(name, duration, keyFrameList);
+		(*animation) = DBG_NEW  Animation(name, duration, keyFrameList);
 	}
 }
 
@@ -255,7 +256,7 @@ Mesh* AssimpLoader::TransformAssimpMeshToEngineMesh(aiMesh** meshes, unsigned in
 			TransformAssimpFacesToEngineIndices(assimpMesh->mFaces, assimpMesh->mNumFaces, indices);
 		}
 
-		Mesh* mesh = new Mesh(vertices, uvs, indices, normals);
+		Mesh* mesh = DBG_NEW  Mesh(vertices, uvs, indices, normals);
 
 		if (assimpMesh->HasBones())
 		{
@@ -363,7 +364,7 @@ Joint* AssimpLoader::TransformAssimpSkeletonNodeToJoint(const aiNode* rootNode, 
 	{
 		matrix = CORRECTION_MATRIX * matrix;
 	}
-	Joint* joint = new Joint(*index, nodeName, matrix);
+	Joint* joint = DBG_NEW  Joint(*index, nodeName, matrix);
 	joints.insert(std::make_pair(joint->GetName(), *index));
 
 	for (unsigned int i = 0; i < rootNode->mNumChildren; ++i)

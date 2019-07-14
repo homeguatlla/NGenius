@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "EnvironmentModificatorComponent.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../Memory.h"
 
 EnvironmentModificatorComponent::EnvironmentModificatorComponent()
 {
@@ -13,7 +14,7 @@ EnvironmentModificatorComponent::~EnvironmentModificatorComponent()
 
 EnvironmentModificatorComponent* EnvironmentModificatorComponent::DoClone() const
 {
-	return new EnvironmentModificatorComponent(*this);
+	return DBG_NEW EnvironmentModificatorComponent(*this);
 }
 
 void EnvironmentModificatorComponent::DoReadFrom(core::utils::IDeserializer* source)

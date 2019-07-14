@@ -3,6 +3,7 @@
 #include "../GameEvent.h"
 #include "../../input/InputConverter.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../Memory.h"
 
 InputComponent::InputComponent()
 {
@@ -14,7 +15,7 @@ InputComponent::~InputComponent()
 
 InputComponent* InputComponent::DoClone() const
 {
-	return new InputComponent(*this);
+	return DBG_NEW InputComponent(*this);
 }
 
 const GameEvent* InputComponent::ConvertKey(int key, int action) const

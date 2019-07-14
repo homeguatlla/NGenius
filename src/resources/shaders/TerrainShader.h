@@ -1,5 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
+#include "../Memory.h"
 
 class TerrainShader : public IShaderProgram
 {
@@ -16,7 +17,7 @@ public:
 	void GetAllUniformLocations();
 
 	static std::string GetClassName() { return std::string("TerrainShader"); }
-	static IShaderProgram* Create() { return new TerrainShader(); }
+	static IShaderProgram* Create() { return DBG_NEW TerrainShader(); }
 
 private:
 	int mLocationMVPMatrix;

@@ -1,5 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
+#include "../Memory.h"
 
 class WaterShader :	public IShaderProgram
 {
@@ -30,6 +31,6 @@ public:
 	void GetAllUniformLocations() override;
 
 	static std::string GetClassName() { return std::string("WaterShader"); }
-	static IShaderProgram* Create() { return new WaterShader(); }
+	static IShaderProgram* Create() { return DBG_NEW WaterShader(); }
 };
 

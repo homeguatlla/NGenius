@@ -9,6 +9,7 @@
 
 #include "fbxsdk/scene/geometry/fbxlayer.h"
 #include "../utils/Log.h"
+#include "../Memory.h"
 
 #include <assert.h>
 #include <vector>
@@ -175,7 +176,7 @@ Mesh* FBXLoader::LoadMesh(FbxMesh* fbxMesh)
 		Log(Log::LOG_ERROR) << "	Texture coords not loaded!" << "\n";
 	}
 
-	return new Mesh(vertices, uvs, indexes, normals);
+	return DBG_NEW  Mesh(vertices, uvs, indexes, normals);
 }
 
 void FBXLoader::LoadMaterials(FbxScene* fbxScene, Mesh* mesh)
@@ -334,7 +335,7 @@ void FBXLoader::LoadAnimations(FbxScene* fbxScene, FbxCluster* fbxCluster, Anima
 			{
 				keyFrames.push_back(new KeyFrame());
 			}
-			(*animation) = new Animation(std::string(animStack->GetName()), duration.GetMilliSeconds(), keyFrames);
+			(*animation) = DBG_NEW  Animation(std::string(animStack->GetName()), duration.GetMilliSeconds(), keyFrames);
 		}
 
 		std::vector<KeyFrame*>& frames = (*animation)->GetKeyframes();
@@ -357,7 +358,7 @@ void FBXLoader::LoadAnimations(FbxScene* fbxScene, FbxCluster* fbxCluster, Anima
 			matrix.GetElements(translation, rotation, shearing, scale, sign);
 			glm::quat jointQuaternion(glm::vec3(rotation[0], rotation[1], rotation[2]));
 			
-			frames[f]->AddJointTransform(jointname, new JointTransform(
+			frames[f]->AddJointTransform(jointname, DBG_NEW  JointTransform(
 														glm::vec3(translation[0], translation[1], translation[2]),
 														jointQuaternion));
 			
@@ -387,7 +388,7 @@ Joint* FBXLoader::ProcessSkeletonHeirarchyre(FbxNode * fbxNode, std::vector<Join
 	if (fbxNode->GetNodeAttribute() && fbxNode->GetNodeAttribute()->GetAttributeType() &&
 		fbxNode->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eSkeleton)
 	{
-		rootJoint = new Joint(joints.size(), std::string(fbxNode->GetName()), glm::mat4(1.0));
+		rootJoint = DBG_NEW  Joint(joints.size(), std::string(fbxNode->GetName()), glm::mat4(1.0));
 		joints.push_back(rootJoint);
 	}
 

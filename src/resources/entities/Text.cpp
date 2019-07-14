@@ -7,6 +7,7 @@
 #include "../models/Model.h"
 #include "../models/Mesh.h"
 #include "../font/FontType.h"
+#include "../Memory.h"
 
 const float EXTRA_CHARACTER_PADDING = 0.0f;
 int Text::IDCounter = 0;
@@ -24,8 +25,8 @@ Text::Text(Transformation* transformation, IMaterial* material, FontType* font,
 	assert(material != nullptr);
 	assert(font != nullptr);
 
-	mMesh = new Mesh();
-	mModel = new Model(mMesh);
+	mMesh = DBG_NEW Mesh();
+	mModel = DBG_NEW Model(mMesh);
 
 	isText3D ? SetRenderer(new TextRenderer(mModel, material)) : SetRenderer(new GUITextRenderer(mModel, material));
 	UpdateText(text);

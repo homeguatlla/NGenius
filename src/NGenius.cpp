@@ -36,6 +36,7 @@
 
 #include "utils/serializer/XMLSerializer.h"
 #include "utils/serializer/XMLDeserializer.h"
+#include "../Memory.h"
 
 
 NGenius::NGenius(std::string applicationName, float screenWidth, float screenHeight) :
@@ -43,8 +44,14 @@ mRenderSystem(nullptr),
 mPhysicsSystem(nullptr),
 mEntitiesSystem(nullptr),
 mParticlesSystem(nullptr),
+mLightsSystem(nullptr),
+mInputSystem(nullptr),
 mSpacePartitionSystem(nullptr),
+mDebugSystem(nullptr),
 mEnvironmentSystem(nullptr),
+mAnimationSystem(nullptr),
+mInputHandler(nullptr),
+mStatistics(nullptr),
 mApplicationName(applicationName),
 mIsSpacePartitionEnabled(true),
 mGameScene("mainScene")
@@ -63,7 +70,7 @@ void NGenius::Init(bool isFullscreen)
 	mInputHandler->Init(mRenderSystem->GetGLWindow());
 }
 
-void NGenius::Start()
+void NGenius::Start(bool isReload)
 {
 	mEnvironmentSystem->Start();
 	mRenderSystem->SetEnvironmentSystem(mEnvironmentSystem);
@@ -71,10 +78,13 @@ void NGenius::Start()
 	mSpacePartitionSystem->Start();
 	mDebugSystem->Start();
 
-	CreateStatesMachine();
-
 	AddListenersToGameScene();
 	mGameScene.Start(mRenderSystem);
+
+	if (!isReload)
+	{
+		CreateStatesMachine();
+	}
 }
 
 void NGenius::Run()
@@ -137,7 +147,10 @@ void NGenius::Render()
 	if (mIsSpacePartitionEnabled)
 	{
 		ICamera* camera = mRenderSystem->GetCamera("gameplay_camera");
-		mSpacePartitionSystem->MarkGameEntitiesInsideCameraAsVisible(camera);
+		if (camera != nullptr)
+		{
+			mSpacePartitionSystem->MarkGameEntitiesInsideCameraAsVisible(camera);
+		}
 	}
 
 	mGameScene.Render(mRenderSystem);
@@ -217,16 +230,16 @@ void NGenius::UpdateSystems(float elapsedTime)
 
 void NGenius::CreateSystems(float screenWidth, float screenHeight)
 {
-	mStatistics = new Statistics();
-	mInputHandler = new InputHandler();
-	mRenderSystem = new RenderSystem(screenWidth, screenHeight);
-	mPhysicsSystem = new PhysicsSystem();
-	mInputSystem = new InputSystem(mInputHandler);
-	mDebugSystem = new DebugSystem(this, mRenderSystem, mInputHandler);
-	mParticlesSystem = new ParticlesSystem();
-	mSpacePartitionSystem = new SpacePartitionSystem();
-	mEnvironmentSystem = new EnvironmentSystem();
-	mAnimationSystem = new AnimationSystem();
+	mStatistics = DBG_NEW  Statistics();
+	mInputHandler = DBG_NEW  InputHandler();
+	mRenderSystem = DBG_NEW  RenderSystem(screenWidth, screenHeight);
+	mPhysicsSystem = DBG_NEW  PhysicsSystem();
+	mInputSystem = DBG_NEW  InputSystem(mInputHandler);
+	mDebugSystem = DBG_NEW  DebugSystem(this, mRenderSystem, mInputHandler);
+	mParticlesSystem = DBG_NEW  ParticlesSystem();
+	mSpacePartitionSystem = DBG_NEW  SpacePartitionSystem();
+	mEnvironmentSystem = DBG_NEW  EnvironmentSystem();
+	mAnimationSystem = DBG_NEW  AnimationSystem();
 }
 
 void NGenius::CreateStatesMachine()
@@ -248,17 +261,50 @@ void NGenius::CreateStatesMachine()
 
 void NGenius::DestroySystems()
 {
-	delete mAnimationSystem;
-	delete mEnvironmentSystem;
-	delete mSpacePartitionSystem;
-	delete mDebugSystem;
-	delete mInputSystem;
-	delete mLightsSystem;
-	delete mParticlesSystem;
-	delete mPhysicsSystem;
-	delete mRenderSystem;
-	delete mInputHandler;
-	delete mStatistics;
+	if (mAnimationSystem != nullptr)
+	{
+		delete mAnimationSystem;
+	}
+	if (mEnvironmentSystem != nullptr)
+	{
+		delete mEnvironmentSystem;
+	}
+	if (mSpacePartitionSystem != nullptr)
+	{
+		delete mSpacePartitionSystem;
+	}
+	if (mDebugSystem != nullptr)
+	{
+		delete mDebugSystem;
+	}
+	if (mInputSystem != nullptr)
+	{
+		delete mInputSystem;
+	}
+	if (mLightsSystem != nullptr)
+	{
+		delete mLightsSystem;
+	}
+	if (mParticlesSystem != nullptr)
+	{
+		delete mParticlesSystem;
+	}
+	if (mPhysicsSystem != nullptr)
+	{
+		delete mPhysicsSystem;
+	}
+	if (mRenderSystem != nullptr)
+	{
+		delete mRenderSystem;
+	}
+	if (mInputHandler != nullptr)
+	{
+		delete mInputHandler;
+	}
+	if (mStatistics != nullptr)
+	{
+		delete mStatistics;
+	}
 }
 
 void NGenius::RegisterAllEventsInputListener(IInputListener* listener)
@@ -406,10 +452,10 @@ void NGenius::AddListenersToGameScene()
 
 GameScene* NGenius::CreateGameScene(const std::string& name)
 {
-	//mGameScene = new GameScene(name);
+	//mGameScene = DBG_NEW  GameScene(name);
 	
 	//TODO ojo que esto es horrible, tener que crear el lightsystem cuando la escena se crea...no sé
-	mLightsSystem = new LightsSystem(&mGameScene);
+	mLightsSystem = DBG_NEW  LightsSystem(&mGameScene);
 	AddListenersToGameScene();	
 
 	return &mGameScene;
@@ -437,6 +483,12 @@ void NGenius::AddLight(Light* light)
 void NGenius::AddCamera(ICamera* camera)
 {
 	mRenderSystem->AddCamera(camera);
+}
+
+void NGenius::AddEntity(GameEntity* entity)
+{
+	assert(entity != nullptr);
+	mGameScene.AddEntity(entity);
 }
 
 void NGenius::SetTerrain(const Terrain* terrain)
@@ -512,7 +564,8 @@ BaseVisitable<>::ReturnType NGenius::Accept(BaseVisitor& guest)
 void NGenius::Reload()
 {
 	LoadFromFile();
-	Start();
+	Start(true);
+	mStatesMachine->ForceState(mStatesMachine->GetCurrentState()->GetID(), 0.0f);
 }
 
 void NGenius::Query(const AABB& aabb, std::vector<GameEntity*>& result)

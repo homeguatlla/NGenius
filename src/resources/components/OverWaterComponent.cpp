@@ -2,6 +2,7 @@
 #include "OverWaterComponent.h"
 #include "../GameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../Memory.h"
 #include <glm/glm.hpp>
 
 OverWaterComponent::OverWaterComponent(float waterHeight) :mWaterHeight(waterHeight)
@@ -14,7 +15,7 @@ OverWaterComponent::~OverWaterComponent()
 
 OverWaterComponent* OverWaterComponent::DoClone() const
 {
-	return new OverWaterComponent(*this);
+	return DBG_NEW OverWaterComponent(*this);
 }
 
 float OverWaterComponent::GetWaterHeight() const

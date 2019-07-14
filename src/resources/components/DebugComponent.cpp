@@ -4,7 +4,7 @@
 #include "../../AABB.h"
 #include "../GameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
-
+#include "../../Memory.h"
 
 DebugComponent::DebugComponent(IRenderer* renderer) :
 mBoundingBoxRenderer(renderer)
@@ -19,7 +19,7 @@ DebugComponent::~DebugComponent()
 
 DebugComponent* DebugComponent::DoClone() const
 {
-	return new DebugComponent(*this);
+	return DBG_NEW DebugComponent(*this);
 }
 
 void DebugComponent::Init()

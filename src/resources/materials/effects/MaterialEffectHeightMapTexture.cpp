@@ -4,6 +4,7 @@
 #include "../../../utils/serializer/XMLDeserializer.h"
 #include "../../../utils/Log.h"
 #include "../../textures/TexturesLibrary.h"
+#include "../Memory.h"
 
 #include <assert.h>
 
@@ -47,12 +48,12 @@ void MaterialEffectHeightMapTexture::CopyValuesFrom(IMaterial* material)
 
 MaterialEffectHeightMapTexture* MaterialEffectHeightMapTexture::DoClone() const
 {
-	return new MaterialEffectHeightMapTexture(*this);
+	return DBG_NEW MaterialEffectHeightMapTexture(*this);
 }
 
 IMaterialEffect* MaterialEffectHeightMapTexture::Create(IMaterial* material)
 {
-	MaterialEffectHeightMapTexture* effect = new MaterialEffectHeightMapTexture();
+	MaterialEffectHeightMapTexture* effect = DBG_NEW MaterialEffectHeightMapTexture();
 	material->AddOrReplaceEffect(effect);
 	return effect;
 }

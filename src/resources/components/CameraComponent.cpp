@@ -2,6 +2,7 @@
 #include "CameraComponent.h"
 #include "../camera/ICamera.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../Memory.h"
 
 CameraComponent::CameraComponent(ICamera* camera) : mCamera(camera)
 {
@@ -14,7 +15,7 @@ CameraComponent::~CameraComponent()
 
 CameraComponent* CameraComponent::DoClone() const
 {
-	return new CameraComponent(*this);
+	return DBG_NEW CameraComponent(*this);
 }
 
 void CameraComponent::DoReadFrom(core::utils::IDeserializer* source)

@@ -77,7 +77,7 @@ public:
 	~NGenius();
 
 	void Init(bool isFullscreen);
-	void Start();
+	void Start(bool isReload = false);
 	void Run();
 
 	IShaderProgram* GetShader(const std::string& name) const;
@@ -102,6 +102,7 @@ public:
 	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing);
 	void AddLight(Light* light);
 	void AddCamera(ICamera* camera);
+	void AddEntity(GameEntity* entity);
 
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 

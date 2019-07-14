@@ -4,6 +4,7 @@
 #include "../../../utils/serializer/XMLDeserializer.h"
 #include "../../../utils/Log.h"
 #include "../../textures/TexturesLibrary.h"
+#include "../Memory.h"
 
 #include <assert.h>
 
@@ -47,12 +48,12 @@ void MaterialEffectDepthTexture::CopyValuesFrom(IMaterial* material)
 
 MaterialEffectDepthTexture* MaterialEffectDepthTexture::DoClone() const
 {
-	return new MaterialEffectDepthTexture(*this);
+	return DBG_NEW MaterialEffectDepthTexture(*this);
 }
 
 IMaterialEffect* MaterialEffectDepthTexture::Create(IMaterial* material)
 {
-	MaterialEffectDepthTexture* effect = new MaterialEffectDepthTexture();
+	MaterialEffectDepthTexture* effect = DBG_NEW MaterialEffectDepthTexture();
 	material->AddOrReplaceEffect(effect);
 	return effect;
 }

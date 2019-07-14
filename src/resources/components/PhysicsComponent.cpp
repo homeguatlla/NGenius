@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PhysicsComponent.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../Memory.h"
 
 PhysicsComponent::PhysicsComponent(bool isStatic, const glm::vec3& gravity) :mIsStatic(isStatic), mVelocity(0.0f), mGravity(gravity)
 {
@@ -13,7 +14,7 @@ PhysicsComponent::~PhysicsComponent()
 
 PhysicsComponent* PhysicsComponent::DoClone() const
 {
-	return new PhysicsComponent(*this);
+	return DBG_NEW PhysicsComponent(*this);
 }
 
 const glm::vec3 PhysicsComponent::GetVelocity() const

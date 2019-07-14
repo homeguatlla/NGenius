@@ -51,7 +51,7 @@ ThirdPersonCameraComponent::~ThirdPersonCameraComponent()
 
 ThirdPersonCameraComponent* ThirdPersonCameraComponent::DoClone() const
 {
-	return new ThirdPersonCameraComponent(*this);
+	return DBG_NEW ThirdPersonCameraComponent(*this);
 }
 
 void ThirdPersonCameraComponent::UpdateInternal(float elapsedTime)

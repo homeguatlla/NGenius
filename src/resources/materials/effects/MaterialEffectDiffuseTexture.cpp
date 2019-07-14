@@ -4,6 +4,7 @@
 #include "../../../utils/serializer/XMLDeserializer.h"
 #include "../../../utils/Log.h"
 #include "../../textures/TexturesLibrary.h"
+#include "../Memory.h"
 
 
 
@@ -69,7 +70,7 @@ void MaterialEffectDiffuseTexture::CopyValuesFrom(IMaterial* material)
 
 IMaterialEffect* MaterialEffectDiffuseTexture::Create(IMaterial* material)
 {
-	MaterialEffectDiffuseTexture* effect = new MaterialEffectDiffuseTexture();
+	MaterialEffectDiffuseTexture* effect = DBG_NEW MaterialEffectDiffuseTexture();
 	material->AddOrReplaceEffect(effect);
 	return effect;
 }
@@ -88,7 +89,7 @@ void MaterialEffectDiffuseTexture::Build(TexturesLibrary* texturesLibrary)
 
 MaterialEffectDiffuseTexture* MaterialEffectDiffuseTexture::DoClone() const
 {
-	return new MaterialEffectDiffuseTexture(*this);
+	return DBG_NEW MaterialEffectDiffuseTexture(*this);
 }
 
 void MaterialEffectDiffuseTexture::ReadFrom(core::utils::IDeserializer * source)

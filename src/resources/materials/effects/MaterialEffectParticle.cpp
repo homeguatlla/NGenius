@@ -3,6 +3,8 @@
 #include "../IMaterial.h"
 #include "../../../utils/serializer/XMLDeserializer.h"
 #include "../../textures/TexturesLibrary.h"
+#include "../Memory.h"
+
 #include <assert.h>
 
 MaterialEffectParticle::MaterialEffectParticle() :
@@ -61,12 +63,12 @@ void MaterialEffectParticle::CopyValuesFrom(IMaterial* material)
 
 MaterialEffectParticle* MaterialEffectParticle::DoClone() const
 {
-	return new MaterialEffectParticle(*this);
+	return DBG_NEW MaterialEffectParticle(*this);
 }
 
 IMaterialEffect* MaterialEffectParticle::Create(IMaterial* material)
 {
-	MaterialEffectParticle* effect = new MaterialEffectParticle();
+	MaterialEffectParticle* effect = DBG_NEW MaterialEffectParticle();
 	material->AddOrReplaceEffect(effect);
 	return effect;
 }

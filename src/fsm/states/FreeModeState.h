@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 
 class ICamera;
+class Text;
 
 class FreeModeState : public core::utils::FSM::BaseState<NGeniusState, FSMContext>, public IInputListener
 {
@@ -32,6 +33,8 @@ private:
 	void OnMouseButton(int button, int action, int mods) override;
 	void OnMouseCursorPos(double x, double y) override;
 
+	void CreateFreeModeStateUI();
+
 private:
 	std::shared_ptr<NGenius> mEngine;
 	ICamera* mFreeCamera;
@@ -43,5 +46,6 @@ private:
 	float mRoll;
 	float mLastRoll;
 	float mForwardSpeed;
+	Text* mFreeModeText;
 };
 

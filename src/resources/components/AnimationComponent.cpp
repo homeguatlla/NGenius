@@ -2,6 +2,7 @@
 #include "AnimationComponent.h"
 #include "../models/animation/Animation.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../Memory.h"
 
 #include <assert.h>
 #include <algorithm>
@@ -17,7 +18,7 @@ AnimationComponent::~AnimationComponent()
 
 AnimationComponent* AnimationComponent::DoClone() const
 {
-	return new AnimationComponent(*this);
+	return DBG_NEW AnimationComponent(*this);
 }
 
 void AnimationComponent::AddAnimation(Animation* animation)

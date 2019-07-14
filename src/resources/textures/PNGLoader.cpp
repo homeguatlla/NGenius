@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "PNGLoader.h"
 #include "../../utils/Log.h"
+#include "../Memory.h"
 
 #include <cstring>
 #include <iostream>
@@ -124,7 +125,7 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 		delete mData;
 	}
 
-	mData = new unsigned char[mWidth * mHeight * bits];
+	mData = DBG_NEW unsigned char[mWidth * mHeight * bits];
 
 	// read image data
 	//imageData = (unsigned char*) malloc( sizeof(unsigned char)*imageSize );

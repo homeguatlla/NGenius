@@ -2,6 +2,7 @@
 #include "MaterialEffectFloat4.h"
 #include "../IMaterial.h"
 #include "../../../utils/serializer/XMLDeserializer.h"
+#include "../Memory.h"
 
 MaterialEffectFloat4::MaterialEffectFloat4() :
 	mValue(0.0f)
@@ -38,12 +39,12 @@ void MaterialEffectFloat4::CopyValuesFrom(IMaterial* material)
 
 MaterialEffectFloat4* MaterialEffectFloat4::DoClone() const
 {
-	return new MaterialEffectFloat4(*this);
+	return DBG_NEW MaterialEffectFloat4(*this);
 }
 
 IMaterialEffect* MaterialEffectFloat4::Create(IMaterial* material)
 {
-	MaterialEffectFloat4* effect = new MaterialEffectFloat4();
+	MaterialEffectFloat4* effect = DBG_NEW MaterialEffectFloat4();
 	material->AddOrReplaceEffect(effect);
 	return effect;
 }

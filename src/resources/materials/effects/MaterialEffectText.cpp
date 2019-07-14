@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MaterialEffectText.h"
 #include "../IMaterial.h"
+#include "../Memory.h"
 
 MaterialEffectText::MaterialEffectText() :
 	mColor(1.0f, 1.0f, 1.0f, 1.0f),
@@ -86,12 +87,12 @@ void MaterialEffectText::CopyValuesFrom(IMaterial* material)
 
 MaterialEffectText* MaterialEffectText::DoClone() const
 {
-	return new MaterialEffectText(*this);
+	return DBG_NEW MaterialEffectText(*this);
 }
 
 IMaterialEffect* MaterialEffectText::Create(IMaterial* material)
 {
-	MaterialEffectText* effect = new MaterialEffectText();
+	MaterialEffectText* effect = DBG_NEW MaterialEffectText();
 	material->AddOrReplaceEffect(effect);
 	return effect;
 }

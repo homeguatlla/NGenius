@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MaterialEffectMatrix4Array.h"
 #include "../IMaterial.h"
+#include "../Memory.h"
 
 MaterialEffectMatrix4Array::MaterialEffectMatrix4Array()
 {
@@ -38,12 +39,12 @@ void MaterialEffectMatrix4Array::CopyValuesFrom(IMaterial* material)
 
 MaterialEffectMatrix4Array* MaterialEffectMatrix4Array::DoClone() const
 {
-	return new MaterialEffectMatrix4Array(*this);
+	return DBG_NEW MaterialEffectMatrix4Array(*this);
 }
 
 IMaterialEffect* MaterialEffectMatrix4Array::Create(IMaterial* material)
 {
-	MaterialEffectMatrix4Array* effect = new MaterialEffectMatrix4Array();
+	MaterialEffectMatrix4Array* effect = DBG_NEW MaterialEffectMatrix4Array();
 	material->AddOrReplaceEffect(effect);
 	return effect;
 }

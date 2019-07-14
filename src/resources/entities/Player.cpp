@@ -17,6 +17,7 @@
 #include "../events/characterControllerEvents/JumpEvent.h"
 #include "../events/characterControllerEvents/ZoomEvent.h"
 #include "../events/characterControllerEvents/TurnEvent.h"
+#include "../Memory.h"
 
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -96,7 +97,7 @@ void Player::Update(float elapsedTime)
 
 GameEntity* Player::CreateGameEntity()
 {
-	return new Player();
+	return DBG_NEW Player();
 }
 
 void Player::UpdateAnimations()

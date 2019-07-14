@@ -19,6 +19,6 @@ public:
 	void GetAllUniformLocations();
 
 	static std::string GetClassName() { return std::string("AnimatedModelShader"); }
-	static IShaderProgram* Create() { return new AnimatedModelShader(); }
+	static IShaderProgram* Create() { return DBG_NEW AnimatedModelShader(); }
 };
 

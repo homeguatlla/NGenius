@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <Windows.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -117,6 +118,7 @@
 #include "src/input/bindings/MouseToEventBind.h"
 
 #include "src/utils/Log.h"
+
 
 using namespace glm;
 using namespace std;
@@ -359,18 +361,18 @@ void MouseCursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 
 GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string>& models, const std::vector<std::pair<float, bool>>& lod, IMaterial* material, IMaterial* materialNormalmap, bool isCullingEnabled)
 {
-	GameEntity* modelEntity = new GameEntity(
-		new Transformation(position, glm::vec3(0.0f), scale),
+	GameEntity* modelEntity = DBG_NEW GameEntity(
+		DBG_NEW Transformation(position, glm::vec3(0.0f), scale),
 		nullptr
 		);
 
-	modelEntity->AddComponent(new PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE));
-	modelEntity->AddComponent(new CollisionComponent());
-	modelEntity->AddComponent(new SpacePartitionComponent());
-	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine->GetModel("cube"), mEngine->GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
-	modelEntity->AddComponent(new DebugComponent(boundingBoxRenderer));
+	modelEntity->AddComponent(DBG_NEW PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE));
+	modelEntity->AddComponent(DBG_NEW CollisionComponent());
+	modelEntity->AddComponent(DBG_NEW SpacePartitionComponent());
+	IRenderer* boundingBoxRenderer = DBG_NEW WireframeRenderer(mEngine->GetModel("cube"), mEngine->GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
+	modelEntity->AddComponent(DBG_NEW DebugComponent(boundingBoxRenderer));
 
-	LODComponent* lodComponent = new LODComponent(mGameplayCamera);
+	LODComponent* lodComponent = DBG_NEW LODComponent(mGameplayCamera);
 	modelEntity->AddComponent(lodComponent);
 	//WARNING!!! debemos añadir el componente a la entity primero para que se le asigne el parent, a partir de ahí, agregar los demás lod que ya les asignará el padre.
 
@@ -382,7 +384,7 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 			m = materialNormalmap;
 		}
 
-		IRenderer* renderer = new VerticesRenderer(mEngine->GetModel(models[i]), m);
+		IRenderer* renderer = DBG_NEW VerticesRenderer(mEngine->GetModel(models[i]), m);
 		lodComponent->AddLevelOfDetail(renderer, lod[i].first);
 		if (lod[i].second)
 		{
@@ -397,19 +399,19 @@ GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale
 
 GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, const glm::vec3& rotation, Model* model, IMaterial* material)
 {
-	IRenderer* renderer = new VerticesRenderer(model, material);
+	IRenderer* renderer = DBG_NEW VerticesRenderer(model, material);
 
-	GameEntity* modelEntity = new GameEntity(
-												new Transformation(position, rotation, scale),
+	GameEntity* modelEntity = DBG_NEW GameEntity(
+												DBG_NEW Transformation(position, rotation, scale),
 												renderer
 											);
 
-	modelEntity->AddComponent(new PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE));
-	modelEntity->AddComponent(new CollisionComponent());
-	modelEntity->AddComponent(new SpacePartitionComponent());
+	modelEntity->AddComponent(DBG_NEW PhysicsComponent(true, PhysicsSystem::GRAVITY_VALUE));
+	modelEntity->AddComponent(DBG_NEW CollisionComponent());
+	modelEntity->AddComponent(DBG_NEW SpacePartitionComponent());
 
-	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine->GetModel("cube"), mEngine->GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
-	modelEntity->AddComponent(new DebugComponent(boundingBoxRenderer));
+	IRenderer* boundingBoxRenderer = DBG_NEW WireframeRenderer(mEngine->GetModel("cube"), mEngine->GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
+	modelEntity->AddComponent(DBG_NEW DebugComponent(boundingBoxRenderer));
 
 	return modelEntity;
 }
@@ -417,15 +419,15 @@ GameEntity* CreateModel(const glm::vec3& position, const glm::vec3& scale, const
 GameEntity* CreateQuadTreeBoxEntity(float size, glm::vec3 position, glm::vec3 color)
 {
 	IMaterial* material = mEngine->GetMaterial(MaterialsLibrary::QUADTREE_MATERIAL_NAME);
-	material->AddEffect(new MaterialEffectFloat3(color));
+	material->AddEffect(DBG_NEW MaterialEffectFloat3(color));
 
-	IRenderer* renderer = new WireframeRenderer(mEngine->GetModel("cube"), material);
-	GameEntity* quad = new GameEntity(
-		new Transformation(position, glm::vec3(0.0f), glm::vec3(size * 2.0f)),
+	IRenderer* renderer = DBG_NEW WireframeRenderer(mEngine->GetModel("cube"), material);
+	GameEntity* quad = DBG_NEW GameEntity(
+		DBG_NEW Transformation(position, glm::vec3(0.0f), glm::vec3(size * 2.0f)),
 		renderer
 	);
-	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine->GetModel("cube"), mEngine->GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
-	quad->AddComponent(new DebugComponent(boundingBoxRenderer));
+	IRenderer* boundingBoxRenderer = DBG_NEW WireframeRenderer(mEngine->GetModel("cube"), mEngine->GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
+	quad->AddComponent(DBG_NEW DebugComponent(boundingBoxRenderer));
 
 	mScene->AddEntity(quad);
 	return quad;
@@ -488,10 +490,10 @@ void CreatePoints()
 	glPointSize(5.0f);
 	IShaderProgram* shader = mEngine->GetShader("s_grass");
 	IMaterial* material = mEngine->GetMaterial("grass2_material");
-	PointsPatch* pointsPatch = new PointsPatch(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
+	PointsPatch* pointsPatch = DBG_NEW PointsPatch(	DBG_NEW Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
 												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 50.0f, 50.0f, 150.0f);
 
-	EnvironmentAffectedComponent* environmentComponent = new EnvironmentAffectedComponent();
+	EnvironmentAffectedComponent* environmentComponent = DBG_NEW EnvironmentAffectedComponent();
 	environmentComponent->SetAffectedByWind(true);
 	pointsPatch->AddComponent(environmentComponent);
 	mScene->AddEntity(pointsPatch);
@@ -598,7 +600,7 @@ void CreateWater()
 	if (mIsWaterEnabled)
 	{
 		IMaterial* material = mEngine->GetMaterial("water");
-		mWater = new Water(		new Transformation(
+		mWater = DBG_NEW Water(		DBG_NEW Transformation(
 													glm::vec3(4.0f, mWaterHeight, 4.5f), 
 													glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), 
 													glm::vec3(1.0f)),
@@ -614,16 +616,16 @@ void CreateWater()
 Particle* CreateParticle(bool canCollide, std::string& materialName, glm::vec3& gravity)
 {
 	IMaterial* material = mEngine->GetMaterial(materialName);
-	Particle* particle = new Particle(new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
+	Particle* particle = DBG_NEW Particle(DBG_NEW Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f)),
 		mEngine->GetModel("particle_quad"),
 		material,
 		6.0f);
-	PhysicsComponent* physicsComponent = new PhysicsComponent(false, gravity);
+	PhysicsComponent* physicsComponent = DBG_NEW PhysicsComponent(false, gravity);
 	particle->AddComponent(physicsComponent);
 
 	if (canCollide)
 	{
-		particle->AddComponent(new CollisionComponent());
+		particle->AddComponent(DBG_NEW CollisionComponent());
 	}
 
 	return particle;
@@ -640,8 +642,8 @@ void CreateParticlesFire()
 
 	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 0.7f;
 
-	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(	particle,
-																new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.1f)),
+	ParticlesEmitter* particlesEmitter = DBG_NEW ParticlesEmitter(	particle,
+																DBG_NEW Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.1f)),
 																nullptr,
 																100);
 	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 1.0f, 0.25f, 1.0f), glm::vec4(1.0f, 0.2f, 0.1f, 0.4f));	
@@ -655,7 +657,7 @@ void CreateParticlesFire()
 void CreateEnergyWall()
 {
 	IMaterial* material = mEngine->GetMaterial("energy_wall");
-	mEnergyWall = new EnergyWall(	new Transformation(mEnergyWallPosition, glm::vec3(0.0f), glm::vec3(mEnergyWallRadius)),
+	mEnergyWall = DBG_NEW EnergyWall(	DBG_NEW Transformation(mEnergyWallPosition, glm::vec3(0.0f), glm::vec3(mEnergyWallRadius)),
 									material,
 									mEngine->GetModel("sphere"),
 									2.0f
@@ -668,13 +670,13 @@ void CreateHUD()
 {
 	//QUAD
 	IMaterial* material = mEngine->GetMaterial(MaterialsLibrary::GUI_MATERIAL_NAME);
-	material->AddEffect(new MaterialEffectDiffuseTexture(mEngine->GetTexture("hud_map"), glm::vec3(1.0f), 1.0f));
-	IRenderer* guiRenderer = new IndicesRenderer(mEngine->GetModel("gui_quad"), material);
+	material->AddEffect(DBG_NEW MaterialEffectDiffuseTexture(mEngine->GetTexture("hud_map"), glm::vec3(1.0f), 1.0f));
+	IRenderer* guiRenderer = DBG_NEW IndicesRenderer(mEngine->GetModel("gui_quad"), material);
 	guiRenderer->SetLayer(IRenderer::LAYER_GUI);
 
 	float x = mEngine->GetScreenWidth() * 0.5f * 0.90f;
 	float y = -mEngine->GetScreenHeight() * 0.5f * 0.85f;
-	GameEntity* quad = new GameEntity(	new Transformation(glm::vec3(x, y, 0.0f), 
+	GameEntity* quad = DBG_NEW GameEntity(	DBG_NEW Transformation(glm::vec3(x, y, 0.0f), 
 										glm::vec3(0.0f), 
 										glm::vec3(256.0f)),
 										guiRenderer
@@ -682,12 +684,12 @@ void CreateHUD()
 	mScene->AddEntity(quad);
 
 	/*
-	IRenderer* mapRenderer = new GUIRenderer(mEngine->GetShader("s_gui"),
+	IRenderer* mapRenderer = DBG_NEW GUIRenderer(mEngine->GetShader("s_gui"),
 		static_cast<Texture*>(mEngine->GetTexture("map")),
 		87.0f,
 		73.0f
 	);
-	GameEntity* map = new GameEntity(new Transformation(glm::vec3(420.0f, -300.0f, -1.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
+	GameEntity* map = DBG_NEW GameEntity(DBG_NEW Transformation(glm::vec3(420.0f, -300.0f, -1.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 		mapRenderer
 	);
 	mScene->AddGameEntity(map);*/
@@ -705,8 +707,8 @@ void CreateParticlesTest()
 	position.y = height + 0.3f;
 	
 
-	ParticlesEmitter* particlesEmitter = new ParticlesEmitter(	particle,
-																new Transformation(position, glm::vec3(0.0f), glm::vec3(1.0f)),
+	ParticlesEmitter* particlesEmitter = DBG_NEW ParticlesEmitter(	particle,
+																DBG_NEW Transformation(position, glm::vec3(0.0f), glm::vec3(1.0f)),
 																nullptr,
 																10);
 	particlesEmitter->SetColorGradientValues(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -723,8 +725,8 @@ void CreateParticlesTest()
 	position = glm::vec3(4.0f, 0.0f, 4.0f);
 	height = mTerrain->GetHeight(glm::vec2(position.x, position.z)) + 0.01f;
 	position.y = height;
-	particlesEmitter = new ParticlesEmitter(	particle,
-												new Transformation(position, glm::vec3(0.0f), glm::vec3(0.1f)),
+	particlesEmitter = DBG_NEW ParticlesEmitter(	particle,
+												DBG_NEW Transformation(position, glm::vec3(0.0f), glm::vec3(0.1f)),
 												nullptr,
 												50);
 	particlesEmitter->SetColorGradientValues(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
@@ -739,8 +741,8 @@ void CreateTextTest()
 	FontType* font = mEngine->GetFont("OCR A Extended");
 
 	materialText = mEngine->GetMaterial(MaterialsLibrary::TEXT_MATERIAL_NAME);
-	materialText->AddEffect(new MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
-	materialText->AddEffect(new MaterialEffectText(	glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+	materialText->AddEffect(DBG_NEW MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
+	materialText->AddEffect(DBG_NEW MaterialEffectText(	glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 													glm::vec4(1.0f, 1.0f, 1.0f, 0.0f),
 													0.4f,
 													0.1f,
@@ -750,8 +752,8 @@ void CreateTextTest()
 
 	for (unsigned int i = 0; i < texts.size(); ++i)
 	{
-		mText[i] = new Text(
-								new Transformation(	glm::vec3(-mEngine->GetScreenWidth() * 0.5f, mEngine->GetScreenHeight() * 0.5f - i * 20.0f, 0.0f),
+		mText[i] = DBG_NEW Text(
+								DBG_NEW Transformation(	glm::vec3(-mEngine->GetScreenWidth() * 0.5f, mEngine->GetScreenHeight() * 0.5f - i * 20.0f, 0.0f),
 								glm::vec3(0.0f),
 								glm::vec3(0.70f)
 							),
@@ -764,8 +766,8 @@ void CreateTextTest()
 	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
 
 	IMaterial* material3D = mEngine->GetMaterial(MaterialsLibrary::TEXT3D_MATERIAL_NAME);
-	material3D->AddEffect(new MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
-	material3D->AddEffect(new MaterialEffectText(	glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+	material3D->AddEffect(DBG_NEW MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
+	material3D->AddEffect(DBG_NEW MaterialEffectText(	glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
 													glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
 													0.4f,
 													0.1f,
@@ -773,7 +775,7 @@ void CreateTextTest()
 													0.6f,
 													glm::vec2(0.0f)));
 
-	Text* mTestText = new Text(	new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.01f)),
+	Text* mTestText = DBG_NEW Text(	DBG_NEW Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.01f)),
 								material3D, font,
 								"Origin", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
 	mScene->AddEntity(mTestText);*/
@@ -782,7 +784,7 @@ void CreateTextTest()
 	z = 10.0f;
 	height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
 
-	mTestText = new Text(new Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(.01f)),
+	mTestText = DBG_NEW Text(DBG_NEW Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(.01f)),
 		mEngine->GetShader("s_text"), mEngine->GetFont("OCR A Extended"),
 		"Market", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
 	mTestText->SetOutlineColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.8f));
@@ -794,7 +796,7 @@ void CreateTextTest()
 void CreateTerrain()
 {
 	//TERRAIN GAME ENTITY
-	//mSunCamera = new OrthogonalCamera(20.0f, 20.0f, -10.0f, 20.0f);
+	//mSunCamera = DBG_NEW OrthogonalCamera(20.0f, 20.0f, -10.0f, 20.0f);
 	//glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
 	//glm::vec3 direction = glm::vec3(camera->GetTarget() - glm::vec3(100000.0f, 100000.0f, 100000.0f));
 	//glm::mat4 depthViewMatrix = glm::lookAt(direction, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
@@ -804,7 +806,7 @@ void CreateTerrain()
 	float scale = mIsTerrainFlat ? 0.0f : TERRAIN_SCALE;
 
 	IMaterial* material = mEngine->GetMaterial("terrain");
-	mTerrain = new Terrain(	new Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
+	mTerrain = DBG_NEW Terrain(	DBG_NEW Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 							material,
 							static_cast<Texture*>(mEngine->GetTexture("terrain_heightmap")),
 							scale);
@@ -824,32 +826,32 @@ void CreatePlayer()
 	//PLAYER
 	IMaterial* material = mEngine->GetMaterial("player");
 
-	InputComponent* inputComponent = new InputComponent();
-	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_W, new ForwardEvent()));
-	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_S, new BackwardEvent()));
-	inputComponent->AddConverter(new MouseToEventBind(-1, new TurnEvent()));
-	inputComponent->AddConverter(new KeyToEventBind(GLFW_KEY_SPACE, new JumpEvent()));
-	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
+	InputComponent* inputComponent = DBG_NEW InputComponent();
+	inputComponent->AddConverter(DBG_NEW KeyToEventBind(GLFW_KEY_W, DBG_NEW ForwardEvent()));
+	inputComponent->AddConverter(DBG_NEW KeyToEventBind(GLFW_KEY_S, DBG_NEW BackwardEvent()));
+	inputComponent->AddConverter(DBG_NEW MouseToEventBind(-1, DBG_NEW TurnEvent()));
+	inputComponent->AddConverter(DBG_NEW KeyToEventBind(GLFW_KEY_SPACE, DBG_NEW JumpEvent()));
+	inputComponent->AddConverter(DBG_NEW MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, DBG_NEW ZoomEvent()));
 
 	Model* model = mEngine->GetModel("farmer");
-	//IRenderer* renderer = new VerticesRenderer(model, material);
-	IRenderer* renderer = new IndicesRenderer(model, material);
+	//IRenderer* renderer = DBG_NEW VerticesRenderer(model, material);
+	IRenderer* renderer = DBG_NEW IndicesRenderer(model, material);
 
-	mPlayer = new Player(	new Transformation(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.18f)),
+	mPlayer = DBG_NEW Player(	DBG_NEW Transformation(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(0.18f)),
 							renderer,
 							inputComponent,
-							new CharacterComponent(),
-							new PhysicsComponent(false, PhysicsSystem::GRAVITY_VALUE),
-							new CollisionComponent(),
+							DBG_NEW CharacterComponent(),
+							DBG_NEW PhysicsComponent(false, PhysicsSystem::GRAVITY_VALUE),
+							DBG_NEW CollisionComponent(),
 							PLAYER_RUN_SPEED,
 							PLAYER_TURN_SPEED,
 							PLAYER_UPWARDS_HEIGHT
 						);
-	mPlayer->AddComponent(new EnergyWallCollisionComponent());
-	IRenderer* boundingBoxRenderer = new WireframeRenderer(mEngine->GetModel("cube"), mEngine->GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
-	mPlayer->AddComponent(new DebugComponent(boundingBoxRenderer));
-	mPlayer->AddComponent(new EnvironmentModificatorComponent());
-	AnimationComponent* animationComponent = new AnimationComponent();
+	mPlayer->AddComponent(DBG_NEW EnergyWallCollisionComponent());
+	IRenderer* boundingBoxRenderer = DBG_NEW WireframeRenderer(mEngine->GetModel("cube"), mEngine->GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
+	mPlayer->AddComponent(DBG_NEW DebugComponent(boundingBoxRenderer));
+	mPlayer->AddComponent(DBG_NEW EnvironmentModificatorComponent());
+	AnimationComponent* animationComponent = DBG_NEW AnimationComponent();
 	animationComponent->AddAnimation(mEngine->GetAnimation("animation_0"));
 	mPlayer->AddComponent(animationComponent);
 	mScene->AddEntity(mPlayer);
@@ -857,15 +859,15 @@ void CreatePlayer()
 
 void CreateGameCameraEntity()
 {
-	InputComponent* inputComponent = new InputComponent();
-	inputComponent->AddConverter(new MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, new ZoomEvent()));
-	inputComponent->AddConverter(new MouseToEventBind(-1, new PitchEvent()));
+	InputComponent* inputComponent = DBG_NEW InputComponent();
+	inputComponent->AddConverter(DBG_NEW MouseToEventBind(GLFW_MOUSE_BUTTON_MIDDLE, DBG_NEW ZoomEvent()));
+	inputComponent->AddConverter(DBG_NEW MouseToEventBind(-1, DBG_NEW PitchEvent()));
 
-	mCamera = new GameEntity(new Transformation(mGameplayCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
-		nullptr);// new CubeRenderer(mEngine->GetShader("s_default")));
+	mCamera = DBG_NEW GameEntity(DBG_NEW Transformation(mGameplayCamera->GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f)),
+		nullptr);// DBG_NEW CubeRenderer(mEngine->GetShader("s_default")));
 
 	glm::vec3 targetOffset(0.0f, 0.5f, 0.0f); //head
-	mThirdPersonCameraComponent = new ThirdPersonCameraComponent(	static_cast<PerspectiveCamera*>(mGameplayCamera), 
+	mThirdPersonCameraComponent = DBG_NEW ThirdPersonCameraComponent(	static_cast<PerspectiveCamera*>(mGameplayCamera), 
 																	mPlayer, 
 																	targetOffset, 
 																	4.0f, 
@@ -873,14 +875,14 @@ void CreateGameCameraEntity()
 																	PLAYER_PITCH_SPEED, 
 																	PLAYER_ZOOM_SPEED);
 	mCamera->AddComponent(mThirdPersonCameraComponent);
-	mCamera->AddComponent(new CollisionComponent());
+	mCamera->AddComponent(DBG_NEW CollisionComponent());
 
-	mCamera->AddComponent(new CharacterComponent());
+	mCamera->AddComponent(DBG_NEW CharacterComponent());
 	mCamera->AddComponent(inputComponent);
 	
 	if (mIsWaterEnabled)
 	{
-		mCamera->AddComponent(new OverWaterComponent(mWaterHeight));
+		mCamera->AddComponent(DBG_NEW OverWaterComponent(mWaterHeight));
 	}
 
 	mScene->AddEntity(mCamera);
@@ -893,14 +895,14 @@ void CreateSkybox()
 	{
 		IMaterial* material = mEngine->GetMaterial("skybox");
 
-		SkyBoxRenderer* skyboxRenderer = new SkyBoxRenderer(mEngine->GetModel("skybox"), material);
+		SkyBoxRenderer* skyboxRenderer = DBG_NEW SkyBoxRenderer(mEngine->GetModel("skybox"), material);
 		skyboxRenderer->SetLayer(IRenderer::LAYER_PARTICLES);
 		
-		GameEntity* skyBox = new GameEntity(
-			new Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(100.0f)),
+		GameEntity* skyBox = DBG_NEW GameEntity(
+			DBG_NEW Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(100.0f)),
 			skyboxRenderer
 		);
-		skyBox->AddComponent(new RotationComponent(glm::vec3(0.0f, 1.0f, 0.0f), SKYBOX_ROTATION_SPEED));
+		skyBox->AddComponent(DBG_NEW RotationComponent(glm::vec3(0.0f, 1.0f, 0.0f), SKYBOX_ROTATION_SPEED));
 		mScene->AddEntity(skyBox);
 	}
 }
@@ -912,7 +914,7 @@ void CreateCameras()
 	float aspectRatio = screenWidth / screenHeight;
 
 	//CAMERA
-	//mEagleEyeCamera = new PerspectiveCamera(VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
+	//mEagleEyeCamera = DBG_NEW PerspectiveCamera(VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
 	float factor = 1.0f;
 	if (mConfiguration != QUADTREE && mConfiguration != QUADTREE_WITH_CAMERA)
 	{
@@ -922,14 +924,14 @@ void CreateCameras()
 	{
 		factor = 50.0f;
 	}
-	mEagleEyeCamera = new OrthogonalCamera("eagle_camera", screenWidth/factor, screenHeight/factor, NEAR_PLANE, FAR_PLANE);
+	mEagleEyeCamera = DBG_NEW OrthogonalCamera("eagle_camera", screenWidth/factor, screenHeight/factor, NEAR_PLANE, FAR_PLANE);
 	mEagleEyeCamera->SetPosition(glm::vec3(0.0f, 15.0f, 0.0f));
 	mEagleEyeCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mEagleEyeCamera->SetUp(glm::vec3(1.0f, 0.0f, 0.0f));
 
 	mEngine->AddCamera(mEagleEyeCamera);
 
-	mGameplayCamera = new PerspectiveCamera("gameplay_camera", VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
+	mGameplayCamera = DBG_NEW PerspectiveCamera("gameplay_camera", VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
 	mGameplayCamera->SetPosition(glm::vec3(0.0f, 5.0f, 5.0f));
 	mGameplayCamera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -938,7 +940,7 @@ void CreateCameras()
 	/*
 	if (mConfiguration == QUADTREE_WITH_CAMERA)
 	{
-		mCameraTest = new PerspectiveCamera("gameplay_test", VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
+		mCameraTest = DBG_NEW PerspectiveCamera("gameplay_test", VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
 		mCameraTest->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 		mCameraTest->SetTarget(glm::vec3(0.0f, 0.0f, 10.0f));
 		mCameraTest->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -1087,14 +1089,14 @@ void DisableRenderPasses()
 void CreateHudMapRenderPass()
 {
 	//HUD MAP RENDER PASS
-	ICamera* camera = new PerspectiveCamera("map_camera", VIEW_ANGLE, mEngine->GetScreenWidth() / mEngine->GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
+	ICamera* camera = DBG_NEW PerspectiveCamera("map_camera", VIEW_ANGLE, mEngine->GetScreenWidth() / mEngine->GetScreenHeight(), NEAR_PLANE, FAR_PLANE);
 	camera->SetPosition(glm::vec3(0.0f, 100.0f, 0.0f));
 	camera->SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	camera->SetUp(glm::vec3(1.0f, 0.0f, 0.0f));
-	mMapPass = new RenderPass("map_hud_render_pass", camera, IRenderer::LAYER_OTHER);
+	mMapPass = DBG_NEW RenderPass("map_hud_render_pass", camera, IRenderer::LAYER_OTHER);
 	mEngine->AddCamera(camera);
 	
-	IFrameBuffer* frameBuffer = new IFrameBuffer(static_cast<int>(mEngine->GetScreenWidth()), static_cast<int>(mEngine->GetScreenHeight()));
+	IFrameBuffer* frameBuffer = DBG_NEW IFrameBuffer(static_cast<int>(mEngine->GetScreenWidth()), static_cast<int>(mEngine->GetScreenHeight()));
 	frameBuffer->SetColorTextureAttachment(0, static_cast<Texture*>(mEngine->GetTexture("map")));
 	frameBuffer->Init();
 	mMapPass->SetFrameBufferOutput(frameBuffer);
@@ -1107,10 +1109,10 @@ void CreateGameplayRenderPass()
 	int screenHeight = static_cast<int>(mEngine->GetScreenHeight());
 	//RENDER PASS GAMEPLAY	
 	ICamera* camera = mEngine->GetCamera("gameplay_camera");
-	mGameplayPass = new RenderPass("gameplay_render_pass", camera, IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
+	mGameplayPass = DBG_NEW RenderPass("gameplay_render_pass", camera, IRenderer::LAYER_OTHER | IRenderer::LAYER_WATER | IRenderer::LAYER_DEBUG);
 	mGameplayPass->SetAcceptSpacePartitionOnly(true);
 
-	IFrameBuffer* frameBuffer = new IFrameBuffer(screenWidth, screenHeight);
+	IFrameBuffer* frameBuffer = DBG_NEW IFrameBuffer(screenWidth, screenHeight);
 	Texture* depthTexture = static_cast<Texture*>(mEngine->GetTexture("depth_texture"));
 	frameBuffer->SetCopyBufferToTexture(depthTexture, 0, 0, screenWidth, screenHeight);
 
@@ -1118,7 +1120,7 @@ void CreateGameplayRenderPass()
 	mGameplayPass->EnableFog(true);
 	
 	//IMaterial* material = mEngine->GetMaterial("shadow");
-	//material->AddEffect(new MaterialEffectDiffuseTexture(mEngine->GetTexture("tree_foliage_diffuse"), glm::vec3(0.0f), 1.0f));
+	//material->AddEffect(DBG_NEW MaterialEffectDiffuseTexture(mEngine->GetTexture("tree_foliage_diffuse"), glm::vec3(0.0f), 1.0f));
 	//mGameplayPass->SetMaterial(material);
 
 	mEngine->AddRenderPass(mGameplayPass, false);
@@ -1128,7 +1130,7 @@ void CreateParticlesRenderPass()
 {
 	//RENDER PASS PARTICLES
 	ICamera* camera = mEngine->GetCamera("gameplay_camera");
-	RenderPass *particlesPass = new RenderPass("particles_render_pass", camera, IRenderer::LAYER_PARTICLES);
+	RenderPass *particlesPass = DBG_NEW RenderPass("particles_render_pass", camera, IRenderer::LAYER_PARTICLES);
 	particlesPass->SetCalculateDistanceToCamera(true);
 	particlesPass->EnableFog(true);
 	mEngine->AddRenderPass(particlesPass, false);
@@ -1138,7 +1140,7 @@ void CreateTransparentRenderPass()
 {
 	//RENDER PASS TRANSPARENT
 	ICamera* camera = mEngine->GetCamera("gameplay_camera");
-	RenderPass *transparentPass = new RenderPass("transparent_render_pass", camera, IRenderer::LAYER_TRANSPARENT);
+	RenderPass *transparentPass = DBG_NEW RenderPass("transparent_render_pass", camera, IRenderer::LAYER_TRANSPARENT);
 	transparentPass->EnableFog(true);
 	mEngine->AddRenderPass(transparentPass, false);
 }
@@ -1326,7 +1328,7 @@ void UpdateInput(GLFWwindow* window)
 	{
 		if (mCurrentCommand == nullptr)
 		{
-			mCurrentCommand = new RiseTerrainCommand(mTerrain);
+			mCurrentCommand = DBG_NEW RiseTerrainCommand(mTerrain);
 		}
 	} 
 	else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
@@ -1610,13 +1612,14 @@ void Initialize()
 }
 
 int main(void)
-{	
+{
 	Initialize();
 
 	mEngine->SetCastingShadowsTarget(mPlayer);
 	mEngine->Run();
 
 	_CrtDumpMemoryLeaks();
+
 	return 0;
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
+#include "../Memory.h"
 
 class OverdrawShader : public IShaderProgram
 {
@@ -16,7 +17,7 @@ public:
 	void GetAllUniformLocations() override;
 
 	static std::string GetClassName() { return std::string("OverdrawShader"); }
-	static IShaderProgram* Create() { return new OverdrawShader(); }
+	static IShaderProgram* Create() { return DBG_NEW OverdrawShader(); }
 
 private:
 

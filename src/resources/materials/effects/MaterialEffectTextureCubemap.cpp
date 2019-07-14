@@ -5,6 +5,7 @@
 #include "../../../utils/Log.h"
 #include "../../textures/TexturesLibrary.h"
 #include "../../textures/TextureCubemap.h"
+#include "../Memory.h"
 
 #include <assert.h>
 
@@ -74,12 +75,12 @@ void MaterialEffectTextureCubemap::CopyValuesFrom(IMaterial* material)
 
 MaterialEffectTextureCubemap* MaterialEffectTextureCubemap::DoClone() const
 {
-	return new MaterialEffectTextureCubemap(*this);
+	return DBG_NEW MaterialEffectTextureCubemap(*this);
 }
 
 IMaterialEffect* MaterialEffectTextureCubemap::Create(IMaterial* material)
 {
-	MaterialEffectTextureCubemap* effect = new MaterialEffectTextureCubemap();
+	MaterialEffectTextureCubemap* effect = DBG_NEW MaterialEffectTextureCubemap();
 	material->AddOrReplaceEffect(effect);
 	return effect;
 }

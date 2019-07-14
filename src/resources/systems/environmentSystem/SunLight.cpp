@@ -2,6 +2,7 @@
 #include "SunLight.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "../../GameConstants.h"
+#include "../Memory.h"
 
 #include <algorithm>
 
@@ -24,7 +25,7 @@ void SunLight::AddFrame(float hour, const float rotationAngle, const glm::vec3& 
 	bool found = std::find_if(mKeyFrames.begin(), mKeyFrames.end(), [&](KeyFrame* keyFrame) { return keyFrame->mHour == hour; }) != mKeyFrames.end();
 	if (!found)
 	{
-		KeyFrame* keyFrame = new KeyFrame(hour, rotationAngle, color, fogColor, fogDensity, fogGradient, cubemapName);
+		KeyFrame* keyFrame = DBG_NEW KeyFrame(hour, rotationAngle, color, fogColor, fogDensity, fogGradient, cubemapName);
 		mKeyFrames.push_back(keyFrame);
 		mShouldSort = true;
 	}

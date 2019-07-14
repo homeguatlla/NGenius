@@ -4,6 +4,7 @@
 #include "../GameEntity.h"
 #include "../Transformation.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../Memory.h"
 
 CollisionComponent::CollisionComponent() :
 mIsOnGround(false),
@@ -18,7 +19,7 @@ CollisionComponent::~CollisionComponent()
 
 CollisionComponent* CollisionComponent::DoClone() const
 {
-	return new CollisionComponent(*this);
+	return DBG_NEW CollisionComponent(*this);
 }
 
 bool CollisionComponent::IsOnGround() const

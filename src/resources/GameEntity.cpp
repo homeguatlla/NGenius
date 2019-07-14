@@ -9,6 +9,7 @@
 #include "../utils/serializer/XMLSerializer.h"
 #include "../utils/serializer/IDeserializer.h"
 #include "InstantiableObject.h"
+#include "../Memory.h"
 
 unsigned GameEntity::IDCounter = 0;
 
@@ -96,12 +97,12 @@ void GameEntity::SetEnabled(bool enabled)
 
 GameEntity* GameEntity::CreateGameEntity()
 {
-	return new GameEntity();
+	return DBG_NEW  GameEntity();
 }
 
 GameEntity* GameEntity::DoClone() const
 {
-	GameEntity* clone = new GameEntity(new Transformation(*GetTransformation()));
+	GameEntity* clone = DBG_NEW  GameEntity(new Transformation(*GetTransformation()));
 	if (GetRenderer() != nullptr)
 	{
 		clone->SetRenderer(GetRenderer()->Clone());
@@ -149,7 +150,7 @@ void GameEntity::Build(RenderSystem* renderSystem)
 		else
 		{
 			//By default
-			renderer = new VerticesRenderer(model, material);
+			renderer = DBG_NEW  VerticesRenderer(model, material);
 		}
 		renderer->SetLayer(mRendererLayer);
 		SetRenderer(renderer);
@@ -163,7 +164,7 @@ void GameEntity::ReadFrom(core::utils::IDeserializer* source)
 	source->ReadParameter("renderer", mRendererName);
 	source->ReadParameter("is_enabled", &mIsEnabled);
 	source->ReadParameter("layer", &mRendererLayer);
-	mTransformation = new Transformation();
+	mTransformation = DBG_NEW  Transformation();
 	mTransformation->ReadFrom(source);
 }
 

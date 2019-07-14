@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "EnvironmentAffectedComponent.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../Memory.h"
 
 EnvironmentAffectedComponent::EnvironmentAffectedComponent() : 
 	mIsAffectedByWind(false),
@@ -15,7 +16,7 @@ EnvironmentAffectedComponent::~EnvironmentAffectedComponent()
 
 EnvironmentAffectedComponent* EnvironmentAffectedComponent::DoClone() const
 {
-	return new EnvironmentAffectedComponent(*this);
+	return DBG_NEW EnvironmentAffectedComponent(*this);
 }
 
 float EnvironmentAffectedComponent::GetWindResistence() const

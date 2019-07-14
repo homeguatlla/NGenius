@@ -13,6 +13,7 @@
 #include "../entities/Player.h"
 #include "../entities/Terrain.h"
 #include "../entities/Water.h"
+#include "../Memory.h"
 
 #include <algorithm>
 
@@ -20,10 +21,10 @@ GameScene::GameScene(const std::string& name) :
 mName(name),
 mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limits<float>::max()))
 {
-	InstantiableObject::RegisterType("entity", new GameEntity());
-	//InstantiableObject::RegisterType("player", new Player());
-	InstantiableObject::RegisterType("terrain", new Terrain());
-	InstantiableObject::RegisterType("water", new Water());
+	InstantiableObject::RegisterType("entity", DBG_NEW GameEntity());
+	//InstantiableObject::RegisterType("player", DBG_NEW Player());
+	InstantiableObject::RegisterType("terrain", DBG_NEW Terrain());
+	InstantiableObject::RegisterType("water", DBG_NEW Water());
 }
 
 GameScene::~GameScene()

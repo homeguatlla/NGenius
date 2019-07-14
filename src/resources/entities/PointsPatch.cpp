@@ -6,6 +6,7 @@
 #include "../entities/Terrain.h"
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectFloat.h"
+#include "../Memory.h"
 
 #include <iostream>
 
@@ -62,7 +63,7 @@ void PointsPatch::Create()
 
 	if (vertexs.size() > 0)
 	{
-		mModel = new Model(new Mesh(vertexs, uv, indices));
+		mModel = DBG_NEW Model(new Mesh(vertexs, uv, indices));
 	}
 }
 

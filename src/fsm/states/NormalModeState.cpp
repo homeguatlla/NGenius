@@ -25,7 +25,10 @@ void NormalModeState::OnEnter(float deltaTime)
 {
 	mIsFreeModeKeyPressed = false;
 	mEngine->RegisterAllEventsInputListener(this);
-	mEngine->ChangeToCamera(mEngine->GetFreeCamera()->GetName(), mEngine->GetGameplayCamera()->GetName());
+	if (mEngine->GetGameplayCamera() != nullptr)
+	{
+		mEngine->ChangeToCamera(mEngine->GetFreeCamera()->GetName(), mEngine->GetGameplayCamera()->GetName());
+	}
 }
 
 void NormalModeState::OnExit(float deltaTime)

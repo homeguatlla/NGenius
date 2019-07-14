@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MaterialEffectFloat3Array.h"
 #include "../IMaterial.h"
+#include "../Memory.h"
 
 MaterialEffectFloat3Array::MaterialEffectFloat3Array()
 {
@@ -36,12 +37,12 @@ void MaterialEffectFloat3Array::CopyValuesFrom(IMaterial* material)
 
 MaterialEffectFloat3Array* MaterialEffectFloat3Array::DoClone() const
 {
-	return new MaterialEffectFloat3Array(*this);
+	return DBG_NEW MaterialEffectFloat3Array(*this);
 }
 
 IMaterialEffect* MaterialEffectFloat3Array::Create(IMaterial* material)
 {
-	MaterialEffectFloat3Array* effect = new MaterialEffectFloat3Array();
+	MaterialEffectFloat3Array* effect = DBG_NEW MaterialEffectFloat3Array();
 	material->AddOrReplaceEffect(effect);
 	return effect;
 }

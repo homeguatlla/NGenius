@@ -4,6 +4,7 @@
 
 #include "../GameEntity.h"
 #include "../Transformation.h"
+#include "../Memory.h"
 
 EnergyWallCollisionComponent::EnergyWallCollisionComponent() :
 mIsColliding(false),
@@ -18,7 +19,7 @@ EnergyWallCollisionComponent::~EnergyWallCollisionComponent()
 
 EnergyWallCollisionComponent* EnergyWallCollisionComponent::DoClone() const
 {
-	return new EnergyWallCollisionComponent(*this);
+	return DBG_NEW EnergyWallCollisionComponent(*this);
 }
 
 bool EnergyWallCollisionComponent::IsColliding() const

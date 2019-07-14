@@ -2,6 +2,7 @@
 #include "CharacterComponent.h"
 #include "../GameEvent.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../Memory.h"
 
 #include <assert.h>
 
@@ -15,7 +16,7 @@ CharacterComponent::~CharacterComponent()
 
 CharacterComponent* CharacterComponent::DoClone() const
 {
-	return new CharacterComponent(*this);
+	return DBG_NEW CharacterComponent(*this);
 }
 
 void CharacterComponent::OnCharacterControllerEvent(const GameEvent* gameEvent)

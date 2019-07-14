@@ -1,5 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
+#include "../Memory.h"
 
 class ModelShader :	public IShaderProgram
 {
@@ -17,7 +18,7 @@ public:
 	void GetAllUniformLocations();
 
 	static std::string GetClassName() { return std::string("ModelShader"); }
-	static IShaderProgram* Create() { return new ModelShader(); }
+	static IShaderProgram* Create() { return DBG_NEW ModelShader(); }
 
 private:
 	int mLocationModelMatrix;

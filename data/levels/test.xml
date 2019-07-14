@@ -11,7 +11,6 @@
 			<shader name="ParticleShader"/>
 			<shader name="WaterShader"/>
 			<shader name="EnergyWallShader"/>
-			<shader name="ContrastShader"/>
 			<shader name="HorizontalBlurShader"/>
 			<shader name="VerticalBlurShader"/>
 			<shader name="BrightShader"/>
@@ -231,7 +230,7 @@
 	</renderer>
 	<game_scene name="mainScene">
 		<entities counter="412">
-			<player is_enabled="true" model="farmer" material="player">
+			<!--player is_enabled="true" model="farmer" material="player">
 				<transformation>
 					<position X="-1.318163" Y="5.474967" Z="-3.749299"/>
 					<rotation X="-1.570796" Y="-1.004369" Z="0.000000"/>
@@ -251,7 +250,7 @@
 					</component>
 					<component enabled="1" type="collision_component"/>
 				</components>
-			</player>
+			</player-->
 			<terrain is_enabled="true" material="terrain" scale="20" is_flat="false" heighmap_texture="terrain_heightmap">
 				<transformation>
 					<position X="0.000000" Y="0.000000" Z="0.000000"/>
@@ -275,24 +274,6 @@
 				<components>
 					<component enabled="1" type="rotation_component" rotation_axis="" rotation_speed="0.01">
 						<axis X="0.0" Y="0.0" Z="0.0"/>
-					</component>
-				</components>
-			</entity>
-			<entity>
-				<transformation>
-					<position X="2.042026" Y="5.874854" Z="-5.824761"/>
-					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
-					<scale X="0.000000" Y="0.000000" Z="0.000000"/>
-				</transformation>
-				<components>
-					<component enabled="1" type="character_component"/>
-					<component enabled="1" type="input_component">
-						<converters/>
-					</component>
-					<component enabled="1" type="over_water_component" water_height="5.466667"/>
-					<component enabled="1" type="collision_component"/>
-					<component enabled="1" type="third_person_camera_component" camera_name="gameplay_camera" target_entity_id="1" distance_from_target="4.000000" pitch="10.000000" pitch_speed="10.000000" zoom_speed="10.000000">
-						<target_offset X="0.000000" Y="0.500000" Z="0.000000"/>
 					</component>
 				</components>
 			</entity>

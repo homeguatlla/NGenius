@@ -5,6 +5,7 @@
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectDiffuseTexture.h"
 #include "../textures/Texture.h"
+#include "../Memory.h"
 
 #include <GL\glew.h>
 
@@ -30,7 +31,7 @@ void PostProcessEffect::Init()
 	switch (mType)
 	{
 		case PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER:
-			mFrameBuffer = new IFrameBuffer(mWidth, mHeight);
+			mFrameBuffer = DBG_NEW IFrameBuffer(mWidth, mHeight);
 			mFrameBuffer->SetColorTextureAttachment(0, mOutTexture);
 			mFrameBuffer->Init();
 			break;
@@ -44,7 +45,7 @@ void PostProcessEffect::Init()
 	IMaterial* material = mRenderer->GetMaterial();
 	assert(material != nullptr);
 
-	mMaterialEffectDiffuseTexture = new MaterialEffectDiffuseTexture(mOutTexture, glm::vec3(0.0f), 0);
+	mMaterialEffectDiffuseTexture = DBG_NEW MaterialEffectDiffuseTexture(mOutTexture, glm::vec3(0.0f), 0);
 	material->AddOrReplaceEffect(mMaterialEffectDiffuseTexture);
 }
 

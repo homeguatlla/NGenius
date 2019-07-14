@@ -6,6 +6,8 @@
 #include "TextureCubemap.h"
 #include "../../utils/serializer/IDeserializer.h"
 #include "../../utils/Log.h"
+#include "../Memory.h"
+
 #include <GL/glew.h>
 
 #include <algorithm>
@@ -42,14 +44,14 @@ void TexturesLibrary::Load()
 
 void TexturesLibrary::LoadTexture(std::string name, std::string filename, bool hasMipmapping, bool hasWrapping)
 {
-	Texture* texture = new Texture();
+	Texture* texture = DBG_NEW Texture();
 	texture->Load(filename, ++mCurrentTextureUnit, hasMipmapping, hasWrapping);
 	AddOrReplaceElement(name, texture);
 }
 
 ITexture* TexturesLibrary::CreateColorTexture(std::string name, const glm::vec2& size)
 {
-	Texture* texture = new Texture();
+	Texture* texture = DBG_NEW Texture();
 	texture->CreateTexture(++mCurrentTextureUnit, static_cast<int>(size.x), static_cast<int>(size.y));
 	AddOrReplaceElement(name, texture);
 
@@ -58,14 +60,14 @@ ITexture* TexturesLibrary::CreateColorTexture(std::string name, const glm::vec2&
 
 void TexturesLibrary::CreateDepthTexture(std::string name, unsigned int width, unsigned int height)
 {
-	Texture* texture = new Texture();
+	Texture* texture = DBG_NEW Texture();
 	texture->CreateDepthTexture(++mCurrentTextureUnit, width, height);
 	AddOrReplaceElement(name, texture);
 }
 
 ITexture* TexturesLibrary::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
 {
-	Texture* texture = new Texture();
+	Texture* texture = DBG_NEW Texture();
 	texture->CreateDepthTexture(++mCurrentTextureUnit, size.x, size.y);
 	AddOrReplaceElement(name, texture);
 
@@ -80,7 +82,7 @@ void TexturesLibrary::LoadTexturesPendingToLoad()
 		//ahora mismo, tres texturas con distinto name pueden hacer referencia al mismo archivo. No se cargará más que una.
 		//suponiendo que las que se cargan directamente sin ser añadidas a mTexturesPendingToLoad se cargasen mediante esta lista.
 		
-		Texture* texture = new Texture();
+		Texture* texture = DBG_NEW Texture();
 		bool loaded = texture->Load(std::get<1>(tuple), ++mCurrentTextureUnit, true, true);
 		if (loaded)
 		{
@@ -170,7 +172,7 @@ void TexturesLibrary::ReadTextureCubemapFrom(core::utils::IDeserializer* source)
 
 	if (!filenames.empty())
 	{
-		TextureCubemap* cubemap = new TextureCubemap();
+		TextureCubemap* cubemap = DBG_NEW TextureCubemap();
 		cubemap->Load(filenames, ++mCurrentTextureUnit);
 		AddOrReplaceElement(textureName, cubemap);
 	}
@@ -190,7 +192,7 @@ void TexturesLibrary::ReadTextureArrayFrom(core::utils::IDeserializer * source)
 	
 	if (!filenames.empty())
 	{
-		TextureArray* textureArray = new TextureArray();
+		TextureArray* textureArray = DBG_NEW TextureArray();
 		textureArray->Load(filenames, ++mCurrentTextureUnit, true);
 		AddOrReplaceElement(textureName, textureArray);
 	}

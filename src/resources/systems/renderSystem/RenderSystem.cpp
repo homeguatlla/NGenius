@@ -133,7 +133,7 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 	assert(initialized);
 
 	CheckGLError();
-	mGuiTool = new GuiTool(mWindow);
+	mGuiTool = DBG_NEW GuiTool(mWindow);
 
 	CreateResourcesLibraries();
 	LoadDefaultResources();
@@ -169,10 +169,10 @@ void RenderSystem::BuildRenderPasses()
 
 void RenderSystem::CreateSubSystems()
 {
-	mShadowsRenderPass = new ShadowsRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
-	mWaterRenderPass = new WaterRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
+	mShadowsRenderPass = DBG_NEW ShadowsRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
+	mWaterRenderPass = DBG_NEW WaterRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
 
-	mPostProcessSubsystem = new PostProcessSubSystem(this);
+	mPostProcessSubsystem = DBG_NEW PostProcessSubSystem(this);
 }
 
 void RenderSystem::DestroySubSystems()
@@ -981,12 +981,12 @@ void RenderSystem::EnableVSync(bool enable)
 
 void RenderSystem::CreateResourcesLibraries()
 {
-	mShadersLibrary = new ShadersLibrary();
-	mTexturesLibrary = new TexturesLibrary(glm::vec2(mScreenWidth, mScreenHeight));
-	mAnimationsLibrary = new AnimationsLibrary();
-	mModelsLibrary = new ModelsLibrary(mTexturesLibrary, mAnimationsLibrary);
-	mFontsLibrary = new FontsLibrary(mTexturesLibrary);
-	mMaterialsLibrary = new MaterialsLibrary(mTexturesLibrary, mShadersLibrary);
+	mShadersLibrary = DBG_NEW ShadersLibrary();
+	mTexturesLibrary = DBG_NEW TexturesLibrary(glm::vec2(mScreenWidth, mScreenHeight));
+	mAnimationsLibrary = DBG_NEW AnimationsLibrary();
+	mModelsLibrary = DBG_NEW ModelsLibrary(mTexturesLibrary, mAnimationsLibrary);
+	mFontsLibrary = DBG_NEW FontsLibrary(mTexturesLibrary);
+	mMaterialsLibrary = DBG_NEW MaterialsLibrary(mTexturesLibrary, mShadersLibrary);
 }
 
 void RenderSystem::DestroyResourcesLibraries()
@@ -1190,7 +1190,7 @@ void RenderSystem::ReadRenderPassFrom(core::utils::IDeserializer* source)
 	ICamera* camera = GetCamera(cameraName);
 	if (camera != nullptr)
 	{
-		RenderPass* renderPass = new RenderPass(renderPassName, camera, layerMask);
+		RenderPass* renderPass = DBG_NEW RenderPass(renderPassName, camera, layerMask);
 		renderPass->ReadFrom(source);
 		AddOrReplaceRenderPass(renderPass, addAfterPostProcessing);
 	}

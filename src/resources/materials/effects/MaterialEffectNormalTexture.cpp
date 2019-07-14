@@ -4,6 +4,8 @@
 #include "../../textures/TexturesLibrary.h"
 #include "../../../utils/serializer/XMLDeserializer.h"
 #include "../../../utils/Log.h"
+#include "../Memory.h"
+
 #include <assert.h>
 
 MaterialEffectNormalTexture::MaterialEffectNormalTexture() :
@@ -60,12 +62,12 @@ void MaterialEffectNormalTexture::Build(TexturesLibrary* texturesLibrary)
 
 MaterialEffectNormalTexture* MaterialEffectNormalTexture::DoClone() const
 {
-	return new MaterialEffectNormalTexture(*this);
+	return DBG_NEW MaterialEffectNormalTexture(*this);
 }
 
 IMaterialEffect* MaterialEffectNormalTexture::Create(IMaterial* material)
 {
-	MaterialEffectNormalTexture* effect = new MaterialEffectNormalTexture();
+	MaterialEffectNormalTexture* effect = DBG_NEW MaterialEffectNormalTexture();
 	material->AddOrReplaceEffect(effect);
 	return effect;
 }

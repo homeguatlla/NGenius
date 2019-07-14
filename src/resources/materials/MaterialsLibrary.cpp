@@ -30,6 +30,7 @@
 #include <GL/glew.h>
 #include <algorithm>
 #include "../../utils/Log.h"
+#include "../Memory.h"
 
 const char* MaterialsLibrary::OVERDRAW_MATERIAL_NAME = "overdraw";
 const char* MaterialsLibrary::WIREFRAME_MATERIAL_NAME = "wireframe";
@@ -68,7 +69,7 @@ IMaterial* MaterialsLibrary::CreateMaterial(const std::string& name, IShaderProg
 {
 	assert(shader != nullptr);
 
-	IMaterial* material = new BasicMaterial(shader);
+	IMaterial* material = DBG_NEW BasicMaterial(shader);
 	AddOrReplaceElement(name, material);
 
 	return material;

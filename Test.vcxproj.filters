@@ -837,6 +837,9 @@
     <ClInclude Include="src\fsm\states\NormalModeState.h">
       <Filter>Header Files\fsm\states</Filter>
     </ClInclude>
+    <ClInclude Include="Memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

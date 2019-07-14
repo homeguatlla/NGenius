@@ -2,6 +2,7 @@
 #include "MaterialEffectDirectionalLightProperties.h"
 #include "../IMaterial.h"
 #include "../../GameConstants.h"
+#include "../Memory.h"
 
 MaterialEffectDirectionalLightProperties::MaterialEffectDirectionalLightProperties() :
 mSunLightDirection(SUN_POSITION_DEFAULT),
@@ -42,12 +43,12 @@ void MaterialEffectDirectionalLightProperties::CopyValuesFrom(IMaterial* materia
 
 MaterialEffectDirectionalLightProperties* MaterialEffectDirectionalLightProperties::DoClone() const
 {
-	return new MaterialEffectDirectionalLightProperties(*this);
+	return DBG_NEW MaterialEffectDirectionalLightProperties(*this);
 }
 
 IMaterialEffect* MaterialEffectDirectionalLightProperties::Create(IMaterial* material)
 {
-	MaterialEffectDirectionalLightProperties* effect = new MaterialEffectDirectionalLightProperties();
+	MaterialEffectDirectionalLightProperties* effect = DBG_NEW MaterialEffectDirectionalLightProperties();
 	material->AddOrReplaceEffect(effect);
 	return effect;
 }

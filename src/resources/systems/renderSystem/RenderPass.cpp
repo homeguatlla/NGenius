@@ -5,6 +5,7 @@
 #include "../../GameEntity.h"
 #include "../../components/SpacePartitionComponent.h"
 #include "../../../utils/serializer/XMLDeserializer.h"
+#include "../Memory.h"
 
 RenderPass::RenderPass(const std::string& name, const ICamera* camera, char layersMask) :
 mLayersMask(layersMask),
@@ -217,7 +218,7 @@ void RenderPass::ReadFrameBufferFrom(core::utils::IDeserializer* source)
 	source->ReadParameter("width", &width);
 	source->ReadParameter("height", &height);
 
-	IFrameBuffer* buffer = new IFrameBuffer(width, height);
+	IFrameBuffer* buffer = DBG_NEW IFrameBuffer(width, height);
 	buffer->ReadFrom(source);
 	SetFrameBufferOutput(buffer);
 }

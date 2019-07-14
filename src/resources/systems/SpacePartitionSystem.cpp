@@ -31,7 +31,7 @@ void SpacePartitionSystem::Start()
 void SpacePartitionSystem::Build()
 {
 	mAABB.Expand(glm::vec3(5.0f));
-	mQuadTree = new GameEntityQuadTree(mAABB);
+	mQuadTree = DBG_NEW GameEntityQuadTree(mAABB);
 	mHasBuilt = true;
 }
 

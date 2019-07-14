@@ -7,8 +7,8 @@
 #include "animation/Animation.h"
 
 #include "../../utils/serializer/IDeserializer.h"
-
 #include "../../utils/Log.h"
+#include "../Memory.h"
 
 #include <iostream>
 
@@ -111,13 +111,13 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 
 		if (animation != nullptr && rootJoint != nullptr)
 		{
-			AnimatedModel* animatedModel = new AnimatedModel(name, model, rootJoint);
+			AnimatedModel* animatedModel = DBG_NEW AnimatedModel(name, model, rootJoint);
 			AddOrReplaceElement(name, animatedModel);
 			mAnimationsLibrary->AddOrReplaceElement(animation->GetName(), animation);
 		}
 		else
 		{
-			Model* modelRender = new Model(model);
+			Model* modelRender = DBG_NEW Model(model);
 			AddOrReplaceElement(name, modelRender);
 		}
 
@@ -252,8 +252,8 @@ void ModelsLibrary::CreateSkyBox()
 	indexes.push_back(7);
 
 	std::vector<glm::vec2> uv;
-	Mesh* mMesh = new Mesh(vertexs, uv, indexes);
-	Model* model = new Model(mMesh);
+	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexes);
+	Model* model = DBG_NEW Model(mMesh);
 
 	AddOrReplaceElement("skybox", model);
 }
@@ -311,8 +311,8 @@ void ModelsLibrary::CreateCube()
 	indexes.push_back(2);
 
 	std::vector<glm::vec2> uv;
-	Mesh* mMesh = new Mesh(vertexs, uv, indexes);
-	Model* model = new Model(mMesh);
+	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexes);
+	Model* model = DBG_NEW Model(mMesh);
 
 	AddOrReplaceElement("cube", model);
 }
@@ -340,8 +340,8 @@ void ModelsLibrary::CreateQuad(const std::string& name, float width, float heigh
 	indexs.push_back(2);
 	indexs.push_back(1);
 
-	Mesh* mMesh = new Mesh(vertexs, uv, indexs);
-	Model* model = new Model(mMesh);
+	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexs);
+	Model* model = DBG_NEW Model(mMesh);
 
 	AddOrReplaceElement(name, model);
 }

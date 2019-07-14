@@ -8,6 +8,7 @@
 #include "../renderers/IRenderer.h"
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectMatrix4Array.h"
+#include "../Memory.h"
 
 #include <algorithm>
 
@@ -55,7 +56,7 @@ void AnimationSystem::AddEntity(GameEntity* entity)
 	if (HasAnimationComponents(entity))
 	{
 		AnimatedModel* model = static_cast<AnimatedModel*>(entity->GetRenderer()->GetModel());
-		Animator* animator = new Animator(model);
+		Animator* animator = DBG_NEW Animator(model);
 
 		AnimationComponent* component = entity->GetComponent<AnimationComponent>();
 		mEntities.push_back(std::pair<GameEntity*, Animator*>(entity, animator));

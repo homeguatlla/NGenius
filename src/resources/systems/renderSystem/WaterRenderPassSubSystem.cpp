@@ -94,12 +94,12 @@ void WaterRenderPassSubSystem::SetWaterParameters(const ICamera* gameplayCamera,
 
 ICamera* WaterRenderPassSubSystem::CreateReflectionCamera()
 {
-	return new PerspectiveCamera("reflection_camera", VIEW_ANGLE, mScreenWidth / mScreenHeight, NEAR_PLANE, FAR_PLANE);
+	return DBG_NEW PerspectiveCamera("reflection_camera", VIEW_ANGLE, mScreenWidth / mScreenHeight, NEAR_PLANE, FAR_PLANE);
 }
 
 ICamera* WaterRenderPassSubSystem::CreateRefractionCamera()
 {
-	return new PerspectiveCamera("refraction_camera", VIEW_ANGLE, mScreenWidth / mScreenHeight, NEAR_PLANE, FAR_PLANE);
+	return DBG_NEW PerspectiveCamera("refraction_camera", VIEW_ANGLE, mScreenWidth / mScreenHeight, NEAR_PLANE, FAR_PLANE);
 }
 
 RenderPass* WaterRenderPassSubSystem::CreateRefractionRenderPass()
@@ -110,12 +110,12 @@ RenderPass* WaterRenderPassSubSystem::CreateRefractionRenderPass()
 	Texture* refractionTexture = static_cast<Texture*>(mRenderSystem->CreateColorTexture("refraction_water", glm::vec2(320 * 2, 240 * 2)));
 	Texture* refractionDepthTexture = static_cast<Texture*>(mRenderSystem->CreateDepthTexture("refraction_depth_water", glm::vec2(320 * 2, 240 * 2)));
 	
-	IFrameBuffer* frameRefractionBuffer = new IFrameBuffer(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight));
+	IFrameBuffer* frameRefractionBuffer = DBG_NEW IFrameBuffer(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight));
 	frameRefractionBuffer->SetColorTextureAttachment(0, refractionTexture);
 	frameRefractionBuffer->SetDepthTextureAttachment(refractionDepthTexture);
 	frameRefractionBuffer->Init();
 
-	RenderPass* refractionWaterPass = new RenderPass("water_refraction_render_pass", static_cast<ICamera*>(mRefractionCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES | IRenderer::LAYER_TRANSPARENT);
+	RenderPass* refractionWaterPass = DBG_NEW RenderPass("water_refraction_render_pass", static_cast<ICamera*>(mRefractionCamera), IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES | IRenderer::LAYER_TRANSPARENT);
 	refractionWaterPass->SetFrameBufferOutput(frameRefractionBuffer);
 	refractionWaterPass->EnableClipping(true);
 	refractionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);
@@ -136,13 +136,13 @@ RenderPass* WaterRenderPassSubSystem::CreateReflectionRenderPass()
 
 	//REFLECTION
 	Texture* reflectionTexture = static_cast<Texture*>(mRenderSystem->CreateColorTexture("reflection_water", glm::vec2(320 * 2, 240 * 2)));
-	IFrameBuffer* frameReflectionBuffer = new IFrameBuffer(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight));
+	IFrameBuffer* frameReflectionBuffer = DBG_NEW IFrameBuffer(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight));
 	frameReflectionBuffer->SetColorTextureAttachment(0, reflectionTexture);
 	frameReflectionBuffer->SetDepthAttachment(reflectionTexture->GetWidth(), reflectionTexture->GetHeight());
 
 	frameReflectionBuffer->Init();
 
-	RenderPass* reflectionWaterPass = new RenderPass("water_reflection_render_pass", static_cast<ICamera*>(mReflectionCamera), IRenderer::LAYER_REFLEXION | IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES | IRenderer::LAYER_TRANSPARENT);
+	RenderPass* reflectionWaterPass = DBG_NEW RenderPass("water_reflection_render_pass", static_cast<ICamera*>(mReflectionCamera), IRenderer::LAYER_REFLEXION | IRenderer::LAYER_TERRAIN | IRenderer::LAYER_OTHER | IRenderer::LAYER_PARTICLES | IRenderer::LAYER_TRANSPARENT);
 	reflectionWaterPass->SetFrameBufferOutput(frameReflectionBuffer);
 	reflectionWaterPass->EnableClipping(true);
 	reflectionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);

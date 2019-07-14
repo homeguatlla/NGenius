@@ -5,6 +5,8 @@
 #include "../../textures/TexturesLibrary.h"
 #include "../../../utils/serializer/XMLDeserializer.h"
 #include "../../../utils/Log.h"
+#include "../Memory.h"
+
 #include <assert.h>
 
 MaterialEffectTextureArray::MaterialEffectTextureArray() :
@@ -39,12 +41,12 @@ void MaterialEffectTextureArray::CopyValuesFrom(IMaterial* material)
 
 MaterialEffectTextureArray* MaterialEffectTextureArray::DoClone() const
 {
-	return new MaterialEffectTextureArray(*this);
+	return DBG_NEW MaterialEffectTextureArray(*this);
 }
 
 IMaterialEffect* MaterialEffectTextureArray::Create(IMaterial* material)
 {
-	MaterialEffectTextureArray* effect = new MaterialEffectTextureArray();
+	MaterialEffectTextureArray* effect = DBG_NEW MaterialEffectTextureArray();
 	material->AddOrReplaceEffect(effect);
 	return effect;
 }
