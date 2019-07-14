@@ -142,7 +142,7 @@ enum Configuration
 	RELEASE
 };
 
-Configuration mConfiguration = DEBUG;
+Configuration mConfiguration = RELEASE;
 
 int movx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int movy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -336,7 +336,6 @@ void CreateSpecificCubes()
 	}
 }
 */
-
 void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 {
 	mEngine->OnMouseScroll(GLFW_MOUSE_BUTTON_MIDDLE, static_cast<float>(yOffset));

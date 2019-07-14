@@ -19,6 +19,7 @@ public:
 	void OnInit() override;
 	void OnEnter(float deltaTime) override;
 	void OnExit(float deltaTime) override;
+	void OnReload() override;
 	void OnUpdate(float deltaTime) override;
 
 	bool IsNormalModeKeyPressed() const { return mIsNormalModeKeyPressed; }

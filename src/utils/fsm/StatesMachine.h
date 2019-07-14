@@ -28,6 +28,7 @@ namespace core {
 
 				StatePtr GetCurrentState() const { return currentState; }
 
+				void Reload();
 				void Update(float deltaTime);
 
 				void AddState(StatePtr state);
@@ -82,6 +83,15 @@ namespace core {
 				if (existState)
 				{
 					initialState = transitions[state].state;
+				}
+			}
+
+			template<typename TStateID, class TContext>
+			void StatesMachine<TStateID, TContext>::Reload()
+			{
+				for (auto it = transitions.begin(); it != transitions.end(); ++it)
+				{
+					it->second.state->OnReload();
 				}
 			}
 

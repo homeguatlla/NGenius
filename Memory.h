@@ -9,5 +9,5 @@
 // Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
 // allocations to be of _CLIENT_BLOCK type
 #else
-#define DBG_DBG_NEW new
+#define DBG_NEW new
 #endif

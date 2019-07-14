@@ -7,6 +7,7 @@
 #include "../../resources/materials/effects/MaterialEffectText.h"
 #include "../../resources/entities/Text.h"
 #include "../../resources/font/FontType.h"
+#include "../../resources/renderers/IRenderer.h"
 
 #include "../../NGenius.h"
 #include "../../GameConstants.h"
@@ -21,12 +22,14 @@ const float PITCH_SPEED = 2.0f;
 const std::string TEXT("Free Mode");
 
 FreeModeState::FreeModeState() : 
+	mFreeCamera(nullptr),
 	mIsNormalModeKeyPressed(false),
 	mPitch(0.0f),
 	mLastPitch(0.0f),
 	mRoll(0.0f),
 	mLastRoll(0.0f),
-	mForwardSpeed(0.0f)
+	mForwardSpeed(0.0f),
+	mFreeModeText(nullptr)
 {
 }
 
@@ -47,14 +50,19 @@ void FreeModeState::OnEnter(float deltaTime)
 	mIsNormalModeKeyPressed = false;
 	mEngine->RegisterAllEventsInputListener(this);
 	mEngine->ChangeToCamera(mEngine->GetGameplayCamera()->GetName(), mEngine->GetFreeCamera()->GetName());
-	mFreeModeText->SetEnabled(true);
+	mFreeModeText->GetRenderer()->SetVisibility(true);
 }
 
 void FreeModeState::OnExit(float deltaTime)
 {
 	mEngine->UnRegisterInputListener(this);
 	mIsNormalModeKeyPressed = false;
-	mFreeModeText->SetEnabled(false);
+	mFreeModeText->GetRenderer()->SetVisibility(false);
+}
+
+void FreeModeState::OnReload()
+{
+	CreateFreeModeStateUI();
 }
 
 void FreeModeState::OnUpdate(float deltaTime)
@@ -142,9 +150,10 @@ void FreeModeState::OnMouseCursorPos(double x, double y)
 void FreeModeState::CreateFreeModeStateUI()
 {
 	FontType* font = mEngine->GetFont("OCR A Extended");
-	IMaterial* materialText = mEngine->GetMaterial(MaterialsLibrary::TEXT_MATERIAL_NAME);
-	materialText->AddEffect(DBG_NEW MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
-	materialText->AddEffect(DBG_NEW MaterialEffectText(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+	IShaderProgram* shader = mEngine->GetShader("TextShader");
+	IMaterial* materialText = mEngine->CreateMaterial(MaterialsLibrary::TEXT_MATERIAL_NAME, shader);
+	materialText->AddOrReplaceEffect(DBG_NEW MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
+	materialText->AddOrReplaceEffect(DBG_NEW MaterialEffectText(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 		glm::vec4(1.0f, 1.0f, 1.0f, 0.0f),
 		0.4f,
 		0.1f, 
@@ -154,12 +163,13 @@ void FreeModeState::CreateFreeModeStateUI()
 
 	mFreeModeText = DBG_NEW Text(
 		DBG_NEW Transformation(
-			glm::vec3(-mEngine->GetScreenWidth() * 0.5f, mEngine->GetScreenHeight() * 0.5f, 0.0f),
+			glm::vec3(mEngine->GetScreenWidth() * 0.4f, -mEngine->GetScreenHeight() * 0.47f, 0.0f),
 			glm::vec3(0.0f),
-			glm::vec3(0.70f)
+			glm::vec3(0.7f)
 		),
 		materialText, font,
 		TEXT, false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
 	
+	mFreeModeText->GetRenderer()->SetVisibility(false);
 	mEngine->AddEntity(mFreeModeText);
 }
