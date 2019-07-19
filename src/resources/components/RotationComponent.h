@@ -1,6 +1,7 @@
 #pragma once
 #include "IComponent.h"
 #include <glm/glm.hpp>
+#include<string>
 
 class RotationComponent : public IComponent
 {
@@ -14,7 +15,11 @@ public:
 
 	void UpdateInternal(float elapsedTime) override;
 
+	static std::string GetClassName() { return std::string("RotationComponent"); }
+	static IComponent* Create();
+
 private:
+	RotationComponent() = default;
 	void DoReadFrom(core::utils::IDeserializer* source);
 	void DoWriteTo(core::utils::ISerializer* destination);
 	RotationComponent* DoClone() const override;

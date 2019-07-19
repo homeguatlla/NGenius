@@ -43,6 +43,11 @@ IRenderer* DebugComponent::GetBoundingBoxRenderer()
 	return mBoundingBoxRenderer;
 }
 
+IComponent* DebugComponent::Create()
+{
+	return DBG_NEW DebugComponent();
+}
+
 bool DebugComponent::IsBoundingBoxVisible() const
 {
 	return mBoundingBoxRenderer->IsVisible();

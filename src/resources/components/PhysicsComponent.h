@@ -1,6 +1,7 @@
 #pragma once
 #include "IComponent.h"
 #include <glm/glm.hpp>
+#include<string>
 
 class PhysicsComponent : public IComponent
 {
@@ -17,7 +18,11 @@ public:
 	const glm::vec3 GetGravity() const;
 	bool IsStatic() const;
 
+	static std::string GetClassName() { return std::string("PhysicsComponent"); }
+	static IComponent* Create();
+
 private:
+	PhysicsComponent() = default;
 	void DoReadFrom(core::utils::IDeserializer* source);
 	void DoWriteTo(core::utils::ISerializer* destination);
 	PhysicsComponent* DoClone() const override;

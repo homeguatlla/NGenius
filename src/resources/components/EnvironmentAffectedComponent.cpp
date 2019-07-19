@@ -39,6 +39,11 @@ bool EnvironmentAffectedComponent::IsAffectedByWind() const
 	return mIsAffectedByWind;
 }
 
+IComponent* EnvironmentAffectedComponent::Create()
+{
+	return DBG_NEW EnvironmentAffectedComponent();
+}
+
 void EnvironmentAffectedComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
 }

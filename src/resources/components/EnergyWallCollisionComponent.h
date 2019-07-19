@@ -1,6 +1,7 @@
 #pragma once
 #include "IComponent.h"
 #include <glm/glm.hpp>
+#include<string>
 
 class EnergyWallCollisionComponent : public IComponent
 {
@@ -15,6 +16,9 @@ public:
 	void SetCollision(bool isColliding);
 	void SetCollisionPoint(glm::vec3& position);
 	glm::vec3 GetCollisionPoint() const;
+
+	static std::string GetClassName() { return std::string("EnergyWallCollisionComponent"); }
+	static IComponent* Create();
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source);

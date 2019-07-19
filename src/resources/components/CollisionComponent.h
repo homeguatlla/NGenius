@@ -1,5 +1,6 @@
 #pragma once
 #include "IComponent.h"
+#include<string>
 
 
 class CollisionComponent : public IComponent
@@ -10,12 +11,14 @@ class CollisionComponent : public IComponent
 public:
 	explicit CollisionComponent();
 	~CollisionComponent();
-
-	
+		
 	bool IsOnGround() const;
 	void SetOnGround(bool isOnGround);
 	void SetGroundHeight(float groundHeight);
 	float GetGroundHeight() const;
+
+	static std::string GetClassName() { return std::string("CollisionComponent"); }
+	static IComponent* Create();
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source);

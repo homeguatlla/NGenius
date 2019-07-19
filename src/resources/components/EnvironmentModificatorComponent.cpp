@@ -12,6 +12,11 @@ EnvironmentModificatorComponent::~EnvironmentModificatorComponent()
 {
 }
 
+IComponent* EnvironmentModificatorComponent::Create()
+{
+	return DBG_NEW EnvironmentModificatorComponent();
+}
+
 EnvironmentModificatorComponent* EnvironmentModificatorComponent::DoClone() const
 {
 	return DBG_NEW EnvironmentModificatorComponent(*this);

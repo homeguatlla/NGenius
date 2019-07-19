@@ -46,6 +46,11 @@ const GameEvent* InputComponent::ConvertMouse(void* data) const
 	return nullptr;
 }
 
+IComponent* InputComponent::Create()
+{
+	return DBG_NEW InputComponent();
+}
+
 void InputComponent::AddConverter(const InputConverter* converter)
 {
 	bool found = std::find(mConverters.begin(), mConverters.end(), converter) != mConverters.end();

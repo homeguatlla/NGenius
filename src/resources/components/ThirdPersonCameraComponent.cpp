@@ -29,6 +29,11 @@ const float MIN_DISTANCE_TO_START_FOLLOW = 2.0f;
 const float MAX_ZOOM = 50.0f;
 const float MIN_ZOOM = 2.0f; // MIN_DISTANCE_TO_START_FOLLOW;
 
+ThirdPersonCameraComponent::ThirdPersonCameraComponent() : mZoomSpeed(1.0f)
+{
+}
+
+
 ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed) :
 	mCamera(camera), 
 	mTarget(target), 
@@ -148,6 +153,11 @@ glm::vec3 ThirdPersonCameraComponent::GetCameraPosition() const
 float ThirdPersonCameraComponent::GetCameraPitch() const
 {
 	return mCurrentPitch;
+}
+
+IComponent* ThirdPersonCameraComponent::Create()
+{
+	return DBG_NEW ThirdPersonCameraComponent();
 }
 
 float ThirdPersonCameraComponent::CalculateHorizontalDistance() const

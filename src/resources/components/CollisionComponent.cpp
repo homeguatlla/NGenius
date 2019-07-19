@@ -42,6 +42,11 @@ float CollisionComponent::GetGroundHeight() const
 	return mGroundHeight;
 }
 
+IComponent* CollisionComponent::Create()
+{
+	return DBG_NEW CollisionComponent();
+}
+
 void CollisionComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
 

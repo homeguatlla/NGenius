@@ -1,6 +1,7 @@
 #pragma once
 #include "IComponent.h"
 #include <queue>
+#include<string>
 
 
 class GameEvent;
@@ -16,6 +17,9 @@ public:
 	void OnCharacterControllerEvent(const GameEvent* gameEvent);
 	bool HasEvents() const;
 	const GameEvent* ConsumeEvent();
+
+	static std::string GetClassName() { return std::string("CharacterComponent"); }
+	static IComponent* Create();
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source);

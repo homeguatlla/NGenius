@@ -3,6 +3,7 @@
 #include "../GameEntity.h"
 #include "../Transformation.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../../utils/serializer/XMLDeserializer.h"
 #include "../Memory.h"
 
 RotationComponent::RotationComponent(const glm::vec3& rotation, float speed) :
@@ -29,9 +30,19 @@ void RotationComponent::UpdateInternal(float elapsedTime)
 	transformation->SetRotation(rotation);
 }
 
+IComponent* RotationComponent::Create()
+{
+	return DBG_NEW RotationComponent();
+}
+
 void RotationComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
-
+	source->ReadParameter(std::string("rotation_speed"), &mSpeed);
+	source->BeginAttribute("axis");
+	source->ReadParameter("X", &mRotation.x);
+	source->ReadParameter("Y", &mRotation.y);
+	source->ReadParameter("Z", &mRotation.z);
+	source->EndAttribute();
 }
 
 void RotationComponent::DoWriteTo(core::utils::ISerializer* destination)

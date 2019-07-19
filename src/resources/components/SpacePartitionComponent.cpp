@@ -22,6 +22,11 @@ void SpacePartitionComponent::SetVisibility(bool visibility)
 	mIsVisible = visibility;
 }
 
+IComponent* SpacePartitionComponent::Create()
+{
+	return new SpacePartitionComponent();
+}
+
 SpacePartitionComponent* SpacePartitionComponent::DoClone() const
 {
 	return DBG_NEW SpacePartitionComponent(*this);

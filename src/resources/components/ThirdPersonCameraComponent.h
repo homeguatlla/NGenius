@@ -28,7 +28,11 @@ public:
 	glm::vec3 GetCameraPosition() const;
 	float GetCameraPitch() const;
 
+	static std::string GetClassName() { return std::string("ThirdPersonCameraComponent"); }
+	static IComponent* Create();
+
 private:
+	ThirdPersonCameraComponent();
 	void UpdateGameEvents(float elapsedTime);
 	void UpdateZoom(float scroll, float elapsedTime);
 	void UpdatePitch(float pitch, float elapsedTime);

@@ -4,6 +4,7 @@
 
 #include <queue>
 #include <vector>
+#include <string>
 
 class GameEvent;
 class InputConverter;
@@ -22,6 +23,9 @@ public:
 
 	const GameEvent* ConvertKey(int key, int action) const;
 	const GameEvent* ConvertMouse(void* data) const;
+
+	static std::string GetClassName() { return std::string("InputComponent"); }
+	static IComponent* Create();
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source);

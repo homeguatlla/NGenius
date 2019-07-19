@@ -42,6 +42,11 @@ glm::vec3 EnergyWallCollisionComponent::GetCollisionPoint() const
 	return mCollisionPoint;
 }
 
+IComponent* EnergyWallCollisionComponent::Create()
+{
+	return DBG_NEW EnergyWallCollisionComponent();
+}
+
 void EnergyWallCollisionComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
 

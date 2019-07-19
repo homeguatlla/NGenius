@@ -37,6 +37,11 @@ bool PhysicsComponent::IsStatic() const
 	return mIsStatic;
 }
 
+IComponent* PhysicsComponent::Create()
+{
+	return DBG_NEW PhysicsComponent();
+}
+
 void PhysicsComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
 

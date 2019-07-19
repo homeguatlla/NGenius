@@ -20,6 +20,9 @@ public:
 	void PlayAnimation(const std::string& name);
 	void StopAnimation();
 
+	static std::string GetClassName() { return std::string("AnimationComponent"); }
+	static IComponent* Create();
+
 private:
 	void DoReadFrom(core::utils::IDeserializer* source);
 	void DoWriteTo(core::utils::ISerializer* destination);

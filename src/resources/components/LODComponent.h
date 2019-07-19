@@ -1,6 +1,7 @@
 #pragma once
 #include "IComponent.h"
 #include <vector>
+#include<string>
 
 class ICamera;
 class IRenderer;
@@ -25,10 +26,13 @@ public:
 	~LODComponent();
 
 	void UpdateInternal(float elapsedTime) override;
-
 	void AddLevelOfDetail(IRenderer* renderer, float distance);
 
+	static std::string GetClassName() { return std::string("LODComponent"); }
+	static IComponent* Create();
+
 private:
+	LODComponent() = default;
 	void DoReadFrom(core::utils::IDeserializer* source);
 	void DoWriteTo(core::utils::ISerializer* destination);
 	IComponent* DoClone() const override;

@@ -31,6 +31,11 @@ void BillboardComponent::UpdateInternal(float elapsedTime)
 	ModifyModelMatrixToAvoidRotations(viewMatrix, scale, angleZ, modelMatrix);
 }
 
+IComponent* BillboardComponent::Create()
+{
+	return DBG_NEW BillboardComponent();
+}
+
 void BillboardComponent::ModifyModelMatrixToAvoidRotations(const glm::mat4& viewMatrix, const glm::vec3& scale, float angleZ, glm::mat4& modelMatrix)
 {
 	modelMatrix[0][0] = viewMatrix[0][0];

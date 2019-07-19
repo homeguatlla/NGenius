@@ -2,6 +2,7 @@
 #include "IComponent.h"
 #include "../GameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../../utils/serializer/XMLDeserializer.h"
 
 IComponent::IComponent() : mIsEnabled(true)
 {
@@ -45,12 +46,14 @@ IComponent* IComponent::Clone() const
 
 void IComponent::ReadFrom(core::utils::IDeserializer* source)
 {
+	source->ReadParameter(std::string("is_enabled"), &mIsEnabled);
+	DoReadFrom(source);
 }
 
 void IComponent::WriteTo(core::utils::ISerializer* destination)
 {
 	destination->BeginAttribute(std::string("component"));
-	destination->WriteParameter(std::string("enabled"), mIsEnabled);
+	destination->WriteParameter(std::string("is_enabled"), mIsEnabled);
 	DoWriteTo(destination);
 	destination->EndAttribute();
 }

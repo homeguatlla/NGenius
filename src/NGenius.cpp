@@ -37,6 +37,23 @@
 #include "utils/serializer/XMLSerializer.h"
 #include "utils/serializer/XMLDeserializer.h"
 #include "../Memory.h"
+#include "resources/InstantiableObject.h"
+#include "resources/components/AnimationComponent.h"
+#include "resources/components/BillboardComponent.h"
+#include "resources/components/CameraComponent.h"
+#include "resources/components/EnvironmentAffectedComponent.h"
+#include "resources/components/EnergyWallCollisionComponent.h"
+#include "resources/components/DebugComponent.h"
+#include "resources/components/CharacterComponent.h"
+#include "resources/components/InputComponent.h"
+#include "resources/components/EnvironmentModificatorComponent.h"
+#include "resources/components/CollisionComponent.h"
+#include "resources/components/LODComponent.h"
+#include "resources/components/SpacePartitionComponent.h"
+#include "resources/components/RotationComponent.h"
+#include "resources/components/PhysicsComponent.h"
+#include "resources/components/OverWaterComponent.h"
+#include "resources/components/ThirdPersonCameraComponent.h"
 
 
 NGenius::NGenius(std::string applicationName, float screenWidth, float screenHeight) :
@@ -57,6 +74,23 @@ mIsSpacePartitionEnabled(true),
 mGameScene("mainScene")
 {
 	CreateSystems(screenWidth, screenHeight);
+
+	InstantiableObject::RegisterComponentType<AnimationComponent>();
+	InstantiableObject::RegisterComponentType<BillboardComponent>();
+	InstantiableObject::RegisterComponentType<CameraComponent>();
+	InstantiableObject::RegisterComponentType<CharacterComponent>();
+	InstantiableObject::RegisterComponentType<CollisionComponent>();
+	InstantiableObject::RegisterComponentType<DebugComponent>();
+	InstantiableObject::RegisterComponentType<EnergyWallCollisionComponent>();
+	InstantiableObject::RegisterComponentType<EnvironmentAffectedComponent>();
+	InstantiableObject::RegisterComponentType<EnvironmentModificatorComponent>();
+	InstantiableObject::RegisterComponentType<InputComponent>();
+	InstantiableObject::RegisterComponentType<LODComponent>();
+	InstantiableObject::RegisterComponentType<OverWaterComponent>();
+	InstantiableObject::RegisterComponentType<PhysicsComponent>();
+	InstantiableObject::RegisterComponentType<RotationComponent>();
+	InstantiableObject::RegisterComponentType<SpacePartitionComponent>();
+	InstantiableObject::RegisterComponentType<ThirdPersonCameraComponent>();
 }
 
 NGenius::~NGenius()

@@ -54,6 +54,11 @@ void AnimationComponent::StopAnimation()
 	mCurrentAnimation = nullptr;
 }
 
+IComponent* AnimationComponent::Create()
+{
+	return DBG_NEW AnimationComponent();
+}
+
 void AnimationComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
 

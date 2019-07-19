@@ -86,6 +86,11 @@ void LODComponent::AddLevelOfDetail(IRenderer* renderer, float distance)
 	}
 }
 
+IComponent* LODComponent::Create()
+{
+	return DBG_NEW LODComponent();
+}
+
 
 void LODComponent::DoReadFrom(core::utils::IDeserializer* source)
 {

@@ -38,6 +38,11 @@ const GameEvent* CharacterComponent::ConsumeEvent()
 	return event;
 }
 
+IComponent* CharacterComponent::Create()
+{
+	return DBG_NEW CharacterComponent();
+}
+
 void CharacterComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
 

@@ -41,7 +41,6 @@ void GameScene::Release()
 
 void GameScene::Start(RenderSystem* renderSystem)
 {
-	
 	for (GameEntity* entity : mNewEntitiesToAdd)
 	{
 		entity->Build(renderSystem);
@@ -165,8 +164,11 @@ void GameScene::ReadFrom(core::utils::IDeserializer* source)
 	source->BeginAttribute();
 	do
 	{
-		ReadEntityFrom(source);
-
+		GameEntity* entity = ReadEntityFrom(source);
+		if (entity != nullptr)
+		{
+			ReadComponentsFrom(entity, source);
+		}
 		source->NextAttribute();
 		numElements--;
 
@@ -191,7 +193,7 @@ void GameScene::WriteTo(core::utils::ISerializer* destination)
 	destination->EndAttribute();
 }
 
-void GameScene::ReadEntityFrom(core::utils::IDeserializer* source)
+GameEntity* GameScene::ReadEntityFrom(core::utils::IDeserializer* source)
 {
 	GameEntity* gameEntity = nullptr;
 	
@@ -201,7 +203,47 @@ void GameScene::ReadEntityFrom(core::utils::IDeserializer* source)
 	{
 		gameEntity->ReadFrom(source);
 		AddEntity(gameEntity);
+		return gameEntity;
 	}
+	return nullptr;
+}
+
+void GameScene::ReadComponentsFrom(GameEntity* entity, core::utils::IDeserializer* source)
+{
+	if (source->HasAttribute("components"))
+	{
+		source->BeginAttribute(std::string("components"));
+		unsigned int numElements = source->ReadNumberOfElements();
+
+		source->BeginAttribute();
+		do
+		{
+			IComponent* component = ReadComponentFrom(source);
+			if (component != nullptr)
+			{
+				entity->AddComponent(component);
+			}
+			source->NextAttribute();
+			numElements--;
+
+		} while (numElements > 0);
+
+		//source->EndAttribute();
+		source->EndAttribute();
+	}
+}
+
+IComponent* GameScene::ReadComponentFrom(core::utils::IDeserializer* source)
+{
+	std::string componentType;
+	source->ReadParameter("type", componentType);
+	IComponent* component = InstantiableObject::CreateComponent(componentType);
+	if (component != nullptr)
+	{
+		component->ReadFrom(source);
+	}
+
+	return component;
 }
 
 void GameScene::RemoveEntities()

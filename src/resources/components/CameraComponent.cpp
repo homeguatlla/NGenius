@@ -13,6 +13,11 @@ CameraComponent::~CameraComponent()
 {
 }
 
+IComponent* CameraComponent::Create()
+{
+	return DBG_NEW CameraComponent();
+}
+
 CameraComponent* CameraComponent::DoClone() const
 {
 	return DBG_NEW CameraComponent(*this);

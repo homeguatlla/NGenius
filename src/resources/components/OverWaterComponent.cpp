@@ -23,6 +23,11 @@ float OverWaterComponent::GetWaterHeight() const
 	return mWaterHeight;
 }
 
+IComponent* OverWaterComponent::Create()
+{
+	return DBG_NEW OverWaterComponent();
+}
+
 void OverWaterComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
 

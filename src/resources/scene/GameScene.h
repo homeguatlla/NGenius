@@ -10,6 +10,7 @@
 class GameEntity;
 class IGameSceneListener;
 class RenderSystem;
+class IComponent;
 
 class GameScene : public core::utils::ISerializable, BaseVisitable<>
 {
@@ -59,6 +60,8 @@ private:
 	void NotifyEntityAdded(GameEntity* entity);
 	void NotifyEntityRemoved(GameEntity* entity);
 
-	void ReadEntityFrom(core::utils::IDeserializer* source);
+	GameEntity* ReadEntityFrom(core::utils::IDeserializer* source);
+	void ReadComponentsFrom(GameEntity* entity, core::utils::IDeserializer* source);
+	IComponent* ReadComponentFrom(core::utils::IDeserializer* source);
 };
 

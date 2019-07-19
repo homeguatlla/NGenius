@@ -1,6 +1,7 @@
 #pragma once
 #include "IComponent.h"
 #include <glm/glm.hpp>
+#include<string>
 
 class EnvironmentAffectedComponent : public IComponent
 {
@@ -15,6 +16,9 @@ public:
 	void SetWindResistence(float resistence);
 	void SetAffectedByWind(bool isAffected);
 	bool IsAffectedByWind() const;
+
+	static std::string GetClassName() { return std::string("EnvironmentAffectedComponent"); }
+	static IComponent* Create();
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source);

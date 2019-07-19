@@ -5,7 +5,8 @@ std::map<std::string, IFactory*> InstantiableObject::mFactories;
 std::map<std::string, InstantiableObject::RendererCreatorFunction> InstantiableObject::mRenderersFactory;
 std::map<std::string, InstantiableObject::CameraCreatorFunction> InstantiableObject::mCamerasFactory;
 std::map<std::string, InstantiableObject::ShaderCreatorFunction> InstantiableObject::mShadersFactory;
-std::map < std::string, InstantiableObject::MaterialEffectCreatorFunction> InstantiableObject::mMaterialEffectFactory;
+std::map<std::string, InstantiableObject::MaterialEffectCreatorFunction> InstantiableObject::mMaterialEffectFactory;
+std::map<std::string, InstantiableObject::ComponentCreatorFunction> InstantiableObject::mComponentsFactory;
 
 void InstantiableObject::RegisterType(const std::string& name, IFactory* factory)
 {
@@ -77,6 +78,18 @@ IShaderProgram* InstantiableObject::CreateShader(const std::string& name)
 	if (mShadersFactory.find(name) != mShadersFactory.end())
 	{
 		return mShadersFactory[name]();
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+IComponent* InstantiableObject::CreateComponent(const std::string& name)
+{
+	if (mComponentsFactory.find(name) != mComponentsFactory.end())
+	{
+		return mComponentsFactory[name]();
 	}
 	else
 	{
