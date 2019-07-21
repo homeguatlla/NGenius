@@ -22,6 +22,11 @@ mEnergyWallRadius(0.0f)
 
 PhysicsSystem::~PhysicsSystem()
 {
+	Release();
+}
+
+void PhysicsSystem::Release()
+{
 	mEntities.clear();
 }
 
@@ -37,6 +42,11 @@ void PhysicsSystem::Update(float deltaTime)
 		ApplyMRU(deltaTime, entity);
 		CheckCollisions(entity);		
 	}
+}
+
+void PhysicsSystem::Reload()
+{
+	Release();
 }
 
 void PhysicsSystem::ApplyMRU(float deltaTime, IGameEntity* entity)

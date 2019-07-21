@@ -42,11 +42,12 @@ void FreeModeState::OnInit()
 {
 	mEngine = GetContext()->GetEngine();
 	CreateFreeModeStateUI();
+	mFreeCamera = CreateFreeCamera();
+	SaveFreeCameraData();
 }
 
 void FreeModeState::OnEnter(float deltaTime)
 {
-	mFreeCamera = CreateFreeCamera();
 	mIsNormalModeKeyPressed = false;
 	mEngine->RegisterAllEventsInputListener(this);
 	mEngine->ChangeToCamera(mEngine->GetGameplayCamera()->GetName(), mEngine->GetFreeCamera()->GetName());
@@ -63,12 +64,27 @@ void FreeModeState::OnExit(float deltaTime)
 void FreeModeState::OnReload()
 {
 	CreateFreeModeStateUI();
+	mFreeCamera = CreateFreeCamera();
+	RecoverFreeCameraData();
+}
+
+void FreeModeState::SaveFreeCameraData()
+{
+	mSavedCameraPosition = mFreeCamera->GetPosition();
+	mSavedCameraTarget = mFreeCamera->GetTarget();
+}
+
+void FreeModeState::RecoverFreeCameraData()
+{
+	mFreeCamera->SetPosition(mSavedCameraPosition);
+	mFreeCamera->SetTarget(mSavedCameraTarget);
 }
 
 void FreeModeState::OnUpdate(float deltaTime)
 {
 	CalculateCameraOrientation(deltaTime);
 	CalculateCameraPosition(deltaTime);
+	SaveFreeCameraData();
 }
 
 ICamera* FreeModeState::CreateFreeCamera()

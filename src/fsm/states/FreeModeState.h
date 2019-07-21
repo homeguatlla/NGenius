@@ -35,12 +35,14 @@ private:
 	void OnMouseCursorPos(double x, double y) override;
 
 	void CreateFreeModeStateUI();
+	void SaveFreeCameraData();
+	void RecoverFreeCameraData();
 
 private:
 	std::shared_ptr<NGenius> mEngine;
 	ICamera* mFreeCamera;
-	glm::vec3 mCameraPosition;
-	glm::vec3 mCameraDirection;
+	glm::vec3 mSavedCameraPosition;
+	glm::vec3 mSavedCameraTarget;
 	bool mIsNormalModeKeyPressed;
 	float mPitch;
 	float mLastPitch;

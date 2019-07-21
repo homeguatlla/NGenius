@@ -42,6 +42,7 @@ void SpacePartitionSystem::Release()
 {
 	mNewEntitiesToAdd.clear();
 	mEntitiesToRemove.clear();
+	mLastQueryResult.clear();
 	delete mQuadTree;
 	mHasBuilt = false;
 }
@@ -58,6 +59,11 @@ void SpacePartitionSystem::Update(float elapsedTime)
 
 	RemoveEntities();
 	AddNewEntities();
+}
+
+void SpacePartitionSystem::Reload()
+{
+	Release();
 }
 
 void SpacePartitionSystem::MarkGameEntitiesInsideCameraAsVisible(ICamera* camera)

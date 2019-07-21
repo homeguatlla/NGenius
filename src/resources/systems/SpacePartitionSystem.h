@@ -24,6 +24,7 @@ public:
 
 	void Start();
 	void Update(float elapsedTime);
+	void Reload();
 	void MarkGameEntitiesInsideCameraAsVisible(ICamera* camera);
 
 	void Query(const AABB& aabb, std::vector<IGameEntity*>& result) const;

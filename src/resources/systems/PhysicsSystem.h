@@ -19,9 +19,11 @@ public:
 
 	PhysicsSystem();
 	~PhysicsSystem();
+	void Release();
 
 	void Update(float deltaTime);
-	
+	void Reload();
+
 	unsigned int GetNumberGameEntities() const;
 
 	//TODO eliminar este método cuando no haga falta

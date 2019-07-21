@@ -605,6 +605,8 @@ BaseVisitable<>::ReturnType NGenius::Accept(BaseVisitor& guest)
 void NGenius::Reload()
 {
 	LoadFromFile();
+	mPhysicsSystem->Reload();
+	mSpacePartitionSystem->Reload();
 	Start(true);
 	mStatesMachine->Reload();
 	mStatesMachine->ForceState(mStatesMachine->GetCurrentState()->GetID(), 0.0f);
