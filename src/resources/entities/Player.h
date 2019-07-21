@@ -1,5 +1,5 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 
 class IRenderer;
 class Transformation;
@@ -8,7 +8,7 @@ class CollisionComponent;
 class PhysicsComponent;
 class CharacterComponent;
 
-class Player : public GameEntity<Player>
+class Player : public BaseGameEntity<Player>
 {
 	enum State
 	{

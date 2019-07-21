@@ -14,7 +14,7 @@ int Text::IDCounter = 0;
 
 Text::Text(Transformation* transformation, IMaterial* material, FontType* font, 
 	const std::string& text, bool isText3D, const glm::vec4& color, unsigned int width, unsigned int height, bool isCentered) :
-	GameEntity(transformation),
+	BaseGameEntity(transformation),
 	mFontType(font),
 	mWidth(width),
 	mHeight(height),

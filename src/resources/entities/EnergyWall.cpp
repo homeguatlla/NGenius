@@ -8,7 +8,7 @@
 #include "../Memory.h"
 
 EnergyWall::EnergyWall(Transformation* transformation, IMaterial* material, Model* model, float maxLiveTime) : 
-GameEntity<EnergyWall>(transformation),
+	BaseGameEntity<EnergyWall>(transformation),
 mMaterial(material),
 mModel(model),
 mMaxLiveTime(maxLiveTime),
@@ -39,7 +39,7 @@ EnergyWall* EnergyWall::DoClone() const
 }
 void EnergyWall::Update(float elapsedTime)
 {
-	GameEntity::Update(elapsedTime);
+	BaseGameEntity::Update(elapsedTime);
 
 	assert(mLiveTime <= mMaxLiveTime);
 

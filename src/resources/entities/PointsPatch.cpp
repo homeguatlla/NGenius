@@ -11,7 +11,7 @@
 #include <iostream>
 
 PointsPatch::PointsPatch(Transformation* transformation, IMaterial* material, const Terrain* terrain, float heightMin, float heightMax, float wide, float length, float density) : 
-	GameEntity(transformation),
+	BaseGameEntity(transformation),
 	mTerrain(terrain),
 	mHeightMin(heightMin),
 	mHeightMax(heightMax),

@@ -22,7 +22,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 Terrain::Terrain(Transformation* transformation) :
-	GameEntity<Terrain>(transformation),
+	BaseGameEntity<Terrain>(transformation),
 	mHeightmap(nullptr),
 	mScale(1.0f),
 	mIsFlat(false)
@@ -30,7 +30,7 @@ Terrain::Terrain(Transformation* transformation) :
 }
 
 Terrain::Terrain(Transformation* transformation, IMaterial* material, Texture* heightmap, float scale) :
-GameEntity<Terrain>(transformation),
+	BaseGameEntity<Terrain>(transformation),
 mHeightmap(nullptr),
 mScale(scale),
 mIsFlat(false)
@@ -72,7 +72,7 @@ void Terrain::Build(RenderSystem* renderSystem)
 
 void Terrain::ReadFrom(core::utils::IDeserializer* source)
 {
-	GameEntity::ReadFrom(source);
+	BaseGameEntity::ReadFrom(source);
 
 	source->ReadParameter("is_flat", &mIsFlat);
 	source->ReadParameter("heighmap_texture", mHeightmapName);

@@ -6,7 +6,7 @@
 #include <iostream>
 
 Particle::Particle(Transformation* transformation, Model* model, IMaterial* material, float liveTime) :
-GameEntity(transformation),
+	BaseGameEntity(transformation),
 mModel(model),
 mMaterial(material),
 mMaxLiveTime(liveTime),
@@ -45,7 +45,7 @@ bool Particle::IsAlive() const
 
 void Particle::Update(float elapsedTime)
 {
-	GameEntity::Update(elapsedTime);
+	BaseGameEntity::Update(elapsedTime);
 	
 	assert(mLiveTime <= mMaxLiveTime);
 

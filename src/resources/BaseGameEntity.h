@@ -21,13 +21,13 @@
 
 
 template<class TD>
-class GameEntity : public IGameEntity
+class BaseGameEntity : public IGameEntity
 {
 public:
-	GameEntity() = default;
-	explicit GameEntity(Transformation* transformation, IRenderer* renderer);
-	explicit GameEntity(Transformation* transformation);
-	~GameEntity();
+	BaseGameEntity() = default;
+	explicit BaseGameEntity(Transformation* transformation, IRenderer* renderer);
+	explicit BaseGameEntity(Transformation* transformation);
+	~BaseGameEntity();
 
 	// Heredado vía IGameEntity
 	void Init() override;
@@ -53,7 +53,7 @@ public:
 		return TD::DoCreate();
 	}
 
-	static IGameEntity* DoCreate() { return DBG_NEW GameEntity<TD>(); }
+	static IGameEntity* DoCreate() { return DBG_NEW BaseGameEntity<TD>(); }
 
 	void ReadFrom(core::utils::IDeserializer* source) override;
 	void WriteTo(core::utils::ISerializer* destination) override;
@@ -75,10 +75,10 @@ protected:
 };
 
 template<class TD>
-unsigned GameEntity<TD>::IDCounter = 0;
+unsigned BaseGameEntity<TD>::IDCounter = 0;
 
 template<class TD>
-GameEntity<TD>::GameEntity(Transformation* transformation, IRenderer* renderer) :
+BaseGameEntity<TD>::BaseGameEntity(Transformation* transformation, IRenderer* renderer) :
 	mTransformation(transformation),
 	mRenderer(renderer),
 	mIsEnabled(true)
@@ -92,12 +92,12 @@ GameEntity<TD>::GameEntity(Transformation* transformation, IRenderer* renderer) 
 }
 
 template<class TD>
-GameEntity<TD>::GameEntity(Transformation* transformation) : GameEntity(transformation, nullptr)
+BaseGameEntity<TD>::BaseGameEntity(Transformation* transformation) : BaseGameEntity(transformation, nullptr)
 {
 }
 
 template<class TD>
-GameEntity<TD>::~GameEntity()
+BaseGameEntity<TD>::~BaseGameEntity()
 {
 	for (auto& pair : mComponents)
 	{
@@ -117,7 +117,7 @@ GameEntity<TD>::~GameEntity()
 }
 
 template<class TD>
-void GameEntity<TD>::Init()
+void BaseGameEntity<TD>::Init()
 {
 	for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
 	{
@@ -126,7 +126,7 @@ void GameEntity<TD>::Init()
 }
 
 template<class TD>
-void GameEntity<TD>::SetRenderer(IRenderer* renderer)
+void BaseGameEntity<TD>::SetRenderer(IRenderer* renderer)
 {
 	mRenderer = renderer;
 	if (renderer != nullptr)
@@ -136,7 +136,7 @@ void GameEntity<TD>::SetRenderer(IRenderer* renderer)
 }
 
 template<class TD>
-void GameEntity<TD>::Update(float elapsedTime)
+void BaseGameEntity<TD>::Update(float elapsedTime)
 {
 	if (mIsEnabled)
 	{
@@ -148,7 +148,7 @@ void GameEntity<TD>::Update(float elapsedTime)
 }
 
 template<class TD>
-void GameEntity<TD>::Build(RenderSystem* renderSystem)
+void BaseGameEntity<TD>::Build(RenderSystem* renderSystem)
 {
 	Model* model = renderSystem->GetModel(mModelName);
 	IMaterial* material = renderSystem->GetMaterial(mMaterialName);
@@ -170,9 +170,9 @@ void GameEntity<TD>::Build(RenderSystem* renderSystem)
 }
 
 template<class TD>
-IGameEntity* GameEntity<TD>::DoClone() const
+IGameEntity* BaseGameEntity<TD>::DoClone() const
 {
-	IGameEntity* clone = DBG_NEW  GameEntity(new Transformation(*GetTransformation()));
+	IGameEntity* clone = DBG_NEW  BaseGameEntity(new Transformation(*GetTransformation()));
 	if (GetRenderer() != nullptr)
 	{
 		clone->SetRenderer(GetRenderer()->Clone());
@@ -182,7 +182,7 @@ IGameEntity* GameEntity<TD>::DoClone() const
 }
 
 template<class TD>
-IGameEntity* GameEntity<TD>::Clone()
+IGameEntity* BaseGameEntity<TD>::Clone()
 {
 	IGameEntity* clone = DoClone();
 
@@ -197,7 +197,7 @@ IGameEntity* GameEntity<TD>::Clone()
 }
 
 template<class TD>
-void GameEntity<TD>::ReadFrom(core::utils::IDeserializer* source)
+void BaseGameEntity<TD>::ReadFrom(core::utils::IDeserializer* source)
 {
 	source->ReadParameter("model", mModelName);
 	source->ReadParameter("material", mMaterialName);
@@ -209,7 +209,7 @@ void GameEntity<TD>::ReadFrom(core::utils::IDeserializer* source)
 }
 
 template<class TD>
-void GameEntity<TD>::WriteTo(core::utils::ISerializer* destination)
+void BaseGameEntity<TD>::WriteTo(core::utils::ISerializer* destination)
 {
 	destination->BeginAttribute(std::string("entity"));
 	destination->WriteParameter(std::string("id"), mID, "");

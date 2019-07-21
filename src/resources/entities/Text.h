@@ -1,5 +1,5 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 #include <string>
 
 class Transformation;
@@ -8,7 +8,7 @@ class Model;
 class Mesh;
 class IMaterial;
 
-class Text : public GameEntity<Text>
+class Text : public BaseGameEntity<Text>
 {
 	static int IDCounter;
 

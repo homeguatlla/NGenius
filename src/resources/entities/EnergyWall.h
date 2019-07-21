@@ -1,12 +1,12 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 
 
 class Model;
 class IMaterial;
 class MaterialEffectFloat;
 
-class EnergyWall : public GameEntity<EnergyWall>
+class EnergyWall : public BaseGameEntity<EnergyWall>
 {
 	IMaterial* mMaterial;
 	Model* mModel;

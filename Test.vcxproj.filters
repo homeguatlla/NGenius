@@ -300,9 +300,6 @@
     <ClInclude Include="src\resources\textures\TextureArray.h">
       <Filter>Header Files\resources\textures</Filter>
     </ClInclude>
-    <ClInclude Include="src\resources\GameEntity.h">
-      <Filter>Header Files\resources</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\entities\Player.h">
       <Filter>Header Files\resources\entities</Filter>
     </ClInclude>
@@ -843,6 +840,12 @@
     <ClInclude Include="src\resources\IGameEntity.h">
       <Filter>Header Files\resources</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\BaseGameEntity.h">
+      <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\GameEntity.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -882,9 +885,6 @@
       <Filter>Source Files\resources\textures</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\Transformation.cpp">
-      <Filter>Source Files\resources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\GameEntity.cpp">
       <Filter>Source Files\resources</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\components\IComponent.cpp">
@@ -1384,6 +1384,9 @@
     </ClCompile>
     <ClCompile Include="src\fsm\transitions\EnterNormalModeTransition.cpp">
       <Filter>Source Files\fsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\GameEntity.cpp">
+      <Filter>Source Files\resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

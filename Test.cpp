@@ -84,7 +84,7 @@
 #include "src/resources/camera/PerspectiveCamera.h"
 #include "src/resources/camera/OrthogonalCamera.h"
 
-#include "src/resources/GameEntity.h"
+#include "src/resources/IGameEntity.h"
 #include "src/resources/Transformation.h"
 
 #include "src/resources/components/PhysicsComponent.h"

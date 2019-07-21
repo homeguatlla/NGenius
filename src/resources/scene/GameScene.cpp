@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "GameScene.h"
 #include "IGameSceneListener.h"
-#include "../GameEntity.h"
 #include "../systems/renderSystem/RenderSystem.h"
 #include "../renderers/IRenderer.h"
 #include "../components/LODComponent.h"
@@ -10,6 +9,7 @@
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../InstantiableObject.h"
 
+#include "../entities/GameEntity.h"
 #include "../entities/Player.h"
 #include "../entities/Terrain.h"
 #include "../entities/Water.h"
@@ -21,7 +21,7 @@ GameScene::GameScene(const std::string& name) :
 mName(name),
 mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limits<float>::max()))
 {
-	//InstantiableObject::RegisterGameEntityType<GameEntity>();
+	InstantiableObject::RegisterGameEntityType<GameEntity>();
 	//InstantiableObject::RegisterType("player", DBG_NEW Player());
 	InstantiableObject::RegisterGameEntityType<Terrain>();
 	InstantiableObject::RegisterGameEntityType<Water>();

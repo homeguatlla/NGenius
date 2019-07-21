@@ -1,5 +1,5 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 #include <vector>
 #include <string>
 
@@ -10,7 +10,7 @@ class Model;
 class MaterialEffectFloat;
 class ITexture;
 
-class Terrain :	public GameEntity<Terrain>
+class Terrain :	public BaseGameEntity<Terrain>
 {
 	int mNumVertexsSide;
 	float mGridSize;

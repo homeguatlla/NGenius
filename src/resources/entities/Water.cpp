@@ -16,7 +16,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 Water::Water(Transformation* transformation, IMaterial* material, float wide, float length, float speed) :
-GameEntity(transformation),
+	BaseGameEntity(transformation),
 mWide(wide),
 mLength(length),
 mWaterSpeed(speed),
@@ -51,7 +51,7 @@ void Water::Build(RenderSystem* renderSystem)
 
 void Water::ReadFrom(core::utils::IDeserializer* source)
 {
-	GameEntity::ReadFrom(source);
+	BaseGameEntity::ReadFrom(source);
 
 	source->ReadParameter("material", mMaterialName);
 	source->ReadParameter("wide", &mWide);

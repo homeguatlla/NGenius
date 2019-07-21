@@ -1,12 +1,12 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 
 class IMaterial;
 class Model;
 class Terrain;
 class MaterialEffectFloat;
 
-class PointsPatch :	public GameEntity<PointsPatch>
+class PointsPatch :	public BaseGameEntity<PointsPatch>
 {
 	const Terrain* mTerrain;
 	float mHeightMin;

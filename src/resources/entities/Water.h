@@ -1,12 +1,12 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 
 class IMaterial;
 class Model;
 class MaterialEffectWater;
 class RenderSystem;
 
-class Water :	public GameEntity<Water>
+class Water :	public BaseGameEntity<Water>
 {
 	float mWide;
 	float mLength;

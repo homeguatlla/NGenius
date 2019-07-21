@@ -12,7 +12,7 @@
 #include <iostream>
 
 ParticlesEmitter::ParticlesEmitter(Particle* particle, Transformation* transformation, IRenderer* renderer, float spawnRate) :
-GameEntity(transformation, renderer),
+	BaseGameEntity(transformation, renderer),
 mOriginalParticle(particle),
 mSpawnRate(spawnRate),
 mParticlesToSpawn(0.0f),
@@ -37,7 +37,7 @@ mMaxParticlesUpdate(MAX_PARTICLES)
 
 void ParticlesEmitter::Update(float elapsedTime)
 {
-	GameEntity::Update(elapsedTime);
+	BaseGameEntity::Update(elapsedTime);
 	if (IsEnabled())
 	{
 		RemoveDeadParticles();

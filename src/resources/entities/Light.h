@@ -1,8 +1,8 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 
 
-class Light : public GameEntity<Light>
+class Light : public BaseGameEntity<Light>
 {
 public:
 	explicit Light(const glm::vec3& position, const glm::vec3& color, IRenderer* renderer);

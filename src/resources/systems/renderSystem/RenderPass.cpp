@@ -2,7 +2,7 @@
 #include "RenderPass.h"
 #include "IFrameBuffer.h"
 #include "../../renderers/IRenderer.h"
-#include "../../GameEntity.h"
+#include "../../IGameEntity.h"
 #include "../../components/SpacePartitionComponent.h"
 #include "../../../utils/serializer/XMLDeserializer.h"
 #include "../Memory.h"

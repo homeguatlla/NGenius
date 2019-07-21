@@ -198,6 +198,7 @@
     <ClInclude Include="src\NGenius.h" />
     <ClInclude Include="src\NoiseGenerator.h" />
     <ClInclude Include="src\PNGLoader.h" />
+    <ClInclude Include="src\resources\BaseGameEntity.h" />
     <ClInclude Include="src\resources\BaseLibrary.h" />
     <ClInclude Include="src\resources\camera\ICamera.h" />
     <ClInclude Include="src\resources\camera\OrthogonalCamera.h" />
@@ -222,6 +223,7 @@
     <ClInclude Include="src\resources\components\SpacePartitionComponent.h" />
     <ClInclude Include="src\resources\components\ThirdPersonCameraComponent.h" />
     <ClInclude Include="src\resources\entities\EnergyWall.h" />
+    <ClInclude Include="src\resources\entities\GameEntity.h" />
     <ClInclude Include="src\resources\entities\Light.h" />
     <ClInclude Include="src\resources\entities\Particle.h" />
     <ClInclude Include="src\resources\entities\ParticlesEmitter.h" />
@@ -241,7 +243,6 @@
     <ClInclude Include="src\resources\events\characterControllerEvents\ZoomEvent.h" />
     <ClInclude Include="src\resources\font\FontsLibrary.h" />
     <ClInclude Include="src\resources\font\FontType.h" />
-    <ClInclude Include="src\resources\GameEntity.h" />
     <ClInclude Include="src\resources\GameEvent.h" />
     <ClInclude Include="src\resources\IFactory.h" />
     <ClInclude Include="src\resources\IGameEntity.h" />
@@ -431,6 +432,7 @@
     <ClCompile Include="src\resources\components\SpacePartitionComponent.cpp" />
     <ClCompile Include="src\resources\components\ThirdPersonCameraComponent.cpp" />
     <ClCompile Include="src\resources\entities\EnergyWall.cpp" />
+    <ClCompile Include="src\resources\entities\GameEntity.cpp" />
     <ClCompile Include="src\resources\entities\Light.cpp" />
     <ClCompile Include="src\resources\entities\Particle.cpp" />
     <ClCompile Include="src\resources\entities\ParticlesEmitter.cpp" />
@@ -450,7 +452,6 @@
     <ClCompile Include="src\resources\events\characterControllerEvents\ZoomEvent.cpp" />
     <ClCompile Include="src\resources\font\FontsLibrary.cpp" />
     <ClCompile Include="src\resources\font\FontType.cpp" />
-    <ClCompile Include="src\resources\GameEntity.cpp" />
     <ClCompile Include="src\resources\GameEvent.cpp" />
     <ClCompile Include="src\resources\InstantiableObject.cpp" />
     <ClCompile Include="src\resources\materials\BasicMaterial.cpp" />

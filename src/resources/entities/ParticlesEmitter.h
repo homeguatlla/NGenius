@@ -1,5 +1,5 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 #include <vector>
 #include <list>
 
@@ -8,7 +8,7 @@ class IShaderProgram;
 class Particle;
 class GameScene;
 
-class ParticlesEmitter : public GameEntity<ParticlesEmitter>
+class ParticlesEmitter : public BaseGameEntity<ParticlesEmitter>
 {
 	std::list<Particle*> mParticlesPool;
 	std::vector<Particle*> mParticles;

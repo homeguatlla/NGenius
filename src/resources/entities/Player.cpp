@@ -24,7 +24,7 @@
 #include <iostream>
 
 Player::Player() : 
-	GameEntity(),
+	BaseGameEntity(),
 	mState(IDLE),
 	mRunSpeed(0.0f),
 	mTurnSpeed(0.0f),
@@ -41,7 +41,7 @@ Player::Player() :
 Player::Player(	Transformation* transformation, IRenderer* renderer, InputComponent* inputComponent, 
 				CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, 
 				CollisionComponent* collisionComponent, float runSpeed, float turnSpeed, float upwardsSpeed) :
-GameEntity(transformation, renderer), 
+	BaseGameEntity(transformation, renderer),
 mState(IDLE), 
 mRunSpeed(runSpeed), 
 mTurnSpeed(turnSpeed),
@@ -66,7 +66,7 @@ Player::~Player()
 
 void Player::Update(float elapsedTime)
 {
-	GameEntity::Update(elapsedTime);
+	BaseGameEntity::Update(elapsedTime);
 
 	mCurrentTurnSpeed = 0.0f;
 

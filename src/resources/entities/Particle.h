@@ -1,10 +1,10 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 
 class Model;
 class IMaterial;
 
-class Particle : public GameEntity<Particle>
+class Particle : public BaseGameEntity<Particle>
 {
 	const float mMaxLiveTime;
 	float mLiveTime;
