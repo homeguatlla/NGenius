@@ -6,14 +6,14 @@
 #include <memory>
 #include <string>
 
-class GameEntity;
+class IGameEntity;
 class Terrain;
 class SunLight;
 
 class EnvironmentSystem : public BaseVisitable<>, public IGameSceneListener
 {
-	std::vector<GameEntity*> mEntities;
-	std::vector<GameEntity*> mModificators;
+	std::vector<IGameEntity*> mEntities;
+	std::vector<IGameEntity*> mModificators;
 	const Terrain* mTerrain;
 	float mTimer;
 	std::vector<glm::vec3> mModificatorsPositions;
@@ -56,17 +56,17 @@ public:
 	void SetFogGradient(float gradient);
 
 private:
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
-	void RemoveEntityVector(GameEntity* entity, std::vector<GameEntity*>& vector);
-	bool HasEnvironmentComponents(const GameEntity* entity) const;
+	void AddEntity(IGameEntity* entity);
+	void RemoveEntity(IGameEntity* entity);
+	void RemoveEntityVector(IGameEntity* entity, std::vector<IGameEntity*>& vector);
+	bool HasEnvironmentComponents(const IGameEntity* entity) const;
 
 	void UpdateModificatorsVector();
 
 	void UpdateTime();
-	void ApplyWind(GameEntity* entity);
+	void ApplyWind(IGameEntity* entity);
 
-	void OnGameEntityAdded(GameEntity* entity) override;
-	void OnGameEntityRemoved(GameEntity* entity) override;
+	void OnGameEntityAdded(IGameEntity* entity) override;
+	void OnGameEntityRemoved(IGameEntity* entity) override;
 };
 

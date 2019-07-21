@@ -10,7 +10,7 @@ class IMaterial;
 class Model;
 class IRenderer;
 class Transformation;
-class GameEntity;
+class IGameEntity;
 class IComponent;
 
 class InstantiableObject
@@ -20,7 +20,8 @@ private:
 	using CameraCreatorFunction = std::function<ICamera* (const std::string& name, float, float, float, float)>;
 	using ShaderCreatorFunction = std::function<IShaderProgram* ()>;
 	using MaterialEffectCreatorFunction = std::function<IMaterialEffect* (IMaterial*)>;
-	using ComponentCreatorFunction = std::function<IComponent* ()>;
+	using ComponentCreatorFunction = std::function<IComponent* (IGameEntity*)>;
+	using GameEntityCreatorFunction = std::function<IGameEntity* ()>;
 
 	public:
 		template<class T>
@@ -51,18 +52,22 @@ private:
 		template<class T>
 		static void RegisterComponentType()
 		{
-			mComponentsFactory[T::GetClassName()] = std::bind<IComponent*>(&T::Create);
+			mComponentsFactory[T::GetClassName()] = std::bind<IComponent*>(&T::Create, std::placeholders::_1);
 		}
 
-		static void RegisterType(const std::string& name, IFactory* factory);
-		static GameEntity* CreateEntity(const std::string& name);
-		
+		template<class T>
+		static void RegisterGameEntityType()
+		{
+			mGameEntitiesFactory[T::GetClassName()] = std::bind<IGameEntity*>(&T::Create);
+		}
+
+		static IGameEntity* CreateEntity(const std::string& name);
 		static IMaterialEffect* CreateMaterialEffect(const std::string& name, IMaterial* material);
 		static ICamera* CreateOrthogonalCamera(const std::string& name, float screenWidth, float screenHeight, float nearPlane, float farPlane);
 		static ICamera* CreatePerspectiveCamera(const std::string& name, float fov, float aspectRatio, float nearPlane, float farPlane);
 		static IRenderer* CreateRenderer(const std::string& name, Model* model, IMaterial* material);
 		static IShaderProgram* CreateShader(const std::string& name);
-		static IComponent* CreateComponent(const std::string& name);
+		static IComponent* CreateComponent(const std::string& name, IGameEntity* entity);
 
 	private:
 		static std::map<std::string, IFactory*> mFactories;
@@ -71,5 +76,6 @@ private:
 		static std::map<std::string, ShaderCreatorFunction> mShadersFactory;
 		static std::map<std::string, MaterialEffectCreatorFunction> mMaterialEffectFactory;
 		static std::map<std::string, ComponentCreatorFunction> mComponentsFactory;
+		static std::map<std::string, GameEntityCreatorFunction> mGameEntitiesFactory;
 };
 

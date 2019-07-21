@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SpacePartitionComponent.h"
+#include "../IGameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../Memory.h"
 
@@ -22,9 +23,12 @@ void SpacePartitionComponent::SetVisibility(bool visibility)
 	mIsVisible = visibility;
 }
 
-IComponent* SpacePartitionComponent::Create()
+IComponent* SpacePartitionComponent::Create(IGameEntity* entity)
 {
-	return new SpacePartitionComponent();
+	SpacePartitionComponent* component = new SpacePartitionComponent();
+	entity->AddComponent(component);
+
+	return component;
 }
 
 SpacePartitionComponent* SpacePartitionComponent::DoClone() const

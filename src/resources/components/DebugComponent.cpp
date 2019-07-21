@@ -2,7 +2,7 @@
 #include "DebugComponent.h"
 #include "../renderers/IRenderer.h"
 #include "../../AABB.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../../Memory.h"
 
@@ -43,9 +43,12 @@ IRenderer* DebugComponent::GetBoundingBoxRenderer()
 	return mBoundingBoxRenderer;
 }
 
-IComponent* DebugComponent::Create()
+IComponent* DebugComponent::Create(IGameEntity* entity)
 {
-	return DBG_NEW DebugComponent();
+	DebugComponent* component = DBG_NEW DebugComponent();
+	entity->AddComponent(component);
+
+	return component;
 }
 
 bool DebugComponent::IsBoundingBoxVisible() const

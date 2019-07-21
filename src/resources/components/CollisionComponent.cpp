@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CollisionComponent.h"
 
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../Transformation.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../Memory.h"
@@ -42,9 +42,12 @@ float CollisionComponent::GetGroundHeight() const
 	return mGroundHeight;
 }
 
-IComponent* CollisionComponent::Create()
+IComponent* CollisionComponent::Create(IGameEntity* entity)
 {
-	return DBG_NEW CollisionComponent();
+	CollisionComponent* component = DBG_NEW CollisionComponent();
+	entity->AddComponent(component);
+
+	return component;
 }
 
 void CollisionComponent::DoReadFrom(core::utils::IDeserializer* source)

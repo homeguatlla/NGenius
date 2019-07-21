@@ -2,7 +2,7 @@
 #include "EnergyWallCollisionComponent.h"
 #include "../../utils/serializer/XMLSerializer.h"
 
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../Transformation.h"
 #include "../Memory.h"
 
@@ -42,9 +42,12 @@ glm::vec3 EnergyWallCollisionComponent::GetCollisionPoint() const
 	return mCollisionPoint;
 }
 
-IComponent* EnergyWallCollisionComponent::Create()
+IComponent* EnergyWallCollisionComponent::Create(IGameEntity* entity)
 {
-	return DBG_NEW EnergyWallCollisionComponent();
+	EnergyWallCollisionComponent* component = DBG_NEW EnergyWallCollisionComponent();
+	entity->AddComponent(component);
+
+	return component;
 }
 
 void EnergyWallCollisionComponent::DoReadFrom(core::utils::IDeserializer* source)

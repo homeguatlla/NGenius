@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include<string>
 
+class IGameEntity;
+
 class EnvironmentAffectedComponent : public IComponent
 {
 	bool mIsAffectedByWind;
@@ -18,7 +20,7 @@ public:
 	bool IsAffectedByWind() const;
 
 	static std::string GetClassName() { return std::string("EnvironmentAffectedComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source);

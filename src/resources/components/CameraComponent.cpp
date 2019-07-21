@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CameraComponent.h"
 #include "../camera/ICamera.h"
+#include "../IGameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../Memory.h"
 
@@ -13,9 +14,12 @@ CameraComponent::~CameraComponent()
 {
 }
 
-IComponent* CameraComponent::Create()
+IComponent* CameraComponent::Create(IGameEntity* entity)
 {
-	return DBG_NEW CameraComponent();
+	CameraComponent* component = DBG_NEW CameraComponent();
+	entity->AddComponent(component);
+
+	return component;
 }
 
 CameraComponent* CameraComponent::DoClone() const

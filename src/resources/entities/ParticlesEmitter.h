@@ -8,7 +8,7 @@ class IShaderProgram;
 class Particle;
 class GameScene;
 
-class ParticlesEmitter : public GameEntity
+class ParticlesEmitter : public GameEntity<ParticlesEmitter>
 {
 	std::list<Particle*> mParticlesPool;
 	std::vector<Particle*> mParticles;

@@ -4,7 +4,7 @@
 class Model;
 class IMaterial;
 
-class Particle : public GameEntity
+class Particle : public GameEntity<Particle>
 {
 	const float mMaxLiveTime;
 	float mLiveTime;

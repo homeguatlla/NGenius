@@ -2,6 +2,8 @@
 #include "IComponent.h"
 #include<string>
 
+class IGameEntity;
+
 class SpacePartitionComponent :	public IComponent
 {
 	bool mIsVisible;
@@ -15,7 +17,7 @@ public:
 	void SetVisibility(bool visibility);
 
 	static std::string GetClassName() { return std::string("SpacePartitionComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source);

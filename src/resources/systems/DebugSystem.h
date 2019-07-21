@@ -3,15 +3,15 @@
 #include "../../input/IInputListener.h"
 #include <vector>
 
-class GameEntity;
+class IGameEntity;
 class InputHandler;
 class NGenius;
 class RenderSystem;
 
 class DebugSystem : public IInputListener, public IGameSceneListener
 {
-	std::vector<GameEntity*> mEntities;
-	typedef std::vector<GameEntity*>::iterator GameEntitiesIterator;
+	std::vector<IGameEntity*> mEntities;
+	typedef std::vector<IGameEntity*>::iterator GameEntitiesIterator;
 
 	bool mIsDebugModeEnabled;
 	bool mIsBoundingBoxVisible;
@@ -41,12 +41,12 @@ public:
 	bool IsDebugModeEnabled() const;
 
 private:
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
+	void AddEntity(IGameEntity* entity);
+	void RemoveEntity(IGameEntity* entity);
 
-	bool HasDebugComponents(const GameEntity* entity) const;
+	bool HasDebugComponents(const IGameEntity* entity) const;
 
-	void OnGameEntityAdded(GameEntity* entity) override;
-	void OnGameEntityRemoved(GameEntity* entity) override;
+	void OnGameEntityAdded(IGameEntity* entity) override;
+	void OnGameEntityRemoved(IGameEntity* entity) override;
 };
 

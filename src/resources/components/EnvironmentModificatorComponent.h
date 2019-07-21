@@ -2,6 +2,8 @@
 #include "IComponent.h"
 #include<string>
 
+class IGameEntity;
+
 class EnvironmentModificatorComponent : public IComponent
 {
 public:
@@ -9,7 +11,7 @@ public:
 	virtual ~EnvironmentModificatorComponent();
 
 	static std::string GetClassName() { return std::string("EnvironmentModificatorComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source);

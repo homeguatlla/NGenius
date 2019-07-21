@@ -11,23 +11,7 @@
 #include "InstantiableObject.h"
 #include "../Memory.h"
 
-unsigned GameEntity::IDCounter = 0;
-
-GameEntity::GameEntity(Transformation* transformation, IRenderer* renderer) :
-mTransformation(transformation),
-mRenderer(renderer),
-mIsEnabled(true)
-{
-	if (renderer != nullptr)
-	{
-		renderer->SetParent(this);
-	}
-	mID = ++IDCounter;
-}
-
-GameEntity::GameEntity(Transformation* transformation) : GameEntity(transformation, nullptr)
-{
-}
+/*
 
 GameEntity::~GameEntity()
 {
@@ -48,148 +32,13 @@ GameEntity::~GameEntity()
 	}
 }
 
-void GameEntity::Init()
-{
-	for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
-	{
-		it->second->Init();
-	}
-}
-
-int GameEntity::GetID()
-{
-	return mID;
-}
-
-Transformation* GameEntity::GetTransformation()
-{
-	return mTransformation;
-}
-
-const Transformation* GameEntity::GetTransformation() const
-{
-	return mTransformation;
-}
-
-IRenderer* GameEntity::GetRenderer() const
-{
-	return mRenderer;
-}
-
-void GameEntity::SetRenderer(IRenderer* renderer)
-{
-	mRenderer = renderer;
-	if (renderer != nullptr)
-	{
-		renderer->SetParent(this);
-	}
-}
-
-bool GameEntity::IsEnabled() const
-{
-	return mIsEnabled;
-}
 
 void GameEntity::SetEnabled(bool enabled)
 {
 	mIsEnabled = enabled;
 }
 
-GameEntity* GameEntity::CreateGameEntity()
-{
-	return DBG_NEW  GameEntity();
-}
 
-GameEntity* GameEntity::DoClone() const
-{
-	GameEntity* clone = DBG_NEW  GameEntity(new Transformation(*GetTransformation()));
-	if (GetRenderer() != nullptr)
-	{
-		clone->SetRenderer(GetRenderer()->Clone());
-	}
-	
-	return clone;
-}
 
-GameEntity* GameEntity::Clone()
-{
-	GameEntity* clone = DoClone();
-
-	assert(typeid(*clone) == typeid(*this));
-
-	for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
-	{		
-		clone->AddComponent(it->first, it->second->Clone());
-	}
-
-	return clone;
-}
-
-void GameEntity::Update(float elapsedTime)
-{
-	if (mIsEnabled)
-	{
-		for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
-		{
-			it->second->Update(elapsedTime);
-		}
-	}
-}
-
-void GameEntity::Build(RenderSystem* renderSystem)
-{
-	Model* model = renderSystem->GetModel(mModelName);
-	IMaterial* material = renderSystem->GetMaterial(mMaterialName);
-	if (model != nullptr && material != nullptr)
-	{
-		IRenderer* renderer = nullptr;
-		if (!mRendererName.empty())
-		{
-			renderer = InstantiableObject::CreateRenderer(mRendererName, model, material);
-		}
-		else
-		{
-			//By default
-			renderer = DBG_NEW  VerticesRenderer(model, material);
-		}
-		renderer->SetLayer(mRendererLayer);
-		SetRenderer(renderer);
-	}
-}
-
-void GameEntity::ReadFrom(core::utils::IDeserializer* source)
-{
-	source->ReadParameter("model", mModelName);
-	source->ReadParameter("material", mMaterialName);
-	source->ReadParameter("renderer", mRendererName);
-	source->ReadParameter("is_enabled", &mIsEnabled);
-	source->ReadParameter("layer", &mRendererLayer);
-	mTransformation = DBG_NEW  Transformation();
-	mTransformation->ReadFrom(source);
-}
-
-void GameEntity::WriteTo(core::utils::ISerializer* destination)
-{
-	destination->BeginAttribute(std::string("entity"));
-	destination->WriteParameter(std::string("id"), mID, "");
-	destination->WriteParameter(std::string("is_enabled"), mIsEnabled);
-	if (GetRenderer() != nullptr)
-	{
-		IRenderer* renderer = GetRenderer();
-		unsigned int modelID = renderer->GetModel()->GetID();
-		unsigned int materialID = renderer->GetMaterial()->GetMaterialID();
-		destination->WriteParameter(std::string("model"), modelID);
-		destination->WriteParameter(std::string("material"), materialID);
-	}
-	mTransformation->WriteTo(destination);
-
-	destination->BeginAttribute(std::string("components"));
-	for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
-	{
-		it->second->WriteTo(destination);
-	}
-	destination->EndAttribute();
-	destination->EndAttribute();
-}
-
+*/
 

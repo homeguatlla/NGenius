@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EnvironmentModificatorComponent.h"
+#include "../IGameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../Memory.h"
 
@@ -12,9 +13,12 @@ EnvironmentModificatorComponent::~EnvironmentModificatorComponent()
 {
 }
 
-IComponent* EnvironmentModificatorComponent::Create()
+IComponent* EnvironmentModificatorComponent::Create(IGameEntity* entity)
 {
-	return DBG_NEW EnvironmentModificatorComponent();
+	EnvironmentModificatorComponent* component = DBG_NEW EnvironmentModificatorComponent();
+	entity->AddComponent(component);
+
+	return component;
 }
 
 EnvironmentModificatorComponent* EnvironmentModificatorComponent::DoClone() const

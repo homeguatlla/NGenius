@@ -1,125 +1,234 @@
 #pragma once
 #include "Transformation.h"
+
+#include "renderers/IRenderer.h"
+#include "renderers/VerticesRenderer.h"
+
+#include "materials/IMaterial.h"
+#include "models/Model.h"
+#include "systems/renderSystem/RenderSystem.h"
+
+#include "../utils/serializer/ISerializable.h"
+#include "../utils/serializer/XMLSerializer.h"
+#include "../utils/serializer/IDeserializer.h"
+#include "../Memory.h"
+#include "IGameEntity.h"
+#include "InstantiableObject.h"
+
 #include<map>
 #include<typeinfo>
 #include<string>
 
-#include "components/IComponent.h"
-#include "../utils/serializer/ISerializable.h"
-#include "IFactory.h"
 
-class IRenderer;
-class RenderSystem;
-
-class GameEntity : public core::utils::ISerializable, public IFactory
+template<class TD>
+class GameEntity : public IGameEntity
 {
-	typedef std::map<const std::type_info*, IComponent*> ComponentsMap;
-	typedef ComponentsMap::iterator IComponentsIterator;
-
-	Transformation* mTransformation;
-	IRenderer* mRenderer;
-	ComponentsMap mComponents;
-	bool mIsEnabled;
-	int mID;
-
-	static unsigned int IDCounter;
-
-protected:
-	//To load an entity
-	std::string mModelName;
-	std::string mMaterialName;
-	std::string mRendererName;
-
-	int mRendererLayer;
-
-	virtual GameEntity* DoClone() const;
-
 public:
 	GameEntity() = default;
 	explicit GameEntity(Transformation* transformation, IRenderer* renderer);
 	explicit GameEntity(Transformation* transformation);
-	virtual ~GameEntity();
+	~GameEntity();
 
-	void Init();
-	int GetID();
+	// Heredado vía IGameEntity
+	void Init() override;
+	int GetID() const override { return mID; }
+	bool IsEnabled() const override	{ return mIsEnabled; }
 
-	IRenderer* GetRenderer() const;
-	void SetRenderer(IRenderer* renderer);
-	Transformation* GetTransformation();
-	const Transformation* GetTransformation() const;
-	GameEntity* Clone();
+	Transformation* GetTransformation() override { return mTransformation; }
+	const Transformation* GetTransformation() const override { return mTransformation; }
 
-	bool IsEnabled() const;
-	void SetEnabled(bool enabled);
+	IRenderer* GetRenderer() const override { return mRenderer;	}
+	void SetRenderer(IRenderer* renderer) override;
 
-	GameEntity* CreateGameEntity() override;
+	virtual void Update(float elapsedTime) override;
+	virtual void Build(RenderSystem* renderSystem) override;
 
-	virtual void Update(float elapsedTime);
-	virtual void Build(RenderSystem* renderSystem);
+	virtual IGameEntity* DoClone() const override;
+	IGameEntity* Clone();
 
-	template<typename T> void AddComponent(T* component)
+	static std::string GetClassName() { return std::string("GameEntity"); }
+	static IGameEntity* Create()
 	{
-		static_assert(std::is_base_of<IComponent, T>::value, "The type must inherit from IComponent");
-		assert(component != nullptr);
-		if (mComponents.count(&typeid(T)) == 0)
-		{
-			component->SetParent(this);
-			mComponents[&typeid(T)] = component;
-		}
-		else
-		{
-			delete component;
-		}
+		//TD& derived = static_cast<TD&>(*this);
+		return TD::DoCreate();
 	}
 
-	template<typename T> void RemoveComponent()
-	{
-		static_assert(std::is_base_of<IComponent, T>::value, "The type must inherit from IComponent");
-		if (HasComponent<T>())
-		{ 
-			T* component = static_cast<T*>(mComponents[&typeid(T)]);
-			mComponents.erase(&typeid(T));
-			delete component;
-		}
-	}
+	static IGameEntity* DoCreate() { return DBG_NEW GameEntity<TD>(); }
 
-	template<typename T> bool HasComponent() const
-	{
-		static_assert(std::is_base_of<IComponent, T>::value, "The type must inherit from IComponent");
-		return mComponents.count(&typeid(T)) != 0;
-	}
-
-	template<typename T> T* GetComponent()
-	{
-		static_assert(std::is_base_of<IComponent, T>::value, "The type must inherit from IComponent");
-		if (HasComponent<T>())
-		{
-			return static_cast<T*>(mComponents[&typeid(T)]);
-		}
-		else
-		{
-			return nullptr;
-		}
-	}
-
-	// Heredado vía ISerializable
 	void ReadFrom(core::utils::IDeserializer* source) override;
 	void WriteTo(core::utils::ISerializer* destination) override;
 
-private:
-	template<typename T> void AddComponent(const std::type_info* type, T* component)
+protected:
+	Transformation* mTransformation;
+	IRenderer* mRenderer;
+	bool mIsEnabled;
+	int mID;
+	
+	static unsigned int IDCounter;
+
+	//To load an entity
+	std::string mModelName;
+	std::string mMaterialName;
+	std::string mRendererName;
+	
+	int mRendererLayer;
+};
+
+template<class TD>
+unsigned GameEntity<TD>::IDCounter = 0;
+
+template<class TD>
+GameEntity<TD>::GameEntity(Transformation* transformation, IRenderer* renderer) :
+	mTransformation(transformation),
+	mRenderer(renderer),
+	mIsEnabled(true)
+{
+	if (renderer != nullptr)
 	{
-		static_assert(std::is_base_of<IComponent, T>::value, "The type must inherit from IComponent");
-		assert(component != nullptr);
-		if (mComponents.count(type) == 0)
+		renderer->SetParent(this);
+	}
+	mID = ++IDCounter;
+
+}
+
+template<class TD>
+GameEntity<TD>::GameEntity(Transformation* transformation) : GameEntity(transformation, nullptr)
+{
+}
+
+template<class TD>
+GameEntity<TD>::~GameEntity()
+{
+	for (auto& pair : mComponents)
+	{
+		delete pair.second;
+	}
+	mComponents.clear();
+	if (mTransformation != nullptr)
+	{
+		delete mTransformation;
+		mTransformation = nullptr;
+	}
+	if (mRenderer != nullptr)
+	{
+		delete mRenderer;
+		mRenderer = nullptr;
+	}
+}
+
+template<class TD>
+void GameEntity<TD>::Init()
+{
+	for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
+	{
+		it->second->Init();
+	}
+}
+
+template<class TD>
+void GameEntity<TD>::SetRenderer(IRenderer* renderer)
+{
+	mRenderer = renderer;
+	if (renderer != nullptr)
+	{
+		renderer->SetParent(this);
+	}
+}
+
+template<class TD>
+void GameEntity<TD>::Update(float elapsedTime)
+{
+	if (mIsEnabled)
+	{
+		for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
 		{
-			component->SetParent(this);
-			mComponents[type] = component;
+			it->second->Update(elapsedTime);
+		}
+	}
+}
+
+template<class TD>
+void GameEntity<TD>::Build(RenderSystem* renderSystem)
+{
+	Model* model = renderSystem->GetModel(mModelName);
+	IMaterial* material = renderSystem->GetMaterial(mMaterialName);
+	if (model != nullptr && material != nullptr)
+	{
+		IRenderer* renderer = nullptr;
+		if (!mRendererName.empty())
+		{
+			renderer = InstantiableObject::CreateRenderer(mRendererName, model, material);
 		}
 		else
 		{
-			delete component;
+			//By default
+			renderer = DBG_NEW  VerticesRenderer(model, material);
 		}
+		renderer->SetLayer(mRendererLayer);
+		SetRenderer(renderer);
 	}
-};
+}
 
+template<class TD>
+IGameEntity* GameEntity<TD>::DoClone() const
+{
+	IGameEntity* clone = DBG_NEW  GameEntity(new Transformation(*GetTransformation()));
+	if (GetRenderer() != nullptr)
+	{
+		clone->SetRenderer(GetRenderer()->Clone());
+	}
+
+	return clone;
+}
+
+template<class TD>
+IGameEntity* GameEntity<TD>::Clone()
+{
+	IGameEntity* clone = DoClone();
+
+	assert(typeid(*clone) == typeid(*this));
+
+	for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
+	{
+		clone->AddComponent(it->first, it->second->Clone());
+	}
+
+	return clone;
+}
+
+template<class TD>
+void GameEntity<TD>::ReadFrom(core::utils::IDeserializer* source)
+{
+	source->ReadParameter("model", mModelName);
+	source->ReadParameter("material", mMaterialName);
+	source->ReadParameter("renderer", mRendererName);
+	source->ReadParameter("is_enabled", &mIsEnabled);
+	source->ReadParameter("layer", &mRendererLayer);
+	mTransformation = DBG_NEW  Transformation();
+	mTransformation->ReadFrom(source);
+}
+
+template<class TD>
+void GameEntity<TD>::WriteTo(core::utils::ISerializer* destination)
+{
+	destination->BeginAttribute(std::string("entity"));
+	destination->WriteParameter(std::string("id"), mID, "");
+	destination->WriteParameter(std::string("is_enabled"), mIsEnabled);
+	if (GetRenderer() != nullptr)
+	{
+		IRenderer* renderer = GetRenderer();
+		unsigned int modelID = renderer->GetModel()->GetID();
+		unsigned int materialID = renderer->GetMaterial()->GetMaterialID();
+		destination->WriteParameter(std::string("model"), modelID);
+		destination->WriteParameter(std::string("material"), materialID);
+	}
+	mTransformation->WriteTo(destination);
+
+	destination->BeginAttribute(std::string("components"));
+	for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
+	{
+		it->second->WriteTo(destination);
+	}
+	destination->EndAttribute();
+	destination->EndAttribute();
+}

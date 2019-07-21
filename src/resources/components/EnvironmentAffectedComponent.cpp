@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EnvironmentAffectedComponent.h"
+#include "../IGameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../Memory.h"
 
@@ -39,9 +40,12 @@ bool EnvironmentAffectedComponent::IsAffectedByWind() const
 	return mIsAffectedByWind;
 }
 
-IComponent* EnvironmentAffectedComponent::Create()
+IComponent* EnvironmentAffectedComponent::Create(IGameEntity* entity)
 {
-	return DBG_NEW EnvironmentAffectedComponent();
+	EnvironmentAffectedComponent* component = DBG_NEW EnvironmentAffectedComponent();
+	entity->AddComponent(component);
+
+	return component;
 }
 
 void EnvironmentAffectedComponent::DoReadFrom(core::utils::IDeserializer* source)

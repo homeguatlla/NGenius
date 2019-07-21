@@ -2,8 +2,9 @@
 #include "ThirdPersonCameraComponent.h"
 
 #include <glm/glm.hpp>
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../camera/PerspectiveCamera.h"
+#include "../Transformation.h"
 #include "../GameEvent.h"
 #include "../events/characterControllerEvents/ZoomEvent.h"
 #include "../events/characterControllerEvents/PitchEvent.h"
@@ -34,7 +35,7 @@ ThirdPersonCameraComponent::ThirdPersonCameraComponent() : mZoomSpeed(1.0f)
 }
 
 
-ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, GameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed) :
+ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, IGameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed) :
 	mCamera(camera), 
 	mTarget(target), 
 	mTargetOffset(targetOffset),
@@ -134,7 +135,7 @@ void ThirdPersonCameraComponent::UpdateGameEvents(float elapsedTime)
 	}
 }
 
-const GameEntity* ThirdPersonCameraComponent::GetTarget() const
+const IGameEntity* ThirdPersonCameraComponent::GetTarget() const
 {
 	return mTarget;
 }
@@ -155,9 +156,12 @@ float ThirdPersonCameraComponent::GetCameraPitch() const
 	return mCurrentPitch;
 }
 
-IComponent* ThirdPersonCameraComponent::Create()
+IComponent* ThirdPersonCameraComponent::Create(IGameEntity* entity)
 {
-	return DBG_NEW ThirdPersonCameraComponent();
+	ThirdPersonCameraComponent* component = DBG_NEW ThirdPersonCameraComponent();
+	entity->AddComponent(component);
+
+	return component;
 }
 
 float ThirdPersonCameraComponent::CalculateHorizontalDistance() const

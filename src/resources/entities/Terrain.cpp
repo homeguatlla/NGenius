@@ -22,7 +22,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 Terrain::Terrain(Transformation* transformation) :
-	GameEntity(transformation),
+	GameEntity<Terrain>(transformation),
 	mHeightmap(nullptr),
 	mScale(1.0f),
 	mIsFlat(false)
@@ -30,12 +30,12 @@ Terrain::Terrain(Transformation* transformation) :
 }
 
 Terrain::Terrain(Transformation* transformation, IMaterial* material, Texture* heightmap, float scale) :
-GameEntity(transformation),
+GameEntity<Terrain>(transformation),
 mHeightmap(nullptr),
 mScale(scale),
 mIsFlat(false)
 {
-	Create(material, heightmap);
+	CreateTerrain(material, heightmap);
 }
 
 Terrain::~Terrain()
@@ -54,11 +54,6 @@ void Terrain::SetScale(float scale)
 	mMaterialEffectFloat->SetValue(mScale);
 }
 
-GameEntity* Terrain::CreateGameEntity()
-{
-	return DBG_NEW Terrain();
-}
-
 void Terrain::Build(RenderSystem* renderSystem)
 {
 	IMaterial* material = renderSystem->GetMaterial(mMaterialName);
@@ -72,7 +67,7 @@ void Terrain::Build(RenderSystem* renderSystem)
 			Log(Log::LOG_ERROR) << "Couldn't found terrain model " << mModelName << "\n";
 		}
 	}
-	Create(material, heighmap);
+	CreateTerrain(material, heighmap);
 }
 
 void Terrain::ReadFrom(core::utils::IDeserializer* source)
@@ -83,6 +78,11 @@ void Terrain::ReadFrom(core::utils::IDeserializer* source)
 	source->ReadParameter("heighmap_texture", mHeightmapName);
 	source->ReadParameter("scale", &mScale);
 	source->ReadParameter("model", mModelName);
+}
+
+IGameEntity* Terrain::DoCreate()
+{
+	return DBG_NEW Terrain();
 }
 
 bool Terrain::IsPointInside(glm::vec2 point) const
@@ -217,7 +217,7 @@ float Terrain::CalculateBarryCenter(glm::vec3& p1, glm::vec3& p2, glm::vec3& p3,
 	return l1 * p1.y + l2 * p2.y + l3 *p3.y;
 }
 
-void Terrain::Create(IMaterial* material, ITexture* heighmap)
+void Terrain::CreateTerrain(IMaterial* material, ITexture* heighmap)
 {
 	//better generate texture high resolution.
 	//With 256 num vertexs side seems not so much different than with 1024. With 1024 there are more bumps and in fact is worst and the performance downs 50%.

@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "../shaders/IShaderProgram.h"
 #include "../camera/ICamera.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../Transformation.h"
 #include "../shaders/QuadShader.h"
 #include "../models/Model.h"
@@ -50,12 +50,12 @@ bool IRenderer::IsPrerendered() const
 	return mIsPrerendered;
 }
 
-void IRenderer::SetParent(GameEntity* parent)
+void IRenderer::SetParent(IGameEntity* parent)
 {
 	mParent = parent;
 }
 
-GameEntity* IRenderer::GetParent()
+IGameEntity* IRenderer::GetParent()
 {
 	return mParent;
 }
@@ -195,13 +195,13 @@ const BitNumber& IRenderer::GetBitRendererInformation() const
 	return mBitRenderInformation;
 }
 
-void IRenderer::SetLayer(char layer)
+void IRenderer::SetLayer(int layer)
 {
 	mLayer = layer;
 	mBitRenderInformation.SetLayer(mLayer);
 }
 
-char IRenderer::GetLayer() const
+int IRenderer::GetLayer() const
 {
 	return mLayer;
 }

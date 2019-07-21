@@ -38,11 +38,12 @@ class Light;
 class Animation;
 class AnimatedModel;
 
-class GameEntity;
 class ParticlesEmitter;
 class RenderPass;
 class Terrain;
 class ICamera;
+
+class IGameEntity;
 
 
 struct GLFWwindow;
@@ -78,6 +79,7 @@ public:
 
 	void Init(bool isFullscreen);
 	void Start(bool isReload = false);
+	void ShutDown();
 	void Run();
 
 	IShaderProgram* GetShader(const std::string& name) const;
@@ -102,7 +104,7 @@ public:
 	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing);
 	void AddLight(Light* light);
 	void AddCamera(ICamera* camera);
-	void AddEntity(GameEntity* entity);
+	void AddEntity(IGameEntity* entity);
 
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 
@@ -122,7 +124,7 @@ public:
 
 	//shadows
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
-	void SetCastingShadowsTarget(const GameEntity* target);
+	void SetCastingShadowsTarget(const IGameEntity* target);
 	void SetCastingShadowsEnabled(bool enabled);
 
 	//fog
@@ -139,7 +141,7 @@ public:
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
 	//spatial partition
-	void Query(const AABB& aabb, std::vector<GameEntity*>& result);
+	void Query(const AABB& aabb, std::vector<IGameEntity*>& result);
 	void SetIsSpacePartitionEnabled(bool enable);
 
 	//cameras

@@ -4,6 +4,7 @@
 #include<string>
 
 class ICamera;
+class IGameEntity;
 
 class BillboardComponent : public IComponent
 {
@@ -17,7 +18,7 @@ public:
 	void UpdateInternal(float elapsedTime) override;
 
 	static std::string GetClassName() { return std::string("BillboardComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	BillboardComponent() = default;

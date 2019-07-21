@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "LODComponent.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../camera/ICamera.h"
 #include "../renderers/IRenderer.h"
 #include "../models/Model.h"
@@ -86,9 +86,12 @@ void LODComponent::AddLevelOfDetail(IRenderer* renderer, float distance)
 	}
 }
 
-IComponent* LODComponent::Create()
+IComponent* LODComponent::Create(IGameEntity* entity)
 {
-	return DBG_NEW LODComponent();
+	LODComponent* component = DBG_NEW LODComponent();
+	entity->AddComponent(component);
+
+	return component;
 }
 
 

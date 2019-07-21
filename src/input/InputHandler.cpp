@@ -20,7 +20,7 @@ void InputHandler::Init(GLFWwindow* window)
 
 void InputHandler::Update(float deltaTime)
 {
-	if (mIsInitialized)
+	if (mIsInitialized && mInputHandler != nullptr)
 	{
 		mInputHandler(mWindow);
 	}

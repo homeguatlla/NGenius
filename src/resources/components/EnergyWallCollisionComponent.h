@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include<string>
 
+class IGameEntity;
+
 class EnergyWallCollisionComponent : public IComponent
 {
 	bool mIsColliding;
@@ -18,7 +20,7 @@ public:
 	glm::vec3 GetCollisionPoint() const;
 
 	static std::string GetClassName() { return std::string("EnergyWallCollisionComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source);

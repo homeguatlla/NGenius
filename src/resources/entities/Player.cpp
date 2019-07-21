@@ -95,11 +95,6 @@ void Player::Update(float elapsedTime)
 	//std::cout << "state: " << mState << " velocity = " << physicsComponent->GetVelocity().y << "\n";
 }
 
-GameEntity* Player::CreateGameEntity()
-{
-	return DBG_NEW Player();
-}
-
 void Player::UpdateAnimations()
 {
 	AnimationComponent* animationComponent = GetComponent<AnimationComponent>();

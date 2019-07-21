@@ -37,7 +37,7 @@ Text::~Text()
 	delete mModel;
 }
 
-unsigned int Text::GetID() const
+unsigned int Text::GetTextID() const
 {
 	return mTextID;
 }

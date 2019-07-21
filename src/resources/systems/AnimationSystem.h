@@ -7,13 +7,13 @@
 #include <vector>
 #include <map>
 
-class GameEntity;
+class IGameEntity;
 class Animator;
 class Animation;
 
 class AnimationSystem : public BaseVisitable<>, public IGameSceneListener
 {
-	std::vector<std::pair<GameEntity*, Animator*>> mEntities;
+	std::vector<std::pair<IGameEntity*, Animator*>> mEntities;
 	//std::map<std::string, std::vector<Animation*>> mAnimations;
 
 public:
@@ -25,13 +25,13 @@ public:
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
 private:
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
-	bool HasAnimationComponents(const GameEntity* entity) const;
+	void AddEntity(IGameEntity* entity);
+	void RemoveEntity(IGameEntity* entity);
+	bool HasAnimationComponents(const IGameEntity* entity) const;
 
-	void SetAnimationData(GameEntity* entity, const std::vector<glm::mat4x4>& data);
+	void SetAnimationData(IGameEntity* entity, const std::vector<glm::mat4x4>& data);
 
-	void OnGameEntityAdded(GameEntity* entity) override;
-	void OnGameEntityRemoved(GameEntity* entity) override;
+	void OnGameEntityAdded(IGameEntity* entity) override;
+	void OnGameEntityRemoved(IGameEntity* entity) override;
 };
 

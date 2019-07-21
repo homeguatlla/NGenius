@@ -6,7 +6,7 @@ class ICamera;
 class Texture;
 class RenderPass;
 class RenderSystem;
-class GameEntity;
+class IGameEntity;
 
 class ShadowsRenderPassSubSystem : public core::utils::ISerializable
 {
@@ -14,7 +14,7 @@ class ShadowsRenderPassSubSystem : public core::utils::ISerializable
 	ICamera* mShadowCastCamera;
 	Texture* mShadowMapTexture;
 	RenderPass* mRenderPass;
-	const GameEntity* mTarget;
+	const IGameEntity* mTarget;
 	glm::mat4 mShadowMapMatrix;
 	glm::vec3 mDirectionalLightDirection;
 	int mPFCCounter;
@@ -30,7 +30,7 @@ public:
 	void Init();
 	void Update();
 
-	void SetCastingShadowsTarget(const GameEntity* target);
+	void SetCastingShadowsTarget(const IGameEntity* target);
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
 	void SetEnable(bool enable);
 

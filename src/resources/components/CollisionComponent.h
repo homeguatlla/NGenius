@@ -2,6 +2,7 @@
 #include "IComponent.h"
 #include<string>
 
+class IGameEntity;
 
 class CollisionComponent : public IComponent
 {
@@ -18,7 +19,7 @@ public:
 	float GetGroundHeight() const;
 
 	static std::string GetClassName() { return std::string("CollisionComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source);

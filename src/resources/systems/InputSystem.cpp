@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "InputSystem.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../../input/InputHandler.h"
 #include "../components/InputComponent.h"
 #include "../components/CharacterComponent.h"
 
 #include <algorithm>
+#include <assert.h>
 
 InputSystem::InputSystem(InputHandler* inputHandler) :
 	mInputHandler(inputHandler)
@@ -23,12 +24,12 @@ void InputSystem::Update(float elapsedTime)
 {
 }
 
-bool InputSystem::HasInputComponents(const GameEntity* entity) const
+bool InputSystem::HasInputComponents(const IGameEntity* entity) const
 {
 	return entity != nullptr && entity->HasComponent<InputComponent>() && entity->HasComponent<CharacterComponent>();
 }
 
-void InputSystem::OnGameEntityAdded(GameEntity* entity)
+void InputSystem::OnGameEntityAdded(IGameEntity* entity)
 {
 	if (HasInputComponents(entity))
 	{
@@ -36,7 +37,7 @@ void InputSystem::OnGameEntityAdded(GameEntity* entity)
 	}
 }
 
-void InputSystem::OnGameEntityRemoved(GameEntity* entity)
+void InputSystem::OnGameEntityRemoved(IGameEntity* entity)
 {
 	if (HasInputComponents(entity))
 	{
@@ -44,16 +45,16 @@ void InputSystem::OnGameEntityRemoved(GameEntity* entity)
 	}
 }
 
-void InputSystem::AddEntity(GameEntity* entity)
+void InputSystem::AddEntity(IGameEntity* entity)
 {
 	mEntities.push_back(entity);
 }
 
-void InputSystem::RemoveEntity(GameEntity* entity)
+void InputSystem::RemoveEntity(IGameEntity* entity)
 {
 	if (HasInputComponents(entity))
 	{
-		std::vector<GameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](GameEntity* a) { return a == entity; });
+		std::vector<IGameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](IGameEntity* a) { return a == entity; });
 		if (it != mEntities.end())
 		{
 			mEntities.erase(it);
@@ -67,7 +68,7 @@ void InputSystem::RemoveEntity(GameEntity* entity)
 
 void InputSystem::OnKey(int key, int action)
 {
-	for (GameEntity* entity : mEntities)
+	for (IGameEntity* entity : mEntities)
 	{
 		InputComponent* inputComponent = entity->GetComponent<InputComponent>();
 		CharacterComponent* characterComponent = entity->GetComponent<CharacterComponent>();
@@ -105,7 +106,7 @@ void InputSystem::OnMouseCursorPos(double x, double y)
 
 void InputSystem::DispatchEvent(MouseData& data)
 {
-	for (GameEntity* entity : mEntities)
+	for (IGameEntity* entity : mEntities)
 	{
 		InputComponent* inputComponent = entity->GetComponent<InputComponent>();
 		CharacterComponent* characterComponent = entity->GetComponent<CharacterComponent>();

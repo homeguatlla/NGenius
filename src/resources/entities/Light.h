@@ -2,7 +2,7 @@
 #include "../GameEntity.h"
 
 
-class Light : public GameEntity
+class Light : public GameEntity<Light>
 {
 public:
 	explicit Light(const glm::vec3& position, const glm::vec3& color, IRenderer* renderer);

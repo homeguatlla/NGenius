@@ -6,7 +6,7 @@ class Model;
 class Terrain;
 class MaterialEffectFloat;
 
-class PointsPatch :	public GameEntity
+class PointsPatch :	public GameEntity<PointsPatch>
 {
 	const Terrain* mTerrain;
 	float mHeightMin;

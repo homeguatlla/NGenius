@@ -2,7 +2,6 @@
 #include <vector>
 
 class ParticlesEmitter;
-class GameEntity;
 
 class ParticlesSystem
 {

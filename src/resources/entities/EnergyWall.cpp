@@ -8,7 +8,7 @@
 #include "../Memory.h"
 
 EnergyWall::EnergyWall(Transformation* transformation, IMaterial* material, Model* model, float maxLiveTime) : 
-GameEntity(transformation),
+GameEntity<EnergyWall>(transformation),
 mMaterial(material),
 mModel(model),
 mMaxLiveTime(maxLiveTime),

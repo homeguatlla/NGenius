@@ -121,6 +121,13 @@ void NGenius::Start(bool isReload)
 	}
 }
 
+void NGenius::ShutDown()
+{
+	mStatesMachine.reset();
+
+	DestroySystems();
+}
+
 void NGenius::Run()
 {
 	double lastCurrentTime = glfwGetTime();
@@ -519,7 +526,7 @@ void NGenius::AddCamera(ICamera* camera)
 	mRenderSystem->AddCamera(camera);
 }
 
-void NGenius::AddEntity(GameEntity* entity)
+void NGenius::AddEntity(IGameEntity* entity)
 {
 	assert(entity != nullptr);
 	mGameScene.AddEntity(entity);
@@ -579,7 +586,7 @@ void NGenius::SetWaterParameters(const ICamera* camera, float waterY)
 	mRenderSystem->SetWaterParameters(camera, waterY);
 }
 
-void NGenius::SetCastingShadowsTarget(const GameEntity* target)
+void NGenius::SetCastingShadowsTarget(const IGameEntity* target)
 {
 	assert(mRenderSystem != nullptr);
 	mRenderSystem->SetCastingShadowsTarget(target);
@@ -603,7 +610,7 @@ void NGenius::Reload()
 	mStatesMachine->ForceState(mStatesMachine->GetCurrentState()->GetID(), 0.0f);
 }
 
-void NGenius::Query(const AABB& aabb, std::vector<GameEntity*>& result)
+void NGenius::Query(const AABB& aabb, std::vector<IGameEntity*>& result)
 {
 	mSpacePartitionSystem->Query(aabb, result);
 }

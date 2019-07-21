@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "AnimationComponent.h"
+#include "../IGameEntity.h"
 #include "../models/animation/Animation.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../Memory.h"
@@ -54,9 +55,11 @@ void AnimationComponent::StopAnimation()
 	mCurrentAnimation = nullptr;
 }
 
-IComponent* AnimationComponent::Create()
+IComponent* AnimationComponent::Create(IGameEntity* entity)
 {
-	return DBG_NEW AnimationComponent();
+	AnimationComponent* component = DBG_NEW AnimationComponent();
+	entity->AddComponent(component);
+	return component;
 }
 
 void AnimationComponent::DoReadFrom(core::utils::IDeserializer* source)

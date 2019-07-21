@@ -2,7 +2,7 @@
 #include "BillboardComponent.h"
 #include "../camera/ICamera.h"
 #include "../Transformation.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include "../Memory.h"
@@ -31,9 +31,13 @@ void BillboardComponent::UpdateInternal(float elapsedTime)
 	ModifyModelMatrixToAvoidRotations(viewMatrix, scale, angleZ, modelMatrix);
 }
 
-IComponent* BillboardComponent::Create()
+IComponent* BillboardComponent::Create(IGameEntity* entity)
 {
-	return DBG_NEW BillboardComponent();
+	BillboardComponent* component = DBG_NEW BillboardComponent();
+
+	entity->AddComponent(component);
+
+	return component;
 }
 
 void BillboardComponent::ModifyModelMatrixToAvoidRotations(const glm::mat4& viewMatrix, const glm::vec3& scale, float angleZ, glm::mat4& modelMatrix)

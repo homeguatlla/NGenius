@@ -8,7 +8,7 @@ class CollisionComponent;
 class PhysicsComponent;
 class CharacterComponent;
 
-class Player : public GameEntity
+class Player : public GameEntity<Player>
 {
 	enum State
 	{
@@ -41,8 +41,6 @@ public:
 
 	Player* DoClone() const override { return nullptr; }
 	void Update(float elapsedTime) override;
-
-	GameEntity* CreateGameEntity()  override;
 
 private:
 	void UpdateGameEvents();

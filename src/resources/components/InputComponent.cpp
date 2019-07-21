@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "InputComponent.h"
 #include "../GameEvent.h"
+#include "../IGameEntity.h"
 #include "../../input/InputConverter.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../Memory.h"
@@ -46,9 +47,12 @@ const GameEvent* InputComponent::ConvertMouse(void* data) const
 	return nullptr;
 }
 
-IComponent* InputComponent::Create()
+IComponent* InputComponent::Create(IGameEntity* entity)
 {
-	return DBG_NEW InputComponent();
+	InputComponent* component = DBG_NEW InputComponent();
+	entity->AddComponent(component);
+
+	return component;
 }
 
 void InputComponent::AddConverter(const InputConverter* converter)

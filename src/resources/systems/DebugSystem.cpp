@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DebugSystem.h"
 #include "../../NGenius.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../../input/InputHandler.h"
 #include "../components/DebugComponent.h"
 #include "renderSystem/RenderSystem.h"
@@ -40,7 +40,7 @@ void DebugSystem::Update(float elapsedTime)
 
 	if (mIsDebugModeEnabled && mIsBoundingBoxVisible)
 	{
-		for (GameEntity* entity : mEntities)
+		for (IGameEntity* entity : mEntities)
 		{
 			entity->Update(elapsedTime);
 			DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
@@ -53,21 +53,21 @@ void DebugSystem::Update(float elapsedTime)
 	}
 }
 
-bool DebugSystem::HasDebugComponents(const GameEntity* entity) const
+bool DebugSystem::HasDebugComponents(const IGameEntity* entity) const
 {
 	return entity != nullptr && entity->HasComponent<DebugComponent>();
 }
 
-void DebugSystem::AddEntity(GameEntity* entity)
+void DebugSystem::AddEntity(IGameEntity* entity)
 {
 	mEntities.push_back(entity);
 }
 
-void DebugSystem::RemoveEntity(GameEntity* entity)
+void DebugSystem::RemoveEntity(IGameEntity* entity)
 {
 	if (HasDebugComponents(entity))
 	{
-		std::vector<GameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](GameEntity* a) { return a == entity; });
+		std::vector<IGameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](IGameEntity* a) { return a == entity; });
 		if (it != mEntities.end())
 		{
 			mEntities.erase(it);
@@ -84,7 +84,7 @@ void DebugSystem::OnKey(int key, int action)
 	if (key == GLFW_KEY_B && action == GLFW_PRESS)
 	{
 		mIsBoundingBoxVisible = !mIsBoundingBoxVisible;
-		for (GameEntity* entity : mEntities)
+		for (IGameEntity* entity : mEntities)
 		{
 			DebugComponent* component = entity->GetComponent<DebugComponent>();
 			if (component != nullptr)
@@ -135,7 +135,7 @@ bool DebugSystem::IsDebugModeEnabled() const
 	return mIsDebugModeEnabled;
 }
 
-void DebugSystem::OnGameEntityAdded(GameEntity* entity)
+void DebugSystem::OnGameEntityAdded(IGameEntity* entity)
 {
 	if (HasDebugComponents(entity))
 	{
@@ -143,7 +143,7 @@ void DebugSystem::OnGameEntityAdded(GameEntity* entity)
 	}
 }
 
-void DebugSystem::OnGameEntityRemoved(GameEntity* entity)
+void DebugSystem::OnGameEntityRemoved(IGameEntity* entity)
 {
 	if (HasDebugComponents(entity))
 	{

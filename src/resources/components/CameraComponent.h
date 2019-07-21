@@ -3,6 +3,7 @@
 #include<string>
 
 class ICamera;
+class IGameEntity;
 
 class CameraComponent : public IComponent
 {
@@ -12,7 +13,7 @@ public:
 	~CameraComponent();
 
 	static std::string GetClassName() { return std::string("CameraComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	CameraComponent() = default;

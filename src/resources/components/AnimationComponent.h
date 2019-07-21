@@ -5,6 +5,7 @@
 #include <map>
 
 class Animation;
+class IGameEntity;
 
 class AnimationComponent : public IComponent
 {
@@ -21,7 +22,7 @@ public:
 	void StopAnimation();
 
 	static std::string GetClassName() { return std::string("AnimationComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source);

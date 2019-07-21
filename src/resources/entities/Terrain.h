@@ -10,7 +10,7 @@ class Model;
 class MaterialEffectFloat;
 class ITexture;
 
-class Terrain :	public GameEntity
+class Terrain :	public GameEntity<Terrain>
 {
 	int mNumVertexsSide;
 	float mGridSize;
@@ -25,7 +25,6 @@ class Terrain :	public GameEntity
 	std::string mModelName;
 
 public:
-	Terrain() = default;
 	explicit Terrain(Transformation* transformation);
 	explicit Terrain(Transformation* transformation, IMaterial* material, Texture* heightmap, float scale);
 	~Terrain();
@@ -40,16 +39,18 @@ public:
 	void SetFlat(bool isFlat);
 	void SetScale(float scale);
 
-	GameEntity* CreateGameEntity()  override;
-
 	void Build(RenderSystem* renderSystem) override;
 
 	// Heredado vía ISerializable
 	void ReadFrom(core::utils::IDeserializer* source) override;
 
+	static std::string GetClassName() { return std::string("terrain"); }
+	static IGameEntity* DoCreate();
+
 private:
+	Terrain() = default;
 	float CalculateBarryCenter(glm::vec3& p1, glm::vec3& p2, glm::vec3& p3, glm::vec2& point) const;
 	void CalculateY();
-	void Create(IMaterial* material, ITexture* heighmap);
+	void CreateTerrain(IMaterial* material, ITexture* heighmap);
 };
 

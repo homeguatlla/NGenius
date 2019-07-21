@@ -3,6 +3,7 @@
 #include<string>
 
 class IRenderer;
+class IGameEntity;
 
 
 class DebugComponent : public IComponent
@@ -19,7 +20,7 @@ public:
 	IRenderer* GetBoundingBoxRenderer();
 
 	static std::string GetClassName() { return std::string("DebugComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	DebugComponent() = default;

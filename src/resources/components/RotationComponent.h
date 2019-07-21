@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include<string>
 
+class IGameEntity;
+
 class RotationComponent : public IComponent
 {
 	glm::vec3 mRotation;
@@ -16,7 +18,7 @@ public:
 	void UpdateInternal(float elapsedTime) override;
 
 	static std::string GetClassName() { return std::string("RotationComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	RotationComponent() = default;

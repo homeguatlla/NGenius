@@ -1,14 +1,14 @@
 #pragma once
 
-class GameEntity;
+class IGameEntity;
 
 class ICommand
 {
 protected:
-	GameEntity* mEntity;
+	IGameEntity* mEntity;
 
 public:
-	ICommand(GameEntity* entity);
+	ICommand(IGameEntity* entity);
 	virtual ~ICommand();
 
 	virtual void Execute() = 0;

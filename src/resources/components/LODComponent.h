@@ -5,6 +5,7 @@
 
 class ICamera;
 class IRenderer;
+class IGameEntity;
 
 class LODComponent : public IComponent
 {
@@ -29,7 +30,7 @@ public:
 	void AddLevelOfDetail(IRenderer* renderer, float distance);
 
 	static std::string GetClassName() { return std::string("LODComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	LODComponent() = default;

@@ -5,6 +5,7 @@
 
 
 class GameEvent;
+class IGameEntity;
 
 class CharacterComponent : public IComponent
 {
@@ -19,7 +20,7 @@ public:
 	const GameEvent* ConsumeEvent();
 
 	static std::string GetClassName() { return std::string("CharacterComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source);

@@ -8,6 +8,7 @@
 
 class GameEvent;
 class InputConverter;
+class IGameEntity;
 
 class InputComponent : public IComponent
 {
@@ -25,7 +26,7 @@ public:
 	const GameEvent* ConvertMouse(void* data) const;
 
 	static std::string GetClassName() { return std::string("InputComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source);

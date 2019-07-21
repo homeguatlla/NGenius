@@ -2,6 +2,8 @@
 #include "IComponent.h"
 #include<string>
 
+class IGameEntity;
+
 class OverWaterComponent : public IComponent
 {
 	float mWaterHeight;
@@ -13,7 +15,7 @@ public:
 	float GetWaterHeight() const;
 
 	static std::string GetClassName() { return std::string("OverWaterComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	OverWaterComponent() = default;

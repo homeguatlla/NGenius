@@ -162,7 +162,6 @@ bool mIsGameplayCameraEnabled = true;
 bool mIsFogEnabled = true;
 bool mIsVegetationEnabled = false;
 bool mIsEnergyWallEnabled = true;
-bool mIsSkyboxEnabled = true;
 bool mIsTerrainFlat = false;
 bool mIsTextEnabled = false;
 bool mIsStatisticsVisible = false;
@@ -173,7 +172,7 @@ bool mIsPropsEnabled = false;
 
 bool mIsSpacePartitionEnabled = false;
 
-std::shared_ptr<NGenius> mEngine = std::make_shared<NGenius>("Demo", SCREEN_WIDTH, SCREEN_HEIGHT);
+std::shared_ptr<NGenius> mEngine;
 ICamera* mGameplayCamera;
 ICamera* mEagleEyeCamera;
 RenderPass *mGameplayPass; 
@@ -184,8 +183,8 @@ RenderPass* mMapPass;
 Terrain* mTerrain;
 Player* mPlayer;
 Water* mWater;
-GameEntity* mCamera;
-GameEntity* mQuadTreeBox;
+IGameEntity* mCamera;
+IGameEntity* mQuadTreeBox;
 GameScene* mScene;
 
 EnergyWall* mEnergyWall;
@@ -200,8 +199,8 @@ IMaterial* materialText;
 ICommand* mCurrentCommand = nullptr;
 
 //camera bounding box
-GameEntity* mCameraAABBEntity;
-GameEntity* mCameraTargetEntity;
+IGameEntity* mCameraAABBEntity;
+IGameEntity* mCameraTargetEntity;
 
 //for QUADTREE setup
 float aabbSize = 2.0f;
@@ -209,8 +208,8 @@ const AABB mAABB(glm::vec3(-aabbSize, 0.0f, -aabbSize), glm::vec3(aabbSize, 0.0f
 GameEntityQuadTree mQuadTree(mAABB);
 glm::vec3 mQuadMovingPosition(0.0f);
 glm::vec3 mQuadMovingScale(1.0f);
-GameEntity* mQuadTreeMovedEntity;
-std::vector<GameEntity*> mQuadTreeEntities;
+IGameEntity* mQuadTreeMovedEntity;
+std::vector<IGameEntity*> mQuadTreeEntities;
 
 
 double aleatori()
@@ -357,7 +356,7 @@ void MouseCursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 	mEngine->OnMouseCursorPos(xpos, ypos);
 	//std::cout << "cursor X = " << xpos  << "\n";
 }
-
+/*
 GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string>& models, const std::vector<std::pair<float, bool>>& lod, IMaterial* material, IMaterial* materialNormalmap, bool isCullingEnabled)
 {
 	GameEntity* modelEntity = DBG_NEW GameEntity(
@@ -520,22 +519,22 @@ void CreateProps()
 
 	//models.push_back(std::string("floor"));
 	
-	/*
-	positions.push_back(glm::vec3(5.0f, 0.0f, 0.0f));
-	positions.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
-	positions.push_back(glm::vec3(-1.0f, 0.0f, 0.0f));
-	positions.push_back(glm::vec3(0.0f, 0.0f, 5.0f));
-	positions.push_back(glm::vec3(0.0f, 0.0f, -5.0f));*/
-	/*
-	int extraProps = 0;
-	numProps += extraProps;
-	for (int i = 0; i < extraProps; ++i)
-	{
-		float x = static_cast<float>(rand() % 7 * (1 - 2 * (rand() % 2)));
-		float z = static_cast<float>(rand() % 7 * (1 - 2 * (rand() % 2)));
+	
+	//positions.push_back(glm::vec3(5.0f, 0.0f, 0.0f));
+	//positions.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+	//positions.push_back(glm::vec3(-1.0f, 0.0f, 0.0f));
+	//positions.push_back(glm::vec3(0.0f, 0.0f, 5.0f));
+	//positions.push_back(glm::vec3(0.0f, 0.0f, -5.0f));
+	//
+	//int extraProps = 0;
+	//numProps += extraProps;
+	//for (int i = 0; i < extraProps; ++i)
+	//{
+	//	float x = static_cast<float>(rand() % 7 * (1 - 2 * (rand() % 2)));
+	//	float z = static_cast<float>(rand() % 7 * (1 - 2 * (rand() % 2)));
 
-		positions.push_back(glm::vec3(x, 0.0f, z));
-	}*/
+	//	positions.push_back(glm::vec3(x, 0.0f, z));
+	//}
 
 	
 	positions.push_back(glm::vec3(1.8f, 10.0f, -2.3f));
@@ -682,16 +681,16 @@ void CreateHUD()
 									);
 	mScene->AddEntity(quad);
 
-	/*
-	IRenderer* mapRenderer = DBG_NEW GUIRenderer(mEngine->GetShader("s_gui"),
-		static_cast<Texture*>(mEngine->GetTexture("map")),
-		87.0f,
-		73.0f
-	);
-	GameEntity* map = DBG_NEW GameEntity(DBG_NEW Transformation(glm::vec3(420.0f, -300.0f, -1.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
-		mapRenderer
-	);
-	mScene->AddGameEntity(map);*/
+	
+	//IRenderer* mapRenderer = DBG_NEW GUIRenderer(mEngine->GetShader("s_gui"),
+	//	static_cast<Texture*>(mEngine->GetTexture("map")),
+	//	87.0f,
+	//	73.0f
+	//);
+	//GameEntity* map = DBG_NEW GameEntity(DBG_NEW Transformation(glm::vec3(420.0f, -300.0f, -1.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
+	//	mapRenderer
+	//);
+	//mScene->AddGameEntity(map);
 }
 
 void CreateParticlesTest()
@@ -760,36 +759,36 @@ void CreateTextTest()
 			texts[i], false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
 		mScene->AddEntity(mText[i]);
 	}
-	/*float x = 0.0f;
-	float z = 0.0f;
-	float height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
+	//float x = 0.0f;
+	//float z = 0.0f;
+	//float height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
 
-	IMaterial* material3D = mEngine->GetMaterial(MaterialsLibrary::TEXT3D_MATERIAL_NAME);
-	material3D->AddEffect(DBG_NEW MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
-	material3D->AddEffect(DBG_NEW MaterialEffectText(	glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
-													glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
-													0.4f,
-													0.1f,
-													0.3f,
-													0.6f,
-													glm::vec2(0.0f)));
+	//IMaterial* material3D = mEngine->GetMaterial(MaterialsLibrary::TEXT3D_MATERIAL_NAME);
+	//material3D->AddEffect(DBG_NEW MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
+	//material3D->AddEffect(DBG_NEW MaterialEffectText(	glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+	//												glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
+	//												0.4f,
+	//												0.1f,
+	//												0.3f,
+	//												0.6f,
+	//												glm::vec2(0.0f)));
 
-	Text* mTestText = DBG_NEW Text(	DBG_NEW Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.01f)),
-								material3D, font,
-								"Origin", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
-	mScene->AddEntity(mTestText);*/
-	/*
-	x = 10.0f;
-	z = 10.0f;
-	height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
+	//Text* mTestText = DBG_NEW Text(	DBG_NEW Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(0.01f)),
+	//							material3D, font,
+	//							"Origin", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
+	//mScene->AddEntity(mTestText);
 
-	mTestText = DBG_NEW Text(DBG_NEW Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(.01f)),
-		mEngine->GetShader("s_text"), mEngine->GetFont("OCR A Extended"),
-		"Market", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
-	mTestText->SetOutlineColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.8f));
-	mTestText->SetBorderParameters(0.5f, 0.1f, 0.5f, 0.4f);
-	mTestText->SetShadow(glm::vec2(0.002f, 0.002f));
-	mScene->AddGameEntity(mTestText);*/
+	//x = 10.0f;
+	//z = 10.0f;
+	//height = mTerrain->GetHeight(glm::vec2(x, z)) + 1.0f;
+
+	//mTestText = DBG_NEW Text(DBG_NEW Transformation(glm::vec3(x, height, z), glm::vec3(0.0f), glm::vec3(.01f)),
+	//	mEngine->GetShader("s_text"), mEngine->GetFont("OCR A Extended"),
+	//	"Market", true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1, 1, false);
+	//mTestText->SetOutlineColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.8f));
+	//mTestText->SetBorderParameters(0.5f, 0.1f, 0.5f, 0.4f);
+	//mTestText->SetShadow(glm::vec2(0.002f, 0.002f));
+	//mScene->AddGameEntity(mTestText);
 }
 
 void CreateTerrain()
@@ -887,25 +886,6 @@ void CreateGameCameraEntity()
 	mScene->AddEntity(mCamera);
 }
 
-void CreateSkybox()
-{
-	//SKYBOX the last
-	if (mIsSkyboxEnabled)
-	{
-		IMaterial* material = mEngine->GetMaterial("skybox");
-
-		SkyBoxRenderer* skyboxRenderer = DBG_NEW SkyBoxRenderer(mEngine->GetModel("skybox"), material);
-		skyboxRenderer->SetLayer(IRenderer::LAYER_PARTICLES);
-		
-		GameEntity* skyBox = DBG_NEW GameEntity(
-			DBG_NEW Transformation(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(100.0f)),
-			skyboxRenderer
-		);
-		skyBox->AddComponent(DBG_NEW RotationComponent(glm::vec3(0.0f, 1.0f, 0.0f), SKYBOX_ROTATION_SPEED));
-		mScene->AddEntity(skyBox);
-	}
-}
-
 void CreateCameras()
 {
 	float screenWidth = static_cast<float>(mEngine->GetScreenWidth());
@@ -936,15 +916,15 @@ void CreateCameras()
 	mGameplayCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
 	mEngine->AddCamera(mGameplayCamera);
 
-	/*
-	if (mConfiguration == QUADTREE_WITH_CAMERA)
-	{
-		mCameraTest = DBG_NEW PerspectiveCamera("gameplay_test", VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
-		mCameraTest->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-		mCameraTest->SetTarget(glm::vec3(0.0f, 0.0f, 10.0f));
-		mCameraTest->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
-		mEngine->AddCamera(mCameraTest);
-	}*/
+	
+	//if (mConfiguration == QUADTREE_WITH_CAMERA)
+	//{
+	//	mCameraTest = DBG_NEW PerspectiveCamera("gameplay_test", VIEW_ANGLE, aspectRatio, NEAR_PLANE, FAR_PLANE);
+	//	mCameraTest->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	//	mCameraTest->SetTarget(glm::vec3(0.0f, 0.0f, 10.0f));
+	//	mCameraTest->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	//	mEngine->AddCamera(mCameraTest);
+	//}
 }
 
 void CreateQuadTreeGrid(int levels, int maxWidth, const glm::vec3 color)
@@ -967,27 +947,27 @@ void CreateQuadTreeGrid(int levels, int maxWidth, const glm::vec3 color)
 void CreateQuads()
 {
 	mQuadTreeBox = CreateQuadTreeBoxEntity(aabbSize, glm::vec3(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	/*
-	GameEntity* entity = CreateQuadTreeBoxEntity(1.3f, glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
-	mQuadTree.AddGameEntity(entity);
-	mQuadTreeEntities.push_back(entity);
+	
+	//GameEntity* entity = CreateQuadTreeBoxEntity(1.3f, glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
+	//mQuadTree.AddGameEntity(entity);
+	//mQuadTreeEntities.push_back(entity);
 
-	entity = CreateQuadTreeBoxEntity(0.05f, glm::vec3(1.7f, 0.0f, 1.7f), glm::vec3(0.0f, 1.0f, 1.0f));
-	mQuadTree.AddGameEntity(entity);
-	mQuadTreeEntities.push_back(entity);
+	//entity = CreateQuadTreeBoxEntity(0.05f, glm::vec3(1.7f, 0.0f, 1.7f), glm::vec3(0.0f, 1.0f, 1.0f));
+	//mQuadTree.AddGameEntity(entity);
+	//mQuadTreeEntities.push_back(entity);
 
-	entity = CreateQuadTreeBoxEntity(0.1f, glm::vec3(-1.5f, 0.0f, -1.5f), glm::vec3(0.0f, 1.0f, 1.0f));
-	mQuadTree.AddGameEntity(entity);
-	mQuadTreeEntities.push_back(entity);
+	//entity = CreateQuadTreeBoxEntity(0.1f, glm::vec3(-1.5f, 0.0f, -1.5f), glm::vec3(0.0f, 1.0f, 1.0f));
+	//mQuadTree.AddGameEntity(entity);
+	//mQuadTreeEntities.push_back(entity);
 
-	entity = CreateQuadTreeBoxEntity(0.8f, glm::vec3(-0.9f, 0.0f, 1.1f), glm::vec3(0.0f, 1.0f, 1.0f));
-	mQuadTree.AddGameEntity(entity);
-	mQuadTreeEntities.push_back(entity);
+	//entity = CreateQuadTreeBoxEntity(0.8f, glm::vec3(-0.9f, 0.0f, 1.1f), glm::vec3(0.0f, 1.0f, 1.0f));
+	//mQuadTree.AddGameEntity(entity);
+	//mQuadTreeEntities.push_back(entity);
 
-	entity = CreateQuadTreeBoxEntity(0.2f, glm::vec3(-0.9f, 0.0f, 0.3f), glm::vec3(0.0f, 1.0f, 1.0f));
-	mQuadTree.AddGameEntity(entity);
-	mQuadTreeEntities.push_back(entity);
-	*/
+	//entity = CreateQuadTreeBoxEntity(0.2f, glm::vec3(-0.9f, 0.0f, 0.3f), glm::vec3(0.0f, 1.0f, 1.0f));
+	//mQuadTree.AddGameEntity(entity);
+	//mQuadTreeEntities.push_back(entity);
+	
 	
 	int maxBoxes = 20;
 	for (int i = 0; i < maxBoxes; ++i)
@@ -1058,11 +1038,6 @@ void CreateEntities()
 	if (mIsEnergyWallEnabled)
 	{
 		CreateEnergyWall();
-	}
-
-	if (mIsSkyboxEnabled)
-	{
-		CreateSkybox();
 	}
 
 	if (mConfiguration == QUADTREE)
@@ -1274,24 +1249,24 @@ void UpdateQuadTreeBox()
 
 void UpdateCameraAABB()
 {
-	/*
-	glm::vec3 position(0.0f);
-	glm::vec3 rotation(0.0f);
-	glm::vec3 scale(1.0f);
-
-	rotation = mPlayer->GetTransformation()->GetRotation();
-	glm::mat4 matrix(1.0f);
-	matrix = glm::rotate(matrix, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-	matrix = glm::rotate(matrix, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-	matrix = glm::rotate(matrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-
-	glm::vec3 targetPos = mPlayer->GetTransformation()->GetPosition();
-	glm::vec3 forward = matrix * glm::vec4(0.0f, 0.0f, 10.0f, 0.0f);
-	forward.y = 0.0f;
-	mCameraTargetEntity->GetTransformation()->SetPosition(targetPos + forward);
 	
-	mCameraTest->SetTarget(targetPos + forward);
-	mCameraTest->SetPosition(targetPos);*/
+	//glm::vec3 position(0.0f);
+	//glm::vec3 rotation(0.0f);
+	//glm::vec3 scale(1.0f);
+
+	//rotation = mPlayer->GetTransformation()->GetRotation();
+	//glm::mat4 matrix(1.0f);
+	//matrix = glm::rotate(matrix, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	//matrix = glm::rotate(matrix, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	//matrix = glm::rotate(matrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+	//glm::vec3 targetPos = mPlayer->GetTransformation()->GetPosition();
+	//glm::vec3 forward = matrix * glm::vec4(0.0f, 0.0f, 10.0f, 0.0f);
+	//forward.y = 0.0f;
+	//mCameraTargetEntity->GetTransformation()->SetPosition(targetPos + forward);
+	//
+	//mCameraTest->SetTarget(targetPos + forward);
+	//mCameraTest->SetPosition(targetPos);
 	
 	AABB aabb = mGameplayCamera->GetAABB();// mCameraTest->GetAABB();
 	mCameraAABBEntity->GetTransformation()->SetPosition(aabb.GetCenter());
@@ -1406,7 +1381,6 @@ void SetupConfiguration()
 		mIsVegetationEnabled = false;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
 		//mWaterHeight = 0.0f;
 		mIsTextEnabled = true;
@@ -1422,7 +1396,6 @@ void SetupConfiguration()
 		mIsVegetationEnabled = true;
 		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = true;
-		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
@@ -1437,7 +1410,6 @@ void SetupConfiguration()
 		mIsVegetationEnabled = false;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = false;
 		mIsStatisticsVisible = false;
@@ -1452,7 +1424,6 @@ void SetupConfiguration()
 		mIsVegetationEnabled = false;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
@@ -1467,7 +1438,6 @@ void SetupConfiguration()
 		mIsVegetationEnabled = false;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = true;
-		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
@@ -1484,7 +1454,6 @@ void SetupConfiguration()
 		mIsVegetationEnabled = false;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = true;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
@@ -1500,7 +1469,6 @@ void SetupConfiguration()
 		mIsVegetationEnabled = false;
 		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = false;
 		mIsStatisticsVisible = true;
@@ -1516,7 +1484,6 @@ void SetupConfiguration()
 		mIsVegetationEnabled = false;
 		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = false;
 		mIsStatisticsVisible = false;
@@ -1531,7 +1498,6 @@ void SetupConfiguration()
 		mIsVegetationEnabled = true;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
 		mIsTextEnabled = false;
 		mIsStatisticsVisible = true;
@@ -1548,7 +1514,6 @@ void SetupConfiguration()
 		mIsVegetationEnabled = false;
 		mIsPropsEnabled = false;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
 		mIsTextEnabled = false;
 		mIsStatisticsVisible = false;
@@ -1563,7 +1528,6 @@ void SetupConfiguration()
 		mIsVegetationEnabled = true;
 		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = false;
-		mIsSkyboxEnabled = false;
 		mIsTerrainFlat = true;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
@@ -1579,7 +1543,6 @@ void SetupConfiguration()
 		mIsVegetationEnabled = true;
 		mIsPropsEnabled = true;
 		mIsEnergyWallEnabled = true;
-		mIsSkyboxEnabled = true;
 		mIsTerrainFlat = false;
 		mIsTextEnabled = true;
 		mIsStatisticsVisible = true;
@@ -1589,13 +1552,14 @@ void SetupConfiguration()
 		break;
 	}
 }
-
+*/
 void Initialize()
 {
-	SetupConfiguration();
+	mEngine = std::make_shared<NGenius>("Demo", SCREEN_WIDTH, SCREEN_HEIGHT);
+	//SetupConfiguration();
 
-	mEngine->RegisterInputHandler(std::bind(&UpdateInput, std::placeholders::_1));
-	mEngine->RegisterUpdateHandler(std::bind(&Update, std::placeholders::_1));
+	//mEngine->RegisterInputHandler(std::bind(&UpdateInput, std::placeholders::_1));
+	//mEngine->RegisterUpdateHandler(std::bind(&Update, std::placeholders::_1));
 
 	mEngine->Init(mIsFullScreen);
 
@@ -1616,6 +1580,9 @@ int main(void)
 
 	mEngine->SetCastingShadowsTarget(mPlayer);
 	mEngine->Run();
+
+	mEngine->ShutDown();
+	mEngine.reset();
 
 	_CrtDumpMemoryLeaks();
 

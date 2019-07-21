@@ -2,7 +2,7 @@
 #include "SpacePartitionSystem.h"
 #include "renderSystem/RenderSystem.h"
 #include "../scene/quadtree/GameEntityQuadTree.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../camera/ICamera.h"
 #include "../camera/PerspectiveCamera.h"
 #include "../components/SpacePartitionComponent.h"
@@ -19,8 +19,7 @@ SpacePartitionSystem::SpacePartitionSystem() :
 
 SpacePartitionSystem::~SpacePartitionSystem()
 {
-	mNewEntitiesToAdd.clear();
-	mEntitiesToRemove.clear();
+	Release();
 }
 
 void SpacePartitionSystem::Start()
@@ -30,9 +29,21 @@ void SpacePartitionSystem::Start()
 
 void SpacePartitionSystem::Build()
 {
+	if (mHasBuilt)
+	{
+		Release();
+	}
 	mAABB.Expand(glm::vec3(5.0f));
 	mQuadTree = DBG_NEW GameEntityQuadTree(mAABB);
 	mHasBuilt = true;
+}
+
+void SpacePartitionSystem::Release()
+{
+	mNewEntitiesToAdd.clear();
+	mEntitiesToRemove.clear();
+	delete mQuadTree;
+	mHasBuilt = false;
 }
 
 void SpacePartitionSystem::Update(float elapsedTime)
@@ -61,7 +72,7 @@ void SpacePartitionSystem::MarkGameEntitiesInsideCameraAsVisible(ICamera* camera
 		
 		//Query(aabb, entities);
 		Query(aabb, frustum, mLastQueryResult);
-		for (GameEntity* entity : mLastQueryResult)
+		for (IGameEntity* entity : mLastQueryResult)
 		{
 			entity->GetComponent<SpacePartitionComponent>()->SetVisibility(true);
 		}
@@ -70,29 +81,29 @@ void SpacePartitionSystem::MarkGameEntitiesInsideCameraAsVisible(ICamera* camera
 
 void SpacePartitionSystem::UpdateVisibilityLastQueryResult()
 {
-	for (GameEntity* entity : mLastQueryResult)
+	for (IGameEntity* entity : mLastQueryResult)
 	{
 		entity->GetComponent<SpacePartitionComponent>()->SetVisibility(false);
 	}
 }
 
-void SpacePartitionSystem::Query(const AABB& aabb, std::vector<GameEntity*>& result) const
+void SpacePartitionSystem::Query(const AABB& aabb, std::vector<IGameEntity*>& result) const
 {
 	mQuadTree->Query(aabb, result);
 }
 
-void SpacePartitionSystem::Query(const AABB& aabb, const Frustum& frustum, std::vector<GameEntity*>& result) const
+void SpacePartitionSystem::Query(const AABB& aabb, const Frustum& frustum, std::vector<IGameEntity*>& result) const
 {
 	mQuadTree->Query(aabb, frustum, result);
 }
 
 void SpacePartitionSystem::SetSpacePartitionComponentsEnabled(bool enable)
 {
-	std::vector<GameEntity*> result;
+	std::vector<IGameEntity*> result;
 
 	Query(mAABB, result);
 
-	for (GameEntity* entity : result)
+	for (IGameEntity* entity : result)
 	{
 		entity->GetComponent<SpacePartitionComponent>()->SetEnabled(enable);
 	}
@@ -103,23 +114,23 @@ unsigned int SpacePartitionSystem::GetNumberEntities() const
 	return mQuadTree->GetNumEntities();
 }
 
-void SpacePartitionSystem::AddEntity(GameEntity* entity)
+void SpacePartitionSystem::AddEntity(IGameEntity* entity)
 {
 	mNewEntitiesToAdd.push_back(entity);
 }
 
-void SpacePartitionSystem::RemoveEntity(GameEntity* entity)
+void SpacePartitionSystem::RemoveEntity(IGameEntity* entity)
 {
 	mEntitiesToRemove.push_back(entity);
 }
 
-bool SpacePartitionSystem::HasSpacePartitionComponents(const GameEntity* entity)
+bool SpacePartitionSystem::HasSpacePartitionComponents(const IGameEntity* entity)
 {
 	return	entity->GetRenderer() != nullptr && entity->HasComponent<SpacePartitionComponent>() && 
 			entity->GetRenderer()->GetLayer() != IRenderer::LAYER_GUI;
 }
 
-void SpacePartitionSystem::OnGameEntityAdded(GameEntity* entity)
+void SpacePartitionSystem::OnGameEntityAdded(IGameEntity* entity)
 {
 	if (HasSpacePartitionComponents(entity))
 	{
@@ -128,7 +139,7 @@ void SpacePartitionSystem::OnGameEntityAdded(GameEntity* entity)
 	}
 }
 
-void SpacePartitionSystem::OnGameEntityRemoved(GameEntity* entity)
+void SpacePartitionSystem::OnGameEntityRemoved(IGameEntity* entity)
 {
 	if (HasSpacePartitionComponents(entity))
 	{
@@ -140,7 +151,7 @@ void SpacePartitionSystem::AddNewEntities()
 {
 	assert(mQuadTree != nullptr);
 
-	for (GameEntity* entity : mNewEntitiesToAdd)
+	for (IGameEntity* entity : mNewEntitiesToAdd)
 	{
 		mQuadTree->AddGameEntity(entity);
 	}
@@ -151,7 +162,7 @@ void SpacePartitionSystem::RemoveEntities()
 {
 	assert(mQuadTree != nullptr);
 
-	for (GameEntity* entity : mEntitiesToRemove)
+	for (IGameEntity* entity : mEntitiesToRemove)
 	{
 		mQuadTree->RemoveGameEntity(entity);
 	}

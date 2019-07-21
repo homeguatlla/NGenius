@@ -3,11 +3,13 @@
 #include <glm/glm.hpp>
 #include<string>
 
+class IGameEntity;
+
 class PhysicsComponent : public IComponent
 {
 	bool mIsStatic;
 	glm::vec3 mVelocity;
-	const glm::vec3 mGravity;
+	glm::vec3 mGravity;
 
 public:
 	PhysicsComponent(bool isStatic, const glm::vec3& gravity);
@@ -19,7 +21,7 @@ public:
 	bool IsStatic() const;
 
 	static std::string GetClassName() { return std::string("PhysicsComponent"); }
-	static IComponent* Create();
+	static IComponent* Create(IGameEntity* entity);
 
 private:
 	PhysicsComponent() = default;

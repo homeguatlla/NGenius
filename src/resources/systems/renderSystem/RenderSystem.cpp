@@ -1032,7 +1032,7 @@ void RenderSystem::SetCastingShadowsParameters(const glm::vec3& lightDirection, 
 	mShadowsRenderPass->SetCastingShadowsParameters(lightDirection, pfcCounter);
 }
 
-void RenderSystem::SetCastingShadowsTarget(const GameEntity* target)
+void RenderSystem::SetCastingShadowsTarget(const IGameEntity* target)
 {
 	assert(mShadowsRenderPass != nullptr);
 	mShadowsRenderPass->SetCastingShadowsTarget(target);

@@ -22,7 +22,7 @@ mLength(length),
 mWaterSpeed(speed),
 mCurrentWaterSpeed(speed)
 {
-	Create(material);
+	CreateWater(material);
 }
 
 Water::~Water()
@@ -37,15 +37,10 @@ void Water::Update(float elapsedTime)
 	mWaterEffect->SetSpeed(mCurrentWaterSpeed);
 }
 
-GameEntity* Water::CreateGameEntity()
-{
-	return DBG_NEW Water();
-}
-
 void Water::Build(RenderSystem* renderSystem)
 {
 	IMaterial* material = renderSystem->GetMaterial(mMaterialName);
-	Create(material);
+	CreateWater(material);
 
 	//Setting the y of the water entity into the water position the renderer says.
 	//Remember that can only exist ONE water entity at moment
@@ -61,6 +56,11 @@ void Water::ReadFrom(core::utils::IDeserializer* source)
 	source->ReadParameter("material", mMaterialName);
 	source->ReadParameter("wide", &mWide);
 	source->ReadParameter("length", &mLength);
+}
+
+IGameEntity* Water::DoCreate()
+{
+	return DBG_NEW Water();
 }
 
 void Water::CreateModel()
@@ -90,7 +90,7 @@ void Water::CreateModel()
 	mModel = DBG_NEW Model(new Mesh(vertexs, uv, indices));
 }
 
-void Water::Create(IMaterial* material)
+void Water::CreateWater(IMaterial* material)
 {
 	CreateModel();
 	

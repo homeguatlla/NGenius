@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "RotationComponent.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../Transformation.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../../utils/serializer/XMLDeserializer.h"
@@ -30,9 +30,12 @@ void RotationComponent::UpdateInternal(float elapsedTime)
 	transformation->SetRotation(rotation);
 }
 
-IComponent* RotationComponent::Create()
+IComponent* RotationComponent::Create(IGameEntity* entity)
 {
-	return DBG_NEW RotationComponent();
+	RotationComponent* component = DBG_NEW RotationComponent();
+	entity->AddComponent(component);
+
+	return component;
 }
 
 void RotationComponent::DoReadFrom(core::utils::IDeserializer* source)

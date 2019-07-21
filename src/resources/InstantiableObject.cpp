@@ -7,11 +7,7 @@ std::map<std::string, InstantiableObject::CameraCreatorFunction> InstantiableObj
 std::map<std::string, InstantiableObject::ShaderCreatorFunction> InstantiableObject::mShadersFactory;
 std::map<std::string, InstantiableObject::MaterialEffectCreatorFunction> InstantiableObject::mMaterialEffectFactory;
 std::map<std::string, InstantiableObject::ComponentCreatorFunction> InstantiableObject::mComponentsFactory;
-
-void InstantiableObject::RegisterType(const std::string& name, IFactory* factory)
-{
-	mFactories[name] = factory;
-}
+std::map<std::string, InstantiableObject::GameEntityCreatorFunction> InstantiableObject::mGameEntitiesFactory;
 
 IMaterialEffect* InstantiableObject::CreateMaterialEffect(const std::string& name, IMaterial* material)
 {
@@ -25,11 +21,11 @@ IMaterialEffect* InstantiableObject::CreateMaterialEffect(const std::string& nam
 	}
 }
 
-GameEntity* InstantiableObject::CreateEntity(const std::string& name)
+IGameEntity* InstantiableObject::CreateEntity(const std::string& name)
 {
-	if (mFactories.find(name) != mFactories.end())
+	if (mGameEntitiesFactory.find(name) != mGameEntitiesFactory.end())
 	{
-		return mFactories[name]->CreateGameEntity();
+		return mGameEntitiesFactory[name]();
 	}
 	else
 	{
@@ -85,11 +81,11 @@ IShaderProgram* InstantiableObject::CreateShader(const std::string& name)
 	}
 }
 
-IComponent* InstantiableObject::CreateComponent(const std::string& name)
+IComponent* InstantiableObject::CreateComponent(const std::string& name, IGameEntity* entity)
 {
 	if (mComponentsFactory.find(name) != mComponentsFactory.end())
 	{
-		return mComponentsFactory[name]();
+		return mComponentsFactory[name](entity);
 	}
 	else
 	{

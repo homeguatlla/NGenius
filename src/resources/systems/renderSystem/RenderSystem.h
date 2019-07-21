@@ -12,6 +12,7 @@ class ICamera;
 class RenderPass;
 class Texture;
 class ITexture;
+class IGameEntity;
 
 class ShadersLibrary;
 class TexturesLibrary;
@@ -143,7 +144,7 @@ public:
 	VertexBuffersManager& GetVertexBufferManager();
 
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
-	void SetCastingShadowsTarget(const GameEntity* target);
+	void SetCastingShadowsTarget(const IGameEntity* target);
 	void SetCastingShadowsEnabled(bool enabled);
 
 	void SetFogEnabled(bool enabled);

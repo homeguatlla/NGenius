@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "IComponent.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../../utils/serializer/XMLDeserializer.h"
+
+#include <typeinfo.h>
+#include <assert.h>
 
 IComponent::IComponent() : mIsEnabled(true)
 {
@@ -13,7 +16,7 @@ IComponent::~IComponent()
 {
 }
 
-void IComponent::SetParent(GameEntity* parent)
+void IComponent::SetParent(IGameEntity* parent)
 {
 	mParent = parent;
 }

@@ -244,6 +244,7 @@
     <ClInclude Include="src\resources\GameEntity.h" />
     <ClInclude Include="src\resources\GameEvent.h" />
     <ClInclude Include="src\resources\IFactory.h" />
+    <ClInclude Include="src\resources\IGameEntity.h" />
     <ClInclude Include="src\resources\InstantiableObject.h" />
     <ClInclude Include="src\resources\materials\BasicMaterial.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectClippingPlane.h" />

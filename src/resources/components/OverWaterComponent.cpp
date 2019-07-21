@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "OverWaterComponent.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../Memory.h"
 #include <glm/glm.hpp>
@@ -23,9 +23,12 @@ float OverWaterComponent::GetWaterHeight() const
 	return mWaterHeight;
 }
 
-IComponent* OverWaterComponent::Create()
+IComponent* OverWaterComponent::Create(IGameEntity* entity)
 {
-	return DBG_NEW OverWaterComponent();
+	OverWaterComponent* component = DBG_NEW OverWaterComponent();
+	entity->AddComponent(component);
+
+	return component;
 }
 
 void OverWaterComponent::DoReadFrom(core::utils::IDeserializer* source)

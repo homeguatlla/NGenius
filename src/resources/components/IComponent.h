@@ -1,20 +1,20 @@
 #pragma once
 #include "../../utils/serializer/ISerializable.h"
 
-class GameEntity;
+class IGameEntity;
 
 class IComponent : public core::utils::ISerializable
 {
 	bool mIsEnabled;
 
 protected:
-	GameEntity* mParent;
+	IGameEntity* mParent;
 
 public:
 	IComponent();
 	virtual ~IComponent();
 
-	void SetParent(GameEntity* parent);
+	void SetParent(IGameEntity* parent);
 	bool IsEnabled() const;
 	void SetEnabled(bool enabled);
 

@@ -6,7 +6,7 @@ class Model;
 class IMaterial;
 class MaterialEffectFloat;
 
-class EnergyWall : public GameEntity
+class EnergyWall : public GameEntity<EnergyWall>
 {
 	IMaterial* mMaterial;
 	Model* mModel;

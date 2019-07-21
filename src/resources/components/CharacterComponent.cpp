@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CharacterComponent.h"
 #include "../GameEvent.h"
+#include "../IGameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../Memory.h"
 
@@ -38,9 +39,12 @@ const GameEvent* CharacterComponent::ConsumeEvent()
 	return event;
 }
 
-IComponent* CharacterComponent::Create()
+IComponent* CharacterComponent::Create(IGameEntity* entity)
 {
-	return DBG_NEW CharacterComponent();
+	CharacterComponent* component = DBG_NEW CharacterComponent();
+	entity->AddComponent(component);
+
+	return component;
 }
 
 void CharacterComponent::DoReadFrom(core::utils::IDeserializer* source)
