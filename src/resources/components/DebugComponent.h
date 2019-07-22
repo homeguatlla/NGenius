@@ -14,7 +14,7 @@ public:
 	explicit DebugComponent(IRenderer* renderer);
 	~DebugComponent();
 
-	void Init();
+	void Init(RenderSystem* renderSystem) override;
 	bool IsBoundingBoxVisible() const;
 	void SetBoundingBoxVisibility(bool visible);
 	IRenderer* GetBoundingBoxRenderer();
@@ -24,8 +24,8 @@ public:
 
 private:
 	DebugComponent() = default;
-	void DoReadFrom(core::utils::IDeserializer* source);
-	void DoWriteTo(core::utils::ISerializer* destination);
+	void DoReadFrom(core::utils::IDeserializer* source) override;
+	void DoWriteTo(core::utils::ISerializer* destination) override;
 	DebugComponent* DoClone() const override;
 };
 

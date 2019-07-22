@@ -40,8 +40,8 @@ private:
 	float CalculateVerticalDistance() const;
 	glm::vec3 CalculateCameraPosition(float horizontalDistance, float verticalDistance) const;
 
-	void DoReadFrom(core::utils::IDeserializer* source);
-	void DoWriteTo(core::utils::ISerializer* destination);
+	void DoReadFrom(core::utils::IDeserializer* source) override;
+	void DoWriteTo(core::utils::ISerializer* destination) override;
 	ThirdPersonCameraComponent* DoClone() const;
 };
 

@@ -22,8 +22,8 @@ public:
 
 private:
 	BillboardComponent() = default;
-	void DoReadFrom(core::utils::IDeserializer* source);
-	void DoWriteTo(core::utils::ISerializer* destination);
+	void DoReadFrom(core::utils::IDeserializer* source) override;
+	void DoWriteTo(core::utils::ISerializer* destination) override;
 	void ModifyModelMatrixToAvoidRotations(const glm::mat4& viewMatrix, const glm::vec3& scale, float angleZ, glm::mat4& modelMatrix);
 };
 

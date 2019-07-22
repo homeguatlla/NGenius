@@ -17,8 +17,8 @@ public:
 
 private:
 	CameraComponent() = default;
-	void DoReadFrom(core::utils::IDeserializer* source);
-	void DoWriteTo(core::utils::ISerializer* destination);
+	void DoReadFrom(core::utils::IDeserializer* source) override;
+	void DoWriteTo(core::utils::ISerializer* destination) override;
 	CameraComponent* DoClone() const override;
 };
 

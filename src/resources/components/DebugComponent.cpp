@@ -22,8 +22,13 @@ DebugComponent* DebugComponent::DoClone() const
 	return DBG_NEW DebugComponent(*this);
 }
 
-void DebugComponent::Init()
+void DebugComponent::Init(RenderSystem* renderSystem)
 {
+	if (mBoundingBoxRenderer == nullptr)
+	{
+		//mBoundingBoxRenderer = 
+	}
+
 	//boundingboxrenderer is of dimensions 1x1x1 and centered in origin in order the 
 	//next transformation works
 	mBoundingBoxRenderer->SetParent(mParent);

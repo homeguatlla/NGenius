@@ -17,9 +17,10 @@
 
 #include <algorithm>
 
-GameScene::GameScene(const std::string& name) :
+GameScene::GameScene(const std::string& name, RenderSystem* renderSystem) :
 mName(name),
-mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limits<float>::max()))
+mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limits<float>::max())),
+mRenderSystem { renderSystem }
 {
 	InstantiableObject::RegisterGameEntityType<GameEntity>();
 	//InstantiableObject::RegisterType("player", DBG_NEW Player());
@@ -39,11 +40,11 @@ void GameScene::Release()
 	ReleaseEntities(&mNewEntitiesToAdd);
 }
 
-void GameScene::Start(RenderSystem* renderSystem)
+void GameScene::Start()
 {
 	for (IGameEntity* entity : mNewEntitiesToAdd)
 	{
-		entity->Build(renderSystem);
+		entity->Build(mRenderSystem);
 	}
 }
 
@@ -78,7 +79,7 @@ std::vector<IGameEntity*>& GameScene::GetAllGameEntities()
 
 void GameScene::AddEntity(IGameEntity* entity)
 {
-	entity->Init();
+	entity->Init(mRenderSystem);
 
 	if (entity->GetRenderer() != nullptr)
 	{

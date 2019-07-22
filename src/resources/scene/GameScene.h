@@ -22,12 +22,13 @@ class GameScene : public core::utils::ISerializable, BaseVisitable<>
 	typedef std::vector<IGameSceneListener*>::iterator ListenersIterator;
 	std::string mName;
 	AABB mAABB;
+	RenderSystem* mRenderSystem;
 
 public:
-	GameScene(const std::string& name);
+	GameScene(const std::string& name, RenderSystem* renderSystem);
 	~GameScene();
 
-	void Start(RenderSystem* renderSystem);
+	void Start();
 
 	void Update(float elapsedTime);
 	void AddEntity(IGameEntity* entity);

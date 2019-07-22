@@ -30,7 +30,7 @@ public:
 	~BaseGameEntity();
 
 	// Heredado vía IGameEntity
-	void Init() override;
+	void Init(RenderSystem* renderSystem) override;
 	int GetID() const override { return mID; }
 	bool IsEnabled() const override	{ return mIsEnabled; }
 
@@ -117,11 +117,11 @@ BaseGameEntity<TD>::~BaseGameEntity()
 }
 
 template<class TD>
-void BaseGameEntity<TD>::Init()
+void BaseGameEntity<TD>::Init(RenderSystem* renderSystem)
 {
 	for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
 	{
-		it->second->Init();
+		it->second->Init(renderSystem);
 	}
 }
 

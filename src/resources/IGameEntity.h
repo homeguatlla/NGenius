@@ -15,7 +15,7 @@ class IGameEntity : public core::utils::ISerializable
 {
 public:
 	virtual ~IGameEntity() = default;
-	virtual void Init() = 0;
+	virtual void Init(RenderSystem* renderSystem) = 0;
 	virtual int GetID() const = 0;
 
 	virtual Transformation* GetTransformation() = 0;

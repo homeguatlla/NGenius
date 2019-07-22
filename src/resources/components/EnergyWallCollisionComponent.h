@@ -23,8 +23,8 @@ public:
 	static IComponent* Create(IGameEntity* entity);
 
 private:
-	void DoReadFrom(core::utils::IDeserializer* source);
-	void DoWriteTo(core::utils::ISerializer* destination);
+	void DoReadFrom(core::utils::IDeserializer* source) override;
+	void DoWriteTo(core::utils::ISerializer* destination) override;
 	EnergyWallCollisionComponent* DoClone() const override;
 };
 

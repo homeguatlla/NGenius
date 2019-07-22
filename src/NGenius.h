@@ -62,7 +62,7 @@ class NGenius : public core::utils::ISerializable, BaseVisitable<>, public std::
 	AnimationSystem* mAnimationSystem;
 	InputHandler* mInputHandler;
 	Statistics* mStatistics;
-	GameScene mGameScene;
+	GameScene* mGameScene;
 
 	std::unique_ptr<core::utils::FSM::StatesMachine<NGeniusState, FSMContext>> mStatesMachine;
 	std::shared_ptr<FSMContext> mFSMContext;
