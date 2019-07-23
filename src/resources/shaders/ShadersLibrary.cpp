@@ -25,6 +25,14 @@
 #include <string>
 #include <iostream>
 
+const char* ShadersLibrary::SHADOW_SHADER_NAME = "ShadowShader";
+const char* ShadersLibrary::DEFAULT_SHADER_NAME = "DefaultShader";
+const char* ShadersLibrary::OVERDRAW_SHADER_NAME = "OverdrawShader";
+const char* ShadersLibrary::TEXT_SHADER_NAME = "TextShader";
+const char* ShadersLibrary::GUI_SHADER_NAME = "GUIShader";
+const char* ShadersLibrary::NORMAL_MAP_SHADER_NAME = "NormalMapShader";
+const char* ShadersLibrary::CONTRAST_SHADER_NAME = "ContrastShader";
+
 
 ShadersLibrary::ShadersLibrary()
 {
@@ -46,13 +54,13 @@ ShadersLibrary::ShadersLibrary()
 
 void ShadersLibrary::Load()
 {
-	AddShader("DefaultShader", DBG_NEW DefaultShader());
-	AddShader("OverdrawShader", DBG_NEW OverdrawShader());
-	AddShader("TextShader", DBG_NEW TextShader());
-	AddShader("ShadowShader", DBG_NEW ShadowShader());
-	AddShader("GUIShader", DBG_NEW GUIShader());
-	AddShader("NormalMapShader", DBG_NEW NormalMapShader());
-	AddShader("ContrastShader", DBG_NEW ContrastShader());
+	AddShader(ShadersLibrary::DEFAULT_SHADER_NAME, DBG_NEW DefaultShader());
+	AddShader(ShadersLibrary::OVERDRAW_SHADER_NAME, DBG_NEW OverdrawShader());
+	AddShader(ShadersLibrary::TEXT_SHADER_NAME, DBG_NEW TextShader());
+	AddShader(ShadersLibrary::SHADOW_SHADER_NAME, DBG_NEW ShadowShader());
+	AddShader(ShadersLibrary::GUI_SHADER_NAME, DBG_NEW GUIShader());
+	AddShader(ShadersLibrary::NORMAL_MAP_SHADER_NAME, DBG_NEW NormalMapShader());
+	AddShader(ShadersLibrary::CONTRAST_SHADER_NAME, DBG_NEW ContrastShader());
 }
 
 void ShadersLibrary::AddShader(const char* name, IShaderProgram* shader)

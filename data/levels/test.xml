@@ -183,10 +183,12 @@
 			</camera>
 		</cameras>
 	</libraries>
+	<engine>
+		<debug is_enabled = "true" />
+	</engine>
 	<renderer>
 		<water is_enabled = "true" camera="gameplay_camera" height="11.4"/>
 		<shadows is_enabled = "false"/>
-		<debug is_enabled = "false" />
 		<fog is_enabled = "false" />
 		<render_layers>
 			<layer name="GUI" value="1"/>

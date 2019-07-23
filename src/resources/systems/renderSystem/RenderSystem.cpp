@@ -7,7 +7,7 @@
 
 #include "../../renderers/SkyBoxRenderer.h"
 
-#include "../../GameEntity.h"
+#include "../../IGameEntity.h"
 #include "../../camera/ICamera.h"
 #include "../../camera/PerspectiveCamera.h"
 #include "../../camera/OrthogonalCamera.h"
@@ -1153,7 +1153,7 @@ void RenderSystem::ReadRenderLayersFrom(core::utils::IDeserializer* source)
 void RenderSystem::ReadFogParameters(core::utils::IDeserializer* source)
 {
 	source->BeginAttribute("fog");
-		source->ReadParameter("is_enabled", &mIsFogEnabled);
+	source->ReadParameter("is_enabled", &mIsFogEnabled);
 	source->EndAttribute();
 }
 

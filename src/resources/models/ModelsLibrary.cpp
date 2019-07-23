@@ -12,6 +12,12 @@
 
 #include <iostream>
 
+const char* ModelsLibrary::CUBE_NAME = "cube";
+const char* ModelsLibrary::SKYBOX_NAME = "skybox";
+const char* ModelsLibrary::QUAD_NAME = "quad";
+const char* ModelsLibrary::GUI_QUAD_NAME = "gui_quad";
+const char* ModelsLibrary::PARTICLE_QUAD_NAME = "particle_quad";
+
 ModelsLibrary::ModelsLibrary(TexturesLibrary* texturesLibrary, AnimationsLibrary* animationsLibrary) : 
 	mTexturesLibrary(texturesLibrary),
 	mAnimationsLibrary(animationsLibrary)
@@ -27,13 +33,13 @@ void ModelsLibrary::Load()
 {
 	CreateCube();
 	CreateSkyBox();
-	CreateQuad("quad", 1.0f, 1.0f);
+	CreateQuad(ModelsLibrary::QUAD_NAME, 1.0f, 1.0f);
 	//necesitamos un gui_quad porque sino, cuando se construye (build) 
 	//buscará el atributo color_gradient. Si no lo tiene, que para el shader_gui no lo tiene, 
 	//después para las partículas no lo asignará y no les funcionará el color_gradient.
 	//creando tres quads, ya es diferente la cosa.
-	CreateQuad("gui_quad", 0.5f, 0.5f);
-	CreateQuad("particle_quad", 0.5f, 0.5f);
+	CreateQuad(ModelsLibrary::GUI_QUAD_NAME, 0.5f, 0.5f);
+	CreateQuad(ModelsLibrary::PARTICLE_QUAD_NAME, 0.5f, 0.5f);
 
 	//LoadModel("cube2", "data/models/cube/cube.obj", false, true);
 	//LoadModel("enano", "data/models/enano/enano.obj", false, true);
@@ -255,7 +261,7 @@ void ModelsLibrary::CreateSkyBox()
 	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexes);
 	Model* model = DBG_NEW Model(mMesh);
 
-	AddOrReplaceElement("skybox", model);
+	AddOrReplaceElement(ModelsLibrary::SKYBOX_NAME, model);
 }
 
 void ModelsLibrary::CreateCube()
@@ -314,7 +320,7 @@ void ModelsLibrary::CreateCube()
 	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexes);
 	Model* model = DBG_NEW Model(mMesh);
 
-	AddOrReplaceElement("cube", model);
+	AddOrReplaceElement(ModelsLibrary::CUBE_NAME, model);
 }
 
 void ModelsLibrary::CreateQuad(const std::string& name, float width, float height)

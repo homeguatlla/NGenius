@@ -52,6 +52,7 @@ void FreeModeState::OnEnter(float deltaTime)
 	mEngine->RegisterAllEventsInputListener(this);
 	mEngine->ChangeToCamera(mEngine->GetGameplayCamera()->GetName(), mEngine->GetFreeCamera()->GetName());
 	mFreeModeText->GetRenderer()->SetVisibility(true);
+	mEngine->SetDebugModeEnabled(true);
 }
 
 void FreeModeState::OnExit(float deltaTime)
@@ -59,6 +60,7 @@ void FreeModeState::OnExit(float deltaTime)
 	mEngine->UnRegisterInputListener(this);
 	mIsNormalModeKeyPressed = false;
 	mFreeModeText->GetRenderer()->SetVisibility(false);
+	mEngine->SetDebugModeEnabled(false);
 }
 
 void FreeModeState::OnReload()

@@ -2,7 +2,7 @@
 #include "ShadowsRenderPassSubSystem.h"
 
 #include "RenderSystem.h"
-#include "../../GameEntity.h"
+#include "../../IGameEntity.h"
 #include "../../camera/OrthogonalCamera.h"
 #include "../../camera/ICamera.h"
 
@@ -15,6 +15,7 @@
 #include "../../materials/effects/MaterialEffectMatrix4Array.h"
 #include "../../textures/ITexture.h"
 #include "../../textures/Texture.h"
+#include "../../shaders/ShadersLibrary.h"
 #include "../../../utils/serializer/XMLDeserializer.h"
 
 static const int SHADOWS_TEXTURE_SIZE = 2048;
@@ -167,7 +168,7 @@ RenderPass* ShadowsRenderPassSubSystem::CreateShadowRenderPass()
 	RenderPass* shadowPass = DBG_NEW RenderPass("shadows_render_pass", static_cast<ICamera*>(mShadowCastCamera), IRenderer::LAYER_OTHER);
 	shadowPass->SetFrameBufferOutput(frameShadowBuffer);
 
-	IMaterial* material = mRenderSystem->CreateMaterial("shadow", mRenderSystem->GetShader("s_shadow"));
+	IMaterial* material = mRenderSystem->CreateMaterial("shadow", mRenderSystem->GetShader(ShadersLibrary::SHADOW_SHADER_NAME));
 	material->AddEffect(new MaterialEffectDiffuseTexture(mShadowMapTexture, glm::vec3(1.0f), 1.0f));
 	//for animated models
 	material->AddEffect(new MaterialEffectMatrix4Array());

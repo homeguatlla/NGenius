@@ -29,12 +29,14 @@ void NormalModeState::OnEnter(float deltaTime)
 	{
 		mEngine->ChangeToCamera(mEngine->GetFreeCamera()->GetName(), mEngine->GetGameplayCamera()->GetName());
 	}
+	mEngine->SetDebugModeEnabled(true);
 }
 
 void NormalModeState::OnExit(float deltaTime)
 {
 	mEngine->UnRegisterInputListener(this);
 	mIsFreeModeKeyPressed = false;
+	mEngine->SetDebugModeEnabled(false);
 }
 
 void NormalModeState::OnUpdate(float deltaTime)

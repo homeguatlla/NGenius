@@ -11,8 +11,15 @@ class ModelsLibrary : public core::utils::ISerializable, public BaseLibrary<Mode
 {
 	TexturesLibrary* mTexturesLibrary;
 	AnimationsLibrary* mAnimationsLibrary;
+	
 
 public:
+	static const char* CUBE_NAME;
+	static const char* SKYBOX_NAME;
+	static const char* QUAD_NAME;
+	static const char* GUI_QUAD_NAME;
+	static const char* PARTICLE_QUAD_NAME;
+
 	ModelsLibrary(TexturesLibrary* texturesLibrary, AnimationsLibrary* animationsLibrary);
 	~ModelsLibrary();
 

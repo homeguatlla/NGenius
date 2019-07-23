@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "DebugComponent.h"
+#include "../systems/renderSystem/RenderSystem.h"
 #include "../renderers/IRenderer.h"
+#include "../renderers/WireframeRenderer.h"
+#include "../models/ModelsLibrary.h"
+#include "../materials/MaterialsLibrary.h"
 #include "../../AABB.h"
 #include "../IGameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
@@ -26,7 +30,9 @@ void DebugComponent::Init(RenderSystem* renderSystem)
 {
 	if (mBoundingBoxRenderer == nullptr)
 	{
-		//mBoundingBoxRenderer = 
+		mBoundingBoxRenderer = DBG_NEW WireframeRenderer(
+			renderSystem->GetModel(ModelsLibrary::CUBE_NAME), 
+			renderSystem->GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	}
 
 	//boundingboxrenderer is of dimensions 1x1x1 and centered in origin in order the 

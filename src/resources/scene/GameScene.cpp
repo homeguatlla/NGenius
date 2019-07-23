@@ -42,10 +42,6 @@ void GameScene::Release()
 
 void GameScene::Start()
 {
-	for (IGameEntity* entity : mNewEntitiesToAdd)
-	{
-		entity->Build(mRenderSystem);
-	}
 }
 
 void GameScene::Update(float elapsedTime)
@@ -79,6 +75,7 @@ std::vector<IGameEntity*>& GameScene::GetAllGameEntities()
 
 void GameScene::AddEntity(IGameEntity* entity)
 {
+	entity->Build(mRenderSystem);
 	entity->Init(mRenderSystem);
 
 	if (entity->GetRenderer() != nullptr)
@@ -169,6 +166,7 @@ void GameScene::ReadFrom(core::utils::IDeserializer* source)
 		if (entity != nullptr)
 		{
 			ReadComponentsFrom(entity, source);
+			AddEntity(entity);
 		}
 		source->NextAttribute();
 		numElements--;
@@ -203,7 +201,6 @@ IGameEntity* GameScene::ReadEntityFrom(core::utils::IDeserializer* source)
 	if (gameEntity != nullptr)
 	{
 		gameEntity->ReadFrom(source);
-		AddEntity(gameEntity);
 		return gameEntity;
 	}
 	return nullptr;
