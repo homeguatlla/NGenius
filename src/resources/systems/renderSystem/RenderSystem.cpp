@@ -6,6 +6,8 @@
 #include "PostProcessSubSystem.h"
 
 #include "../../renderers/SkyBoxRenderer.h"
+#include "../../renderers/IndicesRenderer.h"
+#include "../../renderers/PointsRenderer.h"
 
 #include "../../IGameEntity.h"
 #include "../../camera/ICamera.h"
@@ -92,6 +94,8 @@ mNumberRenderers(0)
 	InstantiableObject::RegisterCameraType<OrthogonalCamera>();
 
 	InstantiableObject::RegisterRendererType<SkyBoxRenderer>();
+	InstantiableObject::RegisterRendererType<IndicesRenderer>();
+	InstantiableObject::RegisterRendererType<PointsRenderer>();
 }
 
 RenderSystem::~RenderSystem()

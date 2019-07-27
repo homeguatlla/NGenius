@@ -11,10 +11,13 @@ class AnimationComponent : public IComponent
 {
 	std::map<std::string, Animation*> mAnimations;
 	Animation* mCurrentAnimation;
+	std::string mAnimationName;
 
 public:
 	AnimationComponent();
 	~AnimationComponent();
+
+	void Init(RenderSystem* renderSystem) override;
 
 	void AddAnimation(Animation* animation);
 	Animation* GetCurrentAnimation();

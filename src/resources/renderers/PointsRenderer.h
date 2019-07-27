@@ -1,6 +1,8 @@
 #pragma once
 #include "IRenderer.h"
+#include "../Memory.h"
 #include<string>
+
 
 class Model;
 class IMaterial;
@@ -16,7 +18,11 @@ public:
 	~PointsRenderer();
 
 	PointsRenderer* DoClone() const override { return nullptr; }
-	//const std::string GetName() const override;
+	static std::string GetClassName() { return std::string("PointsRenderer"); }
+	static IRenderer* Create(Model* model, IMaterial* material)
+	{
+		return DBG_NEW PointsRenderer(model, material);
+	}
 	void Draw() override;
 
 	unsigned int GetNumberTrianglesRendered() const override;

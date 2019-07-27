@@ -23,7 +23,7 @@ mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limi
 mRenderSystem { renderSystem }
 {
 	InstantiableObject::RegisterGameEntityType<GameEntity>();
-	//InstantiableObject::RegisterType("player", DBG_NEW Player());
+	InstantiableObject::RegisterGameEntityType<Player>();
 	InstantiableObject::RegisterGameEntityType<Terrain>();
 	InstantiableObject::RegisterGameEntityType<Water>();
 }

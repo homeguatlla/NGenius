@@ -232,27 +232,27 @@
 	</renderer>
 	<game_scene name="mainScene">
 		<entities counter="412">
-			<!--player is_enabled="true" model="farmer" material="player">
-				<transformation>
-					<position X="-1.318163" Y="5.474967" Z="-3.749299"/>
-					<rotation X="-1.570796" Y="-1.004369" Z="0.000000"/>
+			<player is_enabled="true" model="farmer" material="player" renderer="IndicesRenderer" layer="8">
+				<transformation> 
+					<position X="0" Y="10" Z="0"/>
+					<rotation X="-90" Y="0" Z="0.000000"/>
 					<scale X="0.180000" Y="0.180000" Z="0.180000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="animation_component"/>
-					<component is_enabled="true" type="character_component"/>
-					<component is_enabled="true" type="debug_component"/>
-					<component is_enabled="true" type="energy_wall_collision_component"/>
-					<component is_enabled="true" type="environment_modificator_component"/>
-					<component is_enabled="true" type="input_component">
+					<component is_enabled="true" type="AnimationComponent" animation="animation_0"/>
+					<component is_enabled="true" type="CharacterComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="EnergyWallCollisionComponent"/>
+					<component is_enabled="true" type="EnvironmentModificatorComponent"/>
+					<component is_enabled="true" type="InputComponent">
 						<converters/>
 					</component>
-					<component is_enabled="true" type="physics_component" is_static="0">
+					<component is_enabled="true" type="PhysicsComponent" is_static="0">
 						<gravity X="0.000000" Y="-9.800000" Z="0.000000"/>
 					</component>
-					<component is_enabled="true" type="collision_component"/>
+					<component is_enabled="true" type="CollisionComponent"/>
 				</components>
-			</player-->
+			</player>
 			<terrain is_enabled="true" material="terrain" scale="20" is_flat="false" heighmap_texture="terrain_heightmap">
 				<transformation>
 					<position X="0.000000" Y="0.000000" Z="0.000000"/>

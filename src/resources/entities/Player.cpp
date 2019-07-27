@@ -64,6 +64,16 @@ Player::~Player()
 {
 }
 
+void Player::ReadFrom(core::utils::IDeserializer* source)
+{
+	BaseGameEntity::ReadFrom(source);
+}
+
+IGameEntity* Player::DoCreate()
+{
+	return DBG_NEW Player();
+}
+
 void Player::Update(float elapsedTime)
 {
 	BaseGameEntity::Update(elapsedTime);
@@ -114,92 +124,98 @@ void Player::UpdateAnimations()
 void Player::UpdateGameEvents()
 {
 	CharacterComponent* characterComponent = GetComponent<CharacterComponent>();
-	while (characterComponent->HasEvents())
+	if (characterComponent != nullptr)
 	{
-		const GameEvent* event = characterComponent->ConsumeEvent();
-		switch (mState)
+		while (characterComponent->HasEvents())
 		{
-		case IDLE:
-		case MOVING:
-			if (event->IsOfType<ForwardEvent>())
+			const GameEvent* event = characterComponent->ConsumeEvent();
+			switch (mState)
 			{
-				const ForwardEvent* forwardEvent = static_cast<const ForwardEvent*>(event);
-				bool isPressed = forwardEvent->IsPressed();
-				
-				mHasMoved |= isPressed;
+			case IDLE:
+			case MOVING:
+				if (event->IsOfType<ForwardEvent>())
+				{
+					const ForwardEvent* forwardEvent = static_cast<const ForwardEvent*>(event);
+					bool isPressed = forwardEvent->IsPressed();
 
-				if (isPressed)
-				{
-					mCurrentRunSpeed = mRunSpeed;
-				}
-				else
-				{
-					mCurrentRunSpeed = 0.0f;
-				}
-			}
-			else if (event->IsOfType<BackwardEvent>())
-			{
-				const BackwardEvent* backwardEvent = static_cast<const BackwardEvent*>(event);
-				bool isPressed = backwardEvent->IsPressed();
+					mHasMoved |= isPressed;
 
-				mHasMoved |= isPressed;
+					if (isPressed)
+					{
+						mCurrentRunSpeed = mRunSpeed;
+					}
+					else
+					{
+						mCurrentRunSpeed = 0.0f;
+					}
+				}
+				else if (event->IsOfType<BackwardEvent>())
+				{
+					const BackwardEvent* backwardEvent = static_cast<const BackwardEvent*>(event);
+					bool isPressed = backwardEvent->IsPressed();
 
-				if (isPressed)
-				{
-					mCurrentRunSpeed = -mRunSpeed;
+					mHasMoved |= isPressed;
+
+					if (isPressed)
+					{
+						mCurrentRunSpeed = -mRunSpeed;
+					}
+					else
+					{
+						mCurrentRunSpeed = 0.0f;
+					}
 				}
-				else
+				else if (event->IsOfType<TurnEvent>())
 				{
-					mCurrentRunSpeed = 0.0f;
+					const TurnEvent* turnEvent = static_cast<const TurnEvent*>(event);
+					mHasMoved = true;
+					mCurrentTurnSpeed = mTurnSpeed * (mLastTurnX - turnEvent->GetTurn());
+					mLastTurnX = turnEvent->GetTurn();
 				}
+				else if (event->IsOfType<JumpEvent>())
+				{
+					mHasMoved = false;
+					mHasJumped = true;
+					mCurrentUpwardsSpeed = mUpwardsSpeed;
+				}
+				break;
+			default:
+				break;
 			}
-			else if (event->IsOfType<TurnEvent>())
-			{
-				const TurnEvent* turnEvent = static_cast<const TurnEvent*>(event);
-				mHasMoved = true;
-				mCurrentTurnSpeed = mTurnSpeed * (mLastTurnX - turnEvent->GetTurn());
-				mLastTurnX = turnEvent->GetTurn();
-			}
-			else if (event->IsOfType<JumpEvent>())
-			{
-				mHasMoved = false;
-				mHasJumped = true;
-				mCurrentUpwardsSpeed = mUpwardsSpeed;
-			} 
-		break;
-		default:
-			break;
 		}
 	}
 }
 
 void Player::UpdateIdle(float elapsedTime)
 {
-	bool isOnGround = GetComponent<CollisionComponent>()->IsOnGround();
-	
 	PhysicsComponent* physicsComponent = GetComponent<PhysicsComponent>();
 	physicsComponent->SetVelocity(glm::vec3(0.0f));
 
-	if (isOnGround)
+	CollisionComponent* collisionComponent = GetComponent<CollisionComponent>();
+	if (collisionComponent != nullptr)
 	{
-		if (mHasJumped)
+		bool isOnGround = collisionComponent->IsOnGround();
+		if (isOnGround)
 		{
-			mState = JUMPING;
+			if (mHasJumped)
+			{
+				mState = JUMPING;
+			}
+			else if (mHasMoved)
+			{
+				mState = MOVING;
+			}
+			else
+			{
+				mCurrentRunSpeed = 0.0f;
+				mCurrentTurnSpeed = 0.0f;
+				mCurrentUpwardsSpeed = 0.0f;
+			}
 		}
-		else if(mHasMoved)
+		else if (!isOnGround)
 		{
-			mState = MOVING;
+			mState = FALLING;
 		}
-		else
-		{
-			mCurrentRunSpeed = 0.0f;
-			mCurrentTurnSpeed = 0.0f;
-			mCurrentUpwardsSpeed = 0.0f;
-		}
-	}
-	else if (!isOnGround)
-	{
-		mState = FALLING;
 	}
 }
 

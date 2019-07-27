@@ -58,7 +58,7 @@ void AnimationSystem::AddEntity(IGameEntity* entity)
 		AnimatedModel* model = static_cast<AnimatedModel*>(entity->GetRenderer()->GetModel());
 		Animator* animator = DBG_NEW Animator(model);
 
-		AnimationComponent* component = entity->GetComponent<AnimationComponent>();
+		//AnimationComponent* component = entity->GetComponent<AnimationComponent>();
 		mEntities.push_back(std::pair<IGameEntity*, Animator*>(entity, animator));
 		//mAnimations[model->GetName()].push_back(component->GetAnimation());
 	}

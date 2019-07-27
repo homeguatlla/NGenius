@@ -178,5 +178,7 @@ private:
 	// Heredado vía ISerializable
 	void ReadFrom(core::utils::IDeserializer* source) override;
 	void WriteTo(core::utils::ISerializer* destination) override;
+
+	void ReadDebugParameters(core::utils::IDeserializer* source);
 };
 

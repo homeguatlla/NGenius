@@ -226,10 +226,24 @@ void NGenius::LoadFromFile()
 void NGenius::ReadFrom(core::utils::IDeserializer* source)
 {
 	source->BeginAttribute("ngenius");
-	mRenderSystem->ReadFrom(source);
-	mGameScene->ReadFrom(source);
+		mRenderSystem->ReadFrom(source);
+		source->BeginAttribute("engine");
+		ReadDebugParameters(source);
+		source->EndAttribute();
+		mGameScene->ReadFrom(source);		
 	source->EndAttribute();
 }
+
+void NGenius::ReadDebugParameters(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute("debug");
+	bool isEnabled = false;
+	source->ReadParameter("is_enabled", &isEnabled);
+	source->EndAttribute();
+
+	SetDebugModeEnabled(isEnabled);
+}
+
 
 void NGenius::WriteTo(core::utils::ISerializer* destination)
 {

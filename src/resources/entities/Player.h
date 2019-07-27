@@ -33,7 +33,6 @@ class Player : public BaseGameEntity<Player>
 	bool mHasJumped;
 
 public:
-	explicit Player();
 	explicit Player(Transformation* transformation, IRenderer* renderer, InputComponent* playerInputComponent, 
 					CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, 
 					CollisionComponent* collisionComponent, float runSpeed, float turnSpeed, float upwardsSpeed);
@@ -42,7 +41,14 @@ public:
 	Player* DoClone() const override { return nullptr; }
 	void Update(float elapsedTime) override;
 
+	// Heredado vía ISerializable
+	void ReadFrom(core::utils::IDeserializer* source) override;
+
+	static std::string GetClassName() { return std::string("player"); }
+	static IGameEntity* DoCreate();
+
 private:
+	explicit Player();
 	void UpdateGameEvents();
 	void UpdateIdle(float elapsedTime);
 	void UpdateMoving(float elapsedTime);

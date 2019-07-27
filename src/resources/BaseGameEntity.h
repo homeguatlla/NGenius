@@ -14,6 +14,7 @@
 #include "../Memory.h"
 #include "IGameEntity.h"
 #include "InstantiableObject.h"
+#include "../utils/Log.h"
 
 #include<map>
 #include<typeinfo>
@@ -164,8 +165,15 @@ void BaseGameEntity<TD>::Build(RenderSystem* renderSystem)
 			//By default
 			renderer = DBG_NEW  VerticesRenderer(model, material);
 		}
-		renderer->SetLayer(mRendererLayer);
-		SetRenderer(renderer);
+		if (renderer != nullptr)
+		{
+			renderer->SetLayer(mRendererLayer);
+			SetRenderer(renderer);
+		}
+		else
+		{
+			Log(Log::LOG_ERROR) << "Error creating " << mRendererName << " renderer for model " << mModelName << "\n";
+		}
 	}
 }
 
