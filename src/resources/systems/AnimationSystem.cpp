@@ -18,6 +18,17 @@ AnimationSystem::AnimationSystem()
 
 AnimationSystem::~AnimationSystem()
 {
+	Release();
+}
+
+void AnimationSystem::Release()
+{
+	mEntities.clear();
+}
+
+void AnimationSystem::Reload()
+{
+	Release();
 }
 
 void AnimationSystem::Update(float deltaTime)

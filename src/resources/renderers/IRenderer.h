@@ -38,7 +38,7 @@ protected:
 	bool mIsPrerendered;
 	bool mIsInstancingEnabled;
 	
-	char mLayer;
+	int mLayer;
 
 	BitNumber mBitRenderInformation;
 

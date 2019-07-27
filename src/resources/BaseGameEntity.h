@@ -31,9 +31,12 @@ public:
 	~BaseGameEntity();
 
 	// Heredado vía IGameEntity
-	void Init(RenderSystem* renderSystem) override;
+	void Init(GameScene* scene, RenderSystem* renderSystem) override;
 	int GetID() const override { return mID; }
 	bool IsEnabled() const override	{ return mIsEnabled; }
+
+	void SetName(const std::string& name) { mName = name; }
+	std::string GetName() const { return mName; }
 
 	Transformation* GetTransformation() override { return mTransformation; }
 	const Transformation* GetTransformation() const override { return mTransformation; }
@@ -64,6 +67,7 @@ protected:
 	IRenderer* mRenderer;
 	bool mIsEnabled;
 	int mID;
+	std::string mName;
 	
 	static unsigned int IDCounter;
 
@@ -89,7 +93,7 @@ BaseGameEntity<TD>::BaseGameEntity(Transformation* transformation, IRenderer* re
 		renderer->SetParent(this);
 	}
 	mID = ++IDCounter;
-
+	mName = mID;
 }
 
 template<class TD>
@@ -118,11 +122,11 @@ BaseGameEntity<TD>::~BaseGameEntity()
 }
 
 template<class TD>
-void BaseGameEntity<TD>::Init(RenderSystem* renderSystem)
+void BaseGameEntity<TD>::Init(GameScene* scene, RenderSystem* renderSystem)
 {
 	for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
 	{
-		it->second->Init(renderSystem);
+		it->second->Init(scene, renderSystem);
 	}
 }
 
@@ -212,6 +216,7 @@ void BaseGameEntity<TD>::ReadFrom(core::utils::IDeserializer* source)
 	source->ReadParameter("renderer", mRendererName);
 	source->ReadParameter("is_enabled", &mIsEnabled);
 	source->ReadParameter("layer", &mRendererLayer);
+	source->ReadParameter("name", mName);
 	mTransformation = DBG_NEW  Transformation();
 	mTransformation->ReadFrom(source);
 }

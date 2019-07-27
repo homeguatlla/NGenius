@@ -35,6 +35,7 @@ public:
 	~InputSystem();
 
 	void Update(float elapsedTime);
+	void Reload();
 
 	void OnKey(int key, int action) override;
 	void OnMouseScroll(int button, float scroll) override;
@@ -49,5 +50,6 @@ private:
 
 	void OnGameEntityAdded(IGameEntity* entity) override;
 	void OnGameEntityRemoved(IGameEntity* entity) override;
+	void Release();
 };
 

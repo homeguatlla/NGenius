@@ -627,6 +627,9 @@ void NGenius::Reload()
 	LoadFromFile();
 	mPhysicsSystem->Reload();
 	mSpacePartitionSystem->Reload();
+	mInputSystem->Reload();
+	mEnvironmentSystem->Reload();
+	mAnimationSystem->Reload();
 	Start(true);
 	mStatesMachine->Reload();
 	mStatesMachine->ForceState(mStatesMachine->GetCurrentState()->GetID(), 0.0f);

@@ -14,7 +14,7 @@ public:
 	explicit DebugComponent(IRenderer* renderer);
 	~DebugComponent();
 
-	void Init(RenderSystem* renderSystem) override;
+	void Init(GameScene* scene, RenderSystem* renderSystem) override;
 	bool IsBoundingBoxVisible() const;
 	void SetBoundingBoxVisibility(bool visible);
 	IRenderer* GetBoundingBoxRenderer();

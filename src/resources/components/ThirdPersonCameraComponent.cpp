@@ -4,8 +4,10 @@
 #include <glm/glm.hpp>
 #include "../IGameEntity.h"
 #include "../camera/PerspectiveCamera.h"
+#include "../systems/renderSystem/RenderSystem.h"
 #include "../Transformation.h"
 #include "../GameEvent.h"
+#include "../scene/GameScene.h"
 #include "../events/characterControllerEvents/ZoomEvent.h"
 #include "../events/characterControllerEvents/PitchEvent.h"
 #include "CollisionComponent.h"
@@ -13,6 +15,7 @@
 #include "CharacterComponent.h"
 
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../../utils/serializer/XMLDeserializer.h"
 #include <iostream>
 
 //WARNING!! hay que tener en cuenta que, si subimos este valor la cámara por colisión subirá y no mantendrá el ángulo pitch que le hemos definido.
@@ -58,6 +61,15 @@ ThirdPersonCameraComponent::~ThirdPersonCameraComponent()
 ThirdPersonCameraComponent* ThirdPersonCameraComponent::DoClone() const
 {
 	return DBG_NEW ThirdPersonCameraComponent(*this);
+}
+
+void ThirdPersonCameraComponent::Init(GameScene* scene, RenderSystem* renderSystem)
+{
+	if (!mCameraName.empty() && !mTargetName.empty())
+	{
+		mCamera = renderSystem->GetCamera(mCameraName);
+		mTarget = scene->GetGameEntity(mTargetName);
+	}
 }
 
 void ThirdPersonCameraComponent::UpdateInternal(float elapsedTime)
@@ -214,7 +226,18 @@ void ThirdPersonCameraComponent::UpdatePitch(float pitch, float elapsedTime)
 
 void ThirdPersonCameraComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
+	source->ReadParameter("distance_from_target", &mDistanceFromTarget);
+	source->ReadParameter("pitch", &mPitch);
+	source->ReadParameter("pitch_speed", &mPitchSpeed);
+	source->ReadParameter("zoom_speed", &mZoomSpeed);
+	source->ReadParameter("camera", mCameraName);
+	source->ReadParameter("target", mTargetName);
 
+	source->BeginAttribute("target_offset");
+	source->ReadParameter("X", &mTargetOffset.x);
+	source->ReadParameter("Y", &mTargetOffset.y);
+	source->ReadParameter("Z", &mTargetOffset.z);
+	source->EndAttribute();
 }
 
 void ThirdPersonCameraComponent::DoWriteTo(core::utils::ISerializer* destination)

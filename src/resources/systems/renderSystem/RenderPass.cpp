@@ -7,7 +7,7 @@
 #include "../../../utils/serializer/XMLDeserializer.h"
 #include "../Memory.h"
 
-RenderPass::RenderPass(const std::string& name, const ICamera* camera, char layersMask) :
+RenderPass::RenderPass(const std::string& name, const ICamera* camera, int layersMask) :
 mLayersMask(layersMask),
 mCamera(camera),
 mFrameBufferOutput(nullptr),
@@ -67,7 +67,7 @@ const ICamera* RenderPass::GetCamera() const
 	return mCamera;
 }
 
-char RenderPass::GetLayersMask() const
+int RenderPass::GetLayersMask() const
 {
 	return mLayersMask;
 }
@@ -218,7 +218,7 @@ void RenderPass::ReadFrameBufferFrom(core::utils::IDeserializer* source)
 	source->ReadParameter("width", &width);
 	source->ReadParameter("height", &height);
 
-	IFrameBuffer* buffer = DBG_NEW IFrameBuffer(width, height);
+	IFrameBuffer* buffer = DBG_NEW IFrameBuffer(static_cast<int>(width), static_cast<int>(height));
 	buffer->ReadFrom(source);
 	SetFrameBufferOutput(buffer);
 }

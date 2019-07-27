@@ -17,7 +17,7 @@ public:
 	AnimationComponent();
 	~AnimationComponent();
 
-	void Init(RenderSystem* renderSystem) override;
+	void Init(GameScene* scene, RenderSystem* renderSystem) override;
 
 	void AddAnimation(Animation* animation);
 	Animation* GetCurrentAnimation();

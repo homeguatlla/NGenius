@@ -21,10 +21,12 @@ public:
 	~AnimationSystem();
 
 	void Update(float deltaTime);
+	void Reload();
 
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
 private:
+	void Release();
 	void AddEntity(IGameEntity* entity);
 	void RemoveEntity(IGameEntity* entity);
 	bool HasAnimationComponents(const IGameEntity* entity) const;

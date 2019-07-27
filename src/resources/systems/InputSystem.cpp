@@ -16,12 +16,22 @@ InputSystem::InputSystem(InputHandler* inputHandler) :
 
 InputSystem::~InputSystem()
 {
-	mEntities.clear();
+	Release();
 	mInputHandler->UnRegisterInputListener(this);
+}
+
+void InputSystem::Release()
+{
+	mEntities.clear();
 }
 
 void InputSystem::Update(float elapsedTime)
 {
+}
+
+void InputSystem::Reload()
+{
+	Release();
 }
 
 bool InputSystem::HasInputComponents(const IGameEntity* entity) const

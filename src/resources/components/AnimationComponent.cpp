@@ -25,7 +25,7 @@ AnimationComponent* AnimationComponent::DoClone() const
 	return DBG_NEW AnimationComponent(*this);
 }
 
-void AnimationComponent::Init(RenderSystem* renderSystem)
+void AnimationComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 {
 	if (!mAnimationName.empty())
 	{

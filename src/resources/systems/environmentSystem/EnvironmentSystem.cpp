@@ -30,10 +30,23 @@ EnvironmentSystem::EnvironmentSystem() :
 
 EnvironmentSystem::~EnvironmentSystem()
 {
+	Release();
+}
+
+void EnvironmentSystem::Release()
+{
 	mEntities.clear();
 	mModificators.clear();
 	mModificatorsPositions.clear();
 	delete mSunLight;
+	mSunLight = nullptr;
+}
+
+void EnvironmentSystem::Reload()
+{
+	mEntities.clear();
+	mModificators.clear();
+	mModificatorsPositions.clear();
 }
 
 unsigned int EnvironmentSystem::GetNumberGameEntities() const

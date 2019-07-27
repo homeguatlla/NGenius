@@ -73,10 +73,46 @@ std::vector<IGameEntity*>& GameScene::GetAllGameEntities()
 	return mEntities;
 }
 
+IGameEntity* GameScene::GetGameEntity(const std::string& name)
+{
+	std::vector<IGameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](IGameEntity* a) { return a->GetName() == name; });
+
+	if (it != mEntities.end())
+	{
+		return *it;
+	}
+	else
+	{
+		std::vector<IGameEntity*>::iterator it = std::find_if(mNewEntitiesToAdd.begin(), mNewEntitiesToAdd.end(), [&](IGameEntity* a) { return a->GetName() == name; });
+		if (it != mNewEntitiesToAdd.end())
+		{
+			return *it;
+		}
+		else
+		{
+			return nullptr;
+		}
+	}
+}
+
+IGameEntity* GameScene::GetGameEntity(int id)
+{
+	std::vector<IGameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](IGameEntity* a) { return a->GetID() == id; });
+
+	if (it != mEntities.end())
+	{
+		return *it;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
 void GameScene::AddEntity(IGameEntity* entity)
 {
 	entity->Build(mRenderSystem);
-	entity->Init(mRenderSystem);
+	entity->Init(this, mRenderSystem);
 
 	if (entity->GetRenderer() != nullptr)
 	{

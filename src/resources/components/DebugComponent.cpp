@@ -26,7 +26,7 @@ DebugComponent* DebugComponent::DoClone() const
 	return DBG_NEW DebugComponent(*this);
 }
 
-void DebugComponent::Init(RenderSystem* renderSystem)
+void DebugComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 {
 	if (mBoundingBoxRenderer == nullptr)
 	{

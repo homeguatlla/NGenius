@@ -232,7 +232,7 @@
 	</renderer>
 	<game_scene name="mainScene">
 		<entities counter="412">
-			<player is_enabled="true" model="farmer" material="player" renderer="IndicesRenderer" layer="8">
+			<player is_enabled="true" name="player" model="farmer" material="player" renderer="IndicesRenderer" layer="8">
 				<transformation> 
 					<position X="0" Y="10" Z="0"/>
 					<rotation X="-90" Y="0" Z="0.000000"/>
@@ -292,6 +292,22 @@
 					<component is_enabled="true" type="CollisionComponent"/>
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</entity>
+			<entity is_enabled="true" layer="8">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="0.0" Y="0.0" Z="0.0"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="CharacterComponent"/>
+					<component is_enabled="true" type="OverWaterComponent"/>
+					<component is_enabled="true" type="InputComponent"/>
+					<component is_enabled="true" type="ThirdPersonCameraComponent" target="player" camera="gameplay_camera" distance_from_target="4" pitch="10" pitch_speed="10" zoom_speed="10">
+						<target_offset X="0.0" Y="0.5" Z="0.0"/>
+					</component>
 				</components>
 			</entity>
 		</entities>

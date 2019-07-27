@@ -33,6 +33,8 @@ public:
 	void Update(float elapsedTime);
 	void AddEntity(IGameEntity* entity);
 	void RemoveEntity(IGameEntity* entity);
+	IGameEntity* GetGameEntity(const std::string& name);
+	IGameEntity* GetGameEntity(int id);
 
 	void Render(RenderSystem* renderSystem);
 	

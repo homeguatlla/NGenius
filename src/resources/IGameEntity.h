@@ -6,17 +6,21 @@
 #include <map>
 #include <typeinfo.h>
 #include <assert.h>
+#include <string>
 
 class Transformation;
 class IRenderer;
 class RenderSystem;
+class GameScene;
 
 class IGameEntity : public core::utils::ISerializable
 {
 public:
 	virtual ~IGameEntity() = default;
-	virtual void Init(RenderSystem* renderSystem) = 0;
+	virtual void Init(GameScene* scene, RenderSystem* renderSystem) = 0;
 	virtual int GetID() const = 0;
+	virtual void SetName(const std::string& name) = 0;
+	virtual std::string GetName() const = 0;
 
 	virtual Transformation* GetTransformation() = 0;
 	virtual const Transformation* GetTransformation() const = 0;

@@ -44,6 +44,7 @@ void SpacePartitionSystem::Release()
 	mEntitiesToRemove.clear();
 	mLastQueryResult.clear();
 	delete mQuadTree;
+	mQuadTree = nullptr;
 	mHasBuilt = false;
 }
 
@@ -117,7 +118,14 @@ void SpacePartitionSystem::SetSpacePartitionComponentsEnabled(bool enable)
 
 unsigned int SpacePartitionSystem::GetNumberEntities() const
 {
-	return mQuadTree->GetNumEntities();
+	if (mHasBuilt)
+	{
+		return mQuadTree->GetNumEntities();
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 void SpacePartitionSystem::AddEntity(IGameEntity* entity)

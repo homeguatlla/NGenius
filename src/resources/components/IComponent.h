@@ -3,6 +3,7 @@
 
 class IGameEntity;
 class RenderSystem;
+class GameScene;
 
 class IComponent : public core::utils::ISerializable
 {
@@ -20,7 +21,7 @@ public:
 	void SetEnabled(bool enabled);
 
 	void Update(float elapsedTime);
-	virtual void Init(RenderSystem* renderSystem) {};
+	virtual void Init(GameScene* scene, RenderSystem* renderSystem) {};
 
 	// Heredado vía ISerializable
 	void ReadFrom(core::utils::IDeserializer* source) override;

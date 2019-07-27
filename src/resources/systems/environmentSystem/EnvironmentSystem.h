@@ -26,7 +26,8 @@ public:
 
 	void Start();
 	void Update(float deltaTime);
-	
+	void Reload();
+
 	unsigned int GetNumberGameEntities() const;
 
 	void SetTerrain(const Terrain* terrain);
@@ -56,6 +57,7 @@ public:
 	void SetFogGradient(float gradient);
 
 private:
+	void Release();
 	void AddEntity(IGameEntity* entity);
 	void RemoveEntity(IGameEntity* entity);
 	void RemoveEntityVector(IGameEntity* entity, std::vector<IGameEntity*>& vector);

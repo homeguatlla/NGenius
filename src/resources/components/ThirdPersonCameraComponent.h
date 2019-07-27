@@ -1,13 +1,15 @@
 #pragma once
 #include "InputComponent.h"
 #include <glm/glm.hpp>
+#include <string>
 
 class IGameEntity;
+class ICamera;
 class PerspectiveCamera;
 
 class ThirdPersonCameraComponent : public IComponent
 {
-	PerspectiveCamera* mCamera;
+	ICamera* mCamera;
 	IGameEntity* mTarget;
 	glm::vec3 mTargetOffset;
 	float mDistanceFromTarget;
@@ -16,13 +18,16 @@ class ThirdPersonCameraComponent : public IComponent
 	float mCurrentPitch;
 	float mLastPitch;
 	float mAngleAroundTarget;
-	const float mZoomSpeed;
+	float mZoomSpeed;
 	bool mIsCameraFollowingTarget;
-	
+	std::string mCameraName;
+	std::string mTargetName;
+
 public:
 	explicit ThirdPersonCameraComponent(PerspectiveCamera* camera, IGameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed);
 	~ThirdPersonCameraComponent();
 
+	void Init(GameScene* scene, RenderSystem* renderSystem) override;
 	void UpdateInternal(float elapsedTime) override;
 	const IGameEntity* GetTarget() const;
 	glm::vec3 GetCameraPosition() const;

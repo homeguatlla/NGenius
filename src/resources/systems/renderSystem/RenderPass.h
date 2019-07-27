@@ -12,7 +12,7 @@ class RenderSystem;
 
 class RenderPass : public core::utils::ISerializable
 {
-	char mLayersMask;
+	int mLayersMask;
 	const ICamera* mCamera;
 	IFrameBuffer* mFrameBufferOutput;
 	bool mIsEnabled;
@@ -26,7 +26,7 @@ class RenderPass : public core::utils::ISerializable
 	std::string mName;
 
 public:
-	explicit RenderPass(const std::string& name, const ICamera* camera, char layersMask);
+	explicit RenderPass(const std::string& name, const ICamera* camera, int layersMask);
 	~RenderPass();
 
 	bool HasFrameBufferOutput() const;
@@ -38,7 +38,7 @@ public:
 	const std::string GetName() const { return mName; }
 	void SetCamera(const ICamera* camera);
 	const ICamera* GetCamera() const;
-	char GetLayersMask() const;
+	int GetLayersMask() const;
 	
 	void SetAcceptSpacePartitionOnly(bool accept);
 	bool CanAcceptRenderer(IRenderer* renderer) const;
