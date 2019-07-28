@@ -22,6 +22,11 @@ PitchEvent* PitchEvent::DoClone(const void* data) const
 	return pitchEvent;
 }
 
+GameEvent* PitchEvent::Create()
+{
+	return DBG_NEW PitchEvent();
+}
+
 void PitchEvent::SetPitch(float pitch)
 {
 	mPitch = pitch;

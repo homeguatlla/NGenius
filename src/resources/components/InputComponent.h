@@ -31,6 +31,7 @@ public:
 private:
 	void DoReadFrom(core::utils::IDeserializer* source) override;
 	void DoWriteTo(core::utils::ISerializer* destination) override;
+	InputConverter* ReadConverterFrom(core::utils::IDeserializer* source);
 	InputComponent* DoClone() const override;
 };
 

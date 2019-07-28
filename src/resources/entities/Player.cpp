@@ -18,6 +18,7 @@
 #include "../events/characterControllerEvents/ZoomEvent.h"
 #include "../events/characterControllerEvents/TurnEvent.h"
 #include "../Memory.h"
+#include "../../utils/serializer/XMLDeserializer.h"
 
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -67,6 +68,9 @@ Player::~Player()
 void Player::ReadFrom(core::utils::IDeserializer* source)
 {
 	BaseGameEntity::ReadFrom(source);
+	source->ReadParameter("run_speed", &mRunSpeed);
+	source->ReadParameter("turn_speed", &mTurnSpeed);
+	source->ReadParameter("upwards_speed", &mUpwardsSpeed);
 }
 
 IGameEntity* Player::DoCreate()

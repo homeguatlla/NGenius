@@ -19,9 +19,10 @@ class Player : public BaseGameEntity<Player>
 	};
 
 	State mState;
-	const float mRunSpeed;
-	const float mTurnSpeed;
-	const float mUpwardsSpeed;
+	float mRunSpeed;
+	float mTurnSpeed;
+	float mUpwardsSpeed;
+
 	float mCurrentRunSpeed;
 	float mCurrentTurnSpeed;
 	float mCurrentUpwardsSpeed;

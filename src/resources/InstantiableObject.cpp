@@ -8,6 +8,7 @@ std::map<std::string, InstantiableObject::ShaderCreatorFunction> InstantiableObj
 std::map<std::string, InstantiableObject::MaterialEffectCreatorFunction> InstantiableObject::mMaterialEffectFactory;
 std::map<std::string, InstantiableObject::ComponentCreatorFunction> InstantiableObject::mComponentsFactory;
 std::map<std::string, InstantiableObject::GameEntityCreatorFunction> InstantiableObject::mGameEntitiesFactory;
+std::map<std::string, InstantiableObject::GameEventCreatorFunction> InstantiableObject::mGameEventsFactory;
 
 IMaterialEffect* InstantiableObject::CreateMaterialEffect(const std::string& name, IMaterial* material)
 {
@@ -86,6 +87,18 @@ IComponent* InstantiableObject::CreateComponent(const std::string& name, IGameEn
 	if (mComponentsFactory.find(name) != mComponentsFactory.end())
 	{
 		return mComponentsFactory[name](entity);
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+GameEvent* InstantiableObject::CreateGameEvent(const std::string& name)
+{
+	if (mGameEventsFactory.find(name) != mGameEventsFactory.end())
+	{
+		return mGameEventsFactory[name]();
 	}
 	else
 	{

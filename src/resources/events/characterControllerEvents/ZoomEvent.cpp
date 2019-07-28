@@ -22,6 +22,11 @@ ZoomEvent* ZoomEvent::DoClone(const void* data) const
 	return zoomEvent;
 }
 
+GameEvent* ZoomEvent::Create()
+{
+	return DBG_NEW ZoomEvent();
+}
+
 void ZoomEvent::SetZoom(float zoom)
 {
 	mZoom = zoom;

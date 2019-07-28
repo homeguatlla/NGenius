@@ -20,6 +20,11 @@ ForwardEvent* ForwardEvent::DoClone(const void* data) const
 	return event;
 }
 
+GameEvent* ForwardEvent::Create()
+{
+	return DBG_NEW ForwardEvent();
+}
+
 void ForwardEvent::SetPressed(bool pressed)
 {
 	mIsPressed = pressed;

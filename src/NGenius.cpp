@@ -55,6 +55,14 @@
 #include "resources/components/OverWaterComponent.h"
 #include "resources/components/ThirdPersonCameraComponent.h"
 
+#include "resources/events/characterControllerEvents/BackwardEvent.h"
+#include "resources/events/characterControllerEvents/ButtonLeftEvent.h"
+#include "resources/events/characterControllerEvents/ButtonRightEvent.h"
+#include "resources/events/characterControllerEvents/ForwardEvent.h"
+#include "resources/events/characterControllerEvents/JumpEvent.h"
+#include "resources/events/characterControllerEvents/PitchEvent.h"
+#include "resources/events/characterControllerEvents/TurnEvent.h"
+#include "resources/events/characterControllerEvents/ZoomEvent.h"
 
 NGenius::NGenius(std::string applicationName, float screenWidth, float screenHeight) :
 mRenderSystem(nullptr),
@@ -91,6 +99,16 @@ mGameScene(nullptr)
 	InstantiableObject::RegisterComponentType<RotationComponent>();
 	InstantiableObject::RegisterComponentType<SpacePartitionComponent>();
 	InstantiableObject::RegisterComponentType<ThirdPersonCameraComponent>();
+
+	//Registering game events
+	InstantiableObject::RegisterGameEvent<BackwardEvent>();
+	InstantiableObject::RegisterGameEvent<ButtonLeftEvent>();
+	InstantiableObject::RegisterGameEvent<ButtonRightEvent>();
+	InstantiableObject::RegisterGameEvent<ForwardEvent>();
+	InstantiableObject::RegisterGameEvent<JumpEvent>();
+	InstantiableObject::RegisterGameEvent<PitchEvent>();
+	InstantiableObject::RegisterGameEvent<TurnEvent>();
+	InstantiableObject::RegisterGameEvent<ZoomEvent>();
 }
 
 NGenius::~NGenius()

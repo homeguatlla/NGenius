@@ -22,6 +22,11 @@ ButtonLeftEvent* ButtonLeftEvent::DoClone(const void* data) const
 	return buttonLeftEvent;
 }
 
+GameEvent* ButtonLeftEvent::Create()
+{
+	return DBG_NEW ButtonLeftEvent();
+}
+
 void ButtonLeftEvent::SetAction(int action)
 {
 	mIsPressed = action == GLFW_PRESS;

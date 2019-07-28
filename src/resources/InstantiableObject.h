@@ -12,6 +12,7 @@ class IRenderer;
 class Transformation;
 class IGameEntity;
 class IComponent;
+class GameEvent;
 
 class InstantiableObject
 {
@@ -22,6 +23,7 @@ private:
 	using MaterialEffectCreatorFunction = std::function<IMaterialEffect* (IMaterial*)>;
 	using ComponentCreatorFunction = std::function<IComponent* (IGameEntity*)>;
 	using GameEntityCreatorFunction = std::function<IGameEntity* ()>;
+	using GameEventCreatorFunction = std::function<GameEvent* ()>;
 
 	public:
 		template<class T>
@@ -61,6 +63,12 @@ private:
 			mGameEntitiesFactory[T::GetClassName()] = std::bind<IGameEntity*>(&T::Create);
 		}
 
+		template<class T>
+		static void RegisterGameEvent()
+		{
+			mGameEventsFactory[T::GetClassName()] = std::bind<GameEvent*>(&T::Create);
+		}
+
 		static IGameEntity* CreateEntity(const std::string& name);
 		static IMaterialEffect* CreateMaterialEffect(const std::string& name, IMaterial* material);
 		static ICamera* CreateOrthogonalCamera(const std::string& name, float screenWidth, float screenHeight, float nearPlane, float farPlane);
@@ -68,6 +76,7 @@ private:
 		static IRenderer* CreateRenderer(const std::string& name, Model* model, IMaterial* material);
 		static IShaderProgram* CreateShader(const std::string& name);
 		static IComponent* CreateComponent(const std::string& name, IGameEntity* entity);
+		static GameEvent* CreateGameEvent(const std::string& name);
 
 	private:
 		static std::map<std::string, IFactory*> mFactories;
@@ -77,5 +86,6 @@ private:
 		static std::map<std::string, MaterialEffectCreatorFunction> mMaterialEffectFactory;
 		static std::map<std::string, ComponentCreatorFunction> mComponentsFactory;
 		static std::map<std::string, GameEntityCreatorFunction> mGameEntitiesFactory;
+		static std::map<std::string, GameEventCreatorFunction> mGameEventsFactory;
 };
 

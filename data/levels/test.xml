@@ -232,7 +232,7 @@
 	</renderer>
 	<game_scene name="mainScene">
 		<entities counter="412">
-			<player is_enabled="true" name="player" model="farmer" material="player" renderer="IndicesRenderer" layer="8">
+			<player is_enabled="true" name="player" model="farmer" material="player" renderer="IndicesRenderer" layer="8" run_speed="3.0" turn_speed="0.2" upwards_speed="2.0">
 				<transformation> 
 					<position X="0" Y="10" Z="0"/>
 					<rotation X="-90" Y="0" Z="0.000000"/>
@@ -245,7 +245,13 @@
 					<component is_enabled="true" type="EnergyWallCollisionComponent"/>
 					<component is_enabled="true" type="EnvironmentModificatorComponent"/>
 					<component is_enabled="true" type="InputComponent">
-						<converters/>
+						<converters>
+							<converter key="87" event="ForwardEvent"/>
+							<converter key="83" event="BackwardEvent"/>
+							<converter key="32" event="JumpEvent"/>
+							<converter mouse="-1" event="TurnEvent"/>
+							<converter mouse="2" event="ZoomEvent"/>
+						</converters>
 					</component>
 					<component is_enabled="true" type="PhysicsComponent" is_static="0">
 						<gravity X="0.000000" Y="-9.800000" Z="0.000000"/>

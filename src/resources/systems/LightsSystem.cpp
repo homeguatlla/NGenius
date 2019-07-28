@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "LightsSystem.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../entities/Light.h"
 #include "../scene/GameScene.h"
 

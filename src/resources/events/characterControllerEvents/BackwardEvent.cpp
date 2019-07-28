@@ -29,3 +29,8 @@ bool BackwardEvent::IsPressed() const
 {
 	return mIsPressed;
 }
+
+GameEvent* BackwardEvent::Create()
+{
+	return DBG_NEW BackwardEvent();
+}

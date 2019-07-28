@@ -22,6 +22,11 @@ TurnEvent* TurnEvent::DoClone(const void* data) const
 	return turnEvent;
 }
 
+GameEvent* TurnEvent::Create()
+{
+	return DBG_NEW TurnEvent();
+}
+
 void TurnEvent::SetTurn(float turn)
 {
 	mTurn = turn;

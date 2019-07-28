@@ -1,5 +1,6 @@
 #pragma once
 #include "../CharacterControllerEvent.h"
+#include <string>
 
 class ForwardEvent : public CharacterControllerEvent
 {
@@ -13,5 +14,7 @@ public:
 	bool IsPressed() const;
 
 	ForwardEvent* DoClone(const void* data) const override;
+	static std::string GetClassName() { return std::string("ForwardEvent"); }
+	static GameEvent* Create();
 };
 

@@ -4,7 +4,13 @@
 #include "../IGameEntity.h"
 #include "../../input/InputConverter.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../../utils/serializer/XMLDeserializer.h"
+#include "../../utils/Log.h"
+#include "../../input/bindings/KeyToEventBind.h"
+#include "../../input/bindings/MouseToEventBind.h"
+#include "../GameEvent.h"
 #include "../Memory.h"
+#include "../InstantiableObject.h"
 
 InputComponent::InputComponent()
 {
@@ -76,7 +82,50 @@ void InputComponent::RemoveConverter(const InputConverter* converter)
 
 void InputComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
+	if (source->HasAttribute("converters"))
+	{
+		source->BeginAttribute(std::string("converters"));
+		unsigned int numConverters = source->ReadNumberOfElements();
+		source->BeginAttribute(std::string("converter"));
+		do
+		{
+			InputConverter* converter = ReadConverterFrom(source);
+			if (converter != nullptr)
+			{
+				AddConverter(converter);
+			}
+			source->NextAttribute();
+			numConverters--;
 
+		} while (numConverters > 0);
+		source->EndAttribute();
+		source->EndAttribute();
+	}
+}
+
+InputConverter* InputComponent::ReadConverterFrom(core::utils::IDeserializer* source)
+{
+	int value = 0;
+	std::string eventName;
+	source->ReadParameter("event", eventName);
+
+	GameEvent* event = InstantiableObject::CreateGameEvent(eventName);
+	if (event != nullptr)
+	{
+		if (source->ReadParameter("key", &value))
+		{
+			return DBG_NEW KeyToEventBind(value, event);
+		}
+		else if (source->ReadParameter("mouse", &value))
+		{
+			return DBG_NEW MouseToEventBind(value, event);
+		}
+	}
+	else
+	{
+		Log(Log::LOG_ERROR) << "GameEvent " << eventName << " has not been created.\n";
+	}
+	return nullptr;
 }
 
 void InputComponent::DoWriteTo(core::utils::ISerializer* destination)
