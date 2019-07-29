@@ -33,7 +33,10 @@ const float MIN_DISTANCE_TO_START_FOLLOW = 2.0f;
 const float MAX_ZOOM = 50.0f;
 const float MIN_ZOOM = 2.0f; // MIN_DISTANCE_TO_START_FOLLOW;
 
-ThirdPersonCameraComponent::ThirdPersonCameraComponent() : mZoomSpeed(1.0f)
+ThirdPersonCameraComponent::ThirdPersonCameraComponent() : 
+	mAngleAroundTarget(0.0f), 
+	mZoomSpeed(1.0f),
+	mIsCameraFollowingTarget(true)
 {
 }
 

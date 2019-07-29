@@ -27,7 +27,8 @@
 #include "resources/textures/Texture.h"
 
 #include "fsm/states/NormalModeState.h"
-#include "fsm/states/FreeModeState.h"
+#include "fsm/states/FreeModeOnlyCameraState.h"
+#include "fsm/states/FreeModeOnlyPlayerState.h"
 #include "fsm/transitions/EnterNormalModeTransition.h"
 #include "fsm/transitions/EnterFreeModeTransition.h"
 
@@ -327,13 +328,15 @@ void NGenius::CreateStatesMachine()
 	mStatesMachine = std::make_unique<core::utils::FSM::StatesMachine<NGeniusState, FSMContext>>(mFSMContext);
 
 	auto normalState = std::make_shared<NormalModeState>();
-	auto freeState = std::make_shared<FreeModeState>();
+	auto freeCameraState = std::make_shared<FreeModeOnlyCameraState>();
+	auto freePlayerState = std::make_shared<FreeModeOnlyPlayerState>();
 
 	mStatesMachine->AddState(normalState);
-	mStatesMachine->AddState(freeState);
+	mStatesMachine->AddState(freeCameraState);
+	mStatesMachine->AddState(freePlayerState);
 
-	mStatesMachine->AddTransition(std::make_unique<EnterNormalModeTransition>(freeState, normalState));
-	mStatesMachine->AddTransition(std::make_unique<EnterFreeModeTransition>(normalState, freeState));
+	mStatesMachine->AddTransition(std::make_unique<EnterNormalModeTransition>(freeCameraState, normalState));
+	mStatesMachine->AddTransition(std::make_unique<EnterFreeModeOnlyCameraTransition>(normalState, freeCameraState));
 
 	mStatesMachine->SetInitialState(normalState->GetID());
 }
@@ -480,6 +483,18 @@ ICamera* NGenius::GetFreeCamera() const
 {
 	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetFreeCamera();
+}
+
+IGameEntity* NGenius::GetGameEntity(const std::string& name) const
+{
+	if (mGameScene != nullptr)
+	{
+		return mGameScene->GetGameEntity(name);
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
 GLFWwindow* NGenius::GetGLWindow() const

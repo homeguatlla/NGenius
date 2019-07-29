@@ -29,7 +29,7 @@ public:
 	virtual void SetRenderer(IRenderer* renderer) = 0;
 
 	virtual bool IsEnabled() const = 0;
-	//	void SetEnabled(bool enabled);
+	virtual void SetEnabled(bool enabled) = 0;
 
 	virtual void Update(float elapsedTime) = 0;
 	virtual void Build(RenderSystem* renderSystem) = 0;

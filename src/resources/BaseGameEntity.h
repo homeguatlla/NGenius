@@ -34,6 +34,7 @@ public:
 	void Init(GameScene* scene, RenderSystem* renderSystem) override;
 	int GetID() const override { return mID; }
 	bool IsEnabled() const override	{ return mIsEnabled; }
+	void SetEnabled(bool enable) override { mIsEnabled = enable; }
 
 	void SetName(const std::string& name) { mName = name; }
 	std::string GetName() const { return mName; }

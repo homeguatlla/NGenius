@@ -310,7 +310,12 @@
 					<component is_enabled="true" type="CollisionComponent"/>
 					<component is_enabled="true" type="CharacterComponent"/>
 					<component is_enabled="true" type="OverWaterComponent"/>
-					<component is_enabled="true" type="InputComponent"/>
+					<component is_enabled="true" type="InputComponent">
+						<converters>
+							<converter mouse="-1" event="PitchEvent"/>
+							<converter mouse="2" event="ZoomEvent"/>
+						</converters>
+					</component>
 					<component is_enabled="true" type="ThirdPersonCameraComponent" target="player" camera="gameplay_camera" distance_from_target="4" pitch="10" pitch_speed="10" zoom_speed="10">
 						<target_offset X="0.0" Y="0.5" Z="0.0"/>
 					</component>

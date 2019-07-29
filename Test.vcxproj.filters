@@ -819,17 +819,11 @@
     <ClInclude Include="src\states\StateTypes.h">
       <Filter>Header Files\fsm\states</Filter>
     </ClInclude>
-    <ClInclude Include="src\fsm\transitions\EnterFreeModeTransition.h">
-      <Filter>Header Files\fsm\transitions</Filter>
-    </ClInclude>
     <ClInclude Include="src\fsm\transitions\EnterNormalModeTransition.h">
       <Filter>Header Files\fsm\transitions</Filter>
     </ClInclude>
     <ClInclude Include="src\fsm\FSMContext.h">
       <Filter>Header Files\fsm</Filter>
-    </ClInclude>
-    <ClInclude Include="src\fsm\states\FreeModeState.h">
-      <Filter>Header Files\fsm\states</Filter>
     </ClInclude>
     <ClInclude Include="src\fsm\states\NormalModeState.h">
       <Filter>Header Files\fsm\states</Filter>
@@ -845,6 +839,15 @@
     </ClInclude>
     <ClInclude Include="src\resources\entities\GameEntity.h">
       <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\FreeModeOnlyCameraState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\FreeModeOnlyPlayerState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\transitions\EnterFreeModeOnlyCameraTransition.h">
+      <Filter>Header Files\fsm\transitions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1373,20 +1376,23 @@
     <ClCompile Include="src\fsm\FSMContext.cpp">
       <Filter>Source Files\fsm</Filter>
     </ClCompile>
-    <ClCompile Include="src\fsm\states\FreeModeState.cpp">
-      <Filter>Source Files\fsm\states</Filter>
-    </ClCompile>
     <ClCompile Include="src\fsm\states\NormalModeState.cpp">
       <Filter>Source Files\fsm\states</Filter>
-    </ClCompile>
-    <ClCompile Include="src\fsm\transitions\EnterFreeModeTransition.cpp">
-      <Filter>Source Files\fsm\transitions</Filter>
     </ClCompile>
     <ClCompile Include="src\fsm\transitions\EnterNormalModeTransition.cpp">
       <Filter>Source Files\fsm\transitions</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\entities\GameEntity.cpp">
       <Filter>Source Files\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\FreeModeOnlyCameraState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\FreeModeOnlyPlayerState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\transitions\EnterFreeModeOnlyCameraTransition.cpp">
+      <Filter>Source Files\fsm\transitions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

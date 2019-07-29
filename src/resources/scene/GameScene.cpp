@@ -51,7 +51,10 @@ void GameScene::Update(float elapsedTime)
 
 	for (IGameEntity* entity : mEntities)
 	{
-		entity->Update(elapsedTime);
+		if (entity->IsEnabled())
+		{
+			entity->Update(elapsedTime);
+		}
 	}
 }
 

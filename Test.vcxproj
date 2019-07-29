@@ -179,9 +179,10 @@
     <ClInclude Include="src\BitNumber.h" />
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\fsm\FSMContext.h" />
-    <ClInclude Include="src\fsm\states\FreeModeState.h" />
+    <ClInclude Include="src\fsm\states\FreeModeOnlyCameraState.h" />
+    <ClInclude Include="src\fsm\states\FreeModeOnlyPlayerState.h" />
     <ClInclude Include="src\fsm\states\NormalModeState.h" />
-    <ClInclude Include="src\fsm\transitions\EnterFreeModeTransition.h" />
+    <ClInclude Include="src\fsm\transitions\EnterFreeModeOnlyCameraTransition.h" />
     <ClInclude Include="src\fsm\transitions\EnterNormalModeTransition.h" />
     <ClInclude Include="src\guiTool\GuiTool.h" />
     <ClInclude Include="src\input\bindings\KeyToEventBind.h" />
@@ -391,9 +392,10 @@
     <ClCompile Include="src\BitNumber.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\fsm\FSMContext.cpp" />
-    <ClCompile Include="src\fsm\states\FreeModeState.cpp" />
+    <ClCompile Include="src\fsm\states\FreeModeOnlyCameraState.cpp" />
+    <ClCompile Include="src\fsm\states\FreeModeOnlyPlayerState.cpp" />
     <ClCompile Include="src\fsm\states\NormalModeState.cpp" />
-    <ClCompile Include="src\fsm\transitions\EnterFreeModeTransition.cpp" />
+    <ClCompile Include="src\fsm\transitions\EnterFreeModeOnlyCameraTransition.cpp" />
     <ClCompile Include="src\fsm\transitions\EnterNormalModeTransition.cpp" />
     <ClCompile Include="src\guiTool\GuiTool.cpp" />
     <ClCompile Include="src\input\bindings\KeyToEventBind.cpp" />
