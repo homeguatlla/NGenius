@@ -89,6 +89,8 @@ namespace core {
 			template<typename TStateID, class TContext>
 			void StatesMachine<TStateID, TContext>::Reload()
 			{
+				context->Release();
+
 				for (auto it = transitions.begin(); it != transitions.end(); ++it)
 				{
 					it->second.state->OnReload();

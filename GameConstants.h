@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+
 static const float PLAYER_UPWARDS_HEIGHT = 2.0f;
 static const float PLAYER_RUN_SPEED = 3.0f;
 static const float PLAYER_TURN_SPEED = 0.2f;
@@ -18,3 +20,7 @@ static const float TERRAIN_SCALE = 10.0f;
 static const int SHADOWS_PFC_COUNTER = 5;
 
 const glm::vec3 SUN_POSITION_DEFAULT(1.0f, 0.0f, 0.0f);
+
+
+const std::string TEXT_FREE_MODE("Free Mode");
+const std::string TEXT_PLAYER_MODE("Player Mode");

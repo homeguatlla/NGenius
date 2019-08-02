@@ -15,8 +15,6 @@ public:
 	void OnExit(float deltaTime) override;
 	void OnUpdate(float deltaTime) override;
 
-	bool IsFreeModeKeyPressed() const { return mIsFreeModeKeyPressed; };
-
 private:
 	// Heredado vía IInputListener
 	void OnKey(int key, int action) override;
@@ -26,6 +24,5 @@ private:
 
 private:
 	std::shared_ptr<NGenius> mEngine;
-	bool mIsFreeModeKeyPressed;
 };
 

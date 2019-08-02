@@ -29,8 +29,8 @@
 #include "fsm/states/NormalModeState.h"
 #include "fsm/states/FreeModeOnlyCameraState.h"
 #include "fsm/states/FreeModeOnlyPlayerState.h"
-#include "fsm/transitions/EnterNormalModeTransition.h"
-#include "fsm/transitions/EnterFreeModeTransition.h"
+#include "fsm/transitions/EnterExitFreeModeOnlyCameraTransition.h"
+#include "fsm/transitions/EnterExitFreeModeOnlyPlayerTransition.h"
 
 #include "statistics/Statistics.h"
 #include "guiTool/GuiTool.h"
@@ -335,8 +335,14 @@ void NGenius::CreateStatesMachine()
 	mStatesMachine->AddState(freeCameraState);
 	mStatesMachine->AddState(freePlayerState);
 
-	mStatesMachine->AddTransition(std::make_unique<EnterNormalModeTransition>(freeCameraState, normalState));
-	mStatesMachine->AddTransition(std::make_unique<EnterFreeModeOnlyCameraTransition>(normalState, freeCameraState));
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyCameraTransition>(freeCameraState, normalState));
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyPlayerTransition>(freeCameraState, freePlayerState));
+
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyCameraTransition>(normalState, freeCameraState));
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyPlayerTransition>(normalState, freePlayerState));
+
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyCameraTransition>(freePlayerState, freeCameraState));
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyPlayerTransition>(freePlayerState, normalState));
 
 	mStatesMachine->SetInitialState(normalState->GetID());
 }

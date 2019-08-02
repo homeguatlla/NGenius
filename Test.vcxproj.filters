@@ -819,9 +819,6 @@
     <ClInclude Include="src\states\StateTypes.h">
       <Filter>Header Files\fsm\states</Filter>
     </ClInclude>
-    <ClInclude Include="src\fsm\transitions\EnterNormalModeTransition.h">
-      <Filter>Header Files\fsm\transitions</Filter>
-    </ClInclude>
     <ClInclude Include="src\fsm\FSMContext.h">
       <Filter>Header Files\fsm</Filter>
     </ClInclude>
@@ -846,7 +843,10 @@
     <ClInclude Include="src\fsm\states\FreeModeOnlyPlayerState.h">
       <Filter>Header Files\fsm\states</Filter>
     </ClInclude>
-    <ClInclude Include="src\fsm\transitions\EnterFreeModeOnlyCameraTransition.h">
+    <ClInclude Include="src\fsm\transitions\EnterExitFreeModeOnlyCameraTransition.h">
+      <Filter>Header Files\fsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\transitions\EnterExitFreeModeOnlyPlayerTransition.h">
       <Filter>Header Files\fsm\transitions</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1379,9 +1379,6 @@
     <ClCompile Include="src\fsm\states\NormalModeState.cpp">
       <Filter>Source Files\fsm\states</Filter>
     </ClCompile>
-    <ClCompile Include="src\fsm\transitions\EnterNormalModeTransition.cpp">
-      <Filter>Source Files\fsm\transitions</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\entities\GameEntity.cpp">
       <Filter>Source Files\resources</Filter>
     </ClCompile>
@@ -1391,7 +1388,10 @@
     <ClCompile Include="src\fsm\states\FreeModeOnlyPlayerState.cpp">
       <Filter>Source Files\fsm\states</Filter>
     </ClCompile>
-    <ClCompile Include="src\fsm\transitions\EnterFreeModeOnlyCameraTransition.cpp">
+    <ClCompile Include="src\fsm\transitions\EnterExitFreeModeOnlyCameraTransition.cpp">
+      <Filter>Source Files\fsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\transitions\EnterExitFreeModeOnlyPlayerTransition.cpp">
       <Filter>Source Files\fsm\transitions</Filter>
     </ClCompile>
   </ItemGroup>

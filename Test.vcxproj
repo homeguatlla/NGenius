@@ -182,8 +182,8 @@
     <ClInclude Include="src\fsm\states\FreeModeOnlyCameraState.h" />
     <ClInclude Include="src\fsm\states\FreeModeOnlyPlayerState.h" />
     <ClInclude Include="src\fsm\states\NormalModeState.h" />
-    <ClInclude Include="src\fsm\transitions\EnterFreeModeOnlyCameraTransition.h" />
-    <ClInclude Include="src\fsm\transitions\EnterNormalModeTransition.h" />
+    <ClInclude Include="src\fsm\transitions\EnterExitFreeModeOnlyCameraTransition.h" />
+    <ClInclude Include="src\fsm\transitions\EnterExitFreeModeOnlyPlayerTransition.h" />
     <ClInclude Include="src\guiTool\GuiTool.h" />
     <ClInclude Include="src\input\bindings\KeyToEventBind.h" />
     <ClInclude Include="src\input\bindings\MouseToEventBind.h" />
@@ -395,8 +395,8 @@
     <ClCompile Include="src\fsm\states\FreeModeOnlyCameraState.cpp" />
     <ClCompile Include="src\fsm\states\FreeModeOnlyPlayerState.cpp" />
     <ClCompile Include="src\fsm\states\NormalModeState.cpp" />
-    <ClCompile Include="src\fsm\transitions\EnterFreeModeOnlyCameraTransition.cpp" />
-    <ClCompile Include="src\fsm\transitions\EnterNormalModeTransition.cpp" />
+    <ClCompile Include="src\fsm\transitions\EnterExitFreeModeOnlyCameraTransition.cpp" />
+    <ClCompile Include="src\fsm\transitions\EnterExitFreeModeOnlyPlayerTransition.cpp" />
     <ClCompile Include="src\guiTool\GuiTool.cpp" />
     <ClCompile Include="src\input\bindings\KeyToEventBind.cpp" />
     <ClCompile Include="src\input\bindings\MouseToEventBind.cpp" />
