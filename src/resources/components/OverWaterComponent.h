@@ -12,6 +12,8 @@ public:
 	OverWaterComponent(float waterHeight);
 	~OverWaterComponent();
 
+	void Init(GameScene* scene, RenderSystem* renderSystem);
+
 	float GetWaterHeight() const;
 
 	static std::string GetClassName() { return std::string("OverWaterComponent"); }

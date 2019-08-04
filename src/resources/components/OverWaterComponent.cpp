@@ -3,6 +3,7 @@
 #include "../IGameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../Memory.h"
+#include "../systems/renderSystem/RenderSystem.h"
 #include <glm/glm.hpp>
 
 OverWaterComponent::OverWaterComponent(float waterHeight) :mWaterHeight(waterHeight)
@@ -11,6 +12,11 @@ OverWaterComponent::OverWaterComponent(float waterHeight) :mWaterHeight(waterHei
 
 OverWaterComponent::~OverWaterComponent()
 {
+}
+
+void OverWaterComponent::Init(GameScene* scene, RenderSystem* renderSystem)
+{
+	mWaterHeight = renderSystem->GetWaterHeight();
 }
 
 OverWaterComponent* OverWaterComponent::DoClone() const
