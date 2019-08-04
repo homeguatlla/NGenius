@@ -21,6 +21,7 @@
 const float FORWARD_SPEED = 0.3f;
 const float ROLL_SPEED = 2.0f;
 const float PITCH_SPEED = 2.0f;
+const float PAN_SPEED = 0.3f;
 
 FreeModeOnlyCameraState::FreeModeOnlyCameraState() :
 	mFreeCamera(nullptr),
@@ -28,7 +29,8 @@ FreeModeOnlyCameraState::FreeModeOnlyCameraState() :
 	mLastPitch(0.0f),
 	mRoll(0.0f),
 	mLastRoll(0.0f),
-	mForwardSpeed(0.0f)
+	mForwardSpeed(0.0f),
+	mPanSpeed(0.0f)
 {
 }
 
@@ -68,6 +70,7 @@ void FreeModeOnlyCameraState::OnReload()
 {
 	mFreeCamera = CreateFreeCamera();
 	RecoverFreeCameraData();
+	mPlayer = mEngine->GetGameEntity("player");
 }
 
 void FreeModeOnlyCameraState::SaveFreeCameraData()
@@ -128,8 +131,16 @@ void FreeModeOnlyCameraState::CalculateCameraOrientation(float deltaTime)
 
 void FreeModeOnlyCameraState::CalculateCameraPosition(float deltaTime)
 {
-	mFreeCamera->Move(mForwardSpeed);
+	if (mForwardSpeed != 0.0f)
+	{
+		mFreeCamera->Move(mForwardSpeed);
+	}
+	if (mPanSpeed != 0.0f)
+	{
+		mFreeCamera->Pan(mPanSpeed);
+	}
 	mForwardSpeed = 0.0f;
+	mPanSpeed = 0.0f;
 }
 
 void FreeModeOnlyCameraState::OnKey(int key, int action)
@@ -148,6 +159,19 @@ void FreeModeOnlyCameraState::OnKey(int key, int action)
 	else
 	{
 		mForwardSpeed = 0.0f;
+	}
+
+	if (key == GLFW_KEY_A)
+	{
+		mPanSpeed = -PAN_SPEED;
+	}
+	else if (key == GLFW_KEY_D)
+	{
+		mPanSpeed = PAN_SPEED;
+	}
+	else 
+	{
+		mPanSpeed = 0.0f;
 	}
 }
 

@@ -26,6 +26,7 @@ public:
 	const Frustum& GetFrustum();
 
 	void Move(float speed);
+	void Pan(float speed);
 	void Rotate(float angle, const glm::vec3& axis);
 	virtual AABB GetAABB() const = 0;
 	virtual void CalculateFrustum() = 0;

@@ -119,6 +119,19 @@ void ICamera::Move(float speed)
 	SetTarget(position + direction);
 }
 
+void ICamera::Pan(float speed)
+{
+	glm::vec3 position = GetPosition();
+	glm::vec3 direction = mTarget - position;
+	glm::vec3 right = glm::cross(direction, mUp);
+
+	glm::vec3 displacement = glm::normalize(right) * speed;
+	mIsDirty = true;
+
+	SetPosition(position + displacement);
+	SetTarget(mTarget + displacement);
+}
+
 void ICamera::Rotate(float angle, const glm::vec3& axis)
 {
 	glm::vec3 position = GetPosition();

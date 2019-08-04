@@ -47,6 +47,7 @@ private:
 	float mRoll;
 	float mLastRoll;
 	float mForwardSpeed;
+	float mPanSpeed;
 
 protected:
 	IGameEntity* mPlayer;
