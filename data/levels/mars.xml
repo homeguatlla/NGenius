@@ -158,7 +158,7 @@
 						distorsion_texture="distorsion_water" 
 						normal_texture="normal_water" 
 						depth_texture="refraction_depth_water" 
-						color="0.0 0.3 0.8" speed="0.02" />
+						color="1.0 0.3 0.8" speed="0.02" />
 			</material>
 			<material name="smoke_particle" shader="ParticleShader">
 				<effect name="MaterialEffectParticle" texture="smoke" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>

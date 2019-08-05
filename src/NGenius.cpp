@@ -227,11 +227,12 @@ void NGenius::SaveToFile()
 	mGameScene->SaveToFile();
 }
 
-void NGenius::LoadFromFile()
+void NGenius::LoadFromFile(const std::string& filename)
 {
+	mFilename = filename;
 	core::utils::XMLDeserializer xmlDeserializer;
 
-	xmlDeserializer.Load("data/levels/test.xml");
+	xmlDeserializer.Load(mFilename);
 
 	//TODO esto hay que revisar
 	if (mGameScene == nullptr)
@@ -668,7 +669,7 @@ BaseVisitable<>::ReturnType NGenius::Accept(BaseVisitor& guest)
 
 void NGenius::Reload()
 {
-	LoadFromFile();
+	LoadFromFile(mFilename);
 	mPhysicsSystem->Reload();
 	mSpacePartitionSystem->Reload();
 	mInputSystem->Reload();

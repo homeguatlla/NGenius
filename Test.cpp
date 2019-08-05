@@ -1552,7 +1552,7 @@ void SetupConfiguration()
 	}
 }
 */
-void Initialize()
+void Initialize(const std::string& filename)
 {
 	mEngine = std::make_shared<NGenius>("Demo", SCREEN_WIDTH, SCREEN_HEIGHT);
 	//SetupConfiguration();
@@ -1569,13 +1569,20 @@ void Initialize()
 	glfwSetMouseButtonCallback(mEngine->GetGLWindow(), &MouseButtonCallback);
 	glfwSetCursorPosCallback(mEngine->GetGLWindow(), &MouseCursorPosCallback);
 
-	mEngine->LoadFromFile();
+	mEngine->LoadFromFile(filename);
 	mEngine->Start();
 }
 
-int main(void)
+int main(int argc, char* argv[])
 {
-	Initialize();
+	std::string filename = "data/levels/test.xml";
+
+	if (argc > 1)
+	{
+		filename = std::string(argv[1]);
+	}
+
+	Initialize(filename);
 
 	mEngine->SetCastingShadowsTarget(mPlayer);
 	mEngine->Run();

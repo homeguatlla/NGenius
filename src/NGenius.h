@@ -70,7 +70,8 @@ class NGenius : public core::utils::ISerializable, BaseVisitable<>, public std::
 	std::string mApplicationName;
 	float mNumberFPS;
 	bool mIsSpacePartitionEnabled;
-	
+	std::string mFilename;
+
 	std::function<void(float elapsedTime)> mUpdateHandler;
 
 public:
@@ -160,7 +161,7 @@ public:
 	void SaveToFile();
 
 	//deserialize
-	void LoadFromFile();
+	void LoadFromFile(const std::string& filename);
 
 private:
 	
