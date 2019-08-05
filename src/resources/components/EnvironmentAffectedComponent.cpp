@@ -2,6 +2,7 @@
 #include "EnvironmentAffectedComponent.h"
 #include "../IGameEntity.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../../utils/serializer/XMLDeserializer.h"
 #include "../Memory.h"
 
 EnvironmentAffectedComponent::EnvironmentAffectedComponent() : 
@@ -50,6 +51,7 @@ IComponent* EnvironmentAffectedComponent::Create(IGameEntity* entity)
 
 void EnvironmentAffectedComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
+	source->ReadParameter(std::string("affected_by_wind"), &mIsAffectedByWind);
 }
 
 void EnvironmentAffectedComponent::DoWriteTo(core::utils::ISerializer* destination)

@@ -236,7 +236,7 @@ void NGenius::LoadFromFile()
 	//TODO esto hay que revisar
 	if (mGameScene == nullptr)
 	{
-		mGameScene = DBG_NEW GameScene("mainscene", mRenderSystem);
+		mGameScene = DBG_NEW GameScene("mainscene", this, mRenderSystem);
 	}
 	ReadFrom(&xmlDeserializer);
 }
@@ -643,6 +643,11 @@ void NGenius::SetWaterParameters(const ICamera* camera, float waterY)
 {
 	assert(mRenderSystem != nullptr);
 	mRenderSystem->SetWaterParameters(camera, waterY);
+}
+
+float NGenius::GetWaterHeight() const
+{
+	return mRenderSystem->GetWaterHeight();
 }
 
 void NGenius::SetCastingShadowsTarget(const IGameEntity* target)

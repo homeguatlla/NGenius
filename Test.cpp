@@ -486,7 +486,6 @@ void CreateTrees()
 void CreatePoints()
 {
 	glPointSize(5.0f);
-	IShaderProgram* shader = mEngine->GetShader("s_grass");
 	IMaterial* material = mEngine->GetMaterial("grass2_material");
 	PointsPatch* pointsPatch = DBG_NEW PointsPatch(	DBG_NEW Transformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), 
 												material, mTerrain, mWaterHeight + 0.2f, mWaterHeight + 0.8f, 50.0f, 50.0f, 150.0f);

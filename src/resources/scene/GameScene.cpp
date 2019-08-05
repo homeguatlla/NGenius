@@ -13,19 +13,22 @@
 #include "../entities/Player.h"
 #include "../entities/Terrain.h"
 #include "../entities/Water.h"
+#include "../entities/PointsPatch.h"
 #include "../Memory.h"
 
 #include <algorithm>
 
-GameScene::GameScene(const std::string& name, RenderSystem* renderSystem) :
+GameScene::GameScene(const std::string& name, NGenius* engine, RenderSystem* renderSystem) :
 mName(name),
 mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limits<float>::max())),
+mEngine { engine },
 mRenderSystem { renderSystem }
 {
 	InstantiableObject::RegisterGameEntityType<GameEntity>();
 	InstantiableObject::RegisterGameEntityType<Player>();
 	InstantiableObject::RegisterGameEntityType<Terrain>();
 	InstantiableObject::RegisterGameEntityType<Water>();
+	InstantiableObject::RegisterGameEntityType<PointsPatch>();
 }
 
 GameScene::~GameScene()
@@ -114,7 +117,7 @@ IGameEntity* GameScene::GetGameEntity(int id)
 
 void GameScene::AddEntity(IGameEntity* entity)
 {
-	entity->Build(mRenderSystem);
+	entity->Build(mEngine);
 	entity->Init(this, mRenderSystem);
 
 	if (entity->GetRenderer() != nullptr)

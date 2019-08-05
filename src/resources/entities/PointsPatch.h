@@ -20,7 +20,16 @@ public:
 	explicit PointsPatch(Transformation* transformation, IMaterial* material, const Terrain* terrain, float heightMin, float heightMax, float wide, float length, float density);
 	~PointsPatch();
 
+	// Heredado vía ISerializable
+	void ReadFrom(core::utils::IDeserializer* source) override;
+	
+	void Build(NGenius* engine) override;
+	static std::string GetClassName() { return std::string("terrain_points_patch"); }
+	static IGameEntity* DoCreate();
+
 private:
-	void Create();
+	PointsPatch() = default;
+	void CreateModel();
+	void CreatePointsPatch(IMaterial* material);
 };
 

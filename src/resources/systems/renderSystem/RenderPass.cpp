@@ -90,7 +90,7 @@ bool RenderPass::CanAcceptRenderer(IRenderer* renderer) const
 			}
 		}
 	}
-
+	
 	const char layer = renderer->GetLayer();
 	char result = GetLayersMask() & layer;
 	if (result != 0)

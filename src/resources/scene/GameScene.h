@@ -9,8 +9,9 @@
 
 class IGameEntity;
 class IGameSceneListener;
-class RenderSystem;
+class NGenius;
 class IComponent;
+class RenderSystem;
 
 class GameScene : public core::utils::ISerializable, BaseVisitable<>
 {
@@ -22,10 +23,11 @@ class GameScene : public core::utils::ISerializable, BaseVisitable<>
 	typedef std::vector<IGameSceneListener*>::iterator ListenersIterator;
 	std::string mName;
 	AABB mAABB;
+	NGenius* mEngine;
 	RenderSystem* mRenderSystem;
 
 public:
-	GameScene(const std::string& name, RenderSystem* renderSystem);
+	GameScene(const std::string& name, NGenius* engine, RenderSystem* renderSystem);
 	~GameScene();
 
 	void Start();

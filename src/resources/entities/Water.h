@@ -21,7 +21,7 @@ public:
 	void Update(float elapsedTime) override;
 	Water* DoClone() const override { return nullptr; }
 
-	void Build(RenderSystem* renderSystem) override;
+	void Build(NGenius* engine) override;
 
 	// Heredado vía ISerializable
 	void ReadFrom(core::utils::IDeserializer* source) override;

@@ -37,15 +37,15 @@ void Water::Update(float elapsedTime)
 	mWaterEffect->SetSpeed(mCurrentWaterSpeed);
 }
 
-void Water::Build(RenderSystem* renderSystem)
+void Water::Build(NGenius* engine)
 {
-	IMaterial* material = renderSystem->GetMaterial(mMaterialName);
+	IMaterial* material = engine->GetMaterial(mMaterialName);
 	CreateWater(material);
 
 	//Setting the y of the water entity into the water position the renderer says.
 	//Remember that can only exist ONE water entity at moment
 	glm::vec3 position = GetTransformation()->GetPosition();
-	position.y = renderSystem->GetWaterHeight();
+	position.y = engine->GetWaterHeight();
 	GetTransformation()->SetPosition(position);
 }
 

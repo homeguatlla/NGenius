@@ -134,6 +134,7 @@ public:
 	//water
 	void SetWaterEnabled(bool enabled);
 	void SetWaterParameters(const ICamera* camera, float waterY);
+	float GetWaterHeight() const;
 
 	//debug
 	void SetDebugModeEnabled(bool enabled);

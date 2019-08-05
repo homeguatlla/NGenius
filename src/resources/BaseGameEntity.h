@@ -1,6 +1,7 @@
 #pragma once
 #include "Transformation.h"
 
+#include "../NGenius.h"
 #include "renderers/IRenderer.h"
 #include "renderers/VerticesRenderer.h"
 
@@ -20,6 +21,7 @@
 #include<typeinfo>
 #include<string>
 
+class NGenius;
 
 template<class TD>
 class BaseGameEntity : public IGameEntity
@@ -46,7 +48,7 @@ public:
 	void SetRenderer(IRenderer* renderer) override;
 
 	virtual void Update(float elapsedTime) override;
-	virtual void Build(RenderSystem* renderSystem) override;
+	virtual void Build(NGenius* engine) override;
 
 	virtual IGameEntity* DoClone() const override;
 	IGameEntity* Clone();
@@ -154,10 +156,10 @@ void BaseGameEntity<TD>::Update(float elapsedTime)
 }
 
 template<class TD>
-void BaseGameEntity<TD>::Build(RenderSystem* renderSystem)
+void BaseGameEntity<TD>::Build(NGenius* engine)
 {
-	Model* model = renderSystem->GetModel(mModelName);
-	IMaterial* material = renderSystem->GetMaterial(mMaterialName);
+	Model* model = engine->GetModel(mModelName);
+	IMaterial* material = engine->GetMaterial(mMaterialName);
 	if (model != nullptr && material != nullptr)
 	{
 		IRenderer* renderer = nullptr;

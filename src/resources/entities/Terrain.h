@@ -39,7 +39,7 @@ public:
 	void SetFlat(bool isFlat);
 	void SetScale(float scale);
 
-	void Build(RenderSystem* renderSystem) override;
+	void Build(NGenius* engine) override;
 
 	// Heredado vía ISerializable
 	void ReadFrom(core::utils::IDeserializer* source) override;

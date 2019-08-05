@@ -21,8 +21,35 @@ PointsPatch::PointsPatch(Transformation* transformation, IMaterial* material, co
 {
 	assert(material != nullptr);
 
-	Create();
+	CreatePointsPatch(material);
+}
 
+
+PointsPatch::~PointsPatch()
+{
+}
+
+IGameEntity* PointsPatch::DoCreate()
+{
+	return DBG_NEW PointsPatch();
+}
+
+void PointsPatch::Build(NGenius* engine)
+{
+	if (!mMaterialName.empty())
+	{
+		IMaterial* material = engine->GetMaterial(mMaterialName);
+
+		mTerrain = static_cast<Terrain*>(engine->GetGameEntity("terrain"));
+		assert(mTerrain != nullptr);
+
+		CreatePointsPatch(material);
+	}
+}
+
+void PointsPatch::CreatePointsPatch(IMaterial* material)
+{
+	CreateModel();
 	if (mModel != nullptr)
 	{
 		SetRenderer(new PointsRenderer(mModel, material));
@@ -31,12 +58,7 @@ PointsPatch::PointsPatch(Transformation* transformation, IMaterial* material, co
 	}
 }
 
-
-PointsPatch::~PointsPatch()
-{
-}
-
-void PointsPatch::Create()
+void PointsPatch::CreateModel()
 {
 	std::vector<glm::vec3> vertexs;
 	std::vector<glm::vec2> uv;
@@ -65,5 +87,15 @@ void PointsPatch::Create()
 	{
 		mModel = DBG_NEW Model(new Mesh(vertexs, uv, indices));
 	}
+}
+
+void PointsPatch::ReadFrom(core::utils::IDeserializer* source)
+{
+	BaseGameEntity::ReadFrom(source);
+	source->ReadParameter("min_height", &mHeightMin);
+	source->ReadParameter("max_height", &mHeightMax);
+	source->ReadParameter("wide", &mWide);
+	source->ReadParameter("lenght", &mLength);
+	source->ReadParameter("density", &mDensity);
 }
 

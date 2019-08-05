@@ -12,6 +12,7 @@ class Transformation;
 class IRenderer;
 class RenderSystem;
 class GameScene;
+class NGenius;
 
 class IGameEntity : public core::utils::ISerializable
 {
@@ -32,7 +33,7 @@ public:
 	virtual void SetEnabled(bool enabled) = 0;
 
 	virtual void Update(float elapsedTime) = 0;
-	virtual void Build(RenderSystem* renderSystem) = 0;
+	virtual void Build(NGenius* engine) = 0;
 
 	virtual IGameEntity* DoClone() const = 0;
 

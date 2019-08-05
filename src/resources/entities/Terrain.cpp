@@ -54,14 +54,14 @@ void Terrain::SetScale(float scale)
 	mMaterialEffectFloat->SetValue(mScale);
 }
 
-void Terrain::Build(RenderSystem* renderSystem)
+void Terrain::Build(NGenius* engine)
 {
-	IMaterial* material = renderSystem->GetMaterial(mMaterialName);
-	ITexture* heighmap = static_cast<Texture*>(renderSystem->GetTexture(mHeightmapName));
+	IMaterial* material = engine->GetMaterial(mMaterialName);
+	ITexture* heighmap = static_cast<Texture*>(engine->GetTexture(mHeightmapName));
 
 	if (!mModelName.empty())
 	{
-		mModel = renderSystem->GetModel(mModelName);
+		mModel = engine->GetModel(mModelName);
 		if (mModel == nullptr)
 		{
 			Log(Log::LOG_ERROR) << "Couldn't found terrain model " << mModelName << "\n";
