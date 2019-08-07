@@ -87,9 +87,9 @@ void ThirdPersonCameraComponent::UpdateInternal(float elapsedTime)
 	glm::vec3 currentPosition = mCamera->GetPosition();
 	glm::vec3 newPosition = GetCameraPosition();
 
-	if (mParent->HasComponent<CollisionComponent>())
+	CollisionComponent* collisionComponent = mParent->GetComponent<CollisionComponent>();
+	if (collisionComponent != nullptr && collisionComponent->IsEnabled())
 	{
-		CollisionComponent* collisionComponent = mParent->GetComponent<CollisionComponent>();
 		float groundHeight = collisionComponent->GetGroundHeight() + CAMERA_HEIGHT_OFFSET_GROUND;
 		if (newPosition.y < groundHeight)
 		{
@@ -97,9 +97,10 @@ void ThirdPersonCameraComponent::UpdateInternal(float elapsedTime)
 		}
 	}
 
-	if (mParent->HasComponent<OverWaterComponent>())
+	OverWaterComponent* overWaterComponent = mParent->GetComponent<OverWaterComponent>();
+	if (overWaterComponent!= nullptr && overWaterComponent->IsEnabled())
 	{
-		OverWaterComponent* overWaterComponent = mParent->GetComponent<OverWaterComponent>();
+		
 		float waterHeight = overWaterComponent->GetWaterHeight() + WATER_HEIGHT_OFFSET;
 		if (newPosition.y < waterHeight)
 		{

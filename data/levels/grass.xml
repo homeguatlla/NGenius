@@ -19,7 +19,7 @@
 			<shader name="AnimatedModelShader"/>
 		</shaders_library>
 		<textures_library>
-			<texture name = "terrain_heightmap" filename = "data/textures/terrain_heightmap_1024.png" />
+			<texture name = "terrain_heightmap" filename = "data/textures/terrain_height_0.png" />
 			<texture name = "terrain_blendmap" filename = "data/textures/terrain_blendmap_1024.png" />			
 			<texture name = "distorsion_water" filename = "data/textures/waterDUDV.png" has_wrapping="true"/>
 			<texture name = "normal_water" filename = "data/textures/normal_water.png" has_wrapping="true"/>
@@ -187,7 +187,7 @@
 		<debug is_enabled = "true" />
 	</engine>
 	<renderer>
-		<water is_enabled = "true" camera="gameplay_camera" height="11.4"/>
+		<water is_enabled = "false" camera="gameplay_camera" height="11.4"/>
 		<shadows is_enabled = "false"/>
 		<fog is_enabled = "false" />
 		<render_layers>
@@ -271,13 +271,6 @@
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 			</terrain>
-			<water is_enabled="true" name="water" material="water" wide="50" length="50">
-				<transformation>
-					<position X="4.000000" Y="0.000000" Z="4.500000"/>
-					<rotation X="-90.000000" Y="0.000000" Z="0.000000"/>
-					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
-				</transformation>
-			</water>
 			<entity is_enabled="true" model="skybox" material="skybox" renderer="SkyBoxRenderer" layer="2">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
@@ -290,21 +283,6 @@
 					</component>
 				</components>
 			</entity>
-			<entity is_enabled="true" model="barrel" material="props_material" layer="8">
-				<transformation>
-					<position X="4.400000" Y="18.500000" Z="0.000000"/>
-					<rotation X="-90.000000" Y="0.000000" Z="0.000000"/>
-					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="PhysicsComponent" is_static="true">
-						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
-					</component>
-					<component is_enabled="true" type="CollisionComponent"/>
-					<component is_enabled="true" type="SpacePartitionComponent"/>
-					<component is_enabled="true" type="DebugComponent"/>
-				</components>
-			</entity>
 			<entity is_enabled="true" layer="8">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
@@ -314,7 +292,7 @@
 				<components>
 					<component is_enabled="true" type="CollisionComponent"/>
 					<component is_enabled="true" type="CharacterComponent"/>
-					<component is_enabled="true" type="OverWaterComponent"/>
+					<component is_enabled="false" type="OverWaterComponent"/>
 					<component is_enabled="true" type="InputComponent">
 						<converters>
 							<converter mouse="-1" event="PitchEvent"/>
@@ -326,7 +304,7 @@
 					</component>
 				</components>
 			</entity>
-			<terrain_points_patch is_enabled="true" material="grass2_material" layer="4" min_height ="11.6" max_height="20" wide="50" lenght="50" density="10">
+			<terrain_points_patch is_enabled="true" material="grass2_material" layer="4" min_height ="0.0" max_height="20" wide="5" lenght="5" density="1">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>

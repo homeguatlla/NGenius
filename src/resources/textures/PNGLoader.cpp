@@ -7,7 +7,7 @@
 #include <cstring>
 #include <iostream>
 
-PNGLoader::PNGLoader(void)
+PNGLoader::PNGLoader(void) : mHasAlpha(false), mNumBits(0)
 {
 	mData = nullptr;
 }
@@ -19,8 +19,6 @@ PNGLoader::~PNGLoader(void)
 
 bool PNGLoader::ReadPNGFile(const char* file_name)
 {
-	bool hasAlpha = false;
-
 	Log(Log::LOG_INFO) << file_name << "\n";
 	
 	/* open file and test for it being a png */
@@ -76,10 +74,10 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 	
 	switch (mInfoPtr->color_type) {
 	case PNG_COLOR_TYPE_RGBA:
-		hasAlpha = true;
+		mHasAlpha = true;
 		break;
 	case PNG_COLOR_TYPE_RGB:
-		hasAlpha = false;
+		mHasAlpha = false;
 		break;
 	default:
 		png_destroy_read_struct(&mPngPtr, &mInfoPtr, NULL);
@@ -106,7 +104,7 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 	int colorMode = 3;			// 4 for RGBA, 3 for RGB
 	unsigned char *imageData;	// the PNG data
 
-	if (hasAlpha)
+	if (mHasAlpha)
 	{
 		colorMode = 4;
 	}
@@ -117,15 +115,15 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 	
 	//std::cout << colorMode;
 	//std::cout << mBitDepth;
-	int bits = (colorMode * mBitDepth / 8);
-	if (bits == 1) bits = 3;
+	mNumBits = (colorMode * mBitDepth / 8);
+	if (mNumBits == 1) mNumBits = 3;
 
 	if (mData != nullptr)
 	{
 		delete mData;
 	}
 
-	mData = DBG_NEW unsigned char[mWidth * mHeight * bits];
+	mData = DBG_NEW unsigned char[mWidth * mHeight * mNumBits];
 
 	// read image data
 	//imageData = (unsigned char*) malloc( sizeof(unsigned char)*imageSize );
@@ -163,22 +161,29 @@ bool PNGLoader::ReadPNGFile(const char* file_name)
 
 unsigned char PNGLoader::GetR(int u, int v) const
 {
-	return mData[(u + v * mWidth) * 4];
+	return mData[(u + v * mWidth) * mNumBits];
 }
 
 unsigned char PNGLoader::GetG(int u, int v) const
 {
-	return mData[(u + v * mWidth) * 4 + 1];
+	return mData[(u + v * mWidth) * mNumBits + 1];
 }
 
 unsigned char PNGLoader::GetB(int u, int v) const
 {
-	return mData[(u + v * mWidth) * 4 + 2];
+	return mData[(u + v * mWidth) * mNumBits + 2];
 }
 
 unsigned char PNGLoader::GetA(int u, int v) const
 {
-	return mData[(u + v * mWidth) * 4 + 3];
+	if (mHasAlpha)
+	{
+		return mData[(u + v * mWidth) * 4 + 3];
+	}
+	else 
+	{
+		return 0;
+	}
 }
 
 bool PNGLoader::WritePNGFile(const char* file_name)
