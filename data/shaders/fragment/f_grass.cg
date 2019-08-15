@@ -94,12 +94,9 @@ void main()
 	}
 	vec3 MaterialAmbientColor = vec3(0.1f, 0.1f, 0.1f);
 	
-	//color = MaterialDiffuseColor;
 	color = ApplyLight(MaterialAmbientColor, MaterialDiffuseColor.rgb);
 	color = ApplyFog(color);
 	//color.a = ApplySoftParticle(color.a);
 	color.a *= textureCoords.y * 2.0 * alphaFactor;
-	
-	//color = vec4(1.0, 0.0, 0.0, 1.0);
-	//color.rgb = lightColor;
+	//color.rgb = MaterialDiffuseColor.rgb;
 }

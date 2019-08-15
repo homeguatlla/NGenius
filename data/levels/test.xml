@@ -49,7 +49,8 @@
 			<texture name = "wind_texture" filename = "data/wind_map.png" has_wrapping="true"/>
 			<texture name = "smoke" filename = "data/textures/smoke_64_.png"/>
 			<texture name = "yellow_grid" filename = "data/textures/grid_64.png" has_wrapping="true"/>
-			<texture name = "grass2" filename = "data/textures/grass2.png"/>
+			<texture name = "grass" filename = "data/textures/grass2.png"/>
+			<texture name = "grass_flower" filename = "data/textures/grass_flower.png"/>
 		</textures_library>
 		<models_library>
 			<model name = "barrel" filename = "data/models/props/barrel.obj" calculate_normals="true" calculate_tangents="true"/>
@@ -101,14 +102,25 @@
 				<effect name="MaterialEffectShadowProperties" pfc_counter = "1" />
 				<effect name="MaterialEffectClippingPlane" />
 			</material>
-			<material name="grass2_material" shader="GrassShader">
+			<material name="grass_material" shader="GrassShader">
 				<effect name="MaterialEffectFogProperties"/>
 				<effect name="MaterialEffectFloat2" values="4.0 4.0" />
 				<effect name="MaterialEffectShadowProperties" pfc_counter="0"/>
 				<effect name="MaterialEffectFloat" values="0.0"/>
 				<effect name="MaterialEffectDirectionalLightProperties" />
 				<effect name="MaterialEffectFloat3Array" />
-				<effect name="MaterialEffectParticle" texture="grass2" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
+				<effect name="MaterialEffectParticle" texture="grass" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
+				<effect name="MaterialEffectNormalTexture" texture="wind_texture" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="grass_flower_material" shader="GrassShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectFloat2" values="4.0 6.0" />
+				<effect name="MaterialEffectShadowProperties" pfc_counter="0"/>
+				<effect name="MaterialEffectFloat" values="0.0"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectFloat3Array" />
+				<effect name="MaterialEffectParticle" texture="grass_flower" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
 				<effect name="MaterialEffectNormalTexture" texture="wind_texture" tile="1.0"/>
 				<effect name="MaterialEffectClippingPlane" />				
 			</material>
@@ -264,7 +276,7 @@
 					<component is_enabled="true" type="CollisionComponent"/>
 				</components>
 			</player>
-			<terrain is_enabled="true" name="terrain" material="terrain" scale="20" is_flat="false" heighmap_texture="terrain_heightmap">
+			<terrain is_enabled="true" name="terrain" material="terrain" scale="20" heighmap_texture="terrain_heightmap">
 				<transformation>
 					<position X="0.000000" Y="0.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
@@ -326,7 +338,18 @@
 					</component>
 				</components>
 			</entity>
-			<terrain_points_patch is_enabled="true" material="grass2_material" layer="4" min_height ="11.6" max_height="20" wide="50" lenght="50" density="10">
+			<terrain_points_patch is_enabled="true" material="grass_material" layer="4" min_height ="11.6" max_height="20" wide="50" lenght="50" density="10">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="1.0" Y="1.0" Z="1.0"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="EnvironmentAffectedComponent" affected_by_wind="true"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</terrain_points_patch>
+			<terrain_points_patch is_enabled="true" material="grass_flower_material" layer="4" min_height ="11.6" max_height="20" wide="50" lenght="50" density="2">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>

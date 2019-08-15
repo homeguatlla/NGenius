@@ -49,66 +49,35 @@
 			<texture name = "wind_texture" filename = "data/wind_map.png" has_wrapping="true"/>
 			<texture name = "smoke" filename = "data/textures/smoke_64_.png"/>
 			<texture name = "yellow_grid" filename = "data/textures/grid_64.png" has_wrapping="true"/>
-			<texture name = "grass2" filename = "data/textures/grass2.png"/>
+			<texture name = "grass" filename = "data/textures/grass2.png"/>
+			<texture name = "grass_flower" filename = "data/textures/grass_flower.png"/>
 		</textures_library>
 		<models_library>
-			<model name = "barrel" filename = "data/models/props/barrel.obj" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "chest" filename = "data/models/props/chest.obj" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "brazier" filename = "data/models/props/brazier.obj" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "sphere" filename = "data/models/sphere/sphere.obj" calculate_tangents="true"/>
 			<model name = "farmer" filename = "data/models/farmer/farmer.dae" calculate_normals="true" calculate_tangents="true"/>
 			<model name = "crate" filename = "data/models/props/crate.obj" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "statue" filename = "data/models/props/statue.obj" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "tree_foliage_0" filename="data/models/tree4/tree_foliage_lod0.obj" calculate_tangents="true"/>
-			<model name = "tree_foliage_1" filename="data/models/tree4/tree_foliage_lod1.obj" calculate_tangents="true"/>
-			<model name = "tree_foliage_2" filename="data/models/tree4/tree_foliage_lod2.obj" calculate_tangents="true"/>
-			<model name = "tree_trunk_0" filename="data/models/tree4/tree_trunk_lod0.obj" calculate_tangents="true"/>
-			<model name = "tree_trunk_1" filename="data/models/tree4/tree_trunk_lod1.obj" calculate_tangents="true"/>
-			<model name = "tree_trunk_2" filename="data/models/tree4/tree_trunk_lod2.obj" calculate_tangents="true"/>
 		</models_library>
 		<lods_library>
-			<lods name = "tree_folliage">
-				<lod model_name="tree_folliage_0" distance = "500.0" />
-				<lod model_name="tree_folliage_1" distance = "800.0" />
-				<lod model_name="tree_folliage_2" distance = "1000.0" />
-			</lods>
-			<lods name = "tree_trunk">
-				<lod model_name="tree_trunk_0" distance = "500.0" />
-				<lod model_name="tree_trunk_1" distance = "800.0" />
-				<lod model_name="tree_trunk_2" distance = "1000.0" />
-			</lods>
 		</lods_library>
 		<materials_library>
-			<material name= "tree_foliage" shader = "ModelShader">
-				<effect name="MaterialEffectDiffuseTexture" texture="tree_foliage_diffuse" color="1.0 1.0 1.0" tile="1.0" />
-				<effect name="MaterialEffectDirectionalLightProperties" />
-				<effect name="MaterialEffectFogProperties" />
-				<effect name="MaterialEffectShadowProperties" pfc_counter = "1" />
-				<effect name="MaterialEffectClippingPlane" />
-			</material>
-			<material name= "tree_trunk" shader = "ModelShader">
-				<effect name="MaterialEffectDiffuseTexture" texture="tree_trunk_diffuse" color="1.0 1.0 1.0" tile="1.0" />
-				<effect name="MaterialEffectDirectionalLightProperties" />
-				<effect name="MaterialEffectFogProperties" />
-				<effect name="MaterialEffectShadowProperties" pfc_counter = "1" />
-				<effect name="MaterialEffectClippingPlane" />
-			</material>
-			<material name= "tree_trunk_normalmap" shader = "NormalMapShader">
-				<effect name="MaterialEffectDiffuseTexture" texture="tree_trunk_diffuse" color="1.0 1.0 1.0" tile="1.0" />
-				<effect name="MaterialEffectDirectionalLightProperties" />
-				<effect name="MaterialEffectNormalTexture" texture="tree_trunk_normalmap" tile="1.0"/>
-				<effect name="MaterialEffectFogProperties" />
-				<effect name="MaterialEffectShadowProperties" pfc_counter = "1" />
-				<effect name="MaterialEffectClippingPlane" />
-			</material>
-			<material name="grass2_material" shader="GrassShader">
+			<material name="grass_material" shader="GrassShader">
 				<effect name="MaterialEffectFogProperties"/>
 				<effect name="MaterialEffectFloat2" values="4.0 4.0" />
 				<effect name="MaterialEffectShadowProperties" pfc_counter="0"/>
 				<effect name="MaterialEffectFloat" values="0.0"/>
 				<effect name="MaterialEffectDirectionalLightProperties" />
 				<effect name="MaterialEffectFloat3Array" />
-				<effect name="MaterialEffectParticle" texture="grass2" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
+				<effect name="MaterialEffectParticle" texture="grass" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
+				<effect name="MaterialEffectNormalTexture" texture="wind_texture" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="grass_flower_material" shader="GrassShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectFloat2" values="4.0 4.0" />
+				<effect name="MaterialEffectShadowProperties" pfc_counter="0"/>
+				<effect name="MaterialEffectFloat" values="0.0"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectFloat3Array" />
+				<effect name="MaterialEffectParticle" texture="grass_flower" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
 				<effect name="MaterialEffectNormalTexture" texture="wind_texture" tile="1.0"/>
 				<effect name="MaterialEffectClippingPlane" />				
 			</material>
@@ -144,11 +113,6 @@
 				<effect name="MaterialEffectDirectionalLightProperties" />
 				<effect name="MaterialEffectTextureCubemap" texture1="day_cubemap" texture2="night_cubemap" blend_factor="0.0"/>				
 			</material>
-			<material name="energy_wall" shader="EnergyWallShader">
-				<effect name="MaterialEffectDiffuseTexture" texture="yellow_grid" color="0.0 0.0 0.0" tile="50.0" />
-				<effect name="MaterialEffectFloat2" values="1920 1080" />
-				<effect name="MaterialEffectDepthTexture" texture="depth_texture" tile="1.0"/>
-			</material>
 			<material name="water" shader="WaterShader">
 				<effect name="MaterialEffectFogProperties"/>
 				<effect name="MaterialEffectDirectionalLightProperties" />
@@ -159,10 +123,6 @@
 						normal_texture="normal_water" 
 						depth_texture="refraction_depth_water" 
 						color="1.0 0.3 0.2" speed="0.02" />
-			</material>
-			<material name="smoke_particle" shader="ParticleShader">
-				<effect name="MaterialEffectParticle" texture="smoke" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
-				<effect name="MaterialEffectClippingPlane" />				
 			</material>
 		</materials_library>
 		<cameras>
@@ -304,7 +264,7 @@
 					</component>
 				</components>
 			</entity>
-			<terrain_points_patch is_enabled="true" material="grass2_material" layer="4" min_height ="0.0" max_height="20" wide="5" lenght="5" density="1">
+			<terrain_points_patch is_enabled="true" material="grass_material" layer="4" min_height ="0.0" max_height="20" wide="10" lenght="10" density="30">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>
@@ -315,6 +275,27 @@
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
 			</terrain_points_patch>
+			<terrain_points_patch is_enabled="true" material="grass_flower_material" layer="4" min_height ="0.0" max_height="20" wide="10" lenght="10" density="2">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="1.0" Y="1.0" Z="1.0"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="EnvironmentAffectedComponent" affected_by_wind="true"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</terrain_points_patch>
+			<entity is_enabled="true" model="crate" material="props_material" layer="8">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="1.0" Y="1.0" Z="1.0"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="CollisionComponent"/>
+				</components>
+			</entity>
 		</entities>
 	</game_scene>
 </ngenius>

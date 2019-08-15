@@ -182,7 +182,7 @@ unsigned char PNGLoader::GetA(int u, int v) const
 	}
 	else 
 	{
-		return 0;
+		return 255.0f;
 	}
 }
 

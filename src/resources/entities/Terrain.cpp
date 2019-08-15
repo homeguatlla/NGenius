@@ -24,16 +24,14 @@
 Terrain::Terrain(Transformation* transformation) :
 	BaseGameEntity<Terrain>(transformation),
 	mHeightmap(nullptr),
-	mScale(1.0f),
-	mIsFlat(false)
+	mScale(1.0f)
 {
 }
 
 Terrain::Terrain(Transformation* transformation, IMaterial* material, Texture* heightmap, float scale) :
 	BaseGameEntity<Terrain>(transformation),
 mHeightmap(nullptr),
-mScale(scale),
-mIsFlat(false)
+mScale(scale)
 {
 	CreateTerrain(material, heightmap);
 }
@@ -41,11 +39,6 @@ mIsFlat(false)
 Terrain::~Terrain()
 {
 	delete mModel;
-}
-
-void Terrain::SetFlat(bool isFlat)
-{
-	mIsFlat = isFlat;
 }
 
 void Terrain::SetScale(float scale)
@@ -74,7 +67,6 @@ void Terrain::ReadFrom(core::utils::IDeserializer* source)
 {
 	BaseGameEntity::ReadFrom(source);
 
-	source->ReadParameter("is_flat", &mIsFlat);
 	source->ReadParameter("heighmap_texture", mHeightmapName);
 	source->ReadParameter("scale", &mScale);
 	source->ReadParameter("model", mModelName);
@@ -185,7 +177,7 @@ float Terrain::GetHeightFromColor(glm::vec2 point) const
 		height = CalculateBarryCenter(vertex1, vertex2, vertex3, glm::vec2(xCoord, zCoord));
 	}
 
-	return mIsFlat ? 0.0f : height;
+	return height;
 }
 
 void Terrain::CalculateY()

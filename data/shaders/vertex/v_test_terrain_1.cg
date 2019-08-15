@@ -28,6 +28,8 @@ uniform mat4 toShadowMapSpace;
 const float shadowDistance = 10.0;
 const float transitionDistance = 20.0;
 
+
+// el height color es una normal (rgb) y un valor de altura en el alpha
 void main()
 {
 	//cameraPos = cameraPosition;

@@ -93,7 +93,7 @@ vec3 calculateModificatorsWindVector()
 	{
 		vec3 direction = gl_in[0].gl_Position.xyz -  windModificators[modificator];
 		float distance = length(direction);
-		if(distance < 0.2)
+		if(distance < 0.3)
 		{
 			modification += (direction * 10.0 / distance);
 			modified = true;
@@ -123,39 +123,23 @@ void main()
 	//clipping
 	if(distance < 0.0 || distance > FAR_DISTANCE_CLIPPING)
 	{
-		//outColor = vec4(0,0,1,1);
-				return;
+		return;
 	}
 
-	float x = size.x * 0.5 * scale[0];
-	float h = size.y * 0.5 * scale[0];
-	
-	float angle = rotationY[0];
-	float s = sin(angle);
-	float c = cos(angle);
-
-	float xr = -x * c;
-	float zr = -x * s;
-	float xr2 = -xr;
-	float zr2 = -zr;
-
-	vec3 newWind = vec3(1.0, 1.0, 0.0);
+	vec3 newWind = vec3(0.0, 1.0, 0.0);
 	
 	if(distance < AFFECTED_BY_WIND_RADIUS)
 	{
 		newWind = calculateWindVector(PATCH_SIZE);
 		newWind += calculateModificatorsWindVector();
-		//newWind *= h;
-		//outColor = vec4(newWind.x,newWind.y,newWind.z,1);
-	}
-	else
-	{
-		//outColor = vec4(1,0,0,1);
+		newWind.x = 0.0f;
+		newWind = normalize(newWind);
 	}
 	
 	alphaFactor = clamp(exp(-pow(distance * FOG_DENSITY_MULTIPLIER, fogGradient)), 0.0, 1.0);
 
-	vec3 dif = vec3(0.0, newWind.y, 0.0) - newWind;
+	vec3 dif = -newWind;
+	dif.y = 0.0f;
 	vec3 controlPoints[4];
 	controlPoints[0] = vec3(0.0);
 	controlPoints[1] = newWind + dif * 0.75;
@@ -164,11 +148,29 @@ void main()
 	controlPoints[2].y = controlPoints[1].y + newWind.y / 4.0;
 	controlPoints[3] = newWind;
 
-	for(int c = 0; c <= 5; c++)
+	float x = size.x * 0.5 * scale[0];
+	float h = size.y * 0.5 * scale[0];
+	float sinAroundY = sin(rotationY[0]);
+	float cosAroundY = cos(rotationY[0]);
+
+	for(int c = 0; c <= 4; c++)
 	{
-		vec3 wind = toBezier(c/5.0, controlPoints[0], controlPoints[1], controlPoints[2], controlPoints[3]);
-		createVertex(vec3(xr, 0.0, zr) + wind * h, vec2(0.0, wind.y / newWind.y));
-		createVertex(vec3(xr2, 0.0, zr2) + wind * h, vec2(1.0, wind.y / newWind.y));
+		vec3 wind = toBezier(c/4.0, controlPoints[0], controlPoints[1], controlPoints[2], controlPoints[3]);
+		vec3 vertex1 = vec3(-x, 0.0f, 0.0f) + wind * h;
+		vec3 vertex2 = vec3(x, 0.0f, 0.0f) + wind * h;
+
+		//rotate around Y
+		vec3 vertex1Rotated = vec3(0.0f, vertex1.y, 0.0f);
+		vec3 vertex2Rotated = vec3(0.0f, vertex2.y, 0.0f);
+
+		vertex1Rotated.x = vertex1.x * cosAroundY + vertex1.z * sinAroundY;
+		vertex1Rotated.z = vertex1.z * cosAroundY - vertex1.x * sinAroundY;
+
+		vertex2Rotated.x = vertex2.x * cosAroundY + vertex2.z * sinAroundY;
+		vertex2Rotated.z = vertex2.z * cosAroundY - vertex2.x * sinAroundY;
+		
+		createVertex(vertex1Rotated, vec2(0.0, vertex1Rotated.y / (newWind.y * h)));
+		createVertex(vertex2Rotated, vec2(1.0, vertex2Rotated.y / (newWind.y *h)));
 	}
 	EndPrimitive();
 }

@@ -15,7 +15,6 @@ class Terrain :	public BaseGameEntity<Terrain>
 	int mNumVertexsSide;
 	float mGridSize;
 	float mScale;
-	bool mIsFlat;
 	Texture* mHeightmap;
 	Model* mModel;
 	MaterialEffectFloat* mMaterialEffectFloat;
@@ -36,7 +35,6 @@ public:
 	[[deprecated("Replaced by GetHeight, this needs to be reviwed, not working properly.")]]
 	float GetHeightFromColor(glm::vec2 point) const;
 
-	void SetFlat(bool isFlat);
 	void SetScale(float scale);
 
 	void Build(NGenius* engine) override;
