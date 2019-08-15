@@ -119,11 +119,11 @@ RenderPass* WaterRenderPassSubSystem::CreateRefractionRenderPass()
 	refractionWaterPass->SetFrameBufferOutput(frameRefractionBuffer);
 	refractionWaterPass->EnableClipping(true);
 	refractionWaterPass->SetClippingPlaneNumber(GL_CLIP_DISTANCE0);
-	//we need to add +2.0 to the water height, because when applying distorsion to the texture can get points 
+	//we need to add +0.1 to the water height, because when applying distorsion to the texture can get points 
 	//out the refraction area drawed, and these points are blue (the color of the water plane), getting 
 	//a bit more of the height, cutting over the water, we are painting more space in the water plane and then
 	//the distorsion is not affecting, otherwise the border of the water has a bit of blue color (the default color of the plane)
-	refractionWaterPass->SetClippingPlane(glm::vec4(0.0f, -1.0f, 0.0f, mWaterY + 2.0f));
+	refractionWaterPass->SetClippingPlane(glm::vec4(0.0f, -1.0f, 0.0f, mWaterY + 0.1f));
 	refractionWaterPass->SetAcceptSpacePartitionOnly(true);
 
 	return refractionWaterPass;

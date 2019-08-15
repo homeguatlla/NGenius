@@ -61,14 +61,14 @@ void main()
 	distorsionCoords = textureCoords + vec2(distorsionCoords.x , distorsionCoords.y + waterSpeed);
 	vec2 distorsion = (texture2D(distorsionTexture, distorsionCoords).rg * 2.0 - 1.0) * waveStrengh ;
 
-	reflectTexCoords += distorsion;
-	reflectTexCoords = clamp(reflectTexCoords, 0.001, 0.999);
+	vec2 distorsionedReflectTexCoords = reflectTexCoords + distorsion;
+	distorsionedReflectTexCoords = clamp(distorsionedReflectTexCoords, 0.001, 0.999);
 	
-	refractTexCoords += distorsion;
-	refractTexCoords = clamp(refractTexCoords, 0.001, 0.999);
+	vec2 distorsionedRefractTexCoords = refractTexCoords + distorsion;
+	distorsionedRefractTexCoords = clamp(distorsionedRefractTexCoords, 0.001, 0.999);
 
-	vec4 reflectionColor = texture2D(reflectionTexture, reflectTexCoords);
-	vec4 refractionColor = texture2D(refractionTexture, refractTexCoords);
+	vec4 distorsionedReflectionColor = texture2D(reflectionTexture, distorsionedReflectTexCoords);
+	vec4 distorsionedRefractionColor = texture2D(refractionTexture, distorsionedRefractTexCoords);
 
 	vec3 cameraVectorNormalized = normalize(cameraVector);
 
@@ -81,14 +81,15 @@ void main()
 	{
 		//para el agua cerca de la orilla, quitamos la parte reflejada y modificamos el waterColor para que sea 
 		//más azul más hacia el interior del agua.
-		//color = mix(reflectionColor, refractionColor, reflectionFresnelFactor);
+		vec4 refractionColor = texture2D(refractionTexture, refractTexCoords);
+		color = mix(distorsionedReflectionColor, refractionColor, reflectionFresnelFactor);
 		color = mix(refractionColor,  color, depthFactor);
 		color = mix(color, waterColor, depthFactor * 3.0) + vec4(specularColor, 1.0);
 	}
 	else
 	{
-		color = mix(reflectionColor, refractionColor, reflectionFresnelFactor);
-		color = mix(refractionColor,  color, depthFactor);
+		color = mix(distorsionedReflectionColor, distorsionedRefractionColor, reflectionFresnelFactor);
+		color = mix(distorsionedRefractionColor,  color, depthFactor);
 		color = mix(color, waterColor, 0.2) + vec4(specularColor, 1.0);
 	}
 	/*if(depthFactor < 0.05)

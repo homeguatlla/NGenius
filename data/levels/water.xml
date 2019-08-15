@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ngenius version="0.3.0">
+	<libraries>
+		<fonts_library>
+			<font filename = "data/fonts/quartzMS.fnt"/>
+		</fonts_library>
+		<shaders_library>
+			<shader name="ModelShader"/>
+			<shader name="TerrainShader"/>
+			<shader name="SkyBoxShader"/>
+			<shader name="ParticleShader"/>
+			<shader name="WaterShader"/>
+			<shader name="EnergyWallShader"/>
+			<shader name="HorizontalBlurShader"/>
+			<shader name="VerticalBlurShader"/>
+			<shader name="BrightShader"/>
+			<shader name="BloomShader"/>
+			<shader name="GrassShader"/>
+			<shader name="AnimatedModelShader"/>
+		</shaders_library>
+		<textures_library>
+			<texture name = "terrain_heightmap" filename = "data/textures/terrain_heightmap_1024.png" />
+			<texture name = "terrain_blendmap" filename = "data/textures/terrain_blendmap_1024.png" />			
+			<texture name = "distorsion_water" filename = "data/textures/waterDUDV.png" has_wrapping="true"/>
+			<texture name = "normal_water" filename = "data/textures/normal_water.png" has_wrapping="true"/>
+			<texture_array name = "terrain_array">
+				<texture filename = "data/textures/sand_256.png" />
+				<texture filename = "data/textures/grass_256.png" />
+				<texture filename = "data/textures/grass_dark_256.png" />
+				<texture filename = "data/textures/rock3.png" />
+			</texture_array>
+			<texture_cubemap name = "day_cubemap">
+				<texture filename = "data/skybox/sky1/right.png" />
+				<texture filename = "data/skybox/sky1/left.png" />
+				<texture filename = "data/skybox/sky1/top.png" />
+				<texture filename = "data/skybox/sky1/bottom.png" />
+				<texture filename = "data/skybox/sky1/back.png" />
+				<texture filename = "data/skybox/sky1/front.png" />
+			</texture_cubemap>
+			<texture_cubemap name = "night_cubemap">
+				<texture filename = "data/skybox/sky2/right.png" />
+				<texture filename = "data/skybox/sky2/left.png" />
+				<texture filename = "data/skybox/sky2/top.png" />
+				<texture filename = "data/skybox/sky2/bottom.png" />
+				<texture filename = "data/skybox/sky2/back.png" />
+				<texture filename = "data/skybox/sky2/front.png" />
+			</texture_cubemap>
+			<texture name = "material_farmer_diffuse" filename = "data/models/farmer/farmer_texture.png"/>
+			<texture name = "wind_texture" filename = "data/wind_map.png" has_wrapping="true"/>
+			<texture name = "smoke" filename = "data/textures/smoke_64_.png"/>
+			<texture name = "yellow_grid" filename = "data/textures/grid_64.png" has_wrapping="true"/>
+			<texture name = "grass" filename = "data/textures/grass2.png"/>
+			<texture name = "grass_flower" filename = "data/textures/grass_flower.png"/>
+		</textures_library>
+		<models_library>
+			<model name = "farmer" filename = "data/models/farmer/farmer.dae" calculate_normals="false" calculate_tangents="false"/>
+			<model name = "crate" filename = "data/models/props/crate.obj" calculate_normals="false" calculate_tangents="false"/>
+		</models_library>
+		<lods_library>
+		</lods_library>
+		<materials_library>
+			<material name="grass_material" shader="GrassShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectFloat2" values="4.0 4.0" />
+				<effect name="MaterialEffectShadowProperties" pfc_counter="0"/>
+				<effect name="MaterialEffectFloat" values="0.0"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectFloat3Array" />
+				<effect name="MaterialEffectParticle" texture="grass" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
+				<effect name="MaterialEffectNormalTexture" texture="wind_texture" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="grass_flower_material" shader="GrassShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectFloat2" values="4.0 4.0" />
+				<effect name="MaterialEffectShadowProperties" pfc_counter="0"/>
+				<effect name="MaterialEffectFloat" values="0.0"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectFloat3Array" />
+				<effect name="MaterialEffectParticle" texture="grass_flower" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
+				<effect name="MaterialEffectNormalTexture" texture="wind_texture" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="props_material" shader="NormalMapShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="MedievalDungeonPropsAtlas02_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="MaterialEffectNormalTexture" texture="MedievalDungeonPropsAtlas02_normalmap" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="terrain" shader="TerrainShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="3"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="terrain_blendmap" color="1.0 1.0 1.0" tile="50.0" />
+				<effect name="MaterialEffectClippingPlane" />
+				<effect name="MaterialEffectFloat" value="10"/>
+				<effect name="MaterialEffectHeightMapTexture" texture="terrain_heightmap" tile="1.0" />
+				<effect name="MaterialEffectTextureArray" texture="terrain_array"/>				
+			</material>
+			<material name="player" shader="AnimatedModelShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="3"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="material_farmer_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<!--effect name="MaterialEffectNormalTexture" texture="material_farmer_normalmap" tile="1.0"/-->
+				<effect name="MaterialEffectClippingPlane" />
+				<effect name="MaterialEffectMatrix4Array" />					
+			</material>
+			<material name="skybox" shader="SkyBoxShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectTextureCubemap" texture1="day_cubemap" texture2="night_cubemap" blend_factor="0.0"/>				
+			</material>
+			<material name="water" shader="WaterShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectWater" 
+						reflection_texture="reflection_water" 
+						refraction_texture="refraction_water"
+						distorsion_texture="distorsion_water" 
+						normal_texture="normal_water" 
+						depth_texture="refraction_depth_water" 
+						color="0.0 0.3 0.8" speed="0.02" />
+			</material>
+		</materials_library>
+		<cameras>
+			<camera name="gameplay_camera" fov="45" aspect_ratio="1.7" near_plane="0.1" far_plane="200" is_gameplay_camera = "true">
+				<position X="25" Y="12" Z="25"/>
+				<target X="0" Y="0" Z="0"/>
+				<up X="0" Y="1" Z="0"/>
+			</camera>
+			<camera name="free_camera" fov="45" aspect_ratio="1.7" near_plane="0.1" far_plane="200" is_free_camera="true">
+				<position X="0" Y="15" Z="0"/>
+				<target X="0" Y="15" Z="25"/>
+				<up X="0" Y="1" Z="0"/>
+			</camera>
+			<camera name="gui_camera" screen_width="1920" screen_height="1080" near_plane="0.1" far_plane="100">
+				<position X="0" Y="0" Z="40"/>
+				<target X="0" Y="0" Z="-50"/>
+				<up X="0" Y="1" Z="0"/>
+			</camera>
+		</cameras>
+	</libraries>
+	<engine>
+		<debug is_enabled = "true" />
+	</engine>
+	<renderer>
+		<water is_enabled = "true" camera="gameplay_camera" height="6.0"/>
+		<shadows is_enabled = "false"/>
+		<fog is_enabled = "false" />
+		<render_layers>
+			<layer name="GUI" value="1"/>
+			<layer name="PARTICLES" value="2"/>
+			<layer name="TRANSPARENT" value="4"/>
+			<layer name="OTHER" value="8"/>
+			<layer name="WATER" value="16"/>
+			<layer name="TERRAIN" value="32"/>
+			<layer name="REFLEXION" value="64"/>
+			<layer name="DEBUG" value="128"/>
+		</render_layers>
+		<render_passes>
+			<render_pass 	name = "gui_render_pass"
+							is_enabled = "true" camera_name="gui_camera" layer_mask="1"
+							add_after_post_processing="true"
+							/>
+			<render_pass 	name = "terrain_render_pass"
+							is_enabled = "true" camera_name="gameplay_camera" layer_mask="32"
+							add_after_post_processing="false"
+							is_fog_enabled = "true" 
+							is_clipping_enabled="false" clipping_plane_number="0" 
+							has_to_calculate_distance_to_camera ="false" 
+							can_accept_space_partition_renderers_only = "false"/>
+			<render_pass 	name = "gameplay_render_pass"
+							is_enabled = "true" camera_name="gameplay_camera" layer_mask="152"
+							add_after_post_processing="false"
+							is_fog_enabled = "true" 
+							can_accept_space_partition_renderers_only = "true">
+				<frame_buffers>
+					<frame_buffer width="1920" height="1080" texture="depth_texture" copy_buffer_to_texture="true" 
+								copy_x="0" copy_y="0" copy_width="1920" copy_height="1080"/>
+				</frame_buffers>
+			</render_pass>
+			<render_pass 	name = "transparent_render_pass"
+							is_fog_enabled = "true"
+							is_enabled = "true" camera_name="gameplay_camera" layer_mask="4"
+							add_after_post_processing="false"
+							/>
+			<render_pass 	name = "particles_render_pass"
+							is_enabled = "true" camera_name="gameplay_camera" layer_mask="2"
+							add_after_post_processing="false"
+							has_to_calculate_distance_to_camera ="true"
+							is_fog_enabled = "true"
+							/>			
+		</render_passes>
+	</renderer>
+	<game_scene name="mainScene">
+		<entities counter="412">
+			<player is_enabled="true" name="player" model="farmer" material="player" renderer="IndicesRenderer" layer="8" run_speed="3.0" turn_speed="0.2" upwards_speed="2.0">
+				<transformation> 
+					<position X="0" Y="10" Z="0"/>
+					<rotation X="-90" Y="0" Z="0.000000"/>
+					<scale X="0.180000" Y="0.180000" Z="0.180000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="AnimationComponent" animation="animation_0"/>
+					<component is_enabled="true" type="CharacterComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="EnergyWallCollisionComponent"/>
+					<component is_enabled="true" type="EnvironmentModificatorComponent"/>
+					<component is_enabled="true" type="InputComponent">
+						<converters>
+							<converter key="87" event="ForwardEvent"/>
+							<converter key="83" event="BackwardEvent"/>
+							<converter key="32" event="JumpEvent"/>
+							<converter mouse="-1" event="TurnEvent"/>
+							<converter mouse="2" event="ZoomEvent"/>
+						</converters>
+					</component>
+					<component is_enabled="true" type="PhysicsComponent" is_static="0">
+						<gravity X="0.000000" Y="-9.800000" Z="0.000000"/>
+					</component>
+					<component is_enabled="true" type="CollisionComponent"/>
+				</components>
+			</player>
+			<terrain is_enabled="true" name="terrain" material="terrain" scale="10" is_flat="false" heighmap_texture="terrain_heightmap">
+				<transformation>
+					<position X="0.000000" Y="0.000000" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+			</terrain>
+			<water is_enabled="true" name="water" material="water" wide="50" length="50">
+				<transformation>
+					<position X="4.000000" Y="0.000000" Z="4.500000"/>
+					<rotation X="-90.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+			</water>
+			<entity is_enabled="true" model="skybox" material="skybox" renderer="SkyBoxRenderer" layer="2">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="500.0" Y="500.0" Z="500.0"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RotationComponent" rotation_speed="0.01">
+						<axis X="0.0" Y="1.0" Z="0.0"/>
+					</component>
+				</components>
+			</entity>
+			<entity is_enabled="true" layer="8">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="0.0" Y="0.0" Z="0.0"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="CharacterComponent"/>
+					<component is_enabled="false" type="OverWaterComponent"/>
+					<component is_enabled="true" type="InputComponent">
+						<converters>
+							<converter mouse="-1" event="PitchEvent"/>
+							<converter mouse="2" event="ZoomEvent"/>
+						</converters>
+					</component>
+					<component is_enabled="true" type="ThirdPersonCameraComponent" target="player" camera="gameplay_camera" distance_from_target="4" pitch="10" pitch_speed="10" zoom_speed="10">
+						<target_offset X="0.0" Y="0.5" Z="0.0"/>
+					</component>
+				</components>
+			</entity>
+			<terrain_points_patch is_enabled="true" material="grass_material" layer="4" min_height ="7.0" max_height="20" wide="50" lenght="50" density="30">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="1.0" Y="1.0" Z="1.0"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="EnvironmentAffectedComponent" affected_by_wind="true"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</terrain_points_patch>
+			<terrain_points_patch is_enabled="true" material="grass_flower_material" layer="4" min_height ="7.0" max_height="20" wide="50" lenght="50" density="2">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="1.0" Y="1.0" Z="1.0"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="EnvironmentAffectedComponent" affected_by_wind="true"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</terrain_points_patch>
+			<entity is_enabled="true" model="crate" material="props_material" layer="8">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="1.0" Y="1.0" Z="1.0"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="CollisionComponent"/>
+				</components>
+			</entity>
+		</entities>
+	</game_scene>
+</ngenius>
