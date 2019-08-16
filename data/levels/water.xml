@@ -161,10 +161,6 @@
 			<layer name="DEBUG" value="128"/>
 		</render_layers>
 		<render_passes>
-			<render_pass 	name = "gui_render_pass"
-							is_enabled = "true" camera_name="gui_camera" layer_mask="1"
-							add_after_post_processing="true"
-							/>
 			<render_pass 	name = "terrain_render_pass"
 							is_enabled = "true" camera_name="gameplay_camera" layer_mask="32"
 							add_after_post_processing="false"
@@ -192,7 +188,11 @@
 							add_after_post_processing="false"
 							has_to_calculate_distance_to_camera ="true"
 							is_fog_enabled = "true"
-							/>			
+							/>
+			<render_pass 	name = "gui_render_pass"
+							is_enabled = "true" camera_name="gui_camera" layer_mask="1"
+							add_after_post_processing="true"
+							/>							
 		</render_passes>
 	</renderer>
 	<game_scene name="mainScene">
@@ -238,7 +238,7 @@
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 			</water>
-			<entity is_enabled="true" model="skybox" material="skybox" renderer="SkyBoxRenderer" layer="2">
+			<entity is_enabled="true" model="skybox" material="skybox" renderer="SkyBoxRenderer" layer="8">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>
