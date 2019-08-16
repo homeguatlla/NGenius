@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "BackwardEvent.h"
 #include "GLFW/glfw3.h"
-#include "../Memory.h"
 
 BackwardEvent::BackwardEvent() : mIsPressed(false)
 {
@@ -12,10 +11,10 @@ BackwardEvent::~BackwardEvent()
 {
 }
 
-BackwardEvent* BackwardEvent::DoClone(const void* data) const
+std::shared_ptr<GameEvent> BackwardEvent::DoClone(const void* data) const
 {
 	const int* action = reinterpret_cast<const int*>(data);
-	BackwardEvent* event = DBG_NEW BackwardEvent();
+	std::shared_ptr<BackwardEvent> event = std::make_shared<BackwardEvent>();
 	event->SetPressed(action != GLFW_RELEASE);
 	return event;
 }
@@ -30,7 +29,7 @@ bool BackwardEvent::IsPressed() const
 	return mIsPressed;
 }
 
-GameEvent* BackwardEvent::Create()
+std::shared_ptr<GameEvent> BackwardEvent::Create()
 {
-	return DBG_NEW BackwardEvent();
+	return std::make_shared<BackwardEvent>();
 }

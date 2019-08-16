@@ -20,7 +20,7 @@ CharacterComponent* CharacterComponent::DoClone() const
 	return DBG_NEW CharacterComponent(*this);
 }
 
-void CharacterComponent::OnCharacterControllerEvent(const GameEvent* gameEvent)
+void CharacterComponent::OnCharacterControllerEvent(std::shared_ptr<const GameEvent> gameEvent)
 {
 	assert(gameEvent != nullptr);
 	mEvents.push(gameEvent);
@@ -31,9 +31,9 @@ bool CharacterComponent::HasEvents() const
 	return !mEvents.empty();
 }
 
-const GameEvent* CharacterComponent::ConsumeEvent()
+std::shared_ptr<const GameEvent> CharacterComponent::ConsumeEvent()
 {
-	const GameEvent* event = mEvents.front();
+	std::shared_ptr<const GameEvent> event = mEvents.front();
 	mEvents.pop();
 
 	return event;

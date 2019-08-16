@@ -1,11 +1,14 @@
 #pragma once
+#include <memory>
+
+
 class GameEvent
 {
 public:
 	GameEvent();
 	~GameEvent();
 
-	GameEvent* Clone(const void* data) const;
+	std::shared_ptr<GameEvent> Clone(const void* data) const;
 
 	template<typename T>
 	bool IsOfType() const
@@ -14,6 +17,6 @@ public:
 	}
 
 private:
-	virtual GameEvent* DoClone(const void* data) const = 0;
+	virtual std::shared_ptr<GameEvent> DoClone(const void* data) const = 0;
 };
 

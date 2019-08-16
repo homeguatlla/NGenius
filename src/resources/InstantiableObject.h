@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <functional>
+#include <memory>
 
 class IShaderProgram;
 class IMaterialEffect;
@@ -23,7 +24,7 @@ private:
 	using MaterialEffectCreatorFunction = std::function<IMaterialEffect* (IMaterial*)>;
 	using ComponentCreatorFunction = std::function<IComponent* (IGameEntity*)>;
 	using GameEntityCreatorFunction = std::function<IGameEntity* ()>;
-	using GameEventCreatorFunction = std::function<GameEvent* ()>;
+	using GameEventCreatorFunction = std::function<std::shared_ptr<GameEvent> ()>;
 
 	public:
 		template<class T>
@@ -66,7 +67,7 @@ private:
 		template<class T>
 		static void RegisterGameEvent()
 		{
-			mGameEventsFactory[T::GetClassName()] = std::bind<GameEvent*>(&T::Create);
+			mGameEventsFactory[T::GetClassName()] = std::bind<std::shared_ptr<GameEvent>>(&T::Create);
 		}
 
 		static IGameEntity* CreateEntity(const std::string& name);
@@ -76,7 +77,7 @@ private:
 		static IRenderer* CreateRenderer(const std::string& name, Model* model, IMaterial* material);
 		static IShaderProgram* CreateShader(const std::string& name);
 		static IComponent* CreateComponent(const std::string& name, IGameEntity* entity);
-		static GameEvent* CreateGameEvent(const std::string& name);
+		static std::shared_ptr<GameEvent> CreateGameEvent(const std::string& name);
 
 	private:
 		static std::map<std::string, IFactory*> mFactories;

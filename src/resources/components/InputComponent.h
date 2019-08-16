@@ -5,6 +5,7 @@
 #include <queue>
 #include <vector>
 #include <string>
+#include <memory>
 
 class GameEvent;
 class InputConverter;
@@ -22,8 +23,8 @@ public:
 	void AddConverter(const InputConverter* converter);
 	void RemoveConverter(const InputConverter* converter);
 
-	const GameEvent* ConvertKey(int key, int action) const;
-	const GameEvent* ConvertMouse(void* data) const;
+	std::shared_ptr<const GameEvent> ConvertKey(int key, int action) const;
+	std::shared_ptr<const GameEvent> ConvertMouse(void* data) const;
 
 	static std::string GetClassName() { return std::string("InputComponent"); }
 	static IComponent* Create(IGameEntity* entity);

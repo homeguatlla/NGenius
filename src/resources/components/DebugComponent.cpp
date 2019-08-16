@@ -19,6 +19,7 @@ mBoundingBoxRenderer(renderer)
 
 DebugComponent::~DebugComponent()
 {
+	delete mBoundingBoxRenderer;
 }
 
 DebugComponent* DebugComponent::DoClone() const

@@ -4,14 +4,14 @@
 #include "../../resources/systems/InputSystem.h"
 
 
-MouseToEventBind::MouseToEventBind(int button, int action, const GameEvent* event) :
+MouseToEventBind::MouseToEventBind(int button, int action, std::shared_ptr<const GameEvent> event) :
 	mButton(button), 
 	mAction(action),
 	mEvent(event)
 {
 }
 
-MouseToEventBind::MouseToEventBind(int button, const GameEvent* event) :
+MouseToEventBind::MouseToEventBind(int button, std::shared_ptr<const GameEvent> event) :
 	mButton(button),
 	mAction(-1),
 	mEvent(event)
@@ -19,12 +19,7 @@ MouseToEventBind::MouseToEventBind(int button, const GameEvent* event) :
 
 }
 
-MouseToEventBind::~MouseToEventBind()
-{
-	delete mEvent;
-}
-
-const GameEvent* MouseToEventBind::Convert(const void* data) const
+std::shared_ptr<const GameEvent> MouseToEventBind::Convert(const void* data) const
 {
 	const InputSystem::MouseData* mouseData = reinterpret_cast<const InputSystem::MouseData*>(data);
 

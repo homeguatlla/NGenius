@@ -6,13 +6,13 @@ class MouseToEventBind : public InputConverter
 {
 	int mButton;
 	int mAction;
-	const GameEvent* mEvent;
+	std::shared_ptr<const GameEvent> mEvent;
 
 public:
-	MouseToEventBind(int button, int action, const GameEvent* event);
-	MouseToEventBind(int button, const GameEvent* event);
-	~MouseToEventBind();
+	MouseToEventBind(int button, int action, std::shared_ptr<const GameEvent> event);
+	MouseToEventBind(int button, std::shared_ptr<const GameEvent> event);
+	~MouseToEventBind() = default;
 
-	const GameEvent* Convert(const void* data) const override;
+	std::shared_ptr<const GameEvent> Convert(const void* data) const override;
 };
 

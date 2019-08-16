@@ -17,6 +17,7 @@
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../../utils/serializer/XMLDeserializer.h"
 #include <iostream>
+#include <memory>
 
 //WARNING!! hay que tener en cuenta que, si subimos este valor la cámara por colisión subirá y no mantendrá el ángulo pitch que le hemos definido.
 //es decir, si vemos que el ángulo de la cámara con el target es demasiado alto (vemos al player desde una posición más alta) hay que tener en cuenta que haya subido por este valor
@@ -137,15 +138,15 @@ void ThirdPersonCameraComponent::UpdateGameEvents(float elapsedTime)
 	CharacterComponent* characterComponent = mParent->GetComponent<CharacterComponent>();
 	while (characterComponent->HasEvents())
 	{
-		const GameEvent* event = characterComponent->ConsumeEvent();
+		std::shared_ptr<const GameEvent> event = characterComponent->ConsumeEvent();
 		if (event->IsOfType<ZoomEvent>())
 		{
-			const ZoomEvent* zoomEvent = static_cast<const ZoomEvent*>(event);
+			std::shared_ptr<const ZoomEvent> zoomEvent = std::static_pointer_cast<const ZoomEvent>(event);
 			UpdateZoom(zoomEvent->GetZoom(), elapsedTime);
 		}
 		else if (event->IsOfType<PitchEvent>())
 		{
-			const PitchEvent* pitchEvent = static_cast<const PitchEvent*>(event);
+			std::shared_ptr<const PitchEvent> pitchEvent = std::static_pointer_cast<const PitchEvent>(event);
 			UpdatePitch(pitchEvent->GetPitch(), elapsedTime);
 		}
 	}

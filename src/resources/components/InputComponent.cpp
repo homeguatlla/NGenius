@@ -25,11 +25,11 @@ InputComponent* InputComponent::DoClone() const
 	return DBG_NEW InputComponent(*this);
 }
 
-const GameEvent* InputComponent::ConvertKey(int key, int action) const
+std::shared_ptr<const GameEvent> InputComponent::ConvertKey(int key, int action) const
 {
 	for (const InputConverter* converter : mConverters)
 	{
-		const GameEvent* event = converter->Convert(key, action);
+		std::shared_ptr<const GameEvent> event = converter->Convert(key, action);
 		if (event != nullptr)
 		{
 			return event;
@@ -39,11 +39,11 @@ const GameEvent* InputComponent::ConvertKey(int key, int action) const
 	return nullptr;
 }
 
-const GameEvent* InputComponent::ConvertMouse(void* data) const
+std::shared_ptr<const GameEvent> InputComponent::ConvertMouse(void* data) const
 {
 	for (const InputConverter* converter : mConverters)
 	{
-		const GameEvent* event = converter->Convert(data);
+		std::shared_ptr<const GameEvent> event = converter->Convert(data);
 		if (event != nullptr)
 		{
 			return event;
@@ -109,7 +109,7 @@ InputConverter* InputComponent::ReadConverterFrom(core::utils::IDeserializer* so
 	std::string eventName;
 	source->ReadParameter("event", eventName);
 
-	GameEvent* event = InstantiableObject::CreateGameEvent(eventName);
+	std::shared_ptr<GameEvent> event = InstantiableObject::CreateGameEvent(eventName);
 	if (event != nullptr)
 	{
 		if (source->ReadParameter("key", &value))

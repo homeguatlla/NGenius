@@ -12,12 +12,12 @@ JumpEvent::~JumpEvent()
 {
 }
 
-JumpEvent* JumpEvent::DoClone(const void* data) const
+std::shared_ptr<GameEvent> JumpEvent::DoClone(const void* data) const
 {
-	return DBG_NEW JumpEvent();
+	return std::make_shared<JumpEvent>();
 }
 
-GameEvent* JumpEvent::Create()
+std::shared_ptr<GameEvent> JumpEvent::Create()
 {
-	return DBG_NEW JumpEvent();
+	return std::make_shared<JumpEvent>();
 }

@@ -13,8 +13,8 @@ public:
 	void SetPressed(bool pressed);
 	bool IsPressed() const;
 
-	ForwardEvent* DoClone(const void* data) const override;
+	std::shared_ptr<GameEvent> DoClone(const void* data) const override;
 	static std::string GetClassName() { return std::string("ForwardEvent"); }
-	static GameEvent* Create();
+	static std::shared_ptr<GameEvent> Create();
 };
 

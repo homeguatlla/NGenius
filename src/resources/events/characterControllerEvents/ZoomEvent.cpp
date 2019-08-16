@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "ZoomEvent.h"
 #include "../../systems/InputSystem.h"
-#include "../Memory.h"
 
 ZoomEvent::ZoomEvent() : mZoom(0.0f)
 {
@@ -12,19 +11,19 @@ ZoomEvent::~ZoomEvent()
 {
 }
 
-ZoomEvent* ZoomEvent::DoClone(const void* data) const
+std::shared_ptr<GameEvent> ZoomEvent::DoClone(const void* data) const
 {
 	const InputSystem::MouseData* mouseData = reinterpret_cast<const InputSystem::MouseData*>(data);
 
-	ZoomEvent* zoomEvent = DBG_NEW ZoomEvent();
+	std::shared_ptr<ZoomEvent> zoomEvent = std::make_shared<ZoomEvent>();
 	zoomEvent->SetZoom(mouseData->mScroll);
 
 	return zoomEvent;
 }
 
-GameEvent* ZoomEvent::Create()
+std::shared_ptr<GameEvent> ZoomEvent::Create()
 {
-	return DBG_NEW ZoomEvent();
+	return std::make_shared<ZoomEvent>();
 }
 
 void ZoomEvent::SetZoom(float zoom)

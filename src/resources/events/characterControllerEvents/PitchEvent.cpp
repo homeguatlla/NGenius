@@ -12,19 +12,19 @@ PitchEvent::~PitchEvent()
 {
 }
 
-PitchEvent* PitchEvent::DoClone(const void* data) const
+std::shared_ptr<GameEvent> PitchEvent::DoClone(const void* data) const
 {
 	const InputSystem::MouseData* mouseData = reinterpret_cast<const InputSystem::MouseData*>(data);
 
-	PitchEvent* pitchEvent = DBG_NEW PitchEvent();
+	std::shared_ptr<PitchEvent> pitchEvent = std::make_shared<PitchEvent>();
 	pitchEvent->SetPitch(static_cast<float>(mouseData->mCursorY));
 
 	return pitchEvent;
 }
 
-GameEvent* PitchEvent::Create()
+std::shared_ptr<GameEvent> PitchEvent::Create()
 {
-	return DBG_NEW PitchEvent();
+	return std::make_shared<PitchEvent>();
 }
 
 void PitchEvent::SetPitch(float pitch)

@@ -12,19 +12,19 @@ TurnEvent::~TurnEvent()
 {
 }
 
-TurnEvent* TurnEvent::DoClone(const void* data) const
+std::shared_ptr<GameEvent> TurnEvent::DoClone(const void* data) const
 {
 	const InputSystem::MouseData* mouseData = reinterpret_cast<const InputSystem::MouseData*>(data);
 
-	TurnEvent* turnEvent = DBG_NEW TurnEvent();
+	std::shared_ptr<TurnEvent> turnEvent = std::make_shared<TurnEvent>();
 	turnEvent->SetTurn(static_cast<float>(mouseData->mCursorX));
 
 	return turnEvent;
 }
 
-GameEvent* TurnEvent::Create()
+std::shared_ptr<GameEvent> TurnEvent::Create()
 {
-	return DBG_NEW TurnEvent();
+	return std::make_shared<TurnEvent>();
 }
 
 void TurnEvent::SetTurn(float turn)

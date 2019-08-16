@@ -94,7 +94,7 @@ IComponent* InstantiableObject::CreateComponent(const std::string& name, IGameEn
 	}
 }
 
-GameEvent* InstantiableObject::CreateGameEvent(const std::string& name)
+std::shared_ptr<GameEvent> InstantiableObject::CreateGameEvent(const std::string& name)
 {
 	if (mGameEventsFactory.find(name) != mGameEventsFactory.end())
 	{

@@ -132,14 +132,14 @@ void Player::UpdateGameEvents()
 	{
 		while (characterComponent->HasEvents())
 		{
-			const GameEvent* event = characterComponent->ConsumeEvent();
+			std::shared_ptr<const GameEvent> event = characterComponent->ConsumeEvent();
 			switch (mState)
 			{
 			case IDLE:
 			case MOVING:
 				if (event->IsOfType<ForwardEvent>())
 				{
-					const ForwardEvent* forwardEvent = static_cast<const ForwardEvent*>(event);
+					std::shared_ptr<const ForwardEvent> forwardEvent = std::static_pointer_cast<const ForwardEvent>(event);
 					bool isPressed = forwardEvent->IsPressed();
 
 					mHasMoved |= isPressed;
@@ -155,7 +155,7 @@ void Player::UpdateGameEvents()
 				}
 				else if (event->IsOfType<BackwardEvent>())
 				{
-					const BackwardEvent* backwardEvent = static_cast<const BackwardEvent*>(event);
+					std::shared_ptr<const BackwardEvent> backwardEvent = std::static_pointer_cast<const BackwardEvent>(event);
 					bool isPressed = backwardEvent->IsPressed();
 
 					mHasMoved |= isPressed;
@@ -171,7 +171,7 @@ void Player::UpdateGameEvents()
 				}
 				else if (event->IsOfType<TurnEvent>())
 				{
-					const TurnEvent* turnEvent = static_cast<const TurnEvent*>(event);
+					std::shared_ptr<const TurnEvent> turnEvent = std::static_pointer_cast<const TurnEvent>(event);
 					mHasMoved = true;
 					mCurrentTurnSpeed = mTurnSpeed * (mLastTurnX - turnEvent->GetTurn());
 					mLastTurnX = turnEvent->GetTurn();

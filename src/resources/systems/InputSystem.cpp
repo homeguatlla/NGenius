@@ -84,7 +84,7 @@ void InputSystem::OnKey(int key, int action)
 		CharacterComponent* characterComponent = entity->GetComponent<CharacterComponent>();
 		if (inputComponent != nullptr && characterComponent != nullptr)
 		{
-			const GameEvent* event = inputComponent->ConvertKey(key, action);
+			std::shared_ptr<const GameEvent> event = inputComponent->ConvertKey(key, action);
 			if (event != nullptr)
 			{
 				characterComponent->OnCharacterControllerEvent(event);
@@ -122,7 +122,7 @@ void InputSystem::DispatchEvent(MouseData& data)
 		CharacterComponent* characterComponent = entity->GetComponent<CharacterComponent>();
 		if (inputComponent != nullptr && characterComponent != nullptr)
 		{
-			const GameEvent* event = inputComponent->ConvertMouse(reinterpret_cast<void*>(&data));
+			std::shared_ptr<const GameEvent> event = inputComponent->ConvertMouse(reinterpret_cast<void*>(&data));
 			if (event != nullptr)
 			{
 				characterComponent->OnCharacterControllerEvent(event);
