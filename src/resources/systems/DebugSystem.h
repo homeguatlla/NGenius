@@ -7,6 +7,8 @@ class IGameEntity;
 class InputHandler;
 class NGenius;
 class RenderSystem;
+class IMaterial;
+class Text;
 
 class DebugSystem : public IInputListener, public IGameSceneListener
 {
@@ -22,6 +24,8 @@ class DebugSystem : public IInputListener, public IGameSceneListener
 	NGenius* mEngine;
 	RenderSystem* mRenderSystem;
 	bool mIsInitialized;
+	std::vector<Text*> mText;
+	IMaterial* materialText;
 
 public:
 
@@ -45,6 +49,11 @@ private:
 	void RemoveEntity(IGameEntity* entity);
 
 	bool HasDebugComponents(const IGameEntity* entity) const;
+
+	void CreateStatisticsTexts();
+	void UpdateStatitstics();
+
+	void SetTextsVisibility(bool visible);
 
 	void OnGameEntityAdded(IGameEntity* entity) override;
 	void OnGameEntityRemoved(IGameEntity* entity) override;

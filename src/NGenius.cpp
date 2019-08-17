@@ -504,6 +504,11 @@ IGameEntity* NGenius::GetGameEntity(const std::string& name) const
 	}
 }
 
+GameScene* NGenius::GetGameScene(const std::string& name) const
+{
+	return mGameScene;
+}
+
 GLFWwindow* NGenius::GetGLWindow() const
 {
 	assert(mRenderSystem != nullptr);

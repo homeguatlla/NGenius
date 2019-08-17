@@ -93,6 +93,8 @@ public:
 	ICamera* GetGameplayCamera() const;
 	ICamera* GetFreeCamera() const;
 	IGameEntity* GetGameEntity(const std::string& name) const;
+	GameScene* GetGameScene(const std::string& name) const;
+
 
 	FontType* GetFont(const std::string& name) const;
 	float GetNumberFPS() const;

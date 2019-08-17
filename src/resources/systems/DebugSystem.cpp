@@ -5,9 +5,22 @@
 #include "../../input/InputHandler.h"
 #include "../components/DebugComponent.h"
 #include "renderSystem/RenderSystem.h"
+#include "../textures/ITexture.h"
+#include "../materials/MaterialsLibrary.h"
+#include "../materials/IMaterial.h"
+#include "../materials/effects/MaterialEffectDiffuseTexture.h"
+#include "../materials/effects/MaterialEffectText.h"
+#include "../font/FontType.h"
+#include "../entities/Text.h"
+#include "../../statistics/Statistics.h"
+#include "../GameConstants.h"
 #include "../../guiTool/GuiTool.h"
 #include "GLFW/glfw3.h"
+#include "../Memory.h"
 #include <algorithm>
+
+const std::vector<std::string> texts = { "FPS: ", "Triangles: ", "Drawcalls: ", "GameEntities(GE): ", "GESpacePartition:", "GERendered:", "GEWithPhysics: ", "DayTime: " };
+
 
 DebugSystem::DebugSystem(NGenius* engine, RenderSystem* renderSystem, InputHandler* inputHandler) :
 	mIsDebugModeEnabled(false),
@@ -31,6 +44,8 @@ DebugSystem::~DebugSystem()
 void DebugSystem::Start()
 {
 	mInputHandler->RegisterAllEventsInputListener(this);
+	CreateStatisticsTexts();
+	SetTextsVisibility(false);
 	mIsInitialized = true;
 }
 
@@ -38,18 +53,63 @@ void DebugSystem::Update(float elapsedTime)
 {
 	assert(mIsInitialized);
 
-	if (mIsDebugModeEnabled && mIsBoundingBoxVisible)
+	if (mIsDebugModeEnabled)
 	{
-		for (IGameEntity* entity : mEntities)
+		if (mIsBoundingBoxVisible)
 		{
-			entity->Update(elapsedTime);
-			DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
-			if(debugComponent->IsEnabled())
+			for (IGameEntity* entity : mEntities)
 			{
-				IRenderer* renderer = debugComponent->GetBoundingBoxRenderer();
-				mRenderSystem->AddToRender(renderer);
+				entity->Update(elapsedTime);
+				DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
+				if (debugComponent->IsEnabled())
+				{
+					IRenderer* renderer = debugComponent->GetBoundingBoxRenderer();
+					mRenderSystem->AddToRender(renderer);
+				}
 			}
 		}
+		UpdateStatitstics();
+	}
+}
+
+void DebugSystem::UpdateStatitstics()
+{
+	const Statistics* statistics = mEngine->GetStatistics();
+
+	if (materialText != nullptr)
+	{
+		MaterialEffectText* effect = materialText->GetEffect<MaterialEffectText>();
+		int fps = static_cast<int>(statistics->GetNumberFPS());
+		if (fps < MIN_FPS_ALLOWED)
+		{
+			effect->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+		else
+		{
+			effect->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		}
+
+		unsigned int numGameEntities = statistics->GetNumberGameEntities();
+		unsigned int numGameEntitiesInsideSpacePartition = statistics->GetNumberGameEntitiesInsideSpacePartition();
+
+		mText[0]->UpdateText(texts[0] + std::to_string(fps));
+		mText[1]->UpdateText(texts[1] + std::to_string(statistics->GetNumberTrianglesRendered()));
+		mText[2]->UpdateText(texts[2] + std::to_string(statistics->GetNumberDrawCalls()));
+		mText[3]->UpdateText(texts[3] + std::to_string(numGameEntities));
+		mText[4]->UpdateText(texts[4] + std::to_string(numGameEntitiesInsideSpacePartition));
+		mText[5]->UpdateText(texts[5] + std::to_string(statistics->GetNumberRenderers()));
+		mText[6]->UpdateText(texts[6] + std::to_string(statistics->GetNumberGameEntitiesWithPhysics()));
+		mText[7]->UpdateText(texts[7] + std::to_string(statistics->GetDayTime()));
+
+		//std::cout << "entities rendered: " << statistics->GetNumberRenderers() << "\n";
+	}
+}
+
+void DebugSystem::SetTextsVisibility(bool visible)
+{
+	for (auto i = 0; i < mText.size(); ++i)
+	{
+		mText[i]->GetRenderer()->SetVisibility(visible);
 	}
 }
 
@@ -125,9 +185,40 @@ void DebugSystem::OnKey(int key, int action)
 	}
 }
 
+void DebugSystem::CreateStatisticsTexts()
+{
+	FontType* font = mEngine->GetFont("OCR A Extended");
+	IShaderProgram* shader = mEngine->GetShader("TextShader");
+	materialText = mEngine->CreateMaterial("MaterialDebugStatisticsText", shader);
+	materialText->AddEffect(DBG_NEW MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
+	materialText->AddEffect(DBG_NEW MaterialEffectText(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+		glm::vec4(1.0f, 1.0f, 1.0f, 0.0f),
+		0.4f,
+		0.1f,
+		0.0f,
+		0.0f,
+		glm::vec2(0.0f)));
+
+	GameScene* scene = mEngine->GetGameScene("mainScene");
+
+	for (unsigned int i = 0; i < texts.size(); ++i)
+	{
+		Text* text = DBG_NEW Text(
+			DBG_NEW Transformation(glm::vec3(-mEngine->GetScreenWidth() * 0.5f, mEngine->GetScreenHeight() * 0.5f - (i+1) * 20.0f, 0.0f),
+				glm::vec3(0.0f),
+				glm::vec3(0.70f)
+			),
+			materialText, font,
+			texts[i], false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);		
+		scene->AddEntity(text);
+		mText.push_back(text);
+	}
+}
+
 void DebugSystem::SetDebugModeEnabled(bool enable)
 {
 	mIsDebugModeEnabled = enable;
+	SetTextsVisibility(mIsDebugModeEnabled);
 }
 
 bool DebugSystem::IsDebugModeEnabled() const

@@ -259,7 +259,7 @@
 				<components>
 					<component is_enabled="true" type="CollisionComponent"/>
 					<component is_enabled="true" type="CharacterComponent"/>
-					<component is_enabled="false" type="OverWaterComponent"/>
+					<component is_enabled="true" type="OverWaterComponent"/>
 					<component is_enabled="true" type="InputComponent">
 						<converters>
 							<converter mouse="-1" event="PitchEvent"/>

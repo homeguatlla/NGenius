@@ -960,8 +960,9 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 	glfwPollEvents();
 	//glfwSetCursorPos(window, 1024/2, 768/2);
 
-	// Dark blue background
-	glClearColor(0.66f, 0.87f, 0.9f, 0.0f);
+	// Light blue background
+	//glClearColor(0.66f, 0.87f, 0.9f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);

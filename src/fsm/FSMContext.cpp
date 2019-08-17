@@ -36,7 +36,7 @@ void FSMContext::CreateFreeModeStateUI()
 {
 	FontType* font = mEngine->GetFont("OCR A Extended");
 	IShaderProgram* shader = mEngine->GetShader("TextShader");
-	IMaterial* materialText = mEngine->CreateMaterial(MaterialsLibrary::TEXT_MATERIAL_NAME, shader);
+	IMaterial* materialText = mEngine->CreateMaterial("MaterialFreeModeText", shader);
 	materialText->AddOrReplaceEffect(DBG_NEW MaterialEffectDiffuseTexture(font->GetTexture(), glm::vec3(1.0f), 1.0f));
 	materialText->AddOrReplaceEffect(DBG_NEW MaterialEffectText(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 		glm::vec4(1.0f, 1.0f, 1.0f, 0.0f),

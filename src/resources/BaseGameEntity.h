@@ -89,7 +89,10 @@ template<class TD>
 BaseGameEntity<TD>::BaseGameEntity(Transformation* transformation, IRenderer* renderer) :
 	mTransformation(transformation),
 	mRenderer(renderer),
-	mIsEnabled(true)
+	mIsEnabled(true),
+	mModelName(""),
+	mMaterialName(""),
+	mRendererName("")
 {
 	if (renderer != nullptr)
 	{
