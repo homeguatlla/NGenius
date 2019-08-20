@@ -35,5 +35,8 @@ public:
 	const glm::vec4& GetColor() const;
 	float GetMaxLiveTime() const;
 	float GetLiveTime() const;
+
+	// Heredado vía BaseGameEntity
+	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };
 

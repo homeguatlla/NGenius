@@ -59,4 +59,7 @@ private:
 	void RemoveParticle(unsigned long index);
 	void SpawnNewParticles(float elapsedTime);
 	void RemoveDeadParticles();
+
+	// Heredado vía BaseGameEntity
+	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };

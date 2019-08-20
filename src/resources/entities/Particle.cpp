@@ -86,6 +86,10 @@ float Particle::GetLiveTime() const
 	return mLiveTime;
 }
 
+void Particle::DoInit(GameScene* scene, RenderSystem* renderSystem)
+{
+}
+
 void Particle::SetColorGradientValues(const glm::vec4& origin, const glm::vec4& destination)
 {
 	mColorOrigin = origin;

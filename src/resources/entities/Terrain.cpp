@@ -247,3 +247,7 @@ void Terrain::CreateTerrain(IMaterial* material, ITexture* heighmap)
 	mMaterialEffectFloat = material->GetEffect<MaterialEffectFloat>();
 	assert(mMaterialEffectFloat != nullptr);
 }
+
+void Terrain::DoInit(GameScene* scene, RenderSystem* renderSystem)
+{
+}

@@ -32,5 +32,8 @@ public:
 	glm::vec3 GetContactPoint() const;
 
 	bool IsAlive() const;
+
+	// Heredado vía BaseGameEntity
+	void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };
 

@@ -33,5 +33,8 @@ private:
 	Water() = default;
 	void CreateWater(IMaterial* material);
 	void CreateModel();
+
+	// Heredado vía BaseGameEntity
+	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };
 

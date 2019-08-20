@@ -58,6 +58,10 @@ void PointsPatch::CreatePointsPatch(IMaterial* material)
 	}
 }
 
+void PointsPatch::DoInit(GameScene* scene, RenderSystem* renderSystem)
+{
+}
+
 void PointsPatch::CreateModel()
 {
 	std::vector<glm::vec3> vertexs;

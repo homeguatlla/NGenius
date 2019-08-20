@@ -18,3 +18,7 @@ IGameEntity* GameEntity::DoCreate()
 {
 	return DBG_NEW GameEntity();
 }
+
+void GameEntity::DoInit(GameScene* scene, RenderSystem* renderSystem)
+{
+}

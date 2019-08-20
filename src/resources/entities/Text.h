@@ -33,5 +33,8 @@ public:
 
 private:
 	void Create(const std::string& text, unsigned int width, unsigned int height, bool isCentered);
+
+	// Heredado vía BaseGameEntity
+	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };
 

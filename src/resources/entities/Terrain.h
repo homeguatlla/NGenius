@@ -50,5 +50,8 @@ private:
 	float CalculateBarryCenter(glm::vec3& p1, glm::vec3& p2, glm::vec3& p3, glm::vec2& point) const;
 	void CalculateY();
 	void CreateTerrain(IMaterial* material, ITexture* heighmap);
+
+	// Heredado vía BaseGameEntity
+	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };
 

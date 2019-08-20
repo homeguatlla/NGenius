@@ -19,5 +19,8 @@ public:
 
 private:
 	glm::vec3 mColor;
+
+	// Heredado vía BaseGameEntity
+	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };
 

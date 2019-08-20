@@ -16,5 +16,8 @@ public:
 
 private:
 	GameEntity() = default;
+
+	// Heredado vía BaseGameEntity
+	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };
 

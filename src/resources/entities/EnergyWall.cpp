@@ -74,6 +74,10 @@ bool EnergyWall::IsAlive() const
 	return mLiveTime > 0.0f;
 }
 
+void EnergyWall::DoInit(GameScene* scene, RenderSystem* renderSystem)
+{
+}
+
 glm::vec3 EnergyWall::GetContactPoint() const
 {
 	return mContactPoint;

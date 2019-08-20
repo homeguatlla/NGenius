@@ -37,3 +37,7 @@ void Light::SetColor(const glm::vec3& color)
 {
 	mColor = color;
 }
+
+void Light::DoInit(GameScene* scene, RenderSystem* renderSystem)
+{
+}

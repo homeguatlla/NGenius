@@ -78,6 +78,10 @@ void ParticlesEmitter::RemoveDeadParticles()
 	}
 }
 
+void ParticlesEmitter::DoInit(GameScene* scene, RenderSystem* renderSystem)
+{
+}
+
 void ParticlesEmitter::SpawnNewParticles(float elapsedTime)
 {
 	assert(mGameScene != nullptr);

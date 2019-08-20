@@ -98,3 +98,7 @@ void Text::Create(const std::string& text, unsigned int width, unsigned int heig
 	mMesh->SetIndexes(indexs);
 	mMesh->SetTextureCoords(uv);
 }
+
+void Text::DoInit(GameScene* scene, RenderSystem* renderSystem)
+{
+}

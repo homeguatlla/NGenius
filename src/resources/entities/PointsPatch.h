@@ -31,5 +31,8 @@ private:
 	PointsPatch() = default;
 	void CreateModel();
 	void CreatePointsPatch(IMaterial* material);
+
+	// Heredado vía BaseGameEntity
+	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };
 

@@ -90,6 +90,10 @@ void Water::CreateModel()
 	mModel = DBG_NEW Model(new Mesh(vertexs, uv, indices));
 }
 
+void Water::DoInit(GameScene* scene, RenderSystem* renderSystem)
+{
+}
+
 void Water::CreateWater(IMaterial* material)
 {
 	CreateModel();
