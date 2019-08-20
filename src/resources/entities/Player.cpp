@@ -109,6 +109,11 @@ void Player::Update(float elapsedTime)
 	//std::cout << "state: " << mState << " velocity = " << physicsComponent->GetVelocity().y << "\n";
 }
 
+void Player::Init(GameScene* scene, RenderSystem* renderSystem)
+{
+	renderSystem->SetCastingShadowsTarget(this);
+}
+
 void Player::UpdateAnimations()
 {
 	AnimationComponent* animationComponent = GetComponent<AnimationComponent>();

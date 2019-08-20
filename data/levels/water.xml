@@ -148,7 +148,7 @@
 	</engine>
 	<renderer>
 		<water is_enabled = "true" camera="gameplay_camera" height="6.0"/>
-		<shadows is_enabled = "false"/>
+		<shadows is_enabled = "true"/>
 		<fog is_enabled = "false" />
 		<render_layers>
 			<layer name="GUI" value="1"/>

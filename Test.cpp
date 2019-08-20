@@ -1584,7 +1584,6 @@ int main(int argc, char* argv[])
 
 	Initialize(filename);
 
-	mEngine->SetCastingShadowsTarget(mPlayer);
 	mEngine->Run();
 
 	mEngine->ShutDown();

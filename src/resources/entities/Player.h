@@ -42,6 +42,8 @@ public:
 	Player* DoClone() const override { return nullptr; }
 	void Update(float elapsedTime) override;
 
+	void Init(GameScene* scene, RenderSystem* renderSystem) override;
+
 	// Heredado vía ISerializable
 	void ReadFrom(core::utils::IDeserializer* source) override;
 
