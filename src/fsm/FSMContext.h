@@ -1,5 +1,7 @@
 #pragma once
 #include <memory>
+#include <string>
+#include "states/StateTypes.h"
 
 class NGenius;
 class Text;
@@ -11,7 +13,7 @@ public:
 		mEngine(nGenius),
 		mIsFreeCameraModeEnabled(false),
 		mIsFreePlayerModeEnabled(false),
-		mFreeModeText(nullptr) {}
+		mInformationText(nullptr) {}
 
 	virtual ~FSMContext() = default;
 	void Release();
@@ -23,18 +25,24 @@ public:
 
 	void SetEnableFreeModePlayer(bool enable) { mIsFreePlayerModeEnabled = enable; }
 	bool IsFreePlayerModeEnabled() const { return mIsFreePlayerModeEnabled; }
-
+	NGeniusState GetNextState() const { return mNextState; }
+	void GoToState(NGeniusState state) { mNextState = state; }
 	void ResetFreeMode();	
-	Text* GetFreeModeText();
+	Text* GetInformationText();
+
+	void SetFilename(const std::string& filename) { mFilename = filename; }
+	const std::string GetFilename() const { return mFilename; }
 
 private:
-	void CreateFreeModeStateUI();
+	void CreateStateUI();
 
 private:
 	std::shared_ptr<NGenius> mEngine;
+	NGeniusState mNextState;
 	bool mIsFreeCameraModeEnabled;
 	bool mIsFreePlayerModeEnabled;
+	std::string mFilename;
 
-	Text* mFreeModeText;
+	Text* mInformationText;
 };
 

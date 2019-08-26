@@ -3,7 +3,7 @@
 #include "../../fsm/states/StateTypes.h"
 #include "../../fsm/FSMContext.h"
 
-class NormalModeState;
+class RunState;
 
 class EnterExitFreeModeOnlyCameraTransition : public core::utils::FSM::BaseTransition<NGeniusState, FSMContext>
 {

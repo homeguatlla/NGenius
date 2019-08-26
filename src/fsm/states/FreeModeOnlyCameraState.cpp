@@ -42,21 +42,21 @@ FreeModeOnlyCameraState::~FreeModeOnlyCameraState()
 void FreeModeOnlyCameraState::OnInit()
 {
 	mEngine = GetContext()->GetEngine();
-	mFreeCamera = CreateFreeCamera();
-	SaveFreeCameraData();
+}
+
+void FreeModeOnlyCameraState::OnEnter(float deltaTime)
+{
 	mPlayer = mEngine->GetGameEntity("player");
 	if (mPlayer == nullptr)
 	{
 		Log(Log::LOG_WARNING) << "FreeModeState did'nt find -player- gameEntity to disable input control.\n";
 	}
-}
-
-void FreeModeOnlyCameraState::OnEnter(float deltaTime)
-{
+	mFreeCamera = CreateFreeCamera();
+	SaveFreeCameraData();
 	GetContext()->ResetFreeMode();
 	mEngine->RegisterAllEventsInputListener(this);
 	mEngine->ChangeToCamera(mEngine->GetGameplayCamera()->GetName(), mEngine->GetFreeCamera()->GetName());
-	GetContext()->GetFreeModeText()->UpdateText(TEXT_FREE_MODE);
+	GetContext()->GetInformationText()->UpdateText(TEXT_FREE_MODE);
 	mPlayer->SetEnabled(false);
 }
 

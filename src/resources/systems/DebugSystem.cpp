@@ -107,7 +107,7 @@ void DebugSystem::UpdateStatitstics()
 
 void DebugSystem::SetTextsVisibility(bool visible)
 {
-	for (auto i = 0; i < mText.size(); ++i)
+	for (size_t i = 0; i < mText.size(); ++i)
 	{
 		mText[i]->GetRenderer()->SetVisibility(visible);
 	}

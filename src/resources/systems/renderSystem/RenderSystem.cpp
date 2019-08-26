@@ -909,7 +909,7 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 		mScreenWidth = 0.0f;
 		monitor = GetCurrentMonitor(&mScreenWidth, &mScreenHeight);
 	}
-	Log(Log::LOG_INFO) << " screen size ( " << mScreenWidth << ", " << mScreenHeight << ") \n";
+	//Log(Log::LOG_INFO) << " screen size ( " << mScreenWidth << ", " << mScreenHeight << ") \n";
 	mWindow = glfwCreateWindow(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight), applicationName.c_str(), monitor, NULL);
 
 	if (mWindow == NULL) {

@@ -335,27 +335,6 @@ void CreateSpecificCubes()
 	}
 }
 */
-void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset)
-{
-	mEngine->OnMouseScroll(GLFW_MOUSE_BUTTON_MIDDLE, static_cast<float>(yOffset));
-}
-
-void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	mEngine->OnKey(key, action);
-	//std::cout << "key = " << key << " action = " << action << "\n";
-}
-
-void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
-{
-	mEngine->OnMouseButton(button, action, mods);
-}
-
-void MouseCursorPosCallback(GLFWwindow* window, double xpos, double ypos)
-{
-	mEngine->OnMouseCursorPos(xpos, ypos);
-	//std::cout << "cursor X = " << xpos  << "\n";
-}
 /*
 GameEntity* CreateModelWithLod(const glm::vec3& position, const glm::vec3& scale, const std::vector<std::string>& models, const std::vector<std::pair<float, bool>>& lod, IMaterial* material, IMaterial* materialNormalmap, bool isCullingEnabled)
 {
@@ -1555,22 +1534,16 @@ void SetupConfiguration()
 void Initialize(const std::string& filename)
 {
 	mEngine = std::make_shared<NGenius>("Demo", SCREEN_WIDTH, SCREEN_HEIGHT);
+	mEngine->SetFilename(filename);
+	mEngine->Create();
+
 	//SetupConfiguration();
 
 	//mEngine->RegisterInputHandler(std::bind(&UpdateInput, std::placeholders::_1));
 	//mEngine->RegisterUpdateHandler(std::bind(&Update, std::placeholders::_1));
-
-	mEngine->Init(mIsFullScreen);
-
 	//CreateCameras();
-
-	glfwSetScrollCallback(mEngine->GetGLWindow(), &ScrollCallback);
-	glfwSetKeyCallback(mEngine->GetGLWindow(), &KeyCallback);
-	glfwSetMouseButtonCallback(mEngine->GetGLWindow(), &MouseButtonCallback);
-	glfwSetCursorPosCallback(mEngine->GetGLWindow(), &MouseCursorPosCallback);
-
-	mEngine->LoadFromFile(filename);
-	mEngine->Start();
+	//mEngine->LoadFromFile(filename);
+	//mEngine->Start();
 }
 
 int main(int argc, char* argv[])
@@ -1586,7 +1559,6 @@ int main(int argc, char* argv[])
 
 	mEngine->Run();
 
-	mEngine->ShutDown();
 	mEngine.reset();
 
 	_CrtDumpMemoryLeaks();

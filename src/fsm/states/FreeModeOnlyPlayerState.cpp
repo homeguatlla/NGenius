@@ -21,7 +21,7 @@ void FreeModeOnlyPlayerState::OnEnter(float deltaTime)
 {
 	FreeModeOnlyCameraState::OnEnter(deltaTime);
 
-	GetContext()->GetFreeModeText()->UpdateText(TEXT_PLAYER_MODE);
+	GetContext()->GetInformationText()->UpdateText(TEXT_PLAYER_MODE);
 	mPlayer->SetEnabled(true);
 }
 

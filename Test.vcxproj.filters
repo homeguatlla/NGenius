@@ -819,9 +819,6 @@
     <ClInclude Include="src\fsm\FSMContext.h">
       <Filter>Header Files\fsm</Filter>
     </ClInclude>
-    <ClInclude Include="src\fsm\states\NormalModeState.h">
-      <Filter>Header Files\fsm\states</Filter>
-    </ClInclude>
     <ClInclude Include="Memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -848,6 +845,33 @@
     </ClInclude>
     <ClInclude Include="src\resources\textures\PNGLoader.h">
       <Filter>Header Files\resources\textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\InitialState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\LoadingState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\ShutDownState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\StartState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\transitions\EnterLoadingTransition.h">
+      <Filter>Header Files\fsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\RunState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\transitions\EnterRunTransition.h">
+      <Filter>Header Files\fsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\transitions\EnterStartTransition.h">
+      <Filter>Header Files\fsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\transitions\EnterShutDownTransition.h">
+      <Filter>Header Files\fsm\transitions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1376,9 +1400,6 @@
     <ClCompile Include="src\fsm\FSMContext.cpp">
       <Filter>Source Files\fsm</Filter>
     </ClCompile>
-    <ClCompile Include="src\fsm\states\NormalModeState.cpp">
-      <Filter>Source Files\fsm\states</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\entities\GameEntity.cpp">
       <Filter>Source Files\resources</Filter>
     </ClCompile>
@@ -1392,6 +1413,33 @@
       <Filter>Source Files\fsm\transitions</Filter>
     </ClCompile>
     <ClCompile Include="src\fsm\transitions\EnterExitFreeModeOnlyPlayerTransition.cpp">
+      <Filter>Source Files\fsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\InitialState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\LoadingState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\ShutDownState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\StartState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\transitions\EnterLoadingTransition.cpp">
+      <Filter>Source Files\fsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\RunState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\transitions\EnterRunTransition.cpp">
+      <Filter>Source Files\fsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\transitions\EnterStartTransition.cpp">
+      <Filter>Source Files\fsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\transitions\EnterShutDownTransition.cpp">
       <Filter>Source Files\fsm\transitions</Filter>
     </ClCompile>
   </ItemGroup>

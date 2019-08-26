@@ -13,7 +13,7 @@
 
 void FSMContext::Release()
 {
-	mFreeModeText = nullptr;
+	mInformationText = nullptr;
 }
 
 void FSMContext::ResetFreeMode()
@@ -22,17 +22,17 @@ void FSMContext::ResetFreeMode()
 	mIsFreePlayerModeEnabled = false;
 }
 
-Text* FSMContext::GetFreeModeText()
+Text* FSMContext::GetInformationText()
 {
-	if (mFreeModeText == nullptr)
+	if (mInformationText == nullptr)
 	{
-		CreateFreeModeStateUI();
+		CreateStateUI();
 	}
 
-	return mFreeModeText;
+	return mInformationText;
 }
 
-void FSMContext::CreateFreeModeStateUI()
+void FSMContext::CreateStateUI()
 {
 	FontType* font = mEngine->GetFont("OCR A Extended");
 	IShaderProgram* shader = mEngine->GetShader("TextShader");
@@ -46,7 +46,7 @@ void FSMContext::CreateFreeModeStateUI()
 		0.0f,
 		glm::vec2(0.0f)));
 
-	mFreeModeText = DBG_NEW Text(
+	mInformationText = DBG_NEW Text(
 		DBG_NEW Transformation(
 			glm::vec3(mEngine->GetScreenWidth() * 0.4f, -mEngine->GetScreenHeight() * 0.47f, 0.0f),
 			glm::vec3(0.0f),
@@ -54,7 +54,7 @@ void FSMContext::CreateFreeModeStateUI()
 		),
 		materialText, font,
 		TEXT_FREE_MODE, false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
-	mFreeModeText->SetName("FreeModeText");
-	mFreeModeText->GetRenderer()->SetVisibility(false);
-	mEngine->AddEntity(mFreeModeText);
+	mInformationText->SetName("InformationText");
+	mInformationText->GetRenderer()->SetVisibility(false);
+	mEngine->AddEntity(mInformationText);
 }

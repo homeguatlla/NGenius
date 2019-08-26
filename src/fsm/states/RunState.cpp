@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "NormalModeState.h"
+#include "RunState.h"
 #include "../../NGenius.h"
 #include "../../resources/camera/ICamera.h"
 #include "../../resources/entities/Text.h"
@@ -44,7 +44,6 @@ void RunState::OnExit(float deltaTime)
 
 void RunState::OnUpdate(float deltaTime)
 {
-	mEngine->Update(deltaTime);
 }
 
 void RunState::OnKey(int key, int action)

@@ -2,6 +2,8 @@
 #include "InputHandler.h"
 #include "IInputListener.h"
 
+#include <GLFW/glfw3.h>
+
 InputHandler::InputHandler() : mWindow(nullptr), mIsInitialized(false)
 {
 }
@@ -16,6 +18,11 @@ void InputHandler::Init(GLFWwindow* window)
 {
 	mWindow = window;
 	mIsInitialized = true;
+	glfwSetWindowUserPointer(window, this);
+	glfwSetScrollCallback(mWindow, &InputHandler::OnMouseScroll);
+	glfwSetKeyCallback(mWindow, &InputHandler::OnKeyCallback);
+	glfwSetMouseButtonCallback(mWindow, &InputHandler::OnMouseButtonCallback);
+	glfwSetCursorPosCallback(mWindow, &InputHandler::OnMouseCursorPosCallback);
 }
 
 void InputHandler::Update(float deltaTime)
@@ -50,7 +57,33 @@ void InputHandler::RegisterInputHandler(std::function<void(GLFWwindow* window)> 
 	mInputHandler = callback;
 }
 
-void InputHandler::OnKey(int key, int action)
+void InputHandler::OnMouseScroll(GLFWwindow* window, double xOffset, double yOffset)
+{
+	InputHandler* handler = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
+	handler->MouseScroll(GLFW_MOUSE_BUTTON_MIDDLE, static_cast<float>(yOffset));
+}
+
+void InputHandler::OnKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	InputHandler* handler = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
+	handler->Key(key, action);
+	//std::cout << "key = " << key << " action = " << action << "\n";
+}
+
+void InputHandler::OnMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	InputHandler* handler = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
+	handler->MouseButton(button, action, mods);
+}
+
+void InputHandler::OnMouseCursorPosCallback(GLFWwindow* window, double xpos, double ypos)
+{
+	InputHandler* handler = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
+	handler->MouseCursorPos(xpos, ypos);
+	//std::cout << "cursor X = " << xpos  << "\n";
+}
+
+void InputHandler::Key(int key, int action)
 {
 	for (ListenersIterator it = mListeners.begin(); it != mListeners.end(); ++it)
 	{
@@ -58,7 +91,7 @@ void InputHandler::OnKey(int key, int action)
 	}
 }
 
-void InputHandler::OnMouseScroll(int button, float scroll)
+void InputHandler::MouseScroll(int button, float scroll)
 {
 	for (ListenersIterator it = mListeners.begin(); it != mListeners.end(); ++it)
 	{
@@ -66,7 +99,7 @@ void InputHandler::OnMouseScroll(int button, float scroll)
 	}
 }
 
-void InputHandler::OnMouseButton(int button, int action, int mods)
+void InputHandler::MouseButton(int button, int action, int mods)
 {
 	for (ListenersIterator it = mListeners.begin(); it != mListeners.end(); ++it)
 	{
@@ -74,7 +107,7 @@ void InputHandler::OnMouseButton(int button, int action, int mods)
 	}
 }
 
-void InputHandler::OnMouseCursorPos(double x, double y)
+void InputHandler::MouseCursorPos(double x, double y)
 {
 	for (ListenersIterator it = mListeners.begin(); it != mListeners.end(); ++it)
 	{

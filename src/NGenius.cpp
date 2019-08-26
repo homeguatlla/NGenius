@@ -26,11 +26,20 @@
 #include "resources/entities/ParticlesEmitter.h"
 #include "resources/textures/Texture.h"
 
-#include "fsm/states/NormalModeState.h"
+#include "fsm/states/RunState.h"
 #include "fsm/states/FreeModeOnlyCameraState.h"
 #include "fsm/states/FreeModeOnlyPlayerState.h"
+#include "fsm/states/InitialState.h"
+#include "fsm/states/LoadingState.h"
+#include "fsm/states/StartState.h"
+#include "fsm/states/ShutDownState.h"
+#include "fsm/transitions/EnterLoadingTransition.h"
+#include "fsm/transitions/EnterStartTransition.h"
+#include "fsm/transitions/EnterRunTransition.h"
+#include "fsm/transitions/EnterShutDownTransition.h"
 #include "fsm/transitions/EnterExitFreeModeOnlyCameraTransition.h"
 #include "fsm/transitions/EnterExitFreeModeOnlyPlayerTransition.h"
+
 
 #include "statistics/Statistics.h"
 #include "guiTool/GuiTool.h"
@@ -117,6 +126,16 @@ NGenius::~NGenius()
 	DestroySystems();
 }
 
+void NGenius::Create()
+{
+	CreateStatesMachine();
+	//TODO esto hay que revisar
+	if (mGameScene == nullptr)
+	{
+		mGameScene = DBG_NEW GameScene("mainscene", this, mRenderSystem);
+	}
+}
+
 void NGenius::Init(bool isFullscreen)
 {
 	mRenderSystem->Init(mApplicationName, isFullscreen);
@@ -132,12 +151,7 @@ void NGenius::Start(bool isReload)
 	mDebugSystem->Start();
 
 	AddListenersToGameScene();
-	mGameScene->Start();
-
-	if (!isReload)
-	{
-		CreateStatesMachine();
-	}
+	mGameScene->Start();	
 }
 
 void NGenius::ShutDown()
@@ -170,10 +184,12 @@ void NGenius::Run()
 
 		AcceptGuiTool();
 
-		//while (lag >= frameTime)
+		UpdateStatesMachine(elapsedTime);
+
+		NGeniusState currentState = mStatesMachine->GetCurrentState()->GetID();
+		if (currentState >= NGeniusState::STATE_RUN)
 		{
 			UpdateSystems(elapsedTime);
-
 			if (mUpdateHandler != nullptr)
 			{
 				mUpdateHandler(elapsedTime);
@@ -181,7 +197,10 @@ void NGenius::Run()
 			lag -= frameTime;
 		}
 
-		Render();
+		if (currentState >= NGeniusState::STATE_RUN)
+		{
+			Render();
+		}
 
 		if (accumulatedTime > 1.0f)
 		{
@@ -196,6 +215,8 @@ void NGenius::Run()
 	} // Check if the ESC key was pressed or the window was closed
 	while (	glfwGetKey(mRenderSystem->GetGLWindow(), GLFW_KEY_ESCAPE) != GLFW_PRESS && 
 			glfwWindowShouldClose(mRenderSystem->GetGLWindow()) == 0);
+
+	mStatesMachine->GetContext()->GoToState(NGeniusState::STATE_SHUT_DOWN);
 
 	// Close OpenGL window and terminate GLFW
 	glfwTerminate();
@@ -226,19 +247,15 @@ void NGenius::SaveToFile()
 
 	mGameScene->SaveToFile();
 }
+void NGenius::SetFilename(const std::string& filename)
+{
+	mFilename = filename;
+}
 
 void NGenius::LoadFromFile(const std::string& filename)
 {
-	mFilename = filename;
 	core::utils::XMLDeserializer xmlDeserializer;
-
 	xmlDeserializer.Load(mFilename);
-
-	//TODO esto hay que revisar
-	if (mGameScene == nullptr)
-	{
-		mGameScene = DBG_NEW GameScene("mainscene", this, mRenderSystem);
-	}
 	ReadFrom(&xmlDeserializer);
 }
 
@@ -300,12 +317,16 @@ void NGenius::UpdateSystems(float elapsedTime)
 	mDebugSystem->Update(elapsedTime);
 	mEnvironmentSystem->Update(elapsedTime);
 	mParticlesSystem->Update(elapsedTime);
-	mGameScene->Update(elapsedTime);
-	mPhysicsSystem->Update(elapsedTime);
-	mSpacePartitionSystem->Update(elapsedTime);
+	mPhysicsSystem->Update(elapsedTime);		
 	mAnimationSystem->Update(elapsedTime);
+	mSpacePartitionSystem->Update(elapsedTime);
+	mGameScene->Update(elapsedTime);
 	mRenderSystem->Update(elapsedTime);
+	UpdateStatesMachine(elapsedTime);
+}
 
+void NGenius::UpdateStatesMachine(float elapsedTime)
+{
 	mStatesMachine->Update(elapsedTime);
 }
 
@@ -328,24 +349,38 @@ void NGenius::CreateStatesMachine()
 	mFSMContext = std::make_shared<FSMContext>(shared_from_this());
 	mStatesMachine = std::make_unique<core::utils::FSM::StatesMachine<NGeniusState, FSMContext>>(mFSMContext);
 
-	auto normalState = std::make_shared<NormalModeState>();
+	auto runState = std::make_shared<RunState>();
 	auto freeCameraState = std::make_shared<FreeModeOnlyCameraState>();
 	auto freePlayerState = std::make_shared<FreeModeOnlyPlayerState>();
+	auto initialState = std::make_shared<InitialState>();
+	auto startState = std::make_shared<StartState>();
+	auto loadingState = std::make_shared<LoadingState>();
+	auto shutDownState = std::make_shared<ShutDownState>();
 
-	mStatesMachine->AddState(normalState);
+	mStatesMachine->AddState(initialState);
+	mStatesMachine->AddState(startState);
+	mStatesMachine->AddState(loadingState);
+	mStatesMachine->AddState(runState);
 	mStatesMachine->AddState(freeCameraState);
 	mStatesMachine->AddState(freePlayerState);
+	mStatesMachine->AddState(shutDownState);
 
-	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyCameraTransition>(freeCameraState, normalState));
+	mStatesMachine->AddTransition(std::make_unique<EnterLoadingTransition>(initialState, loadingState));
+	mStatesMachine->AddTransition(std::make_unique<EnterStartTransition>(loadingState, startState));
+	mStatesMachine->AddTransition(std::make_unique<EnterRunTransition>(startState, runState));
+
+	mStatesMachine->AddFromAnyTransition(std::make_unique<EnterShutDownTransition>(shutDownState));
+
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyCameraTransition>(freeCameraState, runState));
 	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyPlayerTransition>(freeCameraState, freePlayerState));
 
-	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyCameraTransition>(normalState, freeCameraState));
-	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyPlayerTransition>(normalState, freePlayerState));
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyCameraTransition>(runState, freeCameraState));
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyPlayerTransition>(runState, freePlayerState));
 
 	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyCameraTransition>(freePlayerState, freeCameraState));
-	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyPlayerTransition>(freePlayerState, normalState));
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyPlayerTransition>(freePlayerState, runState));
 
-	mStatesMachine->SetInitialState(normalState->GetID());
+	mStatesMachine->SetInitialState(initialState->GetID());
 }
 
 void NGenius::DestroySystems()
@@ -416,26 +451,6 @@ void NGenius::RegisterInputHandler(std::function<void(GLFWwindow* window)> callb
 void NGenius::RegisterUpdateHandler(std::function<void(float elapsedTime)> callback)
 {
 	mUpdateHandler = callback;
-}
-
-void NGenius::OnKey(int key, int action)
-{
-	mInputHandler->OnKey(key, action);
-}
-
-void NGenius::OnMouseScroll(int button, float scroll)
-{
-	mInputHandler->OnMouseScroll(button, scroll);
-}
-
-void NGenius::OnMouseButton(int button, int action, int mods)
-{
-	mInputHandler->OnMouseButton(button, action, mods);
-}
-
-void NGenius::OnMouseCursorPos(double x, double y)
-{
-	mInputHandler->OnMouseCursorPos(x, y);
 }
 
 IShaderProgram* NGenius::GetShader(const std::string& name) const
@@ -594,6 +609,7 @@ void NGenius::AddCamera(ICamera* camera)
 void NGenius::AddEntity(IGameEntity* entity)
 {
 	assert(entity != nullptr);
+	assert(mGameScene != nullptr);
 	mGameScene->AddEntity(entity);
 }
 

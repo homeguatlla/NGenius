@@ -78,6 +78,8 @@ public:
 	explicit NGenius(std::string applicationName, float screenWidth, float screenHeight);
 	~NGenius();
 
+	void Create();
+
 	void Init(bool isFullscreen);
 	void Start(bool isReload = false);
 	void ShutDown();
@@ -116,11 +118,6 @@ public:
 	void UnRegisterInputListener(IInputListener* listener);
 	void RegisterInputHandler(std::function<void(GLFWwindow* window)> callback);
 	void RegisterUpdateHandler(std::function<void(float elapsedTime)> callback);
-
-	void OnKey(int key, int action);
-	void OnMouseScroll(int button, float scroll);
-	void OnMouseButton(int button, int action, int mods);
-	void OnMouseCursorPos(double x, double y);
 
 	void SetFullScreen(bool isFullScreen);
 	void SetTerrain(const Terrain* terrain);
@@ -162,6 +159,8 @@ public:
 	//serialize
 	void SaveToFile();
 
+	void SetFilename(const std::string& filename);
+
 	//deserialize
 	void LoadFromFile(const std::string& filename);
 
@@ -171,6 +170,7 @@ private:
 	void DestroySystems();
 	
 	void UpdateSystems(float elapsedTime);
+	void UpdateStatesMachine(float elapsedTime);
 	void AcceptStatistics();
 	void AcceptGuiTool();
 
