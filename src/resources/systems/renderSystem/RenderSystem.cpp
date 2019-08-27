@@ -203,8 +203,18 @@ void RenderSystem::Update(float elapsedTime)
 
 void RenderSystem::UpdateSubsystems()
 {
+	UpdateCameras();
 	mShadowsRenderPass->Update();
 	mWaterRenderPass->Update();
+	UpdateCameras();
+}
+
+void RenderSystem::UpdateCameras()
+{
+	for (CamerasListIterator it = mCamerasList.begin(); it != mCamerasList.end(); ++it)
+	{
+		it->second->Update();
+	}
 }
 
 void RenderSystem::Render()

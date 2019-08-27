@@ -16,7 +16,7 @@ const glm::mat4& ICamera::GetProjectionMatrix() const
 
 const glm::mat4& ICamera::GetViewMatrix()
 {
-	UpdateDirty();
+	assert(!mIsDirty);
 	return mViewMatrix;
 }
 
@@ -44,7 +44,7 @@ void ICamera::WriteTo(core::utils::ISerializer* destination)
 {
 }
 
-void ICamera::UpdateDirty()
+void ICamera::Update()
 {
 	if (mIsDirty)
 	{
@@ -104,7 +104,7 @@ const std::string& ICamera::GetName() const
 
 const Frustum& ICamera::GetFrustum()
 {
-	UpdateDirty();
+	assert(!mIsDirty);
 	return mFrustum;
 }
 

@@ -129,7 +129,7 @@ void PerspectiveCamera::CreateViewMatrix()
 		mTarget,   // where you want to look at, in world space
 		mUp        // probably glm::vec3(0,1,0), but (0,-1,0) would make you looking upside-down, which can be great too
 		);
-	mIsDirty = false;
+	//mIsDirty = false;
 }
 
 void PerspectiveCamera::CreateProjectionMatrix()

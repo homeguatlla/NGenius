@@ -153,26 +153,8 @@ int muevej[] = { 0, 1, 0, -1 };
 
 
 const float Pi = 3.141592f;
-const float WaterFloor = 8.2f * TERRAIN_SCALE / 15.0f;
-float mWaterHeight = WaterFloor;
 
-bool mIsDebugModeEnabled = false;
-bool mIsWaterEnabled = true;
-bool mIsGameplayCameraEnabled = true;
-bool mIsFogEnabled = true;
-bool mIsVegetationEnabled = false;
-bool mIsEnergyWallEnabled = true;
-bool mIsTerrainFlat = false;
-bool mIsTextEnabled = false;
-bool mIsStatisticsVisible = false;
-bool mIsShadowEnabled = false;
-bool mIsParticlesEnabled = false;
-bool mIsFullScreen = false;
-bool mIsPropsEnabled = false;
 
-bool mIsSpacePartitionEnabled = false;
-
-std::shared_ptr<NGenius> mEngine;
 ICamera* mGameplayCamera;
 ICamera* mEagleEyeCamera;
 RenderPass *mGameplayPass; 
@@ -1030,14 +1012,6 @@ void CreateEntities()
 	}
 }
 
-void DisableRenderPasses()
-{
-	if (mMapPass != nullptr)
-	{
-		mMapPass->SetEnable(false);
-	}
-}
-
 void CreateHudMapRenderPass()
 {
 	//HUD MAP RENDER PASS
@@ -1110,10 +1084,6 @@ void CreateSubSystems()
 	//CreateParticlesRenderPass();
 
 	//CreateGUIRenderPass();
-}
-
-void DeleteEntities()
-{
 }
 
 void UpdateEnergyWallCollisions(float elapsedTime)
@@ -1347,207 +1317,12 @@ void Update(float elapsedTime)
 	}
 }
 
-void SetupConfiguration()
-{
-	switch (mConfiguration)
-	{
-	case TEST:
-		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
-		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = true;
-		mIsVegetationEnabled = false;
-		mIsPropsEnabled = false;
-		mIsEnergyWallEnabled = false;
-		mIsTerrainFlat = true;
-		//mWaterHeight = 0.0f;
-		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = false;
-		mIsShadowEnabled = true;
-		break;
-	case DEBUG:
-		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = true;
-		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = true;
-		mIsVegetationEnabled = true;
-		mIsPropsEnabled = true;
-		mIsEnergyWallEnabled = true;
-		mIsTerrainFlat = false;
-		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = true;
-		mIsShadowEnabled = true;
-		break;
-	case SHADOWS:
-		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
-		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
-		mIsVegetationEnabled = false;
-		mIsPropsEnabled = false;
-		mIsEnergyWallEnabled = false;
-		mIsTerrainFlat = false;
-		mIsTextEnabled = false;
-		mIsStatisticsVisible = false;
-		mIsShadowEnabled = true;
-		mIsParticlesEnabled = false;
-		break;
-	case TEXT:
-		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
-		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
-		mIsVegetationEnabled = false;
-		mIsPropsEnabled = false;
-		mIsEnergyWallEnabled = false;
-		mIsTerrainFlat = true;
-		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = false;
-		mIsShadowEnabled = false;
-		break;
-	case ENERGY_WALL:
-		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
-		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
-		mIsVegetationEnabled = false;
-		mIsPropsEnabled = false;
-		mIsEnergyWallEnabled = true;
-		mIsTerrainFlat = false;
-		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
-		mEnergyWallRadius = 22.0f;
-		mIsParticlesEnabled = false;
-		mIsShadowEnabled = false;
-		mIsFullScreen = false;
-		break;
-	case PARTICLES:
-		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
-		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
-		mIsVegetationEnabled = false;
-		mIsPropsEnabled = false;
-		mIsEnergyWallEnabled = false;
-		mIsTerrainFlat = true;
-		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = true;
-		mIsShadowEnabled = false;
-		mIsFullScreen = false;
-		break;
-	case PROPS:
-		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
-		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
-		mIsVegetationEnabled = false;
-		mIsPropsEnabled = true;
-		mIsEnergyWallEnabled = false;
-		mIsTerrainFlat = false;
-		mIsTextEnabled = false;
-		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = false;
-		mIsShadowEnabled = false;
-		mIsFullScreen = false;
-		break; 
-	case COLLISIONS:
-		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
-		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
-		mIsVegetationEnabled = false;
-		mIsPropsEnabled = true;
-		mIsEnergyWallEnabled = false;
-		mIsTerrainFlat = false;
-		mIsTextEnabled = false;
-		mIsStatisticsVisible = false;
-		mIsParticlesEnabled = false;
-		mIsShadowEnabled = true;
-		break;
-	case FLAT:
-		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
-		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
-		mIsVegetationEnabled = true;
-		mIsPropsEnabled = false;
-		mIsEnergyWallEnabled = false;
-		mIsTerrainFlat = true;
-		mIsTextEnabled = false;
-		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = false;
-		mIsShadowEnabled = false;
-		mIsFullScreen = false;
-		mWaterHeight = 0.0f;
-		break;
-	case QUADTREE:
-		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
-		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
-		mIsVegetationEnabled = false;
-		mIsPropsEnabled = false;
-		mIsEnergyWallEnabled = false;
-		mIsTerrainFlat = true;
-		mIsTextEnabled = false;
-		mIsStatisticsVisible = false;
-		mIsParticlesEnabled = false;
-		mIsShadowEnabled = false;
-		break;
-	case QUADTREE_WITH_CAMERA:
-		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = false;
-		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = false;
-		mIsVegetationEnabled = true;
-		mIsPropsEnabled = true;
-		mIsEnergyWallEnabled = false;
-		mIsTerrainFlat = true;
-		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = false;
-		mIsShadowEnabled = false;
-		mIsFullScreen = false;
-		break;
-	case RELEASE:
-		mIsDebugModeEnabled = true;
-		mIsWaterEnabled = true;
-		mIsGameplayCameraEnabled = true;
-		mIsFogEnabled = true;
-		mIsVegetationEnabled = true;
-		mIsPropsEnabled = true;
-		mIsEnergyWallEnabled = true;
-		mIsTerrainFlat = false;
-		mIsTextEnabled = true;
-		mIsStatisticsVisible = true;
-		mIsParticlesEnabled = false;
-		mIsShadowEnabled = true;
-		mIsFullScreen = true;
-		break;
-	}
-}
 */
-void Initialize(const std::string& filename)
-{
-	mEngine = std::make_shared<NGenius>("Demo", SCREEN_WIDTH, SCREEN_HEIGHT);
-	mEngine->SetFilename(filename);
-	mEngine->Create();
-
-	//SetupConfiguration();
-
-	//mEngine->RegisterInputHandler(std::bind(&UpdateInput, std::placeholders::_1));
-	//mEngine->RegisterUpdateHandler(std::bind(&Update, std::placeholders::_1));
-	//CreateCameras();
-	//mEngine->LoadFromFile(filename);
-	//mEngine->Start();
-}
 
 int main(int argc, char* argv[])
 {
+	std::shared_ptr<NGenius> mEngine;
+
 	std::string filename = "data/levels/test.xml";
 
 	if (argc > 1)
@@ -1555,7 +1330,9 @@ int main(int argc, char* argv[])
 		filename = std::string(argv[1]);
 	}
 
-	Initialize(filename);
+	mEngine = std::make_shared<NGenius>("Demo", SCREEN_WIDTH, SCREEN_HEIGHT);
+	mEngine->SetFilename(filename);
+	mEngine->Create();
 
 	mEngine->Run();
 

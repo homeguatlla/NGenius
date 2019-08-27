@@ -25,6 +25,8 @@ public:
 	const std::string& GetName() const;
 	const Frustum& GetFrustum();
 
+	void Update();
+
 	void Move(float speed);
 	void Pan(float speed);
 	void Rotate(float angle, const glm::vec3& axis);
@@ -36,7 +38,6 @@ public:
 	void WriteTo(core::utils::ISerializer* destination) override;
 
 private:
-	void UpdateDirty();
 	virtual void CreateViewMatrix() = 0;
 	virtual void CreateProjectionMatrix() = 0;
 
