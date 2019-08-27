@@ -203,6 +203,7 @@ private:
 	RenderPass* GetRenderPass(const std::string& renderPassName) const;
 
 	void UpdateSubsystems();
+	void UpdateCameras();
 	void UpdateDistancesToCamera(const ICamera* camera, RenderersList* renderers);
 	void RenderInstances(RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances);
 	
