@@ -48,9 +48,9 @@ void ICamera::Update()
 {
 	if (mIsDirty)
 	{
+		mIsDirty = false;
 		CreateViewMatrix();
 		CalculateFrustum();
-		mIsDirty = false;
 	}
 }
 
@@ -84,16 +84,19 @@ void ICamera::SetFrustumDilatation(float value)
 
 glm::vec3 ICamera::GetPosition() const
 {
+	assert(!mIsDirty);
 	return mPosition;
 }
 
 glm::vec3 ICamera::GetTarget() const
 {
+	assert(!mIsDirty);
 	return mTarget;
 }
 
 glm::vec3 ICamera::GetUp() const
 {
+	assert(!mIsDirty);
 	return mUp;
 }
 

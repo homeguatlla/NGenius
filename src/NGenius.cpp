@@ -224,6 +224,8 @@ void NGenius::Run()
 
 void NGenius::Render()
 {
+	ICamera* gameplayCamera = GetCamera("gameplay_camera");
+
 	//render all entities
 	if (mIsSpacePartitionEnabled)
 	{
@@ -313,15 +315,18 @@ void NGenius::AcceptStatistics()
 
 void NGenius::UpdateSystems(float elapsedTime)
 {
+	ICamera* gameplayCamera = GetCamera("gameplay_camera");
+
 	mInputSystem->Update(elapsedTime);
-	mDebugSystem->Update(elapsedTime);
-	mEnvironmentSystem->Update(elapsedTime);
-	mParticlesSystem->Update(elapsedTime);
-	mPhysicsSystem->Update(elapsedTime);		
+	mPhysicsSystem->Update(elapsedTime);
 	mAnimationSystem->Update(elapsedTime);
-	mSpacePartitionSystem->Update(elapsedTime);
+	mEnvironmentSystem->Update(elapsedTime);
 	mGameScene->Update(elapsedTime);
+	mDebugSystem->Update(elapsedTime);
+	mParticlesSystem->Update(elapsedTime);	
 	mRenderSystem->Update(elapsedTime);
+	mSpacePartitionSystem->Update(elapsedTime);
+	
 	UpdateStatesMachine(elapsedTime);
 }
 

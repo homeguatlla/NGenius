@@ -80,11 +80,6 @@ void ThirdPersonCameraComponent::UpdateInternal(float elapsedTime)
 {
 	UpdateGameEvents(elapsedTime);
 
-	glm::vec3 newTarget = mTarget->GetTransformation()->GetPosition() + mTargetOffset;
-	glm::vec3 currentTarget = mCamera->GetTarget();
-	newTarget = currentTarget + (newTarget - currentTarget) * CAMERA_SMOOTH_MOVEMENT_VALUE;
-
-	mCamera->SetTarget(newTarget);
 	glm::vec3 currentPosition = mCamera->GetPosition();
 	glm::vec3 newPosition = GetCameraPosition();
 
@@ -129,6 +124,12 @@ void ThirdPersonCameraComponent::UpdateInternal(float elapsedTime)
 	{
 		mCamera->SetPosition(newPosition);
 	}*/
+
+	glm::vec3 newTarget = mTarget->GetTransformation()->GetPosition() + mTargetOffset;
+	glm::vec3 currentTarget = mCamera->GetTarget();
+	newTarget = currentTarget + (newTarget - currentTarget) * CAMERA_SMOOTH_MOVEMENT_VALUE;
+
+	mCamera->SetTarget(newTarget);
 	mCamera->SetPosition(newPosition);
 	mParent->GetTransformation()->SetPosition(newPosition);
 }

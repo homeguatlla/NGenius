@@ -148,6 +148,7 @@ void RenderSystem::Start()
 {
 	ReleaseRenderers();
 
+	UpdateCameras();
 	mGuiTool->Initialize();
 	mShadowsRenderPass->Init();
 	mWaterRenderPass->Init();
@@ -204,7 +205,7 @@ void RenderSystem::Update(float elapsedTime)
 void RenderSystem::UpdateSubsystems()
 {
 	UpdateCameras();
-	mShadowsRenderPass->Update();
+	//mShadowsRenderPass->Update();
 	mWaterRenderPass->Update();
 	UpdateCameras();
 }
@@ -351,7 +352,13 @@ void RenderSystem::AddOrReplaceRenderPass(RenderPass* renderPass, bool addAfterP
 	AddRenderPass(renderPass, addAfterPostProcessing);
 }
 
-void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing)
+void RenderSystem::AddOrReplaceRenderPassFirst(RenderPass* renderPass, bool addAfterPostProcessing)
+{
+	RemoveRenderPass(renderPass);
+	AddRenderPass(renderPass, addAfterPostProcessing, true);
+}
+
+void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing, bool insertFirst)
 {
 	assert(renderPass != nullptr);
 	assert(renderPass->GetCamera() != nullptr);
@@ -383,7 +390,7 @@ void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProces
 			
 			if (isRenderPassOK)
 			{
-				mRenderPasses.push_back(renderPass);
+				insertFirst ? PushRenderPassFront(renderPass) : PushRenderPassBack(renderPass);
 			}
 			else
 			{
@@ -392,6 +399,17 @@ void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProces
 			}
 		}
 	}
+}
+
+void RenderSystem::PushRenderPassFront(RenderPass* renderPass)
+{
+	mRenderPasses.push_back(renderPass);
+	std::rotate(mRenderPasses.rbegin(), mRenderPasses.rbegin() + 1, mRenderPasses.rend());
+}
+
+void RenderSystem::PushRenderPassBack(RenderPass* renderPass)
+{
+	mRenderPasses.push_back(renderPass);
 }
 
 bool RenderSystem::ValidateRenderPassesLayerMasks(RenderPass* renderPass, std::vector<RenderPass*>& renderPasses) const

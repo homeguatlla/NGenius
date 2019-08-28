@@ -63,8 +63,10 @@ void WaterRenderPassSubSystem::Init()
 		//lo que quiere decir que tienen que tener alguna layer_mask distinta como ahora
 		//que la reflexion tiene la skybox y la refracción no.
 		//sino, una de las dos renderpass no se renderizará bien, o la refracción o la relflexión. No sé el motivo.
-		mRenderSystem->AddOrReplaceRenderPass(mReflectionRenderPass);
-		mRenderSystem->AddOrReplaceRenderPass(mRefractionRenderPass);		
+		//Water reflection and refraction passes need to be rendered first, just after the gameplay render pass where the
+		//water will be rendered and reflection and refraction textures will be needed.
+		mRenderSystem->AddOrReplaceRenderPassFirst(mReflectionRenderPass);
+		mRenderSystem->AddOrReplaceRenderPassFirst(mRefractionRenderPass);		
 		
 		mIsInitialized = true;
 	}
