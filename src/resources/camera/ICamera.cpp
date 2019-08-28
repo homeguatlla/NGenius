@@ -16,7 +16,7 @@ const glm::mat4& ICamera::GetProjectionMatrix() const
 
 const glm::mat4& ICamera::GetViewMatrix()
 {
-	assert(!mIsDirty);
+	Update();
 	return mViewMatrix;
 }
 
@@ -84,19 +84,16 @@ void ICamera::SetFrustumDilatation(float value)
 
 glm::vec3 ICamera::GetPosition() const
 {
-	assert(!mIsDirty);
 	return mPosition;
 }
 
 glm::vec3 ICamera::GetTarget() const
 {
-	assert(!mIsDirty);
 	return mTarget;
 }
 
 glm::vec3 ICamera::GetUp() const
 {
-	assert(!mIsDirty);
 	return mUp;
 }
 
@@ -107,7 +104,7 @@ const std::string& ICamera::GetName() const
 
 const Frustum& ICamera::GetFrustum()
 {
-	assert(!mIsDirty);
+	Update();
 	return mFrustum;
 }
 

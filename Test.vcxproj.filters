@@ -873,6 +873,9 @@
     <ClInclude Include="src\fsm\transitions\EnterShutDownTransition.h">
       <Filter>Header Files\fsm\transitions</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\renderers\WaterRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1441,6 +1444,9 @@
     </ClCompile>
     <ClCompile Include="src\fsm\transitions\EnterShutDownTransition.cpp">
       <Filter>Source Files\fsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\WaterRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

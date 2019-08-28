@@ -299,6 +299,7 @@
     <ClInclude Include="src\resources\renderers\VerticesRenderer.h" />
     <ClInclude Include="src\resources\renderers\IndicesRenderer.h" />
     <ClInclude Include="src\resources\renderers\IRenderer.h" />
+    <ClInclude Include="src\resources\renderers\WaterRenderer.h" />
     <ClInclude Include="src\resources\renderers\WireframeRenderer.h" />
     <ClInclude Include="src\resources\scene\GameScene.h" />
     <ClInclude Include="src\resources\scene\IGameSceneListener.h" />
@@ -516,6 +517,7 @@
     <ClCompile Include="src\resources\renderers\VerticesRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\IndicesRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\IRenderer.cpp" />
+    <ClCompile Include="src\resources\renderers\WaterRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\WireframeRenderer.cpp" />
     <ClCompile Include="src\resources\scene\GameScene.cpp" />
     <ClCompile Include="src\resources\scene\IGameSceneListener.cpp" />

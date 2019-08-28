@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Water.h"
 #include "../systems/renderSystem/RenderSystem.h"
-#include "../renderers/IndicesRenderer.h"
+#include "../renderers/WaterRenderer.h"
 #include "../models/Mesh.h"
 #include "../models/Model.h"
 
@@ -98,7 +98,7 @@ void Water::CreateWater(IMaterial* material)
 {
 	CreateModel();
 	
-	SetRenderer(new IndicesRenderer(mModel, material));
+	SetRenderer(new WaterRenderer(mModel, material));
 
 	GetRenderer()->SetLayer(IRenderer::LAYER_WATER);
 	if (material->HasEffect<MaterialEffectWater>())

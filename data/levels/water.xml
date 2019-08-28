@@ -131,7 +131,7 @@
 				<target X="0" Y="0" Z="0"/>
 				<up X="0" Y="1" Z="0"/>
 			</camera>
-			<camera name="free_camera" fov="45" aspect_ratio="1.77777779" near_plane="0.1" far_plane="200" is_free_camera="true">
+			<camera name="free_camera" fov="45" aspect_ratio="1.77777779" near_plane="0.1" far_plane="1000" is_free_camera="true">
 				<position X="0" Y="15" Z="0"/>
 				<target X="0" Y="15" Z="25"/>
 				<up X="0" Y="1" Z="0"/>
@@ -148,8 +148,8 @@
 	</engine>
 	<renderer>
 		<water is_enabled = "true" camera="gameplay_camera" height="6.0"/>
-		<shadows is_enabled = "false"/>
-		<fog is_enabled = "false" />
+		<shadows is_enabled = "true"/>
+		<fog is_enabled = "true" />
 		<render_layers>
 			<layer name="GUI" value="1"/>
 			<layer name="PARTICLES" value="2"/>
