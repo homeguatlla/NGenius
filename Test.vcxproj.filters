@@ -876,6 +876,9 @@
     <ClInclude Include="src\resources\renderers\WaterRenderer.h">
       <Filter>Header Files\resources\renderers</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\entities\EntitiesPatch.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1403,9 +1406,6 @@
     <ClCompile Include="src\fsm\FSMContext.cpp">
       <Filter>Source Files\fsm</Filter>
     </ClCompile>
-    <ClCompile Include="src\resources\entities\GameEntity.cpp">
-      <Filter>Source Files\resources</Filter>
-    </ClCompile>
     <ClCompile Include="src\fsm\states\FreeModeOnlyCameraState.cpp">
       <Filter>Source Files\fsm\states</Filter>
     </ClCompile>
@@ -1447,6 +1447,12 @@
     </ClCompile>
     <ClCompile Include="src\resources\renderers\WaterRenderer.cpp">
       <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\EntitiesPatch.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\GameEntity.cpp">
+      <Filter>Source Files\resources\entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

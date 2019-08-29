@@ -14,6 +14,7 @@
 #include "../entities/Terrain.h"
 #include "../entities/Water.h"
 #include "../entities/PointsPatch.h"
+#include "../entities/EntitiesPatch.h"
 #include "../Memory.h"
 
 #include <algorithm>
@@ -29,6 +30,7 @@ mRenderSystem { renderSystem }
 	InstantiableObject::RegisterGameEntityType<Terrain>();
 	InstantiableObject::RegisterGameEntityType<Water>();
 	InstantiableObject::RegisterGameEntityType<PointsPatch>();
+	InstantiableObject::RegisterGameEntityType<EntitiesPatch>();
 }
 
 GameScene::~GameScene()

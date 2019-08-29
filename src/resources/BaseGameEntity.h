@@ -214,6 +214,8 @@ IGameEntity* BaseGameEntity<TD>::Clone()
 {
 	IGameEntity* clone = DoClone();
 
+	clone->SetName(this->GetName());
+
 	assert(typeid(*clone) == typeid(*this));
 
 	for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)

@@ -14,6 +14,18 @@ GameEntity::GameEntity(Transformation* transformation) :
 
 }
 
+GameEntity* GameEntity::DoClone() const
+{
+	if (mRenderer != nullptr)
+	{
+		return DBG_NEW GameEntity(new Transformation(*GetTransformation()), mRenderer->Clone());
+	}
+	else
+	{
+		return DBG_NEW GameEntity(new Transformation(*GetTransformation()));
+	}
+}
+
 IGameEntity* GameEntity::DoCreate()
 {
 	return DBG_NEW GameEntity();

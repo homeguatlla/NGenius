@@ -224,7 +224,7 @@
 					<component is_enabled="true" type="CollisionComponent"/>
 				</components>
 			</player>
-			<terrain is_enabled="true" name="terrain" material="terrain" scale="10" is_flat="false" heighmap_texture="terrain_heightmap">
+			<terrain is_enabled="true" name="terrain" material="terrain" scale="10" heighmap_texture="terrain_heightmap">
 				<transformation>
 					<position X="0.000000" Y="0.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
@@ -271,7 +271,7 @@
 					</component>
 				</components>
 			</entity>
-			<terrain_points_patch is_enabled="true" material="grass_material" layer="4" min_height ="7.0" max_height="20" wide="50" lenght="50" density="30">
+			<terrain_points_patch is_enabled="true" material="grass_material" layer="4" min_height ="6.0" max_height="20" wide="50" lenght="50" density="30">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>

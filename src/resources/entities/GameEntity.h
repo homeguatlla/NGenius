@@ -9,7 +9,7 @@ public:
 	explicit GameEntity(Transformation* transformation);
 	~GameEntity() = default;
 
-	GameEntity* DoClone() const override { return nullptr; }
+	GameEntity* DoClone() const override;
 
 	static std::string GetClassName() { return std::string("entity"); }
 	static IGameEntity* DoCreate();
