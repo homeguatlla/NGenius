@@ -8,6 +8,7 @@
 #include "materials/IMaterial.h"
 #include "models/Model.h"
 #include "systems/renderSystem/RenderSystem.h"
+#include "components/LODComponent.h"
 
 #include "../utils/serializer/ISerializable.h"
 #include "../utils/serializer/XMLSerializer.h"
@@ -135,6 +136,14 @@ void BaseGameEntity<TD>::Init(GameScene* scene, RenderSystem* renderSystem)
 {
 	this->DoInit(scene, renderSystem);
 
+	//if has LOD we must init first in order to assign a renderer to the entity and
+	//the other components work properly
+	if (HasComponent<LODComponent>())
+	{
+		GetComponent<LODComponent>()->Init(scene, renderSystem);
+	}
+
+	//Warning LODComponent will be initialized twice.
 	for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
 	{
 		it->second->Init(scene, renderSystem);

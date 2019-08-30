@@ -233,6 +233,7 @@
     <ClInclude Include="src\resources\entities\EnergyWall.h" />
     <ClInclude Include="src\resources\entities\GameEntity.h" />
     <ClInclude Include="src\resources\entities\Light.h" />
+    <ClInclude Include="src\resources\entities\EntitiesPatch.h" />
     <ClInclude Include="src\resources\entities\Particle.h" />
     <ClInclude Include="src\resources\entities\ParticlesEmitter.h" />
     <ClInclude Include="src\resources\entities\Player.h" />
@@ -453,6 +454,7 @@
     <ClCompile Include="src\resources\entities\EnergyWall.cpp" />
     <ClCompile Include="src\resources\entities\GameEntity.cpp" />
     <ClCompile Include="src\resources\entities\Light.cpp" />
+    <ClCompile Include="src\resources\entities\EntitiesPatch.cpp" />
     <ClCompile Include="src\resources\entities\Particle.cpp" />
     <ClCompile Include="src\resources\entities\ParticlesEmitter.cpp" />
     <ClCompile Include="src\resources\entities\Player.cpp" />

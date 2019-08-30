@@ -46,20 +46,9 @@
 				<texture filename = "data/skybox/sky2/front.png" />
 			</texture_cubemap>
 			<texture name = "material_farmer_diffuse" filename = "data/models/farmer/farmer_texture.png"/>
-			<texture name = "wind_texture" filename = "data/wind_map.png" has_wrapping="true"/>
-			<texture name = "smoke" filename = "data/textures/smoke_64_.png"/>
-			<texture name = "yellow_grid" filename = "data/textures/grid_64.png" has_wrapping="true"/>
-			<texture name = "grass" filename = "data/textures/grass2.png"/>
-			<texture name = "grass_flower" filename = "data/textures/grass_flower.png"/>
 		</textures_library>
 		<models_library>
-			<model name = "barrel" filename = "data/models/props/barrel.obj" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "chest" filename = "data/models/props/chest.obj" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "brazier" filename = "data/models/props/brazier.obj" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "sphere" filename = "data/models/sphere/sphere.obj" calculate_tangents="true"/>
 			<model name = "farmer" filename = "data/models/farmer/farmer.dae" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "crate" filename = "data/models/props/crate.obj" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "statue" filename = "data/models/props/statue.obj" calculate_normals="true" calculate_tangents="true"/>
 			<model name = "tree_foliage_0" filename="data/models/tree4/tree_foliage_lod0.obj" calculate_tangents="true"/>
 			<model name = "tree_foliage_1" filename="data/models/tree4/tree_foliage_lod1.obj" calculate_tangents="true"/>
 			<model name = "tree_foliage_2" filename="data/models/tree4/tree_foliage_lod2.obj" calculate_tangents="true"/>
@@ -102,36 +91,6 @@
 				<effect name="MaterialEffectShadowProperties" pfc_counter = "1" />
 				<effect name="MaterialEffectClippingPlane" />
 			</material>
-			<material name="grass_material" shader="GrassShader">
-				<effect name="MaterialEffectFogProperties"/>
-				<effect name="MaterialEffectFloat2" values="4.0 4.0" />
-				<effect name="MaterialEffectShadowProperties" pfc_counter="0"/>
-				<effect name="MaterialEffectFloat" values="0.0"/>
-				<effect name="MaterialEffectDirectionalLightProperties" />
-				<effect name="MaterialEffectFloat3Array" />
-				<effect name="MaterialEffectParticle" texture="grass" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
-				<effect name="MaterialEffectNormalTexture" texture="wind_texture" tile="1.0"/>
-				<effect name="MaterialEffectClippingPlane" />				
-			</material>
-			<material name="grass_flower_material" shader="GrassShader">
-				<effect name="MaterialEffectFogProperties"/>
-				<effect name="MaterialEffectFloat2" values="4.0 6.0" />
-				<effect name="MaterialEffectShadowProperties" pfc_counter="0"/>
-				<effect name="MaterialEffectFloat" values="0.0"/>
-				<effect name="MaterialEffectDirectionalLightProperties" />
-				<effect name="MaterialEffectFloat3Array" />
-				<effect name="MaterialEffectParticle" texture="grass_flower" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
-				<effect name="MaterialEffectNormalTexture" texture="wind_texture" tile="1.0"/>
-				<effect name="MaterialEffectClippingPlane" />				
-			</material>
-			<material name="props_material" shader="NormalMapShader">
-				<effect name="MaterialEffectFogProperties"/>
-				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
-				<effect name="MaterialEffectDirectionalLightProperties" />
-				<effect name="MaterialEffectDiffuseTexture" texture="MedievalDungeonPropsAtlas02_diffuse" color="1.0 1.0 1.0" tile="1.0" />
-				<effect name="MaterialEffectNormalTexture" texture="MedievalDungeonPropsAtlas02_normalmap" tile="1.0"/>
-				<effect name="MaterialEffectClippingPlane" />				
-			</material>
 			<material name="terrain" shader="TerrainShader">
 				<effect name="MaterialEffectFogProperties"/>
 				<effect name="MaterialEffectShadowProperties" pfc_counter="3"/>
@@ -156,11 +115,6 @@
 				<effect name="MaterialEffectDirectionalLightProperties" />
 				<effect name="MaterialEffectTextureCubemap" texture1="day_cubemap" texture2="night_cubemap" blend_factor="0.0"/>				
 			</material>
-			<material name="energy_wall" shader="EnergyWallShader">
-				<effect name="MaterialEffectDiffuseTexture" texture="yellow_grid" color="0.0 0.0 0.0" tile="50.0" />
-				<effect name="MaterialEffectFloat2" values="1920 1080" />
-				<effect name="MaterialEffectDepthTexture" texture="depth_texture" tile="1.0"/>
-			</material>
 			<material name="water" shader="WaterShader">
 				<effect name="MaterialEffectFogProperties"/>
 				<effect name="MaterialEffectDirectionalLightProperties" />
@@ -171,10 +125,6 @@
 						normal_texture="normal_water" 
 						depth_texture="refraction_depth_water" 
 						color="0.0 0.3 0.8" speed="0.02" />
-			</material>
-			<material name="smoke_particle" shader="ParticleShader">
-				<effect name="MaterialEffectParticle" texture="smoke" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
-				<effect name="MaterialEffectClippingPlane" />				
 			</material>
 		</materials_library>
 		<cameras>
@@ -302,37 +252,7 @@
 					</component>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8">
-				<transformation>
-					<position X="4.400000" Y="18.500000" Z="0.000000"/>
-					<rotation X="-90.000000" Y="0.000000" Z="0.000000"/>
-					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="PhysicsComponent" is_static="true">
-						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
-					</component>
-					<component is_enabled="true" type="CollisionComponent"/>
-					<component is_enabled="true" type="SpacePartitionComponent"/>
-					<component is_enabled="true" type="DebugComponent"/>
-				</components>
-			</entity>
-			<entity is_enabled="true" name="crate" model="crate" material="props_material" layer="8">
-				<transformation>
-					<position X="4.400000" Y="18.500000" Z="1.000000"/>
-					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
-					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="PhysicsComponent" is_static="true">
-						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
-					</component>
-					<component is_enabled="true" type="CollisionComponent"/>
-					<component is_enabled="true" type="SpacePartitionComponent"/>
-					<component is_enabled="true" type="DebugComponent"/>
-				</components>
-			</entity>
-			<entity is_enabled="true" name="tree_trunk" material="tree_trunk" layer="8">
+			<entity is_enabled="true" name="tree_trunk" layer="8">
 				<transformation>
 					<position X="0.000000" Y="18.500000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
@@ -347,9 +267,9 @@
 					<component is_enabled="true" type="DebugComponent"/>
 					<component is_enabled="true" type="LODComponent">
 						<lods>
-							<lod model_name="tree_trunk_0" distance = "500.0" />
-							<lod model_name="tree_trunk_1" distance = "800.0" />
-							<lod model_name="tree_trunk_2" distance = "1000.0" />
+							<lod model_name="tree_trunk_0" material="tree_trunk_normalmap" distance = "500.0" />
+							<lod model_name="tree_trunk_1" material="tree_trunk" distance = "800.0" />
+							<lod model_name="tree_trunk_2" material="tree_trunk" distance = "1000.0" />
 						</lods>
 					</component>
 				</components>
@@ -375,39 +295,6 @@
 					</component>
 				</components>
 			</entity>
-			<terrain_points_patch is_enabled="true" material="grass_material" layer="4" min_height ="6.0" max_height="20" wide="50" lenght="50" density="30">
-				<transformation>
-					<position X="0.0" Y="0.0" Z="0.0"/>
-					<rotation X="0.0" Y="0.0" Z="0.0"/>
-					<scale X="1.0" Y="1.0" Z="1.0"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="EnvironmentAffectedComponent" affected_by_wind="true"/>
-					<component is_enabled="true" type="DebugComponent"/>
-				</components>
-			</terrain_points_patch>
-			<terrain_points_patch is_enabled="true" material="grass_flower_material" layer="4" min_height ="7.0" max_height="20" wide="50" lenght="50" density="2">
-				<transformation>
-					<position X="0.0" Y="0.0" Z="0.0"/>
-					<rotation X="0.0" Y="0.0" Z="0.0"/>
-					<scale X="1.0" Y="1.0" Z="1.0"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="EnvironmentAffectedComponent" affected_by_wind="true"/>
-					<component is_enabled="true" type="DebugComponent"/>
-				</components>
-			</terrain_points_patch>
-			<terrain_entities_patch is_enabled="true" layer="8" min_height ="0.0" max_height="20" wide="20" lenght="20" density="20" allow_intersection="false">
-				<transformation>
-					<position X="0.0" Y="0.0" Z="0.0"/>
-					<rotation X="0.0" Y="0.0" Z="0.0"/>
-					<scale X="1.0" Y="1.0" Z="1.0"/>
-				</transformation>
-				<models>
-					<model name="crate" percentage="50"/>
-					<model name="barrel" percentage="50"/>
-				</models>
-			</terrain_entities_patch>
 		</entities>
 	</game_scene>
 </ngenius>

@@ -2,10 +2,13 @@
 #include "LODComponent.h"
 #include "../IGameEntity.h"
 #include "../camera/ICamera.h"
+#include "../systems/renderSystem/RenderSystem.h"
 #include "../renderers/IRenderer.h"
+#include "../renderers/VerticesRenderer.h"
 #include "../models/Model.h"
 #include "../materials/IMaterial.h"
 #include "../../utils/serializer/XMLSerializer.h"
+#include "../../utils/serializer/XMLDeserializer.h"
 #include "../Memory.h"
 
 #include <glm/gtx/norm.hpp>
@@ -35,6 +38,22 @@ LODComponent::~LODComponent()
 IComponent* LODComponent::DoClone() const
 {
 	return DBG_NEW LODComponent(*this);
+}
+
+void LODComponent::Init(GameScene* scene, RenderSystem* renderSystem)
+{
+	mCamera = renderSystem->GetGameplayCamera();
+	for (auto lodData : mLodsToAdd)
+	{
+		Model* model = renderSystem->GetModel(std::get<0>(lodData));
+		IMaterial* material = renderSystem->GetMaterial(std::get<1>(lodData));
+		if (model != nullptr && material != nullptr)
+		{
+			IRenderer* renderer = DBG_NEW VerticesRenderer(model, material);
+			AddLevelOfDetail(renderer, std::get<2>(lodData));
+		}
+	}
+	mLodsToAdd.clear();
 }
 
 void LODComponent::UpdateInternal(float elapsedTime)
@@ -97,7 +116,35 @@ IComponent* LODComponent::Create(IGameEntity* entity)
 
 void LODComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
+	if (source->HasAttribute("lods"))
+	{
+		source->BeginAttribute(std::string("lods"));
+		unsigned int numConverters = source->ReadNumberOfElements();
+		source->BeginAttribute(std::string("lod"));
+		do
+		{
+			auto lodData = ReadLODFrom(source);
+			mLodsToAdd.push_back(lodData);
+			source->NextAttribute();
+			numConverters--;
 
+		} while (numConverters > 0);
+		source->EndAttribute();
+		source->EndAttribute();
+	}
+}
+
+LODComponent::LODData LODComponent::ReadLODFrom(core::utils::IDeserializer* source)
+{
+	std::string modelName;
+	std::string material;
+	float distance;
+
+	source->ReadParameter("model_name", modelName);
+	source->ReadParameter("material", material);
+	source->ReadParameter("distance", &distance);
+
+	return std::make_tuple(modelName, material, distance);
 }
 
 void LODComponent::DoWriteTo(core::utils::ISerializer* destination)
