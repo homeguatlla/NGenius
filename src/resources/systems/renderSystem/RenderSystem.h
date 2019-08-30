@@ -194,7 +194,7 @@ private:
 
 	void BuildRenderPasses();
 
-	void AddToRender(IRenderer* renderer, std::vector<RenderPass*>& renderPasses);
+	bool AddToRender(IRenderer* renderer, std::vector<RenderPass*>& renderPasses);
 	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing = false, bool insertFirst = false);
 
 	void PushRenderPassFront(RenderPass* renderPass);

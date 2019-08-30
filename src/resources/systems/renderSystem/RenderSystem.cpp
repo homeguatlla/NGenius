@@ -449,21 +449,28 @@ void RenderSystem::AddToRender(IRenderer* renderer)
 	//assert(renderer != nullptr);
 	if (renderer != nullptr)
 	{
-		AddToRender(renderer, mRenderPasses);
-		AddToRender(renderer, mRenderPassesAfterPostProcessing);
-		mNumberRenderers++;
+		bool added = AddToRender(renderer, mRenderPasses);
+		added |= AddToRender(renderer, mRenderPassesAfterPostProcessing);
+
+		if (added)
+		{
+			mNumberRenderers++;
+		}
 	}
 }
 
-void RenderSystem::AddToRender(IRenderer* renderer, std::vector<RenderPass*>& renderPasses)
+bool RenderSystem::AddToRender(IRenderer* renderer, std::vector<RenderPass*>& renderPasses)
 {
+	bool added = false;
 	for (const RenderPass* pass : renderPasses)
 	{
 		if (pass->CanAcceptRenderer(renderer))
 		{
 			mRenderersPerPass[pass->GetLayersMask()].push_back(renderer);
+			added = true;
 		}
 	}
+	return added;
 }
 
 void RenderSystem::AddCamera(ICamera* camera)
