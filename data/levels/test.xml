@@ -332,7 +332,7 @@
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="tree_trunk" material="tree_trunk" layer="8">
+			<entity is_enabled="true" name="tree_trunk" layer="8">
 				<transformation>
 					<position X="0.000000" Y="18.500000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
@@ -347,9 +347,31 @@
 					<component is_enabled="true" type="DebugComponent"/>
 					<component is_enabled="true" type="LODComponent">
 						<lods>
-							<lod model_name="tree_trunk_0" distance = "500.0" />
-							<lod model_name="tree_trunk_1" distance = "800.0" />
-							<lod model_name="tree_trunk_2" distance = "1000.0" />
+							<lod model_name="tree_trunk_0" material="tree_trunk_normalmap" distance = "500.0" />
+							<lod model_name="tree_trunk_1" material="tree_trunk" distance = "800.0" />
+							<lod model_name="tree_trunk_2" material="tree_trunk" distance = "1000.0" />
+						</lods>
+					</component>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="tree_foliage" layer="8">
+				<transformation>
+					<position X="0.000000" Y="18.500000" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="PhysicsComponent" is_static="true">
+						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
+					</component>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="LODComponent">
+						<lods>
+							<lod model_name="tree_foliage_0" material="tree_foliage" distance = "500.0" />
+							<lod model_name="tree_foliage_1" material="tree_foliage" distance = "800.0" />
+							<lod model_name="tree_foliage_2" material="tree_foliage" distance = "1000.0" />
 						</lods>
 					</component>
 				</components>
@@ -397,18 +419,16 @@
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
 			</terrain_points_patch>
-			<terrain_entities_patch is_enabled="true" layer="8" min_height ="0.0" max_height="20" wide="20" lenght="20" density="20" allow_intersection="false">
+			<terrain_entities_patch is_enabled="true" layer="8" min_height ="6.0" max_height="20" wide="100" lenght="100" density="30" allow_intersection="true">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>
 					<scale X="1.0" Y="1.0" Z="1.0"/>
 				</transformation>
 				<models>
-					<pack percentage="50">
-						<model name="crate"/>
-					</pack>
-					<pack percentage="50">
-						<model name="barrel"/>
+					<pack percentage="100">
+						<model name="tree_trunk"/>
+						<model name="tree_foliage"/>
 					</pack>
 				</models>
 			</terrain_entities_patch>
