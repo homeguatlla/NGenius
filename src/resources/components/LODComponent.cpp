@@ -37,7 +37,18 @@ LODComponent::~LODComponent()
 
 IComponent* LODComponent::DoClone() const
 {
-	return DBG_NEW LODComponent(*this);
+	LODComponent* clone = DBG_NEW LODComponent(mCamera);
+	clone->SetParent(mParent);
+	clone->SetEnabled(this->IsEnabled());
+
+	for (auto lod : mLODS)
+	{
+		clone->AddLevelOfDetail(
+			DBG_NEW VerticesRenderer(lod->renderer->GetModel(), lod->renderer->GetMaterial()), 
+			lod->distance);
+	}
+
+	return clone;
 }
 
 void LODComponent::Init(GameScene* scene, RenderSystem* renderSystem)

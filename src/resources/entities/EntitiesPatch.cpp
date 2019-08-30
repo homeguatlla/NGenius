@@ -45,13 +45,10 @@ void EntitiesPatch::CreateEntities(NGenius* engine)
 	SpawnEntities(engine, numEntitiesWithDensity);
 }
 
-bool EntitiesPatch::CanPlaceEntityOnPoint(IGameEntity* entity, glm::vec3& point, std::vector<std::pair<glm::vec3, float>>& pointsWithEntityOver)
+bool EntitiesPatch::CanPlaceEntityOnPoint(float radius, glm::vec3& point, std::vector<std::pair<glm::vec3, float>>& pointsWithEntityOver)
 {
 	if (!mIsIntersectionAllowed)
 	{
-		glm::vec2 size = entity->GetRenderer()->GetAABB().GetSize();
-		float radius = size.x > size.y ? size.x : size.y;
-
 		for (auto pair : pointsWithEntityOver)
 		{
 			float distanceBetweenPoints = glm::length(pair.first - point);
@@ -91,13 +88,13 @@ bool EntitiesPatch::FillWithRandomPoint(glm::vec3& point)
 int EntitiesPatch::CalculateNumBiggerEntitiesFitArea()
 {
 	float area = mWide * mLength;
-	float radius = std::numeric_limits<float>::min();
+	float radius = 0.0f;
 
-	for (auto entity : mEntities)
+	for (EntitiesListIterator it = mEntities.begin(); it != mEntities.end(); ++it)
 	{
-		if (entity.second > radius)
+		if (it->second.second > radius)
 		{
-			radius = entity.second;
+			radius = it->second.second;
 		}
 	}
 
@@ -106,16 +103,24 @@ int EntitiesPatch::CalculateNumBiggerEntitiesFitArea()
 
 void EntitiesPatch::FillEntitiesRadiusVector(NGenius* engine)
 {
-	for (auto model : mModelsName)
+	for (auto& pack : mModelsName)
 	{
-		IGameEntity* entity = engine->GetGameEntity(model.first);
-		if (entity != nullptr)
+		float maxRadius = 0.0f;
+		std::vector<std::string> names = std::get<0>(pack);
+		for (auto model : names)
 		{
-			glm::vec2 size = entity->GetRenderer()->GetAABB().GetSize();
-			float radius = size.x > size.y ? size.x : size.y;
+			IGameEntity* entity = engine->GetGameEntity(model);
+			if (entity != nullptr)
+			{
+				glm::vec3 size = entity->GetRenderer()->GetAABB().GetSize();
+				float radius = size.x > size.z ? size.x : size.z;
 
-			mEntities.push_back(std::pair<IGameEntity*, float>(entity, radius));
+				mEntities[model] = std::pair<IGameEntity*, float>(entity, radius);
+				maxRadius = glm::max(maxRadius, radius);
+			}
 		}
+		
+		std::get<1>(pack) = maxRadius;
 	}
 }
 
@@ -123,10 +128,11 @@ void EntitiesPatch::SpawnEntities(NGenius* engine, int numEntities)
 {
 	std::vector<std::pair<glm::vec3, float>> pointsWithRadiusAlreadyPlaced;
 
-	for (int i = 0; i < mEntities.size(); ++i)
+	for (auto pack : mModelsName)
 	{
-		auto entityPair = mEntities[i];
-		int numModelsToPlace = static_cast<int>(mModelsName[i].second * numEntities / 100);
+		int percentage = std::get<2>(pack);
+		float radius = std::get<1>(pack);
+		int numModelsToPlace = static_cast<int>(percentage * numEntities / 100);
 		bool filled = true;
 		while (filled && numModelsToPlace > 0)
 		{
@@ -134,18 +140,24 @@ void EntitiesPatch::SpawnEntities(NGenius* engine, int numEntities)
 			filled = FillWithRandomPoint(point);
 			if (filled)
 			{
-				bool canPlaceIt = CanPlaceEntityOnPoint(entityPair.first, point, pointsWithRadiusAlreadyPlaced);
+				bool canPlaceIt = CanPlaceEntityOnPoint(radius, point, pointsWithRadiusAlreadyPlaced);
 
 				if (canPlaceIt)
 				{
-					BaseGameEntity<GameEntity>* clone = static_cast<BaseGameEntity<GameEntity>*>(entityPair.first);
-					IGameEntity* newEntity = clone->Clone();
-					if (newEntity != nullptr)
+					std::vector<std::string> names = std::get<0>(pack);
+					float rotationY = static_cast<float>(rand() % 360);
+
+					for (auto entityName : names)
 					{
-						newEntity->GetTransformation()->SetPosition(point);
-						float rotationY = static_cast<float>(rand() % 360);
-						newEntity->GetTransformation()->SetRotation(glm::vec3(0.0f, glm::radians(rotationY), 0.0f));
-						engine->AddEntity(newEntity);
+						IGameEntity* entity = mEntities[entityName].first;
+						BaseGameEntity<GameEntity>* clone = static_cast<BaseGameEntity<GameEntity>*>(entity);
+						IGameEntity* newEntity = clone->Clone();
+						if (newEntity != nullptr)
+						{
+							newEntity->GetTransformation()->SetPosition(point);							
+							newEntity->GetTransformation()->SetRotation(glm::vec3(0.0f, glm::radians(rotationY), 0.0f));
+							engine->AddEntity(newEntity);
+						}
 					}
 					numModelsToPlace--;
 				}
@@ -173,22 +185,33 @@ void EntitiesPatch::ReadModels(core::utils::IDeserializer* source)
 	if (source->HasAttribute("models"))
 	{
 		source->BeginAttribute(std::string("models"));
-		unsigned int numElements = source->ReadNumberOfElements();
+		unsigned int numPacks = source->ReadNumberOfElements();
+		source->BeginAttribute(std::string("pack"));
 
-		source->BeginAttribute();
 		do
 		{
-			std::string modelName;
+			unsigned int numModels = source->ReadNumberOfElements();
 			int percentage;
-			source->ReadParameter("name", modelName);
 			source->ReadParameter("percentage", &percentage);
-			mModelsName.push_back(std::pair<std::string, int>(modelName, percentage));
+
+			source->BeginAttribute();
+			std::vector<std::string> pack;
+			for (unsigned int i = 0; i < numModels; ++i)
+			{
+				std::string modelName;
+				source->ReadParameter("name", modelName);
+				pack.push_back(modelName);
+
+				source->NextAttribute();
+			}
+			source->EndAttribute();
+
+			mModelsName.push_back(std::make_tuple(pack, std::numeric_limits<float>::min(), percentage));
+
 			source->NextAttribute();
-			numElements--;
+			numPacks--;
+		} while (numPacks > 0);
 
-		} while (numElements > 0);
-
-		source->EndAttribute();
 		source->EndAttribute();
 	}
 }

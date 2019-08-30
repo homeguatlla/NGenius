@@ -55,20 +55,17 @@
 			<model name = "tree_trunk_0" filename="data/models/tree4/tree_trunk_lod0.obj" calculate_tangents="true"/>
 			<model name = "tree_trunk_1" filename="data/models/tree4/tree_trunk_lod1.obj" calculate_tangents="true"/>
 			<model name = "tree_trunk_2" filename="data/models/tree4/tree_trunk_lod2.obj" calculate_tangents="true"/>
+			<model name = "barrel" filename = "data/models/props/barrel.obj" calculate_normals="true" calculate_tangents="true"/>
 		</models_library>
-		<lods_library>
-			<lods name = "tree_folliage">
-				<lod model_name="tree_folliage_0" distance = "500.0" />
-				<lod model_name="tree_folliage_1" distance = "800.0" />
-				<lod model_name="tree_folliage_2" distance = "1000.0" />
-			</lods>
-			<lods name = "tree_trunk">
-				<lod model_name="tree_trunk_0" distance = "500.0" />
-				<lod model_name="tree_trunk_1" distance = "800.0" />
-				<lod model_name="tree_trunk_2" distance = "1000.0" />
-			</lods>
-		</lods_library>
 		<materials_library>
+			<material name="props_material" shader="NormalMapShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="MedievalDungeonPropsAtlas02_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="MaterialEffectNormalTexture" texture="MedievalDungeonPropsAtlas02_normalmap" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
 			<material name= "tree_foliage" shader = "ModelShader">
 				<effect name="MaterialEffectDiffuseTexture" texture="tree_foliage_diffuse" color="1.0 1.0 1.0" tile="1.0" />
 				<effect name="MaterialEffectDirectionalLightProperties" />
@@ -274,6 +271,43 @@
 					</component>
 				</components>
 			</entity>
+			<entity is_enabled="true" name="tree_foliage" layer="8">
+				<transformation>
+					<position X="0.000000" Y="18.500000" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="PhysicsComponent" is_static="true">
+						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
+					</component>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="LODComponent">
+						<lods>
+							<lod model_name="tree_foliage_0" material="tree_foliage" distance = "500.0" />
+							<lod model_name="tree_foliage_1" material="tree_foliage" distance = "800.0" />
+							<lod model_name="tree_foliage_2" material="tree_foliage" distance = "1000.0" />
+						</lods>
+					</component>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8">
+				<transformation>
+					<position X="4.400000" Y="18.500000" Z="0.000000"/>
+					<rotation X="-90.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="PhysicsComponent" is_static="true">
+						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
+					</component>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</entity>
 			<entity is_enabled="true" layer="8">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
@@ -295,6 +329,22 @@
 					</component>
 				</components>
 			</entity>
+			<terrain_entities_patch is_enabled="true" layer="8" min_height ="6.0" max_height="20" wide="100" lenght="100" density="30" allow_intersection="true">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="1.0" Y="1.0" Z="1.0"/>
+				</transformation>
+				<models>
+					<pack percentage="10">
+						<model name="barrel"/>
+					</pack>
+					<pack percentage="90">
+						<model name="tree_trunk"/>
+						<model name="tree_foliage"/>
+					</pack>					
+				</models>
+			</terrain_entities_patch>
 		</entities>
 	</game_scene>
 </ngenius>

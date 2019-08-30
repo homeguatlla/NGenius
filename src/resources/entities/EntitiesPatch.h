@@ -9,6 +9,9 @@ class NGenius;
 
 class EntitiesPatch : public BaseGameEntity<EntitiesPatch>
 {
+	using ModelPack = std::tuple<std::vector<std::string>, float, int>; //list of models , max radius all models, percentage
+	typedef std::map<std::string, std::pair<IGameEntity*, float>>::iterator EntitiesListIterator;
+
 	const Terrain* mTerrain;
 	float mHeightMin;
 	float mHeightMax;
@@ -16,8 +19,8 @@ class EntitiesPatch : public BaseGameEntity<EntitiesPatch>
 	float mLength;
 	float mDensity;
 	bool mIsIntersectionAllowed;
-	std::vector<std::pair<std::string, int>> mModelsName; //name, percentage
-	std::vector<std::pair<IGameEntity*, float>> mEntities; //entity, radius
+	std::vector<ModelPack> mModelsName;
+	std::map<std::string, std::pair<IGameEntity*, float>> mEntities; //entity, radius
 
 public:
 	explicit EntitiesPatch(Transformation* transformation, const Terrain* terrain, float heightMin, float heightMax, float wide, float length, float density, bool isIntersectionAllowed);
@@ -38,7 +41,7 @@ private:
 	int CalculateNumBiggerEntitiesFitArea();
 	bool FillWithRandomPoint(glm::vec3& point);
 	void SpawnEntities(NGenius* engine, int numEntities);
-	bool CanPlaceEntityOnPoint(IGameEntity* entity, glm::vec3& point, std::vector<std::pair<glm::vec3, float>>& pointsWithEntityOver);
+	bool CanPlaceEntityOnPoint(float radius, glm::vec3& point, std::vector<std::pair<glm::vec3, float>>& pointsWithEntityOver);
 
 	// Heredado vía BaseGameEntity
 	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;

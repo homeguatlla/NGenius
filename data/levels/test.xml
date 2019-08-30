@@ -404,8 +404,12 @@
 					<scale X="1.0" Y="1.0" Z="1.0"/>
 				</transformation>
 				<models>
-					<model name="crate" percentage="50"/>
-					<model name="barrel" percentage="50"/>
+					<pack percentage="50">
+						<model name="crate"/>
+					</pack>
+					<pack percentage="50">
+						<model name="barrel"/>
+					</pack>
 				</models>
 			</terrain_entities_patch>
 		</entities>
