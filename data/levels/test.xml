@@ -28,6 +28,10 @@
 				<texture filename = "data/textures/grass_256.png" />
 				<texture filename = "data/textures/grass_dark_256.png" />
 				<texture filename = "data/textures/rock3.png" />
+				<texture filename = "data/textures/sand_normalmap.png" />
+				<texture filename = "data/textures/grass_normalmap.png" />
+				<texture filename = "data/textures/grass_dark_normalmap.png" />
+				<texture filename = "data/textures/rock3_normalmap.png" />
 			</texture_array>
 			<texture_cubemap name = "day_cubemap">
 				<texture filename = "data/skybox/sky1/right.png" />
