@@ -1,12 +1,13 @@
 #version 330 core
 
 in vec2 textureCoords;
-in vec3 eyeDirection;
-in vec3 lightDirection;
+in vec3 eyePosition;
+in vec3 lightPosition;
 in vec3 normalDirection;
 in vec3 positionWorldspace;
 in float fogVisibility;
 in vec4 shadowCoords;
+in mat3 toTangentSpace;
 
 //in float distance;
 //in vec3 cameraPos;
@@ -34,7 +35,7 @@ vec4 hash4( vec2 p )
 }
 float sum( vec3 v ) { return v.x+v.y+v.z; }
 
-vec4 textureNoTile(sampler2DArray samp, in vec3 uv )
+void textureNoTile(sampler2DArray samp, in vec3 uv, out vec4 color, out vec4 normalColor )
 {
     ivec2 iuv = ivec2( floor( uv.xy ) );
      vec2 fuv = fract( uv.xy );
@@ -61,17 +62,26 @@ vec4 textureNoTile(sampler2DArray samp, in vec3 uv )
     vec2 uvd = uv.xy*ofd.zw + ofd.xy, ddxd = ddx*ofd.zw, ddyd = ddy*ofd.zw;
         
     // fetch and blend
-    vec2 b = smoothstep( 0.25,0.75, fuv );
+    vec2 b = smoothstep( 0.25, 0.75, fuv );
     
 	vec3 uva3 = vec3(uva.x, uva.y, uv.z);
     vec3 uvb3 = vec3(uvb.x, uvb.y, uv.z);
     vec3 uvc3 = vec3(uvc.x, uvc.y, uv.z);
     vec3 uvd3 = vec3(uvd.x, uvd.y, uv.z);
 
-    return mix( mix( textureGrad( samp, uva3, ddxa, ddya ), 
-                     textureGrad( samp, uvb3, ddxb, ddyb ), b.x ), 
-                mix( textureGrad( samp, uvc3, ddxc, ddyc ),
-                     textureGrad( samp, uvd3, ddxd, ddyd ), b.x), b.y );
+	color = mix(	mix( textureGrad( samp, uva3, ddxa, ddya ), 
+							textureGrad( samp, uvb3, ddxb, ddyb ), b.x ), 
+						mix( textureGrad( samp, uvc3, ddxc, ddyc ),
+						textureGrad( samp, uvd3, ddxd, ddyd ), b.x), b.y );
+
+	uva3 = vec3(uva.x, uva.y, uv.z + 4);
+	uvb3 = vec3(uvb.x, uvb.y, uv.z + 4);
+    uvc3 = vec3(uvc.x, uvc.y, uv.z + 4);
+    uvd3 = vec3(uvd.x, uvd.y, uv.z + 4);
+	normalColor = mix(	mix( textureGrad( samp, uva3, ddxa, ddya ), 
+							textureGrad( samp, uvb3, ddxb, ddyb ), b.x ), 
+						mix( textureGrad( samp, uvc3, ddxc, ddyc ),
+							textureGrad( samp, uvd3, ddxd, ddyd ), b.x), b.y );
 }
 
 vec4 textureNoTile2( sampler2DArray samp, in vec3 uv )
@@ -134,26 +144,26 @@ vec4 textureNoTile3( sampler2DArray samp, in vec3 uv )
 	return vec4(color.rgb, 1.0f);
 }
 
-vec4 ApplyLight(vec4 color, vec3 ambient, vec3 materialDiffuse, vec3 materialSpecular)
+vec4 ApplyLight(vec4 color, vec3 normal, vec3 ambient, vec3 materialDiffuse, vec3 materialSpecular)
 {
-	float specularStrength = 0.2f;
-	vec3 n = normalDirection;
-
+	float specularStrength = 0.3f;
+	vec3 n = normalize(2.0f * normal - 1.0f);
 	//n = normalize(cross(dFdx(positionWorldspace), dFdy(positionWorldspace)));
-	
-	vec3 l = -lightDirection;
-	float cosTheta =  max(0.0, dot(n, l));
+
+	vec3 l = normalize(toTangentSpace * (lightPosition - positionWorldspace));
+	float cosTheta =  max(0.0, dot(n, -l));
 	vec3 diffuse = materialDiffuse * cosTheta;
 	
+	vec3 viewDirection = normalize(toTangentSpace * (eyePosition - positionWorldspace));
 	vec3 reflectDir = reflect(-l, n);	
-	float spec = pow(max(dot(eyeDirection, reflectDir), 0.0), 32);
+	float spec = pow(max(dot(reflectDir, normalize(viewDirection)), 0.0), 8);
 	vec3 specular = specularStrength * spec * materialSpecular; 
 
 	//float attenuation = length(lightPosition - positionWorldspace);
 
 	color.rgb = ambient * materialDiffuse + (diffuse + specular);// * (1.0f / attenuation);
 	color.a = 1.0f;
-
+	
 	return color;
 }
 
@@ -202,27 +212,52 @@ void main() {
 
 	vec4 blendmapColor = texture(blendMap, textureCoords.xy);
 	vec2 tiledTextureCoords = textureCoords * tile;
+	vec4 rTextureColor;
+	vec4 gTextureColor;
+	vec4 bTextureColor;
+	vec4 aTextureColor;
+	vec4 rTextureNormal;
+	vec4 gTextureNormal;
+	vec4 bTextureNormal;
+	vec4 aTextureNormal;
+
+	//no tiled
+	textureNoTile(textureArray, vec3(tiledTextureCoords, 0), rTextureColor, rTextureNormal);
+	textureNoTile(textureArray, vec3(tiledTextureCoords, 1), gTextureColor, gTextureNormal);
+	textureNoTile(textureArray, vec3(tiledTextureCoords, 2), bTextureColor, bTextureNormal);
+	textureNoTile(textureArray, vec3(tiledTextureCoords, 3), aTextureColor, aTextureNormal);
 	
-	
-	vec4 rTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 0)) * blendmapColor.r;
-	vec4 gTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 1)) * blendmapColor.g;
-	vec4 bTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 2)) * blendmapColor.b;
-	vec4 aTextureColor = textureNoTile(textureArray, vec3(tiledTextureCoords, 3)) * max(0.0f, (1.0f -  (blendmapColor.r +  blendmapColor.g +  blendmapColor.b)));
-	
-	/*
-	vec4 rTextureColor = texture(textureArray, vec3(tiledTextureCoords, 0)) * blendmapColor.r;
-	vec4 gTextureColor = texture(textureArray, vec3(tiledTextureCoords, 1)) * blendmapColor.g;
-	vec4 bTextureColor = texture(textureArray, vec3(tiledTextureCoords, 2)) * blendmapColor.b;
-	vec4 aTextureColor = texture(textureArray, vec3(tiledTextureCoords, 3)) * max(0.0f, (1.0f -  (blendmapColor.r +  blendmapColor.g +  blendmapColor.b)));
+	/* 
+	//tiled
+	rTextureColor = texture(textureArray, vec3(tiledTextureCoords, 0));
+	gTextureColor = texture(textureArray, vec3(tiledTextureCoords, 1));
+	bTextureColor = texture(textureArray, vec3(tiledTextureCoords, 2));
+	aTextureColor = texture(textureArray, vec3(tiledTextureCoords, 3));
+	rTextureNormal = texture(textureArray, vec3(tiledTextureCoords, 4));
+	gTextureNormal = texture(textureArray, vec3(tiledTextureCoords, 5));
+	bTextureNormal = texture(textureArray, vec3(tiledTextureCoords, 6));
+	aTextureNormal = texture(textureArray, vec3(tiledTextureCoords, 7));
 	*/
+
+	rTextureColor *= blendmapColor.r;
+	gTextureColor *= blendmapColor.g;
+	bTextureColor *= blendmapColor.b;
+	aTextureColor *= max(0.0f, (1.0f -  (blendmapColor.r +  blendmapColor.g +  blendmapColor.b)));;
+
+	rTextureNormal *= blendmapColor.r;
+	gTextureNormal *= blendmapColor.g;
+	bTextureNormal *= blendmapColor.b;
+	aTextureNormal *= max(0.0f, (1.0f -  (blendmapColor.r +  blendmapColor.g +  blendmapColor.b)));;
+
 
 	// Material properties
 	vec3 MaterialDiffuseColor = shadowFactor * (rTextureColor.rgb + gTextureColor.rgb + bTextureColor.rgb + aTextureColor.rgb) * lightColor;
+	vec3 MaterialNormal = (rTextureNormal.rgb + gTextureNormal.rgb + bTextureNormal.rgb + aTextureNormal.rgb);
+	
 	vec3 MaterialAmbientColor = vec3(0.3f, 0.3f, 0.3f);
-	vec3 MaterialSpecularColor = vec3(0.0f, 0.0f, 0.0f);
+	vec3 MaterialSpecularColor = vec3(1.0f, 1.0f, 1.0f);
 
-	color = ApplyLight(color, MaterialAmbientColor, MaterialDiffuseColor, MaterialSpecularColor);
+	color = ApplyLight(color, MaterialNormal, MaterialAmbientColor, MaterialDiffuseColor, MaterialSpecularColor);
 	color = ApplyFog(color);
-	//color.rgb = ApplyFog(color.rgb, distance, cameraPos, eyeDirection).rgb;
 }
 

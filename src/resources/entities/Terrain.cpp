@@ -195,7 +195,11 @@ void Terrain::CalculateY()
 
 		int gridX = static_cast<int>(glm::floor(X / gridSquareSize));
 		int gridZ = static_cast<int>(glm::floor(Z / gridSquareSize));
-		mVertexs[i].y = mHeightmap->GetColor(glm::vec2(gridX *conversionToTextureValue, gridZ*conversionToTextureValue)).a * mScale / 256.0f;
+		float colorX = gridX * conversionToTextureValue;
+		float colorZ = gridZ * conversionToTextureValue;
+		glm::vec4 color = mHeightmap->GetColor(glm::vec2(colorX, colorZ)) / 256.0f;
+
+		mVertexs[i].y = color.a * mScale;
 	}
 }
 
@@ -228,17 +232,21 @@ void Terrain::CreateTerrain(IMaterial* material, ITexture* heighmap)
 
 		std::vector<glm::vec2> uv;
 		std::vector<unsigned int> indices;
+		std::vector<glm::vec3> normals;
+		std::vector<glm::vec3> tangents;
 
 		mGridSize = 120;
 		mNumVertexsSide = 256;
 		TerrainGrid terrainGrid;
 		terrainGrid.GeneratePointsRectangular(mVertexs, uv, mNumVertexsSide, mGridSize, 0, true);
 		terrainGrid.GenerateIndicesRectangular(indices);
-
+		
 		mHeightmap = static_cast<Texture*>(heighmap);
 		CalculateY();
+		terrainGrid.GenerateNormalsAndTangentsRectangular(mNumVertexsSide, mVertexs, uv, indices, normals, tangents);
 
-		mModel = DBG_NEW Model(new Mesh(mVertexs, uv, indices));
+		Mesh* mesh = new Mesh(mVertexs, uv, indices, normals, tangents);
+		mModel = DBG_NEW Model(mesh);
 	}
 
 	SetRenderer(new IndicesRenderer(mModel, material));

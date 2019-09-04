@@ -34,10 +34,24 @@ Mesh::Mesh(const std::vector<glm::vec3>& vertexs,
 {
 	mMeshID = ++IDCounter;
 	assert(vertexs.size() > 0);
+	assert(normals.size() > 0);
 }
 
-Mesh::~Mesh()
+Mesh::Mesh(const std::vector<glm::vec3>& vertexs,
+	const std::vector<glm::vec2>& textureCoords,
+	const std::vector<unsigned int>& indexes,
+	const std::vector<glm::vec3>& normals,
+	const std::vector<glm::vec3>& tangents) :
+	mVertexs(vertexs),
+	mTextureCoords(textureCoords),
+	mIndexes(indexes),
+	mNormals(normals),
+	mTangents(tangents)
 {
+	mMeshID = ++IDCounter;
+	assert(vertexs.size() > 0);
+	assert(normals.size() > 0);
+	assert(tangents.size() > 0);
 }
 
 unsigned int Mesh::GetID() const
@@ -279,18 +293,31 @@ void Mesh::CalculateNormals()
 	std::vector<Face> faces;
 	faces.resize(numFaces);
 
-	int vertex = 0;
-	for (unsigned int face = 0 ; face < numFaces; ++face)
+	int index = 0;
+	for (unsigned int face = 0; face < numFaces; ++face)
 	{
-		faces[face].vertex[0] = mVertexs[vertex];
-		faces[face].vertex[1] = mVertexs[vertex + 1];
-		faces[face].vertex[2] = mVertexs[vertex + 2];
+		int index1 = index;
+		int index2 = index + 1;
+		int index3 = index + 2;
+
+		faces[face].vertex[0] = mVertexs[index1];
+		faces[face].vertex[1] = mVertexs[index2];
+		faces[face].vertex[2] = mVertexs[index3];
 
 		glm::vec3 normal = CalculateTriangleNormalFromVertex(faces[face].vertex[0], faces[face].vertex[1], faces[face].vertex[2]);
 		faces[face].normal = normal;
-		vertex += 3;
+		index += 3;
 	}
 
+	if (mNormals.empty())
+	{
+		for (unsigned int i = 0; i < mVertexs.size(); ++i)
+		{
+			mNormals.push_back(glm::vec3(0.0f));
+		}
+	}
+
+	//TODO slow method
 	for (unsigned int i = 0; i < mVertexs.size(); ++i)
 	{
 		glm::vec3 normal(0.0f);

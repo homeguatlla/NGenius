@@ -28,14 +28,23 @@ class Mesh
 
 public:
 	Mesh();
+	
 	Mesh(	const std::vector<glm::vec3>& vertexs,
 			const std::vector<glm::vec2>& textureCoords,
 			const std::vector<unsigned int>& indexes,
 			const std::vector<glm::vec3>& normals);
+	
+	Mesh(const std::vector<glm::vec3>& vertexs,
+		const std::vector<glm::vec2>& textureCoords,
+		const std::vector<unsigned int>& indexes,
+		const std::vector<glm::vec3>& normals,
+		const std::vector<glm::vec3>& tangents);
+
 	Mesh(	const std::vector<glm::vec3>& vertexs,
 			const std::vector<glm::vec2>& textureCoords,
 			const std::vector<unsigned int>& indexes);
-	~Mesh();
+	
+	~Mesh() = default;
 
 	unsigned int GetID() const;
 	void SetVertexs(std::vector<glm::vec3>& vertexs);

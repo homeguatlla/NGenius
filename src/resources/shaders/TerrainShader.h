@@ -31,5 +31,7 @@ private:
 	int mLocationBlendMapTexture;
 	int mLocationArrayTexture;
 	int mLocationTile;
+	int mLocationNormal;
+	int mLocationTangent;
 };
 

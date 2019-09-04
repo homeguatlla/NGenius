@@ -22,20 +22,20 @@ uniform vec3 lightColor;
 
 
 float totalTexelsShadow = (pfcCount * 2.0 + 1.0) * (pfcCount * 2.0 + 1.0);
-const float FAR_DISTANCE_CLIPPING = 50.0;
+const float FAR_DISTANCE_CLIPPING = 150.0;
 
 vec4 ApplyLight(vec3 ambient, vec3 materialDiffuse, vec3 materialSpecular)
 {
-	float specularStrength = 0.01;
+	float specularStrength = 0.3f;
 	vec3 n = normalize(texture2D(normalmap, textureCoords).rgb * 2.0 - 1.0);
 	//n = normalize(cross(dFdx(positionWorldspace), dFdy(positionWorldspace)));
 	
 	vec3 l = -lightDirection;
-	vec3 diffuse = materialDiffuse * max(0.0, dot(n, l));
+	float cosTheta =  max(0.0, dot(n, l));
+	vec3 diffuse = materialDiffuse * cosTheta;
 	
 	vec3 reflectDir = reflect(-l, n);	
-	vec3 specular = materialSpecular * specularStrength * pow(max(dot(reflectDir, normalize(eyeDirection)), 0.0), 32);
-	
+	vec3 specular = materialSpecular * specularStrength * pow(max(dot(reflectDir, normalize(eyeDirection)), 0.0),8);
 	//float attenuation = length(lightPosition - positionWorldspace);
 
 	color.rgb = lightColor * (ambient * materialDiffuse + (diffuse + specular));// * (1.0f / attenuation);
@@ -86,7 +86,7 @@ void main()
 		discard;
 	}
 
-	vec3 MaterialAmbientColor = vec3(0.5f, 0.5f, 0.5f);
+	vec3 MaterialAmbientColor = vec3(0.3f, 0.3f, 0.3f);
 	vec3 MaterialSpecularColor = vec3(1.0f, 1.0f, 1.0f);
 	color = ApplyLight(MaterialAmbientColor, MaterialDiffuseColor.rgb, MaterialSpecularColor);
 	color = ApplyFog(color);
