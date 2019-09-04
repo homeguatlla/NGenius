@@ -17,11 +17,6 @@ mLocationP(-1)
 {
 }
 
-
-OverdrawShader::~OverdrawShader()
-{
-}
-
 void OverdrawShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	LoadMatrix4(mLocationV, const_cast<ICamera*>(camera)->GetViewMatrix());

@@ -1,0 +1,12 @@
+#pragma once
+
+enum class NGeniusState
+{
+	STATE_SHUT_DOWN = 0,
+	STATE_INITIAL = 1,
+	STATE_START = 2,
+	STATE_LOADING = 3,
+	STATE_RUN = 4,
+	STATE_FREE_CAMERA = 5,
+	STATE_FREE_PLAYER = 6
+};

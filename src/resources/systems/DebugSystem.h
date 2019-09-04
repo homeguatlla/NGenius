@@ -3,14 +3,17 @@
 #include "../../input/IInputListener.h"
 #include <vector>
 
-class GameEntity;
+class IGameEntity;
 class InputHandler;
+class NGenius;
 class RenderSystem;
+class IMaterial;
+class Text;
 
 class DebugSystem : public IInputListener, public IGameSceneListener
 {
-	std::vector<GameEntity*> mEntities;
-	typedef std::vector<GameEntity*>::iterator GameEntitiesIterator;
+	std::vector<IGameEntity*> mEntities;
+	typedef std::vector<IGameEntity*>::iterator GameEntitiesIterator;
 
 	bool mIsDebugModeEnabled;
 	bool mIsBoundingBoxVisible;
@@ -18,12 +21,15 @@ class DebugSystem : public IInputListener, public IGameSceneListener
 	bool mIsWireframeEnabled;
 	bool mIsPostProcessEnabled;
 	InputHandler* mInputHandler;
+	NGenius* mEngine;
 	RenderSystem* mRenderSystem;
 	bool mIsInitialized;
+	std::vector<Text*> mText;
+	IMaterial* materialText;
 
 public:
 
-	DebugSystem(RenderSystem* renderSystem, InputHandler* inputHandler);
+	DebugSystem(NGenius* engine, RenderSystem* renderSystem, InputHandler* inputHandler);
 	~DebugSystem();
 
 	void Start();
@@ -39,12 +45,17 @@ public:
 	bool IsDebugModeEnabled() const;
 
 private:
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
+	void AddEntity(IGameEntity* entity);
+	void RemoveEntity(IGameEntity* entity);
 
-	bool HasDebugComponents(const GameEntity* entity) const;
+	bool HasDebugComponents(const IGameEntity* entity) const;
 
-	void OnGameEntityAdded(GameEntity* entity) override;
-	void OnGameEntityRemoved(GameEntity* entity) override;
+	void CreateStatisticsTexts();
+	void UpdateStatitstics();
+
+	void SetTextsVisibility(bool visible);
+
+	void OnGameEntityAdded(IGameEntity* entity) override;
+	void OnGameEntityRemoved(IGameEntity* entity) override;
 };
 

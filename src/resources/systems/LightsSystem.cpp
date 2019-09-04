@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "LightsSystem.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../entities/Light.h"
 #include "../scene/GameScene.h"
 
@@ -14,8 +14,8 @@ mGameScene(gameScene)
 
 LightsSystem::~LightsSystem()
 {
-	ReleaseLights(&mLights);
-	ReleaseLights(&mNewLightsToAdd);	
+	ReleaseLights(mLights);
+	ReleaseLights(mNewLightsToAdd);	
 	mLightsToRemove.clear();
 }
 
@@ -59,11 +59,11 @@ void LightsSystem::RemoveLights()
 	mLightsToRemove.clear();
 }
 
-void LightsSystem::ReleaseLights(std::vector<Light*>* lights)
+void LightsSystem::ReleaseLights(std::vector<Light*>& lights)
 {
-	for (Light* light : *lights)
+	for (Light* light : lights)
 	{
 		delete light;
 	}
-	lights->clear();
+	lights.clear();
 }

@@ -3,6 +3,7 @@
 #include "../models/Model.h"
 #include "../materials/IMaterial.h"
 #include "../camera/ICamera.h"
+#include "../Memory.h"
 #include <GL/glew.h>
 
 
@@ -14,11 +15,17 @@ IRenderer(model, material)
 VerticesRenderer::~VerticesRenderer()
 {
 }
-/*
-const std::string VerticesRenderer::GetName() const
+
+VerticesRenderer* VerticesRenderer::DoClone() const
 {
-	return std::string("VerticesRenderer") + std::to_string(mModel->GetID());
-}*/
+	VerticesRenderer* renderer = DBG_NEW VerticesRenderer(mModel, mMaterial);
+	renderer->SetBillboard(mIsBillboard);
+	renderer->SetCullingEnabled(mIsCullingEnabled);
+	renderer->SetLayer(mLayer);
+	renderer->SetParent(mParent);
+
+	return renderer;
+}
 
 void VerticesRenderer::Draw()
 {

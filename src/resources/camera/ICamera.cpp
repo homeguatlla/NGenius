@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "ICamera.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "../../utils/serializer/IDeserializer.h"
+#include "../../utils/serializer/XMLDeserializer.h"
 
 
 ICamera::~ICamera()
@@ -14,17 +16,41 @@ const glm::mat4& ICamera::GetProjectionMatrix() const
 
 const glm::mat4& ICamera::GetViewMatrix()
 {
-	UpdateDirty();
+	Update();
 	return mViewMatrix;
 }
 
-void ICamera::UpdateDirty()
+void ICamera::ReadFrom(core::utils::IDeserializer* source)
+{
+	source->ReadParameter("name", mName);
+	source->BeginAttribute("position");
+		source->ReadParameter("X", &mPosition.x);
+		source->ReadParameter("Y", &mPosition.y);
+		source->ReadParameter("Z", &mPosition.z);
+	source->EndAttribute();
+	source->BeginAttribute("target");
+		source->ReadParameter("X", &mTarget.x);
+		source->ReadParameter("Y", &mTarget.y);
+		source->ReadParameter("Z", &mTarget.z);
+	source->EndAttribute();
+	source->BeginAttribute("up");
+		source->ReadParameter("X", &mUp.x);
+		source->ReadParameter("Y", &mUp.y);
+		source->ReadParameter("Z", &mUp.z);
+	source->EndAttribute();
+}
+
+void ICamera::WriteTo(core::utils::ISerializer* destination)
+{
+}
+
+void ICamera::Update()
 {
 	if (mIsDirty)
 	{
+		mIsDirty = false;
 		CreateViewMatrix();
 		CalculateFrustum();
-		mIsDirty = false;
 	}
 }
 
@@ -78,17 +104,32 @@ const std::string& ICamera::GetName() const
 
 const Frustum& ICamera::GetFrustum()
 {
-	UpdateDirty();
+	Update();
 	return mFrustum;
 }
 
 void ICamera::Move(float speed)
 {
 	glm::vec3 position = GetPosition();
-	position += glm::normalize(mTarget - position) * speed;
+	glm::vec3 direction = mTarget - position;
+	position += glm::normalize(direction) * speed;
 	mIsDirty = true;
 
 	SetPosition(position);
+	SetTarget(position + direction);
+}
+
+void ICamera::Pan(float speed)
+{
+	glm::vec3 position = GetPosition();
+	glm::vec3 direction = mTarget - position;
+	glm::vec3 right = glm::cross(direction, mUp);
+
+	glm::vec3 displacement = glm::normalize(right) * speed;
+	mIsDirty = true;
+
+	SetPosition(position + displacement);
+	SetTarget(mTarget + displacement);
 }
 
 void ICamera::Rotate(float angle, const glm::vec3& axis)
@@ -97,7 +138,12 @@ void ICamera::Rotate(float angle, const glm::vec3& axis)
 	glm::vec3 direction = mTarget - position;
 	direction = glm::vec3(glm::rotate(glm::mat4(1.0f), angle, axis) * glm::vec4(direction, 1.0));
 	mTarget = position + direction;
+
+	mUp = glm::vec3(glm::rotate(glm::mat4(1.0f), angle, axis) * glm::vec4(mUp, 1.0));
+
 	mIsDirty = true;
 
+	SetUp(mUp);
 	SetPosition(position);
+	SetTarget(position + direction);
 }

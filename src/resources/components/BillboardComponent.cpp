@@ -2,8 +2,10 @@
 #include "BillboardComponent.h"
 #include "../camera/ICamera.h"
 #include "../Transformation.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
+#include "../../utils/serializer/XMLSerializer.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "../Memory.h"
 
 BillboardComponent::BillboardComponent(const ICamera* camera) :
 mCamera(camera)
@@ -17,7 +19,7 @@ BillboardComponent::~BillboardComponent()
 
 BillboardComponent* BillboardComponent::DoClone() const
 {
-	return new BillboardComponent(*this);
+	return DBG_NEW BillboardComponent(*this);
 }
 
 void BillboardComponent::UpdateInternal(float elapsedTime)
@@ -27,6 +29,15 @@ void BillboardComponent::UpdateInternal(float elapsedTime)
 	glm::vec3 scale = mParent->GetTransformation()->GetScale();
 	float angleZ = mParent->GetTransformation()->GetRotation().z;
 	ModifyModelMatrixToAvoidRotations(viewMatrix, scale, angleZ, modelMatrix);
+}
+
+IComponent* BillboardComponent::Create(IGameEntity* entity)
+{
+	BillboardComponent* component = DBG_NEW BillboardComponent();
+
+	entity->AddComponent(component);
+
+	return component;
 }
 
 void BillboardComponent::ModifyModelMatrixToAvoidRotations(const glm::mat4& viewMatrix, const glm::vec3& scale, float angleZ, glm::mat4& modelMatrix)
@@ -45,4 +56,15 @@ void BillboardComponent::ModifyModelMatrixToAvoidRotations(const glm::mat4& view
 
 	modelMatrix = glm::rotate(modelMatrix, angleZ, glm::vec3(0.0f, 0.0f, 1.0f));
 	modelMatrix = glm::scale(modelMatrix, scale);
+}
+
+void BillboardComponent::DoReadFrom(core::utils::IDeserializer* source)
+{
+
+}
+
+void BillboardComponent::DoWriteTo(core::utils::ISerializer* destination)
+{
+	destination->WriteParameter(std::string("type"), std::string("billboard_component"));
+	destination->WriteParameter(std::string("camera_name"), mCamera->GetName());
 }

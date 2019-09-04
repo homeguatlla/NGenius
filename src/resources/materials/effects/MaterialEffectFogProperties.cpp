@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MaterialEffectFogProperties.h"
 #include "../IMaterial.h"
+#include "../Memory.h"
 
 MaterialEffectFogProperties::MaterialEffectFogProperties() :
 	mColor(glm::vec3(0.0f)),
@@ -49,5 +50,20 @@ void MaterialEffectFogProperties::CopyValuesFrom(IMaterial* material)
 
 MaterialEffectFogProperties* MaterialEffectFogProperties::DoClone() const
 {
-	return new MaterialEffectFogProperties(*this);
+	return DBG_NEW MaterialEffectFogProperties(*this);
+}
+
+IMaterialEffect* MaterialEffectFogProperties::Create(IMaterial* material)
+{
+	MaterialEffectFogProperties* effect = DBG_NEW MaterialEffectFogProperties();
+	material->AddOrReplaceEffect(effect);
+	return effect;
+}
+
+void MaterialEffectFogProperties::ReadFrom(core::utils::IDeserializer * source)
+{
+}
+
+void MaterialEffectFogProperties::WriteTo(core::utils::ISerializer * destination)
+{
 }

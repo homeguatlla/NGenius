@@ -19,6 +19,8 @@ const std::string ATTRIBUTE_SCALE("scale");
 const std::string ATTRIBUTE_MVP_MATRIX("MVP");
 const std::string ATTRIBUTE_MODEL_MATRIX("M");
 const std::string ATTRIBUTE_TEXTURE_COORDS("textureCoordsModelspace");
+const std::string ATTRIBUTE_VERTEX_NORMAL("normalModelspace");
+const std::string ATTRIBUTE_VERTEX_TANGENT("tangentModelspace");
 const std::string ATTRIBUTE_ARRAY_TEXTURE("textureArray");
 const std::string ATTRIBUTE_HEIGHTMAP_TEXTURE("heightMap");
 const std::string ATTRIBUTE_BLENDMAP_TEXTURE("blendMap");
@@ -34,7 +36,9 @@ mLocationTextureCoords(-1),
 mLocationHeightMapTexture(-1),
 mLocationBlendMapTexture(-1),
 mLocationArrayTexture(-1),
-mLocationTile(-1)
+mLocationTile(-1),
+mLocationNormal(-1),
+mLocationTangent(-1)
 {
 }
 
@@ -84,6 +88,8 @@ void TerrainShader::BindAttributes()
 {
 	BindAttribute(mLocationTextureCoords, ATTRIBUTE_TEXTURE_COORDS);
 	BindAttribute(mLocationModelMatrix, ATTRIBUTE_MODEL_MATRIX);
+	BindAttribute(mLocationNormal, ATTRIBUTE_VERTEX_NORMAL);
+	BindAttribute(mLocationTangent, ATTRIBUTE_VERTEX_TANGENT);
 }
 
 void TerrainShader::GetAllUniformLocations()
@@ -91,6 +97,9 @@ void TerrainShader::GetAllUniformLocations()
 	mLocationModelMatrix = GetAttributeLocation(ATTRIBUTE_MODEL_MATRIX); 
 	mLocationTextureCoords = GetAttributeLocation(ATTRIBUTE_TEXTURE_COORDS);
 	
+	mLocationNormal = GetAttributeLocation(ATTRIBUTE_VERTEX_NORMAL);
+	mLocationTangent = GetAttributeLocation(ATTRIBUTE_VERTEX_TANGENT);
+
 	mLocationMVPMatrix = GetUniformLocation(ATTRIBUTE_MVP_MATRIX);
 	mLocationCameraPosition = GetUniformLocation(ATTRIBUTE_CAMERA_POSITION);
 	mLocationBlendMapTexture = GetUniformLocation(ATTRIBUTE_BLENDMAP_TEXTURE);

@@ -1,6 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
-
+#include "../Memory.h"
 
 class ParticleShader : public IShaderProgram
 {
@@ -21,11 +21,14 @@ public:
 
 	ParticleShader();
 	ParticleShader(const std::string& vertexFile, const std::string& fragmentFile);
-	~ParticleShader();
+	virtual ~ParticleShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
+
+	static std::string GetClassName() { return std::string("ParticleShader"); }
+	static IShaderProgram* Create() { return DBG_NEW ParticleShader(); }
 };
 

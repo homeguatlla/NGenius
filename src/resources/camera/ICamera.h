@@ -4,8 +4,9 @@
 #include <vector>
 #include "../../AABB.h"
 #include "../../Frustum.h"
+#include "../../utils/serializer/ISerializable.h"
 
-class ICamera
+class ICamera : public core::utils::ISerializable
 {
 public:
 	virtual ~ICamera();
@@ -24,13 +25,19 @@ public:
 	const std::string& GetName() const;
 	const Frustum& GetFrustum();
 
+	void Update();
+
 	void Move(float speed);
+	void Pan(float speed);
 	void Rotate(float angle, const glm::vec3& axis);
 	virtual AABB GetAABB() const = 0;
 	virtual void CalculateFrustum() = 0;
 
+	// Heredado vía ISerializable
+	void ReadFrom(core::utils::IDeserializer* source) override;
+	void WriteTo(core::utils::ISerializer* destination) override;
+
 private:
-	void UpdateDirty();
 	virtual void CreateViewMatrix() = 0;
 	virtual void CreateProjectionMatrix() = 0;
 
@@ -45,5 +52,7 @@ protected:
 
 	Frustum mFrustum;
 	float mFrustumDilatation;
+
+	
 };
 

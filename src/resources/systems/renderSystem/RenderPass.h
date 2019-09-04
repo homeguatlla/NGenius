@@ -1,15 +1,18 @@
 #pragma once
 #include <glm/glm.hpp>
+#include "../../../utils/serializer/ISerializable.h"
+#include <string>
 
 class ICamera;
 class IFrameBuffer;
 class IMaterial;
 class Texture;
 class IRenderer;
+class RenderSystem;
 
-class RenderPass
+class RenderPass : public core::utils::ISerializable
 {
-	char mLayersMask;
+	int mLayersMask;
 	const ICamera* mCamera;
 	IFrameBuffer* mFrameBufferOutput;
 	bool mIsEnabled;
@@ -20,9 +23,10 @@ class RenderPass
 	int mClippingPlaneNumber;
 	glm::vec4 mClippingPlane;
 	IMaterial* mMaterial;
+	std::string mName;
 
 public:
-	explicit RenderPass(const ICamera* camera, char layersMask);
+	explicit RenderPass(const std::string& name, const ICamera* camera, int layersMask);
 	~RenderPass();
 
 	bool HasFrameBufferOutput() const;
@@ -31,9 +35,10 @@ public:
 	void UnbindOutput() const;
 	Texture* CopyDepthBuffer();
 
+	const std::string GetName() const { return mName; }
 	void SetCamera(const ICamera* camera);
 	const ICamera* GetCamera() const;
-	char GetLayersMask() const;
+	int GetLayersMask() const;
 	
 	void SetAcceptSpacePartitionOnly(bool accept);
 	bool CanAcceptRenderer(IRenderer* renderer) const;
@@ -56,5 +61,14 @@ public:
 	int GetClippingPlaneNumber() const;
 	void SetClippingPlane(const glm::vec4& clippingPlane);
 	const glm::vec4 GetClippingPlane() const;
+
+	void Build(RenderSystem* renderSystem);
+
+	// Heredado vía ISerializable
+	virtual void ReadFrom(core::utils::IDeserializer* source) override;
+	virtual void WriteTo(core::utils::ISerializer* destination) override;
+private:
+	void ReadFrameBuffersFrom(core::utils::IDeserializer* source);
+	void ReadFrameBufferFrom(core::utils::IDeserializer* source);
 };
 

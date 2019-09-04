@@ -19,11 +19,6 @@ mLocationBright(-1)
 {
 }
 
-
-BrightShader::~BrightShader()
-{
-}
-
 void BrightShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	MaterialEffectDiffuseTexture* effectDiffuse = material->GetEffect<MaterialEffectDiffuseTexture>();

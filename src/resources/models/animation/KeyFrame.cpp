@@ -15,6 +15,11 @@ KeyFrame::KeyFrame(float timeStamp, std::map<std::string, JointTransform*>& pose
 
 KeyFrame::~KeyFrame()
 {
+	for (auto it = mPose.begin(); it != mPose.end(); ++it)
+	{
+		delete it->second;
+	}
+	mPose.clear();
 }
 
 float KeyFrame::GetTimestamp() const

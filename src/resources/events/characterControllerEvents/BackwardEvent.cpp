@@ -11,10 +11,10 @@ BackwardEvent::~BackwardEvent()
 {
 }
 
-BackwardEvent* BackwardEvent::DoClone(const void* data) const
+std::shared_ptr<GameEvent> BackwardEvent::DoClone(const void* data) const
 {
 	const int* action = reinterpret_cast<const int*>(data);
-	BackwardEvent* event = new BackwardEvent();
+	std::shared_ptr<BackwardEvent> event = std::make_shared<BackwardEvent>();
 	event->SetPressed(action != GLFW_RELEASE);
 	return event;
 }
@@ -27,4 +27,9 @@ void BackwardEvent::SetPressed(bool pressed)
 bool BackwardEvent::IsPressed() const
 {
 	return mIsPressed;
+}
+
+std::shared_ptr<GameEvent> BackwardEvent::Create()
+{
+	return std::make_shared<BackwardEvent>();
 }

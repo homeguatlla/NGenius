@@ -42,11 +42,6 @@ mLocationCameraPosition(-1)
 {
 }
 
-
-WaterShader::~WaterShader()
-{
-}
-
 void WaterShader::BindAttributes()
 {
 	BindAttribute(mLocationTextureCoords, ATTRIBUTE_TEXTURE_COORDS);
@@ -64,11 +59,20 @@ void WaterShader::LoadData(const ICamera* camera, const Transformation* transfor
 	MaterialEffectWater* effect = material->GetEffect<MaterialEffectWater>();
 	if (effect != nullptr)
 	{
-		LoadTexture(mLocationReflectionTexture, effect->GetReflectionTexture()->GetUnit());
-		LoadTexture(mLocationRefractionTexture, effect->GetRefractionTexture()->GetUnit());
+		if (effect->GetReflectionTexture() != nullptr && effect->GetRefractionTexture() != nullptr)
+		{
+			LoadTexture(mLocationReflectionTexture, effect->GetReflectionTexture()->GetUnit());
+			LoadTexture(mLocationRefractionTexture, effect->GetRefractionTexture()->GetUnit());
+		}
+		
 		LoadTexture(mLocationDistorsionTexture, effect->GetDistorsionTexture()->GetUnit());
 		LoadTexture(mLocationNormalTexture, effect->GetNormalTexture()->GetUnit());
-		LoadTexture(mLocationDepthTexture, effect->GetDepthTexture()->GetUnit());
+		
+		if (effect->GetDepthTexture() != nullptr)
+		{
+			LoadTexture(mLocationDepthTexture, effect->GetDepthTexture()->GetUnit());
+		}
+
 		LoadFloat(mLocationWaterSpeed, effect->GetSpeed());
 		LoadVector4(mLocationWaterColor, effect->GetColor());
 	}

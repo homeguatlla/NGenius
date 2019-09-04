@@ -22,5 +22,11 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectShadowProperties* DoClone() const override;
+	static std::string GetClassName() { return std::string("MaterialEffectShadowProperties"); }
+	static IMaterialEffect* Create(IMaterial* material);
+
+	// Heredado vía IMaterialEffect
+	void ReadFrom(core::utils::IDeserializer * source) override;
+	void WriteTo(core::utils::ISerializer * destination) override;
 };
 

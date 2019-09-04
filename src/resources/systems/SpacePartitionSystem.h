@@ -5,15 +5,15 @@
 #include "../../Frustum.h"
 #include <vector>
 
-class GameEntity;
+class IGameEntity;
 class GameEntityQuadTree;
 class ICamera;
 
 class SpacePartitionSystem : public IGameSceneListener, BaseVisitable<>
 {
-	std::vector<GameEntity*> mNewEntitiesToAdd;
-	std::vector<GameEntity*> mEntitiesToRemove;
-	std::vector<GameEntity*> mLastQueryResult;
+	std::vector<IGameEntity*> mNewEntitiesToAdd;
+	std::vector<IGameEntity*> mEntitiesToRemove;
+	std::vector<IGameEntity*> mLastQueryResult;
 	GameEntityQuadTree* mQuadTree;
 	AABB mAABB;
 	bool mHasBuilt;
@@ -24,10 +24,11 @@ public:
 
 	void Start();
 	void Update(float elapsedTime);
+	void Reload();
 	void MarkGameEntitiesInsideCameraAsVisible(ICamera* camera);
 
-	void Query(const AABB& aabb, std::vector<GameEntity*>& result) const;
-	void Query(const AABB& aabb, const Frustum& frustum, std::vector<GameEntity*>& result) const;
+	void Query(const AABB& aabb, std::vector<IGameEntity*>& result) const;
+	void Query(const AABB& aabb, const Frustum& frustum, std::vector<IGameEntity*>& result) const;
 
 	unsigned int GetNumberEntities() const;
 
@@ -36,17 +37,18 @@ public:
 	BaseVisitable<>::ReturnType Accept(BaseVisitor& guest) override;
 
 private:
-	bool HasSpacePartitionComponents(const GameEntity* entity);
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
+	bool HasSpacePartitionComponents(const IGameEntity* entity);
+	void AddEntity(IGameEntity* entity);
+	void RemoveEntity(IGameEntity* entity);
 	
-	void OnGameEntityAdded(GameEntity* entity) override;
-	void OnGameEntityRemoved(GameEntity* entity) override;
+	void OnGameEntityAdded(IGameEntity* entity) override;
+	void OnGameEntityRemoved(IGameEntity* entity) override;
 	
 	void RemoveEntities();
 	void AddNewEntities();
 
 	void Build();
+	void Release();
 	void UpdateVisibilityLastQueryResult();
 };
 

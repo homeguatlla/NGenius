@@ -79,7 +79,7 @@ public:
 		mRegionSize = regionMax - regionMin;
 		mConversionFactor = static_cast<float>(glm::pow(2, mMaxLevels-1));
 
-		mRoot = new QuadTreeNode(glm::uvec2(0), maxLevels - 1, nullptr);
+		mRoot = DBG_NEW QuadTreeNode(glm::uvec2(0), maxLevels - 1, nullptr);
 	}
 
 	~DirectQuadTree() 
@@ -285,7 +285,7 @@ public:
 				QuadTreeNode* nextNode = finalNode->mChildren[childIndex];
 				if (nextNode == nullptr)
 				{
-					nextNode = new QuadTreeNode(locationCode, n, finalNode);
+					nextNode = DBG_NEW QuadTreeNode(locationCode, n, finalNode);
 					finalNode->mChildren[childIndex] = nextNode;
 				}
 

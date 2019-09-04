@@ -1,8 +1,8 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 
 
-class Light : public GameEntity
+class Light : public BaseGameEntity<Light>
 {
 public:
 	explicit Light(const glm::vec3& position, const glm::vec3& color, IRenderer* renderer);
@@ -19,5 +19,8 @@ public:
 
 private:
 	glm::vec3 mColor;
+
+	// Heredado vía BaseGameEntity
+	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };
 

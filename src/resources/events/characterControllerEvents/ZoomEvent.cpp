@@ -11,14 +11,19 @@ ZoomEvent::~ZoomEvent()
 {
 }
 
-ZoomEvent* ZoomEvent::DoClone(const void* data) const
+std::shared_ptr<GameEvent> ZoomEvent::DoClone(const void* data) const
 {
 	const InputSystem::MouseData* mouseData = reinterpret_cast<const InputSystem::MouseData*>(data);
 
-	ZoomEvent* zoomEvent = new ZoomEvent();
+	std::shared_ptr<ZoomEvent> zoomEvent = std::make_shared<ZoomEvent>();
 	zoomEvent->SetZoom(mouseData->mScroll);
 
 	return zoomEvent;
+}
+
+std::shared_ptr<GameEvent> ZoomEvent::Create()
+{
+	return std::make_shared<ZoomEvent>();
 }
 
 void ZoomEvent::SetZoom(float zoom)

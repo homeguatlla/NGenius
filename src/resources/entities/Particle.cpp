@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "Particle.h"
 #include "../renderers/ParticleRenderer.h"
+#include "../Memory.h"
 
 #include <iostream>
 
 Particle::Particle(Transformation* transformation, Model* model, IMaterial* material, float liveTime) :
-GameEntity(transformation),
+	BaseGameEntity(transformation),
 mModel(model),
 mMaterial(material),
 mMaxLiveTime(liveTime),
@@ -18,7 +19,7 @@ mColor(1.0f),
 mColorOrigin(1.0f),
 mColorDestination(1.0f)
 {
-	ParticleRenderer* renderer = new ParticleRenderer(model, material);
+	ParticleRenderer* renderer = DBG_NEW ParticleRenderer(model, material);
 	renderer->SetTransparency(true);
 	renderer->SetLayer(IRenderer::LAYER_PARTICLES);
 	SetRenderer(renderer);
@@ -31,7 +32,7 @@ Particle::~Particle()
 
 Particle* Particle::DoClone() const
 {
-	Particle* clone = new Particle(new Transformation(*GetTransformation()), mModel, mMaterial, mLiveTime);
+	Particle* clone = DBG_NEW Particle(new Transformation(*GetTransformation()), mModel, mMaterial, mLiveTime);
 
 	return clone;
 }
@@ -44,7 +45,7 @@ bool Particle::IsAlive() const
 
 void Particle::Update(float elapsedTime)
 {
-	GameEntity::Update(elapsedTime);
+	BaseGameEntity::Update(elapsedTime);
 	
 	assert(mLiveTime <= mMaxLiveTime);
 
@@ -83,6 +84,10 @@ void Particle::SetLiveTime(float liveTime)
 float Particle::GetLiveTime() const
 {
 	return mLiveTime;
+}
+
+void Particle::DoInit(GameScene* scene, RenderSystem* renderSystem)
+{
 }
 
 void Particle::SetColorGradientValues(const glm::vec4& origin, const glm::vec4& destination)

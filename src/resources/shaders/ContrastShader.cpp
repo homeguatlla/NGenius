@@ -19,11 +19,6 @@ mLocationContrast(-1)
 {
 }
 
-
-ContrastShader::~ContrastShader()
-{
-}
-
 void ContrastShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	MaterialEffectDiffuseTexture* effectDiffuse = material->GetEffect<MaterialEffectDiffuseTexture>();

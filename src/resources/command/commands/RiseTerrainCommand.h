@@ -9,7 +9,7 @@ class RiseTerrainCommand : public ICommand
 	float mScale;
 
 public:
-	RiseTerrainCommand(GameEntity* entity);
+	RiseTerrainCommand(IGameEntity* entity);
 	~RiseTerrainCommand();
 
 	void Execute() override;

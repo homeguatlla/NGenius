@@ -23,11 +23,6 @@ mLocationColor(-1)
 {
 }
 
-
-DefaultShader::~DefaultShader()
-{
-}
-
 void DefaultShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	LoadMatrix4(mLocationV, const_cast<ICamera*>(camera)->GetViewMatrix());

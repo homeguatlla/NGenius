@@ -24,11 +24,6 @@ mLocationTextureCoords(-1)
 {
 }
 
-
-GUIShader::~GUIShader()
-{
-}
-
 void GUIShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	LoadMatrix4(mLocationViewMatrix, const_cast<ICamera*>(camera)->GetViewMatrix());

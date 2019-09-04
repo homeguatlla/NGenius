@@ -1,5 +1,7 @@
 #pragma once
 #include "IShaderProgram.h"
+#include "../IFactory.h"
+#include "../Memory.h"
 
 class BloomShader : public IShaderProgram
 {
@@ -8,12 +10,15 @@ class BloomShader : public IShaderProgram
 
 public:
 	BloomShader();
-	~BloomShader();
+	virtual ~BloomShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 	
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
+
+	static std::string GetClassName() { return std::string("BloomShader"); }
+	static IShaderProgram* Create()	{ return DBG_NEW BloomShader();	}
 
 private:
 	int mLocationTexture;

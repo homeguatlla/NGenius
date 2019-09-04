@@ -1,6 +1,13 @@
 #include "stdafx.h"
 #include "MaterialEffectFloat2.h"
 #include "../IMaterial.h"
+#include "../../../utils/serializer/XMLDeserializer.h"
+#include "../Memory.h"
+
+MaterialEffectFloat2::MaterialEffectFloat2() :
+	mValue(0.0f)
+{
+}
 
 MaterialEffectFloat2::MaterialEffectFloat2(const glm::vec2& value) : mValue(value)
 {
@@ -32,5 +39,21 @@ void MaterialEffectFloat2::CopyValuesFrom(IMaterial* material)
 
 MaterialEffectFloat2* MaterialEffectFloat2::DoClone() const
 {
-	return new MaterialEffectFloat2(*this);
+	return DBG_NEW MaterialEffectFloat2(*this);
+}
+
+IMaterialEffect* MaterialEffectFloat2::Create(IMaterial* material)
+{
+	MaterialEffectFloat2* effect = DBG_NEW MaterialEffectFloat2();
+	material->AddOrReplaceEffect(effect);
+	return effect;
+}
+
+void MaterialEffectFloat2::ReadFrom(core::utils::IDeserializer * source)
+{
+	source->ReadParameter("values", mValue);
+}
+
+void MaterialEffectFloat2::WriteTo(core::utils::ISerializer * destination)
+{
 }

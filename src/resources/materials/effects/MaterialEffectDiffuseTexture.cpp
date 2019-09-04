@@ -1,11 +1,18 @@
 #include "stdafx.h"
 #include "MaterialEffectDiffuseTexture.h"
 #include "../IMaterial.h"
+#include "../../../utils/serializer/XMLDeserializer.h"
+#include "../../../utils/Log.h"
+#include "../../textures/TexturesLibrary.h"
+#include "../Memory.h"
+
+
 
 MaterialEffectDiffuseTexture::MaterialEffectDiffuseTexture() :
 	mTexture(nullptr),
 	mColor(glm::vec3(0.0f)),
-	mTile(1.0f)
+	mTile(1.0f),
+	mTextureName("")
 {
 
 }
@@ -13,7 +20,8 @@ MaterialEffectDiffuseTexture::MaterialEffectDiffuseTexture() :
 MaterialEffectDiffuseTexture::MaterialEffectDiffuseTexture(ITexture* texture, const glm::vec3& color, float tile) :
 mTexture(texture),
 mColor(color),
-mTile(tile)
+mTile(tile),
+mTextureName("")
 {
 	assert(texture != nullptr);
 }
@@ -60,7 +68,37 @@ void MaterialEffectDiffuseTexture::CopyValuesFrom(IMaterial* material)
 	}
 }
 
+IMaterialEffect* MaterialEffectDiffuseTexture::Create(IMaterial* material)
+{
+	MaterialEffectDiffuseTexture* effect = DBG_NEW MaterialEffectDiffuseTexture();
+	material->AddOrReplaceEffect(effect);
+	return effect;
+}
+
+void MaterialEffectDiffuseTexture::Build(TexturesLibrary* texturesLibrary)
+{
+	if (!mTextureName.empty())
+	{
+		mTexture = texturesLibrary->GetElement(mTextureName);
+		if (mTexture == nullptr)
+		{
+			Log(Log::LOG_WARNING) << "Texture " << mTextureName << " not found. Material Effect couldn't be build \n";
+		}
+	}
+}
+
 MaterialEffectDiffuseTexture* MaterialEffectDiffuseTexture::DoClone() const
 {
-	return new MaterialEffectDiffuseTexture(*this);
+	return DBG_NEW MaterialEffectDiffuseTexture(*this);
+}
+
+void MaterialEffectDiffuseTexture::ReadFrom(core::utils::IDeserializer * source)
+{
+	source->ReadParameter("texture", mTextureName);
+	source->ReadParameter("color", mColor);
+	source->ReadParameter("tile", &mTile);
+}
+
+void MaterialEffectDiffuseTexture::WriteTo(core::utils::ISerializer * destination)
+{
 }

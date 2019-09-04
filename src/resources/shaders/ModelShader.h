@@ -1,5 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
+#include "../Memory.h"
 
 class ModelShader :	public IShaderProgram
 {
@@ -9,12 +10,15 @@ class ModelShader :	public IShaderProgram
 public:
 	ModelShader();
 	ModelShader(const std::string& vertexFile, const std::string& fragmentFile);
-	~ModelShader();
+	virtual ~ModelShader() = default;
 
 	virtual void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
 	void BindAttributes();
 	void GetAllUniformLocations();
+
+	static std::string GetClassName() { return std::string("ModelShader"); }
+	static IShaderProgram* Create() { return DBG_NEW ModelShader(); }
 
 private:
 	int mLocationModelMatrix;
@@ -25,5 +29,6 @@ private:
 	int mLocationNormal;
 	int mLocationTexture;
 	int mLocationTile;
+
 };
 

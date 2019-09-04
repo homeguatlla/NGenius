@@ -1,6 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
 #include "../../../Frustum.h"
+#include "../Memory.h"
+
 #include <vector>
 #include <assert.h>
 #include <iostream>
@@ -84,7 +86,7 @@ public:
 						QuadTree* quadTree = mChildren[index];
 						if (quadTree == nullptr)
 						{
-							quadTree = new QuadTree(newRegionMin, newRegionMin + size2, mMaxLevels, mParent);
+							quadTree = DBG_NEW QuadTree(newRegionMin, newRegionMin + size2, mMaxLevels, mParent);
 							mChildren[index] = quadTree;
 						}
 						quadTree->Add(regionMin, regionMax, data);

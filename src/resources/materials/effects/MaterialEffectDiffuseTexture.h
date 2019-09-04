@@ -1,6 +1,7 @@
 #pragma once
 #include "../IMaterialEffect.h"
 #include <glm/glm.hpp>
+#include <string>
 
 class ITexture;
 
@@ -9,6 +10,7 @@ class MaterialEffectDiffuseTexture : public IMaterialEffect
 	ITexture* mTexture;
 	glm::vec3 mColor;
 	float mTile;	
+	std::string mTextureName;
 
 public:
 	MaterialEffectDiffuseTexture();
@@ -23,7 +25,15 @@ public:
 	void SetTile(float tile);
 
 	void CopyValuesFrom(IMaterial* material) override;
+	static std::string GetClassName() { return std::string("MaterialEffectDiffuseTexture"); }
+	static IMaterialEffect* Create(IMaterial* material);
+	void Build(TexturesLibrary* texturesLibrary) override;
 
 	MaterialEffectDiffuseTexture* DoClone() const override;
+
+
+	// Heredado vía IMaterialEffect
+	void ReadFrom(core::utils::IDeserializer * source) override;
+	void WriteTo(core::utils::ISerializer * destination) override;
 };
 

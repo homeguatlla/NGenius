@@ -2,11 +2,14 @@
 
 #include <typeinfo>
 #include <map>
+#include <string>
+#include <assert.h>
 
 class IShaderProgram;
 class IMaterialEffect;
 class ICamera;
 class Transformation;
+class TexturesLibrary;
 
 class IMaterial
 {
@@ -35,13 +38,15 @@ public:
 	IShaderProgram* GetShader();
 	const IShaderProgram* GetShader() const;
 
+	void Build(TexturesLibrary* texturesLibrary);
 	virtual IMaterial* Clone() const;
 
 	template<typename T> void AddEffect(T* effect)
 	{
 		static_assert(std::is_base_of<IMaterialEffect, T>::value, "The type must inherit from IMaterialEffect");
 		assert(effect != nullptr);
-		if (mEffects.count(&typeid(T)) == 0)
+
+		if (!HasEffect<T>())
 		{
 			effect->SetParent(this);
 			mEffects[&typeid(T)] = effect;
@@ -49,6 +54,21 @@ public:
 		else
 		{
 			delete effect;
+		}
+	}
+
+	template<typename T> void AddOrReplaceEffect(T* effect)
+	{
+		static_assert(std::is_base_of<IMaterialEffect, T>::value, "The type must inherit from IMaterialEffect");
+		assert(effect != nullptr);
+
+		if (HasEffect<T>())
+		{
+			RemoveEffect<T>();
+		}
+		else
+		{
+			AddEffect(effect);
 		}
 	}
 
@@ -81,6 +101,7 @@ public:
 			return nullptr;
 		}
 	}
+
 protected:
 	virtual IMaterial* DoClone() const = 0;
 

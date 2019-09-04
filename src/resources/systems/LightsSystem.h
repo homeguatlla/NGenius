@@ -22,7 +22,7 @@ public:
 	void RemoveLight(Light* light);
 
 private:
-	void ReleaseLights(std::vector<Light*>* lights);
+	void ReleaseLights(std::vector<Light*>& lights);
 	void RemoveLights();
 	void AddNewLights();
 };

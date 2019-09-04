@@ -1,8 +1,16 @@
 #include "stdafx.h"
 #include "LODComponent.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../camera/ICamera.h"
+#include "../systems/renderSystem/RenderSystem.h"
 #include "../renderers/IRenderer.h"
+#include "../renderers/VerticesRenderer.h"
+#include "../models/Model.h"
+#include "../materials/IMaterial.h"
+#include "../../utils/serializer/XMLSerializer.h"
+#include "../../utils/serializer/XMLDeserializer.h"
+#include "../Memory.h"
+
 #include <glm/gtx/norm.hpp>
 #include <algorithm>
 
@@ -29,7 +37,34 @@ LODComponent::~LODComponent()
 
 IComponent* LODComponent::DoClone() const
 {
-	return new LODComponent(*this);
+	LODComponent* clone = DBG_NEW LODComponent(mCamera);
+	clone->SetParent(mParent);
+	clone->SetEnabled(this->IsEnabled());
+
+	for (auto lod : mLODS)
+	{
+		clone->AddLevelOfDetail(
+			DBG_NEW VerticesRenderer(lod->renderer->GetModel(), lod->renderer->GetMaterial()), 
+			lod->distance);
+	}
+
+	return clone;
+}
+
+void LODComponent::Init(GameScene* scene, RenderSystem* renderSystem)
+{
+	mCamera = renderSystem->GetGameplayCamera();
+	for (auto lodData : mLodsToAdd)
+	{
+		Model* model = renderSystem->GetModel(std::get<0>(lodData));
+		IMaterial* material = renderSystem->GetMaterial(std::get<1>(lodData));
+		if (model != nullptr && material != nullptr)
+		{
+			IRenderer* renderer = DBG_NEW VerticesRenderer(model, material);
+			AddLevelOfDetail(renderer, std::get<2>(lodData));
+		}
+	}
+	mLodsToAdd.clear();
 }
 
 void LODComponent::UpdateInternal(float elapsedTime)
@@ -53,11 +88,7 @@ void LODComponent::UpdateInternal(float elapsedTime)
 	mLastLODIndex = lod;
 
 	mParent->SetRenderer(mLODS[lod]->renderer);
-
-	
 }
-
-
 
 void LODComponent::AddLevelOfDetail(IRenderer* renderer, float distance)
 {
@@ -70,7 +101,7 @@ void LODComponent::AddLevelOfDetail(IRenderer* renderer, float distance)
 
 	if (totalLODS < MAX_LODS)
 	{
-		LOD* lod = new LOD(renderer, distance);
+		LOD* lod = DBG_NEW LOD(renderer, distance);
 		renderer->SetParent(mParent);
 		mLODS.push_back(lod);
 	}
@@ -83,4 +114,64 @@ void LODComponent::AddLevelOfDetail(IRenderer* renderer, float distance)
 		//assign a renderer by default the closer. It will be needed for the CollisionComponent if is the case. Should always be one assigned.
 		mParent->SetRenderer(mLODS[0]->renderer);
 	}
+}
+
+IComponent* LODComponent::Create(IGameEntity* entity)
+{
+	LODComponent* component = DBG_NEW LODComponent();
+	entity->AddComponent(component);
+
+	return component;
+}
+
+
+void LODComponent::DoReadFrom(core::utils::IDeserializer* source)
+{
+	if (source->HasAttribute("lods"))
+	{
+		source->BeginAttribute(std::string("lods"));
+		unsigned int numConverters = source->ReadNumberOfElements();
+		source->BeginAttribute(std::string("lod"));
+		do
+		{
+			auto lodData = ReadLODFrom(source);
+			mLodsToAdd.push_back(lodData);
+			source->NextAttribute();
+			numConverters--;
+
+		} while (numConverters > 0);
+		source->EndAttribute();
+		source->EndAttribute();
+	}
+}
+
+LODComponent::LODData LODComponent::ReadLODFrom(core::utils::IDeserializer* source)
+{
+	std::string modelName;
+	std::string material;
+	float distance;
+
+	source->ReadParameter("model_name", modelName);
+	source->ReadParameter("material", material);
+	source->ReadParameter("distance", &distance);
+
+	return std::make_tuple(modelName, material, distance);
+}
+
+void LODComponent::DoWriteTo(core::utils::ISerializer* destination)
+{
+	destination->WriteParameter(std::string("type"), std::string("lod_component"));
+	destination->WriteParameter(std::string("camera_name"), mCamera->GetName());
+	destination->BeginAttribute(std::string("lods"));
+	for (unsigned int i = 0; i < mLODS.size(); ++i)
+	{
+		destination->BeginAttribute(std::string("lod"));
+		destination->WriteParameter(std::string("distance"), mLODS[i]->distance);
+		unsigned int modelID = mLODS[i]->renderer->GetModel()->GetID();
+		unsigned int materialID = mLODS[i]->renderer->GetMaterial()->GetMaterialID();
+		destination->WriteParameter(std::string("modelID"), modelID);
+		destination->WriteParameter(std::string("materialID"), materialID);
+		destination->EndAttribute();
+	}
+	destination->EndAttribute();
 }

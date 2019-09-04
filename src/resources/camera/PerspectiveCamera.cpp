@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "PerspectiveCamera.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "../../utils/serializer/IDeserializer.h"
+#include "../../utils/serializer/XMLDeserializer.h"
+
 
 PerspectiveCamera::PerspectiveCamera(std::string name, float fov, float aspectRatio, float nearPlane, float farPlane) :
 mFov(fov),
@@ -8,14 +11,19 @@ mAspectRatio(aspectRatio),
 mNearPlane(nearPlane),
 mFarPlane(farPlane)
 {
-	SetFrustumDilatation(0.0f);
 	SetName(name);
-	mIsDirty = true;
-	CreateProjectionMatrix();
+	Initialize();
 }
 
 PerspectiveCamera::~PerspectiveCamera()
 {
+}
+
+void PerspectiveCamera::Initialize()
+{
+	SetFrustumDilatation(0.0f);
+	mIsDirty = true;
+	CreateProjectionMatrix();
 }
 
 AABB PerspectiveCamera::GetAABB() const
@@ -69,6 +77,16 @@ AABB PerspectiveCamera::GetAABB() const
 	return aabb;
 }
 
+void PerspectiveCamera::ReadFrom(core::utils::IDeserializer* source)
+{
+	ICamera::ReadFrom(source);
+	source->ReadParameter("fov", &mFov);
+	source->ReadParameter("aspect_ratio", &mAspectRatio);
+	source->ReadParameter("near_plane", &mNearPlane);
+	source->ReadParameter("far_plane", &mFarPlane);
+	Initialize();
+}
+
 void PerspectiveCamera::CalculateFrustum()
 {
 	glm::vec3 forward = glm::normalize(mTarget - mPosition);
@@ -111,7 +129,7 @@ void PerspectiveCamera::CreateViewMatrix()
 		mTarget,   // where you want to look at, in world space
 		mUp        // probably glm::vec3(0,1,0), but (0,-1,0) would make you looking upside-down, which can be great too
 		);
-	mIsDirty = false;
+	//mIsDirty = false;
 }
 
 void PerspectiveCamera::CreateProjectionMatrix()

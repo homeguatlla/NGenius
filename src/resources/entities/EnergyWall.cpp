@@ -5,9 +5,10 @@
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectFloat3.h"
 #include "../materials/effects/MaterialEffectFloat.h"
+#include "../Memory.h"
 
 EnergyWall::EnergyWall(Transformation* transformation, IMaterial* material, Model* model, float maxLiveTime) : 
-GameEntity(transformation),
+	BaseGameEntity<EnergyWall>(transformation),
 mMaterial(material),
 mModel(model),
 mMaxLiveTime(maxLiveTime),
@@ -18,7 +19,7 @@ mMaterialEffectFloat(nullptr)
 	assert(model != nullptr);
 	assert(material != nullptr);
 	material->AddEffect(new MaterialEffectFloat3(glm::vec3(0.0f)));
-	mMaterialEffectFloat = new MaterialEffectFloat(mLiveTime);
+	mMaterialEffectFloat = DBG_NEW MaterialEffectFloat(mLiveTime);
 	material->AddEffect(mMaterialEffectFloat);
 	SetRenderer(new EnergyWallRenderer(model, material));
 	GetRenderer()->SetLayer(IRenderer::LAYER_PARTICLES);
@@ -31,14 +32,14 @@ EnergyWall::~EnergyWall()
 
 EnergyWall* EnergyWall::DoClone() const
 {
-	EnergyWall* clone = new EnergyWall(new Transformation(*GetTransformation()), mMaterial, mModel, mLiveTime);
+	EnergyWall* clone = DBG_NEW EnergyWall(new Transformation(*GetTransformation()), mMaterial, mModel, mLiveTime);
 
 	return clone;
 
 }
 void EnergyWall::Update(float elapsedTime)
 {
-	GameEntity::Update(elapsedTime);
+	BaseGameEntity::Update(elapsedTime);
 
 	assert(mLiveTime <= mMaxLiveTime);
 
@@ -71,6 +72,10 @@ float EnergyWall::GetLiveTime() const
 bool EnergyWall::IsAlive() const
 {
 	return mLiveTime > 0.0f;
+}
+
+void EnergyWall::DoInit(GameScene* scene, RenderSystem* renderSystem)
+{
 }
 
 glm::vec3 EnergyWall::GetContactPoint() const

@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "EnergyWallCollisionComponent.h"
+#include "../../utils/serializer/XMLSerializer.h"
 
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../Transformation.h"
+#include "../Memory.h"
 
 EnergyWallCollisionComponent::EnergyWallCollisionComponent() :
 mIsColliding(false),
@@ -17,7 +19,7 @@ EnergyWallCollisionComponent::~EnergyWallCollisionComponent()
 
 EnergyWallCollisionComponent* EnergyWallCollisionComponent::DoClone() const
 {
-	return new EnergyWallCollisionComponent(*this);
+	return DBG_NEW EnergyWallCollisionComponent(*this);
 }
 
 bool EnergyWallCollisionComponent::IsColliding() const
@@ -38,4 +40,22 @@ void EnergyWallCollisionComponent::SetCollisionPoint(glm::vec3& point)
 glm::vec3 EnergyWallCollisionComponent::GetCollisionPoint() const
 {
 	return mCollisionPoint;
+}
+
+IComponent* EnergyWallCollisionComponent::Create(IGameEntity* entity)
+{
+	EnergyWallCollisionComponent* component = DBG_NEW EnergyWallCollisionComponent();
+	entity->AddComponent(component);
+
+	return component;
+}
+
+void EnergyWallCollisionComponent::DoReadFrom(core::utils::IDeserializer* source)
+{
+
+}
+
+void EnergyWallCollisionComponent::DoWriteTo(core::utils::ISerializer* destination)
+{
+	destination->WriteParameter(std::string("type"), std::string("energy_wall_collision_component"));
 }

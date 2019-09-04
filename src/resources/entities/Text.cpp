@@ -7,13 +7,14 @@
 #include "../models/Model.h"
 #include "../models/Mesh.h"
 #include "../font/FontType.h"
+#include "../Memory.h"
 
 const float EXTRA_CHARACTER_PADDING = 0.0f;
 int Text::IDCounter = 0;
 
 Text::Text(Transformation* transformation, IMaterial* material, FontType* font, 
 	const std::string& text, bool isText3D, const glm::vec4& color, unsigned int width, unsigned int height, bool isCentered) :
-	GameEntity(transformation),
+	BaseGameEntity(transformation),
 	mFontType(font),
 	mWidth(width),
 	mHeight(height),
@@ -24,8 +25,8 @@ Text::Text(Transformation* transformation, IMaterial* material, FontType* font,
 	assert(material != nullptr);
 	assert(font != nullptr);
 
-	mMesh = new Mesh();
-	mModel = new Model(mMesh);
+	mMesh = DBG_NEW Mesh();
+	mModel = DBG_NEW Model(mMesh);
 
 	isText3D ? SetRenderer(new TextRenderer(mModel, material)) : SetRenderer(new GUITextRenderer(mModel, material));
 	UpdateText(text);
@@ -36,7 +37,7 @@ Text::~Text()
 	delete mModel;
 }
 
-unsigned int Text::GetID() const
+unsigned int Text::GetTextID() const
 {
 	return mTextID;
 }
@@ -96,4 +97,8 @@ void Text::Create(const std::string& text, unsigned int width, unsigned int heig
 	mMesh->SetVertexs(vertexs);
 	mMesh->SetIndexes(indexs);
 	mMesh->SetTextureCoords(uv);
+}
+
+void Text::DoInit(GameScene* scene, RenderSystem* renderSystem)
+{
 }

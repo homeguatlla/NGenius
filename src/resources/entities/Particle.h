@@ -1,10 +1,10 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 
 class Model;
 class IMaterial;
 
-class Particle : public GameEntity
+class Particle : public BaseGameEntity<Particle>
 {
 	const float mMaxLiveTime;
 	float mLiveTime;
@@ -35,5 +35,8 @@ public:
 	const glm::vec4& GetColor() const;
 	float GetMaxLiveTime() const;
 	float GetLiveTime() const;
+
+	// Heredado vía BaseGameEntity
+	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };
 

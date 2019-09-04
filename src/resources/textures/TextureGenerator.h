@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <string>
 #include "NoiseGenerator.h"
 
 class TextureGenerator

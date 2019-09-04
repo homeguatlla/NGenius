@@ -6,9 +6,17 @@
 #include "animation/AnimatedModel.h"
 #include "animation/Animation.h"
 
+#include "../../utils/serializer/IDeserializer.h"
 #include "../../utils/Log.h"
+#include "../Memory.h"
 
 #include <iostream>
+
+const char* ModelsLibrary::CUBE_NAME = "cube";
+const char* ModelsLibrary::SKYBOX_NAME = "skybox";
+const char* ModelsLibrary::QUAD_NAME = "quad";
+const char* ModelsLibrary::GUI_QUAD_NAME = "gui_quad";
+const char* ModelsLibrary::PARTICLE_QUAD_NAME = "particle_quad";
 
 ModelsLibrary::ModelsLibrary(TexturesLibrary* texturesLibrary, AnimationsLibrary* animationsLibrary) : 
 	mTexturesLibrary(texturesLibrary),
@@ -25,26 +33,38 @@ void ModelsLibrary::Load()
 {
 	CreateCube();
 	CreateSkyBox();
-	CreateQuad("quad", 1.0f, 1.0f);
+	CreateQuad(ModelsLibrary::QUAD_NAME, 1.0f, 1.0f);
 	//necesitamos un gui_quad porque sino, cuando se construye (build) 
 	//buscará el atributo color_gradient. Si no lo tiene, que para el shader_gui no lo tiene, 
 	//después para las partículas no lo asignará y no les funcionará el color_gradient.
 	//creando tres quads, ya es diferente la cosa.
-	CreateQuad("gui_quad", 0.5f, 0.5f);
-	CreateQuad("particle_quad", 0.5f, 0.5f);
+	CreateQuad(ModelsLibrary::GUI_QUAD_NAME, 0.5f, 0.5f);
+	CreateQuad(ModelsLibrary::PARTICLE_QUAD_NAME, 0.5f, 0.5f);
 
 	//LoadModel("cube2", "data/models/cube/cube.obj", false, true);
 	//LoadModel("enano", "data/models/enano/enano.obj", false, true);
 	//LoadModel("mazo", "data/models/mazo/mazo.obj", false, true);
 
-	LoadModel("barrel", "data/models/props/barrel.obj", true, true);
-	LoadModel("chest", "data/models/props/chest.obj", true, true);
-	LoadModel("brazier", "data/models/props/brazier.obj", true, true);
+	///LoadModel("barrel", "data/models/props/barrel.obj", true, true);
+	///LoadModel("chest", "data/models/props/chest.obj", true, true);
+///	LoadModel("brazier", "data/models/props/brazier.obj", true, true);
 	//LoadModel("stall", "data/models/stall/stall.obj", false, true);
 	//LoadModel("cube3", "data/models/props/cube.obj", false, true);
-	LoadModel("crate", "data/models/props/crate.obj", true, true);
+	///LoadModel("crate", "data/models/props/crate.obj", true, true);
 	//LoadModel("floor", "data/models/props/floor.obj", true, true);
-	LoadModel("statue", "data/models/props/statue.obj", true, true);
+	///LoadModel("statue", "data/models/props/statue.obj", true, true);
+
+	///LoadModel("sphere", "data/models/sphere/sphere.obj", false, true);
+
+	/*LoadModel("tree_foliage_0", "data/models/tree4/tree_foliage_lod0.obj", false, true);
+	LoadModel("tree_foliage_1", "data/models/tree4/tree_foliage_lod1.obj", false, true);
+	LoadModel("tree_foliage_2", "data/models/tree4/tree_foliage_lod2.obj", false, true);
+
+	LoadModel("tree_trunk_0", "data/models/tree4/tree_trunk_lod0.obj", false, true);
+	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", false, true);
+	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
+	*/
+	///LoadModel("farmer", "data/models/farmer/farmer.dae", true, true);
 
 	//LoadModel("grass1", "data/models/grass/grass1.obj", false, false);
 	//LoadModel("grass2", "data/models/grass/grass2.obj", false, false);
@@ -52,17 +72,7 @@ void ModelsLibrary::Load()
 	//model = OBJLoader::LoadModel("data/models/hermes/hermes.obj");
 	//AddElement("hermes", model);
 	
-	LoadModel("sphere", "data/models/sphere/sphere.obj", false, true);
 	
-	LoadModel("tree_foliage_0", "data/models/tree4/tree_foliage_lod0.obj", false, true);
-	LoadModel("tree_foliage_1", "data/models/tree4/tree_foliage_lod1.obj", false, true);
-	LoadModel("tree_foliage_2", "data/models/tree4/tree_foliage_lod2.obj", false, true);
-
-	LoadModel("tree_trunk_0", "data/models/tree4/tree_trunk_lod0.obj", false, true);
-	LoadModel("tree_trunk_1", "data/models/tree4/tree_trunk_lod1.obj", false, true);
-	LoadModel("tree_trunk_2", "data/models/tree4/tree_trunk_lod2.obj", false, true);
-	
-	LoadModel("farmer", "data/models/farmer/farmer.dae", true, true);
 	//LoadModel("farmer", "data/models/cube/cube.dae", false, true);
 	//LoadModel("farmer", "data/models/Adventurer-Militia/Militia-Adventurer-RIGGED.dae", false, true);
 
@@ -107,14 +117,14 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 
 		if (animation != nullptr && rootJoint != nullptr)
 		{
-			AnimatedModel* animatedModel = new AnimatedModel(name, model, rootJoint);
-			AddElement(name, animatedModel);
-			mAnimationsLibrary->AddElement(animation->GetName(), animation);
+			AnimatedModel* animatedModel = DBG_NEW AnimatedModel(name, model, rootJoint);
+			AddOrReplaceElement(name, animatedModel);
+			mAnimationsLibrary->AddOrReplaceElement(animation->GetName(), animation);
 		}
 		else
 		{
-			Model* modelRender = new Model(model);
-			AddElement(name, modelRender);
+			Model* modelRender = DBG_NEW Model(model);
+			AddOrReplaceElement(name, modelRender);
 		}
 
 		std::string path = GetPath(filename) + "/";
@@ -149,6 +159,38 @@ std::string ModelsLibrary::GetPath(const std::string& filename)
 	}
 	
 	return "";
+}
+
+void ModelsLibrary::ReadFrom(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute(std::string("models_library"));
+	unsigned int numElements = source->ReadNumberOfElements();
+
+	source->BeginAttribute("model");
+	do
+	{	
+		std::string filename;
+		source->ReadParameter("filename", filename);
+
+		std::string modelName;
+		source->ReadParameter("name", modelName);
+
+		bool calculateNormals = false;
+		bool calculateTangents = false;
+		source->ReadParameter("calculate_normals", &calculateNormals);
+		source->ReadParameter("calculate_tangents", &calculateTangents);
+
+		LoadModel(modelName, filename, calculateNormals, calculateTangents);
+		
+		source->NextAttribute();
+		numElements--;
+	} while (numElements > 0);
+	source->EndAttribute();
+	source->EndAttribute();
+}
+
+void ModelsLibrary::WriteTo(core::utils::ISerializer* destination)
+{
 }
 
 void ModelsLibrary::CreateSkyBox()
@@ -216,10 +258,10 @@ void ModelsLibrary::CreateSkyBox()
 	indexes.push_back(7);
 
 	std::vector<glm::vec2> uv;
-	Mesh* mMesh = new Mesh(vertexs, uv, indexes);
-	Model* model = new Model(mMesh);
+	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexes);
+	Model* model = DBG_NEW Model(mMesh);
 
-	AddElement("skybox", model);
+	AddOrReplaceElement(ModelsLibrary::SKYBOX_NAME, model);
 }
 
 void ModelsLibrary::CreateCube()
@@ -275,10 +317,10 @@ void ModelsLibrary::CreateCube()
 	indexes.push_back(2);
 
 	std::vector<glm::vec2> uv;
-	Mesh* mMesh = new Mesh(vertexs, uv, indexes);
-	Model* model = new Model(mMesh);
+	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexes);
+	Model* model = DBG_NEW Model(mMesh);
 
-	AddElement("cube", model);
+	AddOrReplaceElement(ModelsLibrary::CUBE_NAME, model);
 }
 
 void ModelsLibrary::CreateQuad(const std::string& name, float width, float height)
@@ -304,8 +346,8 @@ void ModelsLibrary::CreateQuad(const std::string& name, float width, float heigh
 	indexs.push_back(2);
 	indexs.push_back(1);
 
-	Mesh* mMesh = new Mesh(vertexs, uv, indexs);
-	Model* model = new Model(mMesh);
+	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexs);
+	Model* model = DBG_NEW Model(mMesh);
 
-	AddElement(name, model);
+	AddOrReplaceElement(name, model);
 }

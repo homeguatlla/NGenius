@@ -3,14 +3,17 @@
 in mat4 M;
 in vec3 vertexModelspace;
 in vec2 textureCoordsModelspace;
+in vec3 normalModelspace;
+in vec3 tangentModelspace;
 
 out vec2 textureCoords;
-out vec3 eyeDirection;
-out vec3 lightDirection;
+out vec3 eyePosition;
+out vec3 lightPosition;
 out vec3 normalDirection;
 out vec3 positionWorldspace;
 out float fogVisibility;
 out vec4 shadowCoords;
+out mat3 toTangentSpace;
 //out vec3 cameraPos;
 //out float distance;
 
@@ -28,6 +31,8 @@ uniform mat4 toShadowMapSpace;
 const float shadowDistance = 10.0;
 const float transitionDistance = 20.0;
 
+
+// el height color es una normal (rgb) y un valor de altura en el alpha
 void main()
 {
 	//cameraPos = cameraPosition;
@@ -46,15 +51,23 @@ void main()
 	gl_ClipDistance[0] = dot(vec4(positionWorldspace, 1.0f), clippingPlane);
 
 	vec3 positionRelativeToCamera = cameraPosition - positionWorldspace;
-		
-	lightDirection = normalize(lightPositionWorldspace);//normalize(lightPositionWorldspace - positionWorldspace);
-	//lightPosition = lightPositionWorldspace;
-
-	eyeDirection = normalize(cameraPosition - positionWorldspace);
-
-	normalDirection = (color.rgb * 2.0f - 1.0f); 
-	normalDirection = vec3( M * vec4(normalDirection, 0.0f) );	
 	
+	vec3 N = normalize(vec3( M * vec4(normalModelspace, 0.0f) ));
+	vec3 T = normalize(vec3( M * vec4(tangentModelspace, 0.0f) ));
+	vec3 B = normalize(cross(N, T));
+
+	toTangentSpace = transpose(mat3(T, B, N));
+
+	//normalDirection = (color.rgb * 2.0f - 1.0f); 
+	//normalDirection = vec3( M * vec4(normalDirection, 0.0f) );	
+	
+	//light
+	lightPosition = lightPositionWorldspace;
+	eyePosition = cameraPosition;
+	//lightDirection = toTangentSpace * normalize(lightPositionWorldspace);
+	//eyeDirection = toTangentSpace * normalize(cameraPosition - positionWorldspace);
+	
+	//fog
 	float distance = length(positionRelativeToCamera);
 	fogVisibility = clamp(exp(-pow(distance * fogDensity, fogGradient)), 0.0f, 1.0f);
 

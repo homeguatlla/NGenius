@@ -1,5 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
+#include "../Memory.h"
 
 class TextShader : public IShaderProgram
 {
@@ -21,11 +22,14 @@ class TextShader : public IShaderProgram
 
 public:
 	TextShader();
-	~TextShader();
+	virtual ~TextShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
+
+	static std::string GetClassName() { return std::string("TextShader"); }
+	static IShaderProgram* Create() { return DBG_NEW TextShader(); }
 };
 

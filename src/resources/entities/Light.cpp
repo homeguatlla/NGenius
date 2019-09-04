@@ -3,7 +3,7 @@
 
 
 Light::Light(const glm::vec3& position, const glm::vec3& color, IRenderer* renderer) :
-GameEntity(new Transformation(position, glm::vec3(0.0f), glm::vec3(1.0f)), renderer),
+	BaseGameEntity(new Transformation(position, glm::vec3(0.0f), glm::vec3(1.0f)), renderer),
 mColor(color)
 {
 }
@@ -36,4 +36,8 @@ void Light::SetPosition(const glm::vec3& position)
 void Light::SetColor(const glm::vec3& color)
 {
 	mColor = color;
+}
+
+void Light::DoInit(GameScene* scene, RenderSystem* renderSystem)
+{
 }

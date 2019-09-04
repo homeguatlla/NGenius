@@ -1,25 +1,52 @@
 #include "stdafx.h"
 #include "GameScene.h"
 #include "IGameSceneListener.h"
-#include "../GameEntity.h"
 #include "../systems/renderSystem/RenderSystem.h"
 #include "../renderers/IRenderer.h"
 #include "../components/LODComponent.h"
 #include "../components/SpacePartitionComponent.h"
 
+#include "../../utils/serializer/XMLSerializer.h"
+#include "../InstantiableObject.h"
+
+#include "../entities/GameEntity.h"
+#include "../entities/Player.h"
+#include "../entities/Terrain.h"
+#include "../entities/Water.h"
+#include "../entities/PointsPatch.h"
+#include "../entities/EntitiesPatch.h"
+#include "../Memory.h"
+
 #include <algorithm>
 
-GameScene::GameScene(const std::string& name) :
+GameScene::GameScene(const std::string& name, NGenius* engine, RenderSystem* renderSystem) :
 mName(name),
-mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limits<float>::max()))
+mAABB(glm::vec3(std::numeric_limits<float>::max()), -glm::vec3(std::numeric_limits<float>::max())),
+mEngine { engine },
+mRenderSystem { renderSystem }
 {
+	InstantiableObject::RegisterGameEntityType<GameEntity>();
+	InstantiableObject::RegisterGameEntityType<Player>();
+	InstantiableObject::RegisterGameEntityType<Terrain>();
+	InstantiableObject::RegisterGameEntityType<Water>();
+	InstantiableObject::RegisterGameEntityType<PointsPatch>();
+	InstantiableObject::RegisterGameEntityType<EntitiesPatch>();
 }
 
 GameScene::~GameScene()
 {
+	Release();
+}
+
+void GameScene::Release()
+{
 	mEntitiesToRemove.clear(); //these entities were removed when releasing mEntities.
 	ReleaseEntities(&mEntities);
-	ReleaseEntities(&mNewEntitiesToAdd);	
+	ReleaseEntities(&mNewEntitiesToAdd);
+}
+
+void GameScene::Start()
+{
 }
 
 void GameScene::Update(float elapsedTime)
@@ -27,15 +54,18 @@ void GameScene::Update(float elapsedTime)
 	RemoveEntities();
 	AddNewEntities();
 
-	for (GameEntity* entity : mEntities)
+	for (IGameEntity* entity : mEntities)
 	{
-		entity->Update(elapsedTime);
+		if (entity->IsEnabled())
+		{
+			entity->Update(elapsedTime);
+		}
 	}
 }
 
 void GameScene::Render(RenderSystem* renderSystem)
 {
-	for (GameEntity* entity : mEntities)
+	for (IGameEntity* entity : mEntities)
 	{
 		renderSystem->AddToRender(entity->GetRenderer());
 	}
@@ -46,14 +76,51 @@ unsigned int GameScene::GetNumberGameEntities() const
 	return mEntities.size();
 }
 
-std::vector<GameEntity*>& GameScene::GetAllGameEntities()
+std::vector<IGameEntity*>& GameScene::GetAllGameEntities()
 {
 	return mEntities;
 }
 
-void GameScene::AddEntity(GameEntity* entity)
+IGameEntity* GameScene::GetGameEntity(const std::string& name)
 {
-	entity->Init();
+	std::vector<IGameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](IGameEntity* a) { return a->GetName() == name; });
+
+	if (it != mEntities.end())
+	{
+		return *it;
+	}
+	else
+	{
+		std::vector<IGameEntity*>::iterator it = std::find_if(mNewEntitiesToAdd.begin(), mNewEntitiesToAdd.end(), [&](IGameEntity* a) { return a->GetName() == name; });
+		if (it != mNewEntitiesToAdd.end())
+		{
+			return *it;
+		}
+		else
+		{
+			return nullptr;
+		}
+	}
+}
+
+IGameEntity* GameScene::GetGameEntity(int id)
+{
+	std::vector<IGameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](IGameEntity* a) { return a->GetID() == id; });
+
+	if (it != mEntities.end())
+	{
+		return *it;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+void GameScene::AddEntity(IGameEntity* entity)
+{
+	entity->Build(mEngine);
+	entity->Init(this, mRenderSystem);
 
 	if (entity->GetRenderer() != nullptr)
 	{
@@ -62,7 +129,7 @@ void GameScene::AddEntity(GameEntity* entity)
 	mNewEntitiesToAdd.push_back(entity);
 }
 
-void GameScene::RemoveEntity(GameEntity* entity)
+void GameScene::RemoveEntity(IGameEntity* entity)
 {
 	mEntitiesToRemove.push_back(entity);
 }
@@ -93,7 +160,7 @@ void GameScene::UnRegisterGameSceneListener(IGameSceneListener* listener)
 
 void GameScene::AddNewEntities()
 {
-	for (GameEntity* entity : mNewEntitiesToAdd)
+	for (IGameEntity* entity : mNewEntitiesToAdd)
 	{
 		mEntities.push_back(entity);
 		NotifyEntityAdded(entity);
@@ -101,7 +168,7 @@ void GameScene::AddNewEntities()
 	mNewEntitiesToAdd.clear();
 }
 
-void GameScene::NotifyEntityAdded(GameEntity* entity)
+void GameScene::NotifyEntityAdded(IGameEntity* entity)
 {
 	for (ListenersIterator it = mListeners.begin(); it != mListeners.end(); ++it)
 	{
@@ -109,7 +176,7 @@ void GameScene::NotifyEntityAdded(GameEntity* entity)
 	}
 }
 
-void GameScene::NotifyEntityRemoved(GameEntity* entity)
+void GameScene::NotifyEntityRemoved(IGameEntity* entity)
 {
 	for (ListenersIterator it = mListeners.begin(); it != mListeners.end(); ++it)
 	{
@@ -117,11 +184,109 @@ void GameScene::NotifyEntityRemoved(GameEntity* entity)
 	}
 }
 
+void GameScene::SaveToFile()
+{
+	core::utils::XMLSerializer xmlSerializer;
+	WriteTo(&xmlSerializer);
+
+	std::string filename;
+	filename = mName + ".xml";
+	xmlSerializer.Save(filename);
+}
+
+void GameScene::ReadFrom(core::utils::IDeserializer* source)
+{
+	Release();
+	source->BeginAttribute(std::string("game_scene"));
+	source->ReadParameter("name", mName);
+
+	source->BeginAttribute(std::string("entities"));
+	unsigned int numElements = source->ReadNumberOfElements();
+
+	source->BeginAttribute();
+	do
+	{
+		IGameEntity* entity = ReadEntityFrom(source);
+		if (entity != nullptr)
+		{
+			ReadComponentsFrom(entity, source);
+			AddEntity(entity);
+		}
+		source->NextAttribute();
+		numElements--;
+
+	} while (numElements > 0);
+
+	//source->EndAttribute();
+	source->EndAttribute();
+	source->EndAttribute();
+}
+
+void GameScene::WriteTo(core::utils::ISerializer* destination)
+{
+	destination->BeginAttribute(std::string("game_scene"));
+		destination->WriteParameter(std::string("name"), mName);
+		destination->BeginAttribute(std::string("entities"));
+		destination->WriteParameter(std::string("counter"), mEntities.size());
+			for (IGameEntity* entity : mEntities)
+			{
+				entity->WriteTo(destination);
+			}
+		destination->EndAttribute();
+	destination->EndAttribute();
+}
+
+IGameEntity* GameScene::ReadEntityFrom(core::utils::IDeserializer* source)
+{
+	IGameEntity* gameEntity = nullptr;
+	
+	std::string nodeName = source->GetCurrentNodeName();
+	gameEntity = InstantiableObject::CreateEntity(nodeName);
+	if (gameEntity != nullptr)
+	{
+		gameEntity->ReadFrom(source);
+		return gameEntity;
+	}
+	return nullptr;
+}
+
+void GameScene::ReadComponentsFrom(IGameEntity* entity, core::utils::IDeserializer* source)
+{
+	if (source->HasAttribute("components"))
+	{
+		source->BeginAttribute(std::string("components"));
+		unsigned int numElements = source->ReadNumberOfElements();
+
+		source->BeginAttribute();
+		do
+		{
+			ReadComponentFrom(entity, source);
+			source->NextAttribute();
+			numElements--;
+
+		} while (numElements > 0);
+
+		source->EndAttribute();
+		source->EndAttribute();
+	}
+}
+
+void GameScene::ReadComponentFrom(IGameEntity* entity, core::utils::IDeserializer* source)
+{
+	std::string componentType;
+	source->ReadParameter("type", componentType);
+	IComponent* component = InstantiableObject::CreateComponent(componentType, entity);
+	if (component != nullptr)
+	{
+		component->ReadFrom(source);
+	}
+}
+
 void GameScene::RemoveEntities()
 {
-	for (GameEntity* entity : mEntitiesToRemove)
+	for (IGameEntity* entity : mEntitiesToRemove)
 	{
-		GameEntitiesIterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](GameEntity* a) { return a == entity; });
+		GameEntitiesIterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](IGameEntity* a) { return a == entity; });
 		NotifyEntityRemoved(*it);
 		
 		mEntities.erase(it);
@@ -129,9 +294,9 @@ void GameScene::RemoveEntities()
 	mEntitiesToRemove.clear();
 }
 
-void GameScene::ReleaseEntities(std::vector<GameEntity*>* entities)
+void GameScene::ReleaseEntities(std::vector<IGameEntity*>* entities)
 {
-	for (GameEntity* entity : *entities)
+	for (IGameEntity* entity : *entities)
 	{
 		delete entity;
 	}

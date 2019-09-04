@@ -1,5 +1,6 @@
 #pragma once
 #include "ModelShader.h"
+#include "../Memory.h"
 
 class EnergyWallShader : public ModelShader
 {
@@ -12,10 +13,13 @@ class EnergyWallShader : public ModelShader
 
 public:
 	explicit EnergyWallShader();
-	~EnergyWallShader();
+	virtual ~EnergyWallShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
 	void GetAllUniformLocations();
+
+	static std::string GetClassName() { return std::string("EnergyWallShader"); }
+	static IShaderProgram* Create() { return DBG_NEW EnergyWallShader(); }
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include <glm/glm.hpp>
 
 class Mesh
@@ -20,21 +21,30 @@ class Mesh
 	std::vector<std::vector<float>> mTempVertexWeights;
 	std::vector<std::vector<int>> mTempVertexJointsIds;
 
-	int mModelID;
+	int mMeshID;
 	std::string mMaterialName;
 	std::string mDiffuseTextureName;
 	std::string mNormalMapTextureName;
 
 public:
 	Mesh();
+	
 	Mesh(	const std::vector<glm::vec3>& vertexs,
 			const std::vector<glm::vec2>& textureCoords,
 			const std::vector<unsigned int>& indexes,
 			const std::vector<glm::vec3>& normals);
+	
+	Mesh(const std::vector<glm::vec3>& vertexs,
+		const std::vector<glm::vec2>& textureCoords,
+		const std::vector<unsigned int>& indexes,
+		const std::vector<glm::vec3>& normals,
+		const std::vector<glm::vec3>& tangents);
+
 	Mesh(	const std::vector<glm::vec3>& vertexs,
 			const std::vector<glm::vec2>& textureCoords,
 			const std::vector<unsigned int>& indexes);
-	~Mesh();
+	
+	~Mesh() = default;
 
 	unsigned int GetID() const;
 	void SetVertexs(std::vector<glm::vec3>& vertexs);

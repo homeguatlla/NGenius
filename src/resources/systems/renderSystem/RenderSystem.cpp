@@ -5,8 +5,14 @@
 
 #include "PostProcessSubSystem.h"
 
-#include "../../GameEntity.h"
+#include "../../renderers/SkyBoxRenderer.h"
+#include "../../renderers/IndicesRenderer.h"
+#include "../../renderers/PointsRenderer.h"
+
+#include "../../IGameEntity.h"
 #include "../../camera/ICamera.h"
+#include "../../camera/PerspectiveCamera.h"
+#include "../../camera/OrthogonalCamera.h"
 
 #include "../../models/ModelsLibrary.h"
 #include "../../models/Model.h"
@@ -38,12 +44,11 @@
 #include "../environmentSystem/SunLight.h"
 
 #include "RenderPass.h"
+
 #include "../../../BitNumber.h"
-
 #include "../../../guiTool/GuiTool.h"
-
 #include "../GameConstants.h"
-
+#include "../../InstantiableObject.h"
 #include "../../../utils/Log.h"
 
 #include <iostream>
@@ -84,20 +89,44 @@ mNumberRenderers(0)
 {
 	BitNumber bit;
 	bit.Test();
+
+	InstantiableObject::RegisterCameraType<PerspectiveCamera>();
+	InstantiableObject::RegisterCameraType<OrthogonalCamera>();
+
+	InstantiableObject::RegisterRendererType<SkyBoxRenderer>();
+	InstantiableObject::RegisterRendererType<IndicesRenderer>();
+	InstantiableObject::RegisterRendererType<PointsRenderer>();
 }
 
 RenderSystem::~RenderSystem()
 {
-	for (const RenderPass* pass : mRenderPasses)
-	{
-		delete pass;
-	}
+	ReleaseRenderPasses();
 
 	DestroyCameras();
 	DestroyResourcesLibraries();
 	DestroySubSystems();
 	delete mGuiTool;
 	glfwDestroyWindow(mWindow);
+}
+
+void RenderSystem::ReleaseRenderPasses()
+{
+	for (const RenderPass* pass : mRenderPasses)
+	{
+		delete pass;
+	}
+
+	for (const RenderPass* pass : mRenderPassesAfterPostProcessing)
+	{
+		delete pass;
+	}
+	mRenderPasses.clear();
+	mRenderPassesAfterPostProcessing.clear();
+}
+
+void RenderSystem::ReleaseRenderers()
+{
+	mRenderersPerPass.clear();
 }
 
 //Initializing the engine basic stuff. The subsystems which need information apart will be initialized later
@@ -108,27 +137,47 @@ void RenderSystem::Init(const std::string& applicationName, bool isFullscreen)
 	assert(initialized);
 
 	CheckGLError();
-	mGuiTool = new GuiTool(mWindow);
+	mGuiTool = DBG_NEW GuiTool(mWindow);
 
 	CreateResourcesLibraries();
-	LoadResources();
+	LoadDefaultResources();
 	CreateSubSystems();
 }
 
 void RenderSystem::Start()
 {
+	ReleaseRenderers();
+
+	UpdateCameras();
 	mGuiTool->Initialize();
 	mShadowsRenderPass->Init();
 	mWaterRenderPass->Init();
 	mPostProcessSubsystem->Init();
+
+	mTexturesLibrary->LoadTexturesPendingToLoad();
+	mMaterialsLibrary->Build();
+	
+	BuildRenderPasses();
+}
+
+void RenderSystem::BuildRenderPasses()
+{
+	for (RenderPass* pass : mRenderPasses)
+	{
+		pass->Build(this);
+	}
+	for (RenderPass* pass : mRenderPassesAfterPostProcessing)
+	{
+		pass->Build(this);
+	}
 }
 
 void RenderSystem::CreateSubSystems()
 {
-	mShadowsRenderPass = new ShadowsRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
-	mWaterRenderPass = new WaterRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
+	mShadowsRenderPass = DBG_NEW ShadowsRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
+	mWaterRenderPass = DBG_NEW WaterRenderPassSubSystem(this, GetScreenWidth(), GetScreenHeight());
 
-	mPostProcessSubsystem = new PostProcessSubSystem(this);
+	mPostProcessSubsystem = DBG_NEW PostProcessSubSystem(this);
 }
 
 void RenderSystem::DestroySubSystems()
@@ -138,7 +187,7 @@ void RenderSystem::DestroySubSystems()
 	delete mShadowsRenderPass;
 }
 
-void RenderSystem::LoadResources()
+void RenderSystem::LoadDefaultResources()
 {
 	mShadersLibrary->Load();
 	mModelsLibrary->Load();
@@ -155,8 +204,18 @@ void RenderSystem::Update(float elapsedTime)
 
 void RenderSystem::UpdateSubsystems()
 {
+	//UpdateCameras();
 	mShadowsRenderPass->Update();
 	mWaterRenderPass->Update();
+	//UpdateCameras();
+}
+
+void RenderSystem::UpdateCameras()
+{
+	for (CamerasListIterator it = mCamerasList.begin(); it != mCamerasList.end(); ++it)
+	{
+		it->second->Update();
+	}
 }
 
 void RenderSystem::Render()
@@ -200,6 +259,23 @@ void RenderSystem::RenderPasses(std::vector<RenderPass*>& renderPasses)
 				Render(pass);
 			}
 		}
+	}
+}
+
+RenderPass* RenderSystem::GetRenderPass(const std::string& renderPassName) const
+{
+	RenderPassesConstIterator it = std::find_if(
+		mRenderPasses.begin(), 
+		mRenderPasses.end(), 
+		[&] (RenderPass* renderPass) { return renderPass->GetName() == renderPassName; });
+
+	if (it != mRenderPasses.end())
+	{
+		return *it;
+	}
+	else
+	{
+		return nullptr;
 	}
 }
 
@@ -270,7 +346,19 @@ void RenderSystem::Render(RenderPass* renderPass)
 	}
 }
 
-void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing)
+void RenderSystem::AddOrReplaceRenderPass(RenderPass* renderPass, bool addAfterPostProcessing)
+{
+	RemoveRenderPass(renderPass);
+	AddRenderPass(renderPass, addAfterPostProcessing);
+}
+
+void RenderSystem::AddOrReplaceRenderPassFirst(RenderPass* renderPass, bool addAfterPostProcessing)
+{
+	RemoveRenderPass(renderPass);
+	AddRenderPass(renderPass, addAfterPostProcessing, true);
+}
+
+void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing, bool insertFirst)
 {
 	assert(renderPass != nullptr);
 	assert(renderPass->GetCamera() != nullptr);
@@ -302,7 +390,7 @@ void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProces
 			
 			if (isRenderPassOK)
 			{
-				mRenderPasses.push_back(renderPass);
+				insertFirst ? PushRenderPassFront(renderPass) : PushRenderPassBack(renderPass);
 			}
 			else
 			{
@@ -311,6 +399,17 @@ void RenderSystem::AddRenderPass(RenderPass* renderPass, bool addAfterPostProces
 			}
 		}
 	}
+}
+
+void RenderSystem::PushRenderPassFront(RenderPass* renderPass)
+{
+	mRenderPasses.push_back(renderPass);
+	std::rotate(mRenderPasses.rbegin(), mRenderPasses.rbegin() + 1, mRenderPasses.rend());
+}
+
+void RenderSystem::PushRenderPassBack(RenderPass* renderPass)
+{
+	mRenderPasses.push_back(renderPass);
 }
 
 bool RenderSystem::ValidateRenderPassesLayerMasks(RenderPass* renderPass, std::vector<RenderPass*>& renderPasses) const
@@ -328,7 +427,7 @@ bool RenderSystem::ValidateRenderPassesLayerMasks(RenderPass* renderPass, std::v
 
 void RenderSystem::RemoveRenderPass(RenderPass* renderPass)
 {
-	RenderPassesIterator it = std::find(mRenderPasses.begin(), mRenderPasses.end(), renderPass);
+	RenderPassesIterator it = std::find_if(mRenderPasses.begin(), mRenderPasses.end(), [&](RenderPass* pass) { return pass->GetName() == renderPass->GetName(); });
 	bool found = it != mRenderPasses.end();
 	if (found)
 	{
@@ -336,7 +435,7 @@ void RenderSystem::RemoveRenderPass(RenderPass* renderPass)
 	}
 	else
 	{
-		RenderPassesIterator it = std::find(mRenderPassesAfterPostProcessing.begin(), mRenderPassesAfterPostProcessing.end(), renderPass);
+		RenderPassesIterator it = std::find_if(mRenderPassesAfterPostProcessing.begin(), mRenderPassesAfterPostProcessing.end(), [&](RenderPass* pass) { return pass->GetName() == renderPass->GetName(); });
 		bool found = it != mRenderPassesAfterPostProcessing.end();
 		if (found)
 		{
@@ -350,21 +449,28 @@ void RenderSystem::AddToRender(IRenderer* renderer)
 	//assert(renderer != nullptr);
 	if (renderer != nullptr)
 	{
-		AddToRender(renderer, mRenderPasses);
-		AddToRender(renderer, mRenderPassesAfterPostProcessing);
-		mNumberRenderers++;
+		bool added = AddToRender(renderer, mRenderPasses);
+		added |= AddToRender(renderer, mRenderPassesAfterPostProcessing);
+
+		if (added)
+		{
+			mNumberRenderers++;
+		}
 	}
 }
 
-void RenderSystem::AddToRender(IRenderer* renderer, std::vector<RenderPass*>& renderPasses)
+bool RenderSystem::AddToRender(IRenderer* renderer, std::vector<RenderPass*>& renderPasses)
 {
+	bool added = false;
 	for (const RenderPass* pass : renderPasses)
 	{
 		if (pass->CanAcceptRenderer(renderer))
 		{
 			mRenderersPerPass[pass->GetLayersMask()].push_back(renderer);
+			added = true;
 		}
 	}
+	return added;
 }
 
 void RenderSystem::AddCamera(ICamera* camera)
@@ -372,7 +478,29 @@ void RenderSystem::AddCamera(ICamera* camera)
 	mCamerasList[camera->GetName()] = camera;
 }
 
-ICamera* RenderSystem::GetCamera(const std::string name)
+void RenderSystem::RemoveCamera(const std::string& key)
+{
+	if (HasCamera(key))
+	{
+		mCamerasList.erase(key);
+	}
+}
+
+bool RenderSystem::HasCamera(const std::string& key)
+{
+	return mCamerasList.find(key) != mCamerasList.end();
+}
+
+void RenderSystem::AddOrReplaceCamera(ICamera* camera)
+{
+	if (HasCamera(camera->GetName()))
+	{
+		RemoveCamera(camera->GetName());
+	}
+	AddCamera(camera);
+}
+
+ICamera* RenderSystem::GetCamera(const std::string& name)
 {
 	if (mCamerasList.find(name) != mCamerasList.end())
 	{
@@ -382,6 +510,60 @@ ICamera* RenderSystem::GetCamera(const std::string name)
 	{
 		return nullptr;
 	}
+}
+
+void RenderSystem::ReadCamerasFrom(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute(std::string("cameras"));
+	unsigned int numElements = source->ReadNumberOfElements();
+
+	source->BeginAttribute(std::string("camera"));
+	do
+	{
+		ReadCameraFrom(source);
+
+		source->NextAttribute();
+		numElements--;
+
+	} while (numElements > 0);
+
+	source->EndAttribute();
+	source->EndAttribute();
+}
+
+void RenderSystem::ReadCameraFrom(core::utils::IDeserializer* source)
+{
+	//TODO esto no me termina de gustar. Veo una solución que es leer aquí los datos de la cámara, lo que tampoco es estupendo
+	//crear un constructor vacío y meter un Build dentro de la cámara, pero no me convence tampoco.
+	ICamera* camera;
+	float fov;
+
+	if (source->ReadParameter("fov", &fov))
+	{
+		camera = InstantiableObject::CreatePerspectiveCamera("PerspectiveCamera", fov, 0.0f, 0.0f, 0.0f);
+	}
+	else 
+	{
+		//orthogonal camera
+		camera = InstantiableObject::CreateOrthogonalCamera("OrthogonalCamera", 0.0f, 0.0f, 0.0f, 0.0f);
+	}
+
+	bool isGameplayCamera = false;
+	bool isFreeCamera = false;
+	source->ReadParameter("is_gameplay_camera", &isGameplayCamera);
+	source->ReadParameter("is_free_camera", &isFreeCamera);
+
+	if (isGameplayCamera)
+	{
+		mGameplayCamera = camera;
+	}
+	else if (isFreeCamera)
+	{
+		mFreeCamera = camera;
+	}
+	
+	camera->ReadFrom(source);
+	AddOrReplaceCamera(camera);
 }
 
 void RenderSystem::DestroyCameras()
@@ -419,7 +601,7 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 
 	ApplyShadows(renderer);
 
-	ApplyFog(renderer);
+	ApplyFog(renderPass, renderer);
 
 	mCurrentMaterial->Use();
 
@@ -496,14 +678,18 @@ void RenderSystem::ApplyShadows(IRenderer* renderer)
 	}
 }
 
-void RenderSystem::ApplyFog(IRenderer* renderer)
+void RenderSystem::ApplyFog(RenderPass* renderPass, IRenderer* renderer)
 {
-	if (mIsFogEnabled)
+	MaterialEffectFogProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectFogProperties>();
+	if (effect != nullptr)
 	{
-		MaterialEffectFogProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectFogProperties>();
-		if (effect != nullptr)
+		if (mIsFogEnabled && renderPass->IsFogEnabled())
 		{
 			effect->SetProperties(mEnvironmentSystem->GetFogColor(), mEnvironmentSystem->GetFogDensity(), mEnvironmentSystem->GetFogGradient());
+		}
+		else 
+		{
+			effect->SetProperties(glm::vec3(0.0f), 0.0f, 1.0f); // to make fog not enabled
 		}
 	}
 }
@@ -594,11 +780,18 @@ void RenderSystem::SelectTextures()
 	MaterialEffectWater* effectWater = mCurrentMaterial->GetEffect<MaterialEffectWater>();
 	if (effectWater != nullptr)
 	{
-		effectWater->GetReflectionTexture()->SetActive(true);
-		effectWater->GetRefractionTexture()->SetActive(true);
-		effectWater->GetDistorsionTexture()->SetActive(true);
-		effectWater->GetNormalTexture()->SetActive(true);
-		effectWater->GetDepthTexture()->SetActive(true);
+		if (mWaterRenderPass->IsEnabled())
+		{
+			effectWater->GetReflectionTexture()->SetActive(true);
+			effectWater->GetRefractionTexture()->SetActive(true);
+			effectWater->GetDistorsionTexture()->SetActive(true);
+			effectWater->GetNormalTexture()->SetActive(true);
+			effectWater->GetDepthTexture()->SetActive(true);
+		}
+		else
+		{
+			Log(Log::LOG_ERROR) << "Water is not enabled and there is a entity trying to use it. Try to enable water or remove the water material from that entity.\n";
+		}
 	}
 
 	MaterialEffectParticle* effectParticle = mCurrentMaterial->GetEffect<MaterialEffectParticle>();
@@ -751,7 +944,7 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 		mScreenWidth = 0.0f;
 		monitor = GetCurrentMonitor(&mScreenWidth, &mScreenHeight);
 	}
-	Log(Log::LOG_INFO) << " screen size ( " << mScreenWidth << ", " << mScreenHeight << ") \n";
+	//Log(Log::LOG_INFO) << " screen size ( " << mScreenWidth << ", " << mScreenHeight << ") \n";
 	mWindow = glfwCreateWindow(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight), applicationName.c_str(), monitor, NULL);
 
 	if (mWindow == NULL) {
@@ -802,8 +995,9 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 	glfwPollEvents();
 	//glfwSetCursorPos(window, 1024/2, 768/2);
 
-	// Dark blue background
-	glClearColor(0.66f, 0.87f, 0.9f, 0.0f);
+	// Light blue background
+	//glClearColor(0.66f, 0.87f, 0.9f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
@@ -827,12 +1021,12 @@ void RenderSystem::EnableVSync(bool enable)
 
 void RenderSystem::CreateResourcesLibraries()
 {
-	mShadersLibrary = new ShadersLibrary();
-	mTexturesLibrary = new TexturesLibrary();
-	mAnimationsLibrary = new AnimationsLibrary();
-	mModelsLibrary = new ModelsLibrary(mTexturesLibrary, mAnimationsLibrary);
-	mFontsLibrary = new FontsLibrary(mTexturesLibrary);
-	mMaterialsLibrary = new MaterialsLibrary(mShadersLibrary);
+	mShadersLibrary = DBG_NEW ShadersLibrary();
+	mTexturesLibrary = DBG_NEW TexturesLibrary(glm::vec2(mScreenWidth, mScreenHeight));
+	mAnimationsLibrary = DBG_NEW AnimationsLibrary();
+	mModelsLibrary = DBG_NEW ModelsLibrary(mTexturesLibrary, mAnimationsLibrary);
+	mFontsLibrary = DBG_NEW FontsLibrary(mTexturesLibrary);
+	mMaterialsLibrary = DBG_NEW MaterialsLibrary(mTexturesLibrary, mShadersLibrary);
 }
 
 void RenderSystem::DestroyResourcesLibraries()
@@ -878,7 +1072,7 @@ void RenderSystem::SetCastingShadowsParameters(const glm::vec3& lightDirection, 
 	mShadowsRenderPass->SetCastingShadowsParameters(lightDirection, pfcCounter);
 }
 
-void RenderSystem::SetCastingShadowsTarget(const GameEntity* target)
+void RenderSystem::SetCastingShadowsTarget(const IGameEntity* target)
 {
 	assert(mShadowsRenderPass != nullptr);
 	mShadowsRenderPass->SetCastingShadowsTarget(target);
@@ -906,6 +1100,11 @@ void RenderSystem::SetWaterParameters(const ICamera* camera, float waterY)
 	mWaterRenderPass->SetWaterParameters(camera, waterY);
 }
 
+float RenderSystem::GetWaterHeight() const
+{
+	return mWaterRenderPass->GetWaterHeight();
+}
+
 ITexture* RenderSystem::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
 {
 	assert(mTexturesLibrary != nullptr);
@@ -928,12 +1127,121 @@ GuiTool* RenderSystem::GetGuiTool()
 	return mGuiTool;
 }
 
+void RenderSystem::ChangeToCamera(const std::string& renderPassName, const ICamera* camera)
+{
+	assert(camera != nullptr);
+
+	RenderPass* renderPass = GetRenderPass(renderPassName);
+	if (renderPass != nullptr)
+	{
+		renderPass->SetCamera(camera);
+	}
+}
+
+void RenderSystem::ChangeToCamera(const std::string& cameraName, const std::string& newCameraName)
+{
+	ICamera* camera = GetCamera(cameraName);
+	ICamera* newCamera = GetCamera(newCameraName);
+
+	assert(camera != nullptr);
+	assert(newCamera != nullptr);
+
+	for (RenderPass* pass : mRenderPasses)
+	{
+		if (pass->GetCamera()->GetName() == cameraName)
+		{
+			pass->SetCamera(newCamera);
+		}
+	}
+	mWaterRenderPass->SetWaterParameters(newCamera, mWaterRenderPass->GetWaterHeight());
+}
+
 void RenderSystem::CheckGLError()
 {
 	GLenum err;
 	while ((err = glGetError()) != GL_NO_ERROR) {
 		Log(Log::LOG_ERROR) << "OpenGL error: " << err;
 	}
+}
+
+void RenderSystem::ReadFrom(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute("libraries");
+		mFontsLibrary->ReadFrom(source);
+		mShadersLibrary->ReadFrom(source);
+		mModelsLibrary->ReadFrom(source);
+		mTexturesLibrary->ReadFrom(source);
+		mMaterialsLibrary->ReadFrom(source);
+		ReadCamerasFrom(source);
+	source->EndAttribute();
+	source->BeginAttribute("renderer");
+		ReadRenderLayersFrom(source);
+		mWaterRenderPass->ReadFrom(source);
+		mShadowsRenderPass->ReadFrom(source);
+		ReadFogParameters(source);
+		ReadRenderPassesFrom(source);
+	source->EndAttribute();
+}
+
+void RenderSystem::ReadRenderLayersFrom(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute("render_layers");
+	
+	source->EndAttribute();
+}
+
+void RenderSystem::ReadFogParameters(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute("fog");
+	source->ReadParameter("is_enabled", &mIsFogEnabled);
+	source->EndAttribute();
+}
+
+void RenderSystem::ReadRenderPassesFrom(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute(std::string("render_passes"));
+	unsigned int numElements = source->ReadNumberOfElements();
+
+	source->BeginAttribute(std::string("render_pass"));
+	do
+	{
+		ReadRenderPassFrom(source);
+
+		source->NextAttribute();
+		numElements--;
+
+	} while (numElements > 0);
+
+	source->EndAttribute();
+	source->EndAttribute();
+}
+
+void RenderSystem::ReadRenderPassFrom(core::utils::IDeserializer* source)
+{
+	bool addAfterPostProcessing = false;
+	std::string cameraName, renderPassName;
+	int layerMask = IRenderer::LAYER_OTHER;
+
+	source->ReadParameter("name", renderPassName);
+	source->ReadParameter("camera_name", cameraName);
+	source->ReadParameter("layer_mask", &layerMask);
+	source->ReadParameter("add_after_post_processing", &addAfterPostProcessing);
+
+	ICamera* camera = GetCamera(cameraName);
+	if (camera != nullptr)
+	{
+		RenderPass* renderPass = DBG_NEW RenderPass(renderPassName, camera, layerMask);
+		renderPass->ReadFrom(source);
+		AddOrReplaceRenderPass(renderPass, addAfterPostProcessing);
+	}
+	else
+	{
+		Log(Log::LOG_ERROR) << "Couldn't load render pass " << renderPassName << " because camera " << cameraName << " not available." <<"\n";
+	}
+}
+
+void RenderSystem::WriteTo(core::utils::ISerializer* destination)
+{
 }
 
 BaseVisitable<>::ReturnType RenderSystem::Accept(BaseVisitor& guest)

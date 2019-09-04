@@ -11,11 +11,14 @@ class AnimatedModelShader : public ModelShader
 
 public:
 	AnimatedModelShader();
-	~AnimatedModelShader();
+	virtual ~AnimatedModelShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 	
 	void BindAttributes();
 	void GetAllUniformLocations();
+
+	static std::string GetClassName() { return std::string("AnimatedModelShader"); }
+	static IShaderProgram* Create() { return DBG_NEW AnimatedModelShader(); }
 };
 

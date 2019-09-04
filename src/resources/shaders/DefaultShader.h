@@ -1,5 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
+#include "../Memory.h"
 
 class DefaultShader : public IShaderProgram
 {
@@ -8,12 +9,15 @@ class DefaultShader : public IShaderProgram
 
 public:
 	DefaultShader();
-	~DefaultShader();
+	virtual ~DefaultShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
+
+	static std::string GetClassName() { return std::string("DefaultShader"); }
+	static IShaderProgram* Create() { return DBG_NEW DefaultShader(); }
 
 private:
 	

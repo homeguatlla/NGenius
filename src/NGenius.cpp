@@ -26,31 +26,114 @@
 #include "resources/entities/ParticlesEmitter.h"
 #include "resources/textures/Texture.h"
 
+#include "fsm/states/RunState.h"
+#include "fsm/states/FreeModeOnlyCameraState.h"
+#include "fsm/states/FreeModeOnlyPlayerState.h"
+#include "fsm/states/InitialState.h"
+#include "fsm/states/LoadingState.h"
+#include "fsm/states/StartState.h"
+#include "fsm/states/ShutDownState.h"
+#include "fsm/transitions/EnterLoadingTransition.h"
+#include "fsm/transitions/EnterStartTransition.h"
+#include "fsm/transitions/EnterRunTransition.h"
+#include "fsm/transitions/EnterShutDownTransition.h"
+#include "fsm/transitions/EnterExitFreeModeOnlyCameraTransition.h"
+#include "fsm/transitions/EnterExitFreeModeOnlyPlayerTransition.h"
+
+
 #include "statistics/Statistics.h"
 #include "guiTool/GuiTool.h"
 
+#include "utils/serializer/XMLSerializer.h"
+#include "utils/serializer/XMLDeserializer.h"
+#include "../Memory.h"
+#include "resources/InstantiableObject.h"
+#include "resources/components/AnimationComponent.h"
+#include "resources/components/BillboardComponent.h"
+#include "resources/components/CameraComponent.h"
+#include "resources/components/EnvironmentAffectedComponent.h"
+#include "resources/components/EnergyWallCollisionComponent.h"
+#include "resources/components/DebugComponent.h"
+#include "resources/components/CharacterComponent.h"
+#include "resources/components/InputComponent.h"
+#include "resources/components/EnvironmentModificatorComponent.h"
+#include "resources/components/CollisionComponent.h"
+#include "resources/components/LODComponent.h"
+#include "resources/components/SpacePartitionComponent.h"
+#include "resources/components/RotationComponent.h"
+#include "resources/components/PhysicsComponent.h"
+#include "resources/components/OverWaterComponent.h"
+#include "resources/components/ThirdPersonCameraComponent.h"
+
+#include "resources/events/characterControllerEvents/BackwardEvent.h"
+#include "resources/events/characterControllerEvents/ButtonLeftEvent.h"
+#include "resources/events/characterControllerEvents/ButtonRightEvent.h"
+#include "resources/events/characterControllerEvents/ForwardEvent.h"
+#include "resources/events/characterControllerEvents/JumpEvent.h"
+#include "resources/events/characterControllerEvents/PitchEvent.h"
+#include "resources/events/characterControllerEvents/TurnEvent.h"
+#include "resources/events/characterControllerEvents/ZoomEvent.h"
 
 NGenius::NGenius(std::string applicationName, float screenWidth, float screenHeight) :
 mRenderSystem(nullptr),
 mPhysicsSystem(nullptr),
 mEntitiesSystem(nullptr),
 mParticlesSystem(nullptr),
+mLightsSystem(nullptr),
+mInputSystem(nullptr),
 mSpacePartitionSystem(nullptr),
+mDebugSystem(nullptr),
 mEnvironmentSystem(nullptr),
-mGameScene(nullptr),
+mAnimationSystem(nullptr),
+mInputHandler(nullptr),
+mStatistics(nullptr),
 mApplicationName(applicationName),
-mIsSpacePartitionEnabled(true)
+mIsSpacePartitionEnabled(true),
+mGameScene(nullptr)
 {
 	CreateSystems(screenWidth, screenHeight);
+
+	InstantiableObject::RegisterComponentType<AnimationComponent>();
+	InstantiableObject::RegisterComponentType<BillboardComponent>();
+	InstantiableObject::RegisterComponentType<CameraComponent>();
+	InstantiableObject::RegisterComponentType<CharacterComponent>();
+	InstantiableObject::RegisterComponentType<CollisionComponent>();
+	InstantiableObject::RegisterComponentType<DebugComponent>();
+	InstantiableObject::RegisterComponentType<EnergyWallCollisionComponent>();
+	InstantiableObject::RegisterComponentType<EnvironmentAffectedComponent>();
+	InstantiableObject::RegisterComponentType<EnvironmentModificatorComponent>();
+	InstantiableObject::RegisterComponentType<InputComponent>();
+	InstantiableObject::RegisterComponentType<LODComponent>();
+	InstantiableObject::RegisterComponentType<OverWaterComponent>();
+	InstantiableObject::RegisterComponentType<PhysicsComponent>();
+	InstantiableObject::RegisterComponentType<RotationComponent>();
+	InstantiableObject::RegisterComponentType<SpacePartitionComponent>();
+	InstantiableObject::RegisterComponentType<ThirdPersonCameraComponent>();
+
+	//Registering game events
+	InstantiableObject::RegisterGameEvent<BackwardEvent>();
+	InstantiableObject::RegisterGameEvent<ButtonLeftEvent>();
+	InstantiableObject::RegisterGameEvent<ButtonRightEvent>();
+	InstantiableObject::RegisterGameEvent<ForwardEvent>();
+	InstantiableObject::RegisterGameEvent<JumpEvent>();
+	InstantiableObject::RegisterGameEvent<PitchEvent>();
+	InstantiableObject::RegisterGameEvent<TurnEvent>();
+	InstantiableObject::RegisterGameEvent<ZoomEvent>();
 }
 
 NGenius::~NGenius()
 {
-	if (mGameScene != nullptr)
-	{
-		delete mGameScene;
-	}
 	DestroySystems();
+}
+
+void NGenius::Create()
+{
+	CreateStatesMachine();
+	//TODO esto hay que revisar
+	if (mGameScene == nullptr)
+	{
+		mGameScene = DBG_NEW GameScene("mainscene", this, mRenderSystem);
+	}
 }
 
 void NGenius::Init(bool isFullscreen)
@@ -59,13 +142,23 @@ void NGenius::Init(bool isFullscreen)
 	mInputHandler->Init(mRenderSystem->GetGLWindow());
 }
 
-void NGenius::Start()
+void NGenius::Start(bool isReload)
 {
 	mEnvironmentSystem->Start();
 	mRenderSystem->SetEnvironmentSystem(mEnvironmentSystem);
 	mRenderSystem->Start();
 	mSpacePartitionSystem->Start();
 	mDebugSystem->Start();
+
+	AddListenersToGameScene();
+	mGameScene->Start();	
+}
+
+void NGenius::ShutDown()
+{
+	mStatesMachine.reset();
+
+	DestroySystems();
 }
 
 void NGenius::Run()
@@ -91,10 +184,12 @@ void NGenius::Run()
 
 		AcceptGuiTool();
 
-		//while (lag >= frameTime)
+		UpdateStatesMachine(elapsedTime);
+
+		NGeniusState currentState = mStatesMachine->GetCurrentState()->GetID();
+		if (currentState >= NGeniusState::STATE_RUN)
 		{
 			UpdateSystems(elapsedTime);
-
 			if (mUpdateHandler != nullptr)
 			{
 				mUpdateHandler(elapsedTime);
@@ -102,7 +197,10 @@ void NGenius::Run()
 			lag -= frameTime;
 		}
 
-		Render();
+		if (currentState >= NGeniusState::STATE_RUN)
+		{
+			Render();
+		}
 
 		if (accumulatedTime > 1.0f)
 		{
@@ -118,21 +216,80 @@ void NGenius::Run()
 	while (	glfwGetKey(mRenderSystem->GetGLWindow(), GLFW_KEY_ESCAPE) != GLFW_PRESS && 
 			glfwWindowShouldClose(mRenderSystem->GetGLWindow()) == 0);
 
+	mStatesMachine->GetContext()->GoToState(NGeniusState::STATE_SHUT_DOWN);
+
 	// Close OpenGL window and terminate GLFW
 	glfwTerminate();
 }
 
 void NGenius::Render()
 {
+	ICamera* gameplayCamera = GetCamera("gameplay_camera");
+
 	//render all entities
 	if (mIsSpacePartitionEnabled)
 	{
 		ICamera* camera = mRenderSystem->GetCamera("gameplay_camera");
-		mSpacePartitionSystem->MarkGameEntitiesInsideCameraAsVisible(camera);
+		if (camera != nullptr)
+		{
+			mSpacePartitionSystem->MarkGameEntitiesInsideCameraAsVisible(camera);
+		}
 	}
 
 	mGameScene->Render(mRenderSystem);
 	mRenderSystem->Render();
+}
+
+void NGenius::SaveToFile()
+{
+	core::utils::XMLSerializer xmlSerializer;
+	WriteTo(&xmlSerializer);
+
+	xmlSerializer.Save(std::string("ngenius.xml"));
+
+	mGameScene->SaveToFile();
+}
+void NGenius::SetFilename(const std::string& filename)
+{
+	mFilename = filename;
+}
+
+void NGenius::LoadFromFile(const std::string& filename)
+{
+	core::utils::XMLDeserializer xmlDeserializer;
+	xmlDeserializer.Load(mFilename);
+	ReadFrom(&xmlDeserializer);
+}
+
+
+void NGenius::ReadFrom(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute("ngenius");
+		mRenderSystem->ReadFrom(source);
+		source->BeginAttribute("engine");
+		ReadDebugParameters(source);
+		source->EndAttribute();
+		mGameScene->ReadFrom(source);		
+	source->EndAttribute();
+}
+
+void NGenius::ReadDebugParameters(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute("debug");
+	bool isEnabled = false;
+	source->ReadParameter("is_enabled", &isEnabled);
+	source->EndAttribute();
+
+	SetDebugModeEnabled(isEnabled);
+}
+
+
+void NGenius::WriteTo(core::utils::ISerializer* destination)
+{
+	destination->BeginAttribute("Configuration");
+		destination->WriteParameter(std::string("version"), std::string("0.0.1"));
+		destination->WriteParameter(std::string("position"), glm::vec3(1.0f, 3.0f, 3.4f));
+	destination->EndAttribute();
 }
 
 void NGenius::AcceptGuiTool()
@@ -158,44 +315,127 @@ void NGenius::AcceptStatistics()
 
 void NGenius::UpdateSystems(float elapsedTime)
 {
+	ICamera* gameplayCamera = GetCamera("gameplay_camera");
+
 	mInputSystem->Update(elapsedTime);
-	mDebugSystem->Update(elapsedTime);
-	mEnvironmentSystem->Update(elapsedTime);
-	mParticlesSystem->Update(elapsedTime);
-	mGameScene->Update(elapsedTime);
 	mPhysicsSystem->Update(elapsedTime);
-	mSpacePartitionSystem->Update(elapsedTime);
 	mAnimationSystem->Update(elapsedTime);
+	mEnvironmentSystem->Update(elapsedTime);
+	mGameScene->Update(elapsedTime);
+	mDebugSystem->Update(elapsedTime);
+	mParticlesSystem->Update(elapsedTime);	
 	mRenderSystem->Update(elapsedTime);
+	mSpacePartitionSystem->Update(elapsedTime);
+	
+	UpdateStatesMachine(elapsedTime);
+}
+
+void NGenius::UpdateStatesMachine(float elapsedTime)
+{
+	mStatesMachine->Update(elapsedTime);
 }
 
 void NGenius::CreateSystems(float screenWidth, float screenHeight)
 {
-	mStatistics = new Statistics();
-	mInputHandler = new InputHandler();
-	mRenderSystem = new RenderSystem(screenWidth, screenHeight);
-	mPhysicsSystem = new PhysicsSystem();
-	mInputSystem = new InputSystem(mInputHandler);
-	mDebugSystem = new DebugSystem(mRenderSystem, mInputHandler);
-	mParticlesSystem = new ParticlesSystem();
-	mSpacePartitionSystem = new SpacePartitionSystem();
-	mEnvironmentSystem = new EnvironmentSystem();
-	mAnimationSystem = new AnimationSystem();
+	mStatistics = DBG_NEW  Statistics();
+	mInputHandler = DBG_NEW  InputHandler();
+	mRenderSystem = DBG_NEW  RenderSystem(screenWidth, screenHeight);
+	mPhysicsSystem = DBG_NEW  PhysicsSystem();
+	mInputSystem = DBG_NEW  InputSystem(mInputHandler);
+	mDebugSystem = DBG_NEW  DebugSystem(this, mRenderSystem, mInputHandler);
+	mParticlesSystem = DBG_NEW  ParticlesSystem();
+	mSpacePartitionSystem = DBG_NEW  SpacePartitionSystem();
+	mEnvironmentSystem = DBG_NEW  EnvironmentSystem();
+	mAnimationSystem = DBG_NEW  AnimationSystem();
+}
+
+void NGenius::CreateStatesMachine()
+{
+	mFSMContext = std::make_shared<FSMContext>(shared_from_this());
+	mStatesMachine = std::make_unique<core::utils::FSM::StatesMachine<NGeniusState, FSMContext>>(mFSMContext);
+
+	auto runState = std::make_shared<RunState>();
+	auto freeCameraState = std::make_shared<FreeModeOnlyCameraState>();
+	auto freePlayerState = std::make_shared<FreeModeOnlyPlayerState>();
+	auto initialState = std::make_shared<InitialState>();
+	auto startState = std::make_shared<StartState>();
+	auto loadingState = std::make_shared<LoadingState>();
+	auto shutDownState = std::make_shared<ShutDownState>();
+
+	mStatesMachine->AddState(initialState);
+	mStatesMachine->AddState(startState);
+	mStatesMachine->AddState(loadingState);
+	mStatesMachine->AddState(runState);
+	mStatesMachine->AddState(freeCameraState);
+	mStatesMachine->AddState(freePlayerState);
+	mStatesMachine->AddState(shutDownState);
+
+	mStatesMachine->AddTransition(std::make_unique<EnterLoadingTransition>(initialState, loadingState));
+	mStatesMachine->AddTransition(std::make_unique<EnterStartTransition>(loadingState, startState));
+	mStatesMachine->AddTransition(std::make_unique<EnterRunTransition>(startState, runState));
+
+	mStatesMachine->AddFromAnyTransition(std::make_unique<EnterShutDownTransition>(shutDownState));
+
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyCameraTransition>(freeCameraState, runState));
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyPlayerTransition>(freeCameraState, freePlayerState));
+
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyCameraTransition>(runState, freeCameraState));
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyPlayerTransition>(runState, freePlayerState));
+
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyCameraTransition>(freePlayerState, freeCameraState));
+	mStatesMachine->AddTransition(std::make_unique<EnterExitFreeModeOnlyPlayerTransition>(freePlayerState, runState));
+
+	mStatesMachine->SetInitialState(initialState->GetID());
 }
 
 void NGenius::DestroySystems()
 {
-	delete mAnimationSystem;
-	delete mEnvironmentSystem;
-	delete mSpacePartitionSystem;
-	delete mDebugSystem;
-	delete mInputSystem;
-	delete mLightsSystem;
-	delete mParticlesSystem;
-	delete mPhysicsSystem;
-	delete mRenderSystem;
-	delete mInputHandler;
-	delete mStatistics;
+	delete mGameScene;
+
+	if (mAnimationSystem != nullptr)
+	{
+		delete mAnimationSystem;
+	}
+	if (mEnvironmentSystem != nullptr)
+	{
+		delete mEnvironmentSystem;
+	}
+	if (mSpacePartitionSystem != nullptr)
+	{
+		delete mSpacePartitionSystem;
+	}
+	if (mDebugSystem != nullptr)
+	{
+		delete mDebugSystem;
+	}
+	if (mInputSystem != nullptr)
+	{
+		delete mInputSystem;
+	}
+	if (mLightsSystem != nullptr)
+	{
+		delete mLightsSystem;
+	}
+	if (mParticlesSystem != nullptr)
+	{
+		delete mParticlesSystem;
+	}
+	if (mPhysicsSystem != nullptr)
+	{
+		delete mPhysicsSystem;
+	}
+	if (mRenderSystem != nullptr)
+	{
+		delete mRenderSystem;
+	}
+	if (mInputHandler != nullptr)
+	{
+		delete mInputHandler;
+	}
+	if (mStatistics != nullptr)
+	{
+		delete mStatistics;
+	}
 }
 
 void NGenius::RegisterAllEventsInputListener(IInputListener* listener)
@@ -216,26 +456,6 @@ void NGenius::RegisterInputHandler(std::function<void(GLFWwindow* window)> callb
 void NGenius::RegisterUpdateHandler(std::function<void(float elapsedTime)> callback)
 {
 	mUpdateHandler = callback;
-}
-
-void NGenius::OnKey(int key, int action)
-{
-	mInputHandler->OnKey(key, action);
-}
-
-void NGenius::OnMouseScroll(int button, float scroll)
-{
-	mInputHandler->OnMouseScroll(button, scroll);
-}
-
-void NGenius::OnMouseButton(int button, int action, int mods)
-{
-	mInputHandler->OnMouseButton(button, action, mods);
-}
-
-void NGenius::OnMouseCursorPos(double x, double y)
-{
-	mInputHandler->OnMouseCursorPos(x, y);
 }
 
 IShaderProgram* NGenius::GetShader(const std::string& name) const
@@ -272,6 +492,41 @@ Animation* NGenius::GetAnimation(const std::string& name) const
 {
 	assert(mRenderSystem != nullptr);
 	return mRenderSystem->GetAnimation(name);
+}
+
+ICamera* NGenius::GetCamera(const std::string& name) const
+{
+	assert(mRenderSystem != nullptr);
+	return mRenderSystem->GetCamera(name);
+}
+
+ICamera* NGenius::GetGameplayCamera() const
+{
+	assert(mRenderSystem != nullptr);
+	return mRenderSystem->GetGameplayCamera();
+}
+
+ICamera* NGenius::GetFreeCamera() const
+{
+	assert(mRenderSystem != nullptr);
+	return mRenderSystem->GetFreeCamera();
+}
+
+IGameEntity* NGenius::GetGameEntity(const std::string& name) const
+{
+	if (mGameScene != nullptr)
+	{
+		return mGameScene->GetGameEntity(name);
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+GameScene* NGenius::GetGameScene(const std::string& name) const
+{
+	return mGameScene;
 }
 
 GLFWwindow* NGenius::GetGLWindow() const
@@ -313,19 +568,21 @@ void NGenius::SetFullScreen(bool isFullScreen)
 	mRenderSystem->SetFullScreen(isFullScreen);
 }
 
-GameScene* NGenius::CreateGameScene(const std::string& name)
+void NGenius::AddListenersToGameScene()
 {
-	mGameScene = new GameScene(name);
-	
-	//TODO ojo que esto es horrible, tener que crear el lightsystem cuando la escena se crea...no sé
-	mLightsSystem = new LightsSystem(mGameScene);
-	
 	mGameScene->RegisterGameSceneListener(mDebugSystem);
 	mGameScene->RegisterGameSceneListener(mInputSystem);
 	mGameScene->RegisterGameSceneListener(mPhysicsSystem);
 	mGameScene->RegisterGameSceneListener(mSpacePartitionSystem);
 	mGameScene->RegisterGameSceneListener(mEnvironmentSystem);
 	mGameScene->RegisterGameSceneListener(mAnimationSystem);
+}
+
+GameScene* NGenius::CreateGameScene(const std::string& name)
+{
+	//TODO ojo que esto es horrible, tener que crear el lightsystem cuando la escena se crea...no sé
+	mLightsSystem = DBG_NEW  LightsSystem(mGameScene);
+	AddListenersToGameScene();	
 
 	return mGameScene;
 }
@@ -333,7 +590,6 @@ GameScene* NGenius::CreateGameScene(const std::string& name)
 void NGenius::AddParticleEmitter(ParticlesEmitter* emitter)
 {
 	assert(mParticlesSystem != nullptr);
-	assert(mGameScene != nullptr);
 
 	emitter->SetGameScene(mGameScene);
 	mParticlesSystem->AddParticleEmitter(emitter);
@@ -342,7 +598,7 @@ void NGenius::AddParticleEmitter(ParticlesEmitter* emitter)
 void NGenius::AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing)
 {
 	assert(mRenderSystem != nullptr);
-	mRenderSystem->AddRenderPass(renderPass, addAfterPostProcessing);
+	mRenderSystem->AddOrReplaceRenderPass(renderPass, addAfterPostProcessing);
 }
 
 void NGenius::AddLight(Light* light)
@@ -353,6 +609,13 @@ void NGenius::AddLight(Light* light)
 void NGenius::AddCamera(ICamera* camera)
 {
 	mRenderSystem->AddCamera(camera);
+}
+
+void NGenius::AddEntity(IGameEntity* entity)
+{
+	assert(entity != nullptr);
+	assert(mGameScene != nullptr);
+	mGameScene->AddEntity(entity);
 }
 
 void NGenius::SetTerrain(const Terrain* terrain)
@@ -409,7 +672,12 @@ void NGenius::SetWaterParameters(const ICamera* camera, float waterY)
 	mRenderSystem->SetWaterParameters(camera, waterY);
 }
 
-void NGenius::SetCastingShadowsTarget(const GameEntity* target)
+float NGenius::GetWaterHeight() const
+{
+	return mRenderSystem->GetWaterHeight();
+}
+
+void NGenius::SetCastingShadowsTarget(const IGameEntity* target)
 {
 	assert(mRenderSystem != nullptr);
 	mRenderSystem->SetCastingShadowsTarget(target);
@@ -425,7 +693,20 @@ BaseVisitable<>::ReturnType NGenius::Accept(BaseVisitor& guest)
 	return AcceptImpl(*this, guest);
 }
 
-void NGenius::Query(const AABB& aabb, std::vector<GameEntity*>& result)
+void NGenius::Reload()
+{
+	LoadFromFile(mFilename);
+	mPhysicsSystem->Reload();
+	mSpacePartitionSystem->Reload();
+	mInputSystem->Reload();
+	mEnvironmentSystem->Reload();
+	mAnimationSystem->Reload();
+	Start(true);
+	mStatesMachine->Reload();
+	mStatesMachine->ForceState(mStatesMachine->GetCurrentState()->GetID(), 0.0f);
+}
+
+void NGenius::Query(const AABB& aabb, std::vector<IGameEntity*>& result)
 {
 	mSpacePartitionSystem->Query(aabb, result);
 }
@@ -434,4 +715,14 @@ void NGenius::SetIsSpacePartitionEnabled(bool enable)
 {
 	mIsSpacePartitionEnabled = enable;
 	mSpacePartitionSystem->SetSpacePartitionComponentsEnabled(enable);
+}
+
+void NGenius::ChangeToCamera(const std::string& renderPassName, const ICamera* camera)
+{
+	mRenderSystem->ChangeToCamera(renderPassName, camera);
+}
+
+void NGenius::ChangeToCamera(const std::string& cameraName, const std::string& newCameraName)
+{
+	mRenderSystem->ChangeToCamera(cameraName, newCameraName);
 }

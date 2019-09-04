@@ -1,5 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
+#include "../Memory.h"
 
 class SkyBoxShader : public IShaderProgram
 {
@@ -15,11 +16,14 @@ class SkyBoxShader : public IShaderProgram
 
 public:
 	SkyBoxShader();
-	~SkyBoxShader();
+	virtual ~SkyBoxShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
-	void GetAllUniformLocations() override;
 	void BindAttributes() override;
+	void GetAllUniformLocations() override;
+
+	static std::string GetClassName() { return std::string("SkyBoxShader"); }
+	static IShaderProgram* Create() { return DBG_NEW SkyBoxShader(); }
 };
 

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "FontLoader.h"
 #include "../resources/font/FontType.h"
+#include "../Memory.h"
+
 #include <assert.h>
 
 #include <iostream>
@@ -15,7 +17,7 @@ FontType* FontLoader::LoadFont(const std::string& filename)
 
 	if (input.is_open())
 	{
-		FontType* fontType = new FontType();
+		FontType* fontType = DBG_NEW  FontType();
 
 		std::string line;
 		unsigned int numCharacters = 0;
@@ -168,7 +170,7 @@ void FontLoader::ReadChar(FontType* fontType, const std::string& line)
 	std::string name;
 	std::string value;
 
-	FontType::Char* character = new FontType::Char();
+	FontType::Char* character = DBG_NEW  FontType::Char();
 
 	//READ ID
 	ReadToken(token, name, value);

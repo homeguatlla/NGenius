@@ -1,5 +1,5 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 #include <string>
 
 class Transformation;
@@ -8,7 +8,7 @@ class Model;
 class Mesh;
 class IMaterial;
 
-class Text : public GameEntity
+class Text : public BaseGameEntity<Text>
 {
 	static int IDCounter;
 
@@ -23,14 +23,18 @@ class Text : public GameEntity
 	Mesh* mMesh;
 
 public:
+	Text() = default;
 	Text(	Transformation* transformation, IMaterial* material, FontType* font, const std::string& text, 
 			bool isText3D, const glm::vec4& color, unsigned int width, unsigned int height, bool isCentered);
 	~Text();
 
-	unsigned int GetID() const;
+	unsigned int GetTextID() const;
 	void UpdateText(const std::string& text);
 
 private:
 	void Create(const std::string& text, unsigned int width, unsigned int height, bool isCentered);
+
+	// Heredado vía BaseGameEntity
+	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };
 

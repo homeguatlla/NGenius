@@ -19,11 +19,6 @@ mLocationBrightTexture(-1)
 {
 }
 
-
-BloomShader::~BloomShader()
-{
-}
-
 void BloomShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	MaterialEffectDiffuseTexture* effectBright = material->GetEffect<MaterialEffectDiffuseTexture>();

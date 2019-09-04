@@ -1,12 +1,12 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 
 
 class Model;
 class IMaterial;
 class MaterialEffectFloat;
 
-class EnergyWall : public GameEntity
+class EnergyWall : public BaseGameEntity<EnergyWall>
 {
 	IMaterial* mMaterial;
 	Model* mModel;
@@ -32,5 +32,8 @@ public:
 	glm::vec3 GetContactPoint() const;
 
 	bool IsAlive() const;
+
+	// Heredado vía BaseGameEntity
+	void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };
 

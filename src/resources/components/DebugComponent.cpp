@@ -1,8 +1,14 @@
 #include "stdafx.h"
 #include "DebugComponent.h"
+#include "../systems/renderSystem/RenderSystem.h"
 #include "../renderers/IRenderer.h"
+#include "../renderers/WireframeRenderer.h"
+#include "../models/ModelsLibrary.h"
+#include "../materials/MaterialsLibrary.h"
 #include "../../AABB.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
+#include "../../utils/serializer/XMLSerializer.h"
+#include "../../Memory.h"
 
 DebugComponent::DebugComponent(IRenderer* renderer) :
 mBoundingBoxRenderer(renderer)
@@ -13,15 +19,23 @@ mBoundingBoxRenderer(renderer)
 
 DebugComponent::~DebugComponent()
 {
+	delete mBoundingBoxRenderer;
 }
 
 DebugComponent* DebugComponent::DoClone() const
 {
-	return new DebugComponent(*this);
+	return DBG_NEW DebugComponent(*this);
 }
 
-void DebugComponent::Init()
+void DebugComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 {
+	if (mBoundingBoxRenderer == nullptr)
+	{
+		mBoundingBoxRenderer = DBG_NEW WireframeRenderer(
+			renderSystem->GetModel(ModelsLibrary::CUBE_NAME), 
+			renderSystem->GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
+	}
+
 	//boundingboxrenderer is of dimensions 1x1x1 and centered in origin in order the 
 	//next transformation works
 	mBoundingBoxRenderer->SetParent(mParent);
@@ -41,6 +55,14 @@ IRenderer* DebugComponent::GetBoundingBoxRenderer()
 	return mBoundingBoxRenderer;
 }
 
+IComponent* DebugComponent::Create(IGameEntity* entity)
+{
+	DebugComponent* component = DBG_NEW DebugComponent();
+	entity->AddComponent(component);
+
+	return component;
+}
+
 bool DebugComponent::IsBoundingBoxVisible() const
 {
 	return mBoundingBoxRenderer->IsVisible();
@@ -49,4 +71,14 @@ bool DebugComponent::IsBoundingBoxVisible() const
 void DebugComponent::SetBoundingBoxVisibility(bool visible)
 {
 	mBoundingBoxRenderer->SetVisibility(visible);
+}
+
+void DebugComponent::DoReadFrom(core::utils::IDeserializer* source)
+{
+
+}
+
+void DebugComponent::DoWriteTo(core::utils::ISerializer* destination)
+{
+	destination->WriteParameter(std::string("type"), std::string("debug_component"));
 }

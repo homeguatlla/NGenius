@@ -18,10 +18,6 @@ mLocationJointTransformSize(-1)
 {
 }
 
-AnimatedModelShader::~AnimatedModelShader()
-{
-}
-
 void AnimatedModelShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	ModelShader::LoadData(camera, transformation, material);

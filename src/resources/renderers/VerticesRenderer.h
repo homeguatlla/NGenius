@@ -15,8 +15,7 @@ public:
 	VerticesRenderer(Model* model, IMaterial* material);
 	~VerticesRenderer();
 
-	VerticesRenderer* DoClone() const override { return nullptr; }
-	//const std::string GetName() const override;
+	VerticesRenderer* DoClone() const override;
 	void Draw() override;
 
 	unsigned int GetNumberTrianglesRendered() const override;

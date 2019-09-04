@@ -6,9 +6,8 @@
 #include "../../AABB.h"
 #include "../Transformation.h"
 
-
 class ICamera;
-class GameEntity;
+class IGameEntity;
 class Texture;
 class Model;
 class IMaterial;
@@ -30,7 +29,7 @@ public:
 	};
 
 protected:
-	GameEntity* mParent;
+	IGameEntity* mParent;
 	Model* mModel;
 	std::vector<IRenderer*> mInstances;
 	IMaterial* mMaterial;
@@ -39,7 +38,7 @@ protected:
 	bool mIsPrerendered;
 	bool mIsInstancingEnabled;
 	
-	char mLayer;
+	int mLayer;
 
 	BitNumber mBitRenderInformation;
 
@@ -58,12 +57,15 @@ public:
 
 	//virtual const std::string GetName() const = 0;
 
-	void SetParent(GameEntity* parent);
-	GameEntity* GetParent();
+	void SetParent(IGameEntity* parent);
+	IGameEntity* GetParent();
 
 	IMaterial* GetMaterial();
 	const IMaterial* GetMaterial() const;
+	void SetMaterial(IMaterial* material);
+
 	Model* GetModel();
+	void SetModel(Model* model);
 
 	bool HasTransformation() const;
 	void SetTransformation(Transformation& transformation);
@@ -75,8 +77,8 @@ public:
 
 	bool IsPrerendered() const;
 
-	void SetLayer(char layer);
-	char GetLayer() const;
+	void SetLayer(int layer);
+	int GetLayer() const;
 
 	void SetTransparency(bool transparent);
 	void SetDistance(unsigned int distance);

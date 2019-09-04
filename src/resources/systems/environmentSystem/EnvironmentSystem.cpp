@@ -7,7 +7,7 @@
 
 #include "SunLight.h"
 
-#include "../../GameEntity.h"
+#include "../../IGameEntity.h"
 #include "../../components/EnvironmentAffectedComponent.h"
 #include "../../components/EnvironmentModificatorComponent.h"
 #include "../../materials/IMaterial.h"
@@ -18,7 +18,7 @@
 
 #include <iostream>
 
-const long HOUR_DAY_SPEED = 3;
+const long HOUR_DAY_SPEED = 1;
 const long DAY_PERIOD_SEC = 3600 * 24;
 
 EnvironmentSystem::EnvironmentSystem() :
@@ -30,10 +30,23 @@ EnvironmentSystem::EnvironmentSystem() :
 
 EnvironmentSystem::~EnvironmentSystem()
 {
+	Release();
+}
+
+void EnvironmentSystem::Release()
+{
 	mEntities.clear();
 	mModificators.clear();
 	mModificatorsPositions.clear();
 	delete mSunLight;
+	mSunLight = nullptr;
+}
+
+void EnvironmentSystem::Reload()
+{
+	mEntities.clear();
+	mModificators.clear();
+	mModificatorsPositions.clear();
 }
 
 unsigned int EnvironmentSystem::GetNumberGameEntities() const
@@ -43,7 +56,7 @@ unsigned int EnvironmentSystem::GetNumberGameEntities() const
 
 void EnvironmentSystem::Start()
 {
-	mTimer = DAY_PERIOD_SEC * 0.25f / HOUR_DAY_SPEED;
+	mTimer = DAY_PERIOD_SEC * 0.5f / HOUR_DAY_SPEED;
 	mSunLight->AddFrame(1200.0f, 90.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(255.0f, 255.0f, 255.0f) / 255.0f, 0.004f, 1.5f, "day_cubemap");
 	mSunLight->AddFrame(1800.0f, 135.0f, glm::vec3(0.93f, 0.64f, 0.78f), glm::vec3(218.0f, 74.0f, 43.0f) / 255.0f, 0.04f, 1.5f, "day_cubemap");
 	mSunLight->AddFrame(2400.0f, 270.0f, glm::vec3(0.86f, 0.64f, 0.93f), glm::vec3(0.0f), 0.004f, 1.5f, "night_cubemap");
@@ -58,7 +71,7 @@ void EnvironmentSystem::Update(float deltaTime)
 
 	UpdateModificatorsVector();
 
-	for (GameEntity* entity : mEntities)
+	for (IGameEntity* entity : mEntities)
 	{
 		if (entity->GetRenderer() != nullptr)
 		{
@@ -83,7 +96,7 @@ void EnvironmentSystem::UpdateTime()
 	//std::cout << dayHour << "\n";
 }
 
-void EnvironmentSystem::ApplyWind(GameEntity* entity)
+void EnvironmentSystem::ApplyWind(IGameEntity* entity)
 {
 	EnvironmentAffectedComponent* affectedComponent = entity->GetComponent<EnvironmentAffectedComponent>();
 	if (affectedComponent->IsAffectedByWind())
@@ -108,7 +121,7 @@ void EnvironmentSystem::ApplyWind(GameEntity* entity)
 void EnvironmentSystem::UpdateModificatorsVector()
 {
 	mModificatorsPositions.clear();
-	for (GameEntity* entity : mModificators)
+	for (IGameEntity* entity : mModificators)
 	{
 		mModificatorsPositions.push_back(entity->GetTransformation()->GetPosition());
 	}
@@ -121,7 +134,7 @@ void EnvironmentSystem::SetTerrain(const Terrain* terrain)
 	mTerrain = terrain;
 }
 
-void EnvironmentSystem::AddEntity(GameEntity* entity)
+void EnvironmentSystem::AddEntity(IGameEntity* entity)
 {
 	if(entity->HasComponent<EnvironmentAffectedComponent>())
 	{
@@ -133,9 +146,9 @@ void EnvironmentSystem::AddEntity(GameEntity* entity)
 	}
 }
 
-void EnvironmentSystem::RemoveEntityVector(GameEntity* entity, std::vector<GameEntity*>& vector)
+void EnvironmentSystem::RemoveEntityVector(IGameEntity* entity, std::vector<IGameEntity*>& vector)
 {
-	std::vector<GameEntity*>::iterator it = std::find_if(vector.begin(), vector.end(), [&](GameEntity* a) { return a == entity; });
+	std::vector<IGameEntity*>::iterator it = std::find_if(vector.begin(), vector.end(), [&](IGameEntity* a) { return a == entity; });
 	if (it != vector.end())
 	{
 		vector.erase(it);
@@ -146,7 +159,7 @@ void EnvironmentSystem::RemoveEntityVector(GameEntity* entity, std::vector<GameE
 	}
 }
 
-void EnvironmentSystem::RemoveEntity(GameEntity* entity)
+void EnvironmentSystem::RemoveEntity(IGameEntity* entity)
 {
 	if (entity->HasComponent<EnvironmentAffectedComponent>())
 	{
@@ -158,13 +171,13 @@ void EnvironmentSystem::RemoveEntity(GameEntity* entity)
 	}
 }
 
-bool EnvironmentSystem::HasEnvironmentComponents(const GameEntity* entity) const
+bool EnvironmentSystem::HasEnvironmentComponents(const IGameEntity* entity) const
 {
 	return entity != nullptr && (	entity->HasComponent<EnvironmentAffectedComponent>() || 
 									entity->HasComponent<EnvironmentModificatorComponent>());
 }
 
-void EnvironmentSystem::OnGameEntityAdded(GameEntity* entity)
+void EnvironmentSystem::OnGameEntityAdded(IGameEntity* entity)
 {
 	if (HasEnvironmentComponents(entity))
 	{
@@ -172,7 +185,7 @@ void EnvironmentSystem::OnGameEntityAdded(GameEntity* entity)
 	}
 }
 
-void EnvironmentSystem::OnGameEntityRemoved(GameEntity* entity)
+void EnvironmentSystem::OnGameEntityRemoved(IGameEntity* entity)
 {
 	if (HasEnvironmentComponents(entity))
 	{

@@ -4,12 +4,12 @@
 #include "../scene/IGameSceneListener.h"
 #include <vector>
 
-class GameEntity;
+class IGameEntity;
 class Terrain;
 
 class PhysicsSystem : public BaseVisitable<>, public IGameSceneListener
 {
-	std::vector<GameEntity*> mEntities;
+	std::vector<IGameEntity*> mEntities;
 	const Terrain* mTerrain;
 	float mEnergyWallRadius;
 	glm::vec3 mEnergyWallPosition;
@@ -19,9 +19,11 @@ public:
 
 	PhysicsSystem();
 	~PhysicsSystem();
+	void Release();
 
 	void Update(float deltaTime);
-	
+	void Reload();
+
 	unsigned int GetNumberGameEntities() const;
 
 	//TODO eliminar este método cuando no haga falta
@@ -31,20 +33,20 @@ public:
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
 private:
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
-	bool HasPhysicsComponents(const GameEntity* entity) const;
+	void AddEntity(IGameEntity* entity);
+	void RemoveEntity(IGameEntity* entity);
+	bool HasPhysicsComponents(const IGameEntity* entity) const;
 
-	void OnGameEntityAdded(GameEntity* entity) override;
-	void OnGameEntityRemoved(GameEntity* entity) override;
+	void OnGameEntityAdded(IGameEntity* entity) override;
+	void OnGameEntityRemoved(IGameEntity* entity) override;
 
-	void ApplyMRU(float deltaTime, GameEntity* entity);
-	bool ApplyCollisions(GameEntity* entity, float *groundHeight);
-	bool ApplyEnergyWallCollision(GameEntity *entity, glm::vec3& collisionPoint);
-	void CheckCollisions(GameEntity* entity);
-	bool IsInsideTerrain(GameEntity *entity);
+	void ApplyMRU(float deltaTime, IGameEntity* entity);
+	bool ApplyCollisions(IGameEntity* entity, float *groundHeight);
+	bool ApplyEnergyWallCollision(IGameEntity*entity, glm::vec3& collisionPoint);
+	void CheckCollisions(IGameEntity* entity);
+	bool IsInsideTerrain(IGameEntity*entity);
 
-	void CheckCollisionTerrain(GameEntity* entity);
-	void CheckCollisionEnergyWall(GameEntity* entity);
+	void CheckCollisionTerrain(IGameEntity* entity);
+	void CheckCollisionEnergyWall(IGameEntity* entity);
 };
 

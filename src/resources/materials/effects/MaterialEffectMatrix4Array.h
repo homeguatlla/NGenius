@@ -18,5 +18,11 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectMatrix4Array* DoClone() const override;
+	static std::string GetClassName() { return std::string("MaterialEffectMatrix4Array"); }
+	static IMaterialEffect* Create(IMaterial* material);
+
+	// Heredado vía IMaterialEffect
+	void ReadFrom(core::utils::IDeserializer * source) override;
+	void WriteTo(core::utils::ISerializer * destination) override;
 };
 

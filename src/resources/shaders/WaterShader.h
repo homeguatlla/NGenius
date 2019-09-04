@@ -1,6 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
-
+#include "../Memory.h"
 
 class WaterShader :	public IShaderProgram
 {
@@ -23,18 +23,14 @@ class WaterShader :	public IShaderProgram
 
 public:
 	WaterShader();
-	~WaterShader();
+	virtual ~WaterShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
-	void LoadReflectionTexture(int unit);
-	void LoadRefractionTexture(int unit);
-	void LoadDistorsionTexture(int unit);
-	void LoadNormalTexture(int unit);
-	void LoadDepthTexture(int unit);
-	void LoadWaterSpeed(float speed);
-	void LoadWaterColor(const glm::vec4& color);
+
+	static std::string GetClassName() { return std::string("WaterShader"); }
+	static IShaderProgram* Create() { return DBG_NEW WaterShader(); }
 };
 

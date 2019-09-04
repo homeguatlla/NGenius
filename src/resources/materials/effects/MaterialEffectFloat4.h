@@ -8,6 +8,7 @@ class MaterialEffectFloat4 : public IMaterialEffect
 	glm::vec4 mValue;
 
 public:
+	MaterialEffectFloat4();
 	MaterialEffectFloat4(const glm::vec4& value);
 	virtual ~MaterialEffectFloat4();
 
@@ -17,5 +18,11 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectFloat4* DoClone() const override;
+	static std::string GetClassName() { return std::string("MaterialEffectFloat4"); }
+	static IMaterialEffect* Create(IMaterial* material);
+
+	// Heredado vía IMaterialEffect
+	void ReadFrom(core::utils::IDeserializer * source) override;
+	void WriteTo(core::utils::ISerializer * destination) override;
 };
 

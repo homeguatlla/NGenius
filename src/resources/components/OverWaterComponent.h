@@ -1,5 +1,8 @@
 #pragma once
 #include "IComponent.h"
+#include<string>
+
+class IGameEntity;
 
 class OverWaterComponent : public IComponent
 {
@@ -9,8 +12,17 @@ public:
 	OverWaterComponent(float waterHeight);
 	~OverWaterComponent();
 
-	OverWaterComponent* DoClone() const;
+	void Init(GameScene* scene, RenderSystem* renderSystem);
 
 	float GetWaterHeight() const;
+
+	static std::string GetClassName() { return std::string("OverWaterComponent"); }
+	static IComponent* Create(IGameEntity* entity);
+
+private:
+	OverWaterComponent() = default;
+	void DoReadFrom(core::utils::IDeserializer* source) override;
+	void DoWriteTo(core::utils::ISerializer* destination) override;
+	OverWaterComponent* DoClone() const;
 };
 

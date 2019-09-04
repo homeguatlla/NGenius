@@ -6,12 +6,13 @@
 #include "../../../VertexBuffersManager.h"
 #include "../../renderers/IRenderer.h"
 #include "../../../visitor/BaseVisitable.h"
-
+#include "../../../utils/serializer/IDeserializer.h"
 
 class ICamera;
 class RenderPass;
 class Texture;
 class ITexture;
+class IGameEntity;
 
 class ShadersLibrary;
 class TexturesLibrary;
@@ -38,10 +39,11 @@ class PostProcessSubSystem;
 class GuiTool;
 class EnvironmentSystem;
 
-class RenderSystem : public BaseVisitable<>
+class RenderSystem : public core::utils::ISerializable, public BaseVisitable<>
 {
 	typedef std::vector<IRenderer*> RenderersList;
 	typedef std::vector<RenderPass*>::iterator RenderPassesIterator;
+	typedef std::vector<RenderPass*>::const_iterator RenderPassesConstIterator;
 
 	VertexBuffersManager mVertexsBuffersManager;
 
@@ -77,6 +79,9 @@ class RenderSystem : public BaseVisitable<>
 	ITexture* mDiffuseTexture;
 	ITexture* mNormalTexture;
 
+	ICamera* mGameplayCamera;
+	ICamera* mFreeCamera;
+
 	GuiTool* mGuiTool;
 
 	int mLastClipPlaneNumberUsed;
@@ -106,11 +111,17 @@ public:
 	void Render();
 	void AddToRender(IRenderer* renderer);
 	
-	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing = false);
+	void AddOrReplaceRenderPassFirst(RenderPass* renderPass, bool addAfterPostProcessing = false);
+	void AddOrReplaceRenderPass(RenderPass* renderPass, bool addAfterPostProcessing = false);
 	void RemoveRenderPass(RenderPass* renderPass);
 
 	void AddCamera(ICamera* camera);
-	ICamera* GetCamera(const std::string name);
+	void AddOrReplaceCamera(ICamera* camera);
+	void RemoveCamera(const std::string& name);
+	ICamera* GetCamera(const std::string& name);
+	bool HasCamera(const std::string& key);
+	ICamera* GetGameplayCamera() const { return mGameplayCamera; }
+	ICamera* GetFreeCamera() const { return mFreeCamera; }
 
 	float GetScreenWidth() const;
 	float GetScreenHeight() const;
@@ -133,13 +144,14 @@ public:
 	VertexBuffersManager& GetVertexBufferManager();
 
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
-	void SetCastingShadowsTarget(const GameEntity* target);
+	void SetCastingShadowsTarget(const IGameEntity* target);
 	void SetCastingShadowsEnabled(bool enabled);
 
 	void SetFogEnabled(bool enabled);
 
 	void SetWaterEnabled(bool enabled);
 	void SetWaterParameters(const ICamera* camera, float waterY);
+	float GetWaterHeight() const;
 
 	void SetFullScreen(bool isFullScreen);
 	void SetOverdrawEnabled(bool isOverdrawEnabled);
@@ -154,6 +166,17 @@ public:
 
 	GuiTool* GetGuiTool();
 
+	void ChangeToCamera(const std::string& renderPassName, const ICamera* camera);
+	void ChangeToCamera(const std::string& cameraName, const std::string& newCameraName);
+
+	// Heredado vía ISerializable
+	virtual void ReadFrom(core::utils::IDeserializer* source) override;
+	virtual void WriteTo(core::utils::ISerializer* destination) override;
+
+	//release
+	void ReleaseRenderPasses();
+	void ReleaseRenderers();
+
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
 private:
@@ -167,16 +190,24 @@ private:
 	void EnableVSync(bool enable);
 	GLFWmonitor* GetCurrentMonitor(float* screenWidth, float* screenHeight);
 
-	void LoadResources();
+	void LoadDefaultResources();
 
-	void AddToRender(IRenderer* renderer, std::vector<RenderPass*>& renderPasses);
+	void BuildRenderPasses();
+
+	bool AddToRender(IRenderer* renderer, std::vector<RenderPass*>& renderPasses);
+	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing = false, bool insertFirst = false);
+
+	void PushRenderPassFront(RenderPass* renderPass);
+	void PushRenderPassBack(RenderPass* renderPass);
 
 	bool ValidateRenderPassesLayerMasks(RenderPass* renderPass, std::vector<RenderPass*>& renderPasses) const;
 
 	void Render(RenderPass* renderPass);
 	void RenderPasses(std::vector<RenderPass*>& renderPasses);
+	RenderPass* GetRenderPass(const std::string& renderPassName) const;
 
 	void UpdateSubsystems();
+	void UpdateCameras();
 	void UpdateDistancesToCamera(const ICamera* camera, RenderersList* renderers);
 	void RenderInstances(RenderPass* renderPass, IRenderer* renderer, std::vector<IRenderer*>& instances);
 	
@@ -184,10 +215,18 @@ private:
 	void SelectTextures();
 	void SelectClippingPlane(RenderPass* renderPass);
 	void ApplyShadows(IRenderer* renderer);
-	void ApplyFog(IRenderer* renderer);
+	void ApplyFog(RenderPass* renderPass, IRenderer* renderer);
 	void ApplyLights(IRenderer* renderer);
 
+	void ReadCamerasFrom(core::utils::IDeserializer* source);
+	void ReadCameraFrom(core::utils::IDeserializer* source);
 	void DestroyCameras();
+
+	void ReadRenderPassesFrom(core::utils::IDeserializer* source);
+	void ReadRenderPassFrom(core::utils::IDeserializer* source);
+	void ReadRenderLayersFrom(core::utils::IDeserializer* source);
+	
+	void ReadFogParameters(core::utils::IDeserializer* source);
 
 	void CheckGLError();
 };

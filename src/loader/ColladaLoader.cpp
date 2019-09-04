@@ -7,6 +7,7 @@
 #include "../resources/models/animation/JointTransform.h"
 
 #include "../utils/Log.h"
+#include "../Memory.h"
 
 #include "glm/gtx/transform.hpp"
 
@@ -119,7 +120,7 @@ void ColladaLoader::LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Anima
 						std::multimap<float, KeyFrame*>::iterator it = keyFramesMap.find(time);
 						if (it == keyFramesMap.end())
 						{
-							keyFrame = new KeyFrame();
+							keyFrame = DBG_NEW  KeyFrame();
 							keyFrame->SetTimestamp(time);
 							keyFramesMap.insert(std::make_pair(time, keyFrame));
 							keyFrameList.push_back(keyFrame);
@@ -135,7 +136,7 @@ void ColladaLoader::LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Anima
 						{
 							matrix = CORRECTION_MATRIX * matrix;
 						}
-						JointTransform* jointTransform = new JointTransform(matrix);
+						JointTransform* jointTransform = DBG_NEW  JointTransform(matrix);
 						keyFrame->AddJointTransform(jointName, jointTransform);
 					}
 				}
@@ -147,7 +148,7 @@ void ColladaLoader::LoadAnimation(rapidxml::xml_node<>* animationsLibrary, Anima
 		}
 
 		//create animation
-		(*animation) = new Animation(std::string("animation_0"), duration, keyFrameList);
+		(*animation) = DBG_NEW  Animation(std::string("animation_0"), duration, keyFrameList);
 	}
 }
 
@@ -229,7 +230,7 @@ void ColladaLoader::LoadJoint(rapidxml::xml_node<>* rootNode, Joint** rootJoint,
 					{
 						matrix = CORRECTION_MATRIX * matrix;
 					}
-					Joint* joint = new Joint(index, name, matrix);
+					Joint* joint = DBG_NEW  Joint(index, name, matrix);
 
 					*rootJoint == nullptr ? *rootJoint = joint : (*rootJoint)->AddChild(joint);
 					LoadJoint(node, &joint, jointNames);
@@ -429,7 +430,7 @@ Mesh* ColladaLoader::LoadMesh(rapidxml::xml_node<> *geometryLibrary, std::multim
 		}
 	}
 
-	Mesh* mesh = new Mesh(vertices, uvs, indices, normals);
+	Mesh* mesh = DBG_NEW  Mesh(vertices, uvs, indices, normals);
 	typedef std::multimap<unsigned int, unsigned int>::iterator JointsIterator;
 	for (unsigned int i = 0; i < verticesIndices.size(); ++i)
 	{

@@ -1,8 +1,11 @@
 #pragma once
+#include "../../../utils/serializer/ISerializable.h"
+#include <string>
 
 class Texture;
+class RenderSystem;
 
-class IFrameBuffer
+class IFrameBuffer : public core::utils::ISerializable
 {
 	enum FrameBufferType
 	{
@@ -28,9 +31,12 @@ class IFrameBuffer
 	unsigned int mCopyBufferX;
 	unsigned int mCopyBufferY;
 	Texture* mCopyBufferTexture;
+	bool mIsCopyBuffer;
 
 	int mNumDrawBuffers = 0;
 	unsigned int mDrawBuffersList[2];
+
+	std::string mTextureName;
 
 public:
 	explicit IFrameBuffer(int screenWidth, int screenHeight);
@@ -46,10 +52,18 @@ public:
 	Texture* CopyDepthBuffer();
 	Texture* CopyColorBuffer();
 
+	void Build(RenderSystem* renderSystem);
+
+	// Heredado vía ISerializable
+	void ReadFrom(core::utils::IDeserializer* source) override;
+	void WriteTo(core::utils::ISerializer* destination) override;
+
 private:
 	void CreateBuffer();
 	void CopyDepthBufferIntoTexture(Texture* texture, int x, int y, int imageWidth, int imageHeight) const;
 	void CopyColorBufferIntoTexture(Texture* texture, int x, int y, int imageWidth, int imageHeight) const;
 	void PrintFrameBufferInfo(unsigned int target, unsigned int fbo) const;
+
+	
 };
 

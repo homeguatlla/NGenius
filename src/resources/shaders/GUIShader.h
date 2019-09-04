@@ -1,5 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
+#include "../Memory.h"
 
 class GUIShader : public IShaderProgram
 {
@@ -14,11 +15,14 @@ class GUIShader : public IShaderProgram
 public:
 
 	GUIShader();
-	~GUIShader();
+	virtual ~GUIShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 
 	void BindAttributes() override;
 	void GetAllUniformLocations() override;
+
+	static std::string GetClassName() { return std::string("GUIShader"); }
+	static IShaderProgram* Create() { return DBG_NEW GUIShader(); }
 };
 

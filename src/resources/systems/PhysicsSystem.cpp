@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <algorithm>
 
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../components/CollisionComponent.h"
 #include "../components/EnergyWallCollisionComponent.h"
 #include "../components/PhysicsComponent.h"
@@ -22,6 +22,11 @@ mEnergyWallRadius(0.0f)
 
 PhysicsSystem::~PhysicsSystem()
 {
+	Release();
+}
+
+void PhysicsSystem::Release()
+{
 	mEntities.clear();
 }
 
@@ -32,14 +37,19 @@ unsigned int PhysicsSystem::GetNumberGameEntities() const
 
 void PhysicsSystem::Update(float deltaTime)
 {
-	for (GameEntity* entity : mEntities)
+	for (IGameEntity* entity : mEntities)
 	{
 		ApplyMRU(deltaTime, entity);
 		CheckCollisions(entity);		
 	}
 }
 
-void PhysicsSystem::ApplyMRU(float deltaTime, GameEntity* entity)
+void PhysicsSystem::Reload()
+{
+	Release();
+}
+
+void PhysicsSystem::ApplyMRU(float deltaTime, IGameEntity* entity)
 {
 	if (entity->HasComponent<PhysicsComponent>())
 	{
@@ -59,7 +69,7 @@ void PhysicsSystem::ApplyMRU(float deltaTime, GameEntity* entity)
 	}
 }
 
-void PhysicsSystem::CheckCollisions(GameEntity* entity)
+void PhysicsSystem::CheckCollisions(IGameEntity* entity)
 {
 	if (entity->HasComponent<CollisionComponent>())
 	{
@@ -71,7 +81,7 @@ void PhysicsSystem::CheckCollisions(GameEntity* entity)
 	}
 }
 
-void PhysicsSystem::CheckCollisionTerrain(GameEntity* entity)
+void PhysicsSystem::CheckCollisionTerrain(IGameEntity* entity)
 {	
 	CollisionComponent* collisionComponent = entity->GetComponent<CollisionComponent>();
 
@@ -104,7 +114,7 @@ void PhysicsSystem::CheckCollisionTerrain(GameEntity* entity)
 	}
 }
 
-void PhysicsSystem::CheckCollisionEnergyWall(GameEntity* entity)
+void PhysicsSystem::CheckCollisionEnergyWall(IGameEntity* entity)
 {
 	EnergyWallCollisionComponent* collisionComponent = entity->GetComponent<EnergyWallCollisionComponent>();
 
@@ -128,7 +138,7 @@ void PhysicsSystem::SetEnergyWall(const glm::vec3& position, float radius)
 	mEnergyWallPosition = position;
 }
 
-void PhysicsSystem::AddEntity(GameEntity* entity)
+void PhysicsSystem::AddEntity(IGameEntity* entity)
 {
 	if (HasPhysicsComponents(entity))
 	{
@@ -136,11 +146,11 @@ void PhysicsSystem::AddEntity(GameEntity* entity)
 	}
 }
 
-void PhysicsSystem::RemoveEntity(GameEntity* entity)
+void PhysicsSystem::RemoveEntity(IGameEntity* entity)
 {
 	if (HasPhysicsComponents(entity))
 	{
-		std::vector<GameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](GameEntity* a) { return a == entity; });
+		std::vector<IGameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](IGameEntity* a) { return a == entity; });
 		if (it != mEntities.end())
 		{
 			mEntities.erase(it);
@@ -152,7 +162,7 @@ void PhysicsSystem::RemoveEntity(GameEntity* entity)
 	}
 }
 
-bool PhysicsSystem::IsInsideTerrain(GameEntity *entity)
+bool PhysicsSystem::IsInsideTerrain(IGameEntity*entity)
 {
 	Transformation* transformation = entity->GetTransformation();
 	glm::vec3 position = transformation->GetPosition();
@@ -160,7 +170,7 @@ bool PhysicsSystem::IsInsideTerrain(GameEntity *entity)
 	return mTerrain->IsPointInside(glm::vec2(position.x, position.z));
 }
 
-bool PhysicsSystem::HasPhysicsComponents(const GameEntity* entity) const
+bool PhysicsSystem::HasPhysicsComponents(const IGameEntity* entity) const
 {
 	return entity != nullptr && (	entity->HasComponent<CollisionComponent>() ||
 									entity->HasComponent<PhysicsComponent>() ||
@@ -168,15 +178,21 @@ bool PhysicsSystem::HasPhysicsComponents(const GameEntity* entity) const
 								);
 }
 
-void PhysicsSystem::OnGameEntityAdded(GameEntity* entity)
+void PhysicsSystem::OnGameEntityAdded(IGameEntity* entity)
 {
 	if (HasPhysicsComponents(entity))
 	{
 		AddEntity(entity);
 	}
+
+	//TODO esto no funcionará así, pero por ahora sí. 
+	if (typeid(*entity) == typeid(Terrain))
+	{
+		SetTerrain(static_cast<Terrain*>(entity));
+	}
 }
 
-void PhysicsSystem::OnGameEntityRemoved(GameEntity* entity)
+void PhysicsSystem::OnGameEntityRemoved(IGameEntity* entity)
 {
 	if (HasPhysicsComponents(entity))
 	{
@@ -184,7 +200,7 @@ void PhysicsSystem::OnGameEntityRemoved(GameEntity* entity)
 	}
 }
 
-bool PhysicsSystem::ApplyCollisions(GameEntity *entity, float *groundHeight)
+bool PhysicsSystem::ApplyCollisions(IGameEntity*entity, float *groundHeight)
 {
 	Transformation* transformation = entity->GetTransformation();
 	glm::vec3 position = transformation->GetPosition();
@@ -213,7 +229,7 @@ bool PhysicsSystem::ApplyCollisions(GameEntity *entity, float *groundHeight)
 	return isColliding;
 }
 
-bool PhysicsSystem::ApplyEnergyWallCollision(GameEntity *entity, glm::vec3& collisionPoint)
+bool PhysicsSystem::ApplyEnergyWallCollision(IGameEntity*entity, glm::vec3& collisionPoint)
 {
 	Transformation* transformation = entity->GetTransformation();
 

@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "IFrameBuffer.h"
+#include "RenderSystem.h"
 #include "../../textures/Texture.h"
+#include "../../../utils/serializer/XMLDeserializer.h"
+#include "../../../utils/serializer/IDeserializer.h"
 #include <GL/glew.h>
 
 IFrameBuffer::IFrameBuffer(int screenWidth, int screenHeight) :
@@ -19,7 +22,8 @@ mCopyBufferHeight(0),
 mCopyBufferWidth(0),
 mCopyBufferX(0),
 mCopyBufferY(0),
-mCopyBufferTexture(nullptr)
+mCopyBufferTexture(nullptr),
+mIsCopyBuffer(false)
 {
 	
 }
@@ -110,6 +114,17 @@ Texture* IFrameBuffer::CopyColorBuffer()
 	else
 	{
 		return nullptr;
+	}
+}
+
+void IFrameBuffer::Build(RenderSystem* renderSystem)
+{
+	if (!mTextureName.empty())
+	{
+		if (mIsCopyBuffer)
+		{
+			mCopyBufferTexture = static_cast<Texture*>(renderSystem->GetTexture(mTextureName));
+		}
 	}
 }
 
@@ -218,4 +233,22 @@ void IFrameBuffer::PrintFrameBufferInfo(unsigned int target, unsigned int fbo) c
 		++i;
 
 	} while (buffer != GL_NONE);
+}
+
+void IFrameBuffer::ReadFrom(core::utils::IDeserializer* source)
+{
+	source->ReadParameter("copy_buffer_to_texture", &mIsCopyBuffer);
+	source->ReadParameter("texture", mTextureName);
+
+	if (mIsCopyBuffer)
+	{
+		source->ReadParameter("copy_x", &mCopyBufferX);
+		source->ReadParameter("copy_y", &mCopyBufferY);
+		source->ReadParameter("copy_width", &mCopyBufferWidth);
+		source->ReadParameter("copy_height", &mCopyBufferHeight);
+	}
+}
+
+void IFrameBuffer::WriteTo(core::utils::ISerializer* destination)
+{
 }

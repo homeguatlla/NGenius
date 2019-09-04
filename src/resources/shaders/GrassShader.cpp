@@ -66,11 +66,6 @@ GrassShader::GrassShader() :
 {
 }
 
-
-GrassShader::~GrassShader()
-{
-}
-
 void GrassShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	IShaderProgram::LoadData(camera, transformation, material);

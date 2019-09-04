@@ -1,7 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
+#include "../utils/serializer/ISerializable.h"
 
-class Transformation
+class Transformation : public core::utils::ISerializable
 {
 	glm::vec3 mPosition;
 	glm::vec3 mRotation;
@@ -23,5 +24,9 @@ public:
 	void SetScale(const glm::vec3& scale);
 
 	const glm::mat4& GetModelMatrix();
+
+	// Heredado vía ISerializable
+	void ReadFrom(core::utils::IDeserializer* source) override;
+	void WriteTo(core::utils::ISerializer* destination) override;
 };
 

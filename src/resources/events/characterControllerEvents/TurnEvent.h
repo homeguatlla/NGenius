@@ -1,5 +1,6 @@
 #pragma once
 #include "../CharacterControllerEvent.h"
+#include <string>
 
 class TurnEvent : public CharacterControllerEvent
 {
@@ -9,9 +10,11 @@ public:
 	TurnEvent();
 	~TurnEvent();
 
-	TurnEvent* DoClone(const void* data) const;
+	std::shared_ptr<GameEvent> DoClone(const void* data) const;
+	static std::string GetClassName() { return std::string("TurnEvent"); }
+	static std::shared_ptr<GameEvent> Create();
 
 	float GetTurn() const;
-	void SetTurn(float pitch);
+	void SetTurn(float turn);
 };
 

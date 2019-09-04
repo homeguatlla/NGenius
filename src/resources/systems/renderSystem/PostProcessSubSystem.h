@@ -33,5 +33,6 @@ private:
 	void LoadHorizontalBlurPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, float blurGranularity, unsigned int width, unsigned int height);
 	void LoadVerticalBlurPostProcess(Model* model, Texture* texture, PostProcessEffect::PostProcessEffectType type, float blurGranularity, unsigned int width, unsigned int height);
 	void LoadBloomPostProcess(Model* model, Texture* texture, Texture* bright, PostProcessEffect::PostProcessEffectType type, unsigned int width, unsigned int height);
+	void ReleaseEffects();
 };
 

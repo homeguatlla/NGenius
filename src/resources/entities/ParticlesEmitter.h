@@ -1,5 +1,5 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 #include <vector>
 #include <list>
 
@@ -8,7 +8,7 @@ class IShaderProgram;
 class Particle;
 class GameScene;
 
-class ParticlesEmitter : public GameEntity
+class ParticlesEmitter : public BaseGameEntity<ParticlesEmitter>
 {
 	std::list<Particle*> mParticlesPool;
 	std::vector<Particle*> mParticles;
@@ -59,4 +59,7 @@ private:
 	void RemoveParticle(unsigned long index);
 	void SpawnNewParticles(float elapsedTime);
 	void RemoveDeadParticles();
+
+	// Heredado vía BaseGameEntity
+	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };

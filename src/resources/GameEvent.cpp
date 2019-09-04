@@ -13,9 +13,9 @@ GameEvent::~GameEvent()
 {
 }
 
-GameEvent* GameEvent::Clone(const void* data) const
+std::shared_ptr<GameEvent> GameEvent::Clone(const void* data) const
 {
-	GameEvent* clone = DoClone(data);
+	std::shared_ptr<GameEvent> clone = DoClone(data);
 
 	assert(typeid(*clone) == typeid(*this));
 

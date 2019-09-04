@@ -1,5 +1,6 @@
 #pragma once
 #include "ModelShader.h"
+#include "../Memory.h"
 
 class NormalMapShader : public ModelShader
 {
@@ -11,11 +12,14 @@ class NormalMapShader : public ModelShader
 
 public:
 	NormalMapShader();
-	~NormalMapShader();
+	virtual ~NormalMapShader() = default;
 
 	void LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material) override;
 	
 	void BindAttributes();
 	void GetAllUniformLocations();
+
+	static std::string GetClassName() { return std::string("NormalMapShader"); }
+	static IShaderProgram* Create() { return DBG_NEW NormalMapShader(); }
 };
 

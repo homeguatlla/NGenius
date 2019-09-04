@@ -25,10 +25,15 @@ public:
 	void UnRegisterInputListener(IInputListener* listener);
 
 	void RegisterInputHandler(std::function<void(GLFWwindow* window)> callback);
-
-	void OnKey(int key, int action);
-	void OnMouseScroll(int button, float scroll);
-	void OnMouseButton(int button, int action, int mods);
-	void OnMouseCursorPos(double x, double y);
+	static void OnMouseScroll(GLFWwindow* window, double xOffset, double yOffset);
+	static void OnKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	static void OnMouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+	static void OnMouseCursorPosCallback(GLFWwindow* window, double xpos, double ypos);
+	
+private:
+	void Key(int key, int action);
+	void MouseScroll(int button, float scroll);
+	void MouseButton(int button, int action, int mods);
+	void MouseCursorPos(double x, double y);
 };
 

@@ -2,6 +2,7 @@
 #include "OBJLoader.h"
 #include "../resources/models/Mesh.h"
 #include "../utils/Log.h"
+#include "../Memory.h"
 
 #include <iostream>
 #include <fstream>
@@ -120,7 +121,7 @@ Mesh* OBJLoader::LoadModel(const std::string& filename)
 
 		if (vertexs.size() > 0)
 		{
-			Mesh* model = new Mesh(vertexs, uvs, indexes, normals);
+			Mesh* model = DBG_NEW  Mesh(vertexs, uvs, indexes, normals);
 
 			if (!materialFilename.empty())
 			{

@@ -1,6 +1,9 @@
 #pragma once
 #include "IComponent.h"
 #include <glm/glm.hpp>
+#include<string>
+
+class IGameEntity;
 
 class RotationComponent : public IComponent
 {
@@ -12,7 +15,15 @@ public:
 	explicit RotationComponent(const glm::vec3& rotation, float speed);
 	~RotationComponent();
 
-	RotationComponent* DoClone() const override;
 	void UpdateInternal(float elapsedTime) override;
+
+	static std::string GetClassName() { return std::string("RotationComponent"); }
+	static IComponent* Create(IGameEntity* entity);
+
+private:
+	RotationComponent() = default;
+	void DoReadFrom(core::utils::IDeserializer* source) override;
+	void DoWriteTo(core::utils::ISerializer* destination) override;
+	RotationComponent* DoClone() const override;
 };
 

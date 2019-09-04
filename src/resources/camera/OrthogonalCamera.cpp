@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "OrthogonalCamera.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "../../utils/serializer/IDeserializer.h"
+#include "../../utils/serializer/XMLDeserializer.h"
 
 static const int FAR_PLANE = 1000;
 static const int NEAR_PLANE = 0;
@@ -13,20 +15,35 @@ mScreenHeight(screenHeight),
 mNearPlane(nearPlane),
 mFarPlane(farPlane)
 {
-	SetFrustumDilatation(0.0f);
 	SetName(name);
-	mIsDirty = true;
-	CreateProjectionMatrix();
+	Initialize();
 }
 
 OrthogonalCamera::~OrthogonalCamera()
 {
 }
 
+void OrthogonalCamera::Initialize()
+{
+	SetFrustumDilatation(0.0f);
+	mIsDirty = true;
+	CreateProjectionMatrix();
+}
+
 AABB OrthogonalCamera::GetAABB() const
 {
 	AABB aabb;
 	return aabb;
+}
+
+void OrthogonalCamera::ReadFrom(core::utils::IDeserializer* source)
+{
+	ICamera::ReadFrom(source);
+	source->ReadParameter("screen_width", &mScreenWidth);
+	source->ReadParameter("screen_height", &mScreenHeight);
+	source->ReadParameter("near_plane", &mNearPlane);
+	source->ReadParameter("far_plane", &mFarPlane);
+	Initialize();
 }
 
 void OrthogonalCamera::CalculateFrustum()

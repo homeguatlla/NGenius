@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "JumpEvent.h"
+#include "../Memory.h"
 
 
 JumpEvent::JumpEvent()
@@ -11,7 +12,12 @@ JumpEvent::~JumpEvent()
 {
 }
 
-JumpEvent* JumpEvent::DoClone(const void* data) const
+std::shared_ptr<GameEvent> JumpEvent::DoClone(const void* data) const
 {
-	return new JumpEvent();
+	return std::make_shared<JumpEvent>();
+}
+
+std::shared_ptr<GameEvent> JumpEvent::Create()
+{
+	return std::make_shared<JumpEvent>();
 }

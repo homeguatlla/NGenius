@@ -19,10 +19,6 @@ mLocationNormalmapTexture(-1)
 {
 }
 
-NormalMapShader::~NormalMapShader()
-{
-}
-
 void NormalMapShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	ModelShader::LoadData(camera, transformation, material);

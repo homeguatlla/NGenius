@@ -22,32 +22,32 @@
     <ProjectGuid>{D1C89538-D443-4B49-BC3D-81A2105D625D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Test</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -168,14 +168,30 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
+    <ClInclude Include="Memory.h" />
     <ClInclude Include="rapidxml\rapidxml.hpp" />
     <ClInclude Include="rapidxml\rapidxml_iterators.hpp" />
     <ClInclude Include="rapidxml\rapidxml_print.hpp" />
     <ClInclude Include="rapidxml\rapidxml_utils.hpp" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="src\AABB.h" />
     <ClInclude Include="src\BasicTypes.h" />
     <ClInclude Include="src\BitNumber.h" />
     <ClInclude Include="src\Frustum.h" />
+    <ClInclude Include="src\fsm\FSMContext.h" />
+    <ClInclude Include="src\fsm\states\FreeModeOnlyCameraState.h" />
+    <ClInclude Include="src\fsm\states\FreeModeOnlyPlayerState.h" />
+    <ClInclude Include="src\fsm\states\InitialState.h" />
+    <ClInclude Include="src\fsm\states\LoadingState.h" />
+    <ClInclude Include="src\fsm\states\RunState.h" />
+    <ClInclude Include="src\fsm\states\ShutDownState.h" />
+    <ClInclude Include="src\fsm\states\StartState.h" />
+    <ClInclude Include="src\fsm\transitions\EnterExitFreeModeOnlyCameraTransition.h" />
+    <ClInclude Include="src\fsm\transitions\EnterExitFreeModeOnlyPlayerTransition.h" />
+    <ClInclude Include="src\fsm\transitions\EnterLoadingTransition.h" />
+    <ClInclude Include="src\fsm\transitions\EnterRunTransition.h" />
+    <ClInclude Include="src\fsm\transitions\EnterShutDownTransition.h" />
+    <ClInclude Include="src\fsm\transitions\EnterStartTransition.h" />
     <ClInclude Include="src\guiTool\GuiTool.h" />
     <ClInclude Include="src\input\bindings\KeyToEventBind.h" />
     <ClInclude Include="src\input\bindings\MouseToEventBind.h" />
@@ -190,7 +206,7 @@
     <ClInclude Include="src\loader\OBJLoader.h" />
     <ClInclude Include="src\NGenius.h" />
     <ClInclude Include="src\NoiseGenerator.h" />
-    <ClInclude Include="src\PNGLoader.h" />
+    <ClInclude Include="src\resources\BaseGameEntity.h" />
     <ClInclude Include="src\resources\BaseLibrary.h" />
     <ClInclude Include="src\resources\camera\ICamera.h" />
     <ClInclude Include="src\resources\camera\OrthogonalCamera.h" />
@@ -215,7 +231,9 @@
     <ClInclude Include="src\resources\components\SpacePartitionComponent.h" />
     <ClInclude Include="src\resources\components\ThirdPersonCameraComponent.h" />
     <ClInclude Include="src\resources\entities\EnergyWall.h" />
+    <ClInclude Include="src\resources\entities\GameEntity.h" />
     <ClInclude Include="src\resources\entities\Light.h" />
+    <ClInclude Include="src\resources\entities\EntitiesPatch.h" />
     <ClInclude Include="src\resources\entities\Particle.h" />
     <ClInclude Include="src\resources\entities\ParticlesEmitter.h" />
     <ClInclude Include="src\resources\entities\Player.h" />
@@ -234,8 +252,10 @@
     <ClInclude Include="src\resources\events\characterControllerEvents\ZoomEvent.h" />
     <ClInclude Include="src\resources\font\FontsLibrary.h" />
     <ClInclude Include="src\resources\font\FontType.h" />
-    <ClInclude Include="src\resources\GameEntity.h" />
     <ClInclude Include="src\resources\GameEvent.h" />
+    <ClInclude Include="src\resources\IFactory.h" />
+    <ClInclude Include="src\resources\IGameEntity.h" />
+    <ClInclude Include="src\resources\InstantiableObject.h" />
     <ClInclude Include="src\resources\materials\BasicMaterial.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectClippingPlane.h" />
     <ClInclude Include="src\resources\materials\effects\MaterialEffectDepthTexture.h" />
@@ -280,6 +300,7 @@
     <ClInclude Include="src\resources\renderers\VerticesRenderer.h" />
     <ClInclude Include="src\resources\renderers\IndicesRenderer.h" />
     <ClInclude Include="src\resources\renderers\IRenderer.h" />
+    <ClInclude Include="src\resources\renderers\WaterRenderer.h" />
     <ClInclude Include="src\resources\renderers\WireframeRenderer.h" />
     <ClInclude Include="src\resources\scene\GameScene.h" />
     <ClInclude Include="src\resources\scene\IGameSceneListener.h" />
@@ -324,16 +345,28 @@
     <ClInclude Include="src\resources\systems\renderSystem\WaterRenderPassSubSystem.h" />
     <ClInclude Include="src\resources\systems\SpacePartitionSystem.h" />
     <ClInclude Include="src\resources\textures\ITexture.h" />
+    <ClInclude Include="src\resources\textures\PNGLoader.h" />
     <ClInclude Include="src\resources\textures\Texture.h" />
     <ClInclude Include="src\resources\textures\TextureArray.h" />
     <ClInclude Include="src\resources\textures\TextureCubemap.h" />
     <ClInclude Include="src\resources\textures\TexturesLibrary.h" />
     <ClInclude Include="src\resources\Transformation.h" />
+    <ClInclude Include="src\states\StateTypes.h" />
     <ClInclude Include="src\statistics\Statistics.h" />
     <ClInclude Include="src\TerrainGrid.h" />
     <ClInclude Include="src\TextureGenerator.h" />
     <ClInclude Include="src\utils\FileReader.h" />
+    <ClInclude Include="src\utils\fsm\BaseState.h" />
+    <ClInclude Include="src\utils\fsm\BaseTransition.h" />
+    <ClInclude Include="src\utils\fsm\IState.h" />
+    <ClInclude Include="src\utils\fsm\ITransition.h" />
+    <ClInclude Include="src\utils\fsm\StatesMachine.h" />
     <ClInclude Include="src\utils\Log.h" />
+    <ClInclude Include="src\utils\serializer\IDeserializer.h" />
+    <ClInclude Include="src\utils\serializer\ISerializable.h" />
+    <ClInclude Include="src\utils\serializer\ISerializer.h" />
+    <ClInclude Include="src\utils\serializer\XMLDeserializer.h" />
+    <ClInclude Include="src\utils\serializer\XMLSerializer.h" />
     <ClInclude Include="src\VertexBuffersManager.h" />
     <ClInclude Include="src\visitor\BaseVisitable.h" />
     <ClInclude Include="src\visitor\BaseVisitor.h" />
@@ -368,6 +401,20 @@
     <ClCompile Include="src\AABB.cpp" />
     <ClCompile Include="src\BitNumber.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
+    <ClCompile Include="src\fsm\FSMContext.cpp" />
+    <ClCompile Include="src\fsm\states\FreeModeOnlyCameraState.cpp" />
+    <ClCompile Include="src\fsm\states\FreeModeOnlyPlayerState.cpp" />
+    <ClCompile Include="src\fsm\states\InitialState.cpp" />
+    <ClCompile Include="src\fsm\states\LoadingState.cpp" />
+    <ClCompile Include="src\fsm\states\RunState.cpp" />
+    <ClCompile Include="src\fsm\states\ShutDownState.cpp" />
+    <ClCompile Include="src\fsm\states\StartState.cpp" />
+    <ClCompile Include="src\fsm\transitions\EnterExitFreeModeOnlyCameraTransition.cpp" />
+    <ClCompile Include="src\fsm\transitions\EnterExitFreeModeOnlyPlayerTransition.cpp" />
+    <ClCompile Include="src\fsm\transitions\EnterLoadingTransition.cpp" />
+    <ClCompile Include="src\fsm\transitions\EnterRunTransition.cpp" />
+    <ClCompile Include="src\fsm\transitions\EnterShutDownTransition.cpp" />
+    <ClCompile Include="src\fsm\transitions\EnterStartTransition.cpp" />
     <ClCompile Include="src\guiTool\GuiTool.cpp" />
     <ClCompile Include="src\input\bindings\KeyToEventBind.cpp" />
     <ClCompile Include="src\input\bindings\MouseToEventBind.cpp" />
@@ -405,7 +452,9 @@
     <ClCompile Include="src\resources\components\SpacePartitionComponent.cpp" />
     <ClCompile Include="src\resources\components\ThirdPersonCameraComponent.cpp" />
     <ClCompile Include="src\resources\entities\EnergyWall.cpp" />
+    <ClCompile Include="src\resources\entities\GameEntity.cpp" />
     <ClCompile Include="src\resources\entities\Light.cpp" />
+    <ClCompile Include="src\resources\entities\EntitiesPatch.cpp" />
     <ClCompile Include="src\resources\entities\Particle.cpp" />
     <ClCompile Include="src\resources\entities\ParticlesEmitter.cpp" />
     <ClCompile Include="src\resources\entities\Player.cpp" />
@@ -424,8 +473,8 @@
     <ClCompile Include="src\resources\events\characterControllerEvents\ZoomEvent.cpp" />
     <ClCompile Include="src\resources\font\FontsLibrary.cpp" />
     <ClCompile Include="src\resources\font\FontType.cpp" />
-    <ClCompile Include="src\resources\GameEntity.cpp" />
     <ClCompile Include="src\resources\GameEvent.cpp" />
+    <ClCompile Include="src\resources\InstantiableObject.cpp" />
     <ClCompile Include="src\resources\materials\BasicMaterial.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectClippingPlane.cpp" />
     <ClCompile Include="src\resources\materials\effects\MaterialEffectDepthTexture.cpp" />
@@ -470,6 +519,7 @@
     <ClCompile Include="src\resources\renderers\VerticesRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\IndicesRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\IRenderer.cpp" />
+    <ClCompile Include="src\resources\renderers\WaterRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\WireframeRenderer.cpp" />
     <ClCompile Include="src\resources\scene\GameScene.cpp" />
     <ClCompile Include="src\resources\scene\IGameSceneListener.cpp" />
@@ -526,6 +576,8 @@
     <ClCompile Include="src\TerrainGrid.cpp" />
     <ClCompile Include="src\utils\FileReader.cpp" />
     <ClCompile Include="src\utils\Log.cpp" />
+    <ClCompile Include="src\utils\serializer\XMLDeserializer.cpp" />
+    <ClCompile Include="src\utils\serializer\XMLSerializer.cpp" />
     <ClCompile Include="src\VertexBuffersManager.cpp" />
     <ClCompile Include="src\visitor\BaseVisitable.cpp" />
     <ClCompile Include="src\visitor\BaseVisitor.cpp" />
@@ -579,6 +631,9 @@
     <None Include="data\shaders\vertex\v_vertical_blur.cg" />
     <None Include="data\shaders\vertex\v_water.cg" />
     <None Include="data\shaders\vertex\v_energy_wall.cg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Test.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

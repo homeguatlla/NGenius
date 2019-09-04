@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "AnimationSystem.h"
-#include "../GameEntity.h"
+#include "../IGameEntity.h"
 #include "../components/AnimationComponent.h"
 #include "../models/animation/AnimatedModel.h"
 #include "../models/animation/Animation.h"
@@ -8,6 +8,7 @@
 #include "../renderers/IRenderer.h"
 #include "../materials/IMaterial.h"
 #include "../materials/effects/MaterialEffectMatrix4Array.h"
+#include "../Memory.h"
 
 #include <algorithm>
 
@@ -17,13 +18,24 @@ AnimationSystem::AnimationSystem()
 
 AnimationSystem::~AnimationSystem()
 {
+	Release();
+}
+
+void AnimationSystem::Release()
+{
+	mEntities.clear();
+}
+
+void AnimationSystem::Reload()
+{
+	Release();
 }
 
 void AnimationSystem::Update(float deltaTime)
 {
-	for (std::pair<GameEntity*, Animator*> elem : mEntities)
+	for (std::pair<IGameEntity*, Animator*> elem : mEntities)
 	{
-		GameEntity* entity = elem.first;
+		IGameEntity* entity = elem.first;
 		Animator* animator = elem.second;
 
 		AnimationComponent* animationComponent = entity->GetComponent<AnimationComponent>();
@@ -37,7 +49,7 @@ void AnimationSystem::Update(float deltaTime)
 	}
 }
 
-void AnimationSystem::SetAnimationData(GameEntity* entity, const std::vector<glm::mat4x4>& data)
+void AnimationSystem::SetAnimationData(IGameEntity* entity, const std::vector<glm::mat4x4>& data)
 {
 	//Set animation parameters
 	IRenderer* renderer = entity->GetRenderer();
@@ -50,24 +62,24 @@ void AnimationSystem::SetAnimationData(GameEntity* entity, const std::vector<glm
 	}
 }
 
-void AnimationSystem::AddEntity(GameEntity* entity)
+void AnimationSystem::AddEntity(IGameEntity* entity)
 {
 	if (HasAnimationComponents(entity))
 	{
 		AnimatedModel* model = static_cast<AnimatedModel*>(entity->GetRenderer()->GetModel());
-		Animator* animator = new Animator(model);
+		Animator* animator = DBG_NEW Animator(model);
 
-		AnimationComponent* component = entity->GetComponent<AnimationComponent>();
-		mEntities.push_back(std::pair<GameEntity*, Animator*>(entity, animator));
+		//AnimationComponent* component = entity->GetComponent<AnimationComponent>();
+		mEntities.push_back(std::pair<IGameEntity*, Animator*>(entity, animator));
 		//mAnimations[model->GetName()].push_back(component->GetAnimation());
 	}
 }
 
-void AnimationSystem::RemoveEntity(GameEntity* entity)
+void AnimationSystem::RemoveEntity(IGameEntity* entity)
 {
 	if (HasAnimationComponents(entity))
 	{
-		std::vector<std::pair<GameEntity*, Animator*>>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](std::pair<GameEntity*, Animator*> a) { return a.first == entity; });
+		std::vector<std::pair<IGameEntity*, Animator*>>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](std::pair<IGameEntity*, Animator*> a) { return a.first == entity; });
 		if (it != mEntities.end())
 		{
 			delete it->second;
@@ -80,7 +92,7 @@ void AnimationSystem::RemoveEntity(GameEntity* entity)
 	}
 }
 
-bool AnimationSystem::HasAnimationComponents(const GameEntity* entity) const
+bool AnimationSystem::HasAnimationComponents(const IGameEntity* entity) const
 {
 	if (entity != nullptr)
 	{
@@ -94,7 +106,7 @@ bool AnimationSystem::HasAnimationComponents(const GameEntity* entity) const
 	return false;
 }
 
-void AnimationSystem::OnGameEntityAdded(GameEntity* entity)
+void AnimationSystem::OnGameEntityAdded(IGameEntity* entity)
 {
 	if (HasAnimationComponents(entity))
 	{
@@ -102,7 +114,7 @@ void AnimationSystem::OnGameEntityAdded(GameEntity* entity)
 	}
 }
 
-void AnimationSystem::OnGameEntityRemoved(GameEntity* entity)
+void AnimationSystem::OnGameEntityRemoved(IGameEntity* entity)
 {
 	if (HasAnimationComponents(entity))
 	{

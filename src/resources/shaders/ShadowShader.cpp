@@ -31,11 +31,6 @@ mLocationJointTransformSize(-1)
 {
 }
 
-
-ShadowShader::~ShadowShader()
-{
-}
-
 void ShadowShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	LoadMatrix4(mLocationV, const_cast<ICamera*>(camera)->GetViewMatrix());

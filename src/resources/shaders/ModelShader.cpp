@@ -23,6 +23,7 @@ const std::string ATTRIBUTE_TILE("tile");
 ModelShader::ModelShader() :
 ModelShader(VERTEX_FILE, FRAGMENT_FILE)
 {
+	
 }
 
 ModelShader::ModelShader(const std::string& vertexFile, const std::string& fragmentFile) :
@@ -33,11 +34,6 @@ mLocationTextureCoords(-1),
 mLocationNormal(-1),
 mLocationTexture(-1),
 mLocationTile(-1)
-{
-}
-
-
-ModelShader::~ModelShader()
 {
 }
 

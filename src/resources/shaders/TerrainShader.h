@@ -1,5 +1,6 @@
 #pragma once
 #include "IShaderProgram.h"
+#include "../Memory.h"
 
 class TerrainShader : public IShaderProgram
 {
@@ -14,7 +15,10 @@ public:
 
 	void BindAttributes();
 	void GetAllUniformLocations();
-	
+
+	static std::string GetClassName() { return std::string("TerrainShader"); }
+	static IShaderProgram* Create() { return DBG_NEW TerrainShader(); }
+
 private:
 	int mLocationMVPMatrix;
 	int mLocationModelMatrix;
@@ -27,5 +31,7 @@ private:
 	int mLocationBlendMapTexture;
 	int mLocationArrayTexture;
 	int mLocationTile;
+	int mLocationNormal;
+	int mLocationTangent;
 };
 

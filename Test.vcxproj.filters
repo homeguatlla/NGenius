@@ -208,6 +208,33 @@
     <Filter Include="Header Files\utils">
       <UniqueIdentifier>{d6dd4c34-edb5-4b31-a92c-7e5c24d08851}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\utils\serializer">
+      <UniqueIdentifier>{3e2d5c8d-c06a-459d-88f4-b60769654409}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils\serializer">
+      <UniqueIdentifier>{23af9e1f-ba6b-4fa8-930a-c818be5361bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils\fsm">
+      <UniqueIdentifier>{2b9d4ee6-ef32-449e-bd1d-eaec16a05966}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\fsm">
+      <UniqueIdentifier>{7293c6d7-a7f5-45fe-bfed-8a90b4cc6b66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\fsm\states">
+      <UniqueIdentifier>{37352e3c-09db-481e-91b4-f9f3cc5be0e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\fsm\transitions">
+      <UniqueIdentifier>{64ce4154-a9e5-437e-a0cc-62fcebe71d20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\fsm">
+      <UniqueIdentifier>{1295bcfd-9843-4cec-83c5-731b7a01a152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\fsm\states">
+      <UniqueIdentifier>{9698c588-1335-48ce-bf68-f6570d0eec0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\fsm\transitions">
+      <UniqueIdentifier>{f2098de1-1308-4059-9e30-61e7a8a01204}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -243,9 +270,6 @@
     <ClInclude Include="src\resources\textures\TexturesLibrary.h">
       <Filter>Header Files\resources\textures</Filter>
     </ClInclude>
-    <ClInclude Include="src\PNGLoader.h">
-      <Filter>Header Files\resources\textures</Filter>
-    </ClInclude>
     <ClInclude Include="src\TextureGenerator.h">
       <Filter>Header Files\resources\textures</Filter>
     </ClInclude>
@@ -272,9 +296,6 @@
     </ClInclude>
     <ClInclude Include="src\resources\textures\TextureArray.h">
       <Filter>Header Files\resources\textures</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\GameEntity.h">
-      <Filter>Header Files\resources</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\entities\Player.h">
       <Filter>Header Files\resources\entities</Filter>
@@ -753,6 +774,111 @@
     <ClInclude Include="src\utils\FileReader.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\serializer\ISerializer.h">
+      <Filter>Header Files\utils\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\serializer\ISerializable.h">
+      <Filter>Header Files\utils\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\serializer\XMLSerializer.h">
+      <Filter>Header Files\utils\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\serializer\IDeserializer.h">
+      <Filter>Header Files\utils\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\serializer\XMLDeserializer.h">
+      <Filter>Header Files\utils\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\IFactory.h">
+      <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\InstantiableObject.h">
+      <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fsm\BaseState.h">
+      <Filter>Header Files\utils\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fsm\BaseTransition.h">
+      <Filter>Header Files\utils\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fsm\IState.h">
+      <Filter>Header Files\utils\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fsm\ITransition.h">
+      <Filter>Header Files\utils\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fsm\StatesMachine.h">
+      <Filter>Header Files\utils\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\states\StateTypes.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\FSMContext.h">
+      <Filter>Header Files\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\IGameEntity.h">
+      <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\BaseGameEntity.h">
+      <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\GameEntity.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\FreeModeOnlyCameraState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\FreeModeOnlyPlayerState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\transitions\EnterExitFreeModeOnlyCameraTransition.h">
+      <Filter>Header Files\fsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\transitions\EnterExitFreeModeOnlyPlayerTransition.h">
+      <Filter>Header Files\fsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\textures\PNGLoader.h">
+      <Filter>Header Files\resources\textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\InitialState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\LoadingState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\ShutDownState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\StartState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\transitions\EnterLoadingTransition.h">
+      <Filter>Header Files\fsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\states\RunState.h">
+      <Filter>Header Files\fsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\transitions\EnterRunTransition.h">
+      <Filter>Header Files\fsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\transitions\EnterStartTransition.h">
+      <Filter>Header Files\fsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fsm\transitions\EnterShutDownTransition.h">
+      <Filter>Header Files\fsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\WaterRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\EntitiesPatch.h">
+      <Filter>Header Files\resources\entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -792,9 +918,6 @@
       <Filter>Source Files\resources\textures</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\Transformation.cpp">
-      <Filter>Source Files\resources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\GameEntity.cpp">
       <Filter>Source Files\resources</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\components\IComponent.cpp">
@@ -1271,6 +1394,66 @@
     <ClCompile Include="src\utils\FileReader.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\serializer\XMLSerializer.cpp">
+      <Filter>Source Files\utils\serializer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\serializer\XMLDeserializer.cpp">
+      <Filter>Source Files\utils\serializer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\InstantiableObject.cpp">
+      <Filter>Source Files\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\FSMContext.cpp">
+      <Filter>Source Files\fsm</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\FreeModeOnlyCameraState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\FreeModeOnlyPlayerState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\transitions\EnterExitFreeModeOnlyCameraTransition.cpp">
+      <Filter>Source Files\fsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\transitions\EnterExitFreeModeOnlyPlayerTransition.cpp">
+      <Filter>Source Files\fsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\InitialState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\LoadingState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\ShutDownState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\StartState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\transitions\EnterLoadingTransition.cpp">
+      <Filter>Source Files\fsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\states\RunState.cpp">
+      <Filter>Source Files\fsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\transitions\EnterRunTransition.cpp">
+      <Filter>Source Files\fsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\transitions\EnterStartTransition.cpp">
+      <Filter>Source Files\fsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsm\transitions\EnterShutDownTransition.cpp">
+      <Filter>Source Files\fsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\WaterRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\EntitiesPatch.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\GameEntity.cpp">
+      <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\fragment\f_default.cg">
@@ -1396,5 +1579,10 @@
     <None Include="data\shaders\vertex\v_model_animated.cg">
       <Filter>Source Files\shaders\vertex</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Test.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

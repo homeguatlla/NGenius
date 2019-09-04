@@ -11,14 +11,19 @@ ButtonLeftEvent::~ButtonLeftEvent()
 {
 }
 
-ButtonLeftEvent* ButtonLeftEvent::DoClone(const void* data) const
+std::shared_ptr<GameEvent> ButtonLeftEvent::DoClone(const void* data) const
 {
 	const InputSystem::MouseData* mouseData = reinterpret_cast<const InputSystem::MouseData*>(data);
 
-	ButtonLeftEvent* buttonLeftEvent = new ButtonLeftEvent();
+	std::shared_ptr<ButtonLeftEvent> buttonLeftEvent = std::make_shared<ButtonLeftEvent>();
 	buttonLeftEvent->SetAction(mouseData->mAction);
 
 	return buttonLeftEvent;
+}
+
+std::shared_ptr<GameEvent> ButtonLeftEvent::Create()
+{
+	return std::make_shared<ButtonLeftEvent>();
 }
 
 void ButtonLeftEvent::SetAction(int action)

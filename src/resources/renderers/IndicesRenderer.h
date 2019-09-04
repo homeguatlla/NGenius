@@ -1,6 +1,8 @@
 #pragma once
 #include "IRenderer.h"
+#include "../Memory.h"
 #include<string>
+
 
 class Model;
 class IMaterial;
@@ -14,7 +16,11 @@ public:
 	~IndicesRenderer();
 
 	IndicesRenderer* DoClone() const override { return nullptr; }
-	//const std::string GetName() const override;
+	static std::string GetClassName() { return std::string("IndicesRenderer"); }
+	static IRenderer* Create(Model* model, IMaterial* material)
+	{
+		return DBG_NEW IndicesRenderer(model, material);
+	}
 
 private:
 	bool IsInstancingAllowed() const override;

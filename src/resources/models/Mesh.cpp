@@ -9,7 +9,7 @@ const float EPSILON2 = EPSILON * EPSILON;
 
 Mesh::Mesh()
 {
-	mModelID = ++IDCounter;
+	mMeshID = ++IDCounter;
 }
 
 Mesh::Mesh(const std::vector<glm::vec3>& vertexs,
@@ -19,7 +19,7 @@ Mesh::Mesh(const std::vector<glm::vec3>& vertexs,
 	mTextureCoords(textureCoords),
 	mIndexes(indexes)
 {
-	mModelID = ++IDCounter;
+	mMeshID = ++IDCounter;
 	assert(vertexs.size() > 0);
 }
 
@@ -32,17 +32,31 @@ Mesh::Mesh(const std::vector<glm::vec3>& vertexs,
 	mIndexes(indexes),
 	mNormals(normals)
 {
-	mModelID = ++IDCounter;
+	mMeshID = ++IDCounter;
 	assert(vertexs.size() > 0);
+	assert(normals.size() > 0);
 }
 
-Mesh::~Mesh()
+Mesh::Mesh(const std::vector<glm::vec3>& vertexs,
+	const std::vector<glm::vec2>& textureCoords,
+	const std::vector<unsigned int>& indexes,
+	const std::vector<glm::vec3>& normals,
+	const std::vector<glm::vec3>& tangents) :
+	mVertexs(vertexs),
+	mTextureCoords(textureCoords),
+	mIndexes(indexes),
+	mNormals(normals),
+	mTangents(tangents)
 {
+	mMeshID = ++IDCounter;
+	assert(vertexs.size() > 0);
+	assert(normals.size() > 0);
+	assert(tangents.size() > 0);
 }
 
 unsigned int Mesh::GetID() const
 {
-	return mModelID;
+	return mMeshID;
 }
 
 void Mesh::SetVertexs(std::vector<glm::vec3>& vertexs)
@@ -203,7 +217,7 @@ std::vector<glm::ivec4>& Mesh::GetVertexsJointsIDs()
 
 void Mesh::CreateWeightsAndJointsVectors()
 {
-	for (int i = 0; i < mTempVertexWeights.size(); ++i)
+	for (unsigned int i = 0; i < mTempVertexWeights.size(); ++i)
 	{
 		if (mTempVertexWeights[i].size() > 4)
 		{
@@ -211,7 +225,7 @@ void Mesh::CreateWeightsAndJointsVectors()
 		}
 
 		float totalValue = 0.0f;
-		for (int j = 0; j < mTempVertexWeights[i].size() && j < 4; ++j)
+		for (unsigned int j = 0; j < mTempVertexWeights[i].size() && j < 4; ++j)
 		{
 			totalValue += mTempVertexWeights[i][j];
 		}
@@ -247,7 +261,7 @@ void Mesh::ReorderVertexWeightAndJointIdsToHaveGreaterFirst(std::vector<float>& 
 {
 	std::vector<std::pair<float, int>> tempVector;
 
-	for (int i = 0; i < weights.size(); ++i)
+	for (unsigned int i = 0; i < weights.size(); ++i)
 	{
 		tempVector.push_back(std::pair<float, int>(weights[i], joints[i]));
 	}
@@ -260,7 +274,7 @@ void Mesh::ReorderVertexWeightAndJointIdsToHaveGreaterFirst(std::vector<float>& 
 		return a.first > b.first;
 	});
 
-	for (int i = 0; i < tempVector.size(); ++i)
+	for (unsigned int i = 0; i < tempVector.size(); ++i)
 	{
 		weights.push_back(tempVector[i].first);
 		joints.push_back(tempVector[i].second);
@@ -279,18 +293,31 @@ void Mesh::CalculateNormals()
 	std::vector<Face> faces;
 	faces.resize(numFaces);
 
-	int vertex = 0;
-	for (unsigned int face = 0 ; face < numFaces; ++face)
+	int index = 0;
+	for (unsigned int face = 0; face < numFaces; ++face)
 	{
-		faces[face].vertex[0] = mVertexs[vertex];
-		faces[face].vertex[1] = mVertexs[vertex + 1];
-		faces[face].vertex[2] = mVertexs[vertex + 2];
+		int index1 = index;
+		int index2 = index + 1;
+		int index3 = index + 2;
+
+		faces[face].vertex[0] = mVertexs[index1];
+		faces[face].vertex[1] = mVertexs[index2];
+		faces[face].vertex[2] = mVertexs[index3];
 
 		glm::vec3 normal = CalculateTriangleNormalFromVertex(faces[face].vertex[0], faces[face].vertex[1], faces[face].vertex[2]);
 		faces[face].normal = normal;
-		vertex += 3;
+		index += 3;
 	}
 
+	if (mNormals.empty())
+	{
+		for (unsigned int i = 0; i < mVertexs.size(); ++i)
+		{
+			mNormals.push_back(glm::vec3(0.0f));
+		}
+	}
+
+	//TODO slow method
 	for (unsigned int i = 0; i < mVertexs.size(); ++i)
 	{
 		glm::vec3 normal(0.0f);
@@ -322,8 +349,8 @@ void Mesh::CalculateTangents()
 	assert(mVertexs.size() > 0);
 	assert(mTextureCoords.size() > 0);
 
-	std::vector<glm::vec3> tan1(0.0f);
-	std::vector<glm::vec3> tan2(0.0f);
+	std::vector<glm::vec3> tan1(0.0);
+	std::vector<glm::vec3> tan2(0.0);
 
 	tan1.resize(mVertexs.size());
 	tan2.resize(mVertexs.size());

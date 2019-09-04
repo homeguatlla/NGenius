@@ -19,11 +19,6 @@ mLocationHeight(-1)
 {
 }
 
-
-VerticalBlurShader::~VerticalBlurShader()
-{
-}
-
 void VerticalBlurShader::LoadData(const ICamera* camera, const Transformation* transformation, IMaterial* material)
 {
 	MaterialEffectDiffuseTexture* effectDiffuse = material->GetEffect<MaterialEffectDiffuseTexture>();

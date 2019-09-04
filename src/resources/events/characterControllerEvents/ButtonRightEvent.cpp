@@ -2,6 +2,7 @@
 #include "ButtonRightEvent.h"
 #include "../../systems/InputSystem.h"
 #include <GLFW/glfw3.h>
+#include "../Memory.h"
 
 ButtonRightEvent::ButtonRightEvent() : mIsPressed(false)
 {
@@ -11,14 +12,19 @@ ButtonRightEvent::~ButtonRightEvent()
 {
 }
 
-ButtonRightEvent* ButtonRightEvent::DoClone(const void* data) const
+std::shared_ptr<GameEvent> ButtonRightEvent::DoClone(const void* data) const
 {
 	const InputSystem::MouseData* mouseData = reinterpret_cast<const InputSystem::MouseData*>(data);
 
-	ButtonRightEvent* buttonRightEvent = new ButtonRightEvent();
+	std::shared_ptr<ButtonRightEvent> buttonRightEvent = std::make_shared<ButtonRightEvent>();
 	buttonRightEvent->SetAction(mouseData->mAction);
 
 	return buttonRightEvent;
+}
+
+std::shared_ptr<GameEvent> ButtonRightEvent::Create()
+{
+	return std::make_shared<ButtonRightEvent>();
 }
 
 void ButtonRightEvent::SetAction(int action)

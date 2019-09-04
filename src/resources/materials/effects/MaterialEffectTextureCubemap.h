@@ -1,7 +1,9 @@
 #pragma once
 #include "../IMaterialEffect.h"
+#include <string>
 
 class TextureCubemap;
+
 
 class MaterialEffectTextureCubemap : public IMaterialEffect
 {
@@ -9,7 +11,11 @@ class MaterialEffectTextureCubemap : public IMaterialEffect
 	TextureCubemap* mTexture2;
 	float mBlendFactor;
 
+	std::string mTexture1Name;
+	std::string mTexture2Name;
+
 public:
+	MaterialEffectTextureCubemap();
 	MaterialEffectTextureCubemap(TextureCubemap* textureCubemap1, TextureCubemap* textureCubemap2, float blendFactor);
 	virtual ~MaterialEffectTextureCubemap();
 
@@ -23,5 +29,12 @@ public:
 	void CopyValuesFrom(IMaterial* material) override;
 
 	MaterialEffectTextureCubemap* DoClone() const override;
+	static std::string GetClassName() { return std::string("MaterialEffectTextureCubemap"); }
+	static IMaterialEffect* Create(IMaterial* material);
+	void Build(TexturesLibrary* texturesLibrary) override;
+
+	// Heredado vía IMaterialEffect
+	void ReadFrom(core::utils::IDeserializer * source) override;
+	void WriteTo(core::utils::ISerializer * destination) override;
 };
 

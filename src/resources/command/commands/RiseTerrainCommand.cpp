@@ -2,8 +2,9 @@
 #include "RiseTerrainCommand.h"
 #include "../../entities/Terrain.h"
 #include "../../../../GameConstants.h"
+#include "../../IGameEntity.h"
 
-RiseTerrainCommand::RiseTerrainCommand(GameEntity* entity) : 
+RiseTerrainCommand::RiseTerrainCommand(IGameEntity* entity) : 
 	ICommand(entity),
 	mScale(0.0f)
 {

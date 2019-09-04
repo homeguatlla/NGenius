@@ -3,13 +3,13 @@
 #include "../scene/IGameSceneListener.h"
 #include <vector>
 
-class GameEntity;
+class IGameEntity;
 class InputHandler;
 
 class InputSystem : public IInputListener, public IGameSceneListener
 {
-	std::vector<GameEntity*> mEntities;
-	typedef std::vector<GameEntity*>::iterator GameEntitiesIterator;
+	std::vector<IGameEntity*> mEntities;
+	typedef std::vector<IGameEntity*>::iterator GameEntitiesIterator;
 
 	InputHandler* mInputHandler;
 
@@ -35,6 +35,7 @@ public:
 	~InputSystem();
 
 	void Update(float elapsedTime);
+	void Reload();
 
 	void OnKey(int key, int action) override;
 	void OnMouseScroll(int button, float scroll) override;
@@ -42,12 +43,13 @@ public:
 	void OnMouseCursorPos(double x, double y) override;
 
 private:
-	bool HasInputComponents(const GameEntity* entity) const;
-	void AddEntity(GameEntity* entity);
-	void RemoveEntity(GameEntity* entity);
+	bool HasInputComponents(const IGameEntity* entity) const;
+	void AddEntity(IGameEntity* entity);
+	void RemoveEntity(IGameEntity* entity);
 	void DispatchEvent(MouseData& data);
 
-	void OnGameEntityAdded(GameEntity* entity) override;
-	void OnGameEntityRemoved(GameEntity* entity) override;
+	void OnGameEntityAdded(IGameEntity* entity) override;
+	void OnGameEntityRemoved(IGameEntity* entity) override;
+	void Release();
 };
 

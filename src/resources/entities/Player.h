@@ -1,5 +1,5 @@
 #pragma once
-#include "../GameEntity.h"
+#include "../BaseGameEntity.h"
 
 class IRenderer;
 class Transformation;
@@ -8,7 +8,7 @@ class CollisionComponent;
 class PhysicsComponent;
 class CharacterComponent;
 
-class Player : public GameEntity
+class Player : public BaseGameEntity<Player>
 {
 	enum State
 	{
@@ -19,9 +19,10 @@ class Player : public GameEntity
 	};
 
 	State mState;
-	const float mRunSpeed;
-	const float mTurnSpeed;
-	const float mUpwardsSpeed;
+	float mRunSpeed;
+	float mTurnSpeed;
+	float mUpwardsSpeed;
+
 	float mCurrentRunSpeed;
 	float mCurrentTurnSpeed;
 	float mCurrentUpwardsSpeed;
@@ -41,7 +42,16 @@ public:
 	Player* DoClone() const override { return nullptr; }
 	void Update(float elapsedTime) override;
 
+	void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
+
+	// Heredado vía ISerializable
+	void ReadFrom(core::utils::IDeserializer* source) override;
+
+	static std::string GetClassName() { return std::string("player"); }
+	static IGameEntity* DoCreate();
+
 private:
+	explicit Player();
 	void UpdateGameEvents();
 	void UpdateIdle(float elapsedTime);
 	void UpdateMoving(float elapsedTime);

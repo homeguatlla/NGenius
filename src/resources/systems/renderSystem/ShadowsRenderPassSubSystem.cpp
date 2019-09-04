@@ -2,7 +2,7 @@
 #include "ShadowsRenderPassSubSystem.h"
 
 #include "RenderSystem.h"
-#include "../../GameEntity.h"
+#include "../../IGameEntity.h"
 #include "../../camera/OrthogonalCamera.h"
 #include "../../camera/ICamera.h"
 
@@ -15,6 +15,8 @@
 #include "../../materials/effects/MaterialEffectMatrix4Array.h"
 #include "../../textures/ITexture.h"
 #include "../../textures/Texture.h"
+#include "../../shaders/ShadersLibrary.h"
+#include "../../../utils/serializer/XMLDeserializer.h"
 
 static const int SHADOWS_TEXTURE_SIZE = 2048;
 
@@ -43,14 +45,14 @@ void ShadowsRenderPassSubSystem::Init()
 		mShadowCastCamera = CreateShadowCastCamera(mDirectionalLightDirection);
 		mRenderSystem->AddCamera(mShadowCastCamera);
 		mRenderPass = CreateShadowRenderPass();
-		mRenderSystem->AddRenderPass(mRenderPass);
+		mRenderSystem->AddOrReplaceRenderPass(mRenderPass);
 		mIsInitialized = true;
 	}
 }
 
 void ShadowsRenderPassSubSystem::Update()
 {
-	if (mIsShadowCastEnabled)
+	if (mIsInitialized && mIsShadowCastEnabled && HasTarget())
 	{
 		UpdateShadowCastMatrix();
 	}
@@ -65,7 +67,18 @@ void ShadowsRenderPassSubSystem::UpdateShadowCastMatrix()
 	mShadowMapMatrix = CalculateShadowMapMatrix(mShadowCastCamera);
 }
 
-void ShadowsRenderPassSubSystem::SetCastingShadowsTarget(const GameEntity* target)
+void ShadowsRenderPassSubSystem::ReadFrom(core::utils::IDeserializer* source)
+{
+	source->BeginAttribute("shadows");
+		source->ReadParameter("is_enabled", &mIsShadowCastEnabled);
+	source->EndAttribute();
+}
+
+void ShadowsRenderPassSubSystem::WriteTo(core::utils::ISerializer *destination)
+{
+}
+
+void ShadowsRenderPassSubSystem::SetCastingShadowsTarget(const IGameEntity* target)
 {
 	mTarget = target;
 }
@@ -92,7 +105,7 @@ void ShadowsRenderPassSubSystem::UpdateState()
 		}
 		else
 		{
-			mRenderSystem->AddRenderPass(mRenderPass);
+			mRenderSystem->AddOrReplaceRenderPass(mRenderPass);
 		}
 		mShadowMapTexture->SetActive(mIsShadowCastEnabled);
 	}
@@ -135,7 +148,7 @@ glm::mat4 ShadowsRenderPassSubSystem::CalculateShadowMapMatrix(const ICamera* ca
 
 ICamera* ShadowsRenderPassSubSystem::CreateShadowCastCamera(const glm::vec3& directionalLightDirection)
 {
-	ICamera* camera = new OrthogonalCamera("shadow_camera", mScreenWidth * 0.01f, mScreenHeight * 0.01f, -10.0f, 20.0f);
+	ICamera* camera = DBG_NEW OrthogonalCamera("shadow_camera", mScreenWidth * 0.01f, mScreenHeight * 0.01f, -10.0f, 20.0f);
 
 	return camera;
 }
@@ -144,7 +157,7 @@ RenderPass* ShadowsRenderPassSubSystem::CreateShadowRenderPass()
 {
 	//SHADOW RENDER PASS
 	//SHADOW
-	IFrameBuffer* frameShadowBuffer = new IFrameBuffer(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight));
+	IFrameBuffer* frameShadowBuffer = DBG_NEW IFrameBuffer(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight));
 
 	//Texture* colorTexture = static_cast<Texture*>(mRenderSystem->CreateColorTexture("shadow_color", glm::ivec2(SHADOWS_TEXTURE_SIZE)));
 
@@ -152,10 +165,10 @@ RenderPass* ShadowsRenderPassSubSystem::CreateShadowRenderPass()
 	frameShadowBuffer->SetDepthTextureAttachment(mShadowMapTexture);
 	frameShadowBuffer->Init();
 
-	RenderPass* shadowPass = new RenderPass(static_cast<ICamera*>(mShadowCastCamera), IRenderer::LAYER_OTHER);
+	RenderPass* shadowPass = DBG_NEW RenderPass("shadows_render_pass", static_cast<ICamera*>(mShadowCastCamera), IRenderer::LAYER_OTHER);
 	shadowPass->SetFrameBufferOutput(frameShadowBuffer);
 
-	IMaterial* material = mRenderSystem->CreateMaterial("shadow", mRenderSystem->GetShader("shadow"));
+	IMaterial* material = mRenderSystem->CreateMaterial("shadow", mRenderSystem->GetShader(ShadersLibrary::SHADOW_SHADER_NAME));
 	material->AddEffect(new MaterialEffectDiffuseTexture(mShadowMapTexture, glm::vec3(1.0f), 1.0f));
 	//for animated models
 	material->AddEffect(new MaterialEffectMatrix4Array());

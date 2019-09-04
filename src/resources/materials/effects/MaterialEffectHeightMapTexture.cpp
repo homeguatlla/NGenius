@@ -1,7 +1,18 @@
 #include "stdafx.h"
 #include "MaterialEffectHeightMapTexture.h"
 #include "../IMaterial.h"
+#include "../../../utils/serializer/XMLDeserializer.h"
+#include "../../../utils/Log.h"
+#include "../../textures/TexturesLibrary.h"
+#include "../Memory.h"
+
 #include <assert.h>
+
+MaterialEffectHeightMapTexture::MaterialEffectHeightMapTexture() :
+	mTexture(nullptr),
+	mTile(1.0f)
+{
+}
 
 MaterialEffectHeightMapTexture::MaterialEffectHeightMapTexture(ITexture* texture, float tile) :
 mTexture(texture),
@@ -37,5 +48,34 @@ void MaterialEffectHeightMapTexture::CopyValuesFrom(IMaterial* material)
 
 MaterialEffectHeightMapTexture* MaterialEffectHeightMapTexture::DoClone() const
 {
-	return new MaterialEffectHeightMapTexture(*this);
+	return DBG_NEW MaterialEffectHeightMapTexture(*this);
+}
+
+IMaterialEffect* MaterialEffectHeightMapTexture::Create(IMaterial* material)
+{
+	MaterialEffectHeightMapTexture* effect = DBG_NEW MaterialEffectHeightMapTexture();
+	material->AddOrReplaceEffect(effect);
+	return effect;
+}
+
+void MaterialEffectHeightMapTexture::Build(TexturesLibrary* texturesLibrary)
+{
+	if (!mTextureName.empty())
+	{
+		mTexture = texturesLibrary->GetElement(mTextureName);
+		if (mTexture == nullptr)
+		{
+			Log(Log::LOG_WARNING) << "TextureHeightmap " << mTextureName << " not found. Material Effect couldn't be build \n";
+		}
+	}
+}
+
+void MaterialEffectHeightMapTexture::ReadFrom(core::utils::IDeserializer * source)
+{
+	source->ReadParameter("tile", &mTile);
+	source->ReadParameter("texture", mTextureName);
+}
+
+void MaterialEffectHeightMapTexture::WriteTo(core::utils::ISerializer * destination)
+{
 }

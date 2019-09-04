@@ -4,21 +4,21 @@
 #include "QuadTree.h"
 #include "../../../AABB.h"
 
-class GameEntity;
+class IGameEntity;
 
 class GameEntityQuadTree : public ISpacePartition
 {
-	QuadTree<GameEntity>* mQuadTree;
+	QuadTree<IGameEntity>* mQuadTree;
 public:
 	static const int MAX_QUADTREE_LEVELS;
 
 	GameEntityQuadTree(const AABB& boundingBox);
 	virtual ~GameEntityQuadTree();
 
-	void AddGameEntity(GameEntity* entity) override;
-	void RemoveGameEntity(GameEntity* entity) override;
-	void Query(const AABB& aabb, std::vector<GameEntity*>& result) override;
-	void Query(const AABB& aabb, const Frustum& frustum, std::vector<GameEntity*>& result) override;
+	void AddGameEntity(IGameEntity* entity) override;
+	void RemoveGameEntity(IGameEntity* entity) override;
+	void Query(const AABB& aabb, std::vector<IGameEntity*>& result) override;
+	void Query(const AABB& aabb, const Frustum& frustum, std::vector<IGameEntity*>& result) override;
 	unsigned int GetNumEntities() const override;
 };
 
