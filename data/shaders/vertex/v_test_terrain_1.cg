@@ -64,8 +64,6 @@ void main()
 	//light
 	lightPosition = lightPositionWorldspace;
 	eyePosition = cameraPosition;
-	//lightDirection = toTangentSpace * normalize(lightPositionWorldspace);
-	//eyeDirection = toTangentSpace * normalize(cameraPosition - positionWorldspace);
 	
 	//fog
 	float distance = length(positionRelativeToCamera);

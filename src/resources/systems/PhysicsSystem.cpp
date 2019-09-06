@@ -7,8 +7,11 @@
 #include "../components/CollisionComponent.h"
 #include "../components/EnergyWallCollisionComponent.h"
 #include "../components/PhysicsComponent.h"
+#include "../components/GravityComponent.h"
 #include "../entities/Terrain.h"
 #include "../renderers/IRenderer.h"
+
+
 
 #include <iostream>
 #include "../entities/Player.h"
@@ -39,34 +42,21 @@ void PhysicsSystem::Update(float deltaTime)
 {
 	for (IGameEntity* entity : mEntities)
 	{
-		ApplyMRU(deltaTime, entity);
-		CheckCollisions(entity);		
+		UpdateParticlesPositions(entity);
+	}
+
+	mEngine.Update(deltaTime);
+
+	for (IGameEntity* entity : mEntities)
+	{
+		UpdateEntitiesPositions(entity);
+		CheckCollisions(entity);
 	}
 }
 
 void PhysicsSystem::Reload()
 {
 	Release();
-}
-
-void PhysicsSystem::ApplyMRU(float deltaTime, IGameEntity* entity)
-{
-	if (entity->HasComponent<PhysicsComponent>())
-	{
-		PhysicsComponent* physicsComponent = entity->GetComponent<PhysicsComponent>();
-
-		Transformation* transformation = entity->GetTransformation();
-		glm::vec3 position = transformation->GetPosition();
-
-		const glm::vec3 gravity = physicsComponent->GetGravity();
-		glm::vec3 velocity = physicsComponent->GetVelocity();
-
-		velocity = velocity + gravity * deltaTime;
-		position = position + velocity * deltaTime;
-
-		transformation->SetPosition(position);
-		physicsComponent->SetVelocity(velocity);
-	}
 }
 
 void PhysicsSystem::CheckCollisions(IGameEntity* entity)
@@ -140,10 +130,7 @@ void PhysicsSystem::SetEnergyWall(const glm::vec3& position, float radius)
 
 void PhysicsSystem::AddEntity(IGameEntity* entity)
 {
-	if (HasPhysicsComponents(entity))
-	{
-		mEntities.push_back(entity);
-	}
+	mEntities.push_back(entity);
 }
 
 void PhysicsSystem::RemoveEntity(IGameEntity* entity)
@@ -183,6 +170,12 @@ void PhysicsSystem::OnGameEntityAdded(IGameEntity* entity)
 	if (HasPhysicsComponents(entity))
 	{
 		AddEntity(entity);
+		PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
+		if (component != nullptr)
+		{
+			mEngine.AddParticle(component->GetParticle());
+			AddGenerators(component->GetParticle(), entity);
+		}		
 	}
 
 	//TODO esto no funcionará así, pero por ahora sí. 
@@ -191,6 +184,16 @@ void PhysicsSystem::OnGameEntityAdded(IGameEntity* entity)
 		SetTerrain(static_cast<Terrain*>(entity));
 	}
 }
+
+void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::Particle>& particle, IGameEntity* entity)
+{
+	GravityComponent* gravityComponent = entity->GetComponent<GravityComponent>();
+	if (gravityComponent != nullptr)
+	{
+		mEngine.RegisterParticleForceGenerator(particle, gravityComponent->GetGenerator());
+	}
+}
+
 
 void PhysicsSystem::OnGameEntityRemoved(IGameEntity* entity)
 {
@@ -279,6 +282,27 @@ bool PhysicsSystem::ApplyEnergyWallCollision(IGameEntity*entity, glm::vec3& coll
 
 	//is colliding
 	return isColliding;
+}
+
+void PhysicsSystem::UpdateParticlesPositions(IGameEntity* entity)
+{
+	PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
+	if (component != nullptr)
+	{
+		std::shared_ptr<NPhysics::Particle> particle = component->GetParticle();
+		glm::vec3 position = entity->GetTransformation()->GetPosition();
+		particle->SetPosition(position);
+	}
+}
+
+void PhysicsSystem::UpdateEntitiesPositions(IGameEntity* entity)
+{
+	PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
+	if (component != nullptr)
+	{
+		std::shared_ptr<NPhysics::Particle> particle = component->GetParticle();
+		entity->GetTransformation()->SetPosition(particle->GetPosition());
+	}
 }
 
 BaseVisitable<>::ReturnType PhysicsSystem::Accept(BaseVisitor& guest)

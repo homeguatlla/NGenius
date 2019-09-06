@@ -3,6 +3,7 @@
 #include "../../visitor/BaseVisitable.h"
 #include "../scene/IGameSceneListener.h"
 #include <vector>
+#include "../../../../NPhysics/NPhysicsEngine.h"
 
 class IGameEntity;
 class Terrain;
@@ -13,6 +14,8 @@ class PhysicsSystem : public BaseVisitable<>, public IGameSceneListener
 	const Terrain* mTerrain;
 	float mEnergyWallRadius;
 	glm::vec3 mEnergyWallPosition;
+
+	NPhysics::NPhysicsEngine mEngine;
 
 public:
 	static const glm::vec3 GRAVITY_VALUE;
@@ -37,10 +40,11 @@ private:
 	void RemoveEntity(IGameEntity* entity);
 	bool HasPhysicsComponents(const IGameEntity* entity) const;
 
+	void AddGenerators(std::shared_ptr<NPhysics::Particle>& particle, IGameEntity* entity);
+
 	void OnGameEntityAdded(IGameEntity* entity) override;
 	void OnGameEntityRemoved(IGameEntity* entity) override;
 
-	void ApplyMRU(float deltaTime, IGameEntity* entity);
 	bool ApplyCollisions(IGameEntity* entity, float *groundHeight);
 	bool ApplyEnergyWallCollision(IGameEntity*entity, glm::vec3& collisionPoint);
 	void CheckCollisions(IGameEntity* entity);
@@ -48,5 +52,8 @@ private:
 
 	void CheckCollisionTerrain(IGameEntity* entity);
 	void CheckCollisionEnergyWall(IGameEntity* entity);
+
+	void UpdateParticlesPositions(IGameEntity* entity);
+	void UpdateEntitiesPositions(IGameEntity* entity);
 };
 

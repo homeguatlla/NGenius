@@ -879,6 +879,18 @@
     <ClInclude Include="src\resources\entities\EntitiesPatch.h">
       <Filter>Header Files\resources\entities</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\components\BuoyancyComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\DragComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\GravityComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\SpringComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1453,6 +1465,18 @@
     </ClCompile>
     <ClCompile Include="src\resources\entities\GameEntity.cpp">
       <Filter>Source Files\resources\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\BuoyancyComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\DragComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\GravityComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\SpringComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

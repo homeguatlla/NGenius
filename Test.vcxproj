@@ -92,8 +92,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\assimp-4.1.0\lib\Release;$(SolutionDir)\fbx\2019.0\lib\vs2015\x86\release;$(SolutionDir)\glew-2.1.0\bin\Release\Win32;$(SolutionDir)\glew-2.1.0\lib\Release\Win32;$(SolutionDir)\glfw-3.2.1.bin.WIN32\lib-vc2015;$(SolutionDir)/lpng1634\projects\vstudio\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;OPENGL32.lib;libpng16.lib;zlib.lib;glew32.lib;libfbxsdk.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Debug;$(SolutionDir)\assimp-4.1.0\lib\Release;$(SolutionDir)\fbx\2019.0\lib\vs2015\x86\release;$(SolutionDir)\glew-2.1.0\bin\Release\Win32;$(SolutionDir)\glew-2.1.0\lib\Release\Win32;$(SolutionDir)\glfw-3.2.1.bin.WIN32\lib-vc2015;$(SolutionDir)/lpng1634\projects\vstudio\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;OPENGL32.lib;libpng16.lib;zlib.lib;glew32.lib;libfbxsdk.lib;assimp-vc140-mt.lib;NPhysics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -129,8 +129,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\assimp-4.1.0\lib\Release;$(SolutionDir)\fbx\2019.0\lib\vs2015\x86\release;$(SolutionDir)\glew-2.1.0\bin\Release\Win32;$(SolutionDir)\glew-2.1.0\lib\Release\Win32;$(SolutionDir)\glfw-3.2.1.bin.WIN32\lib-vc2015;$(SolutionDir)/lpng1634\projects\vstudio\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;OPENGL32.lib;libpng16.lib;zlib.lib;glew32.lib;libfbxsdk.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Debug;$(SolutionDir)\assimp-4.1.0\lib\Release;$(SolutionDir)\fbx\2019.0\lib\vs2015\x86\release;$(SolutionDir)\glew-2.1.0\bin\Release\Win32;$(SolutionDir)\glew-2.1.0\lib\Release\Win32;$(SolutionDir)\glfw-3.2.1.bin.WIN32\lib-vc2015;$(SolutionDir)/lpng1634\projects\vstudio\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;OPENGL32.lib;libpng16.lib;zlib.lib;glew32.lib;libfbxsdk.lib;assimp-vc140-mt.lib;NPhysics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
@@ -215,12 +215,15 @@
     <ClInclude Include="src\resources\command\ICommand.h" />
     <ClInclude Include="src\resources\components\AnimationComponent.h" />
     <ClInclude Include="src\resources\components\BillboardComponent.h" />
+    <ClInclude Include="src\resources\components\BuoyancyComponent.h" />
     <ClInclude Include="src\resources\components\CameraComponent.h" />
     <ClInclude Include="src\resources\components\CharacterComponent.h" />
     <ClInclude Include="src\resources\components\DebugComponent.h" />
+    <ClInclude Include="src\resources\components\DragComponent.h" />
     <ClInclude Include="src\resources\components\EnergyWallCollisionComponent.h" />
     <ClInclude Include="src\resources\components\EnvironmentAffectedComponent.h" />
     <ClInclude Include="src\resources\components\EnvironmentModificatorComponent.h" />
+    <ClInclude Include="src\resources\components\GravityComponent.h" />
     <ClInclude Include="src\resources\components\IComponent.h" />
     <ClInclude Include="src\resources\components\InputComponent.h" />
     <ClInclude Include="src\resources\components\LODComponent.h" />
@@ -229,6 +232,7 @@
     <ClInclude Include="src\resources\components\CollisionComponent.h" />
     <ClInclude Include="src\resources\components\RotationComponent.h" />
     <ClInclude Include="src\resources\components\SpacePartitionComponent.h" />
+    <ClInclude Include="src\resources\components\SpringComponent.h" />
     <ClInclude Include="src\resources\components\ThirdPersonCameraComponent.h" />
     <ClInclude Include="src\resources\entities\EnergyWall.h" />
     <ClInclude Include="src\resources\entities\GameEntity.h" />
@@ -436,12 +440,15 @@
     <ClCompile Include="src\resources\command\ICommand.cpp" />
     <ClCompile Include="src\resources\components\AnimationComponent.cpp" />
     <ClCompile Include="src\resources\components\BillboardComponent.cpp" />
+    <ClCompile Include="src\resources\components\BuoyancyComponent.cpp" />
     <ClCompile Include="src\resources\components\CameraComponent.cpp" />
     <ClCompile Include="src\resources\components\CharacterComponent.cpp" />
     <ClCompile Include="src\resources\components\DebugComponent.cpp" />
+    <ClCompile Include="src\resources\components\DragComponent.cpp" />
     <ClCompile Include="src\resources\components\EnergyWallCollisionComponent.cpp" />
     <ClCompile Include="src\resources\components\EnvironmentAffectedComponent.cpp" />
     <ClCompile Include="src\resources\components\EnvironmentModificatorComponent.cpp" />
+    <ClCompile Include="src\resources\components\GravityComponent.cpp" />
     <ClCompile Include="src\resources\components\IComponent.cpp" />
     <ClCompile Include="src\resources\components\InputComponent.cpp" />
     <ClCompile Include="src\resources\components\LODComponent.cpp" />
@@ -450,6 +457,7 @@
     <ClCompile Include="src\resources\components\CollisionComponent.cpp" />
     <ClCompile Include="src\resources\components\RotationComponent.cpp" />
     <ClCompile Include="src\resources\components\SpacePartitionComponent.cpp" />
+    <ClCompile Include="src\resources\components\SpringComponent.cpp" />
     <ClCompile Include="src\resources\components\ThirdPersonCameraComponent.cpp" />
     <ClCompile Include="src\resources\entities\EnergyWall.cpp" />
     <ClCompile Include="src\resources\entities\GameEntity.cpp" />

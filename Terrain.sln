@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test.vcxproj", "{D1C89538-D443-4B49-BC3D-81A2105D625D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NPhysics", "..\NPhysics\NPhysics.vcxproj", "{FBEDAC90-78F7-4922-9A41-2AFDE3ACD59C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NPhysicsTest", "..\NPhysicsTest\NPhysicsTest.vcxproj", "{2E183EEE-14A4-4280-9B14-21381E2158B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,22 @@ Global
 		{D1C89538-D443-4B49-BC3D-81A2105D625D}.Release|Win32.Build.0 = Release|Win32
 		{D1C89538-D443-4B49-BC3D-81A2105D625D}.Release|x64.ActiveCfg = Release|x64
 		{D1C89538-D443-4B49-BC3D-81A2105D625D}.Release|x64.Build.0 = Release|x64
+		{FBEDAC90-78F7-4922-9A41-2AFDE3ACD59C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FBEDAC90-78F7-4922-9A41-2AFDE3ACD59C}.Debug|Win32.Build.0 = Debug|Win32
+		{FBEDAC90-78F7-4922-9A41-2AFDE3ACD59C}.Debug|x64.ActiveCfg = Debug|x64
+		{FBEDAC90-78F7-4922-9A41-2AFDE3ACD59C}.Debug|x64.Build.0 = Debug|x64
+		{FBEDAC90-78F7-4922-9A41-2AFDE3ACD59C}.Release|Win32.ActiveCfg = Release|Win32
+		{FBEDAC90-78F7-4922-9A41-2AFDE3ACD59C}.Release|Win32.Build.0 = Release|Win32
+		{FBEDAC90-78F7-4922-9A41-2AFDE3ACD59C}.Release|x64.ActiveCfg = Release|x64
+		{FBEDAC90-78F7-4922-9A41-2AFDE3ACD59C}.Release|x64.Build.0 = Release|x64
+		{2E183EEE-14A4-4280-9B14-21381E2158B8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2E183EEE-14A4-4280-9B14-21381E2158B8}.Debug|Win32.Build.0 = Debug|Win32
+		{2E183EEE-14A4-4280-9B14-21381E2158B8}.Debug|x64.ActiveCfg = Debug|x64
+		{2E183EEE-14A4-4280-9B14-21381E2158B8}.Debug|x64.Build.0 = Debug|x64
+		{2E183EEE-14A4-4280-9B14-21381E2158B8}.Release|Win32.ActiveCfg = Release|Win32
+		{2E183EEE-14A4-4280-9B14-21381E2158B8}.Release|Win32.Build.0 = Release|Win32
+		{2E183EEE-14A4-4280-9B14-21381E2158B8}.Release|x64.ActiveCfg = Release|x64
+		{2E183EEE-14A4-4280-9B14-21381E2158B8}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

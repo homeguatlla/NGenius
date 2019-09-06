@@ -64,6 +64,7 @@
 #include "resources/components/PhysicsComponent.h"
 #include "resources/components/OverWaterComponent.h"
 #include "resources/components/ThirdPersonCameraComponent.h"
+#include "resources/components/GravityComponent.h"
 
 #include "resources/events/characterControllerEvents/BackwardEvent.h"
 #include "resources/events/characterControllerEvents/ButtonLeftEvent.h"
@@ -109,6 +110,7 @@ mGameScene(nullptr)
 	InstantiableObject::RegisterComponentType<RotationComponent>();
 	InstantiableObject::RegisterComponentType<SpacePartitionComponent>();
 	InstantiableObject::RegisterComponentType<ThirdPersonCameraComponent>();
+	InstantiableObject::RegisterComponentType<GravityComponent>();
 
 	//Registering game events
 	InstantiableObject::RegisterGameEvent<BackwardEvent>();
