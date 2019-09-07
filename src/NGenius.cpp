@@ -65,6 +65,8 @@
 #include "resources/components/OverWaterComponent.h"
 #include "resources/components/ThirdPersonCameraComponent.h"
 #include "resources/components/GravityComponent.h"
+#include "resources/components/BuoyancyComponent.h"
+#include "resources/components/DragComponent.h"
 
 #include "resources/events/characterControllerEvents/BackwardEvent.h"
 #include "resources/events/characterControllerEvents/ButtonLeftEvent.h"
@@ -111,6 +113,8 @@ mGameScene(nullptr)
 	InstantiableObject::RegisterComponentType<SpacePartitionComponent>();
 	InstantiableObject::RegisterComponentType<ThirdPersonCameraComponent>();
 	InstantiableObject::RegisterComponentType<GravityComponent>();
+	InstantiableObject::RegisterComponentType<BuoyancyComponent>();
+	InstantiableObject::RegisterComponentType<DragComponent>();
 
 	//Registering game events
 	InstantiableObject::RegisterGameEvent<BackwardEvent>();

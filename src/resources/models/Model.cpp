@@ -314,8 +314,8 @@ void Model::CalculateAABB()
 
 	for (glm::vec3 vertex : mMesh->GetVertexs())
 	{
-	min = glm::min(min, vertex);
-	max = glm::max(max, vertex);
+		min = glm::min(min, vertex);
+		max = glm::max(max, vertex);
 	}
 	mAABB.SetVertexMinMax(min, max);
 }

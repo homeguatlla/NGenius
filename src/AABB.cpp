@@ -46,7 +46,7 @@ const glm::vec3 AABB::GetCenter() const
 
 const glm::vec3 AABB::GetSize() const
 {
-	return mMax - mMin;
+	return glm::abs(mMax - mMin);
 }
 
 const AABB AABB::Merge(const AABB& aabb) const

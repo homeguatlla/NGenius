@@ -4,10 +4,14 @@
 #include <algorithm>
 
 #include "../IGameEntity.h"
+
 #include "../components/CollisionComponent.h"
 #include "../components/EnergyWallCollisionComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../components/GravityComponent.h"
+#include "../components/BuoyancyComponent.h"
+#include "../components/DragComponent.h"
+
 #include "../entities/Terrain.h"
 #include "../renderers/IRenderer.h"
 
@@ -191,6 +195,18 @@ void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::Particle>& particle,
 	if (gravityComponent != nullptr)
 	{
 		mEngine.RegisterParticleForceGenerator(particle, gravityComponent->GetGenerator());
+	}
+
+	BuoyancyComponent* buoyancyComponent = entity->GetComponent<BuoyancyComponent>();
+	if (buoyancyComponent != nullptr)
+	{
+		mEngine.RegisterParticleForceGenerator(particle, buoyancyComponent->GetGenerator());
+	}
+
+	DragComponent* dragComponent = entity->GetComponent<DragComponent>();
+	if (dragComponent != nullptr)
+	{
+		mEngine.RegisterParticleForceGenerator(particle, dragComponent->GetGenerator());
 	}
 }
 
