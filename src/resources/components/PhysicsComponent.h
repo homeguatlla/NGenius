@@ -11,11 +11,11 @@ class PhysicsComponent : public IComponent
 {
 	bool mIsStatic;
 	glm::vec3 mInitialVelocity;
-	float mMass;
+	float mDensity;
 	std::shared_ptr<NPhysics::Particle> mParticle;
 
 public:
-	PhysicsComponent(bool isStatic, float mass, const glm::vec3& initialVelocity);
+	PhysicsComponent(bool isStatic, float mDensity, const glm::vec3& initialVelocity);
 	virtual ~PhysicsComponent() = default;
 
 	void Init(GameScene* scene, RenderSystem* renderSystem) override;

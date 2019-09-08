@@ -194,7 +194,7 @@
 							<converter mouse="2" event="ZoomEvent"/>
 						</converters>
 					</component>
-					<component is_enabled="true" type="PhysicsComponent" is_static="0"  mass="1">
+					<component is_enabled="true" type="PhysicsComponent" is_static="0"  density="980">
 						<initialVelocity X="0.0" Y="0.0f" Z="0.0"/>
 					</component>
 					<component is_enabled="true" type="GravityComponent">
@@ -240,39 +240,39 @@
 			</entity>
 			<entity is_enabled="true" name="crate" model="crate" material="props_material" layer="8">
 				<transformation>
-					<position X="0.00000" Y="50.000000" Z="5.000000"/>
+					<position X="0.00000" Y="15.000000" Z="5.000000"/>
 					<rotation X="0.000000" Y="0.000000" Z="30.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="PhysicsComponent" is_static="true" mass="4.0">
-						<initialVelocity X="10.0" Y="0.0f" Z="0.0"/>
+					<component is_enabled="true" type="PhysicsComponent" is_static="false" density="50">
+						<initialVelocity X="0.0" Y="0.0f" Z="0.0"/>
 					</component>
 					<component is_enabled="true" type="GravityComponent">
 						<gravity X="0.0" Y="-10.0f" Z="0.0"/>
 					</component>
 					<component is_enabled="true" type="CollisionComponent"/>
-					<component is_enabled="true" type="BuoyancyComponent" liquid_density="1000" volume="0.05"/>
-					<component is_enabled="true" type="DragComponent" k1="2.5" k2="0.41"/>
+					<component is_enabled="true" type="BuoyancyComponent" liquid_density="1000"/>
+					<component is_enabled="true" type="DragComponent" k1="12.5" k2="2.5"/>
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
 			</entity>
 			<entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8">
 				<transformation>
-					<position X="0.00000" Y="50.000000" Z="10.000000"/>
+					<position X="0.00000" Y="18.000000" Z="10.000000"/>
 					<rotation X="-90.000000" Y="0.000000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="PhysicsComponent" is_static="true" mass="0.5">
+					<component is_enabled="true" type="PhysicsComponent" is_static="false" density="55">
 						<initialVelocity X="0.0" Y="0.0f" Z="0.0"/>
 					</component>
 					<component is_enabled="true" type="GravityComponent">
 						<gravity X="0.0" Y="-10.0f" Z="0.0"/>
 					</component>
-					<component is_enabled="true" type="BuoyancyComponent" liquid_density="1000" volume="0.01"/>
-					<component is_enabled="true" type="DragComponent" k1="0.5" k2="0.01"/>
+					<component is_enabled="true" type="BuoyancyComponent" liquid_density="1000"/>
+					<component is_enabled="true" type="DragComponent" k1="20.5" k2="1.65"/>
 					<component is_enabled="true" type="CollisionComponent"/>
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>

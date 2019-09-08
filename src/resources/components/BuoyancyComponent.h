@@ -11,7 +11,7 @@ class BuoyancyComponent : public IComponent
 	std::shared_ptr<NPhysics::IParticleForceGenerator> mGenerator;
 
 public:
-	BuoyancyComponent(float liquidDensity, float volume);
+	BuoyancyComponent(float liquidDensity);
 	virtual ~BuoyancyComponent() = default;
 
 	void Init(GameScene* scene, RenderSystem* renderSystem);
@@ -28,6 +28,5 @@ private:
 
 private:
 	float mLiquidDensity;
-	float mVolume;
 };
 

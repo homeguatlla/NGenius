@@ -67,3 +67,9 @@ void AABB::Expand(const glm::vec3& size)
 	mMin -= size;
 	mMax += size;
 }
+
+float AABB::GetVolume() const
+{
+	glm::vec3 size = GetSize();
+	return size.x * size.y * size.z;
+}

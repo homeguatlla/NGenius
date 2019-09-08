@@ -19,5 +19,6 @@ public:
 	bool Contains(const glm::vec3& point) const;
 	const AABB Merge(const AABB& aabb) const;
 	void Expand(const glm::vec3& size);
+	float GetVolume() const;
 };
 

@@ -9,15 +9,18 @@
 #include "../Memory.h"
 #include "../../../../NPhysics/source/particle/forceGenerators/ParticleBuoyancy.h"
 
-BuoyancyComponent::BuoyancyComponent(float liquidDensity, float volume) : 
-	mLiquidDensity(liquidDensity), 
-	mVolume(volume)
+BuoyancyComponent::BuoyancyComponent(float liquidDensity) : 
+	mLiquidDensity(liquidDensity)
 {
 }
 
 void BuoyancyComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 {
 	const AABB aabb = mParent->GetRenderer()->GetAABB();
+	float volume = aabb.GetVolume();
+	//glm::vec3 size = aabb.GetSize();
+
+	//because the object could be rotated and scaled
 	glm::vec3 max = aabb.GetVertexMax();
 	glm::vec3 min = aabb.GetVertexMin();
 	glm::mat3 matrix = glm::mat3(mParent->GetTransformation()->GetModelMatrix());
@@ -27,10 +30,10 @@ void BuoyancyComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 	float sizeY = max.y > min.y ? max.y - min.y : min.y - max.y;
 	float maxDepth = sizeY * 0.5f;
 	float waterHeight = renderSystem->GetWaterHeight();
-	//mVolume = size.x * size.y * size.z;
+	
 
 	//TODO is water enabled??
-	mGenerator = std::make_shared<NPhysics::ParticleBuoyancy>(maxDepth, mVolume, waterHeight, mLiquidDensity);
+	mGenerator = std::make_shared<NPhysics::ParticleBuoyancy>(maxDepth, volume, waterHeight, mLiquidDensity);
 }
 
 BuoyancyComponent* BuoyancyComponent::DoClone() const
@@ -49,11 +52,9 @@ IComponent* BuoyancyComponent::Create(IGameEntity* entity)
 void BuoyancyComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
 	source->ReadParameter(std::string("liquid_density"), &mLiquidDensity);
-	source->ReadParameter(std::string("volume"), &mVolume);
 }
 
 void BuoyancyComponent::DoWriteTo(core::utils::ISerializer* destination)
 {
 	destination->WriteParameter(std::string("liquid_density"), mLiquidDensity);
-	destination->WriteParameter(std::string("volume"), mVolume);
 }

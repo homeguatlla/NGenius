@@ -180,8 +180,11 @@
 							<converter mouse="2" event="ZoomEvent"/>
 						</converters>
 					</component>
-					<component is_enabled="true" type="PhysicsComponent" is_static="0">
-						<gravity X="0.000000" Y="-9.800000" Z="0.000000"/>
+					<component is_enabled="true" type="PhysicsComponent" is_static="0" density="980">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+					</component>
+					<component is_enabled="true" type="GravityComponent">
+						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
 					</component>
 					<component is_enabled="true" type="CollisionComponent"/>
 				</components>
@@ -216,12 +219,15 @@
 			</entity>
 			<entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8">
 				<transformation>
-					<position X="0.'00000" Y="18.500000" Z="0.000000"/>
+					<position X="0.'00000" Y="10.000000" Z="0.000000"/>
 					<rotation X="-90.000000" Y="0.000000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="PhysicsComponent" is_static="true">
+					<component is_enabled="true" type="PhysicsComponent" is_static="true" density="0.0013">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+					</component>
+					<component is_enabled="true" type="GravityComponent">
 						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
 					</component>
 					<component is_enabled="true" type="CollisionComponent"/>
