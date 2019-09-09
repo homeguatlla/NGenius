@@ -9,20 +9,10 @@ GUITextRenderer::GUITextRenderer(Model* model, IMaterial* material) :
 	SetCullingEnabled(false);
 	SetBlendingEnabled(true);
 	SetBlendingFactors(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	SetDepthBufferEnabled(false);
 }
 
 
 GUITextRenderer::~GUITextRenderer()
 {
-}
-
-void GUITextRenderer::Draw()
-{
-	glDisable(GL_DEPTH_TEST);
-	glDepthMask(false);
-
-	IRenderer::Draw();
-
-	glEnable(GL_DEPTH_TEST);
-	glDepthMask(true);
 }

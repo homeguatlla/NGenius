@@ -14,8 +14,5 @@ public:
 
 	ParticleRenderer* DoClone() const override { return nullptr; }
 	bool IsInstancingAllowed() const override;
-
-private:
-	void Draw() override;
 };
 

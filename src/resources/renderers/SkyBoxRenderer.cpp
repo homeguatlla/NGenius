@@ -7,6 +7,10 @@
 SkyBoxRenderer::SkyBoxRenderer(Model* model, IMaterial* material) :
 	IRenderer(model, material)
 {
+	SetCullingEnabled(true);
+	SetBlendingEnabled(false);
+	SetDepthBufferEnabled(true);
+	SetDepthBufferValues(true, GL_LESS);
 }
 
 
@@ -17,16 +21,4 @@ SkyBoxRenderer::~SkyBoxRenderer()
 bool SkyBoxRenderer::IsInstancingAllowed() const
 {
 	return false;
-}
-
-void SkyBoxRenderer::Draw()
-{
-	//draw the skybox last
-	//glDepthMask(GL_FALSE);
-	glDepthFunc(GL_LEQUAL);
-
-	IRenderer::Draw();
-
-	glDepthFunc(GL_LESS);
-	//glDepthMask(GL_TRUE);
 }

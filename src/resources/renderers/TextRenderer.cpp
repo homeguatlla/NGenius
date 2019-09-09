@@ -17,6 +17,8 @@ IRenderer(model, material)
 	SetCullingEnabled(false);
 	SetBlendingEnabled(true);
 	SetBlendingFactors(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	SetDepthBufferEnabled(true);
+	SetDepthBufferValues(false, GL_LESS);
 }
 
 TextRenderer::~TextRenderer()
@@ -26,13 +28,4 @@ TextRenderer::~TextRenderer()
 bool TextRenderer::IsInstancingAllowed() const
 {
 	return false;
-}
-
-void TextRenderer::Draw()
-{
-	glDepthMask(false);
-	
-	IRenderer::Draw();
-
-	glDepthMask(true);
 }

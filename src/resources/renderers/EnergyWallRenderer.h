@@ -16,7 +16,6 @@ public:
 	~EnergyWallRenderer();
 
 	EnergyWallRenderer* DoClone() const override { return nullptr; }
-	void Draw() override;
 
 private:
 	bool IsInstancingAllowed() const override;

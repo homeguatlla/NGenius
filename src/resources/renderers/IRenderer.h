@@ -48,6 +48,9 @@ protected:
 	bool mIsBlendingEnabled;
 	int mBlendingSFactor;
 	int mBlendingDFactor;
+	bool mIsDepthBufferEnabled;
+	int mDepthBufferMask;
+	int mDepthBufferFunc;
 
 	//virtual void PreRender(VertexBuffersManager& vertexBufferManager) = 0;
 	virtual void Draw();
@@ -104,6 +107,11 @@ public:
 	int GetBlendingSFactor() const { return mBlendingSFactor; }
 	int GetBlendingDFactor() const { return mBlendingDFactor; }
 
+	bool IsDepthBufferEnabled() const { return mIsDepthBufferEnabled; }
+	void SetDepthBufferEnabled(bool enabled) { mIsDepthBufferEnabled = enabled; }
+	void SetDepthBufferValues(int mask, int func);
+	int GetDepthBufferMask() const { return mDepthBufferMask; }
+	int GetDepthBufferFunc() const { return mDepthBufferFunc; }
 	const AABB& GetModelAABB() const;
 	const AABB GetAABB() const;
 

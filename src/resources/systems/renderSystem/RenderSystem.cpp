@@ -84,6 +84,7 @@ mIsPostprocessEnabled(true),
 mLastRendererHadCullingEnabled(true),
 mIsFogEnabled(false),
 mLastRendererHadBlendingEnabled(false),
+mIsLastRendererHadDepthBufferEnabled(false),
 mNumberTrianglesRendered(0),
 mNumberDrawCalls(0),
 mNumberRenderers(0)
@@ -606,8 +607,10 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 
 	mCurrentMaterial->Use();
 
-	SelectTextures();
-	
+	SelectTextures();	
+
+	ApplyDepthBuffer(renderer);
+
 	ApplyBlending(renderer);
 
 	ApplyCulling(renderer);
@@ -620,16 +623,43 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 	mNumberTrianglesRendered += renderer->GetNumberTrianglesRendered();
 }
 
+void RenderSystem::ApplyDepthBuffer(IRenderer* renderer)
+{
+	if (renderer->IsDepthBufferEnabled())
+	{
+		int nextDepthBufferMask = renderer->GetDepthBufferMask();
+		int nextDepthBufferFunc = renderer->GetDepthBufferFunc();
+
+		if (!mIsLastRendererHadDepthBufferEnabled || (mLastDepthBufferMask != nextDepthBufferMask || mLastDepthBufferFunc != nextDepthBufferFunc))
+		{
+			if (mLastDepthBufferFunc != nextDepthBufferFunc)
+			{
+				mLastDepthBufferFunc = nextDepthBufferFunc;
+				glDepthFunc(mLastDepthBufferFunc);
+			}
+			if (mLastDepthBufferMask != nextDepthBufferMask)
+			{
+				mLastDepthBufferMask = nextDepthBufferMask;
+				glDepthMask(mLastDepthBufferMask);
+			}
+		}
+		if (!mIsLastRendererHadDepthBufferEnabled)
+		{
+			glEnable(GL_DEPTH_TEST);
+			mIsLastRendererHadDepthBufferEnabled = true;
+		}
+	}
+	else if (mIsLastRendererHadDepthBufferEnabled)
+	{
+		mIsLastRendererHadDepthBufferEnabled = false;
+		glDisable(GL_DEPTH_TEST);
+	}
+}
+
 void RenderSystem::ApplyBlending(IRenderer* renderer)
 {
 	if (renderer->IsBlendingEnabled() || mIsOverdrawEnabled)
 	{
-		if (!mLastRendererHadBlendingEnabled)
-		{
-			mLastRendererHadBlendingEnabled = true;
-			glEnable(GL_BLEND);
-		}
-
 		int mNextBlendSFactor;
 		int mNextBlendDFactor;
 
@@ -650,6 +680,12 @@ void RenderSystem::ApplyBlending(IRenderer* renderer)
 				mLastBlendSFactor = mNextBlendSFactor;
 				mLastBlendDFactor = mNextBlendDFactor;
 				glBlendFunc(mLastBlendSFactor, mLastBlendDFactor);
+		}
+
+		if (!mLastRendererHadBlendingEnabled)
+		{
+			mLastRendererHadBlendingEnabled = true;
+			glEnable(GL_BLEND);
 		}
 	}
 	
@@ -1037,16 +1073,6 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 	// Light blue background
 	//glClearColor(0.66f, 0.87f, 0.9f, 0.0f);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-	// Enable depth test
-	glEnable(GL_DEPTH_TEST);
-	// Accept fragment if it closer to the camera than the former one
-	glDepthFunc(GL_LESS);
-	glDepthMask(GL_TRUE);
-
-	// Cull triangles which normal is not towards the camera
-	//glFrontFace(GL_CCW);
-	//glEnable(GL_CULL_FACE);
 
 	EnableVSync(true);
 

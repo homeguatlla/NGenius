@@ -94,6 +94,9 @@ class RenderSystem : public core::utils::ISerializable, public BaseVisitable<>
 	bool mLastRendererHadBlendingEnabled;
 	int mLastBlendSFactor;
 	int mLastBlendDFactor;
+	bool mIsLastRendererHadDepthBufferEnabled;
+	int mLastDepthBufferMask;
+	int mLastDepthBufferFunc;
 
 	unsigned int mNumberTrianglesRendered;
 	unsigned int mNumberDrawCalls;
@@ -222,6 +225,7 @@ private:
 	void ApplyLights(IRenderer* renderer);
 	void ApplyCulling(IRenderer* renderer);
 	void ApplyBlending(IRenderer* renderer);
+	void ApplyDepthBuffer(IRenderer* renderer);
 
 	void ReadCamerasFrom(core::utils::IDeserializer* source);
 	void ReadCameraFrom(core::utils::IDeserializer* source);

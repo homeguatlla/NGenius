@@ -10,8 +10,5 @@ class GUITextRenderer :	public TextRenderer
 public:
 	GUITextRenderer(Model* model, IMaterial* material);
 	~GUITextRenderer();
-
-private:
-	void Draw() override;
 };
 

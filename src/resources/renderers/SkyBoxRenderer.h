@@ -21,8 +21,5 @@ public:
 	{
 		return DBG_NEW SkyBoxRenderer(model, material);
 	}
-
-private:
-	void Draw() override;
 };
 

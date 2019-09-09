@@ -32,7 +32,7 @@ void RunState::OnEnter(float deltaTime)
 	{
 		mEngine->ChangeToCamera(mEngine->GetFreeCamera()->GetName(), mEngine->GetGameplayCamera()->GetName());
 	}
-	mEngine->SetDebugModeEnabled(true);
+	mEngine->SetDebugModeEnabled(false);
 }
 
 void RunState::OnExit(float deltaTime)

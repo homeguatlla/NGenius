@@ -17,6 +17,8 @@ IRenderer(model, material)
 	SetCullingEnabled(false);
 	SetBlendingEnabled(true);
 	SetBlendingFactors(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	SetDepthBufferEnabled(true);
+	SetDepthBufferValues(false, GL_LESS);
 }
 
 ParticleRenderer::~ParticleRenderer()
@@ -26,13 +28,4 @@ ParticleRenderer::~ParticleRenderer()
 bool ParticleRenderer::IsInstancingAllowed() const
 {
 	return true;
-}
-
-void ParticleRenderer::Draw()
-{
-	glDepthMask(false);
-		
-	IRenderer::Draw();
-
-	glDepthMask(true);
 }

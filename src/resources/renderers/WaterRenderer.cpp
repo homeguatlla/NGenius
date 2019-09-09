@@ -6,6 +6,8 @@
 WaterRenderer::WaterRenderer(Model* model, IMaterial* material) :
 	IndicesRenderer(model, material)
 {
+	SetDepthBufferEnabled(true);
+	SetDepthBufferValues(true, GL_LESS);
 }
 
 WaterRenderer::~WaterRenderer()

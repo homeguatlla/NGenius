@@ -6,6 +6,8 @@
 WireframeRenderer::WireframeRenderer(Model* model, IMaterial* material) :
 IRenderer(model, material)
 {
+	SetDepthBufferEnabled(true);
+	SetDepthBufferValues(true, GL_LESS);
 }
 
 WireframeRenderer::~WireframeRenderer()

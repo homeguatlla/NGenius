@@ -9,6 +9,7 @@ ImageRenderer::ImageRenderer(Model* model, IMaterial* material) :
 IRenderer(model, material)
 {
 	SetCullingEnabled(false);
+	SetDepthBufferEnabled(false);
 }
 
 ImageRenderer::~ImageRenderer()
@@ -17,7 +18,6 @@ ImageRenderer::~ImageRenderer()
 
 void ImageRenderer::Render()
 {
-	glDisable(GL_DEPTH_TEST);
 	glBindVertexArray(mModel->GetVAOID());
 
 	mMaterial->Use();
@@ -29,7 +29,6 @@ void ImageRenderer::Render()
 	mMaterial->UnUse();
 
 	glBindVertexArray(0);
-	glEnable(GL_DEPTH_TEST);
 }
 
 bool ImageRenderer::IsInstancingAllowed() const

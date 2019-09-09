@@ -44,7 +44,7 @@ DebugSystem::~DebugSystem()
 void DebugSystem::Start()
 {
 	mInputHandler->RegisterAllEventsInputListener(this);
-	CreateStatisticsTexts();
+	//CreateStatisticsTexts();
 	SetTextsVisibility(false);
 	mIsInitialized = true;
 }

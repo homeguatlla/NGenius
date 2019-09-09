@@ -13,6 +13,8 @@ PointsRenderer::PointsRenderer(Model* model, IMaterial* material) : IRenderer(mo
 	SetTransparency(false);
 	SetBlendingEnabled(true);
 	SetBlendingFactors(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	SetDepthBufferEnabled(true);
+	SetDepthBufferValues(true, GL_LESS);
 }
 
 PointsRenderer::~PointsRenderer()

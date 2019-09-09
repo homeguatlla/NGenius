@@ -32,6 +32,9 @@ mIsVisible(true),
 mIsBillboard(false),
 mIsCullingEnabled(true),
 mIsBlendingEnabled(false),
+mIsDepthBufferEnabled(true),
+mDepthBufferMask(GL_TRUE),
+mDepthBufferFunc(GL_LESS),
 mBlendingSFactor(GL_SRC_ALPHA),
 mBlendingDFactor(GL_ONE_MINUS_SRC_ALPHA)
 {
@@ -286,6 +289,12 @@ void IRenderer::SetBlendingFactors(int sFactor, int dFactor)
 {
 	mBlendingSFactor = sFactor;
 	mBlendingDFactor = dFactor;
+}
+
+void IRenderer::SetDepthBufferValues(int mask, int func)
+{
+	mDepthBufferMask = mask;
+	mDepthBufferFunc = func;
 }
 
 const AABB& IRenderer::GetModelAABB() const
