@@ -30,7 +30,10 @@ mMaterial(material),
 mTransformation(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)),
 mIsVisible(true),
 mIsBillboard(false),
-mIsCullingEnabled(true)
+mIsCullingEnabled(true),
+mIsBlendingEnabled(false),
+mBlendingSFactor(GL_SRC_ALPHA),
+mBlendingDFactor(GL_ONE_MINUS_SRC_ALPHA)
 {
 	assert(model != nullptr);
 	assert(mMaterial != nullptr);
@@ -272,6 +275,17 @@ void IRenderer::CheckError()
 	while ((err = glGetError()) != GL_NO_ERROR) {
 		std::cout << "OpenGL error: " << err << std::endl;
 	}*/
+}
+
+void IRenderer::SetBlendingEnabled(bool blending)
+{
+	mIsBlendingEnabled = blending;
+}
+
+void IRenderer::SetBlendingFactors(int sFactor, int dFactor)
+{
+	mBlendingSFactor = sFactor;
+	mBlendingDFactor = dFactor;
 }
 
 const AABB& IRenderer::GetModelAABB() const

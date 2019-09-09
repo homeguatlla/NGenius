@@ -45,6 +45,9 @@ protected:
 	bool mIsVisible;
 	bool mIsBillboard;
 	bool mIsCullingEnabled;
+	bool mIsBlendingEnabled;
+	int mBlendingSFactor;
+	int mBlendingDFactor;
 
 	//virtual void PreRender(VertexBuffersManager& vertexBufferManager) = 0;
 	virtual void Draw();
@@ -94,6 +97,12 @@ public:
 
 	bool IsCullingEnabled() const;
 	void SetCullingEnabled(bool culling);
+
+	bool IsBlendingEnabled() const { return mIsBlendingEnabled; }
+	void SetBlendingEnabled(bool blending);
+	void SetBlendingFactors(int sFactor, int dFactor);
+	int GetBlendingSFactor() const { return mBlendingSFactor; }
+	int GetBlendingDFactor() const { return mBlendingDFactor; }
 
 	const AABB& GetModelAABB() const;
 	const AABB GetAABB() const;

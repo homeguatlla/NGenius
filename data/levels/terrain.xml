@@ -217,7 +217,7 @@
 					</component>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8">
+			<!--entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8">
 				<transformation>
 					<position X="0.'00000" Y="10.000000" Z="0.000000"/>
 					<rotation X="-90.000000" Y="0.000000" Z="0.000000"/>
@@ -234,7 +234,7 @@
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
-			</entity>
+			</entity-->
 		</entities>
 	</game_scene>
 </ngenius>

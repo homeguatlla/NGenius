@@ -91,6 +91,9 @@ class RenderSystem : public core::utils::ISerializable, public BaseVisitable<>
 	bool mIsPostprocessEnabled;
 	bool mLastRendererHadCullingEnabled;
 	bool mIsFogEnabled;
+	bool mLastRendererHadBlendingEnabled;
+	int mLastBlendSFactor;
+	int mLastBlendDFactor;
 
 	unsigned int mNumberTrianglesRendered;
 	unsigned int mNumberDrawCalls;
@@ -217,6 +220,8 @@ private:
 	void ApplyShadows(IRenderer* renderer);
 	void ApplyFog(RenderPass* renderPass, IRenderer* renderer);
 	void ApplyLights(IRenderer* renderer);
+	void ApplyCulling(IRenderer* renderer);
+	void ApplyBlending(IRenderer* renderer);
 
 	void ReadCamerasFrom(core::utils::IDeserializer* source);
 	void ReadCameraFrom(core::utils::IDeserializer* source);

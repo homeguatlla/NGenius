@@ -14,6 +14,9 @@ IRenderer(model, material)
 {
 	SetLayer(IRenderer::LAYER_PARTICLES);
 	SetTransparency(true);
+	SetCullingEnabled(false);
+	SetBlendingEnabled(true);
+	SetBlendingFactors(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 TextRenderer::~TextRenderer()
@@ -27,14 +30,9 @@ bool TextRenderer::IsInstancingAllowed() const
 
 void TextRenderer::Draw()
 {
-	glDisable(GL_CULL_FACE);
 	glDepthMask(false);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	IRenderer::Draw();
 
-	glDisable(GL_BLEND);
 	glDepthMask(true);
-	glEnable(GL_CULL_FACE);
 }

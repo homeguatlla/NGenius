@@ -9,6 +9,9 @@
 EnergyWallRenderer::EnergyWallRenderer(Model* model, IMaterial* material) :
 VerticesRenderer(model, material)
 {
+	SetBlendingEnabled(true);
+	SetBlendingFactors(GL_SRC_ALPHA, GL_ONE);
+	SetCullingEnabled(false);
 }
 
 EnergyWallRenderer::~EnergyWallRenderer()
@@ -17,16 +20,11 @@ EnergyWallRenderer::~EnergyWallRenderer()
 
 void EnergyWallRenderer::Draw()
 {
-	glDisable(GL_CULL_FACE);
 	glDepthMask(false);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);// GL_ONE_MINUS_SRC_ALPHA);
 	
 	VerticesRenderer::Draw();
 
-	glDisable(GL_BLEND);
 	glDepthMask(true);
-	glEnable(GL_CULL_FACE);
 }
 
 bool EnergyWallRenderer::IsInstancingAllowed() const

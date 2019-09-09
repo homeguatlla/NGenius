@@ -83,6 +83,7 @@ mIsOverdrawEnabled(false),
 mIsPostprocessEnabled(true),
 mLastRendererHadCullingEnabled(true),
 mIsFogEnabled(false),
+mLastRendererHadBlendingEnabled(false),
 mNumberTrianglesRendered(0),
 mNumberDrawCalls(0),
 mNumberRenderers(0)
@@ -607,21 +608,65 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 
 	SelectTextures();
 	
-	//TODO esto se tiene que mejorar. Sinó estamos haciendo una llamada a blend que igual no hace falta
-	if (mIsOverdrawEnabled)
+	ApplyBlending(renderer);
+
+	ApplyCulling(renderer);
+
+	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, mCurrentMaterial);
+
+	mCurrentMaterial->UnUse();
+
+	mNumberDrawCalls++;
+	mNumberTrianglesRendered += renderer->GetNumberTrianglesRendered();
+}
+
+void RenderSystem::ApplyBlending(IRenderer* renderer)
+{
+	if (renderer->IsBlendingEnabled() || mIsOverdrawEnabled)
 	{
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		if (!mLastRendererHadBlendingEnabled)
+		{
+			mLastRendererHadBlendingEnabled = true;
+			glEnable(GL_BLEND);
+		}
+
+		int mNextBlendSFactor;
+		int mNextBlendDFactor;
+
+		if (mIsOverdrawEnabled)
+		{
+			mNextBlendSFactor = GL_SRC_ALPHA;
+			mNextBlendDFactor = GL_ONE_MINUS_SRC_ALPHA;
+		}
+		else
+		{
+			mNextBlendSFactor = renderer->GetBlendingSFactor();
+			mNextBlendDFactor = renderer->GetBlendingDFactor();
+		}
+
+		if (!mLastRendererHadBlendingEnabled || (mLastBlendSFactor != mNextBlendSFactor || 
+													mLastBlendDFactor != mNextBlendDFactor))
+		{
+				mLastBlendSFactor = mNextBlendSFactor;
+				mLastBlendDFactor = mNextBlendDFactor;
+				glBlendFunc(mLastBlendSFactor, mLastBlendDFactor);
+		}
 	}
-	else 
+	
+	if(!mIsOverdrawEnabled && !renderer->IsBlendingEnabled())
 	{
+		mLastRendererHadBlendingEnabled = false;
 		glDisable(GL_BLEND);
 	}
+}
 
+void RenderSystem::ApplyCulling(IRenderer* renderer)
+{
 	if (renderer->IsCullingEnabled())
 	{
 		if (!mLastRendererHadCullingEnabled)
 		{
+			mLastRendererHadCullingEnabled = true;
 			glEnable(GL_CULL_FACE);
 		}
 	}
@@ -629,16 +674,10 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 	{
 		if (mLastRendererHadCullingEnabled)
 		{
+			mLastRendererHadCullingEnabled = false;
 			glDisable(GL_CULL_FACE);
 		}
 	}
-	
-	renderer->Render(renderPass->GetCamera(), mVertexsBuffersManager, mCurrentMaterial);
-
-	mCurrentMaterial->UnUse();
-
-	mNumberDrawCalls++;
-	mNumberTrianglesRendered += renderer->GetNumberTrianglesRendered();
 }
 
 void RenderSystem::ApplyLights(IRenderer* renderer)
@@ -1006,8 +1045,8 @@ bool RenderSystem::InitializeWindowAndOpenGL(const std::string& applicationName,
 	glDepthMask(GL_TRUE);
 
 	// Cull triangles which normal is not towards the camera
-	glFrontFace(GL_CCW);
-	glEnable(GL_CULL_FACE);
+	//glFrontFace(GL_CCW);
+	//glEnable(GL_CULL_FACE);
 
 	EnableVSync(true);
 
