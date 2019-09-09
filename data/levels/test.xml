@@ -203,8 +203,8 @@
 		<debug is_enabled = "true" />
 	</engine>
 	<renderer>
-		<water is_enabled = "false" camera="gameplay_camera" height="6.0"/>
-		<shadows is_enabled = "false"/>
+		<water is_enabled = "true" camera="gameplay_camera" height="6.0"/>
+		<shadows is_enabled = "true"/>
 		<fog is_enabled = "false" />
 		<render_layers>
 			<layer name="GUI" value="1"/>
@@ -302,15 +302,15 @@
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 			</terrain>
-			<!--water is_enabled="true" name="water" material="water" wide="50" length="50">
+			<water is_enabled="true" name="water" material="water" wide="50" length="50">
 				<transformation>
 					<position X="4.000000" Y="0.000000" Z="4.500000"/>
 					<rotation X="-90.000000" Y="0.000000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
-			</water-->
+			</water>
 			
-			<!--entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8">
+			<entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8">
 				<transformation>
 					<position X="4.400000" Y="10.500000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
@@ -345,8 +345,8 @@
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
-			</entity-->
-			<!--entity is_enabled="true" name="tree_trunk" layer="8">
+			</entity>
+			<entity is_enabled="true" name="tree_trunk" layer="8">
 				<transformation>
 					<position X="10.000000" Y="18.500000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
@@ -395,7 +395,7 @@
 						</lods>
 					</component>
 				</components>
-			</entity-->
+			</entity>
 			<entity is_enabled="true" layer="8">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
@@ -417,7 +417,7 @@
 					</component>
 				</components>
 			</entity>
-			<!--entity is_enabled="true" name="crate_buoyancy" model="crate" material="props_material" layer="8">
+			<entity is_enabled="true" name="crate_buoyancy" model="crate" material="props_material" layer="8">
 				<transformation>
 					<position X="2.00000" Y="6.000000" Z="10.000000"/>
 					<rotation X="0.000000" Y="0.000000" Z="30.000000"/>
@@ -436,7 +436,7 @@
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
-			</entity-->
+			</entity>
 			<!-- para calcular la densidad:
 							V = volumen objecto = size.x * size.y * size.z
 							liquid_density * V * 0.5 = F hacia arriba flotando en reposo
@@ -445,7 +445,7 @@
 							calcular la densidad = m / V
 							Luego, añadir el componente de drag con valores altos para estabilizar.
 				-->
-			<!--entity is_enabled="true" name="barrel_buoyancy" model="barrel" material="props_material" layer="8">
+			<entity is_enabled="true" name="barrel_buoyancy" model="barrel" material="props_material" layer="8">
 				<transformation>
 					<position X="0.00000" Y="3.000000" Z="10.000000"/>
 					<rotation X="-70.000000" Y="0.000000" Z="0.000000"/>
@@ -464,8 +464,8 @@
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
-			</entity-->
-			<!--terrain_points_patch is_enabled="true" material="grass_material" layer="4" min_height ="6.0" max_height="20" wide="50" lenght="50" density="30">
+			</entity>
+			<terrain_points_patch is_enabled="true" material="grass_material" layer="4" min_height ="6.0" max_height="20" wide="50" lenght="50" density="30">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>
@@ -487,7 +487,7 @@
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
 			</terrain_points_patch>
-			<terrain_entities_patch is_enabled="true" layer="8" min_height ="6.0" max_height="20" wide="100" lenght="100" density="20" allow_intersection="true">
+			<!--terrain_entities_patch is_enabled="true" layer="8" min_height ="6.0" max_height="20" wide="100" lenght="100" density="20" allow_intersection="true">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>

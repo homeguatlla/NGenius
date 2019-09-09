@@ -637,6 +637,7 @@ void RenderSystem::ApplyDepthBuffer(IRenderer* renderer)
 				mLastDepthBufferFunc = nextDepthBufferFunc;
 				glDepthFunc(mLastDepthBufferFunc);
 			}
+
 			if (mLastDepthBufferMask != nextDepthBufferMask)
 			{
 				mLastDepthBufferMask = nextDepthBufferMask;
@@ -691,8 +692,11 @@ void RenderSystem::ApplyBlending(IRenderer* renderer)
 	
 	if(!mIsOverdrawEnabled && !renderer->IsBlendingEnabled())
 	{
-		mLastRendererHadBlendingEnabled = false;
-		glDisable(GL_BLEND);
+		if (mLastRendererHadBlendingEnabled)
+		{
+			mLastRendererHadBlendingEnabled = false;
+			glDisable(GL_BLEND);
+		}
 	}
 }
 
