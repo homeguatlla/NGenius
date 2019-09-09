@@ -9,8 +9,7 @@ SkyBoxRenderer::SkyBoxRenderer(Model* model, IMaterial* material) :
 {
 	SetCullingEnabled(true);
 	SetBlendingEnabled(false);
-	SetDepthBufferEnabled(true);
-	SetDepthBufferValues(true, GL_LESS);
+	SetDepthBufferEnabled(false);
 }
 
 
