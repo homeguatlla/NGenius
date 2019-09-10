@@ -12,9 +12,9 @@ public:
 	Texture();
 	~Texture();
 
-	bool Load(const std::string& filename, unsigned int textureUnit, bool hasMipmapping, bool hasWrapping);
-	void CreateTexture(int textureUnit, int width, int height);
-	void CreateDepthTexture(int textureUnit, int width, int height);
+	bool Load(const std::string& filename, bool hasMipmapping, bool hasWrapping);
+	void CreateTexture(int width, int height);
+	void CreateDepthTexture(int width, int height);
 	glm::vec4 GetColor(glm::vec2 uv) const;
 };
 

@@ -18,6 +18,8 @@
 #include "../../shaders/ShadersLibrary.h"
 #include "../../../utils/serializer/XMLDeserializer.h"
 
+#include <GL/glew.h>
+
 static const int SHADOWS_TEXTURE_SIZE = 2048;
 
 ShadowsRenderPassSubSystem::ShadowsRenderPassSubSystem(RenderSystem* renderSystem, float screenWidth, float screenHeight) :
@@ -107,7 +109,7 @@ void ShadowsRenderPassSubSystem::UpdateState()
 		{
 			mRenderSystem->AddOrReplaceRenderPass(mRenderPass);
 		}
-		mShadowMapTexture->SetActive(mIsShadowCastEnabled);
+		mShadowMapTexture->SetActive(mIsShadowCastEnabled, GL_TEXTURE20);
 	}
 }
 

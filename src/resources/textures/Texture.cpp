@@ -15,9 +15,8 @@ Texture::~Texture()
 	glDeleteTextures(1, &mTextureID);
 }
 
-bool Texture::Load(const std::string& filename, unsigned int textureUnit, bool hasMipmapping, bool hasWrapping)
+bool Texture::Load(const std::string& filename, bool hasMipmapping, bool hasWrapping)
 {
-	mTextureUnit = textureUnit;
 	bool loaded = mLoader.ReadPNGFile(filename.c_str());
 
 	if (!loaded)
@@ -30,7 +29,7 @@ bool Texture::Load(const std::string& filename, unsigned int textureUnit, bool h
 	mHeight = mLoader.GetHeight();
 
 	glGenTextures(1, &mTextureID);
-	glActiveTexture(GL_TEXTURE0 + mTextureUnit);
+	
 	glBindTexture(GL_TEXTURE_2D, mTextureID);
 	GLint internalformat = mLoader.HasAlpha() ? GL_RGBA : GL_RGB;
 	glTexImage2D(GL_TEXTURE_2D, 0, internalformat, mWidth, mHeight, 0, internalformat, GL_UNSIGNED_BYTE, mLoader.GetData());
@@ -54,14 +53,14 @@ bool Texture::Load(const std::string& filename, unsigned int textureUnit, bool h
 	return true;
 }
 
-void Texture::CreateTexture(int textureUnit, int width, int height)
+void Texture::CreateTexture(int width, int height)
 {
-	mTextureUnit = textureUnit;
 	mWidth = width;
 	mHeight = height;
 
-	glActiveTexture(GL_TEXTURE0 + mTextureUnit);
+	
 	glGenTextures(1, &mTextureID);
+	
 	glBindTexture(GL_TEXTURE_2D, mTextureID);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 
@@ -72,14 +71,13 @@ void Texture::CreateTexture(int textureUnit, int width, int height)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::CreateDepthTexture(int textureUnit, int width, int height)
+void Texture::CreateDepthTexture(int width, int height)
 {
-	mTextureUnit = textureUnit;
 	mWidth = width;
 	mHeight = height;
 
 	glGenTextures(1, &mTextureID);
-	glActiveTexture(GL_TEXTURE0 + mTextureUnit);
+
 	glBindTexture(GL_TEXTURE_2D, mTextureID);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
 

@@ -15,15 +15,14 @@ TextureCubemap::~TextureCubemap()
 {
 }
 
-void TextureCubemap::Load(std::vector<std::string>& filenames, unsigned int textureUnit)
+void TextureCubemap::Load(std::vector<std::string>& filenames, int textureUnit)
 {
 	PNGLoader loader;
-	mTextureUnit = textureUnit;
 	
 	//assert(filenames.size() == 6);
 
 	glGenTextures(1, &mTextureID);
-	glActiveTexture(GL_TEXTURE0 + mTextureUnit);
+	glActiveTexture(textureUnit);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureID);
 
 	for (unsigned int i = 0; i < mNumberTextures; ++i)

@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 
 in mat4 M;
 in vec3 vertexModelspace;
@@ -17,7 +17,7 @@ out mat3 toTangentSpace;
 //out vec3 cameraPos;
 //out float distance;
 
-uniform sampler2D heightMap;
+layout(binding=6) uniform sampler2D heightMap;
 
 uniform mat4 MVP;
 uniform vec3 lightPositionWorldspace;

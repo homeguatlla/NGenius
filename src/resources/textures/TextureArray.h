@@ -11,7 +11,7 @@ public:
 	TextureArray();
 	~TextureArray();
 
-	void Load(std::vector<std::string>& filenames, unsigned int textureUnit, bool hasMipmapping);
+	void Load(std::vector<std::string>& filenames, bool hasMipmapping);
 	unsigned int GetNumberTextures() const;
 };
 

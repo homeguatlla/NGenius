@@ -11,7 +11,7 @@ public:
 	TextureCubemap();
 	~TextureCubemap();
 
-	void Load(std::vector<std::string>& filenames, unsigned int textureUnit);
+	void Load(std::vector<std::string>& filenames, int textureUnit);
 	unsigned int GetNumberTextures() const;
 };
 

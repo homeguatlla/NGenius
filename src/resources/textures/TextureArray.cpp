@@ -15,16 +15,15 @@ TextureArray::~TextureArray()
 {
 }
 
-void TextureArray::Load(std::vector<std::string>& filenames, unsigned int textureUnit, bool hasMipmapping)
+void TextureArray::Load(std::vector<std::string>& filenames, bool hasMipmapping)
 {
 	PNGLoader loader;
 	int textureMaxWidth = 256;
 	int textureMaxHeight = 256;
-	mTextureUnit = textureUnit;
 	mNumberTextures = filenames.size();
 
 	glGenTextures(1, &mTextureID);
-	glActiveTexture(GL_TEXTURE0 + mTextureUnit);
+	glActiveTexture(GL_TEXTURE7);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, mTextureID);
 	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, textureMaxWidth, textureMaxHeight, mNumberTextures, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 

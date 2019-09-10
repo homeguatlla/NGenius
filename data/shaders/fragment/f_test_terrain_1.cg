@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 
 in vec2 textureCoords;
 in vec3 eyePosition;
@@ -14,12 +14,12 @@ in mat3 toTangentSpace;
 
 //in vec3 lightPosition;
 
-uniform sampler2D blendMap;
-uniform sampler2DArray textureArray;
+layout(binding=3) uniform sampler2D blendMap;
+layout(binding=7) uniform sampler2DArray textureArray;
 uniform vec3 lightColor;
 uniform float tile;
 uniform vec3 fogColor;
-uniform sampler2D shadowMap;
+layout(binding=20) uniform sampler2D shadowMap;
 uniform int shadowMapSize;
 uniform int pfcCount;
 
