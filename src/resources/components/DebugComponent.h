@@ -18,6 +18,7 @@ public:
 	bool IsBoundingBoxVisible() const;
 	void SetBoundingBoxVisibility(bool visible);
 	IRenderer* GetBoundingBoxRenderer();
+	void ResetRenderer();
 
 	static std::string GetClassName() { return std::string("DebugComponent"); }
 	static IComponent* Create(IGameEntity* entity);

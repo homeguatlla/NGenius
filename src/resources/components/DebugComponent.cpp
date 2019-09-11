@@ -24,7 +24,12 @@ DebugComponent::~DebugComponent()
 
 DebugComponent* DebugComponent::DoClone() const
 {
-	return DBG_NEW DebugComponent(*this);
+	DebugComponent* clone = DBG_NEW DebugComponent(*this);
+	clone->SetParent(mParent);
+	clone->SetEnabled(this->IsEnabled());
+	clone->ResetRenderer();
+
+	return clone;
 }
 
 void DebugComponent::Init(GameScene* scene, RenderSystem* renderSystem)
@@ -53,6 +58,11 @@ void DebugComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 IRenderer* DebugComponent::GetBoundingBoxRenderer()
 {
 	return mBoundingBoxRenderer;
+}
+
+void DebugComponent::ResetRenderer()
+{
+	mBoundingBoxRenderer = nullptr;
 }
 
 IComponent* DebugComponent::Create(IGameEntity* entity)
