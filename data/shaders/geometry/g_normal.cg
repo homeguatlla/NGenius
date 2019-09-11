@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 
 layout(points) in;
 in mat4 Mout[];

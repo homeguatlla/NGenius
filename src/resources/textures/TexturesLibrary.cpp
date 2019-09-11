@@ -68,6 +68,7 @@ void TexturesLibrary::CreateDepthTexture(std::string name, unsigned int width, u
 ITexture* TexturesLibrary::CreateDepthTexture(const std::string& name, const glm::ivec2& size)
 {
 	Texture* texture = DBG_NEW Texture();
+	texture->SetUnit(GL_TEXTURE25);
 	texture->CreateDepthTexture(size.x, size.y);
 	AddOrReplaceElement(name, texture);
 

@@ -32,6 +32,7 @@ void PostProcessEffect::Init()
 	{
 		case PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER:
 			mFrameBuffer = DBG_NEW IFrameBuffer(mWidth, mHeight);
+			mOutTexture->SetUnit(GL_TEXTURE1);
 			mFrameBuffer->SetColorTextureAttachment(0, mOutTexture);
 			mFrameBuffer->Init();
 			break;

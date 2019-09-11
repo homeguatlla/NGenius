@@ -47,9 +47,10 @@ void ShadowsRenderPassSubSystem::Init()
 		mShadowCastCamera = CreateShadowCastCamera(mDirectionalLightDirection);
 		mRenderSystem->AddCamera(mShadowCastCamera);
 		mRenderPass = CreateShadowRenderPass();
-		mRenderSystem->AddOrReplaceRenderPass(mRenderPass);
+		mRenderSystem->AddOrReplaceRenderPassFirst(mRenderPass);
 		mIsInitialized = true;
 	}
+	SetEnable(mIsInitialized);
 }
 
 void ShadowsRenderPassSubSystem::Update()
@@ -109,7 +110,7 @@ void ShadowsRenderPassSubSystem::UpdateState()
 		{
 			mRenderSystem->AddOrReplaceRenderPass(mRenderPass);
 		}
-		mShadowMapTexture->SetActive(mIsShadowCastEnabled, GL_TEXTURE20);
+		mShadowMapTexture->SetActive(mIsShadowCastEnabled);
 	}
 }
 
@@ -164,6 +165,7 @@ RenderPass* ShadowsRenderPassSubSystem::CreateShadowRenderPass()
 	//Texture* colorTexture = static_cast<Texture*>(mRenderSystem->CreateColorTexture("shadow_color", glm::ivec2(SHADOWS_TEXTURE_SIZE)));
 
 	//frameShadowBuffer->SetColorTextureAttachment(0, colorTexture);
+	mShadowMapTexture->SetUnit(GL_TEXTURE20);
 	frameShadowBuffer->SetDepthTextureAttachment(mShadowMapTexture);
 	frameShadowBuffer->Init();
 

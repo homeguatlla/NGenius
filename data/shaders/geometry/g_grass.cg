@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 
 layout(points) in;
 in float rotationY[];
@@ -29,7 +29,7 @@ uniform vec4 clippingPlane;
 uniform mat4 toShadowMapSpace;
 
 uniform float timer;
-uniform sampler2D textureWind;
+layout(binding=4) uniform sampler2D textureWind;
 uniform vec3 windModificators[1];
 
 const float shadowDistance = 20.0;

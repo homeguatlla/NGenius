@@ -114,7 +114,10 @@ RenderPass* WaterRenderPassSubSystem::CreateRefractionRenderPass()
 	Texture* refractionDepthTexture = static_cast<Texture*>(mRenderSystem->CreateDepthTexture("refraction_depth_water", textureSize));
 	
 	IFrameBuffer* frameRefractionBuffer = DBG_NEW IFrameBuffer(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight));
+
+	refractionTexture->SetUnit(GL_TEXTURE1);
 	frameRefractionBuffer->SetColorTextureAttachment(0, refractionTexture);
+	refractionDepthTexture->SetUnit(GL_TEXTURE2);
 	frameRefractionBuffer->SetDepthTextureAttachment(refractionDepthTexture);
 	frameRefractionBuffer->Init();
 
@@ -140,6 +143,7 @@ RenderPass* WaterRenderPassSubSystem::CreateReflectionRenderPass()
 	glm::vec2 textureSize(mScreenWidth / 1, mScreenHeight / 1);
 	Texture* reflectionTexture = static_cast<Texture*>(mRenderSystem->CreateColorTexture("reflection_water", textureSize));
 	IFrameBuffer* frameReflectionBuffer = DBG_NEW IFrameBuffer(static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight));
+	reflectionTexture->SetUnit(GL_TEXTURE1);
 	frameReflectionBuffer->SetColorTextureAttachment(0, reflectionTexture);
 	frameReflectionBuffer->SetDepthAttachment(reflectionTexture->GetWidth(), reflectionTexture->GetHeight());
 

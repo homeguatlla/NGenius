@@ -19,8 +19,13 @@ unsigned int ITexture::GetID() const
 
 unsigned int ITexture::GetUnit() const
 {
-	assert(mTextureUnit >= GL_TEXTURE0 && mTextureUnit <= GL_TEXTURE31);
 	return mTextureUnit;
+}
+
+void ITexture::SetUnit(unsigned int unit)
+{
+	assert(unit >= GL_TEXTURE0 && unit <= GL_TEXTURE31);
+	mTextureUnit = unit;
 }
 
 unsigned int ITexture::GetWidth() const
@@ -33,16 +38,13 @@ unsigned int ITexture::GetHeight() const
 	return mHeight;
 }
 
-void ITexture::SetActive(bool active, unsigned int unit)
+void ITexture::SetActive(bool active)
 {
-	assert(unit >= GL_TEXTURE0 && unit <= GL_TEXTURE31);
-
 	if (active)
 	{
-		mTextureUnit = unit;
-		glActiveTexture(unit);
+		glActiveTexture(mTextureUnit);
 		glBindTexture(GL_TEXTURE_2D, mTextureID);
-		glBindTextureUnit(unit, mTextureID);
+		glBindTextureUnit(mTextureUnit, mTextureID);
 	}
 	else
 	{

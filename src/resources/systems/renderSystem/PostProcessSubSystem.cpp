@@ -117,8 +117,12 @@ void PostProcessSubSystem::Load()
 
 	Texture* originalTexture = static_cast<Texture*>(mRenderSystem->CreateColorTexture("original", glm::vec2(screenWidth, screenHeight)));
 	Texture* texture2 = static_cast<Texture*>(mRenderSystem->CreateColorTexture("postprocess2", glm::vec2(screenWidth, screenHeight)));
-	Texture* texture3 = static_cast<Texture*>(mRenderSystem->CreateColorTexture("postprocess3", glm::vec2(screenWidth, screenHeight)));
+	//Texture* texture3 = static_cast<Texture*>(mRenderSystem->CreateColorTexture("postprocess3", glm::vec2(screenWidth, screenHeight)));
 	
+
+	originalTexture->SetUnit(GL_TEXTURE21);
+	texture2->SetUnit(GL_TEXTURE22);
+
 	Model* model = mRenderSystem->GetModel("quad");
 	
 	/*

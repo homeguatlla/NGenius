@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 
 in vec2 textureCoords;
 in vec3 eyeDirection;
@@ -11,10 +11,10 @@ in vec4 shadowCoords;
 in vec3 normal;
 in float distanceToCamera;
 
-uniform sampler2D texture;
-uniform sampler2D normalmap;
+layout(binding=3) uniform sampler2D texture;
+layout(binding=4) uniform sampler2D normalmap;
 uniform vec3 fogColor;
-uniform sampler2D shadowMap;
+layout(binding=20) uniform sampler2D shadowMap;
 uniform int shadowMapSize;
 uniform int pfcCount;
 out vec4 color;

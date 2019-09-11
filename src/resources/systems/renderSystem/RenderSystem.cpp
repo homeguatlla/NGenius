@@ -813,6 +813,7 @@ void RenderSystem::SelectClippingPlane(RenderPass* renderPass)
 //GL_TEXTURE17-19 free
 //GL_TEXTURE20 shadows
 //GL_TEXTURE21-31 free
+//GL_TEXTURE25 depth
 
 void RenderSystem::SelectTextures()
 {
@@ -822,7 +823,8 @@ void RenderSystem::SelectTextures()
 		if (diffuseTexture->GetDiffuseTexture() != mDiffuseTexture)
 		{
 			mDiffuseTexture = diffuseTexture->GetDiffuseTexture();
-			mDiffuseTexture->SetActive(true, GL_TEXTURE3);
+			mDiffuseTexture->SetUnit(GL_TEXTURE3);
+			mDiffuseTexture->SetActive(true);
 		}
 	}
 
@@ -832,7 +834,8 @@ void RenderSystem::SelectTextures()
 		if (normalMaterial->GetNormalTexture() != mNormalTexture)
 		{
 			mNormalTexture = normalMaterial->GetNormalTexture();
-			mNormalTexture->SetActive(true, GL_TEXTURE4);
+			mNormalTexture->SetUnit(GL_TEXTURE4);
+			mNormalTexture->SetActive(true);
 		}
 	}
 
@@ -842,29 +845,34 @@ void RenderSystem::SelectTextures()
 		//if (depth != mNormalTexture)
 		{
 			//mNormalTexture = normal;
-			depthMaterial->GetDepthTexture()->SetActive(true, GL_TEXTURE5);
+			depthMaterial->GetDepthTexture()->SetUnit(GL_TEXTURE25);
+			depthMaterial->GetDepthTexture()->SetActive(true);
 		}
 	}
 
 	MaterialEffectHeightMapTexture* heightmapMaterial = mCurrentMaterial->GetEffect<MaterialEffectHeightMapTexture>();
 	if (heightmapMaterial != nullptr)
 	{
-		heightmapMaterial->GetHeightMapTexture()->SetActive(true, GL_TEXTURE6);
+		heightmapMaterial->GetHeightMapTexture()->SetUnit(GL_TEXTURE6);
+		heightmapMaterial->GetHeightMapTexture()->SetActive(true);
 	}
 
 	MaterialEffectTextureArray* textureArrayMaterial = mCurrentMaterial->GetEffect<MaterialEffectTextureArray>();
 	if (textureArrayMaterial != nullptr)
 	{
-		textureArrayMaterial->GetTextureArray()->SetActive(true, GL_TEXTURE7);
+		textureArrayMaterial->GetTextureArray()->SetUnit(GL_TEXTURE7);
+		textureArrayMaterial->GetTextureArray()->SetActive(true);
 	}
 
 	MaterialEffectTextureCubemap* textureCubemapMaterial = mCurrentMaterial->GetEffect<MaterialEffectTextureCubemap>();
 	if (textureCubemapMaterial != nullptr)
 	{
-		textureCubemapMaterial->GetCubemap1()->SetActive(true, GL_TEXTURE8);
+		textureCubemapMaterial->GetCubemap1()->SetUnit(GL_TEXTURE8);
+		textureCubemapMaterial->GetCubemap1()->SetActive(true);
 		if (textureCubemapMaterial->GetCubemap2() != nullptr)
 		{
-			textureCubemapMaterial->GetCubemap2()->SetActive(true, GL_TEXTURE9);
+			textureCubemapMaterial->GetCubemap2()->SetUnit(GL_TEXTURE9);
+			textureCubemapMaterial->GetCubemap2()->SetActive(true);
 		}
 	}
 
@@ -873,11 +881,20 @@ void RenderSystem::SelectTextures()
 	{
 		if (mWaterRenderPass->IsEnabled())
 		{
-			effectWater->GetReflectionTexture()->SetActive(true, GL_TEXTURE1); //because is frame buffer
-			effectWater->GetRefractionTexture()->SetActive(true, GL_TEXTURE11);
-			effectWater->GetDistorsionTexture()->SetActive(true, GL_TEXTURE12);
-			effectWater->GetNormalTexture()->SetActive(true, GL_TEXTURE13);
-			effectWater->GetDepthTexture()->SetActive(true, GL_TEXTURE14);
+			effectWater->GetReflectionTexture()->SetUnit(GL_TEXTURE1); //because is frame buffer
+			effectWater->GetReflectionTexture()->SetActive(true);
+
+			effectWater->GetRefractionTexture()->SetUnit(GL_TEXTURE11);
+			effectWater->GetRefractionTexture()->SetActive(true);
+
+			effectWater->GetDistorsionTexture()->SetUnit(GL_TEXTURE12);
+			effectWater->GetDistorsionTexture()->SetActive(true);
+
+			effectWater->GetNormalTexture()->SetUnit(GL_TEXTURE13);
+			effectWater->GetNormalTexture()->SetActive(true);
+
+			effectWater->GetDepthTexture()->SetUnit(GL_TEXTURE25);
+			effectWater->GetDepthTexture()->SetActive(true);
 		}
 		else
 		{
@@ -888,8 +905,11 @@ void RenderSystem::SelectTextures()
 	MaterialEffectParticle* effectParticle = mCurrentMaterial->GetEffect<MaterialEffectParticle>();
 	if (effectParticle != nullptr)
 	{
-		effectParticle->GetTexture()->SetActive(true, GL_TEXTURE15);
-		effectParticle->GetDepthTexture()->SetActive(true, GL_TEXTURE16);
+		effectParticle->GetTexture()->SetUnit(GL_TEXTURE3);
+		effectParticle->GetTexture()->SetActive(true);
+
+		effectParticle->GetDepthTexture()->SetUnit(GL_TEXTURE25);
+		effectParticle->GetDepthTexture()->SetActive(true);
 	}
 }
 

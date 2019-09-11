@@ -9,7 +9,7 @@ layout(binding=1) uniform sampler2D reflectionTexture;
 layout(binding=11) uniform sampler2D refractionTexture;
 layout(binding=12) uniform sampler2D distorsionTexture;
 layout(binding=13) uniform sampler2D normalTexture;
-layout(binding=14) uniform sampler2D depthTexture;
+layout(binding=25) uniform sampler2D depthTexture;
 
 uniform float waterSpeed;
 uniform vec4 waterColor;

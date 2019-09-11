@@ -218,9 +218,9 @@ void RenderPass::ReadFrameBufferFrom(core::utils::IDeserializer* source)
 	source->ReadParameter("width", &width);
 	source->ReadParameter("height", &height);
 
-	IFrameBuffer* buffer = DBG_NEW IFrameBuffer(static_cast<int>(width), static_cast<int>(height));
+	/*IFrameBuffer* buffer = DBG_NEW IFrameBuffer(static_cast<int>(width), static_cast<int>(height));
 	buffer->ReadFrom(source);
-	SetFrameBufferOutput(buffer);
+	SetFrameBufferOutput(buffer);*/
 }
 
 void RenderPass::WriteTo(core::utils::ISerializer* destination)
