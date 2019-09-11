@@ -3,7 +3,7 @@
 in vec2 textureCoords;
 //in float fogVisibility;
 
-uniform sampler2D texture;
+layout(binding=3) uniform sampler2D texture;
 out vec4 color;
 
 void main()
