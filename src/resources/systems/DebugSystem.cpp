@@ -59,7 +59,6 @@ void DebugSystem::Update(float elapsedTime)
 		{
 			for (IGameEntity* entity : mEntities)
 			{
-				entity->Update(elapsedTime);
 				DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
 				if (debugComponent->IsEnabled())
 				{
