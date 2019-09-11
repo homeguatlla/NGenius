@@ -213,6 +213,7 @@ void EntitiesPatch::ReadModels(core::utils::IDeserializer* source)
 		} while (numPacks > 0);
 
 		source->EndAttribute();
+		source->EndAttribute();
 	}
 }
 

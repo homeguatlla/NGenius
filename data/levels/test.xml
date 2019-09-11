@@ -70,6 +70,9 @@
 			<model name = "tree_trunk_0" filename="data/models/tree4/tree_trunk_lod0.obj" calculate_tangents="true"/>
 			<model name = "tree_trunk_1" filename="data/models/tree4/tree_trunk_lod1.obj" calculate_tangents="true"/>
 			<model name = "tree_trunk_2" filename="data/models/tree4/tree_trunk_lod2.obj" calculate_tangents="true"/>
+			<model name = "rock2" filename = "data/models/rocks/rock2.dae" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "rock3" filename = "data/models/rocks/rock3.dae" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "rock5" filename = "data/models/rocks/rock5.dae" calculate_normals="true" calculate_tangents="true"/>
 		</models_library>
 		<lods_library>
 			<lods name = "tree_folliage">
@@ -178,6 +181,30 @@
 			</material>
 			<material name="smoke_particle" shader="ParticleShader">
 				<effect name="MaterialEffectParticle" texture="smoke" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="rock2_material" shader="NormalMapShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="material_rock2_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="MaterialEffectNormalTexture" texture="material_rock2_normalmap" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="rock3_material" shader="NormalMapShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="material_rock3_diffuse" color="1.0 0.0 0.0" tile="1.0" />
+				<effect name="MaterialEffectNormalTexture" texture="material_rock3_normalmap" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="rock5_material" shader="NormalMapShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="material_rock5_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="MaterialEffectNormalTexture" texture="material_rock5_normalmap" tile="1.0"/>
 				<effect name="MaterialEffectClippingPlane" />				
 			</material>
 		</materials_library>
@@ -458,7 +485,61 @@
 						<gravity X="0.0" Y="-10.0f" Z="0.0"/>
 					</component>
 					<component is_enabled="true" type="BuoyancyComponent" liquid_density="1000"/>
-					<component is_enabled="true" type="DragComponent" k1="58.5" k2="13.65"/>
+					<component is_enabled="true" type="DragComponent" k1="78.5" k2="13.65"/>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="rock2" model="rock2" material="rock2_material" renderer="IndicesRenderer"  layer="8">
+				<transformation>
+					<position X="-24.000000" Y="10.500000" Z="-10.000000"/>
+					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="0.300000" Y="0.300000" Z="0.300000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="PhysicsComponent" is_static="true" density="900">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+					</component>
+					<component is_enabled="true" type="GravityComponent">
+						<gravity X="0.0" Y="-10.0f" Z="0.0"/>
+					</component>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="rock5" model="rock5" material="rock5_material" renderer="IndicesRenderer"  layer="8">
+				<transformation>
+					<position X="-23.000000" Y="10.500000" Z="-9.000000"/>
+					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="0.600000" Y="0.300000" Z="0.400000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="PhysicsComponent" is_static="true" density="900">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+					</component>
+					<component is_enabled="true" type="GravityComponent">
+						<gravity X="0.0" Y="-10.0f" Z="0.0"/>
+					</component>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="rock3" model="rock3" material="rock3_material" renderer="IndicesRenderer"  layer="8">
+				<transformation>
+					<position X="-25.500000" Y="10.500000" Z="-9.000000"/>
+					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="0.100000" Y="0.100000" Z="0.100000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="PhysicsComponent" is_static="true" density="900">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+					</component>
+					<component is_enabled="true" type="GravityComponent">
+						<gravity X="0.0" Y="-10.0f" Z="0.0"/>
+					</component>
 					<component is_enabled="true" type="CollisionComponent"/>
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
@@ -498,7 +579,7 @@
 						<model name="tree_foliage"/>
 					</pack>
 				</models>
-			</terrain_entities_patch>
+			</terrain_entities_patch>				
 		</entities>
 	</game_scene>
 </ngenius>

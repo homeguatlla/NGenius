@@ -52,6 +52,9 @@
 		<models_library>
 			<model name = "farmer" filename = "data/models/farmer/farmer.dae" calculate_normals="true" calculate_tangents="true"/>
 			<model name = "barrel" filename = "data/models/props/barrel.obj" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "rock2" filename = "data/models/rocks/rock2.dae" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "rock3" filename = "data/models/rocks/rock3.dae" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "rock5" filename = "data/models/rocks/rock5.dae" calculate_normals="true" calculate_tangents="true"/>
 		</models_library>
 		<materials_library>
 			<material name="terrain" shader="TerrainShader">
@@ -84,6 +87,14 @@
 				<effect name="MaterialEffectDirectionalLightProperties" />
 				<effect name="MaterialEffectDiffuseTexture" texture="MedievalDungeonPropsAtlas02_diffuse" color="1.0 1.0 1.0" tile="1.0" />
 				<effect name="MaterialEffectNormalTexture" texture="MedievalDungeonPropsAtlas02_normalmap" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="rock2_material" shader="NormalMapShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="material_rock2_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="MaterialEffectNormalTexture" texture="material_rock2_normalmap" tile="1.0"/>
 				<effect name="MaterialEffectClippingPlane" />				
 			</material>
 		</materials_library>
@@ -215,6 +226,24 @@
 					<component is_enabled="true" type="ThirdPersonCameraComponent" target="player" camera="gameplay_camera" distance_from_target="4" pitch="10" pitch_speed="10" zoom_speed="10">
 						<target_offset X="0.0" Y="0.5" Z="0.0"/>
 					</component>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="rock" model="rock2" material="rock2_material" renderer="IndicesRenderer" layer="8">
+				<transformation>
+					<position X="0.000000" Y="10.500000" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="0.100000" Y="0.100000" Z="0.100000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="PhysicsComponent" is_static="true" density="0.0013">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+					</component>
+					<component is_enabled="true" type="GravityComponent">
+						<gravity X="0.0" Y="-10.0f" Z="0.0"/>
+					</component>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
 				</components>
 			</entity>
 			<!--entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8">
