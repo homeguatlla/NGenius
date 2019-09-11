@@ -19,8 +19,13 @@ void main()
 
 	color = mix(color1, color2, blendFactor) * vec4(lightColor, 1.0);
 
-	//making between lower and upper limit mix the fog color.
-	float factor = (textureCoords.y - lowerLimit) / (upperLimit - lowerLimit);
-	factor = clamp(factor, 0.0f, 1.0f);
-	color = mix( vec4(fogColor, 1.0f), color, factor);
+	//if there is a fog color
+	float maxColor = max (max (fogColor.x, fogColor.y), fogColor.z);
+	if(maxColor > 0.0f)
+	{
+		//making between lower and upper limit mix the fog color.
+		float factor = (textureCoords.y - lowerLimit) / (upperLimit - lowerLimit);
+		factor = clamp(factor, 0.0f, 1.0f);
+		color = mix( vec4(fogColor, 1.0f), color, factor);
+	}
 }
