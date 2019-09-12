@@ -72,6 +72,9 @@
 #include "resources/events/characterControllerEvents/ButtonLeftEvent.h"
 #include "resources/events/characterControllerEvents/ButtonRightEvent.h"
 #include "resources/events/characterControllerEvents/ForwardEvent.h"
+#include "resources/events/characterControllerEvents/LeftEvent.h"
+#include "resources/events/characterControllerEvents/RightEvent.h"
+#include "resources/events/characterControllerEvents/ShiftEvent.h"
 #include "resources/events/characterControllerEvents/JumpEvent.h"
 #include "resources/events/characterControllerEvents/PitchEvent.h"
 #include "resources/events/characterControllerEvents/TurnEvent.h"
@@ -121,6 +124,9 @@ mGameScene(nullptr)
 	InstantiableObject::RegisterGameEvent<ButtonLeftEvent>();
 	InstantiableObject::RegisterGameEvent<ButtonRightEvent>();
 	InstantiableObject::RegisterGameEvent<ForwardEvent>();
+	InstantiableObject::RegisterGameEvent<LeftEvent>();
+	InstantiableObject::RegisterGameEvent<RightEvent>();
+	InstantiableObject::RegisterGameEvent<ShiftEvent>();
 	InstantiableObject::RegisterGameEvent<JumpEvent>();
 	InstantiableObject::RegisterGameEvent<PitchEvent>();
 	InstantiableObject::RegisterGameEvent<TurnEvent>();

@@ -14,6 +14,9 @@
 #include "../GameEvent.h"
 #include "../events/characterControllerEvents/BackwardEvent.h"
 #include "../events/characterControllerEvents/ForwardEvent.h"
+#include "../events/characterControllerEvents/LeftEvent.h"
+#include "../events/characterControllerEvents/RightEvent.h"
+#include "../events/characterControllerEvents/ShiftEvent.h"
 #include "../events/characterControllerEvents/JumpEvent.h"
 #include "../events/characterControllerEvents/ZoomEvent.h"
 #include "../events/characterControllerEvents/TurnEvent.h"
@@ -174,14 +177,33 @@ void Player::UpdateGameEvents()
 						mCurrentRunSpeed = 0.0f;
 					}
 				}
-				else if (event->IsOfType<TurnEvent>())
+				
+				if (event->IsOfType<LeftEvent>())
+				{
+					std::shared_ptr<const LeftEvent> leftEvent = std::static_pointer_cast<const LeftEvent>(event);
+					bool isPressed = leftEvent->IsPressed();
+
+					/*mHasMoved |= isPressed;
+
+					if (isPressed)
+					{
+						mCurrentRunSpeed = mRunSpeed;
+					}
+					else
+					{
+						mCurrentRunSpeed = 0.0f;
+					}*/
+				}
+
+				if (event->IsOfType<TurnEvent>())
 				{
 					std::shared_ptr<const TurnEvent> turnEvent = std::static_pointer_cast<const TurnEvent>(event);
 					mHasMoved = true;
 					mCurrentTurnSpeed = mTurnSpeed * (mLastTurnX - turnEvent->GetTurn());
 					mLastTurnX = turnEvent->GetTurn();
 				}
-				else if (event->IsOfType<JumpEvent>())
+				
+				if (event->IsOfType<JumpEvent>())
 				{
 					mHasMoved = false;
 					mHasJumped = true;

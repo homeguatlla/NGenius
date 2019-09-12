@@ -251,7 +251,10 @@
     <ClInclude Include="src\resources\events\characterControllerEvents\ButtonRightEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\ForwardEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\JumpEvent.h" />
+    <ClInclude Include="src\resources\events\characterControllerEvents\LeftEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\PitchEvent.h" />
+    <ClInclude Include="src\resources\events\characterControllerEvents\RightEvent.h" />
+    <ClInclude Include="src\resources\events\characterControllerEvents\ShiftEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\TurnEvent.h" />
     <ClInclude Include="src\resources\events\characterControllerEvents\ZoomEvent.h" />
     <ClInclude Include="src\resources\font\FontsLibrary.h" />
@@ -476,7 +479,10 @@
     <ClCompile Include="src\resources\events\characterControllerEvents\ButtonRightEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\ForwardEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\JumpEvent.cpp" />
+    <ClCompile Include="src\resources\events\characterControllerEvents\LeftEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\PitchEvent.cpp" />
+    <ClCompile Include="src\resources\events\characterControllerEvents\RightEvent.cpp" />
+    <ClCompile Include="src\resources\events\characterControllerEvents\ShiftEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\TurnEvent.cpp" />
     <ClCompile Include="src\resources\events\characterControllerEvents\ZoomEvent.cpp" />
     <ClCompile Include="src\resources\font\FontsLibrary.cpp" />

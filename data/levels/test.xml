@@ -296,6 +296,9 @@
 						<converters>
 							<converter key="87" event="ForwardEvent"/>
 							<converter key="83" event="BackwardEvent"/>
+							<converter key="65" event="LeftEvent"/>
+							<converter key="68" event="RightEvent"/>
+							<converter key="15" event="ShiftEvent"/>
 							<converter key="32" event="JumpEvent"/>
 							<converter mouse="-1" event="TurnEvent"/>
 							<converter mouse="2" event="ZoomEvent"/>

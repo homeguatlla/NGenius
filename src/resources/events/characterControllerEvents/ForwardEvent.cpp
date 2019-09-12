@@ -7,11 +7,6 @@ ForwardEvent::ForwardEvent() : mIsPressed(false)
 {
 }
 
-
-ForwardEvent::~ForwardEvent()
-{
-}
-
 std::shared_ptr<GameEvent> ForwardEvent::DoClone(const void* data) const
 {
 	const int* action = reinterpret_cast<const int*>(data);
