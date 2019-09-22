@@ -30,6 +30,7 @@
 Player::Player() : 
 	BaseGameEntity(),
 	mState(IDLE),
+	mMaxRunSpeed(0.0f),
 	mRunSpeed(0.0f),
 	mTurnSpeed(0.0f),
 	mUpwardsSpeed(0.0f),
@@ -37,6 +38,7 @@ Player::Player() :
 	mCurrentTurnSpeed(0.0f),
 	mCurrentUpwardsSpeed(0.0f),
 	mCurrentTurnAngle(0.0f),
+	mRotOffsetForLateralMoving(0.0f),
 	mHasMoved(false),
 	mHasJumped(false)
 {
@@ -47,15 +49,18 @@ Player::Player(	Transformation* transformation, IRenderer* renderer, InputCompon
 				CollisionComponent* collisionComponent, float runSpeed, float turnSpeed, float upwardsSpeed) :
 	BaseGameEntity(transformation, renderer),
 mState(IDLE), 
-mRunSpeed(runSpeed), 
+mMaxRunSpeed(runSpeed),
+mRunSpeed(runSpeed),
 mTurnSpeed(turnSpeed),
 mUpwardsSpeed(upwardsSpeed), 
 mCurrentRunSpeed(0.0f), 
 mCurrentTurnSpeed(0.0f),
 mCurrentUpwardsSpeed(0.0f),
 mCurrentTurnAngle(0.0f),
+mRotOffsetForLateralMoving(0.0f),
 mHasMoved(false), 
-mHasJumped(false)
+mHasJumped(false),
+mIsShiftPressed(false)
 {
 	AddComponent(inputComponent);
 	AddComponent(physicsComponent);
@@ -71,7 +76,8 @@ Player::~Player()
 void Player::ReadFrom(core::utils::IDeserializer* source)
 {
 	BaseGameEntity::ReadFrom(source);
-	source->ReadParameter("run_speed", &mRunSpeed);
+	source->ReadParameter("run_speed", &mMaxRunSpeed);
+	mRunSpeed = mMaxRunSpeed;
 	source->ReadParameter("turn_speed", &mTurnSpeed);
 	source->ReadParameter("upwards_speed", &mUpwardsSpeed);
 }
@@ -88,6 +94,8 @@ void Player::Update(float elapsedTime)
 	mCurrentTurnSpeed = 0.0f;
 
 	UpdateGameEvents();
+
+	std::cout << "velocity = " << mCurrentRunSpeed << " state = " << mState << "\n";
 
 	switch (mState)
 	{
@@ -145,54 +153,40 @@ void Player::UpdateGameEvents()
 			{
 			case IDLE:
 			case MOVING:
+				if (event->IsOfType<ShiftEvent>())
+				{
+					std::shared_ptr<const ShiftEvent> shiftEvent = std::static_pointer_cast<const ShiftEvent>(event);
+					bool isPressed = shiftEvent->IsPressed();
+					UpdateSpeed(isPressed);
+				}
+
+				//std::cout << "run speed: " << mRunSpeed << "\n";
 				if (event->IsOfType<ForwardEvent>())
 				{
 					std::shared_ptr<const ForwardEvent> forwardEvent = std::static_pointer_cast<const ForwardEvent>(event);
 					bool isPressed = forwardEvent->IsPressed();
 
-					mHasMoved |= isPressed;
-
-					if (isPressed)
-					{
-						mCurrentRunSpeed = mRunSpeed;
-					}
-					else
-					{
-						mCurrentRunSpeed = 0.0f;
-					}
-				}
+					UpdateVelocity(isPressed, true);
+				} 
 				else if (event->IsOfType<BackwardEvent>())
 				{
 					std::shared_ptr<const BackwardEvent> backwardEvent = std::static_pointer_cast<const BackwardEvent>(event);
 					bool isPressed = backwardEvent->IsPressed();
 
-					mHasMoved |= isPressed;
-
-					if (isPressed)
-					{
-						mCurrentRunSpeed = -mRunSpeed;
-					}
-					else
-					{
-						mCurrentRunSpeed = 0.0f;
-					}
+					UpdateVelocity(isPressed, false);
 				}
 				
 				if (event->IsOfType<LeftEvent>())
 				{
 					std::shared_ptr<const LeftEvent> leftEvent = std::static_pointer_cast<const LeftEvent>(event);
 					bool isPressed = leftEvent->IsPressed();
-
-					/*mHasMoved |= isPressed;
-
-					if (isPressed)
-					{
-						mCurrentRunSpeed = mRunSpeed;
-					}
-					else
-					{
-						mCurrentRunSpeed = 0.0f;
-					}*/
+					UpdateLateralAngle(isPressed, true);					
+				}
+				else if (event->IsOfType<RightEvent>())
+				{
+					std::shared_ptr<const RightEvent> rightEvent = std::static_pointer_cast<const RightEvent>(event);
+					bool isPressed = rightEvent->IsPressed();
+					UpdateLateralAngle(isPressed, false);
 				}
 
 				if (event->IsOfType<TurnEvent>())
@@ -209,12 +203,59 @@ void Player::UpdateGameEvents()
 					mHasJumped = true;
 					mCurrentUpwardsSpeed = mUpwardsSpeed;
 				}
+
 				break;
 			default:
 				break;
 			}
 		}
 	}
+}
+
+void Player::UpdateSpeed(bool isAccelerating)
+{
+	if (isAccelerating && !mIsShiftPressed)
+	{
+		mRunSpeed = mMaxRunSpeed * 2.0f;
+		mIsShiftPressed = true;
+	}
+	else if (!isAccelerating && mIsShiftPressed)
+	{
+		mRunSpeed = mMaxRunSpeed;
+		mIsShiftPressed = false;
+	}
+	if (mCurrentRunSpeed > 0.0f)
+	{
+		mCurrentRunSpeed = mRunSpeed;
+	}
+}
+
+void Player::UpdateVelocity(bool isMoving, bool isForward)
+{
+	mHasMoved |= isMoving;
+	if (isMoving)
+	{
+		float sign = isForward ? 1.0f : -1.0f;
+		mCurrentRunSpeed = sign * mRunSpeed;
+	}
+	else
+	{
+		mCurrentRunSpeed = 0.0f;
+	}
+}
+
+void Player::UpdateLateralAngle(bool isMoving, bool isLeft)
+{
+	if (isMoving)
+	{
+		float angle = isLeft ? 90.0f : -90.0f;
+		mRotOffsetForLateralMoving = glm::radians(angle);
+	}
+	else
+	{
+		mRotOffsetForLateralMoving = 0.0f;
+	}
+	mHasMoved = true;
 }
 
 void Player::UpdateIdle(float elapsedTime)
@@ -270,7 +311,7 @@ void Player::UpdateMoving(float elapsedTime)
 			PhysicsComponent* physicsComponent = GetComponent<PhysicsComponent>();
 
 			float rotationAngle = CalculateTurnPosition(elapsedTime, mCurrentTurnSpeed);
-			glm::vec3 newVelocity = CalculateRunPosition(elapsedTime, rotationAngle, physicsComponent->GetVelocity(), mCurrentRunSpeed);
+			glm::vec3 newVelocity = CalculateRunPosition(elapsedTime, rotationAngle, mRotOffsetForLateralMoving, physicsComponent->GetVelocity(), mCurrentRunSpeed);
 			newVelocity = CalculateJumpPosition(elapsedTime, newVelocity, mCurrentUpwardsSpeed);
 			physicsComponent->SetVelocity(newVelocity);
 
@@ -300,7 +341,7 @@ void Player::UpdateJumping(float elapsedTime)
 	{
 		PhysicsComponent* physicsComponent = GetComponent<PhysicsComponent>();
 			
-		glm::vec3 newVelocity = CalculateRunPosition(elapsedTime, mCurrentTurnAngle, physicsComponent->GetVelocity(), mCurrentRunSpeed);
+		glm::vec3 newVelocity = CalculateRunPosition(elapsedTime, mCurrentTurnAngle, mRotOffsetForLateralMoving, physicsComponent->GetVelocity(), mCurrentRunSpeed);
 		newVelocity = CalculateJumpPosition(elapsedTime, newVelocity, mCurrentUpwardsSpeed);
 		physicsComponent->SetVelocity(newVelocity);
 	}
@@ -316,10 +357,10 @@ void Player::UpdateFalling(float elapsedTime)
 	}
 }
 
-glm::vec3 Player::CalculateRunPosition(float elapsedTime, float rotY, glm::vec3 velocity, float runSpeed)
+glm::vec3 Player::CalculateRunPosition(float elapsedTime, float rotY, float rotOffset, glm::vec3 velocity, float runSpeed)
 {
-	velocity.x = glm::sin(rotY) * runSpeed;
-	velocity.z = glm::cos(rotY) * runSpeed;
+	velocity.x = glm::sin(rotY + rotOffset) * runSpeed;
+	velocity.z = glm::cos(rotY + rotOffset) * runSpeed;
 
 	return velocity;
 }

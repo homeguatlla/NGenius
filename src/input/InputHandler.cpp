@@ -3,6 +3,7 @@
 #include "IInputListener.h"
 
 #include <GLFW/glfw3.h>
+#include <iostream>
 
 InputHandler::InputHandler() : mWindow(nullptr), mIsInitialized(false)
 {

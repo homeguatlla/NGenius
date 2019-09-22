@@ -19,6 +19,7 @@ class Player : public BaseGameEntity<Player>
 	};
 
 	State mState;
+	float mMaxRunSpeed;
 	float mRunSpeed;
 	float mTurnSpeed;
 	float mUpwardsSpeed;
@@ -29,9 +30,11 @@ class Player : public BaseGameEntity<Player>
 	float mLastTurnX;
 	float mCurrentTurnAngle;
 	float mOriginalTurnAngle;
+	float mRotOffsetForLateralMoving;
 
 	bool mHasMoved;
 	bool mHasJumped;
+	bool mIsShiftPressed;
 
 public:
 	explicit Player(Transformation* transformation, IRenderer* renderer, InputComponent* playerInputComponent, 
@@ -59,8 +62,11 @@ private:
 	void UpdateFalling(float elapsedTime);
 
 	void UpdateAnimations();
+	void UpdateSpeed(bool isAccelerating);
+	void UpdateVelocity(bool isMoving, bool isForward);
+	void UpdateLateralAngle(bool isMoving, bool isLeft);
 
-	glm::vec3 CalculateRunPosition(float elapsedTime, float rotY, glm::vec3 velocity, float runSpeed);
+	glm::vec3 CalculateRunPosition(float elapsedTime, float rotY, float rotOffset, glm::vec3 velocity, float runSpeed);
 	float CalculateTurnPosition(float elapsedTime, float turnSpeed);
 	glm::vec3 CalculateJumpPosition(float elapsedTime, glm::vec3 velocity, float upwardsSpeed);
 };
