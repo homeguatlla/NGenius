@@ -95,7 +95,7 @@ void Player::Update(float elapsedTime)
 
 	UpdateGameEvents();
 
-	std::cout << "velocity = " << mCurrentRunSpeed << " state = " << mState << "\n";
+	//std::cout << "velocity = " << mCurrentRunSpeed << " state = " << mState << "\n";
 
 	switch (mState)
 	{

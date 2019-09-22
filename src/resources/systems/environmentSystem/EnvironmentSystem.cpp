@@ -93,6 +93,7 @@ void EnvironmentSystem::UpdateTime()
 		dayHour = dayHour - 2400;
 	}
 	mSunLight->SetDayTime(dayHour);
+	mSunLightDirection = mSunLight->GetSunLightDirection();
 	//std::cout << dayHour << "\n";
 }
 
@@ -205,7 +206,7 @@ float EnvironmentSystem::GetTimer() const
 
 glm::vec3 EnvironmentSystem::GetSunLightDirection() const
 {
-	return mSunLight->GetSunLightDirection();
+	return mSunLightDirection;
 }
 
 glm::vec3 EnvironmentSystem::GetSunLightColor() const

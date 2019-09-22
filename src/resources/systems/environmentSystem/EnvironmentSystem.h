@@ -19,6 +19,7 @@ class EnvironmentSystem : public BaseVisitable<>, public IGameSceneListener
 	std::vector<glm::vec3> mModificatorsPositions;
 	SunLight* mSunLight;
 	long mDayTime;
+	glm::vec3 mSunLightDirection;
 
 public:
 	EnvironmentSystem();

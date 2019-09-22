@@ -66,7 +66,8 @@ void ShadowsRenderPassSubSystem::UpdateShadowCastMatrix()
 	glm::vec3 position = mTarget->GetTransformation()->GetPosition();
 	mShadowCastCamera->SetPosition(glm::normalize(mDirectionalLightDirection) + position);
 	mShadowCastCamera->SetTarget(position);
-	mShadowCastCamera->SetUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::vec3 vectorOnZX(1.0f, 0.0f, 0.0f);
+	mShadowCastCamera->SetUp(glm::cross(vectorOnZX, mDirectionalLightDirection));
 	mShadowMapMatrix = CalculateShadowMapMatrix(mShadowCastCamera);
 }
 

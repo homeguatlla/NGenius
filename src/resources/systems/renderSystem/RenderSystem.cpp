@@ -743,12 +743,13 @@ void RenderSystem::ApplyShadows(IRenderer* renderer)
 {
 	if (mShadowsRenderPass->IsEnabled())
 	{
-		assert(mEnvironmentSystem != nullptr);
-		SetCastingShadowsParameters(-mEnvironmentSystem->GetSunLightDirection(), SHADOWS_PFC_COUNTER);
+		assert(mEnvironmentSystem != nullptr);		
 
 		MaterialEffectShadowProperties* effect = mCurrentMaterial->GetEffect<MaterialEffectShadowProperties>();
 		if (effect != nullptr)
 		{
+			glm::vec3 sunLightDirection = -mEnvironmentSystem->GetSunLightDirection();
+			SetCastingShadowsParameters(sunLightDirection, SHADOWS_PFC_COUNTER);
 			int effectPFCCounter = effect->GetPFCCounter() == -1 ? mShadowsRenderPass->GetShadowMapPFCCounter() : effect->GetPFCCounter();
 			effect->SetParameters(mShadowsRenderPass->GetShadowMapTexture(),
 				mShadowsRenderPass->GetShadowMapMatrix(),
