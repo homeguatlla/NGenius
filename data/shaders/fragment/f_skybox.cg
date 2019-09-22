@@ -3,8 +3,8 @@
 in vec3 textureCoords;
 out vec4 color;
  
-layout(binding=8) uniform samplerCube cubeMap1;
-layout(binding=9) uniform samplerCube cubeMap2;
+layout(binding=9) uniform samplerCube cubeMap1;
+layout(binding=10) uniform samplerCube cubeMap2;
 uniform float blendFactor;
 uniform vec3 fogColor;
 uniform vec3 lightColor;

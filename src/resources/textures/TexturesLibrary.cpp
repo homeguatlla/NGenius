@@ -174,7 +174,7 @@ void TexturesLibrary::ReadTextureCubemapFrom(core::utils::IDeserializer* source)
 	if (!filenames.empty())
 	{
 		TextureCubemap* cubemap = DBG_NEW TextureCubemap();
-		cubemap->Load(filenames, GL_TEXTURE8 + mTextureCubemapUnit);
+		cubemap->Load(filenames, GL_TEXTURE9 + mTextureCubemapUnit);
 		mTextureCubemapUnit++;
 		AddOrReplaceElement(textureName, cubemap);
 	}

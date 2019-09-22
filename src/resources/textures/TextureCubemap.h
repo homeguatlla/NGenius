@@ -13,5 +13,6 @@ public:
 
 	void Load(std::vector<std::string>& filenames, int textureUnit);
 	unsigned int GetNumberTextures() const;
+	void SetActive(bool active) override;
 };
 

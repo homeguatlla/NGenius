@@ -43,8 +43,9 @@ void ITexture::SetActive(bool active)
 	if (active)
 	{
 		glActiveTexture(mTextureUnit);
+		//glBindTextureUnit(mTextureUnit, mTextureID);
 		glBindTexture(GL_TEXTURE_2D, mTextureID);
-		glBindTextureUnit(mTextureUnit, mTextureID);
+		
 	}
 	else
 	{

@@ -18,6 +18,6 @@ public:
 	unsigned int GetHeight() const;
 
 	void SetUnit(unsigned int unit);
-	void SetActive(bool active);
+	virtual void SetActive(bool active);
 };
 

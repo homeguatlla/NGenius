@@ -20,9 +20,10 @@ void TextureCubemap::Load(std::vector<std::string>& filenames, int textureUnit)
 	PNGLoader loader;
 	
 	//assert(filenames.size() == 6);
-
+	glEnable(GL_TEXTURE_CUBE_MAP);
 	glGenTextures(1, &mTextureID);
-	glActiveTexture(textureUnit);
+	//glActiveTexture(textureUnit);
+	//mTextureUnit = textureUnit;
 	glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureID);
 
 	for (unsigned int i = 0; i < mNumberTextures; ++i)
@@ -46,9 +47,24 @@ void TextureCubemap::Load(std::vector<std::string>& filenames, int textureUnit)
 
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glDisable(GL_TEXTURE_CUBE_MAP);
 }
 
 unsigned int TextureCubemap::GetNumberTextures() const
 {
 	return mNumberTextures;
+}
+
+void TextureCubemap::SetActive(bool active)
+{
+	if (active)
+	{
+		glActiveTexture(mTextureUnit);
+		//glBindTextureUnit(mTextureUnit, mTextureID);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureID);
+	}
+	else
+	{
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	}
 }

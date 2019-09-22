@@ -733,8 +733,11 @@ void RenderSystem::ApplyLights(IRenderer* renderer)
 	MaterialEffectTextureCubemap* textureCubemapMaterial = mCurrentMaterial->GetEffect<MaterialEffectTextureCubemap>();
 	if (textureCubemapMaterial != nullptr)
 	{
-		textureCubemapMaterial->SetCubemap1(static_cast<TextureCubemap*>(mTexturesLibrary->GetElement(mEnvironmentSystem->GetSkyBoxCubemapOrigin())));
-		textureCubemapMaterial->SetCubemap2(static_cast<TextureCubemap*>(mTexturesLibrary->GetElement(mEnvironmentSystem->GetSkyBoxCubemapDestination())));
+		TextureCubemap* cubemap1 = static_cast<TextureCubemap*>(mTexturesLibrary->GetElement(mEnvironmentSystem->GetSkyBoxCubemapOrigin()));
+		TextureCubemap* cubemap2 = static_cast<TextureCubemap*>(mTexturesLibrary->GetElement(mEnvironmentSystem->GetSkyBoxCubemapDestination()));
+
+		textureCubemapMaterial->SetCubemap1(cubemap1);
+		textureCubemapMaterial->SetCubemap2(cubemap2);
 		textureCubemapMaterial->SetBlendFactor(mEnvironmentSystem->GetSunLightBlendFactor());
 	}
 }
@@ -809,8 +812,8 @@ void RenderSystem::SelectClippingPlane(RenderPass* renderPass)
 //GL_TEXTURE2 depth frame buffer
 //GL_TEXTURE3-16 in SelectTextures
 //GL_TEXTURE7 texture array
-//GL_TEXTURE8 cubemap1
-//GL_TEXTURE9 cubemap2
+//GL_TEXTURE9 cubemap1
+//GL_TEXTURE10 cubemap2
 //GL_TEXTURE17-19 free
 //GL_TEXTURE20 shadows
 //GL_TEXTURE21-31 free
@@ -868,13 +871,18 @@ void RenderSystem::SelectTextures()
 	MaterialEffectTextureCubemap* textureCubemapMaterial = mCurrentMaterial->GetEffect<MaterialEffectTextureCubemap>();
 	if (textureCubemapMaterial != nullptr)
 	{
-		textureCubemapMaterial->GetCubemap1()->SetUnit(GL_TEXTURE8);
+		glEnable(GL_TEXTURE_CUBE_MAP);
+		textureCubemapMaterial->GetCubemap1()->SetUnit(GL_TEXTURE9);
 		textureCubemapMaterial->GetCubemap1()->SetActive(true);
 		if (textureCubemapMaterial->GetCubemap2() != nullptr)
 		{
-			textureCubemapMaterial->GetCubemap2()->SetUnit(GL_TEXTURE9);
+			textureCubemapMaterial->GetCubemap2()->SetUnit(GL_TEXTURE10);
 			textureCubemapMaterial->GetCubemap2()->SetActive(true);
 		}
+	}
+	else
+	{
+		glDisable(GL_TEXTURE_CUBE_MAP);
 	}
 
 	MaterialEffectWater* effectWater = mCurrentMaterial->GetEffect<MaterialEffectWater>();
