@@ -35,12 +35,12 @@ public:
 
 private:
 	EntitiesPatch() = default;
-	void CreateEntities(NGenius* engine);
+	void CreateEntities(GameScene* scene);
 	void ReadModels(core::utils::IDeserializer* source);
-	void FillEntitiesRadiusVector(NGenius* engine);
+	void FillEntitiesRadiusVector(GameScene* scene);
 	int CalculateNumBiggerEntitiesFitArea();
 	bool FillWithRandomPoint(glm::vec3& point);
-	void SpawnEntities(NGenius* engine, int numEntities);
+	void SpawnEntities(GameScene* scene, int numEntities);
 	bool CanPlaceEntityOnPoint(float radius, glm::vec3& point, std::vector<std::pair<glm::vec3, float>>& pointsWithEntityOver);
 
 	// Heredado vía BaseGameEntity

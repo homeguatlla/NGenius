@@ -213,14 +213,21 @@
 						<converters>
 							<converter key="87" event="ForwardEvent"/>
 							<converter key="83" event="BackwardEvent"/>
+							<converter key="65" event="LeftEvent"/>
+							<converter key="68" event="RightEvent"/>
+							<converter key="340" event="ShiftEvent"/>
 							<converter key="32" event="JumpEvent"/>
 							<converter mouse="-1" event="TurnEvent"/>
 							<converter mouse="2" event="ZoomEvent"/>
 						</converters>
 					</component>
-					<component is_enabled="true" type="PhysicsComponent" is_static="0">
-						<gravity X="0.000000" Y="-9.800000" Z="0.000000"/>
+					<component is_enabled="true" type="PhysicsComponent" is_static="0" density="70">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 					</component>
+					<component is_enabled="true" type="GravityComponent">
+						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
+					</component>
+					<!--component is_enabled="true" type="DragComponent" k1="2.5" k2="0.05"/-->
 					<component is_enabled="true" type="CollisionComponent"/>
 				</components>
 			</player>
@@ -238,7 +245,7 @@
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 			</water>
-			<entity is_enabled="true" model="skybox" material="skybox" renderer="SkyBoxRenderer" layer="8">
+			<entity is_enabled="true" model="skybox" material="skybox" renderer="SkyBoxRenderer" layer="32">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>

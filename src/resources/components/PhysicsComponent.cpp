@@ -72,11 +72,14 @@ void PhysicsComponent::DoReadFrom(core::utils::IDeserializer* source)
 	source->ReadParameter(std::string("is_static"), &mIsStatic);
 	source->ReadParameter(std::string("density"), &mDensity);
 	mInitialVelocity = glm::vec3(0.0f);
-	source->BeginAttribute("initialVelocity");
-	source->ReadParameter("X", &mInitialVelocity.x);
-	source->ReadParameter("Y", &mInitialVelocity.y);
-	source->ReadParameter("Z", &mInitialVelocity.z);
-	source->EndAttribute();
+	if (source->HasAttribute("initialVelocity"))
+	{
+		source->BeginAttribute("initialVelocity");
+		source->ReadParameter("X", &mInitialVelocity.x);
+		source->ReadParameter("Y", &mInitialVelocity.y);
+		source->ReadParameter("Z", &mInitialVelocity.z);
+		source->EndAttribute();
+	}
 }
 
 void PhysicsComponent::DoWriteTo(core::utils::ISerializer* destination)

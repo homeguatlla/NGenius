@@ -30,19 +30,20 @@ void EntitiesPatch::Build(NGenius* engine)
 	mTerrain = static_cast<Terrain*>(engine->GetGameEntity("terrain"));
 	assert(mTerrain != nullptr);
 
-	CreateEntities(engine);
+	
 }
 
 void EntitiesPatch::DoInit(GameScene* scene, RenderSystem* renderSystem)
 {
+	CreateEntities(scene);
 }
 
-void EntitiesPatch::CreateEntities(NGenius* engine)
+void EntitiesPatch::CreateEntities(GameScene* scene)
 {
-	FillEntitiesRadiusVector(engine);
+	FillEntitiesRadiusVector(scene);
 	int numMaxEntitiesFittingArea = CalculateNumBiggerEntitiesFitArea();
 	int numEntitiesWithDensity = static_cast<int>(numMaxEntitiesFittingArea * mDensity / 100);
-	SpawnEntities(engine, numEntitiesWithDensity);
+	SpawnEntities(scene, numEntitiesWithDensity);
 }
 
 bool EntitiesPatch::CanPlaceEntityOnPoint(float radius, glm::vec3& point, std::vector<std::pair<glm::vec3, float>>& pointsWithEntityOver)
@@ -101,7 +102,7 @@ int EntitiesPatch::CalculateNumBiggerEntitiesFitArea()
 	return static_cast<int>(area / (radius * 4.0f)); // a bit more of diameter instead of 2, x 3
 }
 
-void EntitiesPatch::FillEntitiesRadiusVector(NGenius* engine)
+void EntitiesPatch::FillEntitiesRadiusVector(GameScene* scene)
 {
 	for (auto& pack : mModelsName)
 	{
@@ -109,7 +110,7 @@ void EntitiesPatch::FillEntitiesRadiusVector(NGenius* engine)
 		std::vector<std::string> names = std::get<0>(pack);
 		for (auto model : names)
 		{
-			IGameEntity* entity = engine->GetGameEntity(model);
+			IGameEntity* entity = scene->GetGameEntity(model);
 			if (entity != nullptr)
 			{
 				glm::vec3 size = entity->GetRenderer()->GetAABB().GetSize();
@@ -124,7 +125,7 @@ void EntitiesPatch::FillEntitiesRadiusVector(NGenius* engine)
 	}
 }
 
-void EntitiesPatch::SpawnEntities(NGenius* engine, int numEntities)
+void EntitiesPatch::SpawnEntities(GameScene* scene, int numEntities)
 {
 	std::vector<std::pair<glm::vec3, float>> pointsWithRadiusAlreadyPlaced;
 
@@ -156,7 +157,7 @@ void EntitiesPatch::SpawnEntities(NGenius* engine, int numEntities)
 						{
 							newEntity->GetTransformation()->SetPosition(point);							
 							newEntity->GetTransformation()->SetRotation(glm::vec3(0.0f, glm::radians(rotationY), 0.0f));
-							engine->AddEntity(newEntity);
+							scene->AddEntity(newEntity);
 						}
 					}
 					numModelsToPlace--;
