@@ -20,7 +20,9 @@ void PhysicsComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 
 PhysicsComponent* PhysicsComponent::DoClone() const
 {
-	return DBG_NEW PhysicsComponent(*this);
+	PhysicsComponent* newPhysicsComponent = DBG_NEW PhysicsComponent(*this);
+
+	return newPhysicsComponent;
 }
 
 bool PhysicsComponent::IsStatic() const
@@ -36,7 +38,12 @@ IComponent* PhysicsComponent::Create(IGameEntity* entity)
 	return component;
 }
 
-void PhysicsComponent::SetVelocity(glm::vec3& velocity)
+void PhysicsComponent::SetInitialVelocity(const glm::vec3& velocity)
+{
+	mInitialVelocity = velocity;
+}
+
+void PhysicsComponent::SetVelocity(const glm::vec3& velocity)
 {
 	mParticle->SetInitialVelocity(velocity);
 }

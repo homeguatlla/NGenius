@@ -5,8 +5,8 @@ in vec4 luminiscence;
 //in float fogVisibility;
 //in vec4 clipSpace;
 
-uniform sampler2D texture;
-uniform sampler2D depthTexture;
+layout(binding=3) uniform sampler2D texture;
+layout(binding=25) uniform sampler2D depthTexture;
 uniform vec3 fogColor;
 uniform float tile;
 uniform vec2 screenSize;

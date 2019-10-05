@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ParticlesSystem.h"
 #include "../entities/ParticlesEmitter.h"
+#include "../..//utils/serializer/XMLDeserializer.h"
 
 
 
@@ -30,4 +31,13 @@ void ParticlesSystem::AddParticleEmitter(ParticlesEmitter* emitter)
 		emitter->SetMaxParticlesUpdate(512);
 		mParticlesEmitters.push_back(emitter);
 	}
+}
+
+void ParticlesSystem::ReadFrom(core::utils::IDeserializer* source)
+{
+
+}
+
+void ParticlesSystem::WriteTo(core::utils::ISerializer* destination)
+{
 }

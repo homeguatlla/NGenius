@@ -35,12 +35,18 @@ class ParticlesEmitter : public BaseGameEntity<ParticlesEmitter>
 
 	//from global
 	GameScene* mGameScene;
+	std::string mParticleName;
 
 public:
 	ParticlesEmitter(Particle* particle, Transformation* transformation, IRenderer* renderer, float spawnRate);
 	~ParticlesEmitter();
 
 	ParticlesEmitter* DoClone() const override { return nullptr; }
+
+	// Heredado vía ISerializable
+	void ReadFrom(core::utils::IDeserializer* source) override;
+	static std::string GetClassName() { return std::string("emitter"); }
+	static IGameEntity* DoCreate();
 
 	void SetGameScene(GameScene* gameScene);
 
@@ -54,12 +60,19 @@ public:
 	void SetMaxParticlesUpdate(int maxParticlesUpdate);
 
 private:
+	ParticlesEmitter() = default;
+
 	bool CanCreateParticle() const;
 	Particle* CreateParticle();
 	void RemoveParticle(unsigned long index);
 	void SpawnNewParticles(float elapsedTime);
 	void RemoveDeadParticles();
+	void ReserveParticlesPool();
+
+	void ReadParameters(core::utils::IDeserializer* source);
+	void ReadMinMax3(core::utils::IDeserializer* source, glm::vec3& min, glm::vec3& max);
+	void ReadMinMax4(core::utils::IDeserializer* source, glm::vec4& min, glm::vec4& max);
 
 	// Heredado vía BaseGameEntity
-	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
+	void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 };

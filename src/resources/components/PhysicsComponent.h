@@ -29,7 +29,8 @@ public:
 
 	//[[deprecated("Replaced by NPhysicsEngine, this both methods must be removed. Only physics engine will Set velocity")]]
 	const glm::vec3 GetVelocity() const { return mParticle->GetVelocity(); }
-	void SetVelocity(glm::vec3& velocity);
+	void SetInitialVelocity(const glm::vec3& velocity);
+	void SetVelocity(const glm::vec3& velocity);
 
 private:
 	PhysicsComponent() = default;

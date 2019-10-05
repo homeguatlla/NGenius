@@ -28,8 +28,13 @@ mRotationSpeedMax(0.0f),
 mGameScene(nullptr),
 mMaxParticlesUpdate(MAX_PARTICLES)
 {
-	mParticles.reserve(MAX_PARTICLES);
-	for (unsigned int i = 0; i < MAX_PARTICLES; ++i)
+	
+}
+
+void ParticlesEmitter::ReserveParticlesPool()
+{
+	mParticles.reserve(mMaxParticlesUpdate);
+	for (unsigned int i = 0; i < mMaxParticlesUpdate; ++i)
 	{
 		mParticlesPool.push_back(static_cast<Particle*>(mOriginalParticle->Clone()));
 	}
@@ -80,6 +85,12 @@ void ParticlesEmitter::RemoveDeadParticles()
 
 void ParticlesEmitter::DoInit(GameScene* scene, RenderSystem* renderSystem)
 {
+	mOriginalParticle = static_cast<Particle*>(scene->GetGameEntity(mParticleName));
+	assert(mOriginalParticle != nullptr);
+
+	SetMaxParticlesUpdate(MAX_PARTICLES);
+	SetGameScene(scene);
+	ReserveParticlesPool();
 }
 
 void ParticlesEmitter::SpawnNewParticles(float elapsedTime)
@@ -172,9 +183,94 @@ Particle* ParticlesEmitter::CreateParticle()
 		lambda = static_cast<float>(rand() % 100) / 100.0f;
 		float yVelocity = mVelocityMin.y + lambda * (mVelocityMax.y - mVelocityMin.y);
 		PhysicsComponent* physicsComponent = particle->GetComponent<PhysicsComponent>();
-		physicsComponent->SetVelocity(glm::vec3(xVelocity, yVelocity, zVelocity));
+		physicsComponent->SetInitialVelocity(glm::vec3(xVelocity, yVelocity, zVelocity));
 	}
 	return particle;
+}
+
+void ParticlesEmitter::ReadFrom(core::utils::IDeserializer* source)
+{
+	BaseGameEntity::ReadFrom(source);
+
+	source->ReadParameter("spawn_rate", &mSpawnRate);
+	source->ReadParameter("particle", mParticleName);
+	if (source->HasAttribute("parameters"))
+	{
+		source->BeginAttribute(std::string("parameters"));
+		ReadParameters(source);
+		source->EndAttribute();
+	}
+}
+
+void ParticlesEmitter::ReadParameters(core::utils::IDeserializer* source)
+{
+	if (source->HasAttribute("gradient_color"))
+	{
+		source->BeginAttribute(std::string("gradient_color"));
+		ReadMinMax4(source, mColorOrigin, mColorDestination);
+		source->EndAttribute();
+	}
+	if (source->HasAttribute("velocity"))
+	{
+		source->BeginAttribute(std::string("velocity"));
+		ReadMinMax3(source, mVelocityMin, mVelocityMax);
+		source->EndAttribute();
+	}
+	if (source->HasAttribute("spawn_area"))
+	{
+		source->BeginAttribute(std::string("spawn_area"));
+		ReadMinMax3(source, mSpawnAreaMin, mSpawnAreaMax);
+		source->EndAttribute();
+	}
+	if (source->HasAttribute("scale"))
+	{
+		source->BeginAttribute(std::string("scale"));
+		source->ReadParameter("from", &mScale.x);
+		source->ReadParameter("to", &mScale.y);
+		source->EndAttribute();
+	}
+	if (source->HasAttribute("rotation"))
+	{
+		source->BeginAttribute(std::string("rotation"));
+		source->ReadParameter("from", &mRotationSpeedMin);
+		source->ReadParameter("to", &mRotationSpeedMax);
+		source->EndAttribute();
+	}
+}
+
+void ParticlesEmitter::ReadMinMax3(core::utils::IDeserializer* source, glm::vec3& min, glm::vec3& max)
+{
+	source->BeginAttribute(std::string("min"));
+		source->ReadParameter("X", &min.x);
+		source->ReadParameter("Y", &min.y);
+		source->ReadParameter("Z", &min.z);
+	source->EndAttribute();
+	source->BeginAttribute(std::string("max"));
+		source->ReadParameter("X", &max.x);
+		source->ReadParameter("Y", &max.y);
+		source->ReadParameter("Z", &max.z);
+	source->EndAttribute();
+}
+
+void ParticlesEmitter::ReadMinMax4(core::utils::IDeserializer* source, glm::vec4& min, glm::vec4& max)
+{
+	source->BeginAttribute(std::string("min"));
+		source->ReadParameter("X", &min.x);
+		source->ReadParameter("Y", &min.y);
+		source->ReadParameter("Z", &min.z);
+		source->ReadParameter("W", &min.w);
+	source->EndAttribute();
+	source->BeginAttribute(std::string("max"));
+		source->ReadParameter("X", &max.x);
+		source->ReadParameter("Y", &max.y);
+		source->ReadParameter("Z", &max.z);
+		source->ReadParameter("W", &max.w);
+	source->EndAttribute();
+}
+
+IGameEntity* ParticlesEmitter::DoCreate()
+{
+	return DBG_NEW ParticlesEmitter();
 }
 
 void ParticlesEmitter::SetGameScene(GameScene* gameScene)

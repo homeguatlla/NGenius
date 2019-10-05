@@ -71,5 +71,20 @@ void AABB::Expand(const glm::vec3& size)
 float AABB::GetVolume() const
 {
 	glm::vec3 size = GetSize();
+	//this ifs are in case the aabb is a plane, or a particle
+	//the volume will be the area. Let's see if this works.
+	if (size.x == 0.0f)
+	{
+		return size.y * size.z;
+	}
+	else if (size.y == 0.0f)
+	{
+		return size.x * size.z;
+	}
+	else if (size.z == 0.0f)
+	{
+		return size.x * size.y;
+	}
+
 	return size.x * size.y * size.z;
 }

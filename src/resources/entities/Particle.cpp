@@ -19,24 +19,44 @@ mColor(1.0f),
 mColorOrigin(1.0f),
 mColorDestination(1.0f)
 {
+	CreateRenderer(model, material);
+}
+
+void Particle::CreateRenderer(Model* model, IMaterial* material)
+{
 	ParticleRenderer* renderer = DBG_NEW ParticleRenderer(model, material);
 	renderer->SetTransparency(true);
 	renderer->SetLayer(IRenderer::LAYER_PARTICLES);
 	SetRenderer(renderer);
 }
 
-
-Particle::~Particle()
+void Particle::ReadFrom(core::utils::IDeserializer* source)
 {
+	BaseGameEntity::ReadFrom(source);
+	source->ReadParameter("max_live_time", &mMaxLiveTime);
+}
+
+IGameEntity* Particle::DoCreate()
+{
+	return DBG_NEW Particle();
 }
 
 Particle* Particle::DoClone() const
 {
-	Particle* clone = DBG_NEW Particle(new Transformation(*GetTransformation()), mModel, mMaterial, mLiveTime);
-
+	Particle* clone = DBG_NEW Particle(new Transformation(*GetTransformation()), mModel, mMaterial, mMaxLiveTime);
+	
 	return clone;
 }
 
+void Particle::Build(NGenius* engine)
+{
+	if (!mMaterialName.empty())
+	{
+		mMaterial = engine->GetMaterial(mMaterialName);
+		mModel = engine->GetModel(mModelName);
+		CreateRenderer(mModel, mMaterial);
+	}
+}
 
 bool Particle::IsAlive() const
 {

@@ -15,6 +15,9 @@
 #include "../entities/Water.h"
 #include "../entities/PointsPatch.h"
 #include "../entities/EntitiesPatch.h"
+#include "../entities/Particle.h"
+#include "../entities/ParticlesEmitter.h"
+
 #include "../Memory.h"
 
 #include <algorithm>
@@ -31,6 +34,8 @@ mRenderSystem { renderSystem }
 	InstantiableObject::RegisterGameEntityType<Water>();
 	InstantiableObject::RegisterGameEntityType<PointsPatch>();
 	InstantiableObject::RegisterGameEntityType<EntitiesPatch>();
+	InstantiableObject::RegisterGameEntityType<Particle>();
+	InstantiableObject::RegisterGameEntityType<ParticlesEmitter>();
 }
 
 GameScene::~GameScene()
@@ -120,8 +125,7 @@ IGameEntity* GameScene::GetGameEntity(int id)
 void GameScene::AddEntity(IGameEntity* entity)
 {
 	entity->Build(mEngine);
-	entity->Init(this, mRenderSystem);
-
+	
 	if (entity->GetRenderer() != nullptr)
 	{
 		mAABB = mAABB.Merge(entity->GetRenderer()->GetAABB());
@@ -163,8 +167,14 @@ void GameScene::AddNewEntities()
 	for (IGameEntity* entity : mNewEntitiesToAdd)
 	{
 		mEntities.push_back(entity);
+	}
+
+	for (IGameEntity* entity : mNewEntitiesToAdd)
+	{
+		entity->Init(this, mRenderSystem);
 		NotifyEntityAdded(entity);
 	}
+
 	mNewEntitiesToAdd.clear();
 }
 

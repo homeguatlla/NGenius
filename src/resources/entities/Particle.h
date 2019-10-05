@@ -6,7 +6,7 @@ class IMaterial;
 
 class Particle : public BaseGameEntity<Particle>
 {
-	const float mMaxLiveTime;
+	float mMaxLiveTime;
 	float mLiveTime;
 	glm::vec2 mScale;
 	float mRotationSpeed;
@@ -22,9 +22,16 @@ class Particle : public BaseGameEntity<Particle>
 
 public:
 	Particle(Transformation* transformation, Model* model, IMaterial* material, float liveTime);
-	~Particle();
+	~Particle() = default;
+
+	// Heredado vía ISerializable
+	void ReadFrom(core::utils::IDeserializer* source) override;
+	static std::string GetClassName() { return std::string("particle"); }
+	static IGameEntity* DoCreate();
 
 	Particle* DoClone() const override;
+
+	void Build(NGenius* engine) override;
 
 	bool IsAlive() const;
 	void Update(float elapsedTime) override;
@@ -38,5 +45,9 @@ public:
 
 	// Heredado vía BaseGameEntity
 	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
+
+private:
+	Particle() = default;
+	void CreateRenderer(Model* model, IMaterial* material);
 };
 
