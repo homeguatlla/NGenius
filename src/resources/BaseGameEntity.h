@@ -150,6 +150,9 @@ void BaseGameEntity<TD>::Init(GameScene* scene, RenderSystem* renderSystem)
 	}
 }
 
+//DOInit will happen just when all entities will have built and are going to pass from newEntitiesToAdd list
+//to entitiesList in the scene. In this method, an entity can clone new existing entities due all entities have
+//been created and build. The new cloned entities will be added too in the entitiesList in the same frame
 template<class TD>
 inline void BaseGameEntity<TD>::DoInit(GameScene* scene, RenderSystem* renderSystem)
 {
@@ -177,6 +180,8 @@ void BaseGameEntity<TD>::Update(float elapsedTime)
 	}
 }
 
+//BUILD method allows the entity to create itself. This way, when an entity will be added from 
+//newEntities to add to the list of entities in the scene will be created.
 template<class TD>
 void BaseGameEntity<TD>::Build(NGenius* engine)
 {

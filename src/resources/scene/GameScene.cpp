@@ -164,18 +164,29 @@ void GameScene::UnRegisterGameSceneListener(IGameSceneListener* listener)
 
 void GameScene::AddNewEntities()
 {
+	std::vector<IGameEntity*> mEntitiesAdded;
+
+	//adding new entities
 	for (IGameEntity* entity : mNewEntitiesToAdd)
 	{
 		mEntities.push_back(entity);
+		mEntitiesAdded.push_back(entity);
 	}
+	mNewEntitiesToAdd.clear();
 
-	for (IGameEntity* entity : mNewEntitiesToAdd)
+	//entities just added need to initialize.
+	//Initialize can make some entities clone existing entities we want to be added in this frame
+	for (IGameEntity* entity : mEntitiesAdded)
 	{
 		entity->Init(this, mRenderSystem);
 		NotifyEntityAdded(entity);
 	}
+	mEntitiesAdded.clear();
 
-	mNewEntitiesToAdd.clear();
+	if (!mNewEntitiesToAdd.empty())
+	{
+		AddNewEntities();
+	}
 }
 
 void GameScene::NotifyEntityAdded(IGameEntity* entity)

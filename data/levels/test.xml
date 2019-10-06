@@ -605,7 +605,7 @@
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
 			</terrain_points_patch>
-			<!--terrain_entities_patch is_enabled="true" layer="8" min_height ="6.0" max_height="20" wide="100" lenght="100" density="20" allow_intersection="true">
+			<terrain_entities_patch is_enabled="true" layer="8" min_height ="6.0" max_height="20" wide="100" lenght="100" density="20" allow_intersection="true">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>
@@ -617,7 +617,7 @@
 						<model name="tree_foliage"/>
 					</pack>
 				</models>
-			</terrain_entities_patch-->				
+			</terrain_entities_patch>				
 		</entities>
 	</game_scene>
 </ngenius>

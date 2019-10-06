@@ -29,8 +29,6 @@ void EntitiesPatch::Build(NGenius* engine)
 {
 	mTerrain = static_cast<Terrain*>(engine->GetGameEntity("terrain"));
 	assert(mTerrain != nullptr);
-
-	
 }
 
 void EntitiesPatch::DoInit(GameScene* scene, RenderSystem* renderSystem)
