@@ -9,7 +9,7 @@
 #include <GL/glew.h>
 
 AnimatedModel::AnimatedModel(const std::string& name, Mesh* mesh, Joint* rootJoint) :
-	Model(mesh),
+	Model(name, mesh),
 	mName(name),
 	mRootJoint(rootJoint),
 	mAnimator(this),

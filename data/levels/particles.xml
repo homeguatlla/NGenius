@@ -135,12 +135,12 @@
 		</cameras>
 	</libraries>
 	<engine>
-		<debug is_enabled = "true" />
+		<debug is_enabled = "false" />
 	</engine>
 	<renderer>
-		<water is_enabled = "true" camera="gameplay_camera" height="6.0"/>
-		<shadows is_enabled = "true"/>
-		<fog is_enabled = "true" />
+		<water is_enabled = "false" camera="gameplay_camera" height="6.0"/>
+		<shadows is_enabled = "false"/>
+		<fog is_enabled = "false" />
 		<render_layers>
 			<layer name="GUI" value="1"/>
 			<layer name="PARTICLES" value="2"/>
@@ -202,7 +202,7 @@
 			</particle>
 			<emitter is_enabled="true" spawn_rate="10" particle="smoke">
 				<transformation> 
-					<position X="5" Y="6.5" Z="5"/>
+					<position X="5" Y="6" Z="5"/>
 					<rotation X="-90" Y="0" Z="0.000000"/>
 					<scale X="0.180000" Y="0.180000" Z="0.180000"/>
 				</transformation>
@@ -211,7 +211,7 @@
 						<min X="1" Y="1" Z="0" W="1"/>
 						<max X="0.8" Y="0.8" Z="0.8" W ="0"/>
 					</gradient_color>					
-					<scale from = "0.1" to = "1.0" />
+					<scale from = "0.5" to = "2.0" />
 					<rotation from = "0" to = "1" />
 					<velocity>
 						<min X= "0" Y = "0.1" Z = "0" />
@@ -297,13 +297,13 @@
 					</component>
 				</components>
 			</entity>
-			<water is_enabled="true" name="water" material="water" wide="50" length="50">
+			<!--water is_enabled="true" name="water" material="water" wide="50" length="50">
 				<transformation>
 					<position X="4.000000" Y="0.000000" Z="4.500000"/>
 					<rotation X="-90.000000" Y="0.000000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
-			</water>	
+			</water-->	
 			<!--entity is_enabled="true" name="rock" model="rock2" material="rock2_material" renderer="IndicesRenderer" layer="8">
 				<transformation>
 					<position X="4.000000" Y="10.500000" Z="0.000000"/>

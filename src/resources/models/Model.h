@@ -13,6 +13,7 @@ protected:
 	Mesh* mMesh;
 
 private:
+	std::string mName;
 	AABB mAABB;
 	int mVAO;
 	int mMatrixVBO;
@@ -22,9 +23,10 @@ private:
 	int mColorVBO;
 
 public:
-	Model(Mesh* model);
+	Model(const std::string& name, Mesh* model);
 	~Model();
 
+	std::string GetName() const { return mName; }
 	unsigned int GetID() const;
 	const AABB& GetAABB() const;
 	int GetVAOID() const;

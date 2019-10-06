@@ -42,9 +42,9 @@ void RenderPass::SetFrameBufferOutput(IFrameBuffer* output)
 	mFrameBufferOutput = output;
 }
 
-void RenderPass::BindOutput() const
+void RenderPass::BindOutput(RenderSystem* renderSystem) const
 {
-	mFrameBufferOutput->BindBuffer();
+	mFrameBufferOutput->BindBuffer(renderSystem);
 }
 
 void RenderPass::UnbindOutput() const

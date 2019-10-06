@@ -98,6 +98,11 @@ mNumberRenderers(0)
 	InstantiableObject::RegisterRendererType<SkyBoxRenderer>();
 	InstantiableObject::RegisterRendererType<IndicesRenderer>();
 	InstantiableObject::RegisterRendererType<PointsRenderer>();
+
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_CLIP_PLANE0);
 }
 
 RenderSystem::~RenderSystem()
@@ -222,6 +227,8 @@ void RenderSystem::UpdateCameras()
 
 void RenderSystem::Render()
 {
+	ApplyDepthTest(true, true, GL_LESS);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	mNumberDrawCalls = 0;
@@ -251,7 +258,7 @@ void RenderSystem::RenderPasses(std::vector<RenderPass*>& renderPasses)
 		{
 			if (pass->HasFrameBufferOutput())
 			{
-				pass->BindOutput();
+				pass->BindOutput(this);
 				Render(pass);
 				pass->UnbindOutput();
 				pass->CopyDepthBuffer();
@@ -284,6 +291,8 @@ RenderPass* RenderSystem::GetRenderPass(const std::string& renderPassName) const
 void RenderSystem::Render(RenderPass* renderPass)
 {
 	RenderersList renderers = mRenderersPerPass[renderPass->GetLayersMask()];
+
+	//std::cout << "render pass " << renderPass->GetName() << "\n";
 
 	if (renderers.size() > 0)
 	{
@@ -331,6 +340,7 @@ void RenderSystem::Render(RenderPass* renderPass)
 					}
 					++i;
 				}
+				//std::cout << " renderer " << mInstances[0]->GetModel()->GetName() << "\n";
 				RenderInstances(renderPass, mInstances[0], mInstances);
 			}
 			else
@@ -623,24 +633,21 @@ void RenderSystem::RenderInstances(RenderPass* renderPass, IRenderer* renderer, 
 	mNumberTrianglesRendered += renderer->GetNumberTrianglesRendered();
 }
 
-void RenderSystem::ApplyDepthBuffer(IRenderer* renderer)
+void RenderSystem::ApplyDepthTest(bool isEnabled, int mask, int func)
 {
-	if (renderer->IsDepthBufferEnabled())
+	if (isEnabled)
 	{
-		int nextDepthBufferMask = renderer->GetDepthBufferMask();
-		int nextDepthBufferFunc = renderer->GetDepthBufferFunc();
-
-		if (!mIsLastRendererHadDepthBufferEnabled || (mLastDepthBufferMask != nextDepthBufferMask || mLastDepthBufferFunc != nextDepthBufferFunc))
+		if (!mIsLastRendererHadDepthBufferEnabled || (mLastDepthBufferMask != mask || mLastDepthBufferFunc != func))
 		{
-			if (mLastDepthBufferFunc != nextDepthBufferFunc)
+			if (mLastDepthBufferFunc != func)
 			{
-				mLastDepthBufferFunc = nextDepthBufferFunc;
+				mLastDepthBufferFunc = func;
 				glDepthFunc(mLastDepthBufferFunc);
 			}
 
-			if (mLastDepthBufferMask != nextDepthBufferMask)
+			if (mLastDepthBufferMask != mask)
 			{
-				mLastDepthBufferMask = nextDepthBufferMask;
+				mLastDepthBufferMask = mask;
 				glDepthMask(mLastDepthBufferMask);
 			}
 		}
@@ -655,6 +662,13 @@ void RenderSystem::ApplyDepthBuffer(IRenderer* renderer)
 		mIsLastRendererHadDepthBufferEnabled = false;
 		glDisable(GL_DEPTH_TEST);
 	}
+}
+
+void RenderSystem::ApplyDepthBuffer(IRenderer* renderer)
+{
+	//std::cout << " renderer depth? " << renderer->IsDepthBufferEnabled() << " mask? " << renderer->GetDepthBufferMask() << " \n";
+
+	ApplyDepthTest(renderer->IsDepthBufferEnabled(), renderer->GetDepthBufferMask(), renderer->GetDepthBufferFunc());
 }
 
 void RenderSystem::ApplyBlending(IRenderer* renderer)

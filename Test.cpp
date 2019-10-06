@@ -1323,7 +1323,7 @@ int main(int argc, char* argv[])
 {
 	std::shared_ptr<NGenius> mEngine;
 
-	std::string filename = "data/levels/flat_terrain.xml";
+	std::string filename = "data/levels/test.xml";
 
 	if (argc > 1)
 	{

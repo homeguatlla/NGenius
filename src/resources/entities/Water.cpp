@@ -87,7 +87,7 @@ void Water::CreateModel()
 	indices.push_back(2);
 	indices.push_back(1);
 
-	mModel = DBG_NEW Model(new Mesh(vertexs, uv, indices));
+	mModel = DBG_NEW Model("water", new Mesh(vertexs, uv, indices));
 }
 
 void Water::DoInit(GameScene* scene, RenderSystem* renderSystem)

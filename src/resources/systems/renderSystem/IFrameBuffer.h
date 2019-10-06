@@ -47,7 +47,7 @@ public:
 	void SetDepthTextureAttachment(Texture* texture);
 	void SetDepthAttachment(unsigned int width, unsigned int height);
 	void SetCopyBufferToTexture(Texture* texture, int x, int y, int imageWidth, int imageHeight);
-	void BindBuffer() const;
+	void BindBuffer(RenderSystem* renderSystem) const;
 	void UnbindBuffer() const;
 	Texture* CopyDepthBuffer();
 	Texture* CopyColorBuffer();

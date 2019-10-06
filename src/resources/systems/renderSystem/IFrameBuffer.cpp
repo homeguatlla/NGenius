@@ -39,7 +39,7 @@ IFrameBuffer::~IFrameBuffer()
 	glDeleteRenderbuffers(1, &mDepthBufferID);
 }
 
-void IFrameBuffer::BindBuffer() const
+void IFrameBuffer::BindBuffer(RenderSystem* renderSystem) const
 {	
 	if (mFrameBufferID != -1)
 	{
@@ -54,6 +54,8 @@ void IFrameBuffer::BindBuffer() const
 			glDrawBuffer(GL_NONE);
 		}
 
+		renderSystem->ApplyDepthTest(true, true, GL_LESS);
+		
 		if (mType & FRAME_BUFFER_COLOR_TEXTURE & FRAME_BUFFER_DEPTH_TEXTURE)
 		{
 			glViewport(0, 0, mDepthTexture->GetWidth(), mDepthTexture->GetHeight());

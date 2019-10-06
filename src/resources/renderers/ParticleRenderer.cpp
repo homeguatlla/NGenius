@@ -17,7 +17,7 @@ IRenderer(model, material)
 	SetCullingEnabled(false);
 	SetBlendingEnabled(true);
 	SetBlendingFactors(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	SetDepthBufferEnabled(false);
+	SetDepthBufferEnabled(true);
 	SetDepthBufferValues(false, GL_LESS);
 }
 

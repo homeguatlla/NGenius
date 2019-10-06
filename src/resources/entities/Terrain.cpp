@@ -246,7 +246,7 @@ void Terrain::CreateTerrain(IMaterial* material, ITexture* heighmap)
 		terrainGrid.GenerateNormalsAndTangentsRectangular(mNumVertexsSide, mVertexs, uv, indices, normals, tangents);
 
 		Mesh* mesh = new Mesh(mVertexs, uv, indices, normals, tangents);
-		mModel = DBG_NEW Model(mesh);
+		mModel = DBG_NEW Model("terrain", mesh);
 	}
 
 	SetRenderer(new IndicesRenderer(mModel, material));

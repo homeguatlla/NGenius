@@ -31,7 +31,7 @@ public:
 
 	bool HasFrameBufferOutput() const;
 	void SetFrameBufferOutput(IFrameBuffer* output);
-	void BindOutput() const;
+	void BindOutput(RenderSystem* renderSystem) const;
 	void UnbindOutput() const;
 	Texture* CopyDepthBuffer();
 

@@ -89,7 +89,7 @@ void PointsPatch::CreateModel()
 
 	if (vertexs.size() > 0)
 	{
-		mModel = DBG_NEW Model(new Mesh(vertexs, uv, indices));
+		mModel = DBG_NEW Model("pointsPatch", new Mesh(vertexs, uv, indices));
 	}
 }
 

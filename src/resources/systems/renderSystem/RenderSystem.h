@@ -175,6 +175,8 @@ public:
 	void ChangeToCamera(const std::string& renderPassName, const ICamera* camera);
 	void ChangeToCamera(const std::string& cameraName, const std::string& newCameraName);
 
+	void ApplyDepthTest(bool isEnabled, int mask, int func);
+
 	// Heredado vía ISerializable
 	virtual void ReadFrom(core::utils::IDeserializer* source) override;
 	virtual void WriteTo(core::utils::ISerializer* destination) override;
@@ -220,6 +222,7 @@ private:
 	void SelectMaterial(RenderPass* renderPass, IRenderer* renderer);
 	void SelectTextures();
 	void SelectClippingPlane(RenderPass* renderPass);
+
 	void ApplyShadows(IRenderer* renderer);
 	void ApplyFog(RenderPass* renderPass, IRenderer* renderer);
 	void ApplyLights(IRenderer* renderer);

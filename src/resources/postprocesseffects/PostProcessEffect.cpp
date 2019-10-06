@@ -61,13 +61,13 @@ bool PostProcessEffect::HasFrameBuffer()
 	return mType == PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER;
 }
 
-ITexture* PostProcessEffect::Render(ITexture* inTexture)
+ITexture* PostProcessEffect::Render(RenderSystem* renderSystem, ITexture* inTexture)
 {
 	mMaterialEffectDiffuseTexture->SetDiffuseTexture(inTexture);
 
 	if (HasFrameBuffer())
 	{
-		mFrameBuffer->BindBuffer();
+		mFrameBuffer->BindBuffer(renderSystem);
 		mRenderer->Render();
 		mFrameBuffer->UnbindBuffer();
 	}

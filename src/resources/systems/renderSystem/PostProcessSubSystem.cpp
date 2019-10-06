@@ -148,12 +148,12 @@ void PostProcessSubSystem::Render()
 {
 	ITexture* texture = mFrameBuffer->CopyColorBuffer();
 
-	glDisable(GL_DEPTH_TEST);
+	mRenderSystem->ApplyDepthTest(false, false, GL_LESS);
 	for (PostProcessEffect* postProcessEffect : mEffects)
 	{
-		texture = postProcessEffect->Render(texture);
+		texture = postProcessEffect->Render(mRenderSystem, texture);
 	}
-	glEnable(GL_DEPTH_TEST);
+	mRenderSystem->ApplyDepthTest(true, true, GL_LESS);
 }
 
 void PostProcessSubSystem::AddPostProcessEffect(PostProcessEffect* postProcessEffect)

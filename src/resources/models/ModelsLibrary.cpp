@@ -123,7 +123,7 @@ void ModelsLibrary::LoadModel(const std::string& name, const std::string& filena
 		}
 		else
 		{
-			Model* modelRender = DBG_NEW Model(model);
+			Model* modelRender = DBG_NEW Model(name, model);
 			AddOrReplaceElement(name, modelRender);
 		}
 
@@ -259,7 +259,7 @@ void ModelsLibrary::CreateSkyBox()
 
 	std::vector<glm::vec2> uv;
 	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexes);
-	Model* model = DBG_NEW Model(mMesh);
+	Model* model = DBG_NEW Model("skybox", mMesh);
 
 	AddOrReplaceElement(ModelsLibrary::SKYBOX_NAME, model);
 }
@@ -318,7 +318,7 @@ void ModelsLibrary::CreateCube()
 
 	std::vector<glm::vec2> uv;
 	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexes);
-	Model* model = DBG_NEW Model(mMesh);
+	Model* model = DBG_NEW Model("cube", mMesh);
 
 	AddOrReplaceElement(ModelsLibrary::CUBE_NAME, model);
 }
@@ -347,7 +347,7 @@ void ModelsLibrary::CreateQuad(const std::string& name, float width, float heigh
 	indexs.push_back(1);
 
 	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexs);
-	Model* model = DBG_NEW Model(mMesh);
+	Model* model = DBG_NEW Model("quad", mMesh);
 
 	AddOrReplaceElement(name, model);
 }

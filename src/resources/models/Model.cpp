@@ -6,7 +6,8 @@
 
 #include <GL/glew.h>
 
-Model::Model(Mesh* model) :
+Model::Model(const std::string& name, Mesh* model) :
+mName(name),
 mMesh(model),
 mVAO(-1),
 mMatrixVBO(-1),

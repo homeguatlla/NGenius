@@ -26,7 +26,7 @@ Text::Text(Transformation* transformation, IMaterial* material, FontType* font,
 	assert(font != nullptr);
 
 	mMesh = DBG_NEW Mesh();
-	mModel = DBG_NEW Model(mMesh);
+	mModel = DBG_NEW Model("text", mMesh);
 
 	isText3D ? SetRenderer(new TextRenderer(mModel, material)) : SetRenderer(new GUITextRenderer(mModel, material));
 	UpdateText(text);

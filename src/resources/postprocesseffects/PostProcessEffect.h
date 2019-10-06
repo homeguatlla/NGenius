@@ -8,6 +8,7 @@ class IFrameBuffer;
 class ITexture;
 class Texture;
 class MaterialEffectDiffuseTexture;
+class RenderSystem;
 
 class PostProcessEffect
 {
@@ -33,7 +34,7 @@ public:
 
 	void Init();
 	void SetBufferSize(unsigned int width, unsigned int height);
-	ITexture* Render(ITexture* inTexture);
+	ITexture* Render(RenderSystem* renderSystem, ITexture* inTexture);
 	bool HasFrameBuffer();
 };
 
