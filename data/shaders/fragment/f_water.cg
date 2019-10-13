@@ -87,6 +87,10 @@ void main()
 	color = mix(distorsionedRefractionColor,  color, depthFactor);
 	color = mix(color, waterColor, 0.2) + vec4(specularColor, 1.0);
 	
+	//to remove distorsion near the water edges
 	vec4 refractionColor = texture2D(refractionTexture, refractTexCoords);
-	color = mix(refractionColor, color, depthFactor);
+	vec4 reflectionColor = texture2D(reflectionTexture, reflectTexCoords);
+	color = mix(vec4(0.0f, 1.0f, 1.0f, 1.0f), color, depthFactor);
+	color = mix(reflectionColor, color, depthFactor);
+	color = mix(refractionColor, color, depthFactor);	
 }

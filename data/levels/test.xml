@@ -292,7 +292,7 @@
 					</component>
 				</components>				
 			</particle>
-			<emitter is_enabled="true" spawn_rate="20" particle="smoke">
+			<emitter is_enabled="true" spawn_rate="5" particle="smoke">
 				<transformation> 
 					<position X="5" Y="6.5" Z="5"/>
 					<rotation X="-90" Y="0" Z="0.000000"/>
