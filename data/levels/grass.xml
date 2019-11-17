@@ -218,7 +218,7 @@
 							<converter mouse="2" event="ZoomEvent"/>
 						</converters>
 					</component>
-					<component is_enabled="true" type="PhysicsComponent" is_static="0">
+					<component is_enabled="true" type="ParticlePhysicsComponent" is_static="0">
 						<gravity X="0.000000" Y="-9.800000" Z="0.000000"/>
 					</component>
 					<component is_enabled="true" type="CollisionComponent"/>

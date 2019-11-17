@@ -4,7 +4,7 @@
 #include "components/IComponent.h"
 
 #include <map>
-#include <typeinfo.h>
+#include <typeinfo>
 #include <assert.h>
 #include <string>
 

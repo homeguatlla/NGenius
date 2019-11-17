@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GameEvent.h"
 
-#include <typeinfo.h>
+#include <typeinfo>
 #include <assert.h>
 
 GameEvent::GameEvent()

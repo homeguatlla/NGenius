@@ -61,7 +61,8 @@
 #include "resources/components/LODComponent.h"
 #include "resources/components/SpacePartitionComponent.h"
 #include "resources/components/RotationComponent.h"
-#include "resources/components/PhysicsComponent.h"
+#include "resources/components/RigidbodyPhysicsComponent.h"
+#include "resources/components/ParticlePhysicsComponent.h"
 #include "resources/components/OverWaterComponent.h"
 #include "resources/components/ThirdPersonCameraComponent.h"
 #include "resources/components/GravityComponent.h"
@@ -111,7 +112,8 @@ mGameScene(nullptr)
 	InstantiableObject::RegisterComponentType<InputComponent>();
 	InstantiableObject::RegisterComponentType<LODComponent>();
 	InstantiableObject::RegisterComponentType<OverWaterComponent>();
-	InstantiableObject::RegisterComponentType<PhysicsComponent>();
+	InstantiableObject::RegisterComponentType<RigidbodyPhysicsComponent>();
+	InstantiableObject::RegisterComponentType<ParticlePhysicsComponent>();
 	InstantiableObject::RegisterComponentType<RotationComponent>();
 	InstantiableObject::RegisterComponentType<SpacePartitionComponent>();
 	InstantiableObject::RegisterComponentType<ThirdPersonCameraComponent>();

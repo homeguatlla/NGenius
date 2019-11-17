@@ -1,7 +1,8 @@
 #pragma once
 #include "IComponent.h"
 
-#include "../../../../NPhysics/source/particle/IParticleForceGenerator.h"
+#include "../../../../NPhysics/source/IForceGenerator.h"
+#include "../../../../NPhysics/source/particle/Particle.h"
 
 #include <glm/glm.hpp>
 #include <memory>
@@ -9,14 +10,14 @@
 
 class DragComponent : public IComponent
 {
-	std::shared_ptr<NPhysics::IParticleForceGenerator> mGenerator;
+	std::shared_ptr<NPhysics::IForceGenerator<NPhysics::Particle>> mGenerator;
 
 public:
 	DragComponent(float k1, float k2);
 	virtual ~DragComponent() = default;
 
 	void Init(GameScene* scene, RenderSystem* renderSystem);
-	std::shared_ptr<NPhysics::IParticleForceGenerator> GetGenerator() const { return mGenerator; }
+	std::shared_ptr<NPhysics::IForceGenerator<NPhysics::Particle>> GetGenerator() const { return mGenerator; }
 
 	static std::string GetClassName() { return std::string("DragComponent"); }
 	static IComponent* Create(IGameEntity* entity);

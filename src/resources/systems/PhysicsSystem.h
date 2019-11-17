@@ -2,8 +2,9 @@
 #include <glm/glm.hpp>
 #include "../../visitor/BaseVisitable.h"
 #include "../scene/IGameSceneListener.h"
-#include <vector>
 #include "../../../../NPhysics/NPhysicsEngine.h"
+#include "../../../../NPhysics/source/particle/Particle.h"
+#include <vector>
 
 class IGameEntity;
 class Terrain;

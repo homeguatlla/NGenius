@@ -34,7 +34,7 @@ mMaxParticlesUpdate(MAX_PARTICLES)
 void ParticlesEmitter::ReserveParticlesPool()
 {
 	mParticles.reserve(mMaxParticlesUpdate);
-	for (unsigned int i = 0; i < mMaxParticlesUpdate; ++i)
+	for (int i = 0; i < mMaxParticlesUpdate; ++i)
 	{
 		mParticlesPool.push_back(static_cast<Particle*>(mOriginalParticle->Clone()));
 	}

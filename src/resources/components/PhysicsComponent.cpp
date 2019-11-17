@@ -15,14 +15,21 @@ PhysicsComponent::PhysicsComponent(bool isStatic, float density, const glm::vec3
 
 void PhysicsComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 {
-	CreatePhysicsData();
-}
+	DoCreatePhysicsData();
+	assert(mObject);
 
-PhysicsComponent* PhysicsComponent::DoClone() const
-{
-	PhysicsComponent* newPhysicsComponent = DBG_NEW PhysicsComponent(*this);
+	//para calcular la densidad :
+	//V = volumen objecto = size.x * size.y * size.z
+	//liquid_density * V * 0.5 = F hacia arriba flotando en reposo
+	//calcular la gravedad P = m g  que es la fuerza hacia abajo
+	//Para equilibrio y flote estático P = F de donde puedes derivar la m
+	//calcular la densidad = m / V
+	//Luego, añadir el componente de drag con valores altos para estabilizar.
 
-	return newPhysicsComponent;
+	const AABB box = mParent->GetRenderer()->GetAABB();
+	float volume = box.GetVolume();
+	float mass = mDensity * volume;
+	mObject->SetMass(mass);	
 }
 
 bool PhysicsComponent::IsStatic() const
@@ -30,12 +37,9 @@ bool PhysicsComponent::IsStatic() const
 	return mIsStatic;
 }
 
-IComponent* PhysicsComponent::Create(IGameEntity* entity)
+const glm::vec3 PhysicsComponent::GetVelocity() const
 {
-	PhysicsComponent* component = DBG_NEW PhysicsComponent();
-	entity->AddComponent(component);
-
-	return component;
+	return mObject->GetVelocity();
 }
 
 void PhysicsComponent::SetInitialVelocity(const glm::vec3& velocity)
@@ -45,26 +49,12 @@ void PhysicsComponent::SetInitialVelocity(const glm::vec3& velocity)
 
 void PhysicsComponent::SetVelocity(const glm::vec3& velocity)
 {
-	mParticle->SetInitialVelocity(velocity);
+	mObject->SetInitialVelocity(velocity);
 }
 
-//para calcular la densidad :
-//V = volumen objecto = size.x * size.y * size.z
-//liquid_density * V * 0.5 = F hacia arriba flotando en reposo
-//calcular la gravedad P = m g  que es la fuerza hacia abajo
-//Para equilibrio y flote estático P = F de donde puedes derivar la m
-//calcular la densidad = m / V
-//Luego, añadir el componente de drag con valores altos para estabilizar.
-
-void PhysicsComponent::CreatePhysicsData()
+std::shared_ptr<NPhysics::PhysicsObject> PhysicsComponent::GetPhysicsObject() const
 {
-	glm::vec3 position = mParent->GetTransformation()->GetPosition();
-	mParticle = std::make_shared<NPhysics::Particle>(position, mInitialVelocity);
-	
-	const AABB box = mParent->GetRenderer()->GetAABB();
-	float volume = box.GetVolume();
-	float mass = mDensity * volume;
-	mParticle->SetMass(mass);
+	return mObject;
 }
 
 void PhysicsComponent::DoReadFrom(core::utils::IDeserializer* source)

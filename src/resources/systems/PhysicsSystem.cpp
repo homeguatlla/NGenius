@@ -8,6 +8,8 @@
 #include "../components/CollisionComponent.h"
 #include "../components/EnergyWallCollisionComponent.h"
 #include "../components/PhysicsComponent.h"
+#include "../components/ParticlePhysicsComponent.h"
+#include "../components/RigidbodyPhysicsComponent.h"
 #include "../components/GravityComponent.h"
 #include "../components/BuoyancyComponent.h"
 #include "../components/DragComponent.h"
@@ -175,11 +177,19 @@ void PhysicsSystem::OnGameEntityAdded(IGameEntity* entity)
 	{
 		AddEntity(entity);
 		PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
-		if (component != nullptr)
+		
+		if (component != nullptr && typeid(*component) == typeid(ParticlePhysicsComponent)) 
 		{
-			mEngine.AddParticle(component->GetParticle());
-			AddGenerators(component->GetParticle(), entity);
-		}		
+			auto particle = std::static_pointer_cast<NPhysics::Particle>(component->GetPhysicsObject());
+			mEngine.AddParticle(particle);
+			AddGenerators(particle, entity);
+		}
+		else if(component != nullptr && typeid(*component) == typeid(RigidbodyPhysicsComponent))
+		{
+			auto body = std::static_pointer_cast<NPhysics::RigidBody>(component->GetPhysicsObject());
+			mEngine.AddRigidBody(body);
+			//AddGenerators(body, entity);
+		}
 	}
 
 	//TODO esto no funcionará así, pero por ahora sí. 
@@ -305,9 +315,9 @@ void PhysicsSystem::UpdateParticlesPositions(IGameEntity* entity)
 	PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
 	if (component != nullptr)
 	{
-		std::shared_ptr<NPhysics::Particle> particle = component->GetParticle();
+		auto object = component->GetPhysicsObject();
 		glm::vec3 position = entity->GetTransformation()->GetPosition();
-		particle->SetPosition(position);
+		object->SetPosition(position);
 	}
 }
 
@@ -316,8 +326,8 @@ void PhysicsSystem::UpdateEntitiesPositions(IGameEntity* entity)
 	PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
 	if (component != nullptr)
 	{
-		std::shared_ptr<NPhysics::Particle> particle = component->GetParticle();
-		entity->GetTransformation()->SetPosition(particle->GetPosition());
+		auto object = component->GetPhysicsObject();
+		entity->GetTransformation()->SetPosition(object->GetPosition());
 	}
 }
 

@@ -900,6 +900,12 @@
     <ClInclude Include="src\resources\events\characterControllerEvents\ShiftEvent.h">
       <Filter>Header Files\resources\events\characterControllerEvents</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\components\ParticlePhysicsComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\components\RigidbodyPhysicsComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1495,6 +1501,12 @@
     </ClCompile>
     <ClCompile Include="src\resources\events\characterControllerEvents\ShiftEvent.cpp">
       <Filter>Source Files\resources\events\characterControllerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\ParticlePhysicsComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\RigidbodyPhysicsComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

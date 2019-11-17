@@ -4,7 +4,7 @@
 #include "../../utils/serializer/XMLSerializer.h"
 #include "../../utils/serializer/XMLDeserializer.h"
 
-#include <typeinfo.h>
+#include <typeinfo>
 #include <assert.h>
 
 IComponent::IComponent() : mIsEnabled(true)

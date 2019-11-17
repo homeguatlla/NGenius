@@ -17,7 +17,7 @@
 
 #include <GL/glew.h>
 #include <iostream>
-#include <typeinfo.h>
+#include <typeinfo>
 
 IRenderer::IRenderer(Model* model, IMaterial* material) :
 mParent(nullptr),
