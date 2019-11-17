@@ -13,11 +13,6 @@ DragComponent::DragComponent(float k1, float k2) : mK1(k1), mK2(k2)
 {
 }
 
-void DragComponent::Init(GameScene* scene, RenderSystem* renderSystem)
-{
-	mGenerator = std::make_shared<NPhysics::ParticleDrag>(mK1, mK2);
-}
-
 DragComponent* DragComponent::DoClone() const
 {
 	return DBG_NEW DragComponent(*this);

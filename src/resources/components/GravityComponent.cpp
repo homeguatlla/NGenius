@@ -10,11 +10,6 @@ GravityComponent::GravityComponent(const glm::vec3& gravity) : mGravity(gravity)
 {
 }
 
-void GravityComponent::Init(GameScene* scene, RenderSystem* renderSystem)
-{
-	mGenerator = std::make_shared<NPhysics::ParticleGravity>(mGravity);
-}
-
 GravityComponent* GravityComponent::DoClone() const
 {
 	return DBG_NEW GravityComponent(*this);

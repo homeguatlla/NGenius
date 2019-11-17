@@ -17,7 +17,9 @@ BuoyancyComponent::BuoyancyComponent(float liquidDensity) :
 void BuoyancyComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 {
 	const AABB aabb = mParent->GetRenderer()->GetAABB();
-	float volume = aabb.GetVolume();
+	//TODO the center should be the center of the rigidbody
+	mCenter = aabb.GetCenter();
+	mVolume = aabb.GetVolume();
 	//glm::vec3 size = aabb.GetSize();
 
 	//because the object could be rotated and scaled
@@ -28,12 +30,10 @@ void BuoyancyComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 	min = matrix * min;
 
 	float sizeY = max.y > min.y ? max.y - min.y : min.y - max.y;
-	float maxDepth = sizeY * 0.5f;
-	float waterHeight = renderSystem->GetWaterHeight();
-	
+	mMaxDepth = sizeY * 0.5f;
+	mWaterHeight = renderSystem->GetWaterHeight();
 
 	//TODO is water enabled??
-	mGenerator = std::make_shared<NPhysics::ParticleBuoyancy>(maxDepth, volume, waterHeight, mLiquidDensity);
 }
 
 BuoyancyComponent* BuoyancyComponent::DoClone() const

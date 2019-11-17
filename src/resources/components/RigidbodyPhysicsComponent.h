@@ -4,7 +4,7 @@
 class RigidbodyPhysicsComponent : public PhysicsComponent
 {
 public:
-	static std::string GetClassName() { return std::string("RigidBodyPhysicsComponent"); }
+	static std::string GetClassName() { return std::string("RigidbodyPhysicsComponent"); }
 	static IComponent* Create(IGameEntity* entity);
 
 private:

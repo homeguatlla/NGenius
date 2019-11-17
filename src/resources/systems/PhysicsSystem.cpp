@@ -14,6 +14,14 @@
 #include "../components/BuoyancyComponent.h"
 #include "../components/DragComponent.h"
 
+#include "../../NPhysics/source/particle/forceGenerators/ParticleDrag.h"
+#include "../../NPhysics/source/particle/forceGenerators/ParticleBuoyancy.h"
+#include "../../NPhysics/source/particle/forceGenerators/ParticleGravity.h"
+
+#include "../../NPhysics/source/rigidbody/forceGenerators/RigidBodyDrag.h"
+#include "../../NPhysics/source/rigidbody/forceGenerators/RigidBodyBuoyancy.h"
+#include "../../NPhysics/source/rigidbody/forceGenerators/RigidBodyGravity.h"
+
 #include "../entities/Terrain.h"
 #include "../renderers/IRenderer.h"
 
@@ -188,7 +196,7 @@ void PhysicsSystem::OnGameEntityAdded(IGameEntity* entity)
 		{
 			auto body = std::static_pointer_cast<NPhysics::RigidBody>(component->GetPhysicsObject());
 			mEngine.AddRigidBody(body);
-			//AddGenerators(body, entity);
+			AddGenerators(body, entity);
 		}
 	}
 
@@ -204,22 +212,63 @@ void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::Particle>& particle,
 	GravityComponent* gravityComponent = entity->GetComponent<GravityComponent>();
 	if (gravityComponent != nullptr)
 	{
-		mEngine.RegisterParticleForceGenerator(particle, gravityComponent->GetGenerator());
+		std::shared_ptr<NPhysics::IForceGenerator<NPhysics::Particle>> generator;
+		generator = std::make_shared<NPhysics::ParticleGravity>(gravityComponent->GetGravity());
+		mEngine.RegisterParticleForceGenerator(particle, generator);
 	}
 
 	BuoyancyComponent* buoyancyComponent = entity->GetComponent<BuoyancyComponent>();
 	if (buoyancyComponent != nullptr)
 	{
-		mEngine.RegisterParticleForceGenerator(particle, buoyancyComponent->GetGenerator());
+		std::shared_ptr<NPhysics::IForceGenerator<NPhysics::Particle>> generator;
+		generator = std::make_shared<NPhysics::ParticleBuoyancy>(
+			buoyancyComponent->GetMaxDepth(), 
+			buoyancyComponent->GetVolume(), 
+			buoyancyComponent->GetWaterHeight(), 
+			buoyancyComponent->GetLiquidDensity());
+		mEngine.RegisterParticleForceGenerator(particle, generator);
 	}
 
 	DragComponent* dragComponent = entity->GetComponent<DragComponent>();
 	if (dragComponent != nullptr)
 	{
-		mEngine.RegisterParticleForceGenerator(particle, dragComponent->GetGenerator());
+		std::shared_ptr<NPhysics::IForceGenerator<NPhysics::Particle>> generator;
+		generator = std::make_shared<NPhysics::ParticleDrag>(dragComponent->GetK1(), dragComponent->GetK2());
+		mEngine.RegisterParticleForceGenerator(particle, generator);
 	}
 }
 
+void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::RigidBody>& rigidBody, IGameEntity* entity)
+{
+	GravityComponent* gravityComponent = entity->GetComponent<GravityComponent>();
+	if (gravityComponent != nullptr)
+	{
+		std::shared_ptr<NPhysics::IForceGenerator<NPhysics::RigidBody>> generator;
+		generator = std::make_shared<NPhysics::RigidBodyGravity>(gravityComponent->GetGravity());
+		mEngine.RegisterRigidBodyForceGenerator(rigidBody, generator);
+	}
+
+	BuoyancyComponent* buoyancyComponent = entity->GetComponent<BuoyancyComponent>();
+	if (buoyancyComponent != nullptr)
+	{
+		std::shared_ptr<NPhysics::IForceGenerator<NPhysics::RigidBody>> generator;
+		generator = std::make_shared<NPhysics::RigidBodyBuoyancy>(
+			buoyancyComponent->GetMaxDepth(),
+			buoyancyComponent->GetVolume(),
+			buoyancyComponent->GetWaterHeight(),
+			buoyancyComponent->GetLiquidDensity(),
+			buoyancyComponent->GetCenter());
+		mEngine.RegisterRigidBodyForceGenerator(rigidBody, generator);
+	}
+
+	DragComponent* dragComponent = entity->GetComponent<DragComponent>();
+	if (dragComponent != nullptr)
+	{
+		std::shared_ptr<NPhysics::IForceGenerator<NPhysics::RigidBody>> generator;
+		generator = std::make_shared<NPhysics::RigidBodyDrag>(dragComponent->GetK1(), dragComponent->GetK2());
+		mEngine.RegisterRigidBodyForceGenerator(rigidBody, generator);
+	}
+}
 
 void PhysicsSystem::OnGameEntityRemoved(IGameEntity* entity)
 {

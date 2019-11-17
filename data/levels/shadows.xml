@@ -194,7 +194,7 @@
 							<converter mouse="2" event="ZoomEvent"/>
 						</converters>
 					</component>
-					<component is_enabled="true" type="ParticlePhysicsComponent" is_static="0" density="70">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="0" density="70">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 					</component>
 					<component is_enabled="true" type="GravityComponent">
@@ -239,7 +239,7 @@
 					<scale X="0.100000" Y="0.100000" Z="0.100000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="ParticlePhysicsComponent" is_static="true" density="0.0013">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="true" density="0.0013">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 					</component>
 					<component is_enabled="true" type="GravityComponent">

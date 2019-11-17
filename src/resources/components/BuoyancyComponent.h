@@ -9,14 +9,17 @@
 
 class BuoyancyComponent : public IComponent
 {
-	std::shared_ptr<NPhysics::IForceGenerator<NPhysics::Particle>> mGenerator;
-
 public:
 	BuoyancyComponent(float liquidDensity);
 	virtual ~BuoyancyComponent() = default;
 
 	void Init(GameScene* scene, RenderSystem* renderSystem);
-	std::shared_ptr<NPhysics::IForceGenerator<NPhysics::Particle>> GetGenerator() const { return mGenerator; }
+	
+	float GetVolume() const { return mVolume; }
+	float GetMaxDepth() const { return mMaxDepth; }
+	float GetWaterHeight() const { return mWaterHeight; }
+	float GetLiquidDensity() const { return mLiquidDensity; }
+	glm::vec3 GetCenter() const { return mCenter; }
 
 	static std::string GetClassName() { return std::string("BuoyancyComponent"); }
 	static IComponent* Create(IGameEntity* entity);
@@ -29,5 +32,9 @@ private:
 
 private:
 	float mLiquidDensity;
+	float mVolume;
+	float mMaxDepth;
+	float mWaterHeight;
+	glm::vec3 mCenter;
 };
 
