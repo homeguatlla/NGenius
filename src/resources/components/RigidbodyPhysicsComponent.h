@@ -10,6 +10,6 @@ public:
 private:
 	// Heredado vía PhysicsComponent
 	IComponent* DoClone() const override;
-	void DoCreatePhysicsData() override;
+	void DoCreatePhysicsData(const AABB& box, float mass) override;
 };
 

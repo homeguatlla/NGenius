@@ -27,7 +27,7 @@ IComponent* ParticlePhysicsComponent::Create(IGameEntity* entity)
 	return component;
 }
 
-void ParticlePhysicsComponent::DoCreatePhysicsData()
+void ParticlePhysicsComponent::DoCreatePhysicsData(const AABB& box, float mass)
 {
 	glm::vec3 position = mParent->GetTransformation()->GetPosition();
 	mObject = std::make_shared<NPhysics::Particle>(position, mInitialVelocity);

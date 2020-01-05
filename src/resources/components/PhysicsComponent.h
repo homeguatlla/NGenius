@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include "../../../../NPhysics/source/particle/Particle.h"
+#include "../../AABB.h"
 
 class IGameEntity;
 
@@ -37,6 +38,6 @@ private:
 	void DoReadFrom(core::utils::IDeserializer* source) override;
 	void DoWriteTo(core::utils::ISerializer* destination) override;
 	static IComponent* DoCreate(IGameEntity* entity) { return nullptr; }
-	virtual void DoCreatePhysicsData() = 0;
+	virtual void DoCreatePhysicsData(const AABB& box, float mass) = 0;
 };
 

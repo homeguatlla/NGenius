@@ -15,9 +15,6 @@ PhysicsComponent::PhysicsComponent(bool isStatic, float density, const glm::vec3
 
 void PhysicsComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 {
-	DoCreatePhysicsData();
-	assert(mObject);
-
 	//para calcular la densidad :
 	//V = volumen objecto = size.x * size.y * size.z
 	//liquid_density * V * 0.5 = F hacia arriba flotando en reposo
@@ -29,6 +26,12 @@ void PhysicsComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 	const AABB box = mParent->GetRenderer()->GetAABB();
 	float volume = box.GetVolume();
 	float mass = mDensity * volume;
+
+	//TODO the box here should by the rigidbody (box, capsule, sphere) that we need to read from file
+	DoCreatePhysicsData(box, mass);
+
+	assert(mObject);
+
 	mObject->SetMass(mass);	
 }
 

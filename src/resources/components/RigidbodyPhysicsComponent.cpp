@@ -4,6 +4,7 @@
 #include "../IGameEntity.h"
 #include "../Transformation.h"
 #include "../../../../NPhysics/source/rigidbody/RigidBody.h"
+#include "../../../../NPhysics/NPhysicsEngine.h"
 
 IComponent* RigidbodyPhysicsComponent::DoClone() const
 {
@@ -12,10 +13,14 @@ IComponent* RigidbodyPhysicsComponent::DoClone() const
 	return newPhysicsComponent;
 }
 
-void RigidbodyPhysicsComponent::DoCreatePhysicsData()
+void RigidbodyPhysicsComponent::DoCreatePhysicsData(const AABB& box, float mass)
 {
 	glm::vec3 position = mParent->GetTransformation()->GetPosition();
-	mObject = std::make_shared<NPhysics::RigidBody>(position, mInitialVelocity);
+	glm::vec3 initialRotation = mParent->GetTransformation()->GetRotation();
+	auto rigidBody = std::make_shared<NPhysics::RigidBody>(position, initialRotation, mInitialVelocity);
+	rigidBody->SetInertiaTensorMatrix(NPhysics::NPhysicsEngine::GetInertiaTensorMatrix(mass, box.GetSize()));
+
+	mObject = rigidBody;
 }
 
 IComponent* RigidbodyPhysicsComponent::Create(IGameEntity* entity)
