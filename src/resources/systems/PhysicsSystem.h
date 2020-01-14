@@ -55,7 +55,7 @@ private:
 	void CheckCollisionTerrain(IGameEntity* entity);
 	void CheckCollisionEnergyWall(IGameEntity* entity);
 
-	void UpdateParticlesPositions(IGameEntity* entity);
-	void UpdateEntitiesPositions(IGameEntity* entity);
+	void UpdatePhysicsObjectsData(IGameEntity* entity);
+	void UpdateEntitiesData(IGameEntity* entity);
 };
 

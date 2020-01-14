@@ -105,6 +105,7 @@
 
 #include "src/resources/command/ICommand.h"
 #include "src/resources/command/commands/RiseTerrainCommand.h"
+#include "src/resources/command/commands/ApplyForceToEntityCommand.h"
 
 #include "src/resources/events/characterControllerEvents/ForwardEvent.h"
 #include "src/resources/events/characterControllerEvents/BackwardEvent.h"
@@ -193,6 +194,8 @@ glm::vec3 mQuadMovingScale(1.0f);
 IGameEntity* mQuadTreeMovedEntity;
 std::vector<IGameEntity*> mQuadTreeEntities;
 
+
+std::shared_ptr<NGenius> mEngine;
 
 double aleatori()
 {
@@ -1319,10 +1322,21 @@ void Update(float elapsedTime)
 
 */
 
+void UpdateInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
+	{
+		if (mCurrentCommand == nullptr)
+		{
+			IGameEntity* entity = mEngine->GetGameEntity(std::string("box"));
+			mCurrentCommand = DBG_NEW ApplyForceToEntityCommand(entity);
+			mCurrentCommand->Execute();
+		}
+	}
+}
+
 int main(int argc, char* argv[])
 {
-	std::shared_ptr<NGenius> mEngine;
-
 	std::string filename = "data/levels/test.xml";
 
 	if (argc > 1)
@@ -1332,6 +1346,7 @@ int main(int argc, char* argv[])
 
 	mEngine = std::make_shared<NGenius>("Demo", SCREEN_WIDTH, SCREEN_HEIGHT);
 	mEngine->SetFilename(filename);
+	mEngine->RegisterInputHandler(std::bind(&UpdateInput, std::placeholders::_1));
 	mEngine->Create();
 
 	mEngine->Run();

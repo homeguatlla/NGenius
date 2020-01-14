@@ -211,6 +211,7 @@
     <ClInclude Include="src\resources\camera\ICamera.h" />
     <ClInclude Include="src\resources\camera\OrthogonalCamera.h" />
     <ClInclude Include="src\resources\camera\PerspectiveCamera.h" />
+    <ClInclude Include="src\resources\command\commands\ApplyForceToEntityCommand.h" />
     <ClInclude Include="src\resources\command\commands\RiseTerrainCommand.h" />
     <ClInclude Include="src\resources\command\ICommand.h" />
     <ClInclude Include="src\resources\components\AnimationComponent.h" />
@@ -371,6 +372,7 @@
     <ClInclude Include="src\utils\fsm\ITransition.h" />
     <ClInclude Include="src\utils\fsm\StatesMachine.h" />
     <ClInclude Include="src\utils\Log.h" />
+    <ClInclude Include="src\utils\Math.h" />
     <ClInclude Include="src\utils\serializer\IDeserializer.h" />
     <ClInclude Include="src\utils\serializer\ISerializable.h" />
     <ClInclude Include="src\utils\serializer\ISerializer.h" />
@@ -441,6 +443,7 @@
     <ClCompile Include="src\resources\camera\ICamera.cpp" />
     <ClCompile Include="src\resources\camera\OrthogonalCamera.cpp" />
     <ClCompile Include="src\resources\camera\PerspectiveCamera.cpp" />
+    <ClCompile Include="src\resources\command\commands\ApplyForceToEntityCommand.cpp" />
     <ClCompile Include="src\resources\command\commands\RiseTerrainCommand.cpp" />
     <ClCompile Include="src\resources\command\ICommand.cpp" />
     <ClCompile Include="src\resources\components\AnimationComponent.cpp" />

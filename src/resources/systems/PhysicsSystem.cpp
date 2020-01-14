@@ -56,14 +56,14 @@ void PhysicsSystem::Update(float deltaTime)
 {
 	for (IGameEntity* entity : mEntities)
 	{
-		UpdateParticlesPositions(entity);
+		UpdatePhysicsObjectsData(entity);
 	}
 
 	mEngine.Update(deltaTime);
 
 	for (IGameEntity* entity : mEntities)
 	{
-		UpdateEntitiesPositions(entity);
+		UpdateEntitiesData(entity);
 		CheckCollisions(entity);
 	}
 }
@@ -359,24 +359,30 @@ bool PhysicsSystem::ApplyEnergyWallCollision(IGameEntity*entity, glm::vec3& coll
 	return isColliding;
 }
 
-void PhysicsSystem::UpdateParticlesPositions(IGameEntity* entity)
+void PhysicsSystem::UpdatePhysicsObjectsData(IGameEntity* entity)
 {
 	PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
 	if (component != nullptr)
 	{
 		auto object = component->GetPhysicsObject();
-		glm::vec3 position = entity->GetTransformation()->GetPosition();
+		auto position = entity->GetTransformation()->GetPosition();
+		auto rotation = entity->GetTransformation()->GetRotation();
 		object->SetPosition(position);
+		object->SetRotation(rotation);
 	}
 }
 
-void PhysicsSystem::UpdateEntitiesPositions(IGameEntity* entity)
+void PhysicsSystem::UpdateEntitiesData(IGameEntity* entity)
 {
 	PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
 	if (component != nullptr)
 	{
 		auto object = component->GetPhysicsObject();
 		entity->GetTransformation()->SetPosition(object->GetPosition());
+		glm::vec3 rotation = object->GetRotation();
+		std::cout << "euler angles: " << rotation.x << ", " << rotation.y << ", " << rotation.z << "\n";
+
+		entity->GetTransformation()->SetRotation(object->GetRotation());
 	}
 }
 

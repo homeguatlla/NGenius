@@ -30,3 +30,9 @@ IComponent* RigidbodyPhysicsComponent::Create(IGameEntity* entity)
 
 	return component;
 }
+
+void RigidbodyPhysicsComponent::AddForceAtBodyPoint(const glm::vec3& force, const glm::vec3& point)
+{
+	auto rigidbody = std::static_pointer_cast<NPhysics::RigidBody>(mObject);
+	rigidbody->AddForceAtBodyPoint(force, point);
+}

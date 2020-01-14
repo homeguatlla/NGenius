@@ -906,6 +906,12 @@
     <ClInclude Include="src\resources\components\RigidbodyPhysicsComponent.h">
       <Filter>Header Files\resources\components</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\command\commands\ApplyForceToEntityCommand.h">
+      <Filter>Header Files\resources\command\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Math.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1507,6 +1513,9 @@
     </ClCompile>
     <ClCompile Include="src\resources\components\RigidbodyPhysicsComponent.cpp">
       <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\command\commands\ApplyForceToEntityCommand.cpp">
+      <Filter>Source Files\resources\command\commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
