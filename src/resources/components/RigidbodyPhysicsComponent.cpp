@@ -17,7 +17,9 @@ void RigidbodyPhysicsComponent::DoCreatePhysicsData(const AABB& box, float mass)
 {
 	glm::vec3 position = mParent->GetTransformation()->GetPosition();
 	glm::vec3 initialRotation = mParent->GetTransformation()->GetRotation();
-	auto rigidBody = std::make_shared<NPhysics::RigidBody>(position, initialRotation, mInitialVelocity);
+	glm::vec3 initialAngularVelocity(0.0f);
+	auto rigidBody = std::make_shared<NPhysics::RigidBody>(position, initialAngularVelocity, mInitialVelocity);
+	rigidBody->SetRotation(initialRotation);
 	rigidBody->SetInertiaTensorMatrix(NPhysics::NPhysicsEngine::GetInertiaTensorMatrix(mass, box.GetSize()));
 
 	mObject = rigidBody;

@@ -56,6 +56,7 @@
 			<model name = "rock3" filename = "data/models/rocks/rock3.dae" calculate_normals="true" calculate_tangents="true"/>
 			<model name = "rock5" filename = "data/models/rocks/rock5.dae" calculate_normals="true" calculate_tangents="true"/>
 			<model name = "crate" filename = "data/models/props/crate.obj" calculate_normals="true" calculate_tangents="true"/>
+      <model name = "cube" filename = "data/models/cube/cube.obj" calculate_normals="true" calculate_tangents="true"/>
 		</models_library>
 		<materials_library>
 			<material name="terrain" shader="TerrainShader">
@@ -241,10 +242,10 @@
 					</component>
 				</components>
 			</entity>
-      <entity is_enabled="true" name="box" model="crate" material="props_material" layer="8">
+      <entity is_enabled="true" name="box" model="cube" material="props_material" layer="8">
 				<transformation>
-					<position X="0.000000" Y="0.000000" Z="0.000000"/>
-					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
+					<position X="0.000000" Y="2.000000" Z="0.000000"/>
+					<rotation X="0.000000" Y="90.0000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 				<components>
@@ -255,14 +256,30 @@
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
 			</entity>
-      <entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8">
+
+
+      <entity is_enabled="true" name="center" model="cube" material="props_material" layer="8">
         <transformation>
           <position X="0.000000" Y="0.000000" Z="0.000000"/>
           <rotation X="0.000000" Y="0.000000" Z="0.000000"/>
-          <scale X="1.000000" Y="1.000000" Z="1.000000"/>
+          <scale X=".100000" Y="0.100000" Z="0.100000"/>
         </transformation>
         <components>
-          <component is_enabled="true" type="ParticlePhysicsComponent" is_static="true" density="2.0">
+          <component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="true" density="2.0">
+            <initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+          </component>
+          <component is_enabled="true" type="SpacePartitionComponent"/>
+          <component is_enabled="true" type="DebugComponent"/>
+        </components>
+      </entity>
+      <entity is_enabled="true" name="xAxis" model="cube" material="props_material" layer="8">
+        <transformation>
+          <position X="1.000000" Y="0.000000" Z="0.000000"/>
+          <rotation X="0.000000" Y="0.000000" Z="0.000000"/>
+          <scale X=".100000" Y="0.100000" Z="0.100000"/>
+        </transformation>
+        <components>
+          <component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="true" density="2.0">
             <initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
           </component>
           <component is_enabled="true" type="SpacePartitionComponent"/>
