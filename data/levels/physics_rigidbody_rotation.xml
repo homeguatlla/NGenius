@@ -245,7 +245,7 @@
       <entity is_enabled="true" name="box" model="cube" material="props_material" layer="8">
 				<transformation>
 					<position X="0.000000" Y="2.000000" Z="0.000000"/>
-					<rotation X="0.000000" Y="90.0000" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 				<components>

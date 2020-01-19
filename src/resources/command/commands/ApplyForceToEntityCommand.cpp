@@ -19,7 +19,7 @@ void ApplyForceToEntityCommand::Execute()
 	{
 		PhysicsComponent* component = mEntity->GetComponent<PhysicsComponent>();
 		auto rigidbodyComponent = static_cast<RigidbodyPhysicsComponent*>(component);
-		rigidbodyComponent->AddForceAtBodyPoint(glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(-0.5f, 1.0f, 0.0f));
+		rigidbodyComponent->AddForceAtBodyPoint(glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(-0.5f, 0.5f, 0.0f));
 		//rigidbodyComponent->AddForceAtBodyPoint(glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(-0.5f, 0.0f, 0.0f));
 	}
 }

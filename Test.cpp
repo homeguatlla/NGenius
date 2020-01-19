@@ -1331,6 +1331,8 @@ void UpdateInput(GLFWwindow* window)
 			IGameEntity* entity = mEngine->GetGameEntity(std::string("box"));
 			mCurrentCommand = DBG_NEW ApplyForceToEntityCommand(entity);
 			mCurrentCommand->Execute();
+			delete mCurrentCommand;
+			mCurrentCommand = nullptr;
 		}
 	}
 }
