@@ -13,14 +13,14 @@ IComponent* RigidbodyPhysicsComponent::DoClone() const
 	return newPhysicsComponent;
 }
 
-void RigidbodyPhysicsComponent::DoCreatePhysicsData(const AABB& box, float mass)
+void RigidbodyPhysicsComponent::DoCreatePhysicsData(const NPhysics::IBoundingVolume& volume, float mass)
 {
 	glm::vec3 position = mParent->GetTransformation()->GetPosition();
 	glm::vec3 initialRotation = mParent->GetTransformation()->GetRotation();
 	glm::vec3 initialAngularVelocity(0.0f);
 	auto rigidBody = std::make_shared<NPhysics::RigidBody>(position, initialAngularVelocity, mInitialVelocity);
 	rigidBody->SetRotation(initialRotation);
-	rigidBody->SetInertiaTensorMatrix(NPhysics::NPhysicsEngine::GetInertiaTensorMatrix(mass, box.GetSize()));
+	rigidBody->SetInertiaTensorMatrix(volume.GetInertiaTensorMatrix(mass));
 
 	mObject = rigidBody;
 }

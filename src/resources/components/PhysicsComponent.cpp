@@ -7,9 +7,15 @@
 #include "../renderers/IRenderer.h"
 #include "../Memory.h"
 #include "../systems/PhysicsSystem.h"
+#include "../../NPhysics/source/InstantiableObject.h"
+#include "../../NPhysics/source/bvh/boundingVolumes/SphereBoundingVolume.h"
 
 
-PhysicsComponent::PhysicsComponent(bool isStatic, float density, const glm::vec3& initialVelocity) :mIsStatic(isStatic), mDensity(density), mInitialVelocity(initialVelocity)
+PhysicsComponent::PhysicsComponent(bool isStatic, float density, const glm::vec3& initialVelocity) :
+	mIsStatic(isStatic), 
+	mDensity(density), 
+	mInitialVelocity(initialVelocity),
+	mBoundingVolume { nullptr }
 {
 }
 
@@ -23,12 +29,14 @@ void PhysicsComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 	//calcular la densidad = m / V
 	//Luego, añadir el componente de drag con valores altos para estabilizar.
 
-	const AABB box = mParent->GetRenderer()->GetAABB();
-	float volume = box.GetVolume();
+
+	//const AABB box = mParent->GetRenderer()->GetAABB();
+	assert(mBoundingVolume);
+	
+	float volume = mBoundingVolume->GetVolume();
 	float mass = mDensity * volume;
 
-	//TODO the box here should by the rigidbody (box, capsule, sphere) that we need to read from file
-	DoCreatePhysicsData(box, mass);
+	DoCreatePhysicsData(*mBoundingVolume.get(), mass);
 
 	assert(mObject);
 
@@ -60,6 +68,11 @@ std::shared_ptr<NPhysics::PhysicsObject> PhysicsComponent::GetPhysicsObject() co
 	return mObject;
 }
 
+std::shared_ptr<NPhysics::IBoundingVolume> PhysicsComponent::GetPhysicsBouningVolume() const
+{
+	return mBoundingVolume;
+}
+
 void PhysicsComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
 	source->ReadParameter(std::string("is_static"), &mIsStatic);
@@ -72,6 +85,39 @@ void PhysicsComponent::DoReadFrom(core::utils::IDeserializer* source)
 		source->ReadParameter("Y", &mInitialVelocity.y);
 		source->ReadParameter("Z", &mInitialVelocity.z);
 		source->EndAttribute();
+	}
+
+	ReadBoundingVolumeFrom(source);
+}
+
+void PhysicsComponent::ReadBoundingVolumeFrom(core::utils::IDeserializer* source)
+{
+	if (source->HasAttribute("boundingVolume"))
+	{
+		std::string boundingVolumeType;
+		source->BeginAttribute("boundingVolume");
+		source->ReadParameter("type", boundingVolumeType);
+		mBoundingVolume = NPhysics::InstantiableObject::CreateBoundingVolume(boundingVolumeType); 
+		if (boundingVolumeType == NPhysics::SphereBoundingVolume::GetClassName())
+		{
+			auto sphereVolume = std::dynamic_pointer_cast<NPhysics::SphereBoundingVolume>(mBoundingVolume);
+			float radius = 0.0f;
+			source->ReadParameter("radius", &radius);
+			//TODO estaría bien que si no viene el radio este se calcule de la caja contenedora.
+			//supongo que cuando haga el init. Hay otros sitios donde ha pasado algo parecido
+			//const AABB box = mParent->GetRenderer()->GetAABB();
+			sphereVolume->SetRadius(radius);
+		}
+		else
+		{
+			assert(false);
+		}
+		source->EndAttribute();
+	}
+	else
+	{
+		//Create a bounding volume by default
+		mBoundingVolume = std::make_shared<NPhysics::SphereBoundingVolume>(glm::vec3(0.0f), 1.0f);
 	}
 }
 

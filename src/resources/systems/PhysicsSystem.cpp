@@ -195,7 +195,8 @@ void PhysicsSystem::OnGameEntityAdded(IGameEntity* entity)
 		else if(component != nullptr && typeid(*component) == typeid(RigidbodyPhysicsComponent))
 		{
 			auto body = std::static_pointer_cast<NPhysics::RigidBody>(component->GetPhysicsObject());
-			mEngine.AddRigidBody(body);
+			auto volume = component->GetPhysicsBouningVolume();
+			mEngine.AddRigidBody(body, volume);
 			AddGenerators(body, entity);
 		}
 	}
@@ -245,7 +246,7 @@ void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::RigidBody>& rigidBod
 	{
 		std::shared_ptr<NPhysics::IForceGenerator<NPhysics::RigidBody>> generator;
 		generator = std::make_shared<NPhysics::RigidBodyGravity>(gravityComponent->GetGravity());
-		mEngine.RegisterRigidBodyForceGenerator(rigidBody, generator);
+		//mEngine.RegisterRigidBodyForceGenerator(rigidBody, generator);
 	}
 
 	BuoyancyComponent* buoyancyComponent = entity->GetComponent<BuoyancyComponent>();
@@ -258,7 +259,7 @@ void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::RigidBody>& rigidBod
 			buoyancyComponent->GetWaterHeight(),
 			buoyancyComponent->GetLiquidDensity(),
 			buoyancyComponent->GetCenter());
-		mEngine.RegisterRigidBodyForceGenerator(rigidBody, generator);
+		//mEngine.RegisterRigidBodyForceGenerator(rigidBody, generator);
 	}
 
 	DragComponent* dragComponent = entity->GetComponent<DragComponent>();
@@ -266,7 +267,7 @@ void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::RigidBody>& rigidBod
 	{
 		std::shared_ptr<NPhysics::IForceGenerator<NPhysics::RigidBody>> generator;
 		generator = std::make_shared<NPhysics::RigidBodyDrag>(dragComponent->GetK1(), dragComponent->GetK2());
-		mEngine.RegisterRigidBodyForceGenerator(rigidBody, generator);
+		//mEngine.RegisterRigidBodyForceGenerator(rigidBody, generator);
 	}
 }
 

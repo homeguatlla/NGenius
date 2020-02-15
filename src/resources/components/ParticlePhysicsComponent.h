@@ -25,6 +25,6 @@ public:
 private:
 	ParticlePhysicsComponent() = default;
 	ParticlePhysicsComponent* DoClone() const override;
-	void DoCreatePhysicsData(const AABB& box, float mass) override;
+	void DoCreatePhysicsData(const NPhysics::IBoundingVolume& volume, float mass) override;
 };
 
