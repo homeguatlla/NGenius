@@ -29,18 +29,8 @@ void PhysicsComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 	//calcular la densidad = m / V
 	//Luego, añadir el componente de drag con valores altos para estabilizar.
 
-
-	//const AABB box = mParent->GetRenderer()->GetAABB();
-	assert(mBoundingVolume);
-	
-	float volume = mBoundingVolume->GetVolume();
-	float mass = mDensity * volume;
-
-	DoCreatePhysicsData(*mBoundingVolume.get(), mass);
-
+	DoCreatePhysicsData();
 	assert(mObject);
-
-	mObject->SetMass(mass);	
 }
 
 bool PhysicsComponent::IsStatic() const
@@ -92,10 +82,11 @@ void PhysicsComponent::DoReadFrom(core::utils::IDeserializer* source)
 
 void PhysicsComponent::ReadBoundingVolumeFrom(core::utils::IDeserializer* source)
 {
-	if (source->HasAttribute("boundingVolume"))
+	if (source->HasAttribute("collider"))
 	{
+		source->BeginAttribute("collider");
+
 		std::string boundingVolumeType;
-		source->BeginAttribute("boundingVolume");
 		source->ReadParameter("type", boundingVolumeType);
 		mBoundingVolume = NPhysics::InstantiableObject::CreateBoundingVolume(boundingVolumeType); 
 		if (boundingVolumeType == NPhysics::SphereBoundingVolume::GetClassName())
@@ -103,9 +94,6 @@ void PhysicsComponent::ReadBoundingVolumeFrom(core::utils::IDeserializer* source
 			auto sphereVolume = std::dynamic_pointer_cast<NPhysics::SphereBoundingVolume>(mBoundingVolume);
 			float radius = 0.0f;
 			source->ReadParameter("radius", &radius);
-			//TODO estaría bien que si no viene el radio este se calcule de la caja contenedora.
-			//supongo que cuando haga el init. Hay otros sitios donde ha pasado algo parecido
-			//const AABB box = mParent->GetRenderer()->GetAABB();
 			sphereVolume->SetRadius(radius);
 		}
 		else
@@ -113,11 +101,6 @@ void PhysicsComponent::ReadBoundingVolumeFrom(core::utils::IDeserializer* source
 			assert(false);
 		}
 		source->EndAttribute();
-	}
-	else
-	{
-		//Create a bounding volume by default
-		mBoundingVolume = std::make_shared<NPhysics::SphereBoundingVolume>(glm::vec3(0.0f), 1.0f);
 	}
 }
 

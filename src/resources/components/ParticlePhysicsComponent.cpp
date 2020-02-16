@@ -5,6 +5,7 @@
 #include "../renderers/IRenderer.h"
 #include "../Memory.h"
 #include "../systems/PhysicsSystem.h"
+#include "../../../../NPhysics/source/bvh/boundingVolumes/SphereBoundingVolume.h"
 
 
 ParticlePhysicsComponent::ParticlePhysicsComponent(bool isStatic, float density, const glm::vec3& initialVelocity) : 
@@ -27,8 +28,20 @@ IComponent* ParticlePhysicsComponent::Create(IGameEntity* entity)
 	return component;
 }
 
-void ParticlePhysicsComponent::DoCreatePhysicsData(const NPhysics::IBoundingVolume& volume, float mass)
+void ParticlePhysicsComponent::DoCreatePhysicsData()
 {
+	if (mBoundingVolume == nullptr)
+	{
+		//Create a bounding volume by default
+		mBoundingVolume = std::make_shared<NPhysics::SphereBoundingVolume>(glm::vec3(0.0f), 1.0f);
+	}
+
+	assert(mBoundingVolume);
+
+	float volume = mBoundingVolume->GetVolume();
+	float mass = mDensity * volume;
+
 	glm::vec3 position = mParent->GetTransformation()->GetPosition();
 	mObject = std::make_shared<NPhysics::Particle>(position, mInitialVelocity);
+	mObject->SetMass(mass);
 }

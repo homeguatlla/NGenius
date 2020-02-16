@@ -242,7 +242,7 @@
 					</component>
 				</components>
 			</entity>
-      <entity is_enabled="true" name="box" model="cube" material="props_material" layer="8">
+			<entity is_enabled="true" name="box" model="cube" material="props_material" layer="8">
 				<transformation>
 					<position X="0.000000" Y="2.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
@@ -251,7 +251,22 @@
 				<components>
 					<component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="true" density="2.0">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<boundingVolume type="SphereBoundingVolume" radius="10"/>
+						<collider type="SphereBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="box2" model="cube" material="props_material" layer="8">
+				<transformation>
+					<position X="0.000000" Y="1.000000" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="true" density="2.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="SphereBoundingVolume"/>
 					</component>
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>

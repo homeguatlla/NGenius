@@ -41,7 +41,7 @@ private:
 	void DoReadFrom(core::utils::IDeserializer* source) override;
 	void DoWriteTo(core::utils::ISerializer* destination) override;
 	static IComponent* DoCreate(IGameEntity* entity) { return nullptr; }
-	virtual void DoCreatePhysicsData(const NPhysics::IBoundingVolume& volume, float mass) = 0;
+	virtual void DoCreatePhysicsData() = 0;
 	void ReadBoundingVolumeFrom(core::utils::IDeserializer* source);
 };
 
