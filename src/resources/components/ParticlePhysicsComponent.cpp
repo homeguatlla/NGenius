@@ -42,6 +42,6 @@ void ParticlePhysicsComponent::DoCreatePhysicsData()
 	float mass = mDensity * volume;
 
 	glm::vec3 position = mParent->GetTransformation()->GetPosition();
-	mObject = std::make_shared<NPhysics::Particle>(position, mInitialVelocity);
+	mObject = std::make_shared<NPhysics::Particle>(position, mInitialVelocity, mIsStatic);
 	mObject->SetMass(mass);
 }

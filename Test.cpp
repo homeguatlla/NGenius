@@ -14,6 +14,7 @@
 #include <complex>
 #include <ctime>
 #include <utility>
+#include <memory>
 
 #include "GameConstants.h"
 #include "src/NGenius.h"
@@ -119,7 +120,6 @@
 #include "src/input/bindings/MouseToEventBind.h"
 
 #include "src/utils/Log.h"
-
 
 using namespace glm;
 using namespace std;

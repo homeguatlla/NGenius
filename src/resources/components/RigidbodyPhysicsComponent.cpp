@@ -44,7 +44,7 @@ void RigidbodyPhysicsComponent::DoCreatePhysicsData()
 	glm::vec3 position = mParent->GetTransformation()->GetPosition();
 	glm::vec3 initialRotation = mParent->GetTransformation()->GetRotation();
 	glm::vec3 initialAngularVelocity(0.0f);
-	auto rigidBody = std::make_shared<NPhysics::RigidBody>(position, initialAngularVelocity, mInitialVelocity);
+	auto rigidBody = std::make_shared<NPhysics::RigidBody>(position, initialAngularVelocity, mInitialVelocity, mIsStatic);
 	rigidBody->SetRotation(initialRotation);
 	rigidBody->SetInertiaTensorMatrix(mBoundingVolume->GetInertiaTensorMatrix(mass));
 
