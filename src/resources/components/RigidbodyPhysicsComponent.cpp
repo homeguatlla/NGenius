@@ -24,7 +24,7 @@ void RigidbodyPhysicsComponent::DoCreatePhysicsData()
 		//TODO remove this code once we create a BoxBoundingVolume
 		const AABB box = mParent->GetRenderer()->GetAABB();
 		float largerSide = glm::distance(box.GetVertexMax(), box.GetVertexMin());
-		float radiusCircumscribe = largerSide * 0.866f;
+		float radiusCircumscribe = largerSide * 0.5f;
 		if (mBoundingVolume == nullptr)
 		{
 			mBoundingVolume = std::make_shared<NPhysics::SphereBoundingVolume>(glm::vec3(0.0f), radiusCircumscribe);

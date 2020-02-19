@@ -381,7 +381,7 @@ void PhysicsSystem::UpdateEntitiesData(IGameEntity* entity)
 		auto object = component->GetPhysicsObject();
 		entity->GetTransformation()->SetPosition(object->GetPosition());
 		glm::vec3 rotation = object->GetRotation();
-		std::cout << "euler angles: " << rotation.x << ", " << rotation.y << ", " << rotation.z << "\n";
+		//std::cout << "euler angles: " << rotation.x << ", " << rotation.y << ", " << rotation.z << "\n";
 
 		entity->GetTransformation()->SetRotation(object->GetRotation());
 	}

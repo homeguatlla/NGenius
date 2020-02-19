@@ -249,7 +249,7 @@
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="true" density="2.0">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="false" density="2.0">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 						<collider type="SphereBoundingVolume"/>
 					</component>
@@ -272,7 +272,81 @@
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
 			</entity>
-
+			<entity is_enabled="true" name="box3" model="cube" material="props_material" layer="8">
+				<transformation>
+					<position X="-3.000000" Y="2.000000" Z="2.000000"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="true" density="2.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="SphereBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="box4" model="cube" material="props_material" layer="8">
+				<transformation>
+					<position X="1.000000" Y="2.000000" Z="-2.000000"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="true" density="2.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="SphereBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="box5" model="cube" material="props_material" layer="8">
+				<transformation>
+					<position X="3.000000" Y="1.500000" Z="2.000000"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="true" density="2.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="SphereBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="box6" model="cube" material="props_material" layer="8">
+				<transformation>
+					<position X="-1.000000" Y="2.000000" Z="-1.000000"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="true" density="2.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="SphereBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="box7" model="cube" material="props_material" layer="8">
+				<transformation>
+					<position X="2.000000" Y="1.600000" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="true" density="2.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="SphereBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</entity>
 		</entities>
 	</game_scene>
 </ngenius>
