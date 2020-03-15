@@ -8,6 +8,10 @@
 
 class IGameEntity;
 class Terrain;
+namespace NPhysics
+{
+	class IBoundingVolume;
+}
 
 class PhysicsSystem : public BaseVisitable<>, public IGameSceneListener
 {
@@ -42,7 +46,7 @@ private:
 	bool HasPhysicsComponents(const IGameEntity* entity) const;
 
 	void AddGenerators(std::shared_ptr<NPhysics::Particle>& particle, IGameEntity* entity);
-	void AddGenerators(std::shared_ptr<NPhysics::RigidBody>& rigidBody, IGameEntity* entity);
+	void AddGenerators(std::shared_ptr<NPhysics::RigidBody>& rigidBody, std::shared_ptr<NPhysics::IBoundingVolume>& volume, IGameEntity* entity);
 
 	void OnGameEntityAdded(IGameEntity* entity) override;
 	void OnGameEntityRemoved(IGameEntity* entity) override;

@@ -25,7 +25,7 @@ const float reflectivity = 0.1;
 
 vec3 CalculateSpecularColor(vec2 distorsionCoords, vec3 cameraVector)
 {
-	vec3 normalColor = texture2D(normalTexture, distorsionCoords).rgb;
+	vec3 normalColor = texture(normalTexture, distorsionCoords).rgb;
 	vec3 normal = vec3(normalColor.r * 2.0 - 1.0, normalColor.b, normalColor.g * 2.0 - 1.0);
 	normal = normalize(normal);
 	vec3 reflectedLight = reflect(normalize(fromLightVector), normal);
@@ -51,7 +51,7 @@ void main()
 	
 	float near = 0.1;
 	float far = 1000.0f;	
-	float depth = texture2D(depthTexture, refractTexCoords).r;
+	float depth = texture(depthTexture, refractTexCoords).r;
 	float floorDistance = 2.0 * near * far /( far + near - (2.0 * depth - 1.0) * (far - near));
 	
 	depth = gl_FragCoord.z;
@@ -59,22 +59,22 @@ void main()
 	float waterDepth = floorDistance - waterDistance;
 	
 	vec2 tc = textureCoords * 5.0f;
-	vec2 distorsionReflectionCoords = texture2D(distorsionTexture, vec2(tc.x + waterSpeed, tc.y)).rg * 0.1;
+	vec2 distorsionReflectionCoords = texture(distorsionTexture, vec2(tc.x + waterSpeed, tc.y)).rg * 0.1;
 	distorsionReflectionCoords = textureCoords + vec2(distorsionReflectionCoords.x , distorsionReflectionCoords.y + waterSpeed);
-	vec2 distorsionReflection = (texture2D(distorsionTexture, distorsionReflectionCoords).rg * 2.0 - 1.0) * waveStrengh ;
+	vec2 distorsionReflection = (texture(distorsionTexture, distorsionReflectionCoords).rg * 2.0 - 1.0) * waveStrengh ;
 	
 	vec2 distorsionedReflectTexCoords = reflectTexCoords + distorsionReflection;
 	distorsionedReflectTexCoords = clamp(distorsionedReflectTexCoords, 0.001, 0.999);
 	
-	vec2 distorsionRefractionCoords = texture2D(distorsionTexture, vec2(tc.x + waterSpeed, tc.y)).rg * 0.05;
+	vec2 distorsionRefractionCoords = texture(distorsionTexture, vec2(tc.x + waterSpeed, tc.y)).rg * 0.05;
 	distorsionRefractionCoords = textureCoords + vec2(distorsionRefractionCoords.x , distorsionRefractionCoords.y + waterSpeed);
-	vec2 distorsionRefraction = (texture2D(distorsionTexture, distorsionRefractionCoords).rg * 2.0 - 1.0) * waveStrengh ;
+	vec2 distorsionRefraction = (texture(distorsionTexture, distorsionRefractionCoords).rg * 2.0 - 1.0) * waveStrengh ;
 
 	vec2 distorsionedRefractTexCoords = refractTexCoords + distorsionRefraction;
 	distorsionedRefractTexCoords = clamp(distorsionedRefractTexCoords, 0.001, 0.999);
 
-	vec4 distorsionedReflectionColor = texture2D(reflectionTexture, distorsionedReflectTexCoords);
-	vec4 distorsionedRefractionColor = texture2D(refractionTexture, distorsionedRefractTexCoords);
+	vec4 distorsionedReflectionColor = texture(reflectionTexture, distorsionedReflectTexCoords);
+	vec4 distorsionedRefractionColor = texture(refractionTexture, distorsionedRefractTexCoords);
 
 	vec3 cameraVectorNormalized = normalize(cameraVector); 
 
@@ -88,8 +88,8 @@ void main()
 	color = mix(color, waterColor, 0.2) + vec4(specularColor, 1.0);
 	
 	//to remove distorsion near the water edges
-	vec4 refractionColor = texture2D(refractionTexture, refractTexCoords);
-	vec4 reflectionColor = texture2D(reflectionTexture, reflectTexCoords);
+	vec4 refractionColor = texture(refractionTexture, refractTexCoords);
+	vec4 reflectionColor = texture(reflectionTexture, reflectTexCoords);
 	color = mix(vec4(0.0f, 1.0f, 1.0f, 1.0f), color, depthFactor);
 	color = mix(reflectionColor, color, depthFactor);
 	color = mix(refractionColor, color, depthFactor);	

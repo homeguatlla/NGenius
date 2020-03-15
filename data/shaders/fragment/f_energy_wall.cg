@@ -26,13 +26,13 @@ void main()
 {
 	float newTime = timer;
 	vec2 newTextureCoords = vec2( textureCoords.x + newTime * 0.005, textureCoords.y) * tile;
-	color = texture2D(texture, newTextureCoords);
+	color = texture(texture, newTextureCoords);
 	
 	float near = 0.1;
 	float far = 1000.0f;
 	
 	//calculate the depth texture value from the pixel we are rendering (the depth texture is a texture of screenSize)	
-	float depth = texture2D(depthTexture, vec2(gl_FragCoord.x , gl_FragCoord.y) * 1.0/screenSize).r;
+	float depth = texture(depthTexture, vec2(gl_FragCoord.x , gl_FragCoord.y) * 1.0/screenSize).r;
 	float floorDistance = 2.0 * near * far /( far + near - (2.0 * depth - 1.0) * (far - near));
 	
 	depth = gl_FragCoord.z;

@@ -26,7 +26,7 @@ float ApplySoftParticle(float alphaColor)
 	float far = 1000.0f;
 	
 	//calculate the depth texture value from the pixel we are rendering (the depth texture is a texture of 1024 x 768)	
-	float depth = texture2D(depthTexture, vec2(gl_FragCoord.x, gl_FragCoord.y) * 1.0/screenSize).r;
+	float depth = texture(depthTexture, vec2(gl_FragCoord.x, gl_FragCoord.y) * 1.0/screenSize).r;
 	float floorDistance = 2.0 * near * far /( far + near - (2.0 * depth - 1.0) * (far - near));
 	
 	depth = gl_FragCoord.z;
@@ -45,7 +45,7 @@ void main()
 {	
 	//vec2 ndc = (clipSpace.xy / clipSpace.w) / 2.0 + 0.5;
 	
-	vec4 textureColor = texture2D(texture, textureCoords * tile);
+	vec4 textureColor = texture(texture, textureCoords * tile);
 	color = (textureColor + vec4(luminiscence.r, luminiscence.g, luminiscence.b, textureColor.a) )* luminiscence.a;
 	color.a = ApplySoftParticle(color.a);
 

@@ -197,7 +197,7 @@ void PhysicsSystem::OnGameEntityAdded(IGameEntity* entity)
 			auto body = std::static_pointer_cast<NPhysics::RigidBody>(component->GetPhysicsObject());
 			auto volume = component->GetPhysicsBouningVolume();
 			mEngine.AddRigidBody(body, volume);
-			AddGenerators(body, entity);
+			AddGenerators(body, volume, entity);
 		}
 	}
 
@@ -239,14 +239,14 @@ void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::Particle>& particle,
 	}
 }
 
-void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::RigidBody>& rigidBody, IGameEntity* entity)
+void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::RigidBody>& rigidBody, std::shared_ptr<NPhysics::IBoundingVolume>& volume, IGameEntity* entity)
 {
 	GravityComponent* gravityComponent = entity->GetComponent<GravityComponent>();
 	if (gravityComponent != nullptr)
 	{
 		std::shared_ptr<NPhysics::IForceGenerator<NPhysics::RigidBody>> generator;
 		generator = std::make_shared<NPhysics::RigidBodyGravity>(gravityComponent->GetGravity());
-		//mEngine.RegisterRigidBodyForceGenerator(rigidBody, generator);
+		mEngine.RegisterRigidBodyForceGenerator(rigidBody, volume, generator);
 	}
 
 	BuoyancyComponent* buoyancyComponent = entity->GetComponent<BuoyancyComponent>();
@@ -259,7 +259,7 @@ void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::RigidBody>& rigidBod
 			buoyancyComponent->GetWaterHeight(),
 			buoyancyComponent->GetLiquidDensity(),
 			buoyancyComponent->GetCenter());
-		//mEngine.RegisterRigidBodyForceGenerator(rigidBody, generator);
+		mEngine.RegisterRigidBodyForceGenerator(rigidBody, volume, generator);
 	}
 
 	DragComponent* dragComponent = entity->GetComponent<DragComponent>();
@@ -267,7 +267,7 @@ void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::RigidBody>& rigidBod
 	{
 		std::shared_ptr<NPhysics::IForceGenerator<NPhysics::RigidBody>> generator;
 		generator = std::make_shared<NPhysics::RigidBodyDrag>(dragComponent->GetK1(), dragComponent->GetK2());
-		//mEngine.RegisterRigidBodyForceGenerator(rigidBody, generator);
+		mEngine.RegisterRigidBodyForceGenerator(rigidBody, volume, generator);
 	}
 }
 

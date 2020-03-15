@@ -24,10 +24,10 @@ vec4 outlineColor = vec4(0.0, 0.0, 0.0, 1.0);*/
 
 void main()
 {	
-	float distance = 1.0 - texture2D(texture, textureCoords).a;
+	float distance = 1.0 - texture(texture, textureCoords).a;
 	float alpha = 1.0 - smoothstep(width, width + edge, distance);
 	
-	float distance2 = 1.0 - texture2D(texture, textureCoords + shadowOffset).a;
+	float distance2 = 1.0 - texture(texture, textureCoords + shadowOffset).a;
 	float outlineAlpha = 1.0 - smoothstep(borderWidth, borderWidth + borderEdge, distance2);
 
 	float overallAlpha = alpha + (1.0 - alpha) * outlineAlpha;

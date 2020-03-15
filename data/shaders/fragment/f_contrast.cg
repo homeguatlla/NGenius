@@ -9,7 +9,7 @@ uniform float contrast;
 
 void main()
 {
-	vec4 textureColor = texture2D(texture, textureCoords);
+	vec4 textureColor = texture(texture, textureCoords);
 	color = (textureColor - 0.5) * (1.0 + contrast) + 0.5;
 	//gamma correction, but don't like it
 	//float gamma = 2.2;

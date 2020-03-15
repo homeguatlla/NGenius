@@ -75,8 +75,8 @@ vec3 calculateWindVector(float patchSize)
 	coord = coord * 1.0 / patchSize;
 	vec2 coord1 = coord * vec2(cos(timer + 4), sin(timer * 3 + 10));
 
-	vec3 wind1 = texture2D(textureWind, coord1).bgr * 2.0 - 1.0;
-	vec3 wind2 = texture2D(textureWind, coord1.yx).bgr * 2.0 - 1.0;
+	vec3 wind1 = texture(textureWind, coord1).bgr * 2.0 - 1.0;
+	vec3 wind2 = texture(textureWind, coord1.yx).bgr * 2.0 - 1.0;
 	vec3 wind = wind1 * 0.7 - wind2 * 0.25;
 	wind.y = 0.8;
 

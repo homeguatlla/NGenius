@@ -56,7 +56,7 @@ float ApplyShadow(int pfcCount, float totalTexels)
 
 	for(int x = -pfcCount; x <= pfcCount; x++) {
 		for(int y = -pfcCount; y <= pfcCount; y++) {
-			float objectNearestLight = texture2D(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
+			float objectNearestLight = texture(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
 
 			total += step(objectNearestLight, shadowCoords.z - bias);
 			/*if(objectNearestLight < shadowCoords.z - bias)
@@ -80,7 +80,7 @@ void main()
 
 	// Material properties
 	float shadowFactor = ApplyShadow(pfcCount, totalTexelsShadow);
-	vec4 MaterialDiffuseColor = shadowFactor * texture2D(texture, textureCoords);
+	vec4 MaterialDiffuseColor = shadowFactor * texture(texture, textureCoords);
 
 	if(MaterialDiffuseColor.a < 0.5)
 	{
