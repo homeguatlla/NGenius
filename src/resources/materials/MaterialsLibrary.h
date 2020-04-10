@@ -19,6 +19,7 @@ class MaterialsLibrary : public core::utils::ISerializable, public BaseLibrary<I
 public:
 	static const char* OVERDRAW_MATERIAL_NAME;
 	static const char* WIREFRAME_MATERIAL_NAME;
+	static const char* COLLIDER_MATERIAL_NAME;
 	static const char* QUADTREE_MATERIAL_NAME;
 	static const char* MODEL_MATERIAL_NAME;
 	static const char* TEXT_MATERIAL_NAME;

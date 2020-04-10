@@ -57,6 +57,11 @@ void MaterialEffectDiffuseTexture::SetTile(float tile)
 	mTile = tile;
 }
 
+void MaterialEffectDiffuseTexture::SetColor(const glm::vec3& color)
+{
+	mColor = color;
+}
+
 void MaterialEffectDiffuseTexture::CopyValuesFrom(IMaterial* material)
 {
 	MaterialEffectDiffuseTexture* effectDiffuse = material->GetEffect<MaterialEffectDiffuseTexture>();

@@ -220,6 +220,7 @@
     <ClInclude Include="src\resources\components\BuoyancyComponent.h" />
     <ClInclude Include="src\resources\components\CameraComponent.h" />
     <ClInclude Include="src\resources\components\CharacterComponent.h" />
+    <ClInclude Include="src\resources\components\ColliderDebugComponent.h" />
     <ClInclude Include="src\resources\components\DebugComponent.h" />
     <ClInclude Include="src\resources\components\DragComponent.h" />
     <ClInclude Include="src\resources\components\EnergyWallCollisionComponent.h" />
@@ -313,6 +314,7 @@
     <ClInclude Include="src\resources\renderers\IRenderer.h" />
     <ClInclude Include="src\resources\renderers\WaterRenderer.h" />
     <ClInclude Include="src\resources\renderers\WireframeRenderer.h" />
+    <ClInclude Include="src\resources\renderers\WireframeVerticesRenderer.h" />
     <ClInclude Include="src\resources\scene\GameScene.h" />
     <ClInclude Include="src\resources\scene\IGameSceneListener.h" />
     <ClInclude Include="src\resources\scene\ISpacePartition.h" />
@@ -453,6 +455,7 @@
     <ClCompile Include="src\resources\components\BuoyancyComponent.cpp" />
     <ClCompile Include="src\resources\components\CameraComponent.cpp" />
     <ClCompile Include="src\resources\components\CharacterComponent.cpp" />
+    <ClCompile Include="src\resources\components\ColliderDebugComponent.cpp" />
     <ClCompile Include="src\resources\components\DebugComponent.cpp" />
     <ClCompile Include="src\resources\components\DragComponent.cpp" />
     <ClCompile Include="src\resources\components\EnergyWallCollisionComponent.cpp" />
@@ -544,6 +547,7 @@
     <ClCompile Include="src\resources\renderers\IRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\WaterRenderer.cpp" />
     <ClCompile Include="src\resources\renderers\WireframeRenderer.cpp" />
+    <ClCompile Include="src\resources\renderers\WireframeVerticesRenderer.cpp" />
     <ClCompile Include="src\resources\scene\GameScene.cpp" />
     <ClCompile Include="src\resources\scene\IGameSceneListener.cpp" />
     <ClCompile Include="src\resources\scene\ISpacePartition.cpp" />

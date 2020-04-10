@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "MaterialsLibrary.h"
-#include "../shaders/ShadersLibrary.h"
-#include "../../utils/serializer/XMLDeserializer.h"
-#include "../InstantiableObject.h"
+#include "src/resources/shaders/ShadersLibrary.h"
+#include "src/utils/serializer/XMLDeserializer.h"
+#include "src/resources/InstantiableObject.h"
 
 #include "IMaterial.h"
 #include "BasicMaterial.h"
@@ -29,11 +29,12 @@
 
 #include <GL/glew.h>
 #include <algorithm>
-#include "../../utils/Log.h"
-#include "../Memory.h"
+#include "src/utils/Log.h"
+#include "Memory.h"
 
 const char* MaterialsLibrary::OVERDRAW_MATERIAL_NAME = "overdraw";
 const char* MaterialsLibrary::WIREFRAME_MATERIAL_NAME = "wireframe";
+const char* MaterialsLibrary::COLLIDER_MATERIAL_NAME = "collider";
 const char* MaterialsLibrary::QUADTREE_MATERIAL_NAME = "quadtree";
 const char* MaterialsLibrary::MODEL_MATERIAL_NAME = "model";
 const char* MaterialsLibrary::TEXT_MATERIAL_NAME = "text";
@@ -79,6 +80,7 @@ void MaterialsLibrary::Load()
 {
 	CreateMaterial(OVERDRAW_MATERIAL_NAME, mShadersLibrary->GetElement("OverdrawShader"));
 	CreateMaterial(WIREFRAME_MATERIAL_NAME, mShadersLibrary->GetElement("DefaultShader"));
+	CreateMaterial(COLLIDER_MATERIAL_NAME, mShadersLibrary->GetElement("DefaultShader"));
 	CreateMaterial(QUADTREE_MATERIAL_NAME, mShadersLibrary->GetElement("DefaultShader"));
 	CreateMaterial(MODEL_MATERIAL_NAME, mShadersLibrary->GetElement("NormalMapShader"));
 	CreateMaterial(TEXT_MATERIAL_NAME, mShadersLibrary->GetElement("TextShader"));

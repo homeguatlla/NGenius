@@ -17,6 +17,7 @@ class DebugSystem : public IInputListener, public IGameSceneListener
 
 	bool mIsDebugModeEnabled;
 	bool mIsBoundingBoxVisible;
+	bool mIsColliderVisible;
 	bool mIsOverdrawEnabled;
 	bool mIsWireframeEnabled;
 	bool mIsPostProcessEnabled;

@@ -264,6 +264,7 @@
 					</component>
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
 					<component is_enabled="true" type="GravityComponent">
 						<gravity X="0.0" Y="-2.8f" Z="0.0"/>
 					</component>
@@ -282,6 +283,7 @@
 					</component>
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
 			</entity>
 		</entities>

@@ -915,6 +915,12 @@
     <ClInclude Include="src\resources\command\commands\EnableDisablePhysicsEngineCommand.h">
       <Filter>Header Files\resources\command\commands</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\components\ColliderDebugComponent.h">
+      <Filter>Header Files\resources\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\renderers\WireframeVerticesRenderer.h">
+      <Filter>Header Files\resources\renderers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1522,6 +1528,12 @@
     </ClCompile>
     <ClCompile Include="src\resources\command\commands\EnableDisablePhysicsEngineCommand.cpp">
       <Filter>Source Files\resources\command\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\components\ColliderDebugComponent.cpp">
+      <Filter>Source Files\resources\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\renderers\WireframeVerticesRenderer.cpp">
+      <Filter>Source Files\resources\renderers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

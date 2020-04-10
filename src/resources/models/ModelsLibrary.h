@@ -15,6 +15,7 @@ class ModelsLibrary : public core::utils::ISerializable, public BaseLibrary<Mode
 
 public:
 	static const char* CUBE_NAME;
+	static const char* SPHERE_NAME;
 	static const char* SKYBOX_NAME;
 	static const char* QUAD_NAME;
 	static const char* GUI_QUAD_NAME;

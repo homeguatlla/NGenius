@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "DebugComponent.h"
-#include "../systems/renderSystem/RenderSystem.h"
-#include "../renderers/IRenderer.h"
-#include "../renderers/WireframeRenderer.h"
-#include "../models/ModelsLibrary.h"
-#include "../materials/MaterialsLibrary.h"
-#include "../../AABB.h"
-#include "../IGameEntity.h"
-#include "../../utils/serializer/XMLSerializer.h"
-#include "../../Memory.h"
+#include "src/resources/systems/renderSystem/RenderSystem.h"
+#include "src/resources/renderers/IRenderer.h"
+#include "src/resources/renderers/WireframeRenderer.h"
+#include "src/resources/models/ModelsLibrary.h"
+#include "src/resources/materials/MaterialsLibrary.h"
+#include "src/resources/IGameEntity.h"
+#include "src/AABB.h"
+#include "src/utils/serializer/XMLSerializer.h"
+#include "Memory.h"
 
 DebugComponent::DebugComponent(IRenderer* renderer) :
 mBoundingBoxRenderer(renderer)

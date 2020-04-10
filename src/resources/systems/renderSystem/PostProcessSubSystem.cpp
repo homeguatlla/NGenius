@@ -1,15 +1,16 @@
 #include "stdafx.h"
 #include "PostProcessSubSystem.h"
-#include "../renderSystem/RenderSystem.h"
-#include "../../renderers/ImageRenderer.h"
-#include "../../models/Model.h"
-#include "../../textures/Texture.h"
-#include "../../materials/IMaterial.h"
-#include "../../materials/effects/MaterialEffectDiffuseTexture.h"
-#include "../../materials/effects/MaterialEffectDepthTexture.h"
-#include "../../materials/effects/MaterialEffectFloat.h"
-#include "../../materials/effects/MaterialEffectFloat3.h"
-#include "../../systems/renderSystem/IFrameBuffer.h"
+#include "src/resources/systems/renderSystem/RenderSystem.h"
+#include "src/resources/renderers/ImageRenderer.h"
+#include "src/resources/models/Model.h"
+#include "src/resources/textures/Texture.h"
+#include "src/resources/materials/IMaterial.h"
+#include "src/resources/materials/effects/MaterialEffectDiffuseTexture.h"
+#include "src/resources/materials/effects/MaterialEffectDepthTexture.h"
+#include "src/resources/materials/effects/MaterialEffectFloat.h"
+#include "src/resources/materials/effects/MaterialEffectFloat3.h"
+#include "src/resources/systems/renderSystem/IFrameBuffer.h"
+#include "src/resources/models/ModelsLibrary.h"
 #include "../Memory.h"
 
 #include <GL/glew.h>
@@ -123,7 +124,7 @@ void PostProcessSubSystem::Load()
 	originalTexture->SetUnit(GL_TEXTURE21);
 	texture2->SetUnit(GL_TEXTURE22);
 
-	Model* model = mRenderSystem->GetModel("quad");
+	Model* model = mRenderSystem->GetModel(ModelsLibrary::QUAD_NAME);
 	
 	/*
 	LoadBrightPostProcess(model, texture2, PostProcessEffect::PostProcessEffectType::POSTPROCESS_TO_COLOR_BUFFER, BRIGHT_VECTOR, screenWidth, screenHeight);

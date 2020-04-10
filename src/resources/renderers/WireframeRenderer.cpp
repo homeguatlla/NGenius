@@ -33,5 +33,5 @@ bool WireframeRenderer::IsInstancingAllowed() const
 
 unsigned int WireframeRenderer::GetNumberTrianglesRendered() const
 {
-	return 0;
+	return mInstances.size() * mModel->GetNumberOfIndexes() / 3;
 }

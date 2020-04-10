@@ -23,6 +23,7 @@ public:
 
 	void SetDiffuseTexture(ITexture* texture);
 	void SetTile(float tile);
+	void SetColor(const glm::vec3& color);
 
 	void CopyValuesFrom(IMaterial* material) override;
 	static std::string GetClassName() { return std::string("MaterialEffectDiffuseTexture"); }

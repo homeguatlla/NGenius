@@ -54,6 +54,7 @@
 #include "resources/components/EnvironmentAffectedComponent.h"
 #include "resources/components/EnergyWallCollisionComponent.h"
 #include "resources/components/DebugComponent.h"
+#include "resources/components/ColliderDebugComponent.h"
 #include "resources/components/CharacterComponent.h"
 #include "resources/components/InputComponent.h"
 #include "resources/components/EnvironmentModificatorComponent.h"
@@ -106,6 +107,7 @@ mGameScene(nullptr)
 	InstantiableObject::RegisterComponentType<CharacterComponent>();
 	InstantiableObject::RegisterComponentType<CollisionComponent>();
 	InstantiableObject::RegisterComponentType<DebugComponent>();
+	InstantiableObject::RegisterComponentType<ColliderDebugComponent>();
 	InstantiableObject::RegisterComponentType<EnergyWallCollisionComponent>();
 	InstantiableObject::RegisterComponentType<EnvironmentAffectedComponent>();
 	InstantiableObject::RegisterComponentType<EnvironmentModificatorComponent>();

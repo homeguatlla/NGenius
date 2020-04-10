@@ -1,22 +1,23 @@
 #include "stdafx.h"
 #include "DebugSystem.h"
-#include "../../NGenius.h"
-#include "../IGameEntity.h"
-#include "../../input/InputHandler.h"
-#include "../components/DebugComponent.h"
+#include "src/NGenius.h"
+#include "src/resources/IGameEntity.h"
+#include "src/input/InputHandler.h"
+#include "src/resources/components/DebugComponent.h"
+#include "src/resources/components/ColliderDebugComponent.h"
 #include "renderSystem/RenderSystem.h"
-#include "../textures/ITexture.h"
-#include "../materials/MaterialsLibrary.h"
-#include "../materials/IMaterial.h"
-#include "../materials/effects/MaterialEffectDiffuseTexture.h"
-#include "../materials/effects/MaterialEffectText.h"
-#include "../font/FontType.h"
-#include "../entities/Text.h"
-#include "../../statistics/Statistics.h"
-#include "../GameConstants.h"
-#include "../../guiTool/GuiTool.h"
+#include "src/resources/textures/ITexture.h"
+#include "src/resources/materials/MaterialsLibrary.h"
+#include "src/resources/materials/IMaterial.h"
+#include "src/resources/materials/effects/MaterialEffectDiffuseTexture.h"
+#include "src/resources/materials/effects/MaterialEffectText.h"
+#include "src/resources/font/FontType.h"
+#include "src/resources/entities/Text.h"
+#include "src/statistics/Statistics.h"
+#include "GameConstants.h"
+#include "src/guiTool/GuiTool.h"
 #include "GLFW/glfw3.h"
-#include "../Memory.h"
+#include "Memory.h"
 #include <algorithm>
 
 const std::vector<std::string> texts = { "FPS: ", "Triangles: ", "Drawcalls: ", "GameEntities(GE): ", "GESpacePartition:", "GERendered:", "GEWithPhysics: ", "DayTime: " };
@@ -25,6 +26,7 @@ const std::vector<std::string> texts = { "FPS: ", "Triangles: ", "Drawcalls: ", 
 DebugSystem::DebugSystem(NGenius* engine, RenderSystem* renderSystem, InputHandler* inputHandler) :
 	mIsDebugModeEnabled(false),
 	mIsBoundingBoxVisible(false),
+	mIsColliderVisible(false),
 	mIsOverdrawEnabled(false),
 	mIsWireframeEnabled(false),
 	mIsPostProcessEnabled(true),
@@ -55,18 +57,31 @@ void DebugSystem::Update(float elapsedTime)
 
 	if (mIsDebugModeEnabled)
 	{
-		if (mIsBoundingBoxVisible)
+		if (mIsBoundingBoxVisible || mIsColliderVisible)
 		{
 			for (IGameEntity* entity : mEntities)
 			{
-				DebugComponent* debugComponent = entity->GetComponent<DebugComponent>();
-				if (debugComponent->IsEnabled())
+				if (mIsBoundingBoxVisible)
 				{
-					IRenderer* renderer = debugComponent->GetBoundingBoxRenderer();
-					mRenderSystem->AddToRender(renderer);
+					auto component = entity->GetComponent<DebugComponent>();
+					if (component != nullptr && component->IsEnabled())
+					{
+						auto renderer = component->GetBoundingBoxRenderer();
+						mRenderSystem->AddToRender(renderer);
+					}
+				}
+				if (mIsColliderVisible)
+				{
+					auto component = entity->GetComponent<ColliderDebugComponent>();
+					if (component != nullptr && component->IsEnabled())
+					{
+						auto renderer = component->GetBoundingVolumeRenderer();
+						mRenderSystem->AddToRender(renderer);
+					}
 				}
 			}
 		}
+		
 		UpdateStatitstics();
 	}
 }
@@ -114,7 +129,8 @@ void DebugSystem::SetTextsVisibility(bool visible)
 
 bool DebugSystem::HasDebugComponents(const IGameEntity* entity) const
 {
-	return entity != nullptr && entity->HasComponent<DebugComponent>();
+	return entity != nullptr && 
+		( entity->HasComponent<DebugComponent>() || entity->HasComponent<ColliderDebugComponent>());
 }
 
 void DebugSystem::AddEntity(IGameEntity* entity)
@@ -149,6 +165,19 @@ void DebugSystem::OnKey(int key, int action)
 			if (component != nullptr)
 			{
 				component->SetBoundingBoxVisibility(mIsBoundingBoxVisible);
+			}
+		}
+	}
+
+	if (key == GLFW_KEY_C && action == GLFW_PRESS)
+	{
+		mIsColliderVisible = !mIsColliderVisible;
+		for (IGameEntity* entity : mEntities)
+		{
+			auto component = entity->GetComponent<ColliderDebugComponent>();
+			if (component != nullptr)
+			{
+				component->SetBoundingVolumeVisibility(mIsColliderVisible);
 			}
 		}
 	}

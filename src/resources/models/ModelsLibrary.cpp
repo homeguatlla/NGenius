@@ -12,9 +12,10 @@
 
 #include <iostream>
 
-const char* ModelsLibrary::CUBE_NAME = "cube";
+const char* ModelsLibrary::CUBE_NAME = "cube_default";
+const char* ModelsLibrary::SPHERE_NAME = "sphere_default";
 const char* ModelsLibrary::SKYBOX_NAME = "skybox";
-const char* ModelsLibrary::QUAD_NAME = "quad";
+const char* ModelsLibrary::QUAD_NAME = "quad_default";
 const char* ModelsLibrary::GUI_QUAD_NAME = "gui_quad";
 const char* ModelsLibrary::PARTICLE_QUAD_NAME = "particle_quad";
 
@@ -40,6 +41,8 @@ void ModelsLibrary::Load()
 	//creando tres quads, ya es diferente la cosa.
 	CreateQuad(ModelsLibrary::GUI_QUAD_NAME, 0.5f, 0.5f);
 	CreateQuad(ModelsLibrary::PARTICLE_QUAD_NAME, 0.5f, 0.5f);
+	
+	LoadModel(ModelsLibrary::SPHERE_NAME, "data/models/sphere/sphere.obj", true, true);
 
 	//LoadModel("cube2", "data/models/cube/cube.obj", false, true);
 	//LoadModel("enano", "data/models/enano/enano.obj", false, true);
@@ -318,7 +321,7 @@ void ModelsLibrary::CreateCube()
 
 	std::vector<glm::vec2> uv;
 	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexes);
-	Model* model = DBG_NEW Model("cube", mMesh);
+	Model* model = DBG_NEW Model(CUBE_NAME, mMesh);
 
 	AddOrReplaceElement(ModelsLibrary::CUBE_NAME, model);
 }
@@ -347,7 +350,7 @@ void ModelsLibrary::CreateQuad(const std::string& name, float width, float heigh
 	indexs.push_back(1);
 
 	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexs);
-	Model* model = DBG_NEW Model("quad", mMesh);
+	Model* model = DBG_NEW Model(QUAD_NAME, mMesh);
 
 	AddOrReplaceElement(name, model);
 }
