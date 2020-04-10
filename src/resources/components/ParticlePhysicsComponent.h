@@ -16,7 +16,7 @@ namespace NPhysics
 class ParticlePhysicsComponent : public PhysicsComponent
 {
 public:
-	ParticlePhysicsComponent(bool isStatic, float mDensity, const glm::vec3& initialVelocity);
+	ParticlePhysicsComponent(float mDensity, const glm::vec3& initialVelocity);
 	virtual ~ParticlePhysicsComponent() = default;
 
 	static std::string GetClassName() { return std::string("ParticlePhysicsComponent"); }

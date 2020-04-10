@@ -3,8 +3,9 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <memory>
-#include "../../../../NPhysics/source/PhysicsObject.h"
-#include "../../../../NPhysics/source/bvh/boundingVolumes/IBoundingVolume.h"
+#include "source/PhysicsObject.h"
+#include "source/bvh/boundingVolumes/IBoundingVolume.h"
+#include "source/PhysicsObject.h"
 #include "../../AABB.h"
 
 class IGameEntity;
@@ -12,18 +13,18 @@ class IGameEntity;
 class PhysicsComponent : public IComponent
 {
 protected:
-	bool mIsStatic;
+	NPhysics::PhysicsType mType;
 	glm::vec3 mInitialVelocity;
 	float mDensity;
 	std::shared_ptr<NPhysics::PhysicsObject> mObject;
 	std::shared_ptr<NPhysics::IBoundingVolume> mBoundingVolume;
 
 public:
-	PhysicsComponent(bool isStatic, float mDensity, const glm::vec3& initialVelocity);
+	PhysicsComponent(NPhysics::PhysicsType type, float mDensity, const glm::vec3& initialVelocity);
 	virtual ~PhysicsComponent() = default;
 
 	void Init(GameScene* scene, RenderSystem* renderSystem) override;
-	bool IsStatic() const;
+	NPhysics::PhysicsType GetType() const;
 
 	static std::string GetClassName() { return std::string("PhysicsComponent"); }
 	

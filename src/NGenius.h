@@ -163,6 +163,9 @@ public:
 
 	//deserialize
 	void LoadFromFile(const std::string& filename);
+	
+	//physics engine
+	void EnablePhysicsEngine(bool enable);
 
 private:
 	

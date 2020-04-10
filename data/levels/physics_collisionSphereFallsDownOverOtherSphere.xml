@@ -20,7 +20,8 @@
 		</shaders_library>
 		<textures_library>
 			<texture name = "terrain_heightmap" filename = "data/textures/terrain_heightmap_0.png" />
-			<texture name = "terrain_blendmap" filename = "data/textures/terrain_blendmap_1024.png" />			
+			<texture name = "terrain_blendmap" filename = "data/textures/terrain_blendmap_1024.png" />
+			<texture name = "flat_red" filename = "data/textures/flat_red_64.png" />
 			<texture_array name = "terrain_array">
 				<texture filename = "data/textures/sand_256.png" />
 				<texture filename = "data/textures/grass_256.png" />
@@ -56,7 +57,8 @@
 			<model name = "rock3" filename = "data/models/rocks/rock3.dae" calculate_normals="true" calculate_tangents="true"/>
 			<model name = "rock5" filename = "data/models/rocks/rock5.dae" calculate_normals="true" calculate_tangents="true"/>
 			<model name = "crate" filename = "data/models/props/crate.obj" calculate_normals="true" calculate_tangents="true"/>
-      <model name = "cube" filename = "data/models/cube/cube.obj" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "sphere" filename = "data/models/sphere/sphere.obj" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "cube" filename = "data/models/cube/cube.obj" calculate_normals="true" calculate_tangents="true"/>
 		</models_library>
 		<materials_library>
 			<material name="terrain" shader="TerrainShader">
@@ -97,6 +99,13 @@
 				<effect name="MaterialEffectDirectionalLightProperties" />
 				<effect name="MaterialEffectDiffuseTexture" texture="material_rock2_diffuse" color="1.0 1.0 1.0" tile="1.0" />
 				<effect name="MaterialEffectNormalTexture" texture="material_rock2_normalmap" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="flat_material" shader="ModelShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="flat_red" color="1.0 1.0 1.0" tile="1.0" />
 				<effect name="MaterialEffectClippingPlane" />				
 			</material>
 		</materials_library>
@@ -193,7 +202,7 @@
 							<converter mouse="2" event="ZoomEvent"/>
 						</converters>
 					</component>
-					<component is_enabled="true" type="ParticlePhysicsComponent" is_static="0" density="980">
+					<component is_enabled="true" type="ParticlePhysicsComponent" physics_type="0" density="980">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 					</component>
 					<component is_enabled="true" type="GravityComponent">
@@ -242,16 +251,16 @@
 					</component>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="box" model="cube" material="props_material" layer="8">
+			<entity is_enabled="true" name="box" model="sphere" material="flat_material" layer="8">
 				<transformation>
-					<position X="0.000000" Y="20.000000" Z="0.000000"/>
+					<position X="0.000000" Y="10.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="false" density="2.0">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="2.0">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<collider type="SphereBoundingVolume"/>
+						<collider type="SphereBoundingVolume" radius="1"/>
 					</component>
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
@@ -260,16 +269,16 @@
 					</component>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="box2" model="cube" material="props_material" layer="8">
+			<entity is_enabled="true" name="box2" model="sphere" material="flat_material" layer="8">
 				<transformation>
 					<position X="0.000000" Y="1.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" is_static="true" density="2.0">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="99999999.0">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<collider type="SphereBoundingVolume"/>
+						<collider type="SphereBoundingVolume" radius="1"/>
 					</component>
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>

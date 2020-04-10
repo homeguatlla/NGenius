@@ -1,15 +1,10 @@
-# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 12.12.2017 13:36:56
+# Blender MTL File: 'None'
+# Material Count: 1
 
-newmtl cube_mat
-	Ns 30.0000
-	Ni 1.5000
-	d 1.0000
-	Tr 0.0000
-	Tf 1.0000 1.0000 1.0000 
-	Ka 1.0000 1.0000 1.0000
-	Kd 0.0000 0.0000 0.0000
-	Ks 0.0000 0.0000 0.0000
-	Ke 0.0000 0.0000 0.0000
-
-	map_Kd rock_256.png
+newmtl None
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2

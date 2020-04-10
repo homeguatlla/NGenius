@@ -44,12 +44,17 @@ void RigidbodyPhysicsComponent::DoCreatePhysicsData()
 	glm::vec3 position = mParent->GetTransformation()->GetPosition();
 	glm::vec3 initialRotation = mParent->GetTransformation()->GetRotation();
 	glm::vec3 initialAngularVelocity(0.0f);
-	auto rigidBody = std::make_shared<NPhysics::RigidBody>(position, initialAngularVelocity, mInitialVelocity, mIsStatic);
+	auto rigidBody = std::make_shared<NPhysics::RigidBody>(position, initialAngularVelocity, mInitialVelocity, mType);
 	rigidBody->SetRotation(initialRotation);
 	rigidBody->SetInertiaTensorMatrix(mBoundingVolume->GetInertiaTensorMatrix(mass));
 
 	mObject = rigidBody;
 	mObject->SetMass(mass);
+
+	if (mType == NPhysics::PhysicsType::kStatic)
+	{
+		mObject->SetInfiniteMass();
+	}
 }
 
 IComponent* RigidbodyPhysicsComponent::Create(IGameEntity* entity)

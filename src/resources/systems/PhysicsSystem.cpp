@@ -33,7 +33,8 @@
 const glm::vec3 PhysicsSystem::GRAVITY_VALUE(0.0f, -9.8f, 0.0f);
 
 PhysicsSystem::PhysicsSystem() :
-mEnergyWallRadius(0.0f)
+	mEnergyWallRadius(0.0f),
+	mCanUpdate(true)
 {
 }
 
@@ -52,19 +53,27 @@ unsigned int PhysicsSystem::GetNumberGameEntities() const
 	return mEntities.size() + 1; //+1 terrain
 }
 
+void PhysicsSystem::EnableUpdate(bool enable)
+{
+	mCanUpdate = enable;
+}
+
 void PhysicsSystem::Update(float deltaTime)
 {
-	for (IGameEntity* entity : mEntities)
+	if (mCanUpdate)
 	{
-		UpdatePhysicsObjectsData(entity);
-	}
+		for (IGameEntity* entity : mEntities)
+		{
+			UpdatePhysicsObjectsData(entity);
+		}
 
-	mEngine.Update(deltaTime);
+		mEngine.Update(deltaTime);
 
-	for (IGameEntity* entity : mEntities)
-	{
-		UpdateEntitiesData(entity);
-		CheckCollisions(entity);
+		for (IGameEntity* entity : mEntities)
+		{
+			UpdateEntitiesData(entity);
+			CheckCollisions(entity);
+		}
 	}
 }
 

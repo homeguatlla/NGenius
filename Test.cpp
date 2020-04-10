@@ -107,6 +107,7 @@
 #include "src/resources/command/ICommand.h"
 #include "src/resources/command/commands/RiseTerrainCommand.h"
 #include "src/resources/command/commands/ApplyForceToEntityCommand.h"
+#include "src/resources/command/commands/EnableDisablePhysicsEngineCommand.h"
 
 #include "src/resources/events/characterControllerEvents/ForwardEvent.h"
 #include "src/resources/events/characterControllerEvents/BackwardEvent.h"
@@ -196,6 +197,7 @@ std::vector<IGameEntity*> mQuadTreeEntities;
 
 
 std::shared_ptr<NGenius> mEngine;
+bool mCanUpdatePhysicsEngine = false;
 
 double aleatori()
 {
@@ -1335,6 +1337,18 @@ void UpdateInput(GLFWwindow* window)
 			mCurrentCommand = nullptr;
 		}
 	}
+
+	if (glfwGetKey(window, GLFW_KEY_F5) == GLFW_PRESS)
+	{
+		if (mCurrentCommand == nullptr)
+		{
+			mCanUpdatePhysicsEngine = !mCanUpdatePhysicsEngine;
+			mCurrentCommand = DBG_NEW EnableDisablePhysicsEngineCommand(mEngine, mCanUpdatePhysicsEngine);
+			mCurrentCommand->Execute();
+			delete mCurrentCommand;
+			mCurrentCommand = nullptr;
+		}
+	}
 }
 
 int main(int argc, char* argv[])
@@ -1350,6 +1364,11 @@ int main(int argc, char* argv[])
 	mEngine->SetFilename(filename);
 	mEngine->RegisterInputHandler(std::bind(&UpdateInput, std::placeholders::_1));
 	mEngine->Create();
+
+	mCurrentCommand = DBG_NEW EnableDisablePhysicsEngineCommand(mEngine, false);
+	mCurrentCommand->Execute();
+	delete mCurrentCommand;
+	mCurrentCommand = nullptr;
 
 	mEngine->Run();
 

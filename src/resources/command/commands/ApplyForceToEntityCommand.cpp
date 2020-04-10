@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ApplyForceToEntityCommand.h"
-#include "../../components/RigidbodyPhysicsComponent.h"
-#include "../../IGameEntity.h"
+#include "src/resources/components/RigidbodyPhysicsComponent.h"
+#include "src/resources/IGameEntity.h"
 
 ApplyForceToEntityCommand::ApplyForceToEntityCommand(IGameEntity* entity) :
 	ICommand(entity)

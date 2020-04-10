@@ -11,8 +11,8 @@
 #include "../../NPhysics/source/bvh/boundingVolumes/SphereBoundingVolume.h"
 
 
-PhysicsComponent::PhysicsComponent(bool isStatic, float density, const glm::vec3& initialVelocity) :
-	mIsStatic(isStatic), 
+PhysicsComponent::PhysicsComponent(NPhysics::PhysicsType type, float density, const glm::vec3& initialVelocity) :
+	mType(type), 
 	mDensity(density), 
 	mInitialVelocity(initialVelocity),
 	mBoundingVolume { nullptr }
@@ -33,9 +33,9 @@ void PhysicsComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 	assert(mObject);
 }
 
-bool PhysicsComponent::IsStatic() const
+NPhysics::PhysicsType PhysicsComponent::GetType() const
 {
-	return mIsStatic;
+	return mType;
 }
 
 const glm::vec3 PhysicsComponent::GetVelocity() const
@@ -65,7 +65,12 @@ std::shared_ptr<NPhysics::IBoundingVolume> PhysicsComponent::GetPhysicsBouningVo
 
 void PhysicsComponent::DoReadFrom(core::utils::IDeserializer* source)
 {
-	source->ReadParameter(std::string("is_static"), &mIsStatic);
+	int type = 0;
+	source->ReadParameter(std::string("physics_type"), &type);
+
+	//TODO esto hay que mirar de hacer una funcion que te transforme, y validar que sea un tipo valido
+	mType = static_cast<NPhysics::PhysicsType>(type);
+
 	source->ReadParameter(std::string("density"), &mDensity);
 	mInitialVelocity = glm::vec3(0.0f);
 	if (source->HasAttribute("initialVelocity"))
@@ -107,7 +112,7 @@ void PhysicsComponent::ReadBoundingVolumeFrom(core::utils::IDeserializer* source
 void PhysicsComponent::DoWriteTo(core::utils::ISerializer* destination)
 {
 	destination->WriteParameter(std::string("type"), std::string("physics_component"));
-	destination->WriteParameter(std::string("is_static"), mIsStatic);
+	destination->WriteParameter(std::string("physics_type"), static_cast<int>(mType), "");
 	destination->WriteParameter(std::string("density"), mDensity);
 	destination->WriteParameter(std::string("initialVelocity"), mInitialVelocity);
 }

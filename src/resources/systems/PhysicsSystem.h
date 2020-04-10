@@ -21,6 +21,7 @@ class PhysicsSystem : public BaseVisitable<>, public IGameSceneListener
 	glm::vec3 mEnergyWallPosition;
 
 	NPhysics::NPhysicsEngine mEngine;
+	bool mCanUpdate;
 
 public:
 	static const glm::vec3 GRAVITY_VALUE;
@@ -33,6 +34,8 @@ public:
 	void Reload();
 
 	unsigned int GetNumberGameEntities() const;
+
+	void EnableUpdate(bool enable);
 
 	//TODO eliminar este método cuando no haga falta
 	void SetTerrain(const Terrain* terrain);

@@ -1,15 +1,16 @@
 #include "stdafx.h"
 #include "ParticlePhysicsComponent.h"
-#include "../IGameEntity.h"
-#include "../Transformation.h"
-#include "../renderers/IRenderer.h"
-#include "../Memory.h"
-#include "../systems/PhysicsSystem.h"
-#include "../../../../NPhysics/source/bvh/boundingVolumes/SphereBoundingVolume.h"
+#include "src/resources/IGameEntity.h"
+#include "src/resources/Transformation.h"
+#include "src/resources/renderers/IRenderer.h"
+#include "Memory.h"
+#include "src/resources/systems/PhysicsSystem.h"
+#include "source/bvh/boundingVolumes/SphereBoundingVolume.h"
+#include "source/PhysicsObject.h"
 
 
-ParticlePhysicsComponent::ParticlePhysicsComponent(bool isStatic, float density, const glm::vec3& initialVelocity) : 
-	PhysicsComponent(isStatic, density, initialVelocity)
+ParticlePhysicsComponent::ParticlePhysicsComponent(float density, const glm::vec3& initialVelocity) : 
+	PhysicsComponent(NPhysics::PhysicsType::kDynamic, density, initialVelocity)
 {
 }
 
@@ -42,6 +43,6 @@ void ParticlePhysicsComponent::DoCreatePhysicsData()
 	float mass = mDensity * volume;
 
 	glm::vec3 position = mParent->GetTransformation()->GetPosition();
-	mObject = std::make_shared<NPhysics::Particle>(position, mInitialVelocity, mIsStatic);
+	mObject = std::make_shared<NPhysics::Particle>(position, mInitialVelocity);
 	mObject->SetMass(mass);
 }

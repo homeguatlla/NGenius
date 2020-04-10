@@ -275,6 +275,11 @@ void NGenius::LoadFromFile(const std::string& filename)
 	ReadFrom(&xmlDeserializer);
 }
 
+void NGenius::EnablePhysicsEngine(bool enable)
+{
+	mPhysicsSystem->EnableUpdate(enable);
+}
+
 
 void NGenius::ReadFrom(core::utils::IDeserializer* source)
 {
