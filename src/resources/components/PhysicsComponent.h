@@ -33,7 +33,7 @@ public:
 	void SetInitialVelocity(const glm::vec3& velocity);
 	void SetVelocity(const glm::vec3& velocity);
 	std::shared_ptr<NPhysics::PhysicsObject> GetPhysicsObject() const;
-	std::shared_ptr<NPhysics::IBoundingVolume> GetPhysicsBouningVolume() const;
+	std::shared_ptr<NPhysics::IBoundingVolume> GetPhysicsBoundingVolume() const;
 
 protected:
 	PhysicsComponent() = default;

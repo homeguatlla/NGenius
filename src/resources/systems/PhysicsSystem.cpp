@@ -204,7 +204,7 @@ void PhysicsSystem::OnGameEntityAdded(IGameEntity* entity)
 		else if(component != nullptr && typeid(*component) == typeid(RigidbodyPhysicsComponent))
 		{
 			auto body = std::static_pointer_cast<NPhysics::RigidBody>(component->GetPhysicsObject());
-			auto volume = component->GetPhysicsBouningVolume();
+			auto volume = component->GetPhysicsBoundingVolume();
 			mEngine.AddRigidBody(body, volume);
 			AddGenerators(body, volume, entity);
 		}

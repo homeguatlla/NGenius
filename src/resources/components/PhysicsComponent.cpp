@@ -1,15 +1,16 @@
 #include "stdafx.h"
 #include "PhysicsComponent.h"
-#include "../IGameEntity.h"
-#include "../Transformation.h"
-#include "../../utils/serializer/XMLSerializer.h"
-#include "../../utils/serializer/XMLDeserializer.h"
-#include "../renderers/IRenderer.h"
-#include "../Memory.h"
-#include "../systems/PhysicsSystem.h"
-#include "../../NPhysics/source/InstantiableObject.h"
-#include "../../NPhysics/source/bvh/boundingVolumes/SphereBoundingVolume.h"
-
+#include "src/resources/IGameEntity.h"
+#include "src/resources/Transformation.h"
+#include "src/utils/serializer/XMLSerializer.h"
+#include "src/utils/serializer/XMLDeserializer.h"
+#include "src/resources/renderers/IRenderer.h"
+#include "Memory.h"
+#include "src/resources/systems/PhysicsSystem.h"
+#include "source/InstantiableObject.h"
+#include "source/bvh/boundingVolumes/SphereBoundingVolume.h"
+#include "source/bvh/boundingVolumes/BoxBoundingVolume.h"
+#include <memory>
 
 PhysicsComponent::PhysicsComponent(NPhysics::PhysicsType type, float density, const glm::vec3& initialVelocity) :
 	mType(type), 
@@ -58,7 +59,7 @@ std::shared_ptr<NPhysics::PhysicsObject> PhysicsComponent::GetPhysicsObject() co
 	return mObject;
 }
 
-std::shared_ptr<NPhysics::IBoundingVolume> PhysicsComponent::GetPhysicsBouningVolume() const
+std::shared_ptr<NPhysics::IBoundingVolume> PhysicsComponent::GetPhysicsBoundingVolume() const
 {
 	return mBoundingVolume;
 }
@@ -94,17 +95,7 @@ void PhysicsComponent::ReadBoundingVolumeFrom(core::utils::IDeserializer* source
 		std::string boundingVolumeType;
 		source->ReadParameter("type", boundingVolumeType);
 		mBoundingVolume = NPhysics::InstantiableObject::CreateBoundingVolume(boundingVolumeType); 
-		if (boundingVolumeType == NPhysics::SphereBoundingVolume::GetClassName())
-		{
-			auto sphereVolume = std::dynamic_pointer_cast<NPhysics::SphereBoundingVolume>(mBoundingVolume);
-			float radius = 0.0f;
-			source->ReadParameter("radius", &radius);
-			sphereVolume->SetRadius(radius);
-		}
-		else
-		{
-			assert(false);
-		}
+		mBoundingVolume->SetTransformation(mParent->GetTransformation()->GetModelMatrix());
 		source->EndAttribute();
 	}
 }

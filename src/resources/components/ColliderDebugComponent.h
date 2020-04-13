@@ -31,7 +31,7 @@ private:
 	void DoReadFrom(core::utils::IDeserializer* source) override;
 	void DoWriteTo(core::utils::ISerializer* destination) override;
 	ColliderDebugComponent* DoClone() const override;
-	std::string GetColliderModelNameAndSize(RenderSystem* renderSystem, glm::vec3& size);
+	std::string GetColliderModelNameAndSize(RenderSystem* renderSystem, glm::vec3& position, glm::vec3& size);
 	void CreateBoundingVolumeRenderer(const std::string& modelName, RenderSystem* renderSystem);
 };
 

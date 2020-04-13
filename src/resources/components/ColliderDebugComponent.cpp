@@ -14,6 +14,7 @@
 #include "src/AABB.h"
 #include "src/utils/serializer/XMLSerializer.h"
 #include "source/bvh/boundingVolumes/SphereBoundingVolume.h"
+#include "source/bvh/boundingVolumes/BoxBoundingVolume.h"
 #include "Memory.h"
 
 ColliderDebugComponent::ColliderDebugComponent(IRenderer* renderer) :
@@ -38,17 +39,23 @@ ColliderDebugComponent* ColliderDebugComponent::DoClone() const
 	return clone;
 }
 
-std::string ColliderDebugComponent::GetColliderModelNameAndSize(RenderSystem* renderSystem, glm::vec3& size)
+std::string ColliderDebugComponent::GetColliderModelNameAndSize(RenderSystem* renderSystem, glm::vec3& position, glm::vec3& size)
 {
 	auto physicsComponent = mParent->GetComponent<PhysicsComponent>();
-	auto boundingVolume = physicsComponent->GetPhysicsBouningVolume();
+	auto boundingVolume = physicsComponent->GetPhysicsBoundingVolume();
 	
+	position = boundingVolume->GetPosition();
 	auto modelName = ModelsLibrary::CUBE_NAME;
 	if (typeid(*boundingVolume) == typeid(NPhysics::SphereBoundingVolume))
 	{
 		modelName = ModelsLibrary::SPHERE_NAME;
 		auto sphere = std::dynamic_pointer_cast<NPhysics::SphereBoundingVolume>(boundingVolume);
 		size = glm::vec3(sphere->GetRadius());
+	}
+	else
+	{
+		auto box = std::dynamic_pointer_cast<NPhysics::BoxBoundingVolume>(boundingVolume);
+		size = glm::vec3(box->GetSize());
 	}
 
 	return std::string(modelName);
@@ -71,11 +78,11 @@ void ColliderDebugComponent::CreateBoundingVolumeRenderer(const std::string& mod
 
 void ColliderDebugComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 {
-	glm::vec3 size;
+	glm::vec3 defaultPosition, defaultVolumeSize;
 
 	if (mBoundingVolumeRenderer == nullptr)
 	{
-		auto modelName = GetColliderModelNameAndSize(renderSystem, size);
+		auto modelName = GetColliderModelNameAndSize(renderSystem, defaultPosition, defaultVolumeSize);
 		CreateBoundingVolumeRenderer(modelName, renderSystem);
 		
 		//change volume color
@@ -84,18 +91,8 @@ void ColliderDebugComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 	}
 
 	mBoundingVolumeRenderer->SetParent(mParent);
-	/*glm::vec3 min = mParent->GetRenderer()->GetModelAABB().GetVertexMin();
-	glm::vec3 max = mParent->GetRenderer()->GetModelAABB().GetVertexMax();
-
-	glm::vec3 scale = max - min;*/
-	
-	auto physicsComponent = mParent->GetComponent<PhysicsComponent>();
-	auto boundingVolume = physicsComponent->GetPhysicsBouningVolume();
-	auto position = boundingVolume->GetPosition();
-	auto parentSize = mParent->GetTransformation()->GetScale();
-	//To the renderer transformation is also applying parent transformation
-	//we need to divide the scale in order to have the real collider size
-	Transformation transformation(position, glm::vec3(0.0f), size/parentSize);
+	auto colliderScale = defaultVolumeSize / mParent->GetTransformation()->GetScale();
+	Transformation transformation(glm::vec3(0.0f), glm::vec3(0.0f), colliderScale);
 	mBoundingVolumeRenderer->SetTransformation(transformation);
 
 	mBoundingVolumeRenderer->SetLayer(IRenderer::LAYER_DEBUG);

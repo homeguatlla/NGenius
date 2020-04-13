@@ -1,13 +1,14 @@
 #include "stdafx.h"
 #include "RigidBodyPhysicsComponent.h"
-#include "../Memory.h"
-#include "../IGameEntity.h"
-#include "../Transformation.h"
-#include "../renderers/IRenderer.h"
-#include "../../AABB.h"
-#include "../../../../NPhysics/source/rigidbody/RigidBody.h"
-#include "../../../../NPhysics/NPhysicsEngine.h"
-#include "../../../../NPhysics/source/bvh/boundingVolumes/SphereBoundingVolume.h"
+#include "Memory.h"
+#include "src/resources/IGameEntity.h"
+#include "src/resources/Transformation.h"
+#include "src/resources/renderers/IRenderer.h"
+#include "src/AABB.h"
+#include "source/rigidbody/RigidBody.h"
+#include "NPhysicsEngine.h"
+#include "source/bvh/boundingVolumes/SphereBoundingVolume.h"
+#include "source/bvh/boundingVolumes/BoxBoundingVolume.h"
 
 IComponent* RigidbodyPhysicsComponent::DoClone() const
 {
@@ -18,6 +19,7 @@ IComponent* RigidbodyPhysicsComponent::DoClone() const
 
 void RigidbodyPhysicsComponent::DoCreatePhysicsData()
 {
+	/* to be removed after 13/06/2020 (time enough to know if is needed or not after a lot of executions)
 	if (mBoundingVolume == nullptr || mBoundingVolume->GetVolume() == 0.0f)
 	{
 		//Create a bounding volume by default with a radius circumscribe the boundingbox
@@ -27,33 +29,60 @@ void RigidbodyPhysicsComponent::DoCreatePhysicsData()
 		float radiusCircumscribe = largerSide * 0.5f;
 		if (mBoundingVolume == nullptr)
 		{
-			mBoundingVolume = std::make_shared<NPhysics::SphereBoundingVolume>(glm::vec3(0.0f), radiusCircumscribe);
+			glm::mat4 transformation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
+			transformation = glm::scale(transformation, glm::vec3(radiusCircumscribe));
+			mBoundingVolume = std::make_shared<NPhysics::SphereBoundingVolume>(transformation);
 		}
 		else
 		{
 			auto sphereVolume = std::dynamic_pointer_cast<NPhysics::SphereBoundingVolume>(mBoundingVolume);
 			sphereVolume->SetRadius(radiusCircumscribe);
 		}
-	}
+	}*/
 
 	assert(mBoundingVolume);
+	assert(mBoundingVolume->GetVolume() > 0.0f);
 
-	float volume = mBoundingVolume->GetVolume();
-	float mass = mDensity * volume;
+	glm::vec3 min = mParent->GetRenderer()->GetModelAABB().GetVertexMin();
+	glm::vec3 max = mParent->GetRenderer()->GetModelAABB().GetVertexMax();
+	glm::vec3 objectSize = max - min;
+
+	if (typeid(*mBoundingVolume.get()) == typeid(NPhysics::BoxBoundingVolume))
+	{
+		auto box = std::dynamic_pointer_cast<NPhysics::BoxBoundingVolume>(mBoundingVolume);
+		box->SetSize(objectSize);
+	}
+	else if (typeid(*mBoundingVolume.get()) == typeid(NPhysics::SphereBoundingVolume))
+	{
+		auto sphere = std::dynamic_pointer_cast<NPhysics::SphereBoundingVolume>(mBoundingVolume);
+		sphere->SetRadius(glm::max(objectSize.x, glm::max(objectSize.y, objectSize.z)) * 0.5f);
+	}
+
+	mBoundingVolume->SetTransformation(mParent->GetTransformation()->GetModelMatrix());
 
 	glm::vec3 position = mParent->GetTransformation()->GetPosition();
 	glm::vec3 initialRotation = mParent->GetTransformation()->GetRotation();
 	glm::vec3 initialAngularVelocity(0.0f);
+
 	auto rigidBody = std::make_shared<NPhysics::RigidBody>(position, initialAngularVelocity, mInitialVelocity, mType);
 	rigidBody->SetRotation(initialRotation);
-	rigidBody->SetInertiaTensorMatrix(mBoundingVolume->GetInertiaTensorMatrix(mass));
-
 	mObject = rigidBody;
-	mObject->SetMass(mass);
+
+	float volume = mBoundingVolume->GetVolume();
+	float mass = mDensity * volume;
+
+	//Although is a static object and its mass is infinite the inertia tensor matrix needs to be calculated 
+	//with the value of its real mass (not infinite)
+	rigidBody->SetInertiaTensorMatrix(mBoundingVolume->GetInertiaTensorMatrix(mass));
 
 	if (mType == NPhysics::PhysicsType::kStatic)
 	{
 		mObject->SetInfiniteMass();
+		mass = mObject->GetMass();
+	}
+	else
+	{
+		mObject->SetMass(mass);
 	}
 }
 
