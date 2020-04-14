@@ -253,13 +253,13 @@
 			</entity>
 			<entity is_enabled="true" name="box" model="sphere" material="flat_material" layer="8">
 				<transformation>
-					<position X="0.000000" Y="10.000000" Z="0.000000"/>
+					<position X="0.000000" Y="5.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
-					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+					<scale X="0.200000" Y="0.200000" Z="0.200000"/>
 				</transformation>
 				<components>
 					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="2.0">
-						<initialVelocity X="2.000000" Y="0.000000" Z="0.000000"/>
+						<initialVelocity X="-4.300000" Y="0.000000" Z="0.000000"/>
 						<collider type="SphereBoundingVolume"/>
 					</component>
 					<component is_enabled="true" type="SpacePartitionComponent"/>
@@ -302,7 +302,7 @@
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="box_lateralX2" model="cube" material="flat_material" layer="8">
+			<!--entity is_enabled="true" name="box_lateralX2" model="cube" material="flat_material" layer="8">
 				<transformation>
 					<position X="5.1" Y="1.500000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
@@ -349,7 +349,7 @@
 					<component is_enabled="true" type="DebugComponent"/>
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
-			</entity>
+			</entity-->
 		</entities>
 	</game_scene>
 </ngenius>

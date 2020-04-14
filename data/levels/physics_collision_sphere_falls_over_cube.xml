@@ -253,9 +253,9 @@
 			</entity>
 			<entity is_enabled="true" name="box" model="sphere" material="flat_material" layer="8">
 				<transformation>
-					<position X="0.000000" Y="10.000000" Z="0.000000"/>
+					<position X="1.000000" Y="4.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
-					<scale X="0.200000" Y="0.200000" Z="0.200000"/>
+					<scale X="0.100000" Y="0.100000" Z="0.100000"/>
 				</transformation>
 				<components>
 					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="2.0">
