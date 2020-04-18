@@ -50,15 +50,19 @@ void RigidbodyPhysicsComponent::DoCreatePhysicsData()
 	if (typeid(*mBoundingVolume.get()) == typeid(NPhysics::BoxBoundingVolume))
 	{
 		auto box = std::dynamic_pointer_cast<NPhysics::BoxBoundingVolume>(mBoundingVolume);
-		box->SetSize(objectSize);
+		auto transformation = mParent->GetTransformation();
+		box->SetPosition(transformation->GetPosition());
+		box->SetSize(objectSize * transformation->GetScale());
+		box->SetRotation(transformation->GetRotation());
 	}
 	else if (typeid(*mBoundingVolume.get()) == typeid(NPhysics::SphereBoundingVolume))
 	{
 		auto sphere = std::dynamic_pointer_cast<NPhysics::SphereBoundingVolume>(mBoundingVolume);
-		sphere->SetRadius(glm::max(objectSize.x, glm::max(objectSize.y, objectSize.z)) * 0.5f);
+		auto transformation = mParent->GetTransformation();
+		auto size = objectSize * transformation->GetScale();
+		sphere->SetPosition(transformation->GetPosition());
+		sphere->SetRadius(glm::max(size.x, glm::max(size.y, size.z)) * 0.5f);
 	}
-
-	mBoundingVolume->SetTransformation(mParent->GetTransformation()->GetModelMatrix());
 
 	glm::vec3 position = mParent->GetTransformation()->GetPosition();
 	glm::vec3 initialRotation = mParent->GetTransformation()->GetRotation();
@@ -78,7 +82,6 @@ void RigidbodyPhysicsComponent::DoCreatePhysicsData()
 	if (mType == NPhysics::PhysicsType::kStatic)
 	{
 		mObject->SetInfiniteMass();
-		mass = mObject->GetMass();
 	}
 	else
 	{

@@ -94,8 +94,12 @@ void PhysicsComponent::ReadBoundingVolumeFrom(core::utils::IDeserializer* source
 
 		std::string boundingVolumeType;
 		source->ReadParameter("type", boundingVolumeType);
-		mBoundingVolume = NPhysics::InstantiableObject::CreateBoundingVolume(boundingVolumeType); 
-		mBoundingVolume->SetTransformation(mParent->GetTransformation()->GetModelMatrix());
+		Transformation* transformation = mParent->GetTransformation();
+		mBoundingVolume = NPhysics::InstantiableObject::CreateBoundingVolume(
+			boundingVolumeType, 
+			transformation->GetPosition(), 
+			transformation->GetScale(),
+			transformation->GetRotation());
 		source->EndAttribute();
 	}
 }

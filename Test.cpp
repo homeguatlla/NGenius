@@ -1342,7 +1342,19 @@ void UpdateInput(GLFWwindow* window)
 	{
 		if (mCurrentCommand == nullptr)
 		{
-			mCanUpdatePhysicsEngine = !mCanUpdatePhysicsEngine;
+			mCanUpdatePhysicsEngine = true;
+			mCurrentCommand = DBG_NEW EnableDisablePhysicsEngineCommand(mEngine, mCanUpdatePhysicsEngine);
+			mCurrentCommand->Execute();
+			delete mCurrentCommand;
+			mCurrentCommand = nullptr;
+		}
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_F6) == GLFW_PRESS)
+	{
+		if (mCurrentCommand == nullptr)
+		{
+			mCanUpdatePhysicsEngine = false;
 			mCurrentCommand = DBG_NEW EnableDisablePhysicsEngineCommand(mEngine, mCanUpdatePhysicsEngine);
 			mCurrentCommand->Execute();
 			delete mCurrentCommand;
