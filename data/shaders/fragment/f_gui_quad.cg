@@ -8,7 +8,7 @@ out vec4 color;
 
 void main()
 {	
-	vec4 textureColor = texture(texture, textureCoords);
+	vec4 textureColor = texture2D(texture, textureCoords);
 	if(textureColor.a < 0.5)
 	{
 		discard;

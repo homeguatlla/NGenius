@@ -122,7 +122,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;IMGUI_IMPL_OPENGL_LOADER_GLEW</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\assimp-4.1.0\include;$(SolutionDir)\zlib-1.2.11;$(SolutionDir)\lpng1634\projects\vstudio\libpng;$(SolutionDir)\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)\glm;$(SolutionDir)\glew-2.1.0\include;$(SolutionDir)\fbx\2019.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\;$(SolutionDir)\assimp-4.1.0\include;$(SolutionDir)\zlib-1.2.11;$(SolutionDir)\lpng1634\projects\vstudio\libpng;$(SolutionDir)\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)\glm;$(SolutionDir)\glew-2.1.0\include;$(SolutionDir)\fbx\2019.0\include;$(SolutionDir)\..\NPhysics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

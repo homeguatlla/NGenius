@@ -27,7 +27,7 @@ const float FAR_DISTANCE_CLIPPING = 150.0;
 vec4 ApplyLight(vec3 ambient, vec3 materialDiffuse, vec3 materialSpecular)
 {
 	float specularStrength = 0.3f;
-	vec3 n = normalize(texture(normalmap, textureCoords).rgb * 2.0 - 1.0);
+	vec3 n = normalize(texture2D(normalmap, textureCoords).rgb * 2.0 - 1.0);
 	//n = normalize(cross(dFdx(positionWorldspace), dFdy(positionWorldspace)));
 	
 	vec3 l = -lightDirection;
@@ -57,7 +57,7 @@ float ApplyShadow(int pfcCount, float totalTexels)
 
 	for(int x = -pfcCount; x <= pfcCount; x++) {
 		for(int y = -pfcCount; y <= pfcCount; y++) {
-			float objectNearestLight = texture(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
+			float objectNearestLight = texture2D(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
 			total += step(objectNearestLight, shadowCoords.z - bias);
 			/*if(objectNearestLight < shadowCoords.z - bias)
 			{
@@ -79,7 +79,7 @@ void main()
 	}
 	// Material properties
 	float shadowFactor = ApplyShadow(pfcCount, totalTexelsShadow);
-	vec4 MaterialDiffuseColor = shadowFactor * texture(texture, textureCoords);
+	vec4 MaterialDiffuseColor = shadowFactor * texture2D(texture, textureCoords);
 
 	if(MaterialDiffuseColor.a < 0.5)
 	{

@@ -30,7 +30,7 @@ float ApplyShadow(int pfcCount, float totalTexels)
 
 	for(int x = -pfcCount; x <= pfcCount; x++) {
 		for(int y = -pfcCount; y <= pfcCount; y++) {
-			float objectNearestLight = texture(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
+			float objectNearestLight = texture2D(shadowMap, shadowCoords.xy + vec2(x, y) * texelSize).r;
 
 			total += step(objectNearestLight, shadowCoords.z - bias);
 			/*if(objectNearestLight < shadowCoords.z - bias)
@@ -51,7 +51,7 @@ float ApplySoftParticle(float alphaColor)
 	float far = 1000.0f;
 	
 	//calculate the depth texture value from the pixel we are rendering (the depth texture is a texture of 1024 x 768)	
-	float depth = texture(depthTexture, vec2(gl_FragCoord.x, gl_FragCoord.y) * 1.0/screenSize).r;
+	float depth = texture2D(depthTexture, vec2(gl_FragCoord.x, gl_FragCoord.y) * 1.0/screenSize).r;
 	float floorDistance = 2.0 * near * far /( far + near - (2.0 * depth - 1.0) * (far - near));
 	
 	depth = gl_FragCoord.z;
@@ -86,7 +86,7 @@ vec4 ApplyFog(vec4 color)
 void main()
 {
 	float shadowFactor = ApplyShadow(pfcCount, totalTexelsShadow);
-	vec4 MaterialDiffuseColor = shadowFactor * texture(texture, textureCoords);
+	vec4 MaterialDiffuseColor = shadowFactor * texture2D(texture, textureCoords);
 
 	if(MaterialDiffuseColor.a < 0.5)
 	{
