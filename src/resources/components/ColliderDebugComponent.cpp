@@ -45,7 +45,7 @@ std::string ColliderDebugComponent::GetColliderModelNameAndSize(RenderSystem* re
 	auto boundingVolume = physicsComponent->GetPhysicsBoundingVolume();
 	
 	position = boundingVolume->GetPosition();
-	auto modelName = ModelsLibrary::CUBE_NAME;
+	auto modelName = ModelsLibrary::CUBE_WIREFRAME_NAME;
 	if (typeid(*boundingVolume) == typeid(NPhysics::SphereBoundingVolume))
 	{
 		modelName = ModelsLibrary::SPHERE_NAME;

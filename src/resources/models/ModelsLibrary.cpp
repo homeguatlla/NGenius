@@ -13,6 +13,7 @@
 #include <iostream>
 
 const char* ModelsLibrary::CUBE_NAME = "cube_default";
+const char* ModelsLibrary::CUBE_WIREFRAME_NAME = "cube_wireframe_default";
 const char* ModelsLibrary::SPHERE_NAME = "sphere_default";
 const char* ModelsLibrary::SKYBOX_NAME = "skybox";
 const char* ModelsLibrary::QUAD_NAME = "quad_default";
@@ -33,6 +34,7 @@ ModelsLibrary::~ModelsLibrary()
 void ModelsLibrary::Load()
 {
 	CreateCube();
+	CreateCubeWireframe();
 	CreateSkyBox();
 	CreateQuad(ModelsLibrary::QUAD_NAME, 1.0f, 1.0f);
 	//necesitamos un gui_quad porque sino, cuando se construye (build) 
@@ -200,65 +202,9 @@ void ModelsLibrary::CreateSkyBox()
 {
 	float size = 0.5;
 	std::vector<glm::vec3> vertexs;
-
-	vertexs.push_back(glm::vec3(-size, -size, -size));
-	vertexs.push_back(glm::vec3(-size, size, -size));
-	vertexs.push_back(glm::vec3(size, -size, -size));
-	vertexs.push_back(glm::vec3(size, size, -size));
-	vertexs.push_back(glm::vec3(size, -size, size));
-	vertexs.push_back(glm::vec3(size, size, size));
-	vertexs.push_back(glm::vec3(-size, -size, size));
-	vertexs.push_back(glm::vec3(-size, size, size));
-
 	std::vector<unsigned int> indexes;
 
-	indexes.push_back(2);
-	indexes.push_back(1);
-	indexes.push_back(0);
-
-	indexes.push_back(3);
-	indexes.push_back(1);
-	indexes.push_back(2);
-
-	indexes.push_back(4);
-	indexes.push_back(3);
-	indexes.push_back(2);
-
-	indexes.push_back(5);
-	indexes.push_back(3);
-	indexes.push_back(4);
-
-	indexes.push_back(6);
-	indexes.push_back(5);
-	indexes.push_back(4);
-
-	indexes.push_back(7);
-	indexes.push_back(5);
-	indexes.push_back(6);
-
-	indexes.push_back(0);
-	indexes.push_back(7);
-	indexes.push_back(6);
-
-	indexes.push_back(1);
-	indexes.push_back(7);
-	indexes.push_back(0);
-
-	indexes.push_back(2);
-	indexes.push_back(0);
-	indexes.push_back(6);
-
-	indexes.push_back(6);
-	indexes.push_back(4);
-	indexes.push_back(2);
-
-	indexes.push_back(3);
-	indexes.push_back(5);
-	indexes.push_back(7);
-
-	indexes.push_back(1);
-	indexes.push_back(3);
-	indexes.push_back(7);
+	CreateGeometryForACube(size, vertexs, indexes, true);
 
 	std::vector<glm::vec2> uv;
 	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexes);
@@ -268,6 +214,117 @@ void ModelsLibrary::CreateSkyBox()
 }
 
 void ModelsLibrary::CreateCube()
+{
+	float size = 0.5;
+	std::vector<unsigned int> indexes;
+	std::vector<glm::vec3> vertexs = {
+		{-size, -size, -size},
+		{-size, size, -size},
+		{size, size, -size},
+
+		{-size, -size, -size},
+		{size, size, -size},
+		{size, -size, -size},
+
+		{size, -size, -size},
+		{size, size, -size},
+		{size, size, size},
+
+		{size, -size, -size},
+		{size, size, size},
+		{size, -size, size},
+
+		{size, -size, size},
+		{size, size, size},
+		{-size, size, size},
+
+		{size, -size, size},
+		{-size, size, size},
+		{-size, -size, size},
+
+		{-size, -size, size},
+		{-size, size, size},
+		{-size, size, -size},
+
+		{-size, -size, size},
+		{-size, size, -size},
+		{-size, -size, -size},
+
+		{-size, size, -size},
+		{-size, size, size},
+		{size, size, size},
+
+		{-size, size, -size},
+		{size, size, size},
+		{size, size, -size},
+
+		{-size, -size, size},
+		{-size, -size, -size},
+		{size, -size, -size},
+
+		{-size, -size, size},
+		{size, -size, -size},
+		{size, -size, size}
+	};
+
+	std::vector<glm::vec2> uv = {
+		{0, 0},
+		{0, 1},
+		{1, 1},
+
+		{0,0},
+		{1,1},
+		{1,0},
+
+		{0, 0},
+		{0, 1},
+		{1, 1},
+
+		{0,0},
+		{1,1},
+		{1,0},
+
+		{0, 0},
+		{0, 1},
+		{1, 1},
+
+		{0,0},
+		{1,1},
+		{1,0},
+
+		{0, 0},
+		{0, 1},
+		{1, 1},
+
+		{0,0},
+		{1,1},
+		{1,0},
+
+		{0, 0},
+		{0, 1},
+		{1, 1},
+
+		{0,0},
+		{1,1},
+		{1,0},
+
+		{0, 0},
+		{0, 1},
+		{1, 1},
+
+		{0,0},
+		{1,1},
+		{1,0},
+	};
+
+	Mesh* mesh = DBG_NEW Mesh(vertexs, uv, indexes);
+	mesh->Build(true, true);
+	Model* model = DBG_NEW Model(CUBE_NAME, mesh);
+	
+	AddOrReplaceElement(ModelsLibrary::CUBE_NAME, model);
+}
+
+void ModelsLibrary::CreateCubeWireframe()
 {
 	float size = 0.5;
 	std::vector<glm::vec3> vertexs;
@@ -321,9 +378,9 @@ void ModelsLibrary::CreateCube()
 
 	std::vector<glm::vec2> uv;
 	Mesh* mMesh = DBG_NEW Mesh(vertexs, uv, indexes);
-	Model* model = DBG_NEW Model(CUBE_NAME, mMesh);
+	Model* model = DBG_NEW Model(CUBE_WIREFRAME_NAME, mMesh);
 
-	AddOrReplaceElement(ModelsLibrary::CUBE_NAME, model);
+	AddOrReplaceElement(ModelsLibrary::CUBE_WIREFRAME_NAME, model);
 }
 
 void ModelsLibrary::CreateQuad(const std::string& name, float width, float height)
@@ -353,4 +410,51 @@ void ModelsLibrary::CreateQuad(const std::string& name, float width, float heigh
 	Model* model = DBG_NEW Model(QUAD_NAME, mMesh);
 
 	AddOrReplaceElement(name, model);
+}
+
+void ModelsLibrary::CreateGeometryForACube(float size, std::vector<glm::vec3>& vertexs, std::vector<unsigned int>& indexes, bool inside)
+{
+	vertexs.push_back(glm::vec3(-size, -size, -size));
+	vertexs.push_back(glm::vec3(-size, size, -size));
+	vertexs.push_back(glm::vec3(size, -size, -size));
+	vertexs.push_back(glm::vec3(size, size, -size));
+	vertexs.push_back(glm::vec3(size, -size, size));
+	vertexs.push_back(glm::vec3(size, size, size));
+	vertexs.push_back(glm::vec3(-size, -size, size));
+	vertexs.push_back(glm::vec3(-size, size, size));
+
+	if (inside)
+	{
+		indexes = {
+			2, 1, 0,
+			3, 1, 2,
+			4, 3, 2,
+			5, 3, 4,
+			6, 5, 4,
+			7, 5, 6,
+			0, 7, 6,
+			1, 7, 0,
+			2, 0, 6,
+			6, 4, 2,
+			3, 5, 7,
+			1, 3, 7
+		};
+	}
+	else
+	{
+		indexes = {
+			2, 0, 1,
+			3, 2, 1,
+			4, 2, 3,
+			5, 4, 3,
+			6, 4, 5,
+			7, 6, 5,
+			0, 6, 7,
+			1, 0, 7,
+			2, 6, 0,
+			6, 2, 4,
+			3, 7, 5,
+			1, 7, 3
+		};
+	}
 }

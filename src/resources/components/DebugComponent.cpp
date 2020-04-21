@@ -37,7 +37,7 @@ void DebugComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 	if (mBoundingBoxRenderer == nullptr)
 	{
 		mBoundingBoxRenderer = DBG_NEW WireframeRenderer(
-			renderSystem->GetModel(ModelsLibrary::CUBE_NAME), 
+			renderSystem->GetModel(ModelsLibrary::CUBE_WIREFRAME_NAME),
 			renderSystem->GetMaterial(MaterialsLibrary::WIREFRAME_MATERIAL_NAME));
 	}
 

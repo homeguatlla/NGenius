@@ -14,6 +14,7 @@ class ModelsLibrary : public core::utils::ISerializable, public BaseLibrary<Mode
 	
 
 public:
+	static const char* CUBE_WIREFRAME_NAME;
 	static const char* CUBE_NAME;
 	static const char* SPHERE_NAME;
 	static const char* SKYBOX_NAME;
@@ -32,8 +33,10 @@ public:
 private:
 	void LoadModel(const std::string& name, const std::string& filename, bool calculateNormals, bool calculateTangents);
 	void CreateCube();
+	void CreateCubeWireframe();
 	void CreateSkyBox();
 	void CreateQuad(const std::string& name, float width, float height);
+	void CreateGeometryForACube(float size, std::vector<glm::vec3>& vertexs, std::vector<unsigned int>& indexes, bool inside);
 
 	//TODO este método podría estar en una librería statica
 	std::string GetPath(const std::string& filename);
