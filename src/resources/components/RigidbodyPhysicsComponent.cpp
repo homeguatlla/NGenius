@@ -77,7 +77,7 @@ void RigidbodyPhysicsComponent::DoCreatePhysicsData()
 
 	//Although is a static object and its mass is infinite the inertia tensor matrix needs to be calculated 
 	//with the value of its real mass (not infinite)
-	rigidBody->SetInertiaTensorMatrix(mBoundingVolume->GetInertiaTensorMatrix(mass));
+	rigidBody->SetInertiaTensorMatrix(mBoundingVolume->GetInertiaTensorMatrix(mass, false));
 
 	if (mType == NPhysics::PhysicsType::kStatic)
 	{

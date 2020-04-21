@@ -19,6 +19,7 @@ const std::string ATTRIBUTE_TEXTURE_COORDS("textureCoordsModelspace");
 const std::string ATTRIBUTE_VERTEX_NORMAL("normalModelspace");
 const std::string ATTRIBUTE_TEXTURE("texture");
 const std::string ATTRIBUTE_TILE("tile");
+const std::string ATTRIBUTE_COLOR("color");
 
 ModelShader::ModelShader() :
 ModelShader(VERTEX_FILE, FRAGMENT_FILE)
@@ -50,6 +51,7 @@ void ModelShader::LoadData(const ICamera* camera, const Transformation* transfor
 	{
 		LoadTexture(mLocationTexture, effectDiffuse->GetDiffuseTexture()->GetUnit());
 		LoadFloat(mLocationTile, effectDiffuse->GetTile());
+		LoadVector3(mLocationColor, effectDiffuse->GetColor());
 	}
 }
 
@@ -72,4 +74,5 @@ void ModelShader::GetAllUniformLocations()
 	mLocationTexture = GetUniformLocation(ATTRIBUTE_TEXTURE);
 	
 	mLocationTile = GetUniformLocation(ATTRIBUTE_TILE);
+	mLocationColor = GetUniformLocation(ATTRIBUTE_COLOR);
 }

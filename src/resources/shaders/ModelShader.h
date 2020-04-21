@@ -29,6 +29,6 @@ private:
 	int mLocationNormal;
 	int mLocationTexture;
 	int mLocationTile;
-
+	int mLocationColor;
 };
 
