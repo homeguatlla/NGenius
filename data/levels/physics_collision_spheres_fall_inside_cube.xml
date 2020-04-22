@@ -22,7 +22,7 @@
 			<texture name = "terrain_heightmap" filename = "data/textures/terrain_heightmap_0.png" />
 			<texture name = "terrain_blendmap" filename = "data/textures/terrain_blendmap_1024.png" />
 			<texture name = "flat_white" filename = "data/textures/flat_white_64.png" />
-			<texture name = "grid" filename = "data/textures/grid_black_64.png" />
+			<texture name = "grid" filename = "data/textures/grid_white_64.png" has_wrapping="true"/>
 			<texture_array name = "terrain_array">
 				<texture filename = "data/textures/sand_256.png" />
 				<texture filename = "data/textures/grass_256.png" />
@@ -109,18 +109,18 @@
 				<effect name="MaterialEffectDiffuseTexture" texture="flat_white" color="1.0 0.0 0.0" tile="1.0" />
 				<effect name="MaterialEffectClippingPlane" />				
 			</material>
-			<material name="green_flat_material" shader="ModelShader">
+			<material name="blue_flat_material" shader="ModelShader">
 				<effect name="MaterialEffectFogProperties"/>
 				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
 				<effect name="MaterialEffectDirectionalLightProperties" />
-				<effect name="MaterialEffectDiffuseTexture" texture="flat_white" color="0.0 1.0 0.0" tile="1.0" />
+				<effect name="MaterialEffectDiffuseTexture" texture="flat_white" color="0.0 0.0 1.0" tile="1.0" />
 				<effect name="MaterialEffectClippingPlane" />				
 			</material>
 			<material name="grid_material" shader="ModelShader">
 				<effect name="MaterialEffectFogProperties"/>
 				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
 				<effect name="MaterialEffectDirectionalLightProperties" />
-				<effect name="MaterialEffectDiffuseTexture" texture="grid" color="1.0 1.0 1.0" tile="10.0" />
+				<effect name="MaterialEffectDiffuseTexture" texture="grid" color="0.0 0.0 1.0" tile="8.0" />
 				<effect name="MaterialEffectClippingPlane" />				
 			</material>
 		</materials_library>
@@ -304,7 +304,7 @@
 					</component>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="box_middle" model="cube" material="green_flat_material" layer="8">
+			<entity is_enabled="true" name="box_middle" model="cube" material="red_flat_material" layer="8">
 				<transformation>
 					<position X="0.000000" Y="2.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="45.000000"/>
@@ -320,7 +320,7 @@
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="box_base" model="cube" material="green_flat_material" layer="8">
+			<entity is_enabled="true" name="box_base" model="cube" material="blue_flat_material" layer="8">
 				<transformation>
 					<position X="0.000000" Y=".100000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
@@ -336,7 +336,7 @@
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="box_lateralX" model="cube" material="green_flat_material" layer="8">
+			<entity is_enabled="true" name="box_lateralX" model="cube" material="blue_flat_material" layer="8">
 				<transformation>
 					<position X="-5.1" Y="3.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
@@ -353,7 +353,7 @@
 				</components>
 			</entity>
 		
-			<entity is_enabled="true" name="box_lateralX2" model="cube" material="green_flat_material" layer="8">
+			<entity is_enabled="true" name="box_lateralX2" model="cube" material="blue_flat_material" layer="8">
 				<transformation>
 					<position X="5.1" Y="3.00000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
@@ -369,7 +369,7 @@
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="box_lateralZ" model="cube" material="green_flat_material" layer="8">
+			<entity is_enabled="true" name="box_lateralZ" model="cube" material="blue_flat_material" layer="8">
 				<transformation>
 					<position X="0" Y="3.00000" Z="5.100000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>

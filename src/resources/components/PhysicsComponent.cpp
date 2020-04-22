@@ -12,10 +12,23 @@
 #include "source/bvh/boundingVolumes/BoxBoundingVolume.h"
 #include <memory>
 
+
+PhysicsComponent::PhysicsComponent() :
+	mType(NPhysics::PhysicsType::kStatic),
+	mDensity(1.0f),
+	mInitialVelocity(0.0f),
+	mTranslation(0.0f),
+	mScale(1.0f),
+	mBoundingVolume{ nullptr }
+{
+}
+
 PhysicsComponent::PhysicsComponent(NPhysics::PhysicsType type, float density, const glm::vec3& initialVelocity) :
 	mType(type), 
 	mDensity(density), 
 	mInitialVelocity(initialVelocity),
+	mTranslation(0.0f),
+	mScale(1.0f),
 	mBoundingVolume { nullptr }
 {
 }
@@ -73,13 +86,31 @@ void PhysicsComponent::DoReadFrom(core::utils::IDeserializer* source)
 	mType = static_cast<NPhysics::PhysicsType>(type);
 
 	source->ReadParameter(std::string("density"), &mDensity);
-	mInitialVelocity = glm::vec3(0.0f);
+	
 	if (source->HasAttribute("initialVelocity"))
 	{
 		source->BeginAttribute("initialVelocity");
 		source->ReadParameter("X", &mInitialVelocity.x);
 		source->ReadParameter("Y", &mInitialVelocity.y);
 		source->ReadParameter("Z", &mInitialVelocity.z);
+		source->EndAttribute();
+	}
+
+	if (source->HasAttribute("translation"))
+	{
+		source->BeginAttribute("translation");
+		source->ReadParameter("X", &mTranslation.x);
+		source->ReadParameter("Y", &mTranslation.y);
+		source->ReadParameter("Z", &mTranslation.z);
+		source->EndAttribute();
+	}
+	
+	if (source->HasAttribute("scale"))
+	{
+		source->BeginAttribute("scale");
+		source->ReadParameter("X", &mScale.x);
+		source->ReadParameter("Y", &mScale.y);
+		source->ReadParameter("Z", &mScale.z);
 		source->EndAttribute();
 	}
 

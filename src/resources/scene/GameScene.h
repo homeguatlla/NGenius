@@ -3,15 +3,16 @@
 #include <vector>
 #include <string>
 
-#include "../../visitor/BaseVisitable.h"
-#include "../../AABB.h"
-#include "../../utils/serializer/ISerializable.h"
+#include "src/visitor/BaseVisitable.h"
+#include "src/AABB.h"
+#include "src/utils/serializer/ISerializable.h"
 
 class IGameEntity;
 class IGameSceneListener;
 class NGenius;
 class IComponent;
 class RenderSystem;
+class Terrain;
 
 class GameScene : public core::utils::ISerializable, BaseVisitable<>
 {
@@ -25,6 +26,9 @@ class GameScene : public core::utils::ISerializable, BaseVisitable<>
 	AABB mAABB;
 	NGenius* mEngine;
 	RenderSystem* mRenderSystem;
+	
+	//To set Entities on ground
+	Terrain* mGround;
 
 public:
 	GameScene(const std::string& name, NGenius* engine, RenderSystem* renderSystem);
@@ -64,6 +68,10 @@ private:
 	void AddNewEntities();
 	void NotifyEntityAdded(IGameEntity* entity);
 	void NotifyEntityRemoved(IGameEntity* entity);
+
+	void SetEntitiesOnGround();
+	void SetEntityOnGround(IGameEntity* entity);
+	bool CheckIsGround(IGameEntity* entity);
 
 	IGameEntity* ReadEntityFrom(core::utils::IDeserializer* source);
 	void ReadComponentsFrom(IGameEntity* entity, core::utils::IDeserializer* source);

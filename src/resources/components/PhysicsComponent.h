@@ -15,6 +15,8 @@ class PhysicsComponent : public IComponent
 protected:
 	NPhysics::PhysicsType mType;
 	glm::vec3 mInitialVelocity;
+	glm::vec3 mTranslation;
+	glm::vec3 mScale;
 	float mDensity;
 	std::shared_ptr<NPhysics::PhysicsObject> mObject;
 	std::shared_ptr<NPhysics::IBoundingVolume> mBoundingVolume;
@@ -36,7 +38,7 @@ public:
 	std::shared_ptr<NPhysics::IBoundingVolume> GetPhysicsBoundingVolume() const;
 
 protected:
-	PhysicsComponent() = default;
+	PhysicsComponent();
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source) override;

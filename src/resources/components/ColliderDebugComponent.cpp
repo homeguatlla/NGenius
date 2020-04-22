@@ -17,6 +17,8 @@
 #include "source/bvh/boundingVolumes/BoxBoundingVolume.h"
 #include "Memory.h"
 
+#include <glm/gtx/transform.hpp>
+
 ColliderDebugComponent::ColliderDebugComponent(IRenderer* renderer) :
 mBoundingVolumeRenderer(renderer)
 {
@@ -91,8 +93,13 @@ void ColliderDebugComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 	}
 
 	mBoundingVolumeRenderer->SetParent(mParent);
+	auto parentTransMatrix = mParent->GetTransformation()->GetModelMatrix();
+	auto parentInverseTransMatrix = glm::inverse(parentTransMatrix);
+
 	auto colliderScale = defaultVolumeSize / mParent->GetTransformation()->GetScale();
-	Transformation transformation(glm::vec3(0.0f), glm::vec3(0.0f), colliderScale);
+	auto colliderOffset = parentInverseTransMatrix * glm::vec4(defaultPosition, 1);
+
+	Transformation transformation(colliderOffset, glm::vec3(0.0f), colliderScale);
 	mBoundingVolumeRenderer->SetTransformation(transformation);
 
 	mBoundingVolumeRenderer->SetLayer(IRenderer::LAYER_DEBUG);

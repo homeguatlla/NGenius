@@ -60,6 +60,8 @@
 			<model name = "crate" filename = "data/models/props/crate.obj" calculate_normals="true" calculate_tangents="true"/>
 			<model name = "sphere" filename = "data/models/sphere/sphere.obj" calculate_normals="true" calculate_tangents="true"/>
 			<model name = "cube" filename = "data/models/cube/cube.obj" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "tree_foliage_0" filename="data/models/tree4/tree_foliage_lod0.obj" calculate_tangents="true"/>
+			<model name = "tree_trunk_0" filename="data/models/tree4/tree_trunk_lod0.obj" calculate_tangents="true"/>
 		</models_library>
 		<materials_library>
 			<material name="terrain" shader="TerrainShader">
@@ -122,6 +124,28 @@
 				<effect name="MaterialEffectDirectionalLightProperties" />
 				<effect name="MaterialEffectDiffuseTexture" texture="grid" color="0.0 0.0 1.0" tile="4.0" />
 				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name= "tree_foliage" shader = "ModelShader">
+				<effect name="MaterialEffectDiffuseTexture" texture="tree_foliage_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectFogProperties" />
+				<effect name="MaterialEffectShadowProperties" pfc_counter = "1" />
+				<effect name="MaterialEffectClippingPlane" />
+			</material>
+			<material name= "tree_trunk" shader = "ModelShader">
+				<effect name="MaterialEffectDiffuseTexture" texture="tree_trunk_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectFogProperties" />
+				<effect name="MaterialEffectShadowProperties" pfc_counter = "1" />
+				<effect name="MaterialEffectClippingPlane" />
+			</material>
+			<material name= "tree_trunk_normalmap" shader = "NormalMapShader">
+				<effect name="MaterialEffectDiffuseTexture" texture="tree_trunk_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectNormalTexture" texture="tree_trunk_normalmap" tile="1.0"/>
+				<effect name="MaterialEffectFogProperties" />
+				<effect name="MaterialEffectShadowProperties" pfc_counter = "1" />
+				<effect name="MaterialEffectClippingPlane" />
 			</material>
 		</materials_library>
 		<cameras>
@@ -205,7 +229,6 @@
 				<components>
 					<component is_enabled="true" type="AnimationComponent" animation="animation_0"/>
 					<component is_enabled="true" type="CharacterComponent"/>
-					<component is_enabled="true" type="DebugComponent"/>
 					<component is_enabled="true" type="EnergyWallCollisionComponent"/>
 					<component is_enabled="true" type="EnvironmentModificatorComponent"/>
 					<component is_enabled="true" type="InputComponent">
@@ -219,12 +242,15 @@
 					</component>
 					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="980">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<translation X="0.000000" Y="1.0" Z="0.000000"/>
 						<collider type="SphereBoundingVolume"/>
 					</component>
 					<component is_enabled="true" type="GravityComponent">
 						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
 					</component>
 					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
 			</player>
 			<terrain is_enabled="true" name="terrain" material="terrain" scale="0" heighmap_texture="terrain_heightmap">
@@ -286,7 +312,7 @@
 					</component>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="box_middle" model="cube_default" material="grid_material" layer="8">
+			<entity is_enabled="true" name="box_middle" model="cube_default" material="grid_material" layer="8" on_ground="true">
 				<transformation>
 					<position X="2.000000" Y="1.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
@@ -302,6 +328,34 @@
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
 			</entity>
+			<entity is_enabled="true" name="tree_trunk_0" model="tree_trunk_0" material="tree_trunk" layer="8" on_ground="true">
+				<transformation>
+					<position X="-3.000000" Y="0.000000" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<scale X="0.500000" Y="1.000000" Z="0.500000"/>
+						<collider type="BoxBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
+				</components>
+			</entity>
+			<!--entity is_enabled="true" name="tree_foliage_0" model="tree_foliage_0" material="tree_foliage" layer="8" on_ground="true">
+				<transformation>
+					<position X="-3.000000" Y="0" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</entity-->
 		</entities>
 	</game_scene>
 </ngenius>

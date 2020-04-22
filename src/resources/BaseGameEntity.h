@@ -42,6 +42,8 @@ public:
 	bool IsEnabled() const override	{ return mIsEnabled; }
 	void SetEnabled(bool enable) override { mIsEnabled = enable; }
 
+	bool ShouldBeCreatedOnGround() const override { return mShouldBeCreatedOnGround; }
+
 	void SetName(const std::string& name) { mName = name; }
 	std::string GetName() const { return mName; }
 
@@ -83,6 +85,7 @@ protected:
 	std::string mMaterialName;
 	std::string mRendererName;
 	
+	bool mShouldBeCreatedOnGround;
 	int mRendererLayer;
 };
 
@@ -96,7 +99,8 @@ BaseGameEntity<TD>::BaseGameEntity(Transformation* transformation, IRenderer* re
 	mIsEnabled(true),
 	mModelName(""),
 	mMaterialName(""),
-	mRendererName("")
+	mRendererName(""),
+	mShouldBeCreatedOnGround(false)
 {
 	if (renderer != nullptr)
 	{
@@ -249,6 +253,8 @@ void BaseGameEntity<TD>::ReadFrom(core::utils::IDeserializer* source)
 	source->ReadParameter("is_enabled", &mIsEnabled);
 	source->ReadParameter("layer", &mRendererLayer);
 	source->ReadParameter("name", mName);
+	source->ReadParameter("on_ground", &mShouldBeCreatedOnGround);
+
 	mTransformation = DBG_NEW  Transformation();
 	mTransformation->ReadFrom(source);
 }

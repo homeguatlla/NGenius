@@ -51,24 +51,24 @@ void RigidbodyPhysicsComponent::DoCreatePhysicsData()
 	{
 		auto box = std::dynamic_pointer_cast<NPhysics::BoxBoundingVolume>(mBoundingVolume);
 		auto transformation = mParent->GetTransformation();
-		box->SetPosition(transformation->GetPosition());
-		box->SetSize(objectSize * transformation->GetScale());
+		box->SetPosition(transformation->GetPosition() + mTranslation);
+		box->SetSize(objectSize * transformation->GetScale() * mScale);
 		box->SetRotation(transformation->GetRotation());
 	}
 	else if (typeid(*mBoundingVolume.get()) == typeid(NPhysics::SphereBoundingVolume))
 	{
 		auto sphere = std::dynamic_pointer_cast<NPhysics::SphereBoundingVolume>(mBoundingVolume);
 		auto transformation = mParent->GetTransformation();
-		auto size = objectSize * transformation->GetScale();
-		sphere->SetPosition(transformation->GetPosition());
-		sphere->SetRadius(glm::max(size.x, glm::max(size.y, size.z)) * 0.5f);
+		auto size = objectSize * transformation->GetScale() * mScale;
+		sphere->SetPosition(transformation->GetPosition() + mTranslation);
+		sphere->SetRadius(glm::max(size.x, glm::max(size.y, size.z)) * 0.5f );
 	}
-
+	
 	glm::vec3 position = mParent->GetTransformation()->GetPosition();
 	glm::vec3 initialRotation = mParent->GetTransformation()->GetRotation();
 	glm::vec3 initialAngularVelocity(0.0f);
 
-	auto rigidBody = std::make_shared<NPhysics::RigidBody>(position, initialAngularVelocity, mInitialVelocity, mType);
+	auto rigidBody = std::make_shared<NPhysics::RigidBody>(position + mTranslation, initialAngularVelocity, mInitialVelocity, mType);
 	rigidBody->SetRotation(initialRotation);
 	mObject = rigidBody;
 

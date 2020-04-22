@@ -1,24 +1,24 @@
 #include "stdafx.h"
 #include "GameScene.h"
 #include "IGameSceneListener.h"
-#include "../systems/renderSystem/RenderSystem.h"
-#include "../renderers/IRenderer.h"
-#include "../components/LODComponent.h"
-#include "../components/SpacePartitionComponent.h"
+#include "src/resources/systems/renderSystem/RenderSystem.h"
+#include "src/resources/renderers/IRenderer.h"
+#include "src/resources/components/LODComponent.h"
+#include "src/resources/components/SpacePartitionComponent.h"
 
-#include "../../utils/serializer/XMLSerializer.h"
-#include "../InstantiableObject.h"
+#include "src/utils/serializer/XMLSerializer.h"
+#include "src/resources/InstantiableObject.h"
 
-#include "../entities/GameEntity.h"
-#include "../entities/Player.h"
-#include "../entities/Terrain.h"
-#include "../entities/Water.h"
-#include "../entities/PointsPatch.h"
-#include "../entities/EntitiesPatch.h"
-#include "../entities/Particle.h"
-#include "../entities/ParticlesEmitter.h"
+#include "src/resources/entities/GameEntity.h"
+#include "src/resources/entities/Player.h"
+#include "src/resources/entities/Terrain.h"
+#include "src/resources/entities/Water.h"
+#include "src/resources/entities/PointsPatch.h"
+#include "src/resources/entities/EntitiesPatch.h"
+#include "src/resources/entities/Particle.h"
+#include "src/resources/entities/ParticlesEmitter.h"
 
-#include "../Memory.h"
+#include "Memory.h"
 
 #include <algorithm>
 
@@ -52,6 +52,9 @@ void GameScene::Release()
 
 void GameScene::Start()
 {
+	//all entities on ground have its y modified to ground
+	SetEntitiesOnGround();
+
 }
 
 void GameScene::Update(float elapsedTime)
@@ -130,6 +133,11 @@ void GameScene::AddEntity(IGameEntity* entity)
 	{
 		mAABB = mAABB.Merge(entity->GetRenderer()->GetAABB());
 	}
+	if (CheckIsGround(entity))
+	{
+		mGround = dynamic_cast<Terrain*>(entity);
+	}
+
 	mNewEntitiesToAdd.push_back(entity);
 }
 
@@ -180,7 +188,12 @@ void GameScene::AddNewEntities()
 	{
 		entity->Init(this, mRenderSystem);
 		NotifyEntityAdded(entity);
+		if (entity->ShouldBeCreatedOnGround())
+		{
+			SetEntityOnGround(entity);
+		}
 	}
+
 	mEntitiesAdded.clear();
 
 	if (!mNewEntitiesToAdd.empty())
@@ -327,4 +340,36 @@ void GameScene::ReleaseEntities(std::vector<IGameEntity*>* entities)
 BaseVisitable<>::ReturnType GameScene::Accept(BaseVisitor& guest)
 {
 	return AcceptImpl(*this, guest);
+}
+
+bool GameScene::CheckIsGround(IGameEntity* entity)
+{
+	return typeid(*entity) == typeid(Terrain);
+}
+
+void GameScene::SetEntitiesOnGround()
+{
+	if (mGround != nullptr)
+	{
+		for (auto&& entity : mEntities)
+		{
+			if (entity->ShouldBeCreatedOnGround())
+			{
+				SetEntityOnGround(entity);
+			}
+		}
+	}
+}
+
+void GameScene::SetEntityOnGround(IGameEntity* entity)
+{
+	if (mGround != nullptr)
+	{
+		glm::vec3 position = entity->GetTransformation()->GetPosition();
+		float groundY = mGround->GetHeight(glm::vec2(position.x, position.z));
+		float min = entity->GetRenderer()->GetAABB().GetVertexMin().y;
+
+		position.y = min < groundY ? groundY - min : min - groundY;
+		entity->GetTransformation()->SetPosition(position);
+	}
 }

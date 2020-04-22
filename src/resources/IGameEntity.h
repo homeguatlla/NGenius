@@ -32,6 +32,8 @@ public:
 	virtual bool IsEnabled() const = 0;
 	virtual void SetEnabled(bool enabled) = 0;
 
+	virtual bool ShouldBeCreatedOnGround() const = 0;
+
 	virtual void Update(float elapsedTime) = 0;
 	virtual void Build(NGenius* engine) = 0;
 

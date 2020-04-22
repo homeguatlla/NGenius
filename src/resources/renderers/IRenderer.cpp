@@ -158,6 +158,8 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 			if (renderer->HasTransformation())
 			{
 				Transformation rendererTransformation = renderer->GetTransformation();
+				//modelMatrix is aplied. Then, we apply render matrix but in the modelMatrix system.
+				//if modelMatrix is rotated 90 degrees the render matrix has to take into acount this rotation.
 				modelMatrix *= rendererTransformation.GetModelMatrix();
 				scale *= rendererTransformation.GetScale();
 				angleZ *= rendererTransformation.GetRotation().z;
