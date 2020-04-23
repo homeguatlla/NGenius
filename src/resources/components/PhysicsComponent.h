@@ -32,6 +32,8 @@ public:
 	
 	//[[deprecated("Replaced by NPhysicsEngine, this both methods must be removed. Only physics engine will Set velocity")]]
 	const glm::vec3 GetVelocity() const;
+	//This translation, is an offset related the parent position
+	const glm::vec3 GetTranslation() const { return mTranslation; }
 	void SetInitialVelocity(const glm::vec3& velocity);
 	void SetVelocity(const glm::vec3& velocity);
 	std::shared_ptr<NPhysics::PhysicsObject> GetPhysicsObject() const;

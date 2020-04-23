@@ -240,9 +240,10 @@
 							<converter mouse="2" event="ZoomEvent"/>
 						</converters>
 					</component>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="980">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="1">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<translation X="0.000000" Y="1.0" Z="0.000000"/>
+						<translation X="0.000000" Y="0.35" Z="0.000000"/>
+						<scale X="0.500000" Y="0.500000" Z="0.500000"/>
 						<collider type="SphereBoundingVolume"/>
 					</component>
 					<component is_enabled="true" type="GravityComponent">
@@ -300,7 +301,7 @@
 					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="20.0">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850.0">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 						<collider type="SphereBoundingVolume"/>
 					</component>
@@ -312,14 +313,14 @@
 					</component>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="box_middle" model="cube_default" material="grid_material" layer="8" on_ground="true">
+			<entity is_enabled="true" name="box_middle" model="cube_default" material="grid_material" layer="8" on_ground="false">
 				<transformation>
-					<position X="2.000000" Y="1.000000" Z="0.000000"/>
+					<position X="2.000000" Y="1.300000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="1.0">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 						<collider type="BoxBoundingVolume"/>
 					</component>
@@ -328,6 +329,22 @@
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
 			</entity>
+			<!--entity is_enabled="true" name="ground" model="cube_default" material="grid_material" layer="8" on_ground="true">
+				<transformation>
+					<position X="0.000000" Y="-0.100000" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<scale X="10.000000" Y="0.100000" Z="10.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="BoxBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
+				</components>
+			</entity-->
 			<entity is_enabled="true" name="tree_trunk_0" model="tree_trunk_0" material="tree_trunk" layer="8" on_ground="true">
 				<transformation>
 					<position X="-3.000000" Y="0.000000" Z="0.000000"/>
@@ -337,7 +354,7 @@
 				<components>
 					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<scale X="0.500000" Y="1.000000" Z="0.500000"/>
+						<scale X="0.2500000" Y="1.000000" Z="0.2500000"/>
 						<collider type="BoxBoundingVolume"/>
 					</component>
 					<component is_enabled="true" type="SpacePartitionComponent"/>

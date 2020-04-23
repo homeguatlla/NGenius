@@ -3,32 +3,30 @@
 #include <GLFW/glfw3.h>
 #include <algorithm>
 
-#include "../IGameEntity.h"
+#include "src/resources//IGameEntity.h"
 
-#include "../components/CollisionComponent.h"
-#include "../components/EnergyWallCollisionComponent.h"
-#include "../components/PhysicsComponent.h"
-#include "../components/ParticlePhysicsComponent.h"
-#include "../components/RigidbodyPhysicsComponent.h"
-#include "../components/GravityComponent.h"
-#include "../components/BuoyancyComponent.h"
-#include "../components/DragComponent.h"
+#include "src/resources/components/CollisionComponent.h"
+#include "src/resources/components/EnergyWallCollisionComponent.h"
+#include "src/resources/components/PhysicsComponent.h"
+#include "src/resources/components/ParticlePhysicsComponent.h"
+#include "src/resources/components/RigidbodyPhysicsComponent.h"
+#include "src/resources/components/GravityComponent.h"
+#include "src/resources/components/BuoyancyComponent.h"
+#include "src/resources/components/DragComponent.h"
 
-#include "../../NPhysics/source/particle/forceGenerators/ParticleDrag.h"
-#include "../../NPhysics/source/particle/forceGenerators/ParticleBuoyancy.h"
-#include "../../NPhysics/source/particle/forceGenerators/ParticleGravity.h"
+#include "source/particle/forceGenerators/ParticleDrag.h"
+#include "source/particle/forceGenerators/ParticleBuoyancy.h"
+#include "source/particle/forceGenerators/ParticleGravity.h"
+#include "source/rigidbody/forceGenerators/RigidBodyDrag.h"
+#include "source/rigidbody/forceGenerators/RigidBodyBuoyancy.h"
+#include "source/rigidbody/forceGenerators/RigidBodyGravity.h"
 
-#include "../../NPhysics/source/rigidbody/forceGenerators/RigidBodyDrag.h"
-#include "../../NPhysics/source/rigidbody/forceGenerators/RigidBodyBuoyancy.h"
-#include "../../NPhysics/source/rigidbody/forceGenerators/RigidBodyGravity.h"
-
-#include "../entities/Terrain.h"
-#include "../renderers/IRenderer.h"
-
-
+#include "src/resources/entities/Terrain.h"
+#include "src/resources/entities/Player.h"
+#include "src/resources/renderers/IRenderer.h"
+#include "source/utils/Math.h"
 
 #include <iostream>
-#include "../entities/Player.h"
 
 const glm::vec3 PhysicsSystem::GRAVITY_VALUE(0.0f, -9.8f, 0.0f);
 
@@ -71,8 +69,8 @@ void PhysicsSystem::Update(float deltaTime)
 
 		for (IGameEntity* entity : mEntities)
 		{
-			UpdateEntitiesData(entity);
 			CheckCollisions(entity);
+			UpdateEntitiesData(entity);
 		}
 	}
 }
@@ -90,7 +88,7 @@ void PhysicsSystem::CheckCollisions(IGameEntity* entity)
 	}
 	if (entity->HasComponent<EnergyWallCollisionComponent>() && mEnergyWallRadius > 0.0f)
 	{
-		CheckCollisionEnergyWall(entity);
+		//CheckCollisionEnergyWall(entity);
 	}
 }
 
@@ -174,10 +172,18 @@ void PhysicsSystem::RemoveEntity(IGameEntity* entity)
 
 bool PhysicsSystem::IsInsideTerrain(IGameEntity*entity)
 {
-	Transformation* transformation = entity->GetTransformation();
-	glm::vec3 position = transformation->GetPosition();
+	auto physicsComponent = entity->GetComponent<PhysicsComponent>();
+	if (physicsComponent != nullptr)
+	{
+		//Transformation* transformation = entity->GetTransformation();
+		//glm::vec3 position = transformation->GetPosition();
 
-	return mTerrain->IsPointInside(glm::vec2(position.x, position.z));
+		auto position = physicsComponent->GetPhysicsObject()->GetPosition();
+
+		return mTerrain->IsPointInside(glm::vec2(position.x, position.z));
+	}
+
+	return true;
 }
 
 bool PhysicsSystem::HasPhysicsComponents(const IGameEntity* entity) const
@@ -290,31 +296,40 @@ void PhysicsSystem::OnGameEntityRemoved(IGameEntity* entity)
 
 bool PhysicsSystem::ApplyCollisions(IGameEntity*entity, float *groundHeight)
 {
-	Transformation* transformation = entity->GetTransformation();
+	/*Transformation* transformation = entity->GetTransformation();
 	glm::vec3 position = transformation->GetPosition();
-
-	*groundHeight = mTerrain->GetHeight(glm::vec2(position.x, position.z));
-	float entityBottomHeight = 0.0f;
-	IRenderer* renderer = entity->GetRenderer();
-	if (renderer != nullptr)
+	*/
+	PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
+	if (component != nullptr)
 	{
-		glm::vec3 max = renderer->GetModelAABB().GetVertexMax();
-		glm::vec3 min = renderer->GetModelAABB().GetVertexMin();
-		glm::mat3 matrix = glm::mat3(transformation->GetModelMatrix());
-		max = matrix * max;
-		min = matrix * min;
-		entityBottomHeight = glm::abs(min.y);
+		auto physicsObject = component->GetPhysicsObject();
+		if (physicsObject->GetType() != NPhysics::PhysicsType::kStatic)
+		{
+			auto boundingVolume = component->GetPhysicsBoundingVolume();
+			auto position = boundingVolume->GetPosition();
+
+			*groundHeight = mTerrain->GetHeight(glm::vec2(position.x, position.z));
+			float newY = glm::max(position.y, *groundHeight + boundingVolume->GetSize().y * 0.5f);
+			bool isColliding = position.y < newY;
+
+			if (isColliding)
+			{
+				position.y = newY;
+				boundingVolume->SetPosition(position);
+				physicsObject->SetPosition(position);
+				//TODO esto se está cargando la fisica real. Habría que hacerlo dentro del motor de fisica.
+				physicsObject->SetInitialVelocity(glm::vec3(0.0f));
+				physicsObject->SetAcceleration(glm::vec3(0.0f));
+			}
+			
+			/*bool isColliding = (position.y < *groundHeight + entityBottomHeight) || 
+				(NPhysics::NMath::IsNearlyEqual(position.y, *groundHeight + entityBottomHeight, EPSILON2));
+			*/
+			return isColliding;
+		}
 	}
-	position.y = glm::max(position.y, *groundHeight + entityBottomHeight);
-	transformation->SetPosition(position);
-
-	//is colliding
-	bool isColliding = position.y <= *groundHeight + entityBottomHeight;
-	/*if (typeid(*entity) == typeid(Player))
-	{
-		std::cout << "position: " << position.y << " is colliding = " << isColliding << "\n";
-	}*/
-	return isColliding;
+	
+	return false;
 }
 
 bool PhysicsSystem::ApplyEnergyWallCollision(IGameEntity*entity, glm::vec3& collisionPoint)
@@ -377,8 +392,14 @@ void PhysicsSystem::UpdatePhysicsObjectsData(IGameEntity* entity)
 		auto object = component->GetPhysicsObject();
 		auto position = entity->GetTransformation()->GetPosition();
 		auto rotation = entity->GetTransformation()->GetRotation();
-		object->SetPosition(position);
+		//as we are setting to the physicsObject the position of the gameEntity
+		//because if is the player, position could be changed, we have to set the game entity position
+		//adding the translation the physics object has related the game entity.
+		object->SetPosition(position + component->GetTranslation());
 		object->SetRotation(rotation);
+
+		auto boundingVolume = component->GetPhysicsBoundingVolume();
+		boundingVolume->SetPosition(position + component->GetTranslation());
 	}
 }
 
@@ -388,7 +409,7 @@ void PhysicsSystem::UpdateEntitiesData(IGameEntity* entity)
 	if (component != nullptr)
 	{
 		auto object = component->GetPhysicsObject();
-		entity->GetTransformation()->SetPosition(object->GetPosition());
+		entity->GetTransformation()->SetPosition(object->GetPosition() - component->GetTranslation());
 		glm::vec3 rotation = object->GetRotation();
 		//std::cout << "euler angles: " << rotation.x << ", " << rotation.y << ", " << rotation.z << "\n";
 

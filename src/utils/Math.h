@@ -53,6 +53,18 @@ namespace NGenius
 
 			return glm::vec3(attitude, heading, bank);
 		}
+
+		static bool IsNearlyEqual(const glm::vec3& v1, const glm::vec3& v2, const float epsilon)
+		{
+			const glm::vec3 epsilon3(epsilon);
+			//return glm::epsilonEqual<glm::vec3>(v1, v2, epsilon3);
+			return glm::all(glm::lessThan(glm::abs(v1 - v2), epsilon3));
+		}
+
+		static bool IsNearlyEqual(float a, float b, const float epsilon = 0.0001f)
+		{
+			return glm::abs(a - b) < epsilon;
+		}
 	};
 };
 
