@@ -198,6 +198,9 @@ void PhysicsSystem::OnGameEntityAdded(IGameEntity* entity)
 {
 	if (HasPhysicsComponents(entity))
 	{
+		//when a new entity is added, first we assure the position of the entity
+		//is updated into the physics object and volume
+		UpdatePhysicsObjectsData(entity);
 		AddEntity(entity);
 		PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
 		
@@ -296,9 +299,6 @@ void PhysicsSystem::OnGameEntityRemoved(IGameEntity* entity)
 
 bool PhysicsSystem::ApplyCollisions(IGameEntity*entity, float *groundHeight)
 {
-	/*Transformation* transformation = entity->GetTransformation();
-	glm::vec3 position = transformation->GetPosition();
-	*/
 	PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
 	if (component != nullptr)
 	{
@@ -309,12 +309,13 @@ bool PhysicsSystem::ApplyCollisions(IGameEntity*entity, float *groundHeight)
 			auto position = boundingVolume->GetPosition();
 
 			*groundHeight = mTerrain->GetHeight(glm::vec2(position.x, position.z));
-			float newY = glm::max(position.y, *groundHeight + boundingVolume->GetSize().y * 0.5f);
-			bool isColliding = position.y < newY;
+			float minY = -boundingVolume->GetSize().y * 0.5f;
+			//float newY = glm::max(position.y, *groundHeight + boundingVolume->GetSize().y * 0.5f);
+			bool isColliding = position.y != minY;
 
 			if (isColliding)
 			{
-				position.y = newY;
+				position.y = *groundHeight - minY;
 				boundingVolume->SetPosition(position);
 				physicsObject->SetPosition(position);
 				//TODO esto se está cargando la fisica real. Habría que hacerlo dentro del motor de fisica.
@@ -322,9 +323,6 @@ bool PhysicsSystem::ApplyCollisions(IGameEntity*entity, float *groundHeight)
 				physicsObject->SetAcceleration(glm::vec3(0.0f));
 			}
 			
-			/*bool isColliding = (position.y < *groundHeight + entityBottomHeight) || 
-				(NPhysics::NMath::IsNearlyEqual(position.y, *groundHeight + entityBottomHeight, EPSILON2));
-			*/
 			return isColliding;
 		}
 	}

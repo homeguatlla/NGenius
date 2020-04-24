@@ -53,9 +53,6 @@ void GameScene::Release()
 
 void GameScene::Start()
 {
-	//all entities on ground have its y modified to ground
-	SetEntitiesOnGround();
-
 }
 
 void GameScene::Update(float elapsedTime)
@@ -188,11 +185,11 @@ void GameScene::AddNewEntities()
 	for (IGameEntity* entity : mEntitiesAdded)
 	{
 		entity->Init(this, mRenderSystem);
-		NotifyEntityAdded(entity);
 		if (entity->ShouldBeCreatedOnGround())
 		{
 			SetEntityOnGround(entity);
 		}
+		NotifyEntityAdded(entity);
 	}
 
 	mEntitiesAdded.clear();

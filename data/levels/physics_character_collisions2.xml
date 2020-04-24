@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ngenius version="0.3.0">
+	<libraries>
+		<fonts_library>
+			<font filename = "data/fonts/quartzMS.fnt"/>
+		</fonts_library>
+		<shaders_library>
+			<shader name="ModelShader"/>
+			<shader name="TerrainShader"/>
+			<shader name="SkyBoxShader"/>
+			<shader name="ParticleShader"/>
+			<shader name="WaterShader"/>
+			<shader name="EnergyWallShader"/>
+			<shader name="HorizontalBlurShader"/>
+			<shader name="VerticalBlurShader"/>
+			<shader name="BrightShader"/>
+			<shader name="BloomShader"/>
+			<shader name="GrassShader"/>
+			<shader name="AnimatedModelShader"/>
+		</shaders_library>
+		<textures_library>
+			<texture name = "terrain_heightmap" filename = "data/textures/terrain_heightmap_1024.png" has_mippaing="true"/>
+			<texture name = "terrain_blendmap" filename = "data/textures/terrain_blendmap_1024.png" has_mippaing="true"/>
+			<texture name = "flat_white" filename = "data/textures/flat_white_64.png" has_mippaing="true"/>
+			<texture name = "grid" filename = "data/textures/grid_white_64.png" has_wrapping="true"/>
+			<texture_array name = "terrain_array">
+				<texture filename = "data/textures/sand_256.png" />
+				<texture filename = "data/textures/grass_256.png" />
+				<texture filename = "data/textures/grass_dark_256.png" />
+				<texture filename = "data/textures/rock3.png" />
+				<texture filename = "data/textures/sand_normalmap.png" />
+				<texture filename = "data/textures/grass_normalmap.png" />
+				<texture filename = "data/textures/grass_dark_normalmap.png" />
+				<texture filename = "data/textures/rock3_normalmap.png" />
+			</texture_array>
+			<texture_cubemap name = "day_cubemap">
+				<texture filename = "data/skybox/sky1/right.png" />
+				<texture filename = "data/skybox/sky1/left.png" />
+				<texture filename = "data/skybox/sky1/top.png" />
+				<texture filename = "data/skybox/sky1/bottom.png" />
+				<texture filename = "data/skybox/sky1/back.png" />
+				<texture filename = "data/skybox/sky1/front.png" />
+			</texture_cubemap>
+			<texture_cubemap name = "night_cubemap">
+				<texture filename = "data/skybox/sky2/right.png" />
+				<texture filename = "data/skybox/sky2/left.png" />
+				<texture filename = "data/skybox/sky2/top.png" />
+				<texture filename = "data/skybox/sky2/bottom.png" />
+				<texture filename = "data/skybox/sky2/back.png" />
+				<texture filename = "data/skybox/sky2/front.png" />
+			</texture_cubemap>
+			<texture name = "material_farmer_diffuse" filename = "data/models/farmer/farmer_texture.png"/>
+		</textures_library>
+		<models_library>
+			<model name = "farmer" filename = "data/models/farmer/farmer.dae" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "barrel" filename = "data/models/props/barrel.obj" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "rock2" filename = "data/models/rocks/rock2.dae" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "rock3" filename = "data/models/rocks/rock3.dae" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "rock5" filename = "data/models/rocks/rock5.dae" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "crate" filename = "data/models/props/crate.obj" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "sphere" filename = "data/models/sphere/sphere.obj" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "cube" filename = "data/models/cube/cube.obj" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "tree_foliage_0" filename="data/models/tree4/tree_foliage_lod0.obj" calculate_tangents="true"/>
+			<model name = "tree_trunk_0" filename="data/models/tree4/tree_trunk_lod0.obj" calculate_tangents="true"/>
+		</models_library>
+		<materials_library>
+			<material name="terrain" shader="TerrainShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="3"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="terrain_blendmap" color="1.0 1.0 1.0" tile="50.0" />
+				<effect name="MaterialEffectClippingPlane" />
+				<effect name="MaterialEffectFloat" value="2"/>
+				<effect name="MaterialEffectHeightMapTexture" texture="terrain_heightmap" tile="1.0" />
+				<effect name="MaterialEffectTextureArray" texture="terrain_array"/>			
+			</material>
+			<material name="player" shader="AnimatedModelShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="3"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="material_farmer_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<!--effect name="MaterialEffectNormalTexture" texture="material_farmer_normalmap" tile="1.0"/-->
+				<effect name="MaterialEffectClippingPlane" />
+				<effect name="MaterialEffectMatrix4Array" />					
+			</material>
+			<material name="skybox" shader="SkyBoxShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectTextureCubemap" texture1="day_cubemap" texture2="night_cubemap" blend_factor="0.0"/>				
+			</material>
+			<material name="props_material" shader="NormalMapShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="MedievalDungeonPropsAtlas02_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="MaterialEffectNormalTexture" texture="MedievalDungeonPropsAtlas02_normalmap" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="rock2_material" shader="NormalMapShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="material_rock2_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="MaterialEffectNormalTexture" texture="material_rock2_normalmap" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="red_flat_material" shader="ModelShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="flat_white" color="1.0 0.0 0.0" tile="1.0" />
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="green_flat_material" shader="ModelShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="flat_white" color="0.0 1.0 0.0" tile="1.0" />
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="grid_material" shader="ModelShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectDiffuseTexture" texture="grid" color="0.0 0.0 1.0" tile="4.0" />
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name= "tree_foliage" shader = "ModelShader">
+				<effect name="MaterialEffectDiffuseTexture" texture="tree_foliage_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectFogProperties" />
+				<effect name="MaterialEffectShadowProperties" pfc_counter = "1" />
+				<effect name="MaterialEffectClippingPlane" />
+			</material>
+			<material name= "tree_trunk" shader = "ModelShader">
+				<effect name="MaterialEffectDiffuseTexture" texture="tree_trunk_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectFogProperties" />
+				<effect name="MaterialEffectShadowProperties" pfc_counter = "1" />
+				<effect name="MaterialEffectClippingPlane" />
+			</material>
+			<material name= "tree_trunk_normalmap" shader = "NormalMapShader">
+				<effect name="MaterialEffectDiffuseTexture" texture="tree_trunk_diffuse" color="1.0 1.0 1.0" tile="1.0" />
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectNormalTexture" texture="tree_trunk_normalmap" tile="1.0"/>
+				<effect name="MaterialEffectFogProperties" />
+				<effect name="MaterialEffectShadowProperties" pfc_counter = "1" />
+				<effect name="MaterialEffectClippingPlane" />
+			</material>
+		</materials_library>
+		<cameras>
+			<camera name="gameplay_camera" fov="45" aspect_ratio="1.77777779" near_plane="0.1" far_plane="1000" is_gameplay_camera = "true">
+				<position X="25" Y="12" Z="25"/>
+				<target X="0" Y="0" Z="0"/>
+				<up X="0" Y="1" Z="0"/>
+			</camera>
+			<camera name="free_camera" fov="45" aspect_ratio="1.77777779" near_plane="0.1" far_plane="1000" is_free_camera="true">
+				<position X="0" Y="15" Z="0"/>
+				<target X="0" Y="15" Z="25"/>
+				<up X="0" Y="1" Z="0"/>
+			</camera>
+			<camera name="gui_camera" screen_width="1920" screen_height="1080" near_plane="0.1" far_plane="100">
+				<position X="0" Y="0" Z="40"/>
+				<target X="0" Y="0" Z="-50"/>
+				<up X="0" Y="1" Z="0"/>
+			</camera>
+		</cameras>
+	</libraries>
+	<engine>
+		<debug is_enabled = "true" />
+	</engine>
+	<renderer>
+		<water is_enabled = "false" camera="gameplay_camera" height="6.0"/>
+		<shadows is_enabled = "true"/>
+		<fog is_enabled = "false" />
+		<render_layers>
+			<layer name="GUI" value="1"/>
+			<layer name="PARTICLES" value="2"/>
+			<layer name="TRANSPARENT" value="4"/>
+			<layer name="OTHER" value="8"/>
+			<layer name="WATER" value="16"/>
+			<layer name="TERRAIN" value="32"/>
+			<layer name="REFLEXION" value="64"/>
+			<layer name="DEBUG" value="128"/>
+		</render_layers>
+		<render_passes>
+			<render_pass 	name = "terrain_render_pass"
+							is_enabled = "true" camera_name="gameplay_camera" layer_mask="32"
+							add_after_post_processing="false"
+							is_fog_enabled = "true" 
+							is_clipping_enabled="false" clipping_plane_number="0" 
+							has_to_calculate_distance_to_camera ="false" 
+							can_accept_space_partition_renderers_only = "false"/>
+			<render_pass 	name = "gameplay_render_pass"
+							is_enabled = "true" camera_name="gameplay_camera" layer_mask="152"
+							add_after_post_processing="false"
+							is_fog_enabled = "true" 
+							can_accept_space_partition_renderers_only = "true">
+				<frame_buffers>
+					<frame_buffer width="1920" height="1080" texture="depth_texture" copy_buffer_to_texture="true" 
+								copy_x="0" copy_y="0" copy_width="1920" copy_height="1080"/>
+				</frame_buffers>
+			</render_pass>
+			<render_pass 	name = "transparent_render_pass"
+							is_fog_enabled = "true"
+							is_enabled = "true" camera_name="gameplay_camera" layer_mask="4"
+							add_after_post_processing="false"
+							/>
+			<render_pass 	name = "particles_render_pass"
+							is_enabled = "true" camera_name="gameplay_camera" layer_mask="2"
+							add_after_post_processing="false"
+							has_to_calculate_distance_to_camera ="true"
+							is_fog_enabled = "true"
+							/>
+			<render_pass 	name = "gui_render_pass"
+							is_enabled = "true" camera_name="gui_camera" layer_mask="1"
+							add_after_post_processing="true"
+							/>
+		</render_passes>
+	</renderer>
+	<game_scene name="mainScene">
+		<entities>
+			<player is_enabled="true" name="player" model="farmer" material="player" renderer="IndicesRenderer" layer="8" run_speed="3.0" turn_speed="0.2" upwards_speed="3.5">
+				<transformation> 
+					<position X="0" Y="0" Z="0"/>
+					<rotation X="-90" Y="0" Z="0.0"/>
+					<scale X="0.180000" Y="0.180000" Z="0.180000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="AnimationComponent" animation="animation_0"/>
+					<component is_enabled="true" type="CharacterComponent"/>
+					<component is_enabled="true" type="EnergyWallCollisionComponent"/>
+					<component is_enabled="true" type="EnvironmentModificatorComponent"/>
+					<component is_enabled="true" type="InputComponent">
+						<converters>
+							<converter key="87" event="ForwardEvent"/>
+							<converter key="83" event="BackwardEvent"/>
+							<converter key="32" event="JumpEvent"/>
+							<converter mouse="-1" event="TurnEvent"/>
+							<converter mouse="2" event="ZoomEvent"/>
+						</converters>
+					</component>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="1">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<translation X="0.000000" Y="0.4" Z="0.000000"/>
+						<scale X="0.500000" Y="0.500000" Z="0.500000"/>
+						<collider type="SphereBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="GravityComponent">
+						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
+					</component>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
+				</components>
+			</player>
+			<terrain is_enabled="true" name="terrain" material="terrain" scale="10" heighmap_texture="terrain_heightmap">
+				<transformation>
+					<position X="0.000000" Y="0.000000" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+			</terrain>
+			<entity is_enabled="true" layer="8">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="0.0" Y="0.0" Z="0.0"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="CharacterComponent"/>
+					<!--component is_enabled="true" type="OverWaterComponent"/-->
+					<component is_enabled="true" type="InputComponent">
+						<converters>
+							<converter mouse="-1" event="PitchEvent"/>
+							<converter mouse="2" event="ZoomEvent"/>
+						</converters>
+					</component>
+					<component is_enabled="true" type="ThirdPersonCameraComponent" target="player" camera="gameplay_camera" distance_from_target="4" pitch="10" pitch_speed="10" zoom_speed="10">
+						<target_offset X="0.0" Y="0.5" Z="0.0"/>
+					</component>
+				</components>
+			</entity>
+			<entity is_enabled="true" model="skybox" material="skybox" renderer="SkyBoxRenderer" layer="32">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="500.0" Y="500.0" Z="500.0"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RotationComponent" rotation_speed="0.01">
+						<axis X="0.0" Y="1.0" Z="0.0"/>
+					</component>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="sphere" model="sphere" material="red_flat_material" layer="8" on_ground="true">
+				<transformation>
+					<position X="4" Y="1.000000" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="SphereBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
+					<component is_enabled="true" type="GravityComponent">
+						<gravity X="0.0" Y="-2.8f" Z="0.0"/>
+					</component>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="box_middle" model="cube_default" material="grid_material" layer="8" on_ground="true">
+				<transformation>
+					<position X="2.000000" Y="1.300000" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="BoxBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="tree_trunk_0" model="tree_trunk_0" material="tree_trunk" layer="8" on_ground="true">
+				<transformation>
+					<position X="-3.000000" Y="0.000000" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<scale X="0.2500000" Y="1.000000" Z="0.2500000"/>
+						<collider type="BoxBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="tree_foliage_0" model="tree_foliage_0" material="tree_foliage" layer="8" on_ground="true">
+				<transformation>
+					<position X="-3.000000" Y="0" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8" on_ground="true">
+				<transformation>
+					<position X="2.000000" Y="2" Z="2"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<scale X="1" Y="1" Z="1"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="BoxBoundingVolume"/>
+						<translation X="0.000000" Y="0.43" Z="0.000000"/>
+					</component>
+					<component is_enabled="true" type="GravityComponent">
+						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
+					</component>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
+				</components>
+			</entity>
+		</entities>
+	</game_scene>
+</ngenius>
