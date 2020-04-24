@@ -5,6 +5,7 @@
 #include "src/resources/renderers/IRenderer.h"
 #include "src/resources/components/LODComponent.h"
 #include "src/resources/components/SpacePartitionComponent.h"
+#include "src/resources/components/PhysicsComponent.h"
 
 #include "src/utils/serializer/XMLSerializer.h"
 #include "src/resources/InstantiableObject.h"
@@ -367,9 +368,18 @@ void GameScene::SetEntityOnGround(IGameEntity* entity)
 	{
 		glm::vec3 position = entity->GetTransformation()->GetPosition();
 		float groundY = mGround->GetHeight(glm::vec2(position.x, position.z));
-		float min = entity->GetRenderer()->GetAABB().GetVertexMin().y;
-
-		position.y = min < groundY ? groundY - min : min - groundY;
+		float minY = 0.0f;
+		if (entity->HasComponent<PhysicsComponent>())
+		{
+			auto physicsComponent = entity->GetComponent<PhysicsComponent>();
+			auto boundingVolume = physicsComponent->GetPhysicsBoundingVolume();
+			minY = - boundingVolume->GetSize().y * 0.5f + physicsComponent->GetTranslation().y;
+		}
+		else
+		{
+			minY = entity->GetRenderer()->GetModel()->GetAABB().GetVertexMin().y;			
+		}
+		position.y = groundY - minY;
 		entity->GetTransformation()->SetPosition(position);
 	}
 }
