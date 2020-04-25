@@ -66,6 +66,11 @@ private:
 	void UpdateVelocity(bool isMoving, bool isForward);
 	void UpdateLateralAngle(bool isMoving, bool isLeft);
 
+	void TreatTurnEvent(std::shared_ptr<const GameEvent> event);
+	void TreatBackwardEvent(std::shared_ptr<const GameEvent> event);
+
+	bool IsFalling();
+
 	glm::vec3 CalculateRunPosition(float elapsedTime, float rotY, float rotOffset, glm::vec3 velocity, float runSpeed);
 	float CalculateTurnPosition(float elapsedTime, float turnSpeed);
 	glm::vec3 CalculateJumpPosition(float elapsedTime, glm::vec3 velocity, float upwardsSpeed);

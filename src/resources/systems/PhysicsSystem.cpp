@@ -296,11 +296,11 @@ bool PhysicsSystem::ApplyCollisions(IGameEntity*entity, float *groundHeight)
 			*groundHeight = mTerrain->GetHeight(glm::vec2(position.x, position.z));
 			float minY = -boundingVolume->GetSize().y * 0.5f;
 			bool isColliding = position.y <= *groundHeight - minY;
+			//std::cout << "vel " << physicsObject->GetVelocity().y << std::endl;
 
-			//std::cout << "Collision? " << isColliding << " positionY = " << position.y << " must Position.y =" << (*groundHeight - minY) << "\n";
 			if (isColliding)
 			{
-				//std::cout << "vel " << physicsObject->GetVelocity().y << " acceleration " << physicsObject->GetAcceleration().y << std::endl;
+				//std::cout << "Collision? " << isColliding << "\n";
 
 				position.y = *groundHeight - minY;
 				boundingVolume->SetPosition(position);
@@ -309,8 +309,10 @@ bool PhysicsSystem::ApplyCollisions(IGameEntity*entity, float *groundHeight)
 				velocity.y = 0.0f;
 				physicsObject->SetInitialVelocity(velocity);
 			}
-			
-			return isColliding;
+			//case is on other physics object. Its y velocity will be 0, because other object is applying a vel equal on opposite side
+			bool isOverOtherObject = NPhysics::NMath::IsNearlyEqual(physicsObject->GetVelocity().y, 0.0f);
+
+			return isColliding || isOverOtherObject;
 		}
 	}
 	

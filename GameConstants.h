@@ -7,6 +7,7 @@ static const float PLAYER_TURN_SPEED = 0.2f;
 static const float PLAYER_ZOOM_SPEED = 10.0f;
 static const float PLAYER_PITCH = 10.0f;
 static const float PLAYER_PITCH_SPEED = 10.0f;
+static const float MIN_HEIGHT_FALL = 0.1f;
 static const float VIEW_ANGLE = 45.0f;
 static const float FAR_PLANE = 100.0f;
 static const float NEAR_PLANE = 0.1f;

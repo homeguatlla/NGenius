@@ -220,7 +220,7 @@
 	</renderer>
 	<game_scene name="mainScene">
 		<entities>
-			<player is_enabled="true" name="player" model="farmer" material="player" renderer="IndicesRenderer" layer="8" run_speed="3.0" turn_speed="0.2" upwards_speed="3.5" on_ground="true">
+			<player is_enabled="true" name="player" model="farmer" material="player" renderer="IndicesRenderer" layer="8" run_speed="3.0" turn_speed="0.2" upwards_speed="5.0" on_ground="true">
 				<transformation> 
 					<position X="0" Y="0" Z="0"/>
 					<rotation X="-90" Y="0" Z="0.0"/>
