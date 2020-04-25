@@ -220,7 +220,7 @@
 	</renderer>
 	<game_scene name="mainScene">
 		<entities>
-			<player is_enabled="true" name="player" model="farmer" material="player" renderer="IndicesRenderer" layer="8" run_speed="3.0" turn_speed="0.2" upwards_speed="3.5">
+			<player is_enabled="true" name="player" model="farmer" material="player" renderer="IndicesRenderer" layer="8" run_speed="3.0" turn_speed="0.2" upwards_speed="3.5" on_ground="true">
 				<transformation> 
 					<position X="0" Y="0" Z="0"/>
 					<rotation X="-90" Y="0" Z="0.0"/>
@@ -294,6 +294,22 @@
 					</component>
 				</components>
 			</entity>
+			<!--entity is_enabled="true" name="ground" model="cube_default" material="grid_material" layer="8">
+				<transformation>
+					<position X="0" Y="-0.4" Z="0"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<scale X="10.000000" Y="1.000000" Z="10.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="BoxBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
+				</components>
+			</entity-->
 			<entity is_enabled="true" name="sphere" model="sphere" material="red_flat_material" layer="8" on_ground="true">
 				<transformation>
 					<position X="4" Y="1.000000" Z="0.000000"/>

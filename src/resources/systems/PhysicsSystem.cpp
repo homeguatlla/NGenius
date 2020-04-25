@@ -99,25 +99,10 @@ void PhysicsSystem::CheckCollisionTerrain(IGameEntity* entity)
 	bool isInsideTerrain = IsInsideTerrain(entity);
 	if (isInsideTerrain)
 	{
-		
 		float groundHeight = 0.0f;
 		bool isColliding = ApplyCollisions(entity, &groundHeight);
 		collisionComponent->SetOnGround(isColliding);
 		collisionComponent->SetGroundHeight(groundHeight);
-		
-		//improvement, hasta el momento no tiene mucha utilidad, pero creo que debería ser útil.
-		//cuando un objeto es estático si ha colisionado le eliminamos los componentes físicos de colisión y el físico para que no sea updateado
-		//pues no va a colisionar más ni va a moverse más.
-		/*if (isColliding && entity->HasComponent<PhysicsComponent>())
-		{
-			PhysicsComponent* physicComponent = entity->GetComponent<PhysicsComponent>();
-			if (physicComponent->IsStatic())
-			{
-				entity->RemoveComponent<CollisionComponent>();
-				entity->RemoveComponent<PhysicsComponent>();
-				//TODO si no tiene más componentes quitarlo del physicsSystem
-			}
-		}*/
 	}
 	else
 	{
@@ -310,17 +295,19 @@ bool PhysicsSystem::ApplyCollisions(IGameEntity*entity, float *groundHeight)
 
 			*groundHeight = mTerrain->GetHeight(glm::vec2(position.x, position.z));
 			float minY = -boundingVolume->GetSize().y * 0.5f;
-			//float newY = glm::max(position.y, *groundHeight + boundingVolume->GetSize().y * 0.5f);
-			bool isColliding = position.y != minY;
+			bool isColliding = position.y <= *groundHeight - minY;
 
+			//std::cout << "Collision? " << isColliding << " positionY = " << position.y << " must Position.y =" << (*groundHeight - minY) << "\n";
 			if (isColliding)
 			{
+				//std::cout << "vel " << physicsObject->GetVelocity().y << " acceleration " << physicsObject->GetAcceleration().y << std::endl;
+
 				position.y = *groundHeight - minY;
 				boundingVolume->SetPosition(position);
 				physicsObject->SetPosition(position);
-				//TODO esto se está cargando la fisica real. Habría que hacerlo dentro del motor de fisica.
-				physicsObject->SetInitialVelocity(glm::vec3(0.0f));
-				physicsObject->SetAcceleration(glm::vec3(0.0f));
+				auto velocity = physicsObject->GetVelocity();
+				velocity.y = 0.0f;
+				physicsObject->SetInitialVelocity(velocity);
 			}
 			
 			return isColliding;
