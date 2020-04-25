@@ -310,7 +310,7 @@ bool PhysicsSystem::ApplyCollisions(IGameEntity*entity, float *groundHeight)
 				physicsObject->SetInitialVelocity(velocity);
 			}
 			//case is on other physics object. Its y velocity will be 0, because other object is applying a vel equal on opposite side
-			bool isOverOtherObject = NPhysics::NMath::IsNearlyEqual(physicsObject->GetVelocity().y, 0.0f);
+			bool isOverOtherObject = NPhysics::NMath::IsNearlyEqual(physicsObject->GetVelocity().y, 0.0f, EPSILON1);
 
 			return isColliding || isOverOtherObject;
 		}

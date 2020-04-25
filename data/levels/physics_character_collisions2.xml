@@ -294,10 +294,10 @@
 					</component>
 				</components>
 			</entity>
-			<!--entity is_enabled="true" name="ground" model="cube_default" material="grid_material" layer="8">
+			<entity is_enabled="true" name="ground" model="cube_default" material="green_flat_material" layer="8">
 				<transformation>
-					<position X="0" Y="-0.4" Z="0"/>
-					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<position X="4" Y="-0.4" Z="-4"/>
+					<rotation X="0.000000" Y="0.0000" Z="45.000000"/>
 					<scale X="10.000000" Y="1.000000" Z="10.000000"/>
 				</transformation>
 				<components>
@@ -309,7 +309,7 @@
 					<component is_enabled="true" type="DebugComponent"/>
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
-			</entity-->
+			</entity>
 			<entity is_enabled="true" name="sphere" model="sphere" material="red_flat_material" layer="8" on_ground="true">
 				<transformation>
 					<position X="4" Y="1.000000" Z="0.000000"/>
@@ -325,10 +325,29 @@
 					<component is_enabled="true" type="DebugComponent"/>
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 					<component is_enabled="true" type="GravityComponent">
-						<gravity X="0.0" Y="-2.8f" Z="0.0"/>
+						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
 					</component>
 				</components>
 			</entity>
+			<!--entity is_enabled="true" name="sphere2" model="sphere" material="red_flat_material" layer="8">
+				<transformation>
+					<position X="2" Y="8.000000" Z="0.000000"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<scale X="0.100000" Y="0.100000" Z="0.100000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="850.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="SphereBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
+					<component is_enabled="true" type="GravityComponent">
+						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
+					</component>
+				</components>
+			</entity-->
 			<entity is_enabled="true" name="box_middle" model="cube_default" material="grid_material" layer="8" on_ground="true">
 				<transformation>
 					<position X="2.000000" Y="1.300000" Z="0.000000"/>
