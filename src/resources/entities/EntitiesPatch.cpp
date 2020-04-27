@@ -8,7 +8,7 @@
 #include <iostream>
 
 
-EntitiesPatch::EntitiesPatch(Transformation* transformation, const Terrain* terrain, float heightMin, float heightMax, float wide, float length, float density, bool isIntersectionAllowed) :
+EntitiesPatch::EntitiesPatch(Transformation* transformation, const std::shared_ptr<Terrain> terrain, float heightMin, float heightMax, float wide, float length, float density, bool isIntersectionAllowed) :
 	BaseGameEntity(transformation),
 	mTerrain(terrain),
 	mHeightMin(heightMin),
@@ -20,14 +20,14 @@ EntitiesPatch::EntitiesPatch(Transformation* transformation, const Terrain* terr
 {
 }
 
-IGameEntity* EntitiesPatch::DoCreate()
+std::shared_ptr<IGameEntity> EntitiesPatch::DoCreate()
 {
-	return DBG_NEW EntitiesPatch();
+	return std::make_shared<EntitiesPatch>();
 }
 
 void EntitiesPatch::Build(NGenius* engine)
 {
-	mTerrain = static_cast<Terrain*>(engine->GetGameEntity("terrain"));
+	mTerrain = std::static_pointer_cast<Terrain>(engine->GetGameEntity("terrain"));
 	assert(mTerrain != nullptr);
 }
 
@@ -108,13 +108,13 @@ void EntitiesPatch::FillEntitiesRadiusVector(GameScene* scene)
 		std::vector<std::string> names = std::get<0>(pack);
 		for (auto model : names)
 		{
-			IGameEntity* entity = scene->GetGameEntity(model);
+			auto entity = scene->GetGameEntity(model);
 			if (entity != nullptr)
 			{
 				glm::vec3 size = entity->GetRenderer()->GetAABB().GetSize();
 				float radius = size.x > size.z ? size.x : size.z;
 
-				mEntities[model] = std::pair<IGameEntity*, float>(entity, radius);
+				mEntities[model] = std::pair<std::shared_ptr<IGameEntity>, float>(entity, radius);
 				maxRadius = glm::max(maxRadius, radius);
 			}
 		}
@@ -148,9 +148,9 @@ void EntitiesPatch::SpawnEntities(GameScene* scene, int numEntities)
 
 					for (auto entityName : names)
 					{
-						IGameEntity* entity = mEntities[entityName].first;
-						BaseGameEntity<GameEntity>* clone = static_cast<BaseGameEntity<GameEntity>*>(entity);
-						IGameEntity* newEntity = clone->Clone();
+						std::shared_ptr<IGameEntity> entity = mEntities[entityName].first;
+						std::shared_ptr<BaseGameEntity<GameEntity>> clone = std::static_pointer_cast<BaseGameEntity<GameEntity>>(entity);
+						std::shared_ptr<IGameEntity> newEntity = clone->Clone();
 						if (newEntity != nullptr)
 						{
 							newEntity->GetTransformation()->SetPosition(point);							

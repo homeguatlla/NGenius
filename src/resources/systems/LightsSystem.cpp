@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "LightsSystem.h"
-#include "../IGameEntity.h"
-#include "../entities/Light.h"
-#include "../scene/GameScene.h"
+#include "src/resources/IGameEntity.h"
+#include "src/resources/entities/Light.h"
+#include "src/resources/scene/GameScene.h"
 
 #include <algorithm>
 
@@ -14,8 +14,8 @@ mGameScene(gameScene)
 
 LightsSystem::~LightsSystem()
 {
-	ReleaseLights(mLights);
-	ReleaseLights(mNewLightsToAdd);	
+	mLights.clear();
+	mNewLightsToAdd.clear();
 	mLightsToRemove.clear();
 }
 
@@ -25,19 +25,19 @@ void LightsSystem::Update(float elapsedTime)
 	AddNewLights();
 }
 
-void LightsSystem::AddLight(Light* light)
+void LightsSystem::AddLight(std::shared_ptr<Light> light)
 {
 	mNewLightsToAdd.push_back(light);
 }
 
-void LightsSystem::RemoveLight(Light* light)
+void LightsSystem::RemoveLight(std::shared_ptr<Light> light)
 {
 	mLightsToRemove.push_back(light);
 }
 
 void LightsSystem::AddNewLights()
 {
-	for (Light* light : mNewLightsToAdd)
+	for (auto&& light : mNewLightsToAdd)
 	{
 		mLights.push_back(light);
 		if (light->GetRenderer() != nullptr)
@@ -50,20 +50,11 @@ void LightsSystem::AddNewLights()
 
 void LightsSystem::RemoveLights()
 {
-	for (Light* light : mLightsToRemove)
+	for (auto&& light : mLightsToRemove)
 	{
-		GameLightIterator it = std::find_if(mLights.begin(), mLights.end(), [&](Light* a) { return a == light; });
+		GameLightIterator it = std::find_if(mLights.begin(), mLights.end(), [&](std::shared_ptr<Light> a) { return a == light; });
 		mGameScene->RemoveEntity(light);
 		mLights.erase(it);
 	}
 	mLightsToRemove.clear();
-}
-
-void LightsSystem::ReleaseLights(std::vector<Light*>& lights)
-{
-	for (Light* light : lights)
-	{
-		delete light;
-	}
-	lights.clear();
 }

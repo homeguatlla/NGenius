@@ -240,7 +240,7 @@
 							<converter mouse="2" event="ZoomEvent"/>
 						</converters>
 					</component>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="1">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="1" restitution="0.2">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 						<translation X="0.000000" Y="0.4" Z="0.000000"/>
 						<scale X="0.500000" Y="0.500000" Z="0.500000"/>
@@ -268,7 +268,7 @@
 					<scale X="0.0" Y="0.0" Z="0.0"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="CollisionComponent"/>
+					<!--component is_enabled="true" type="CollisionComponent"/-->
 					<component is_enabled="true" type="CharacterComponent"/>
 					<!--component is_enabled="true" type="OverWaterComponent"/-->
 					<component is_enabled="true" type="InputComponent">
@@ -294,10 +294,10 @@
 					</component>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="ground" model="cube_default" material="green_flat_material" layer="8">
+			<!--entity is_enabled="true" name="ground" model="cube_default" material="green_flat_material" layer="8">
 				<transformation>
-					<position X="4" Y="-0.4" Z="-4"/>
-					<rotation X="0.000000" Y="0.0000" Z="45.000000"/>
+					<position X="6" Y="8" Z="-6"/>
+					<rotation X="0.000000" Y="0.0000" Z="15.000000"/>
 					<scale X="10.000000" Y="1.000000" Z="10.000000"/>
 				</transformation>
 				<components>
@@ -309,10 +309,10 @@
 					<component is_enabled="true" type="DebugComponent"/>
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
-			</entity>
+			</entity-->
 			<entity is_enabled="true" name="sphere" model="sphere" material="red_flat_material" layer="8" on_ground="true">
 				<transformation>
-					<position X="4" Y="1.000000" Z="0.000000"/>
+					<position X="4" Y="2.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
 					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
 				</transformation>
@@ -350,12 +350,12 @@
 			</entity-->
 			<entity is_enabled="true" name="box_middle" model="cube_default" material="grid_material" layer="8" on_ground="true">
 				<transformation>
-					<position X="2.000000" Y="1.300000" Z="0.000000"/>
+					<position X="2.000000" Y="1.800000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850" restitution="0.0">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 						<collider type="BoxBoundingVolume"/>
 					</component>
@@ -364,9 +364,9 @@
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="tree_trunk_0" model="tree_trunk_0" material="tree_trunk" layer="8" on_ground="true">
+			<entity is_enabled="true" name="tree_trunk_0" model="tree_trunk_0" material="tree_trunk" layer="8" on_ground="true" restitution="0.0">
 				<transformation>
-					<position X="-3.000000" Y="0.000000" Z="0.000000"/>
+					<position X="-3.000000" Y="0.000000" Z="3.000000"/>
 					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
@@ -383,7 +383,7 @@
 			</entity>
 			<entity is_enabled="true" name="tree_foliage_0" model="tree_foliage_0" material="tree_foliage" layer="8" on_ground="true">
 				<transformation>
-					<position X="-3.000000" Y="0" Z="0.000000"/>
+					<position X="-3.000000" Y="0" Z="3.000000"/>
 					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
@@ -392,7 +392,7 @@
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8" on_ground="true">
+			<entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8" on_ground="true"  restitution="0.0">
 				<transformation>
 					<position X="2.000000" Y="2" Z="2"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>

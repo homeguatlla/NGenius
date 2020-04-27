@@ -1,5 +1,5 @@
 #pragma once
-#include "../BaseGameEntity.h"
+#include "src/resources/BaseGameEntity.h"
 
 class IMaterial;
 class Model;
@@ -16,10 +16,11 @@ class Water :	public BaseGameEntity<Water>
 	MaterialEffectWater* mWaterEffect;
 
 public:
+	Water() = default;
 	explicit Water(Transformation* transformation, IMaterial* material, float wide, float length, float speed);
 	~Water();
 	void Update(float elapsedTime) override;
-	Water* DoClone() const override { return nullptr; }
+	std::shared_ptr<IGameEntity> DoClone() const override { return nullptr; }
 
 	void Build(NGenius* engine) override;
 
@@ -27,10 +28,10 @@ public:
 	void ReadFrom(core::utils::IDeserializer* source) override;
 
 	static std::string GetClassName() { return std::string("water"); }
-	static IGameEntity* DoCreate();
+	static std::shared_ptr<IGameEntity> DoCreate();
 
 private:
-	Water() = default;
+	
 	void CreateWater(IMaterial* material);
 	void CreateModel();
 

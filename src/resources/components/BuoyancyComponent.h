@@ -22,7 +22,7 @@ public:
 	glm::vec3 GetCenter() const { return mCenter; }
 
 	static std::string GetClassName() { return std::string("BuoyancyComponent"); }
-	static IComponent* Create(IGameEntity* entity);
+	static IComponent* Create(std::shared_ptr<IGameEntity> entity);
 
 private:
 	BuoyancyComponent() = default;

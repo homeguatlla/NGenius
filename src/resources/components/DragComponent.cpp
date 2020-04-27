@@ -18,7 +18,7 @@ DragComponent* DragComponent::DoClone() const
 	return DBG_NEW DragComponent(*this);
 }
 
-IComponent* DragComponent::Create(IGameEntity* entity)
+IComponent* DragComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	DragComponent* component = DBG_NEW DragComponent();
 	entity->AddComponent(component);

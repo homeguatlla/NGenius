@@ -7,14 +7,14 @@
 
 #include "SunLight.h"
 
-#include "../../IGameEntity.h"
-#include "../../components/EnvironmentAffectedComponent.h"
-#include "../../components/EnvironmentModificatorComponent.h"
-#include "../../materials/IMaterial.h"
-#include "../../materials/effects/MaterialEffectFloat.h"
-#include "../../materials/effects/MaterialEffectFloat3Array.h"
-#include "../../renderers/IRenderer.h"
-#include "../../entities/Terrain.h"
+#include "src/resources/IGameEntity.h"
+#include "src/resources/components/EnvironmentAffectedComponent.h"
+#include "src/resources/components/EnvironmentModificatorComponent.h"
+#include "src/resources/materials/IMaterial.h"
+#include "src/resources/materials/effects/MaterialEffectFloat.h"
+#include "src/resources/materials/effects/MaterialEffectFloat3Array.h"
+#include "src/resources/renderers/IRenderer.h"
+#include "src/resources/entities/Terrain.h"
 
 #include <iostream>
 
@@ -71,7 +71,7 @@ void EnvironmentSystem::Update(float deltaTime)
 
 	UpdateModificatorsVector();
 
-	for (IGameEntity* entity : mEntities)
+	for (auto&& entity : mEntities)
 	{
 		if (entity->GetRenderer() != nullptr)
 		{
@@ -97,7 +97,7 @@ void EnvironmentSystem::UpdateTime()
 	//std::cout << dayHour << "\n";
 }
 
-void EnvironmentSystem::ApplyWind(IGameEntity* entity)
+void EnvironmentSystem::ApplyWind(std::shared_ptr<IGameEntity> entity)
 {
 	EnvironmentAffectedComponent* affectedComponent = entity->GetComponent<EnvironmentAffectedComponent>();
 	if (affectedComponent->IsAffectedByWind())
@@ -122,20 +122,20 @@ void EnvironmentSystem::ApplyWind(IGameEntity* entity)
 void EnvironmentSystem::UpdateModificatorsVector()
 {
 	mModificatorsPositions.clear();
-	for (IGameEntity* entity : mModificators)
+	for (auto&& entity : mModificators)
 	{
 		mModificatorsPositions.push_back(entity->GetTransformation()->GetPosition());
 	}
 }
 
-void EnvironmentSystem::SetTerrain(const Terrain* terrain)
+void EnvironmentSystem::SetTerrain(const std::shared_ptr<Terrain> terrain)
 {
 	assert(terrain != nullptr);
 
 	mTerrain = terrain;
 }
 
-void EnvironmentSystem::AddEntity(IGameEntity* entity)
+void EnvironmentSystem::AddEntity(std::shared_ptr<IGameEntity> entity)
 {
 	if(entity->HasComponent<EnvironmentAffectedComponent>())
 	{
@@ -147,9 +147,9 @@ void EnvironmentSystem::AddEntity(IGameEntity* entity)
 	}
 }
 
-void EnvironmentSystem::RemoveEntityVector(IGameEntity* entity, std::vector<IGameEntity*>& vector)
+void EnvironmentSystem::RemoveEntityVector(std::shared_ptr<IGameEntity> entity, std::vector<std::shared_ptr<IGameEntity>>& vector)
 {
-	std::vector<IGameEntity*>::iterator it = std::find_if(vector.begin(), vector.end(), [&](IGameEntity* a) { return a == entity; });
+	std::vector<std::shared_ptr<IGameEntity>>::iterator it = std::find_if(vector.begin(), vector.end(), [&](std::shared_ptr<IGameEntity> a) { return a == entity; });
 	if (it != vector.end())
 	{
 		vector.erase(it);
@@ -160,7 +160,7 @@ void EnvironmentSystem::RemoveEntityVector(IGameEntity* entity, std::vector<IGam
 	}
 }
 
-void EnvironmentSystem::RemoveEntity(IGameEntity* entity)
+void EnvironmentSystem::RemoveEntity(std::shared_ptr<IGameEntity> entity)
 {
 	if (entity->HasComponent<EnvironmentAffectedComponent>())
 	{
@@ -172,13 +172,13 @@ void EnvironmentSystem::RemoveEntity(IGameEntity* entity)
 	}
 }
 
-bool EnvironmentSystem::HasEnvironmentComponents(const IGameEntity* entity) const
+bool EnvironmentSystem::HasEnvironmentComponents(const std::shared_ptr<IGameEntity> entity) const
 {
 	return entity != nullptr && (	entity->HasComponent<EnvironmentAffectedComponent>() || 
 									entity->HasComponent<EnvironmentModificatorComponent>());
 }
 
-void EnvironmentSystem::OnGameEntityAdded(IGameEntity* entity)
+void EnvironmentSystem::OnGameEntityAdded(std::shared_ptr<IGameEntity> entity)
 {
 	if (HasEnvironmentComponents(entity))
 	{
@@ -186,7 +186,7 @@ void EnvironmentSystem::OnGameEntityAdded(IGameEntity* entity)
 	}
 }
 
-void EnvironmentSystem::OnGameEntityRemoved(IGameEntity* entity)
+void EnvironmentSystem::OnGameEntityRemoved(std::shared_ptr<IGameEntity> entity)
 {
 	if (HasEnvironmentComponents(entity))
 	{

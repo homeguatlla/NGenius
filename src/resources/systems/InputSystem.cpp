@@ -34,12 +34,12 @@ void InputSystem::Reload()
 	Release();
 }
 
-bool InputSystem::HasInputComponents(const IGameEntity* entity) const
+bool InputSystem::HasInputComponents(const std::shared_ptr<IGameEntity> entity) const
 {
 	return entity != nullptr && entity->HasComponent<InputComponent>() && entity->HasComponent<CharacterComponent>();
 }
 
-void InputSystem::OnGameEntityAdded(IGameEntity* entity)
+void InputSystem::OnGameEntityAdded(std::shared_ptr<IGameEntity> entity)
 {
 	if (HasInputComponents(entity))
 	{
@@ -47,7 +47,7 @@ void InputSystem::OnGameEntityAdded(IGameEntity* entity)
 	}
 }
 
-void InputSystem::OnGameEntityRemoved(IGameEntity* entity)
+void InputSystem::OnGameEntityRemoved(std::shared_ptr<IGameEntity> entity)
 {
 	if (HasInputComponents(entity))
 	{
@@ -55,16 +55,16 @@ void InputSystem::OnGameEntityRemoved(IGameEntity* entity)
 	}
 }
 
-void InputSystem::AddEntity(IGameEntity* entity)
+void InputSystem::AddEntity(std::shared_ptr<IGameEntity> entity)
 {
 	mEntities.push_back(entity);
 }
 
-void InputSystem::RemoveEntity(IGameEntity* entity)
+void InputSystem::RemoveEntity(std::shared_ptr<IGameEntity> entity)
 {
 	if (HasInputComponents(entity))
 	{
-		std::vector<IGameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](IGameEntity* a) { return a == entity; });
+		std::vector<std::shared_ptr<IGameEntity>>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](std::shared_ptr<IGameEntity> a) { return a == entity; });
 		if (it != mEntities.end())
 		{
 			mEntities.erase(it);
@@ -78,13 +78,13 @@ void InputSystem::RemoveEntity(IGameEntity* entity)
 
 void InputSystem::OnKey(int key, int action)
 {
-	for (IGameEntity* entity : mEntities)
+	for (auto&& entity : mEntities)
 	{
 		InputComponent* inputComponent = entity->GetComponent<InputComponent>();
 		CharacterComponent* characterComponent = entity->GetComponent<CharacterComponent>();
 		if (inputComponent != nullptr && characterComponent != nullptr)
 		{
-			std::shared_ptr<const GameEvent> event = inputComponent->ConvertKey(key, action);
+			std::shared_ptr<GameEvent> event = inputComponent->ConvertKey(key, action);
 			if (event != nullptr)
 			{
 				characterComponent->OnCharacterControllerEvent(event);
@@ -116,13 +116,13 @@ void InputSystem::OnMouseCursorPos(double x, double y)
 
 void InputSystem::DispatchEvent(MouseData& data)
 {
-	for (IGameEntity* entity : mEntities)
+	for (auto&& entity : mEntities)
 	{
 		InputComponent* inputComponent = entity->GetComponent<InputComponent>();
 		CharacterComponent* characterComponent = entity->GetComponent<CharacterComponent>();
 		if (inputComponent != nullptr && characterComponent != nullptr)
 		{
-			std::shared_ptr<const GameEvent> event = inputComponent->ConvertMouse(reinterpret_cast<void*>(&data));
+			std::shared_ptr<GameEvent> event = inputComponent->ConvertMouse(reinterpret_cast<void*>(&data));
 			if (event != nullptr)
 			{
 				characterComponent->OnCharacterControllerEvent(event);

@@ -116,7 +116,7 @@ void LODComponent::AddLevelOfDetail(IRenderer* renderer, float distance)
 	}
 }
 
-IComponent* LODComponent::Create(IGameEntity* entity)
+IComponent* LODComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	LODComponent* component = DBG_NEW LODComponent();
 	entity->AddComponent(component);

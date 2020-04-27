@@ -3,13 +3,8 @@
 #include "src/resources/components/RigidbodyPhysicsComponent.h"
 #include "src/resources/IGameEntity.h"
 
-ApplyForceToEntityCommand::ApplyForceToEntityCommand(IGameEntity* entity) :
+ApplyForceToEntityCommand::ApplyForceToEntityCommand(std::shared_ptr<IGameEntity> entity) :
 	ICommand(entity)
-{
-}
-
-
-ApplyForceToEntityCommand::~ApplyForceToEntityCommand()
 {
 }
 

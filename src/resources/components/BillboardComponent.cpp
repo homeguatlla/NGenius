@@ -31,7 +31,7 @@ void BillboardComponent::UpdateInternal(float elapsedTime)
 	ModifyModelMatrixToAvoidRotations(viewMatrix, scale, angleZ, modelMatrix);
 }
 
-IComponent* BillboardComponent::Create(IGameEntity* entity)
+IComponent* BillboardComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	BillboardComponent* component = DBG_NEW BillboardComponent();
 

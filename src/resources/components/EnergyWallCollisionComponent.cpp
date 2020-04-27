@@ -42,7 +42,7 @@ glm::vec3 EnergyWallCollisionComponent::GetCollisionPoint() const
 	return mCollisionPoint;
 }
 
-IComponent* EnergyWallCollisionComponent::Create(IGameEntity* entity)
+IComponent* EnergyWallCollisionComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	EnergyWallCollisionComponent* component = DBG_NEW EnergyWallCollisionComponent();
 	entity->AddComponent(component);

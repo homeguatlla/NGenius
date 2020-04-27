@@ -5,51 +5,51 @@
 
 #include "PostProcessSubSystem.h"
 
-#include "../../renderers/SkyBoxRenderer.h"
-#include "../../renderers/IndicesRenderer.h"
-#include "../../renderers/PointsRenderer.h"
+#include "src/resources/renderers/SkyBoxRenderer.h"
+#include "src/resources/renderers/IndicesRenderer.h"
+#include "src/resources/renderers/PointsRenderer.h"
 
-#include "../../IGameEntity.h"
-#include "../../camera/ICamera.h"
-#include "../../camera/PerspectiveCamera.h"
-#include "../../camera/OrthogonalCamera.h"
+#include "src/resources/IGameEntity.h"
+#include "src/resources/camera/ICamera.h"
+#include "src/resources/camera/PerspectiveCamera.h"
+#include "src/resources/camera/OrthogonalCamera.h"
 
-#include "../../models/ModelsLibrary.h"
-#include "../../models/Model.h"
-#include "../../shaders/IShaderProgram.h"
-#include "../../shaders/ShadersLibrary.h"
-#include "../../font/FontsLibrary.h"
-#include "../../textures/TexturesLibrary.h"
-#include "../../textures/Texture.h"
-#include "../../textures/TextureArray.h"
-#include "../../textures/TextureCubemap.h"
-#include "../../materials/IMaterial.h"
-#include "../../materials/MaterialsLibrary.h"
-#include "../../models/animation/AnimationsLibrary.h"
+#include "src/resources/models/ModelsLibrary.h"
+#include "src/resources/models/Model.h"
+#include "src/resources/shaders/IShaderProgram.h"
+#include "src/resources/shaders/ShadersLibrary.h"
+#include "src/resources/font/FontsLibrary.h"
+#include "src/resources/textures/TexturesLibrary.h"
+#include "src/resources/textures/Texture.h"
+#include "src/resources/textures/TextureArray.h"
+#include "src/resources/textures/TextureCubemap.h"
+#include "src/resources/materials/IMaterial.h"
+#include "src/resources/materials/MaterialsLibrary.h"
+#include "src/resources/models/animation/AnimationsLibrary.h"
 
-#include "../../materials/effects/MaterialEffectDiffuseTexture.h"
-#include "../../materials/effects/MaterialEffectNormalTexture.h"
-#include "../../materials/effects/MaterialEffectHeightMapTexture.h"
-#include "../../materials/effects/MaterialEffectClippingPlane.h"
-#include "../../materials/effects/MaterialEffectShadowProperties.h"
-#include "../../materials/effects/MaterialEffectWater.h"
-#include "../../materials/effects/MaterialEffectTextureArray.h"
-#include "../../materials/effects/MaterialEffectTextureCubemap.h"
-#include "../../materials/effects/MaterialEffectParticle.h"
-#include "../../materials/effects/MaterialEffectDepthTexture.h"
-#include "../../materials/effects/MaterialEffectFogProperties.h"
-#include "../../materials/effects/MaterialEffectDirectionalLightProperties.h"
+#include "src/resources/materials/effects/MaterialEffectDiffuseTexture.h"
+#include "src/resources/materials/effects/MaterialEffectNormalTexture.h"
+#include "src/resources/materials/effects/MaterialEffectHeightMapTexture.h"
+#include "src/resources/materials/effects/MaterialEffectClippingPlane.h"
+#include "src/resources/materials/effects/MaterialEffectShadowProperties.h"
+#include "src/resources/materials/effects/MaterialEffectWater.h"
+#include "src/resources/materials/effects/MaterialEffectTextureArray.h"
+#include "src/resources/materials/effects/MaterialEffectTextureCubemap.h"
+#include "src/resources/materials/effects/MaterialEffectParticle.h"
+#include "src/resources/materials/effects/MaterialEffectDepthTexture.h"
+#include "src/resources/materials/effects/MaterialEffectFogProperties.h"
+#include "src/resources/materials/effects/MaterialEffectDirectionalLightProperties.h"
 
-#include "../environmentSystem/EnvironmentSystem.h"
-#include "../environmentSystem/SunLight.h"
+#include "src/resources/systems/environmentSystem/EnvironmentSystem.h"
+#include "src/resources/systems/environmentSystem/SunLight.h"
 
 #include "RenderPass.h"
 
-#include "../../../BitNumber.h"
-#include "../../../guiTool/GuiTool.h"
-#include "../GameConstants.h"
-#include "../../InstantiableObject.h"
-#include "../../../utils/Log.h"
+#include "src/BitNumber.h"
+#include "src/guiTool/GuiTool.h"
+#include "GameConstants.h"
+#include "src/resources/InstantiableObject.h"
+#include "src/utils/Log.h"
 
 #include <iostream>
 #include <algorithm>
@@ -1196,7 +1196,7 @@ void RenderSystem::SetCastingShadowsParameters(const glm::vec3& lightDirection, 
 	mShadowsRenderPass->SetCastingShadowsParameters(lightDirection, pfcCounter);
 }
 
-void RenderSystem::SetCastingShadowsTarget(const IGameEntity* target)
+void RenderSystem::SetCastingShadowsTarget(const std::shared_ptr<IGameEntity> target)
 {
 	assert(mShadowsRenderPass != nullptr);
 	mShadowsRenderPass->SetCastingShadowsTarget(target);

@@ -1,15 +1,15 @@
 #pragma once
-#include "../ICommand.h"
+#include "src/resources/command/ICommand.h"
 
 class Terrain;
 
 class RiseTerrainCommand : public ICommand
 {
-	Terrain* mTerrain;
+	std::shared_ptr<Terrain> mTerrain;
 	float mScale;
 
 public:
-	RiseTerrainCommand(IGameEntity* entity);
+	RiseTerrainCommand(std::shared_ptr<IGameEntity> entity);
 	~RiseTerrainCommand();
 
 	void Execute() override;

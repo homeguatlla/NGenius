@@ -235,6 +235,30 @@
     <Filter Include="Source Files\fsm\transitions">
       <UniqueIdentifier>{f2098de1-1308-4059-9e30-61e7a8a01204}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\resources\entities\player">
+      <UniqueIdentifier>{2cb08332-520e-4c54-ae1d-9b2a260b015c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\entities\player\playerFsm">
+      <UniqueIdentifier>{a022aef1-994e-4f34-8f37-b8da4f97fdbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\entities\player\playerFsm\states">
+      <UniqueIdentifier>{84c103b8-bb72-4617-956c-d1de5919916b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\entities\player\playerFsm\transitions">
+      <UniqueIdentifier>{45304e43-eeae-41bb-bb3a-17d2bac96a90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\entities\Player">
+      <UniqueIdentifier>{82e10fb7-96d4-41b0-9365-dd1d427c1259}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\entities\Player\playerFsm">
+      <UniqueIdentifier>{8e236365-31d2-4880-a6d2-6a310445d4ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\entities\Player\playerFsm\states">
+      <UniqueIdentifier>{29927dfd-8a86-4d9e-8a40-765e79786a4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\entities\Player\playerFsm\transitions">
+      <UniqueIdentifier>{6c94483e-e16b-44f7-8642-5706465ba9fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -296,9 +320,6 @@
     </ClInclude>
     <ClInclude Include="src\resources\textures\TextureArray.h">
       <Filter>Header Files\resources\textures</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resources\entities\Player.h">
-      <Filter>Header Files\resources\entities</Filter>
     </ClInclude>
     <ClInclude Include="src\resources\entities\Light.h">
       <Filter>Header Files\resources\entities</Filter>
@@ -921,6 +942,27 @@
     <ClInclude Include="src\resources\renderers\WireframeVerticesRenderer.h">
       <Filter>Header Files\resources\renderers</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\states\Idle.h">
+      <Filter>Header Files\resources\entities\player\playerFsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\states\PlayerStates.h">
+      <Filter>Header Files\resources\entities\player\playerFsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\states\Run.h">
+      <Filter>Header Files\resources\entities\player\playerFsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\PlayerContext.h">
+      <Filter>Header Files\resources\entities\player\playerFsm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\transitions\EnterIdle.h">
+      <Filter>Header Files\resources\entities\player\playerFsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\transitions\EnterRun.h">
+      <Filter>Header Files\resources\entities\player\playerFsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Player\Player.h">
+      <Filter>Header Files\resources\entities\player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -979,9 +1021,6 @@
     </ClCompile>
     <ClCompile Include="src\resources\textures\TextureArray.cpp">
       <Filter>Source Files\resources\textures</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resources\entities\Player.cpp">
-      <Filter>Source Files\resources\entities</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\entities\Light.cpp">
       <Filter>Source Files\resources\entities</Filter>
@@ -1534,6 +1573,24 @@
     </ClCompile>
     <ClCompile Include="src\resources\renderers\WireframeVerticesRenderer.cpp">
       <Filter>Source Files\resources\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\states\Idle.cpp">
+      <Filter>Source Files\resources\entities\Player\playerFsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\states\Run.cpp">
+      <Filter>Source Files\resources\entities\Player\playerFsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\PlayerContext.cpp">
+      <Filter>Source Files\resources\entities\Player\playerFsm</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\transitions\EnterIdle.cpp">
+      <Filter>Source Files\resources\entities\Player\playerFsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\transitions\EnterRun.cpp">
+      <Filter>Source Files\resources\entities\Player\playerFsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Player\Player.cpp">
+      <Filter>Source Files\resources\entities\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -3,13 +3,13 @@
 #include "../../resources/GameEvent.h"
 
 
-KeyToEventBind::KeyToEventBind(int key, std::shared_ptr<const GameEvent> event) :
+KeyToEventBind::KeyToEventBind(int key, std::shared_ptr<GameEvent> event) :
 	mKey(key), 
 	mEvent(event)
 {
 }
 
-std::shared_ptr<const GameEvent> KeyToEventBind::Convert(int key, int action) const
+std::shared_ptr<GameEvent> KeyToEventBind::Convert(int key, int action) const
 {
 	if (mKey == key)
 	{

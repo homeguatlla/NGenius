@@ -19,7 +19,10 @@ Text::Text(Transformation* transformation, IMaterial* material, FontType* font,
 	mWidth(width),
 	mHeight(height),
 	mIsCentered(isCentered),
-	mColor(color)
+	mColor(color),
+	mIsText3D(isText3D),
+	mMaterial(material),
+	mText(text)
 {
 	mTextID = ++IDCounter;
 	assert(material != nullptr);
@@ -27,9 +30,6 @@ Text::Text(Transformation* transformation, IMaterial* material, FontType* font,
 
 	mMesh = DBG_NEW Mesh();
 	mModel = DBG_NEW Model("text", mMesh);
-
-	isText3D ? SetRenderer(new TextRenderer(mModel, material)) : SetRenderer(new GUITextRenderer(mModel, material));
-	UpdateText(text);
 }
 
 Text::~Text()
@@ -101,4 +101,6 @@ void Text::Create(const std::string& text, unsigned int width, unsigned int heig
 
 void Text::DoInit(GameScene* scene, RenderSystem* renderSystem)
 {
+	mIsText3D ? SetRenderer(new TextRenderer(mModel, mMaterial)) : SetRenderer(new GUITextRenderer(mModel, mMaterial));
+	UpdateText(mText);
 }

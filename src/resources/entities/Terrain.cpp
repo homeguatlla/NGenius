@@ -72,9 +72,9 @@ void Terrain::ReadFrom(core::utils::IDeserializer* source)
 	source->ReadParameter("model", mModelName);
 }
 
-IGameEntity* Terrain::DoCreate()
+std::shared_ptr<IGameEntity> Terrain::DoCreate()
 {
-	return DBG_NEW Terrain();
+	return std::make_shared<Terrain>();
 }
 
 bool Terrain::IsPointInside(glm::vec2 point) const

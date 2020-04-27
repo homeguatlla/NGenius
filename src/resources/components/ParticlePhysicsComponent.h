@@ -20,7 +20,7 @@ public:
 	virtual ~ParticlePhysicsComponent() = default;
 
 	static std::string GetClassName() { return std::string("ParticlePhysicsComponent"); }
-	static IComponent* Create(IGameEntity* entity);
+	static IComponent* Create(std::shared_ptr<IGameEntity> entity);
 
 private:
 	ParticlePhysicsComponent() = default;

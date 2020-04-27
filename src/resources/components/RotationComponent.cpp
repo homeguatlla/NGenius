@@ -30,7 +30,7 @@ void RotationComponent::UpdateInternal(float elapsedTime)
 	transformation->SetRotation(rotation);
 }
 
-IComponent* RotationComponent::Create(IGameEntity* entity)
+IComponent* RotationComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	RotationComponent* component = DBG_NEW RotationComponent();
 	entity->AddComponent(component);

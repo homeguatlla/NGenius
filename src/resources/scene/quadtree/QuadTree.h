@@ -15,9 +15,9 @@ class QuadTree
 	{
 		const glm::vec2 regionMin;
 		const glm::vec2 regionMax;
-		T* data;
+		std::shared_ptr<T> data;
 
-		Element(const glm::vec2& min, const glm::vec2& max, T* _data) : regionMin(min), regionMax(max), data(_data) {}
+		Element(const glm::vec2& min, const glm::vec2& max, std::shared_ptr<T> _data) : regionMin(min), regionMax(max), data(_data) {}
 		~Element() {}
 	} Element;
 
@@ -58,7 +58,7 @@ public:
 		return GetNumElements(this);
 	}
 
-	void Add(const glm::vec2& regionMin, const glm::vec2& regionMax, T* data)
+	void Add(const glm::vec2& regionMin, const glm::vec2& regionMax, std::shared_ptr<T> data)
 	{
 		if (data != nullptr)
 		{
@@ -100,7 +100,7 @@ public:
 		}
 	}
 
-	void Remove(const glm::vec2& regionMin, const glm::vec2& regionMax, T* data)
+	void Remove(const glm::vec2& regionMin, const glm::vec2& regionMax, std::shared_ptr<T> data)
 	{
 		if (data != nullptr)
 		{
@@ -108,7 +108,7 @@ public:
 		}
 	}
 
-	void Query(const glm::vec2& regionMin, const glm::vec2& regionMax, std::vector<T*>& result)
+	void Query(const glm::vec2& regionMin, const glm::vec2& regionMax, std::vector<std::shared_ptr<T>>& result)
 	{
 		if (Contains(mRegionMin, mRegionMax, regionMin, regionMax))
 		{
@@ -129,7 +129,7 @@ public:
 		}
 	}
 	
-	void Query(const glm::vec2& regionMin, const glm::vec2& regionMax, const Frustum& frustum, std::vector<T*>& result)
+	void Query(const glm::vec2& regionMin, const glm::vec2& regionMax, const Frustum& frustum, std::vector<std::shared_ptr<T>>& result)
 	{
 		if (Contains(mRegionMin, mRegionMax, regionMin, regionMax))
 		{

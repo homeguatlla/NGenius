@@ -4,7 +4,7 @@
 #include "src/resources/IGameEntity.h"
 #include "GameConstants.h"
 
-RiseTerrainCommand::RiseTerrainCommand(IGameEntity* entity) : 
+RiseTerrainCommand::RiseTerrainCommand(std::shared_ptr<IGameEntity> entity) :
 	ICommand(entity),
 	mScale(0.0f)
 {
@@ -17,7 +17,7 @@ RiseTerrainCommand::~RiseTerrainCommand()
 
 void RiseTerrainCommand::Execute()
 {
-	mTerrain = static_cast<Terrain*>(mEntity);
+	mTerrain = std::static_pointer_cast<Terrain>(mEntity);
 	mTerrain->SetScale(mScale);
 }
 

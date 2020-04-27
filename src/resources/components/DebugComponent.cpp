@@ -65,7 +65,7 @@ void DebugComponent::ResetRenderer()
 	mBoundingBoxRenderer = nullptr;
 }
 
-IComponent* DebugComponent::Create(IGameEntity* entity)
+IComponent* DebugComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	DebugComponent* component = DBG_NEW DebugComponent();
 	entity->AddComponent(component);

@@ -68,7 +68,7 @@
 #include "src/resources/materials/effects/MaterialEffectMatrix4Array.h"
 
 #include "src/resources/entities/Terrain.h"
-#include "src/resources/entities/Player.h"
+#include "src/resources/entities/player/Player.h"
 #include "src/resources/entities/Text.h"
 #include "src/resources/entities/Water.h"
 #include "src/resources/entities/Particle.h"
@@ -1330,7 +1330,7 @@ void UpdateInput(GLFWwindow* window)
 	{
 		if (mCurrentCommand == nullptr)
 		{
-			IGameEntity* entity = mEngine->GetGameEntity(std::string("box"));
+			std::shared_ptr<IGameEntity> entity = mEngine->GetGameEntity(std::string("box"));
 			mCurrentCommand = DBG_NEW ApplyForceToEntityCommand(entity);
 			mCurrentCommand->Execute();
 			delete mCurrentCommand;

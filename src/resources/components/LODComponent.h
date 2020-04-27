@@ -33,7 +33,7 @@ public:
 	void AddLevelOfDetail(IRenderer* renderer, float distance);
 
 	static std::string GetClassName() { return std::string("LODComponent"); }
-	static IComponent* Create(IGameEntity* entity);
+	static IComponent* Create(std::shared_ptr<IGameEntity> entity);
 
 private:
 	LODComponent() = default;

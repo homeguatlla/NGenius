@@ -4,14 +4,10 @@
 
 class BackwardEvent : public CharacterControllerEvent
 {
-	bool mIsPressed;
-
 public:
-	BackwardEvent();
-	~BackwardEvent();
+	BackwardEvent() = default;
+	~BackwardEvent() = default;
 
-	void SetPressed(bool pressed);
-	bool IsPressed() const;
 	static std::string GetClassName() { return std::string("BackwardEvent"); }
 	static std::shared_ptr<GameEvent> Create();
 

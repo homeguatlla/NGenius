@@ -13,7 +13,7 @@ public:
 	~CameraComponent();
 
 	static std::string GetClassName() { return std::string("CameraComponent"); }
-	static IComponent* Create(IGameEntity* entity);
+	static IComponent* Create(std::shared_ptr<IGameEntity> entity);
 
 private:
 	CameraComponent() = default;

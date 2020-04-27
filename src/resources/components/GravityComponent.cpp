@@ -15,7 +15,7 @@ GravityComponent* GravityComponent::DoClone() const
 	return DBG_NEW GravityComponent(*this);
 }
 
-IComponent* GravityComponent::Create(IGameEntity* entity)
+IComponent* GravityComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	GravityComponent* component = DBG_NEW GravityComponent();
 	entity->AddComponent(component);

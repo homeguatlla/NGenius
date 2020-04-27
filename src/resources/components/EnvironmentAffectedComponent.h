@@ -20,7 +20,7 @@ public:
 	bool IsAffectedByWind() const;
 
 	static std::string GetClassName() { return std::string("EnvironmentAffectedComponent"); }
-	static IComponent* Create(IGameEntity* entity);
+	static IComponent* Create(std::shared_ptr<IGameEntity> entity);
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source) override;

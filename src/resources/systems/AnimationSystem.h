@@ -13,7 +13,7 @@ class Animation;
 
 class AnimationSystem : public BaseVisitable<>, public IGameSceneListener
 {
-	std::vector<std::pair<IGameEntity*, Animator*>> mEntities;
+	std::vector<std::pair<std::shared_ptr<IGameEntity>, Animator*>> mEntities;
 	//std::map<std::string, std::vector<Animation*>> mAnimations;
 
 public:
@@ -27,13 +27,13 @@ public:
 
 private:
 	void Release();
-	void AddEntity(IGameEntity* entity);
-	void RemoveEntity(IGameEntity* entity);
-	bool HasAnimationComponents(const IGameEntity* entity) const;
+	void AddEntity(std::shared_ptr<IGameEntity> entity);
+	void RemoveEntity(std::shared_ptr<IGameEntity> entity);
+	bool HasAnimationComponents(const std::shared_ptr<IGameEntity> entity) const;
 
-	void SetAnimationData(IGameEntity* entity, const std::vector<glm::mat4x4>& data);
+	void SetAnimationData(std::shared_ptr<IGameEntity> entity, const std::vector<glm::mat4x4>& data);
 
-	void OnGameEntityAdded(IGameEntity* entity) override;
-	void OnGameEntityRemoved(IGameEntity* entity) override;
+	void OnGameEntityAdded(std::shared_ptr<IGameEntity> entity) override;
+	void OnGameEntityRemoved(std::shared_ptr<IGameEntity> entity) override;
 };
 

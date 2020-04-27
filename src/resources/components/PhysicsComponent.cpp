@@ -15,20 +15,22 @@
 
 PhysicsComponent::PhysicsComponent() :
 	mType(NPhysics::PhysicsType::kStatic),
-	mDensity(1.0f),
 	mInitialVelocity(0.0f),
 	mTranslation(0.0f),
 	mScale(1.0f),
+	mDensity(1.0f),
+	mRestitution(1.0f),
 	mBoundingVolume{ nullptr }
 {
 }
 
 PhysicsComponent::PhysicsComponent(NPhysics::PhysicsType type, float density, const glm::vec3& initialVelocity) :
 	mType(type), 
-	mDensity(density), 
 	mInitialVelocity(initialVelocity),
 	mTranslation(0.0f),
 	mScale(1.0f),
+	mDensity(density),
+	mRestitution(1.0f),
 	mBoundingVolume { nullptr }
 {
 }
@@ -86,6 +88,7 @@ void PhysicsComponent::DoReadFrom(core::utils::IDeserializer* source)
 	mType = static_cast<NPhysics::PhysicsType>(type);
 
 	source->ReadParameter(std::string("density"), &mDensity);
+	source->ReadParameter(std::string("restitution"), &mRestitution);
 	
 	if (source->HasAttribute("initialVelocity"))
 	{
@@ -140,5 +143,6 @@ void PhysicsComponent::DoWriteTo(core::utils::ISerializer* destination)
 	destination->WriteParameter(std::string("type"), std::string("physics_component"));
 	destination->WriteParameter(std::string("physics_type"), static_cast<int>(mType), "");
 	destination->WriteParameter(std::string("density"), mDensity);
+	destination->WriteParameter(std::string("restitution"), mRestitution);
 	destination->WriteParameter(std::string("initialVelocity"), mInitialVelocity);
 }

@@ -41,7 +41,7 @@ BuoyancyComponent* BuoyancyComponent::DoClone() const
 	return DBG_NEW BuoyancyComponent(*this);
 }
 
-IComponent* BuoyancyComponent::Create(IGameEntity* entity)
+IComponent* BuoyancyComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	BuoyancyComponent* component = DBG_NEW BuoyancyComponent();
 	entity->AddComponent(component);

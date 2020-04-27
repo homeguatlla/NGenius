@@ -18,7 +18,7 @@ public:
 	float GetK2() const { return mK2; }
 
 	static std::string GetClassName() { return std::string("DragComponent"); }
-	static IComponent* Create(IGameEntity* entity);
+	static IComponent* Create(std::shared_ptr<IGameEntity> entity);
 
 private:
 	DragComponent() = default;

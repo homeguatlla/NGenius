@@ -1,12 +1,13 @@
 #pragma once
 
-#include "../utils/serializer/ISerializable.h"
+#include "src/utils/serializer/ISerializable.h"
 #include "components/IComponent.h"
 
 #include <map>
 #include <typeinfo>
 #include <assert.h>
 #include <string>
+#include <memory>
 
 class Transformation;
 class IRenderer;
@@ -14,7 +15,7 @@ class RenderSystem;
 class GameScene;
 class NGenius;
 
-class IGameEntity : public core::utils::ISerializable
+class IGameEntity : public core::utils::ISerializable, public std::enable_shared_from_this<IGameEntity>
 {
 public:
 	virtual ~IGameEntity() = default;
@@ -37,7 +38,7 @@ public:
 	virtual void Update(float elapsedTime) = 0;
 	virtual void Build(NGenius* engine) = 0;
 
-	virtual IGameEntity* DoClone() const = 0;
+	virtual std::shared_ptr<IGameEntity> DoClone() const = 0;
 
 	// Heredado vía ISerializable
 	virtual void ReadFrom(core::utils::IDeserializer* source) override = 0;
@@ -63,7 +64,7 @@ void IGameEntity::AddComponent(T* component)
 	assert(component != nullptr);
 	if (mComponents.count(&typeid(T)) == 0)
 	{
-		component->SetParent(this);
+		component->SetParent(shared_from_this());
 		mComponents[&typeid(T)] = component;
 	}
 	else
@@ -79,7 +80,7 @@ void IGameEntity::AddComponent(const std::type_info* type, T* component)
 	assert(component != nullptr);
 	if (mComponents.count(type) == 0)
 	{
-		component->SetParent(this);
+		component->SetParent(shared_from_this());
 		mComponents[type] = component;
 	}
 	else

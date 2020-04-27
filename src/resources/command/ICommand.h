@@ -1,15 +1,16 @@
 #pragma once
+#include <memory>
 
 class IGameEntity;
 
 class ICommand
 {
 protected:
-	IGameEntity* mEntity;
+	std::shared_ptr<IGameEntity> mEntity;
 
 public:
-	ICommand(IGameEntity* entity);
-	virtual ~ICommand();
+	ICommand(std::shared_ptr<IGameEntity> entity);
+	virtual ~ICommand() = default;
 
 	virtual void Execute() = 0;
 	virtual bool HasFinished() const { return true; }

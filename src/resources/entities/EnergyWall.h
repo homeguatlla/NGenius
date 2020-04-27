@@ -19,7 +19,7 @@ public:
 	explicit EnergyWall(Transformation* transformation, IMaterial* material, Model* model, float maxLiveTime);
 	~EnergyWall();
 
-	EnergyWall* DoClone() const override;
+	std::shared_ptr<IGameEntity> DoClone() const override;
 
 	void Update(float elapsedTime) override;
 

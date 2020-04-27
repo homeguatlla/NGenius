@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 #include "src/visitor/BaseVisitable.h"
 #include "src/AABB.h"
@@ -16,10 +17,10 @@ class Terrain;
 
 class GameScene : public core::utils::ISerializable, BaseVisitable<>
 {
-	std::vector<IGameEntity*> mEntities;
-	std::vector<IGameEntity*> mNewEntitiesToAdd;
-	std::vector<IGameEntity*> mEntitiesToRemove;
-	typedef std::vector<IGameEntity*>::iterator GameEntitiesIterator;
+	std::vector<std::shared_ptr<IGameEntity>> mEntities;
+	std::vector<std::shared_ptr<IGameEntity>> mNewEntitiesToAdd;
+	std::vector<std::shared_ptr<IGameEntity>> mEntitiesToRemove;
+	typedef std::vector<std::shared_ptr<IGameEntity>>::iterator GameEntitiesIterator;
 	std::vector<IGameSceneListener*> mListeners;
 	typedef std::vector<IGameSceneListener*>::iterator ListenersIterator;
 	std::string mName;
@@ -28,7 +29,7 @@ class GameScene : public core::utils::ISerializable, BaseVisitable<>
 	RenderSystem* mRenderSystem;
 	
 	//To set Entities on ground
-	Terrain* mGround;
+	std::shared_ptr<Terrain> mGround;
 
 public:
 	GameScene(const std::string& name, NGenius* engine, RenderSystem* renderSystem);
@@ -37,16 +38,16 @@ public:
 	void Start();
 
 	void Update(float elapsedTime);
-	void AddEntity(IGameEntity* entity);
-	void RemoveEntity(IGameEntity* entity);
-	IGameEntity* GetGameEntity(const std::string& name);
-	IGameEntity* GetGameEntity(int id);
+	void AddEntity(std::shared_ptr<IGameEntity> entity);
+	void RemoveEntity(std::shared_ptr<IGameEntity> entity);
+	std::shared_ptr<IGameEntity> GetGameEntity(const std::string& name);
+	std::shared_ptr<IGameEntity> GetGameEntity(int id);
 
 	void Render(RenderSystem* renderSystem);
 	
 	unsigned int GetNumberGameEntities() const;
 	
-	std::vector<IGameEntity*>& GetAllGameEntities();
+	std::vector<std::shared_ptr<IGameEntity>>& GetAllGameEntities();
 
 	const AABB& GetAABB() const;
 
@@ -63,18 +64,17 @@ public:
 
 private:
 	void Release();
-	void ReleaseEntities(std::vector<IGameEntity*>* entities);
 	void RemoveEntities();
 	void AddNewEntities();
-	void NotifyEntityAdded(IGameEntity* entity);
-	void NotifyEntityRemoved(IGameEntity* entity);
+	void NotifyEntityAdded(std::shared_ptr<IGameEntity> entity);
+	void NotifyEntityRemoved(std::shared_ptr<IGameEntity> entity);
 
 	void SetEntitiesOnGround();
-	void SetEntityOnGround(IGameEntity* entity);
-	bool CheckIsGround(IGameEntity* entity);
+	void SetEntityOnGround(std::shared_ptr<IGameEntity> entity);
+	bool CheckIsGround(std::shared_ptr<IGameEntity> entity);
 
-	IGameEntity* ReadEntityFrom(core::utils::IDeserializer* source);
-	void ReadComponentsFrom(IGameEntity* entity, core::utils::IDeserializer* source);
-	void ReadComponentFrom(IGameEntity* entity, core::utils::IDeserializer* source);
+	std::shared_ptr<IGameEntity> ReadEntityFrom(core::utils::IDeserializer* source);
+	void ReadComponentsFrom(std::shared_ptr<IGameEntity> entity, core::utils::IDeserializer* source);
+	void ReadComponentFrom(std::shared_ptr<IGameEntity> entity, core::utils::IDeserializer* source);
 };
 

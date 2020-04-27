@@ -7,7 +7,7 @@
 #include <typeinfo>
 #include <assert.h>
 
-IComponent::IComponent() : mIsEnabled(true)
+IComponent::IComponent() : mIsEnabled(true), mParent(nullptr)
 {
 }
 
@@ -16,7 +16,7 @@ IComponent::~IComponent()
 {
 }
 
-void IComponent::SetParent(IGameEntity* parent)
+void IComponent::SetParent(std::shared_ptr<IGameEntity> parent)
 {
 	mParent = parent;
 }

@@ -70,6 +70,8 @@ void RigidbodyPhysicsComponent::DoCreatePhysicsData()
 
 	auto rigidBody = std::make_shared<NPhysics::RigidBody>(position + mTranslation, initialAngularVelocity, mInitialVelocity, mType);
 	rigidBody->SetRotation(initialRotation);
+	rigidBody->SetResitution(mRestitution);
+
 	mObject = rigidBody;
 
 	float volume = mBoundingVolume->GetVolume();
@@ -89,7 +91,7 @@ void RigidbodyPhysicsComponent::DoCreatePhysicsData()
 	}
 }
 
-IComponent* RigidbodyPhysicsComponent::Create(IGameEntity* entity)
+IComponent* RigidbodyPhysicsComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	PhysicsComponent* component = DBG_NEW RigidbodyPhysicsComponent();
 	entity->AddComponent(component);

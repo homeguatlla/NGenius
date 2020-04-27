@@ -10,11 +10,11 @@ class GameScene;
 
 class ParticlesEmitter : public BaseGameEntity<ParticlesEmitter>
 {
-	std::list<Particle*> mParticlesPool;
-	std::vector<Particle*> mParticles;
-	std::vector<Particle*> mNewParticlesToBeAdded;
-	typedef std::vector<Particle*>::iterator ParticlesIterator;
-	Particle* mOriginalParticle;
+	std::list<std::shared_ptr<Particle>> mParticlesPool;
+	std::vector<std::shared_ptr<Particle>> mParticles;
+	std::vector<std::shared_ptr<Particle>> mNewParticlesToBeAdded;
+	typedef std::vector<std::shared_ptr<Particle>>::iterator ParticlesIterator;
+	std::shared_ptr<Particle> mOriginalParticle;
 	const unsigned long MAX_PARTICLES = 512;
 	float mSpawnRate;
 	float mParticlesToSpawn;
@@ -38,15 +38,16 @@ class ParticlesEmitter : public BaseGameEntity<ParticlesEmitter>
 	std::string mParticleName;
 
 public:
+	ParticlesEmitter() = default;
 	ParticlesEmitter(Particle* particle, Transformation* transformation, IRenderer* renderer, float spawnRate);
 	~ParticlesEmitter();
 
-	ParticlesEmitter* DoClone() const override { return nullptr; }
+	std::shared_ptr<IGameEntity> DoClone() const override { return nullptr; }
 
 	// Heredado vía ISerializable
 	void ReadFrom(core::utils::IDeserializer* source) override;
 	static std::string GetClassName() { return std::string("emitter"); }
-	static IGameEntity* DoCreate();
+	static std::shared_ptr<IGameEntity> DoCreate();
 
 	void SetGameScene(GameScene* gameScene);
 
@@ -60,10 +61,10 @@ public:
 	void SetMaxParticlesUpdate(int maxParticlesUpdate);
 
 private:
-	ParticlesEmitter() = default;
+	
 
 	bool CanCreateParticle() const;
-	Particle* CreateParticle();
+	std::shared_ptr<Particle> CreateParticle();
 	void RemoveParticle(unsigned long index);
 	void SpawnNewParticles(float elapsedTime);
 	void RemoveDeadParticles();

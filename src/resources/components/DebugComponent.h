@@ -21,7 +21,7 @@ public:
 	void ResetRenderer();
 
 	static std::string GetClassName() { return std::string("DebugComponent"); }
-	static IComponent* Create(IGameEntity* entity);
+	static IComponent* Create(std::shared_ptr<IGameEntity> entity);
 
 private:
 	DebugComponent() = default;

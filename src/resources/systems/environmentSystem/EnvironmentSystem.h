@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
-#include "../../../visitor/BaseVisitable.h"
-#include "../../scene/IGameSceneListener.h"
+#include "src/visitor/BaseVisitable.h"
+#include "src/resources/scene/IGameSceneListener.h"
 #include <vector>
 #include <memory>
 #include <string>
@@ -12,9 +12,9 @@ class SunLight;
 
 class EnvironmentSystem : public BaseVisitable<>, public IGameSceneListener
 {
-	std::vector<IGameEntity*> mEntities;
-	std::vector<IGameEntity*> mModificators;
-	const Terrain* mTerrain;
+	std::vector<std::shared_ptr<IGameEntity>> mEntities;
+	std::vector<std::shared_ptr<IGameEntity>> mModificators;
+	std::shared_ptr<Terrain> mTerrain;
 	float mTimer;
 	std::vector<glm::vec3> mModificatorsPositions;
 	SunLight* mSunLight;
@@ -31,7 +31,7 @@ public:
 
 	unsigned int GetNumberGameEntities() const;
 
-	void SetTerrain(const Terrain* terrain);
+	void SetTerrain(const std::shared_ptr<Terrain> terrain);
 	
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
@@ -59,17 +59,17 @@ public:
 
 private:
 	void Release();
-	void AddEntity(IGameEntity* entity);
-	void RemoveEntity(IGameEntity* entity);
-	void RemoveEntityVector(IGameEntity* entity, std::vector<IGameEntity*>& vector);
-	bool HasEnvironmentComponents(const IGameEntity* entity) const;
+	void AddEntity(std::shared_ptr<IGameEntity> entity);
+	void RemoveEntity(std::shared_ptr<IGameEntity> entity);
+	void RemoveEntityVector(std::shared_ptr<IGameEntity> entity, std::vector<std::shared_ptr<IGameEntity>>& vector);
+	bool HasEnvironmentComponents(const std::shared_ptr<IGameEntity> entity) const;
 
 	void UpdateModificatorsVector();
 
 	void UpdateTime();
-	void ApplyWind(IGameEntity* entity);
+	void ApplyWind(std::shared_ptr<IGameEntity> entity);
 
-	void OnGameEntityAdded(IGameEntity* entity) override;
-	void OnGameEntityRemoved(IGameEntity* entity) override;
+	void OnGameEntityAdded(std::shared_ptr<IGameEntity> entity) override;
+	void OnGameEntityRemoved(std::shared_ptr<IGameEntity> entity) override;
 };
 

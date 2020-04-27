@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "GameEntityQuadTree.h"
-#include "../../IGameEntity.h"
-#include "../../renderers/IRenderer.h"
-#include "../../Transformation.h"
-#include "../Memory.h"
+#include "src/resources/IGameEntity.h"
+#include "src/resources/renderers/IRenderer.h"
+#include "src/resources/Transformation.h"
 
 const int GameEntityQuadTree::MAX_QUADTREE_LEVELS = 6;
 
@@ -11,13 +10,7 @@ GameEntityQuadTree::GameEntityQuadTree(const AABB& boundingBox)
 {
 	glm::vec2 regionMin(boundingBox.GetVertexMin().x, boundingBox.GetVertexMin().z);
 	glm::vec2 regionMax(boundingBox.GetVertexMax().x, boundingBox.GetVertexMax().z);
-	mQuadTree = DBG_NEW QuadTree<IGameEntity>(regionMin, regionMax, MAX_QUADTREE_LEVELS, nullptr);
-}
-
-
-GameEntityQuadTree::~GameEntityQuadTree()
-{
-	delete mQuadTree;
+	mQuadTree = std::make_shared<QuadTree<IGameEntity>>(regionMin, regionMax, MAX_QUADTREE_LEVELS, nullptr);
 }
 
 unsigned int GameEntityQuadTree::GetNumEntities() const
@@ -25,7 +18,7 @@ unsigned int GameEntityQuadTree::GetNumEntities() const
 	return mQuadTree->GetNumElements();
 }
 
-void GameEntityQuadTree::AddGameEntity(IGameEntity* entity)
+void GameEntityQuadTree::AddGameEntity(std::shared_ptr<IGameEntity> entity)
 {
 	IRenderer* renderer = entity->GetRenderer();
 	const AABB boundingBox = renderer->GetAABB();
@@ -36,7 +29,7 @@ void GameEntityQuadTree::AddGameEntity(IGameEntity* entity)
 					glm::vec2(max.x, max.z), entity);
 }
 
-void GameEntityQuadTree::RemoveGameEntity(IGameEntity* entity)
+void GameEntityQuadTree::RemoveGameEntity(std::shared_ptr<IGameEntity> entity)
 {
 	IRenderer* renderer = entity->GetRenderer();
 	const AABB boundingBox = renderer->GetAABB();
@@ -47,13 +40,13 @@ void GameEntityQuadTree::RemoveGameEntity(IGameEntity* entity)
 						glm::vec2(max.x, max.z), entity);
 }
 
-void GameEntityQuadTree::Query(const AABB& aabb, std::vector<IGameEntity*>& result)
+void GameEntityQuadTree::Query(const AABB& aabb, std::vector<std::shared_ptr<IGameEntity>>& result)
 {
 	mQuadTree->Query(	glm::vec2(aabb.GetVertexMin().x, aabb.GetVertexMin().z),
 						glm::vec2(aabb.GetVertexMax().x, aabb.GetVertexMax().z), result);
 }
 
-void GameEntityQuadTree::Query(const AABB& aabb, const Frustum& frustum, std::vector<IGameEntity*>& result)
+void GameEntityQuadTree::Query(const AABB& aabb, const Frustum& frustum, std::vector<std::shared_ptr<IGameEntity>>& result)
 {
 	mQuadTree->Query(	glm::vec2(aabb.GetVertexMin().x, aabb.GetVertexMin().z),
 						glm::vec2(aabb.GetVertexMax().x, aabb.GetVertexMax().z), frustum, result);

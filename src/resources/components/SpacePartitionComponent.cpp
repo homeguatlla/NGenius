@@ -23,7 +23,7 @@ void SpacePartitionComponent::SetVisibility(bool visibility)
 	mIsVisible = visibility;
 }
 
-IComponent* SpacePartitionComponent::Create(IGameEntity* entity)
+IComponent* SpacePartitionComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	SpacePartitionComponent* component = new SpacePartitionComponent();
 	entity->AddComponent(component);

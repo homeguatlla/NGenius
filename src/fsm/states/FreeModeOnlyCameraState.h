@@ -1,7 +1,7 @@
 #pragma once
-#include "../../utils/fsm/BaseState.h"
-#include "../../input/IInputListener.h"
-#include "../FSMContext.h"
+#include "src/utils/fsm/BaseState.h"
+#include "src/input/IInputListener.h"
+#include "src/fsm/FSMContext.h"
 #include "StateTypes.h"
 
 #include <glm/glm.hpp>
@@ -50,6 +50,6 @@ private:
 	float mPanSpeed;
 
 protected:
-	IGameEntity* mPlayer;
+	std::shared_ptr<IGameEntity> mPlayer;
 };
 

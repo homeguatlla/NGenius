@@ -18,6 +18,8 @@ class Text : public BaseGameEntity<Text>
 	unsigned int mHeight;
 	bool mIsCentered;
 	glm::vec4 mColor;
+	bool mIsText3D;
+	IMaterial* mMaterial;
 	FontType* mFontType;
 	Model* mModel;
 	Mesh* mMesh;

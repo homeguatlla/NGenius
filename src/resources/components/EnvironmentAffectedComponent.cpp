@@ -41,7 +41,7 @@ bool EnvironmentAffectedComponent::IsAffectedByWind() const
 	return mIsAffectedByWind;
 }
 
-IComponent* EnvironmentAffectedComponent::Create(IGameEntity* entity)
+IComponent* EnvironmentAffectedComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	EnvironmentAffectedComponent* component = DBG_NEW EnvironmentAffectedComponent();
 	entity->AddComponent(component);

@@ -22,7 +22,7 @@ void FSMContext::ResetFreeMode()
 	mIsFreePlayerModeEnabled = false;
 }
 
-Text* FSMContext::GetInformationText()
+std::shared_ptr<Text> FSMContext::GetInformationText()
 {
 	if (mInformationText == nullptr)
 	{
@@ -46,7 +46,7 @@ void FSMContext::CreateStateUI()
 		0.0f,
 		glm::vec2(0.0f)));
 
-	mInformationText = DBG_NEW Text(
+	mInformationText = std::make_shared<Text>(
 		DBG_NEW Transformation(
 			glm::vec3(mEngine->GetScreenWidth() * 0.4f, -mEngine->GetScreenHeight() * 0.47f, 0.0f),
 			glm::vec3(0.0f),
@@ -55,6 +55,5 @@ void FSMContext::CreateStateUI()
 		materialText, font,
 		TEXT_FREE_MODE, false, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1, 1, false);
 	mInformationText->SetName("InformationText");
-	mInformationText->GetRenderer()->SetVisibility(false);
 	mEngine->AddEntity(mInformationText);
 }

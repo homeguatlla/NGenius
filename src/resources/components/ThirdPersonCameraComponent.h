@@ -2,6 +2,7 @@
 #include "InputComponent.h"
 #include <glm/glm.hpp>
 #include <string>
+#include <memory>
 
 class IGameEntity;
 class ICamera;
@@ -10,7 +11,7 @@ class PerspectiveCamera;
 class ThirdPersonCameraComponent : public IComponent
 {
 	ICamera* mCamera;
-	IGameEntity* mTarget;
+	std::shared_ptr<IGameEntity> mTarget;
 	glm::vec3 mTargetOffset;
 	float mDistanceFromTarget;
 	float mPitch;
@@ -24,17 +25,17 @@ class ThirdPersonCameraComponent : public IComponent
 	std::string mTargetName;
 
 public:
-	explicit ThirdPersonCameraComponent(PerspectiveCamera* camera, IGameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed);
+	explicit ThirdPersonCameraComponent(PerspectiveCamera* camera, std::shared_ptr<IGameEntity> target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed);
 	~ThirdPersonCameraComponent();
 
 	void Init(GameScene* scene, RenderSystem* renderSystem) override;
 	void UpdateInternal(float elapsedTime) override;
-	const IGameEntity* GetTarget() const;
+	const std::shared_ptr<IGameEntity> GetTarget() const;
 	glm::vec3 GetCameraPosition() const;
 	float GetCameraPitch() const;
 
 	static std::string GetClassName() { return std::string("ThirdPersonCameraComponent"); }
-	static IComponent* Create(IGameEntity* entity);
+	static IComponent* Create(std::shared_ptr<IGameEntity> entity);
 
 private:
 	ThirdPersonCameraComponent();

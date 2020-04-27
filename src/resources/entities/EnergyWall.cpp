@@ -30,9 +30,9 @@ EnergyWall::~EnergyWall()
 {
 }
 
-EnergyWall* EnergyWall::DoClone() const
+std::shared_ptr<IGameEntity> EnergyWall::DoClone() const
 {
-	EnergyWall* clone = DBG_NEW EnergyWall(new Transformation(*GetTransformation()), mMaterial, mModel, mLiveTime);
+	std::shared_ptr<EnergyWall> clone = std::make_shared<EnergyWall>(new Transformation(*GetTransformation()), mMaterial, mModel, mLiveTime);
 
 	return clone;
 

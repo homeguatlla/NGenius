@@ -21,15 +21,16 @@ class Particle : public BaseGameEntity<Particle>
 	glm::vec4 mColorDestination;
 
 public:
+	Particle() = default;
 	Particle(Transformation* transformation, Model* model, IMaterial* material, float liveTime);
 	~Particle() = default;
 
 	// Heredado vía ISerializable
 	void ReadFrom(core::utils::IDeserializer* source) override;
 	static std::string GetClassName() { return std::string("particle"); }
-	static IGameEntity* DoCreate();
+	static std::shared_ptr<IGameEntity> DoCreate();
 
-	Particle* DoClone() const override;
+	std::shared_ptr<IGameEntity> DoClone() const override;
 
 	void Build(NGenius* engine) override;
 
@@ -47,7 +48,7 @@ public:
 	virtual void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 
 private:
-	Particle() = default;
+	
 	void CreateRenderer(Model* model, IMaterial* material);
 };
 

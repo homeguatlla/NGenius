@@ -21,7 +21,7 @@ ParticlePhysicsComponent* ParticlePhysicsComponent::DoClone() const
 	return newPhysicsComponent;
 }
 
-IComponent* ParticlePhysicsComponent::Create(IGameEntity* entity)
+IComponent* ParticlePhysicsComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	PhysicsComponent* component = DBG_NEW ParticlePhysicsComponent();
 	entity->AddComponent(component);

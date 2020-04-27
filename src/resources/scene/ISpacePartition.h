@@ -1,8 +1,10 @@
 #pragma once
 
 #include <vector>
-#include "../../AABB.h"
-#include "../../Frustum.h"
+#include <memory>
+
+#include "src/AABB.h"
+#include "src/Frustum.h"
 
 class IGameEntity;
 
@@ -12,10 +14,10 @@ public:
 	ISpacePartition();
 	~ISpacePartition();
 
-	virtual void AddGameEntity(IGameEntity* entity) = 0;
-	virtual void RemoveGameEntity(IGameEntity* entity) = 0;
-	virtual void Query(const AABB& aabb, std::vector<IGameEntity*>& result) = 0;
-	virtual void Query(const AABB& aabb, const Frustum& frustum, std::vector<IGameEntity*>& result) = 0;
+	virtual void AddGameEntity(std::shared_ptr<IGameEntity> entity) = 0;
+	virtual void RemoveGameEntity(std::shared_ptr<IGameEntity> entity) = 0;
+	virtual void Query(const AABB& aabb, std::vector<std::shared_ptr<IGameEntity>>& result) = 0;
+	virtual void Query(const AABB& aabb, const Frustum& frustum, std::vector<std::shared_ptr<IGameEntity>>& result) = 0;
 	virtual unsigned int GetNumEntities() const = 0;
 };
 

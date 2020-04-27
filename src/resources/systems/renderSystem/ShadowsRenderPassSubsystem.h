@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
-#include "../../../utils/serializer/ISerializable.h"
+#include <memory>
+#include "src/utils/serializer/ISerializable.h"
 
 class ICamera;
 class Texture;
@@ -14,7 +15,7 @@ class ShadowsRenderPassSubSystem : public core::utils::ISerializable
 	ICamera* mShadowCastCamera;
 	Texture* mShadowMapTexture;
 	RenderPass* mRenderPass;
-	const IGameEntity* mTarget;
+	std::shared_ptr<IGameEntity> mTarget;
 	glm::mat4 mShadowMapMatrix;
 	glm::vec3 mDirectionalLightDirection;
 	int mPFCCounter;
@@ -30,7 +31,7 @@ public:
 	void Init();
 	void Update();
 
-	void SetCastingShadowsTarget(const IGameEntity* target);
+	void SetCastingShadowsTarget(const std::shared_ptr<IGameEntity> target);
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
 	void SetEnable(bool enable);
 

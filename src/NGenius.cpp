@@ -144,18 +144,19 @@ NGenius::~NGenius()
 
 void NGenius::Create()
 {
-	CreateStatesMachine();
-	//TODO esto hay que revisar
+	//TODO esto hay que revisar tiene que crearse para poder hacer el load.
 	if (mGameScene == nullptr)
 	{
 		mGameScene = DBG_NEW GameScene("mainscene", this, mRenderSystem);
 	}
+	CreateStatesMachine();
 }
 
 void NGenius::Init(bool isFullscreen)
 {
 	mRenderSystem->Init(mApplicationName, isFullscreen);
 	mInputHandler->Init(mRenderSystem->GetGLWindow());
+	mDebugSystem->Init();
 }
 
 void NGenius::Start(bool isReload)
@@ -164,10 +165,10 @@ void NGenius::Start(bool isReload)
 	mRenderSystem->SetEnvironmentSystem(mEnvironmentSystem);
 	mRenderSystem->Start();
 	mSpacePartitionSystem->Start();
-	mDebugSystem->Start();
+	
 
 	AddListenersToGameScene();
-	mGameScene->Start();	
+	mGameScene->Start();
 }
 
 void NGenius::ShutDown()
@@ -275,6 +276,7 @@ void NGenius::LoadFromFile(const std::string& filename)
 	core::utils::XMLDeserializer xmlDeserializer;
 	xmlDeserializer.Load(mFilename);
 	ReadFrom(&xmlDeserializer);
+	Loaded();
 }
 
 void NGenius::EnablePhysicsEngine(bool enable)
@@ -533,7 +535,7 @@ ICamera* NGenius::GetFreeCamera() const
 	return mRenderSystem->GetFreeCamera();
 }
 
-IGameEntity* NGenius::GetGameEntity(const std::string& name) const
+std::shared_ptr<IGameEntity> NGenius::GetGameEntity(const std::string& name) const
 {
 	if (mGameScene != nullptr)
 	{
@@ -608,7 +610,7 @@ GameScene* NGenius::CreateGameScene(const std::string& name)
 	return mGameScene;
 }
 
-void NGenius::AddParticleEmitter(ParticlesEmitter* emitter)
+void NGenius::AddParticleEmitter(std::shared_ptr<ParticlesEmitter> emitter)
 {
 	assert(mParticlesSystem != nullptr);
 
@@ -622,7 +624,7 @@ void NGenius::AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing)
 	mRenderSystem->AddOrReplaceRenderPass(renderPass, addAfterPostProcessing);
 }
 
-void NGenius::AddLight(Light* light)
+void NGenius::AddLight(std::shared_ptr<Light> light)
 {
 	mLightsSystem->AddLight(light);
 }
@@ -632,14 +634,14 @@ void NGenius::AddCamera(ICamera* camera)
 	mRenderSystem->AddCamera(camera);
 }
 
-void NGenius::AddEntity(IGameEntity* entity)
+void NGenius::AddEntity(std::shared_ptr<IGameEntity> entity)
 {
 	assert(entity != nullptr);
 	assert(mGameScene != nullptr);
 	mGameScene->AddEntity(entity);
 }
 
-void NGenius::SetTerrain(const Terrain* terrain)
+void NGenius::SetTerrain(const std::shared_ptr<Terrain> terrain)
 {
 	assert(mPhysicsSystem != nullptr);
 	mPhysicsSystem->SetTerrain(terrain);
@@ -698,7 +700,7 @@ float NGenius::GetWaterHeight() const
 	return mRenderSystem->GetWaterHeight();
 }
 
-void NGenius::SetCastingShadowsTarget(const IGameEntity* target)
+void NGenius::SetCastingShadowsTarget(const std::shared_ptr<IGameEntity> target)
 {
 	assert(mRenderSystem != nullptr);
 	mRenderSystem->SetCastingShadowsTarget(target);
@@ -714,6 +716,13 @@ BaseVisitable<>::ReturnType NGenius::Accept(BaseVisitor& guest)
 	return AcceptImpl(*this, guest);
 }
 
+void NGenius::Loaded()
+{
+	mDebugSystem->Start();
+	//to create it
+	mFSMContext->GetInformationText();
+}
+
 void NGenius::Reload()
 {
 	LoadFromFile(mFilename);
@@ -727,7 +736,7 @@ void NGenius::Reload()
 	mStatesMachine->ForceState(mStatesMachine->GetCurrentState()->GetID(), 0.0f);
 }
 
-void NGenius::Query(const AABB& aabb, std::vector<IGameEntity*>& result)
+void NGenius::Query(const AABB& aabb, std::vector<std::shared_ptr<IGameEntity>>& result)
 {
 	mSpacePartitionSystem->Query(aabb, result);
 }

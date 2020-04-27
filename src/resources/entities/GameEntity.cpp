@@ -14,21 +14,21 @@ GameEntity::GameEntity(Transformation* transformation) :
 
 }
 
-GameEntity* GameEntity::DoClone() const
+std::shared_ptr<IGameEntity> GameEntity::DoClone() const
 {
 	if (mRenderer != nullptr)
 	{
-		return DBG_NEW GameEntity(new Transformation(*GetTransformation()), mRenderer->Clone());
+		return std::make_shared<GameEntity>(new Transformation(*GetTransformation()), mRenderer->Clone());
 	}
 	else
 	{
-		return DBG_NEW GameEntity(new Transformation(*GetTransformation()));
+		return std::make_shared<GameEntity>(new Transformation(*GetTransformation()));
 	}
 }
 
-IGameEntity* GameEntity::DoCreate()
+std::shared_ptr<IGameEntity> GameEntity::DoCreate()
 {
-	return DBG_NEW GameEntity();
+	return std::make_shared<GameEntity>();
 }
 
 void GameEntity::DoInit(GameScene* scene, RenderSystem* renderSystem)

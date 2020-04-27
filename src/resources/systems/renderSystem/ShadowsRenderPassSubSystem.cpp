@@ -82,7 +82,7 @@ void ShadowsRenderPassSubSystem::WriteTo(core::utils::ISerializer *destination)
 {
 }
 
-void ShadowsRenderPassSubSystem::SetCastingShadowsTarget(const IGameEntity* target)
+void ShadowsRenderPassSubSystem::SetCastingShadowsTarget(const std::shared_ptr<IGameEntity> target)
 {
 	mTarget = target;
 }

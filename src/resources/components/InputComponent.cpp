@@ -25,11 +25,11 @@ InputComponent* InputComponent::DoClone() const
 	return DBG_NEW InputComponent(*this);
 }
 
-std::shared_ptr<const GameEvent> InputComponent::ConvertKey(int key, int action) const
+std::shared_ptr<GameEvent> InputComponent::ConvertKey(int key, int action) const
 {
 	for (const InputConverter* converter : mConverters)
 	{
-		std::shared_ptr<const GameEvent> event = converter->Convert(key, action);
+		std::shared_ptr<GameEvent> event = converter->Convert(key, action);
 		if (event != nullptr)
 		{
 			return event;
@@ -39,11 +39,11 @@ std::shared_ptr<const GameEvent> InputComponent::ConvertKey(int key, int action)
 	return nullptr;
 }
 
-std::shared_ptr<const GameEvent> InputComponent::ConvertMouse(void* data) const
+std::shared_ptr<GameEvent> InputComponent::ConvertMouse(void* data) const
 {
 	for (const InputConverter* converter : mConverters)
 	{
-		std::shared_ptr<const GameEvent> event = converter->Convert(data);
+		std::shared_ptr<GameEvent> event = converter->Convert(data);
 		if (event != nullptr)
 		{
 			return event;
@@ -53,7 +53,7 @@ std::shared_ptr<const GameEvent> InputComponent::ConvertMouse(void* data) const
 	return nullptr;
 }
 
-IComponent* InputComponent::Create(IGameEntity* entity)
+IComponent* InputComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	InputComponent* component = DBG_NEW InputComponent();
 	entity->AddComponent(component);

@@ -14,7 +14,7 @@ CameraComponent::~CameraComponent()
 {
 }
 
-IComponent* CameraComponent::Create(IGameEntity* entity)
+IComponent* CameraComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	CameraComponent* component = DBG_NEW CameraComponent();
 	entity->AddComponent(component);

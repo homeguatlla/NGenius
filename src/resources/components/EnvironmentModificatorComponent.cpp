@@ -13,7 +13,7 @@ EnvironmentModificatorComponent::~EnvironmentModificatorComponent()
 {
 }
 
-IComponent* EnvironmentModificatorComponent::Create(IGameEntity* entity)
+IComponent* EnvironmentModificatorComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	EnvironmentModificatorComponent* component = DBG_NEW EnvironmentModificatorComponent();
 	entity->AddComponent(component);

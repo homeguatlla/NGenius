@@ -1,5 +1,5 @@
 #pragma once
-#include "../BaseGameEntity.h"
+#include "src/resources/BaseGameEntity.h"
 #include <vector>
 #include <string>
 
@@ -24,11 +24,12 @@ class Terrain :	public BaseGameEntity<Terrain>
 	std::string mModelName;
 
 public:
+	Terrain() = default;
 	explicit Terrain(Transformation* transformation);
 	explicit Terrain(Transformation* transformation, IMaterial* material, Texture* heightmap, float scale);
 	~Terrain();
 
-	Terrain* DoClone() const override { return nullptr; }
+	std::shared_ptr<IGameEntity> DoClone() const override { return nullptr; }
 
 	bool IsPointInside(glm::vec2 point) const;
 	float GetHeight(glm::vec2 point) const;
@@ -43,10 +44,10 @@ public:
 	void ReadFrom(core::utils::IDeserializer* source) override;
 
 	static std::string GetClassName() { return std::string("terrain"); }
-	static IGameEntity* DoCreate();
+	static std::shared_ptr<IGameEntity> DoCreate();
 
 private:
-	Terrain() = default;
+	
 	float CalculateBarryCenter(glm::vec3& p1, glm::vec3& p2, glm::vec3& p3, glm::vec2& point) const;
 	void CalculateY();
 	void CreateTerrain(IMaterial* material, ITexture* heighmap);

@@ -36,14 +36,14 @@ void Particle::ReadFrom(core::utils::IDeserializer* source)
 	source->ReadParameter("max_live_time", &mMaxLiveTime);
 }
 
-IGameEntity* Particle::DoCreate()
+std::shared_ptr<IGameEntity> Particle::DoCreate()
 {
-	return DBG_NEW Particle();
+	return std::make_shared<Particle>();
 }
 
-Particle* Particle::DoClone() const
+std::shared_ptr<IGameEntity> Particle::DoClone() const
 {
-	Particle* clone = DBG_NEW Particle(new Transformation(*GetTransformation()), mModel, mMaterial, mMaxLiveTime);
+	std::shared_ptr<Particle> clone = std::make_shared<Particle>(new Transformation(*GetTransformation()), mModel, mMaterial, mMaxLiveTime);
 	
 	return clone;
 }

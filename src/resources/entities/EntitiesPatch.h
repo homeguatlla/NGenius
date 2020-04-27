@@ -10,9 +10,9 @@ class NGenius;
 class EntitiesPatch : public BaseGameEntity<EntitiesPatch>
 {
 	using ModelPack = std::tuple<std::vector<std::string>, float, int>; //list of models , max radius all models, percentage
-	typedef std::map<std::string, std::pair<IGameEntity*, float>>::iterator EntitiesListIterator;
+	typedef std::map<std::string, std::pair<std::shared_ptr<IGameEntity>, float>>::iterator EntitiesListIterator;
 
-	const Terrain* mTerrain;
+	std::shared_ptr<Terrain> mTerrain;
 	float mHeightMin;
 	float mHeightMax;
 	float mWide;
@@ -20,10 +20,11 @@ class EntitiesPatch : public BaseGameEntity<EntitiesPatch>
 	float mDensity;
 	bool mIsIntersectionAllowed;
 	std::vector<ModelPack> mModelsName;
-	std::map<std::string, std::pair<IGameEntity*, float>> mEntities; //entity, radius
+	std::map<std::string, std::pair<std::shared_ptr<IGameEntity>, float>> mEntities; //entity, radius
 
 public:
-	explicit EntitiesPatch(Transformation* transformation, const Terrain* terrain, float heightMin, float heightMax, float wide, float length, float density, bool isIntersectionAllowed);
+	EntitiesPatch() = default;
+	explicit EntitiesPatch(Transformation* transformation, const std::shared_ptr<Terrain> terrain, float heightMin, float heightMax, float wide, float length, float density, bool isIntersectionAllowed);
 	~EntitiesPatch() = default;
 
 	// Heredado vía ISerializable
@@ -31,10 +32,10 @@ public:
 
 	void Build(NGenius* engine) override;
 	static std::string GetClassName() { return std::string("terrain_entities_patch"); }
-	static IGameEntity* DoCreate();
+	static std::shared_ptr<IGameEntity> DoCreate();
 
 private:
-	EntitiesPatch() = default;
+	
 	void CreateEntities(GameScene* scene);
 	void ReadModels(core::utils::IDeserializer* source);
 	void FillEntitiesRadiusVector(GameScene* scene);

@@ -17,7 +17,7 @@ public:
 	float GetWaterHeight() const;
 
 	static std::string GetClassName() { return std::string("OverWaterComponent"); }
-	static IComponent* Create(IGameEntity* entity);
+	static IComponent* Create(std::shared_ptr<IGameEntity> entity);
 
 private:
 	OverWaterComponent() = default;

@@ -1,7 +1,7 @@
 #pragma once
 #include "Transformation.h"
 
-#include "../NGenius.h"
+#include "src/NGenius.h"
 #include "renderers/IRenderer.h"
 #include "renderers/VerticesRenderer.h"
 
@@ -10,13 +10,14 @@
 #include "systems/renderSystem/RenderSystem.h"
 #include "components/LODComponent.h"
 
-#include "../utils/serializer/ISerializable.h"
-#include "../utils/serializer/XMLSerializer.h"
-#include "../utils/serializer/IDeserializer.h"
-#include "../Memory.h"
+#include "src/utils/serializer/ISerializable.h"
+#include "src/utils/serializer/XMLSerializer.h"
+#include "src/utils/serializer/IDeserializer.h"
+#include "src/utils/Log.h"
+#include "Memory.h"
 #include "IGameEntity.h"
 #include "InstantiableObject.h"
-#include "../utils/Log.h"
+
 
 #include<map>
 #include<typeinfo>
@@ -28,9 +29,9 @@ template<class TD>
 class BaseGameEntity : public IGameEntity
 {
 public:
-	BaseGameEntity() = default;
-	explicit BaseGameEntity(Transformation* transformation, IRenderer* renderer);
-	explicit BaseGameEntity(Transformation* transformation);
+	BaseGameEntity();
+	BaseGameEntity(Transformation* transformation, IRenderer* renderer);
+	BaseGameEntity(Transformation* transformation);
 	~BaseGameEntity();
 
 	// Heredado vía IGameEntity
@@ -56,17 +57,17 @@ public:
 	virtual void Update(float elapsedTime) override;
 	virtual void Build(NGenius* engine) override;
 
-	virtual IGameEntity* DoClone() const override;
-	IGameEntity* Clone();
+	virtual std::shared_ptr<IGameEntity> DoClone() const override;
+	std::shared_ptr<IGameEntity> Clone();
 
 	static std::string GetClassName() { return std::string("GameEntity"); }
-	static IGameEntity* Create()
+	static std::shared_ptr<IGameEntity> Create()
 	{
 		//TD& derived = static_cast<TD&>(*this);
 		return TD::DoCreate();
 	}
 
-	static IGameEntity* DoCreate() { return DBG_NEW BaseGameEntity<TD>(); }
+	static std::shared_ptr<IGameEntity> DoCreate() { return std::make_shared<BaseGameEntity<TD>>(); }
 
 	void ReadFrom(core::utils::IDeserializer* source) override;
 	void WriteTo(core::utils::ISerializer* destination) override;
@@ -93,6 +94,18 @@ template<class TD>
 unsigned BaseGameEntity<TD>::IDCounter = 0;
 
 template<class TD>
+inline BaseGameEntity<TD>::BaseGameEntity() :
+	mTransformation(nullptr),
+	mRenderer(nullptr),
+	mIsEnabled(true),
+	mModelName(""),
+	mMaterialName(""),
+	mRendererName(""),
+	mShouldBeCreatedOnGround(false)
+{
+}
+
+template<class TD>
 BaseGameEntity<TD>::BaseGameEntity(Transformation* transformation, IRenderer* renderer) :
 	mTransformation(transformation),
 	mRenderer(renderer),
@@ -104,7 +117,7 @@ BaseGameEntity<TD>::BaseGameEntity(Transformation* transformation, IRenderer* re
 {
 	if (renderer != nullptr)
 	{
-		renderer->SetParent(this);
+		renderer->SetParent(shared_from_this());
 	}
 	mID = ++IDCounter;
 	mName = mID;
@@ -168,7 +181,7 @@ void BaseGameEntity<TD>::SetRenderer(IRenderer* renderer)
 	mRenderer = renderer;
 	if (renderer != nullptr)
 	{
-		renderer->SetParent(this);
+		renderer->SetParent(shared_from_this());
 	}
 }
 
@@ -216,9 +229,9 @@ void BaseGameEntity<TD>::Build(NGenius* engine)
 }
 
 template<class TD>
-IGameEntity* BaseGameEntity<TD>::DoClone() const
+std::shared_ptr<IGameEntity> BaseGameEntity<TD>::DoClone() const
 {
-	IGameEntity* clone = DBG_NEW  BaseGameEntity(new Transformation(*GetTransformation()));
+	std::shared_ptr<IGameEntity> clone = std::make_shared<BaseGameEntity>(new Transformation(*GetTransformation()));
 	if (GetRenderer() != nullptr)
 	{
 		clone->SetRenderer(GetRenderer()->Clone());
@@ -228,13 +241,13 @@ IGameEntity* BaseGameEntity<TD>::DoClone() const
 }
 
 template<class TD>
-IGameEntity* BaseGameEntity<TD>::Clone()
+std::shared_ptr<IGameEntity> BaseGameEntity<TD>::Clone()
 {
-	IGameEntity* clone = DoClone();
+	std::shared_ptr<IGameEntity> clone = DoClone();
 
 	clone->SetName(this->GetName());
 
-	assert(typeid(*clone) == typeid(*this));
+	assert(typeid(*clone) == typeid(*shared_from_this()));
 
 	for (IComponentsIterator it = mComponents.begin(); it != mComponents.end(); ++it)
 	{

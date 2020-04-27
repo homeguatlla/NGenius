@@ -42,7 +42,7 @@ ThirdPersonCameraComponent::ThirdPersonCameraComponent() :
 }
 
 
-ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, IGameEntity* target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed) :
+ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, std::shared_ptr<IGameEntity> target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed) :
 	mCamera(camera), 
 	mTarget(target), 
 	mTargetOffset(targetOffset),
@@ -153,7 +153,7 @@ void ThirdPersonCameraComponent::UpdateGameEvents(float elapsedTime)
 	}
 }
 
-const IGameEntity* ThirdPersonCameraComponent::GetTarget() const
+const std::shared_ptr<IGameEntity> ThirdPersonCameraComponent::GetTarget() const
 {
 	return mTarget;
 }
@@ -174,7 +174,7 @@ float ThirdPersonCameraComponent::GetCameraPitch() const
 	return mCurrentPitch;
 }
 
-IComponent* ThirdPersonCameraComponent::Create(IGameEntity* entity)
+IComponent* ThirdPersonCameraComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	ThirdPersonCameraComponent* component = DBG_NEW ThirdPersonCameraComponent();
 	entity->AddComponent(component);

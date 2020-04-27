@@ -19,7 +19,7 @@ public:
 	float GetGroundHeight() const;
 
 	static std::string GetClassName() { return std::string("CollisionComponent"); }
-	static IComponent* Create(IGameEntity* entity);
+	static IComponent* Create(std::shared_ptr<IGameEntity> entity);
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source) override;

@@ -116,7 +116,7 @@ void ColliderDebugComponent::ResetRenderer()
 	mBoundingVolumeRenderer = nullptr;
 }
 
-IComponent* ColliderDebugComponent::Create(IGameEntity* entity)
+IComponent* ColliderDebugComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	ColliderDebugComponent* component = DBG_NEW ColliderDebugComponent();
 	entity->AddComponent(component);

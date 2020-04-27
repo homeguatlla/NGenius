@@ -33,7 +33,9 @@ DebugSystem::DebugSystem(NGenius* engine, RenderSystem* renderSystem, InputHandl
 	mInputHandler(inputHandler),
 	mEngine(engine),
 	mRenderSystem(renderSystem),
-	mIsInitialized(false)
+	mIsInitialized(false),
+	materialText(nullptr),
+	mAreTextVisible(false)
 {
 }
 
@@ -43,11 +45,14 @@ DebugSystem::~DebugSystem()
 	mInputHandler->UnRegisterInputListener(this);
 }
 
-void DebugSystem::Start()
+void DebugSystem::Init()
 {
 	mInputHandler->RegisterAllEventsInputListener(this);
+}
+
+void DebugSystem::Start()
+{
 	CreateStatisticsTexts();
-	SetTextsVisibility(false);
 	mIsInitialized = true;
 }
 
@@ -55,11 +60,13 @@ void DebugSystem::Update(float elapsedTime)
 {
 	assert(mIsInitialized);
 
+	UpdateVisibility();
+
 	if (mIsDebugModeEnabled)
 	{
 		if (mIsBoundingBoxVisible || mIsColliderVisible)
 		{
-			for (IGameEntity* entity : mEntities)
+			for (auto&& entity : mEntities)
 			{
 				if (mIsBoundingBoxVisible)
 				{
@@ -83,6 +90,18 @@ void DebugSystem::Update(float elapsedTime)
 		}
 		
 		UpdateStatitstics();
+	}
+}
+
+void DebugSystem::UpdateVisibility()
+{
+	if (mAreTextVisible && !mIsDebugModeEnabled)
+	{
+		SetTextsVisibility(false);
+	}
+	else if (!mAreTextVisible && mIsDebugModeEnabled)
+	{
+		SetTextsVisibility(true);
 	}
 }
 
@@ -127,22 +146,22 @@ void DebugSystem::SetTextsVisibility(bool visible)
 	}
 }
 
-bool DebugSystem::HasDebugComponents(const IGameEntity* entity) const
+bool DebugSystem::HasDebugComponents(const std::shared_ptr<IGameEntity> entity) const
 {
 	return entity != nullptr && 
 		( entity->HasComponent<DebugComponent>() || entity->HasComponent<ColliderDebugComponent>());
 }
 
-void DebugSystem::AddEntity(IGameEntity* entity)
+void DebugSystem::AddEntity(std::shared_ptr<IGameEntity> entity)
 {
 	mEntities.push_back(entity);
 }
 
-void DebugSystem::RemoveEntity(IGameEntity* entity)
+void DebugSystem::RemoveEntity(std::shared_ptr<IGameEntity> entity)
 {
 	if (HasDebugComponents(entity))
 	{
-		std::vector<IGameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](IGameEntity* a) { return a == entity; });
+		std::vector<std::shared_ptr<IGameEntity>>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](std::shared_ptr<IGameEntity> a) { return a == entity; });
 		if (it != mEntities.end())
 		{
 			mEntities.erase(it);
@@ -159,7 +178,7 @@ void DebugSystem::OnKey(int key, int action)
 	if (key == GLFW_KEY_B && action == GLFW_PRESS)
 	{
 		mIsBoundingBoxVisible = !mIsBoundingBoxVisible;
-		for (IGameEntity* entity : mEntities)
+		for (auto&& entity : mEntities)
 		{
 			DebugComponent* component = entity->GetComponent<DebugComponent>();
 			if (component != nullptr)
@@ -172,7 +191,7 @@ void DebugSystem::OnKey(int key, int action)
 	if (key == GLFW_KEY_C && action == GLFW_PRESS)
 	{
 		mIsColliderVisible = !mIsColliderVisible;
-		for (IGameEntity* entity : mEntities)
+		for (auto&& entity : mEntities)
 		{
 			auto component = entity->GetComponent<ColliderDebugComponent>();
 			if (component != nullptr)
@@ -231,7 +250,7 @@ void DebugSystem::CreateStatisticsTexts()
 
 	for (unsigned int i = 0; i < texts.size(); ++i)
 	{
-		Text* text = DBG_NEW Text(
+		std::shared_ptr<Text> text = std::make_shared<Text>(
 			DBG_NEW Transformation(glm::vec3(-mEngine->GetScreenWidth() * 0.5f, mEngine->GetScreenHeight() * 0.5f - (i+1) * 20.0f, 0.0f),
 				glm::vec3(0.0f),
 				glm::vec3(0.70f)
@@ -246,7 +265,6 @@ void DebugSystem::CreateStatisticsTexts()
 void DebugSystem::SetDebugModeEnabled(bool enable)
 {
 	mIsDebugModeEnabled = enable;
-	SetTextsVisibility(mIsDebugModeEnabled);
 }
 
 bool DebugSystem::IsDebugModeEnabled() const
@@ -254,7 +272,7 @@ bool DebugSystem::IsDebugModeEnabled() const
 	return mIsDebugModeEnabled;
 }
 
-void DebugSystem::OnGameEntityAdded(IGameEntity* entity)
+void DebugSystem::OnGameEntityAdded(std::shared_ptr<IGameEntity> entity)
 {
 	if (HasDebugComponents(entity))
 	{
@@ -262,7 +280,7 @@ void DebugSystem::OnGameEntityAdded(IGameEntity* entity)
 	}
 }
 
-void DebugSystem::OnGameEntityRemoved(IGameEntity* entity)
+void DebugSystem::OnGameEntityRemoved(std::shared_ptr<IGameEntity> entity)
 {
 	if (HasDebugComponents(entity))
 	{

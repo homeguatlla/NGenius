@@ -18,7 +18,7 @@ public:
 	void UpdateInternal(float elapsedTime) override;
 
 	static std::string GetClassName() { return std::string("RotationComponent"); }
-	static IComponent* Create(IGameEntity* entity);
+	static IComponent* Create(std::shared_ptr<IGameEntity> entity);
 
 private:
 	RotationComponent() = default;

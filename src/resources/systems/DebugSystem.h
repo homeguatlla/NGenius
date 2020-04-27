@@ -1,7 +1,8 @@
 #pragma once
-#include "../scene/IGameSceneListener.h"
-#include "../../input/IInputListener.h"
+#include "src/resources/scene/IGameSceneListener.h"
+#include "src/input/IInputListener.h"
 #include <vector>
+#include <memory>
 
 class IGameEntity;
 class InputHandler;
@@ -12,8 +13,8 @@ class Text;
 
 class DebugSystem : public IInputListener, public IGameSceneListener
 {
-	std::vector<IGameEntity*> mEntities;
-	typedef std::vector<IGameEntity*>::iterator GameEntitiesIterator;
+	std::vector<std::shared_ptr<IGameEntity>> mEntities;
+	typedef std::vector<std::shared_ptr<IGameEntity>>::iterator GameEntitiesIterator;
 
 	bool mIsDebugModeEnabled;
 	bool mIsBoundingBoxVisible;
@@ -25,14 +26,16 @@ class DebugSystem : public IInputListener, public IGameSceneListener
 	NGenius* mEngine;
 	RenderSystem* mRenderSystem;
 	bool mIsInitialized;
-	std::vector<Text*> mText;
+	std::vector<std::shared_ptr<Text>> mText;
 	IMaterial* materialText;
+	bool mAreTextVisible;
 
 public:
 
 	DebugSystem(NGenius* engine, RenderSystem* renderSystem, InputHandler* inputHandler);
 	~DebugSystem();
 
+	void Init();
 	void Start();
 
 	void Update(float elapsedTime);
@@ -46,17 +49,18 @@ public:
 	bool IsDebugModeEnabled() const;
 
 private:
-	void AddEntity(IGameEntity* entity);
-	void RemoveEntity(IGameEntity* entity);
+	void AddEntity(std::shared_ptr<IGameEntity> entity);
+	void RemoveEntity(std::shared_ptr<IGameEntity> entity);
 
-	bool HasDebugComponents(const IGameEntity* entity) const;
+	bool HasDebugComponents(const std::shared_ptr<IGameEntity> entity) const;
 
 	void CreateStatisticsTexts();
 	void UpdateStatitstics();
+	void UpdateVisibility();
 
 	void SetTextsVisibility(bool visible);
 
-	void OnGameEntityAdded(IGameEntity* entity) override;
-	void OnGameEntityRemoved(IGameEntity* entity) override;
+	void OnGameEntityAdded(std::shared_ptr<IGameEntity> entity) override;
+	void OnGameEntityRemoved(std::shared_ptr<IGameEntity> entity) override;
 };
 

@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-PointsPatch::PointsPatch(Transformation* transformation, IMaterial* material, const Terrain* terrain, float heightMin, float heightMax, float wide, float length, float density) : 
+PointsPatch::PointsPatch(Transformation* transformation, IMaterial* material, const std::shared_ptr<Terrain> terrain, float heightMin, float heightMax, float wide, float length, float density) :
 	BaseGameEntity(transformation),
 	mTerrain(terrain),
 	mHeightMin(heightMin),
@@ -25,13 +25,9 @@ PointsPatch::PointsPatch(Transformation* transformation, IMaterial* material, co
 }
 
 
-PointsPatch::~PointsPatch()
+std::shared_ptr<IGameEntity> PointsPatch::DoCreate()
 {
-}
-
-IGameEntity* PointsPatch::DoCreate()
-{
-	return DBG_NEW PointsPatch();
+	return std::make_shared<PointsPatch>();
 }
 
 void PointsPatch::Build(NGenius* engine)
@@ -40,7 +36,7 @@ void PointsPatch::Build(NGenius* engine)
 	{
 		IMaterial* material = engine->GetMaterial(mMaterialName);
 
-		mTerrain = static_cast<Terrain*>(engine->GetGameEntity("terrain"));
+		mTerrain = std::static_pointer_cast<Terrain>(engine->GetGameEntity("terrain"));
 		assert(mTerrain != nullptr);
 
 		CreatePointsPatch(material);

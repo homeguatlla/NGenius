@@ -18,6 +18,7 @@ protected:
 	glm::vec3 mTranslation;
 	glm::vec3 mScale;
 	float mDensity;
+	float mRestitution;
 	std::shared_ptr<NPhysics::PhysicsObject> mObject;
 	std::shared_ptr<NPhysics::IBoundingVolume> mBoundingVolume;
 
@@ -45,7 +46,7 @@ protected:
 private:
 	void DoReadFrom(core::utils::IDeserializer* source) override;
 	void DoWriteTo(core::utils::ISerializer* destination) override;
-	static IComponent* DoCreate(IGameEntity* entity) { return nullptr; }
+	static IComponent* DoCreate(std::shared_ptr<IGameEntity> entity) { return nullptr; }
 	virtual void DoCreatePhysicsData() = 0;
 	void ReadBoundingVolumeFrom(core::utils::IDeserializer* source);
 };

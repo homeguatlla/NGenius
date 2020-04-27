@@ -4,11 +4,16 @@
 #include <typeinfo>
 #include <assert.h>
 
-CharacterControllerEvent::CharacterControllerEvent()
+CharacterControllerEvent::CharacterControllerEvent() : mIsPressed {false}
 {
 }
 
-
-CharacterControllerEvent::~CharacterControllerEvent()
+void CharacterControllerEvent::SetPressed(bool pressed)
 {
+	mIsPressed = pressed;
+}
+
+bool CharacterControllerEvent::IsPressed() const
+{
+	return mIsPressed;
 }

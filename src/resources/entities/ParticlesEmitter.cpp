@@ -36,7 +36,7 @@ void ParticlesEmitter::ReserveParticlesPool()
 	mParticles.reserve(mMaxParticlesUpdate);
 	for (int i = 0; i < mMaxParticlesUpdate; ++i)
 	{
-		mParticlesPool.push_back(static_cast<Particle*>(mOriginalParticle->Clone()));
+		mParticlesPool.push_back(std::static_pointer_cast<Particle>(mOriginalParticle->Clone()));
 	}
 }
 
@@ -57,11 +57,6 @@ void ParticlesEmitter::Update(float elapsedTime)
 
 ParticlesEmitter::~ParticlesEmitter()
 {
-	for (unsigned long i = 0; i < mNewParticlesToBeAdded.size(); ++i)
-	{
-		delete mNewParticlesToBeAdded[i];
-	}
-
 	mNewParticlesToBeAdded.clear();
 	mParticles.clear();
 }
@@ -85,7 +80,7 @@ void ParticlesEmitter::RemoveDeadParticles()
 
 void ParticlesEmitter::DoInit(GameScene* scene, RenderSystem* renderSystem)
 {
-	mOriginalParticle = static_cast<Particle*>(scene->GetGameEntity(mParticleName));
+	mOriginalParticle = std::static_pointer_cast<Particle>(scene->GetGameEntity(mParticleName));
 	assert(mOriginalParticle != nullptr);
 
 	SetMaxParticlesUpdate(MAX_PARTICLES);
@@ -104,7 +99,7 @@ void ParticlesEmitter::SpawnNewParticles(float elapsedTime)
 	
 	for (int i = 0; i < particles; ++i)
 	{
-		Particle* particle = CreateParticle();
+		auto particle = CreateParticle();
 		mParticles.push_back(particle);
 		mGameScene->AddEntity(particle);
 	}
@@ -137,11 +132,11 @@ void ParticlesEmitter::RemoveParticle(unsigned long index)
 	mParticles.pop_back();
 }
 
-Particle* ParticlesEmitter::CreateParticle()
+std::shared_ptr<Particle> ParticlesEmitter::CreateParticle()
 {
 	assert(mParticles.size() + mParticlesPool.size() == MAX_PARTICLES);
 
-	Particle* particle = mParticlesPool.front();
+	auto particle = mParticlesPool.front();
 	mParticlesPool.pop_front();
 
 	//POSITION
@@ -268,9 +263,9 @@ void ParticlesEmitter::ReadMinMax4(core::utils::IDeserializer* source, glm::vec4
 	source->EndAttribute();
 }
 
-IGameEntity* ParticlesEmitter::DoCreate()
+std::shared_ptr<IGameEntity> ParticlesEmitter::DoCreate()
 {
-	return DBG_NEW ParticlesEmitter();
+	return std::make_shared<ParticlesEmitter>();
 }
 
 void ParticlesEmitter::SetGameScene(GameScene* gameScene)

@@ -1,5 +1,6 @@
 #pragma once
-#include "../../utils/serializer/ISerializable.h"
+#include "src/utils/serializer/ISerializable.h"
+#include <memory>
 
 class IGameEntity;
 class RenderSystem;
@@ -10,13 +11,13 @@ class IComponent : public core::utils::ISerializable
 	bool mIsEnabled;
 
 protected:
-	IGameEntity* mParent;
+	std::shared_ptr<IGameEntity> mParent;
 
 public:
 	IComponent();
 	virtual ~IComponent();
 
-	void SetParent(IGameEntity* parent);
+	void SetParent(std::shared_ptr<IGameEntity> parent);
 	bool IsEnabled() const;
 	void SetEnabled(bool enabled);
 

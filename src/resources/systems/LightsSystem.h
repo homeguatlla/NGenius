@@ -1,16 +1,17 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 class Light;
 class GameScene;
 
 class LightsSystem
 {
-	std::vector<Light*> mLights;
-	std::vector<Light*> mNewLightsToAdd;
-	std::vector<Light*> mLightsToRemove;
-	typedef std::vector<Light*>::iterator GameLightIterator;
+	std::vector<std::shared_ptr<Light>> mLights;
+	std::vector<std::shared_ptr<Light>> mNewLightsToAdd;
+	std::vector<std::shared_ptr<Light>> mLightsToRemove;
+	typedef std::vector<std::shared_ptr<Light>>::iterator GameLightIterator;
 	GameScene* mGameScene;
 
 public:
@@ -18,11 +19,10 @@ public:
 	~LightsSystem();
 
 	void Update(float elapsedTime);
-	void AddLight(Light* light);
-	void RemoveLight(Light* light);
+	void AddLight(std::shared_ptr<Light> light);
+	void RemoveLight(std::shared_ptr<Light> light);
 
 private:
-	void ReleaseLights(std::vector<Light*>& lights);
 	void RemoveLights();
 	void AddNewLights();
 };

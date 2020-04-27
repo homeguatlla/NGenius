@@ -42,7 +42,7 @@ float CollisionComponent::GetGroundHeight() const
 	return mGroundHeight;
 }
 
-IComponent* CollisionComponent::Create(IGameEntity* entity)
+IComponent* CollisionComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	CollisionComponent* component = DBG_NEW CollisionComponent();
 	entity->AddComponent(component);

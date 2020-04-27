@@ -74,7 +74,7 @@ void AnimationComponent::StopAnimation()
 	mCurrentAnimation = nullptr;
 }
 
-IComponent* AnimationComponent::Create(IGameEntity* entity)
+IComponent* AnimationComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	AnimationComponent* component = DBG_NEW AnimationComponent();
 	entity->AddComponent(component);

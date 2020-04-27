@@ -11,7 +11,7 @@
 #include "src/resources/InstantiableObject.h"
 
 #include "src/resources/entities/GameEntity.h"
-#include "src/resources/entities/Player.h"
+#include "src/resources/entities/player/Player.h"
 #include "src/resources/entities/Terrain.h"
 #include "src/resources/entities/Water.h"
 #include "src/resources/entities/PointsPatch.h"
@@ -47,12 +47,14 @@ GameScene::~GameScene()
 void GameScene::Release()
 {
 	mEntitiesToRemove.clear(); //these entities were removed when releasing mEntities.
-	ReleaseEntities(&mEntities);
-	ReleaseEntities(&mNewEntitiesToAdd);
+	mEntities.clear();
+	mNewEntitiesToAdd.clear();
 }
 
 void GameScene::Start()
 {
+	RemoveEntities();
+	AddNewEntities();
 }
 
 void GameScene::Update(float elapsedTime)
@@ -60,7 +62,7 @@ void GameScene::Update(float elapsedTime)
 	RemoveEntities();
 	AddNewEntities();
 
-	for (IGameEntity* entity : mEntities)
+	for (auto&& entity : mEntities)
 	{
 		if (entity->IsEnabled())
 		{
@@ -71,7 +73,7 @@ void GameScene::Update(float elapsedTime)
 
 void GameScene::Render(RenderSystem* renderSystem)
 {
-	for (IGameEntity* entity : mEntities)
+	for (auto&& entity : mEntities)
 	{
 		renderSystem->AddToRender(entity->GetRenderer());
 	}
@@ -82,14 +84,14 @@ unsigned int GameScene::GetNumberGameEntities() const
 	return mEntities.size();
 }
 
-std::vector<IGameEntity*>& GameScene::GetAllGameEntities()
+std::vector<std::shared_ptr<IGameEntity>>& GameScene::GetAllGameEntities()
 {
 	return mEntities;
 }
 
-IGameEntity* GameScene::GetGameEntity(const std::string& name)
+std::shared_ptr<IGameEntity> GameScene::GetGameEntity(const std::string& name)
 {
-	std::vector<IGameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](IGameEntity* a) { return a->GetName() == name; });
+	std::vector<std::shared_ptr<IGameEntity>>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](std::shared_ptr<IGameEntity> a) { return a->GetName() == name; });
 
 	if (it != mEntities.end())
 	{
@@ -97,7 +99,7 @@ IGameEntity* GameScene::GetGameEntity(const std::string& name)
 	}
 	else
 	{
-		std::vector<IGameEntity*>::iterator it = std::find_if(mNewEntitiesToAdd.begin(), mNewEntitiesToAdd.end(), [&](IGameEntity* a) { return a->GetName() == name; });
+		std::vector<std::shared_ptr<IGameEntity>>::iterator it = std::find_if(mNewEntitiesToAdd.begin(), mNewEntitiesToAdd.end(), [&](std::shared_ptr<IGameEntity> a) { return a->GetName() == name; });
 		if (it != mNewEntitiesToAdd.end())
 		{
 			return *it;
@@ -109,9 +111,9 @@ IGameEntity* GameScene::GetGameEntity(const std::string& name)
 	}
 }
 
-IGameEntity* GameScene::GetGameEntity(int id)
+std::shared_ptr<IGameEntity> GameScene::GetGameEntity(int id)
 {
-	std::vector<IGameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](IGameEntity* a) { return a->GetID() == id; });
+	std::vector<std::shared_ptr<IGameEntity>>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](std::shared_ptr<IGameEntity> a) { return a->GetID() == id; });
 
 	if (it != mEntities.end())
 	{
@@ -123,7 +125,7 @@ IGameEntity* GameScene::GetGameEntity(int id)
 	}
 }
 
-void GameScene::AddEntity(IGameEntity* entity)
+void GameScene::AddEntity(std::shared_ptr<IGameEntity> entity)
 {
 	entity->Build(mEngine);
 	
@@ -133,13 +135,13 @@ void GameScene::AddEntity(IGameEntity* entity)
 	}
 	if (CheckIsGround(entity))
 	{
-		mGround = dynamic_cast<Terrain*>(entity);
+		mGround = std::dynamic_pointer_cast<Terrain>(entity);
 	}
 
 	mNewEntitiesToAdd.push_back(entity);
 }
 
-void GameScene::RemoveEntity(IGameEntity* entity)
+void GameScene::RemoveEntity(std::shared_ptr<IGameEntity> entity)
 {
 	mEntitiesToRemove.push_back(entity);
 }
@@ -170,19 +172,19 @@ void GameScene::UnRegisterGameSceneListener(IGameSceneListener* listener)
 
 void GameScene::AddNewEntities()
 {
-	std::vector<IGameEntity*> mEntitiesAdded;
+	std::vector<std::shared_ptr<IGameEntity>> mEntitiesAdded;
 
 	//adding new entities
-	for (IGameEntity* entity : mNewEntitiesToAdd)
+	for (auto&& entity : mNewEntitiesToAdd)
 	{
-		mEntities.push_back(entity);
-		mEntitiesAdded.push_back(entity);
+		mEntities.push_back(std::shared_ptr<IGameEntity>(entity));
+		mEntitiesAdded.push_back(std::shared_ptr<IGameEntity>(entity));
 	}
 	mNewEntitiesToAdd.clear();
 
 	//entities just added need to initialize.
 	//Initialize can make some entities clone existing entities we want to be added in this frame
-	for (IGameEntity* entity : mEntitiesAdded)
+	for (auto&& entity : mEntitiesAdded)
 	{
 		entity->Init(this, mRenderSystem);
 		if (entity->ShouldBeCreatedOnGround())
@@ -200,7 +202,7 @@ void GameScene::AddNewEntities()
 	}
 }
 
-void GameScene::NotifyEntityAdded(IGameEntity* entity)
+void GameScene::NotifyEntityAdded(std::shared_ptr<IGameEntity> entity)
 {
 	for (ListenersIterator it = mListeners.begin(); it != mListeners.end(); ++it)
 	{
@@ -208,7 +210,7 @@ void GameScene::NotifyEntityAdded(IGameEntity* entity)
 	}
 }
 
-void GameScene::NotifyEntityRemoved(IGameEntity* entity)
+void GameScene::NotifyEntityRemoved(std::shared_ptr<IGameEntity> entity)
 {
 	for (ListenersIterator it = mListeners.begin(); it != mListeners.end(); ++it)
 	{
@@ -238,7 +240,7 @@ void GameScene::ReadFrom(core::utils::IDeserializer* source)
 	source->BeginAttribute();
 	do
 	{
-		IGameEntity* entity = ReadEntityFrom(source);
+		std::shared_ptr<IGameEntity> entity = ReadEntityFrom(source);
 		if (entity != nullptr)
 		{
 			ReadComponentsFrom(entity, source);
@@ -260,7 +262,7 @@ void GameScene::WriteTo(core::utils::ISerializer* destination)
 		destination->WriteParameter(std::string("name"), mName);
 		destination->BeginAttribute(std::string("entities"));
 		destination->WriteParameter(std::string("counter"), mEntities.size());
-			for (IGameEntity* entity : mEntities)
+			for (auto&& entity : mEntities)
 			{
 				entity->WriteTo(destination);
 			}
@@ -268,12 +270,10 @@ void GameScene::WriteTo(core::utils::ISerializer* destination)
 	destination->EndAttribute();
 }
 
-IGameEntity* GameScene::ReadEntityFrom(core::utils::IDeserializer* source)
-{
-	IGameEntity* gameEntity = nullptr;
-	
+std::shared_ptr<IGameEntity> GameScene::ReadEntityFrom(core::utils::IDeserializer* source)
+{	
 	std::string nodeName = source->GetCurrentNodeName();
-	gameEntity = InstantiableObject::CreateEntity(nodeName);
+	auto gameEntity = InstantiableObject::CreateEntity(nodeName);
 	if (gameEntity != nullptr)
 	{
 		gameEntity->ReadFrom(source);
@@ -282,7 +282,7 @@ IGameEntity* GameScene::ReadEntityFrom(core::utils::IDeserializer* source)
 	return nullptr;
 }
 
-void GameScene::ReadComponentsFrom(IGameEntity* entity, core::utils::IDeserializer* source)
+void GameScene::ReadComponentsFrom(std::shared_ptr<IGameEntity> entity, core::utils::IDeserializer* source)
 {
 	if (source->HasAttribute("components"))
 	{
@@ -303,7 +303,7 @@ void GameScene::ReadComponentsFrom(IGameEntity* entity, core::utils::IDeserializ
 	}
 }
 
-void GameScene::ReadComponentFrom(IGameEntity* entity, core::utils::IDeserializer* source)
+void GameScene::ReadComponentFrom(std::shared_ptr<IGameEntity> entity, core::utils::IDeserializer* source)
 {
 	std::string componentType;
 	source->ReadParameter("type", componentType);
@@ -316,9 +316,9 @@ void GameScene::ReadComponentFrom(IGameEntity* entity, core::utils::IDeserialize
 
 void GameScene::RemoveEntities()
 {
-	for (IGameEntity* entity : mEntitiesToRemove)
+	for (auto&& entity : mEntitiesToRemove)
 	{
-		GameEntitiesIterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](IGameEntity* a) { return a == entity; });
+		GameEntitiesIterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](std::shared_ptr<IGameEntity> a) { return a == entity; });
 		NotifyEntityRemoved(*it);
 		
 		mEntities.erase(it);
@@ -326,21 +326,12 @@ void GameScene::RemoveEntities()
 	mEntitiesToRemove.clear();
 }
 
-void GameScene::ReleaseEntities(std::vector<IGameEntity*>* entities)
-{
-	for (IGameEntity* entity : *entities)
-	{
-		delete entity;
-	}
-	entities->clear();
-}
-
 BaseVisitable<>::ReturnType GameScene::Accept(BaseVisitor& guest)
 {
 	return AcceptImpl(*this, guest);
 }
 
-bool GameScene::CheckIsGround(IGameEntity* entity)
+bool GameScene::CheckIsGround(std::shared_ptr<IGameEntity> entity)
 {
 	return typeid(*entity) == typeid(Terrain);
 }
@@ -359,7 +350,7 @@ void GameScene::SetEntitiesOnGround()
 	}
 }
 
-void GameScene::SetEntityOnGround(IGameEntity* entity)
+void GameScene::SetEntityOnGround(std::shared_ptr<IGameEntity> entity)
 {
 	if (mGround != nullptr)
 	{

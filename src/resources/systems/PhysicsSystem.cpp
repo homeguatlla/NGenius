@@ -22,7 +22,7 @@
 #include "source/rigidbody/forceGenerators/RigidBodyGravity.h"
 
 #include "src/resources/entities/Terrain.h"
-#include "src/resources/entities/Player.h"
+#include "src/resources/entities/player/Player.h"
 #include "src/resources/renderers/IRenderer.h"
 #include "source/utils/Math.h"
 
@@ -60,14 +60,14 @@ void PhysicsSystem::Update(float deltaTime)
 {
 	if (mCanUpdate)
 	{
-		for (IGameEntity* entity : mEntities)
+		for (auto&& entity : mEntities)
 		{
 			UpdatePhysicsObjectsData(entity);
 		}
 
 		mEngine.Update(deltaTime);
 
-		for (IGameEntity* entity : mEntities)
+		for (auto&& entity : mEntities)
 		{
 			CheckCollisions(entity);
 			UpdateEntitiesData(entity);
@@ -80,7 +80,7 @@ void PhysicsSystem::Reload()
 	Release();
 }
 
-void PhysicsSystem::CheckCollisions(IGameEntity* entity)
+void PhysicsSystem::CheckCollisions(std::shared_ptr<IGameEntity> entity)
 {
 	if (entity->HasComponent<CollisionComponent>())
 	{
@@ -92,7 +92,7 @@ void PhysicsSystem::CheckCollisions(IGameEntity* entity)
 	}
 }
 
-void PhysicsSystem::CheckCollisionTerrain(IGameEntity* entity)
+void PhysicsSystem::CheckCollisionTerrain(std::shared_ptr<IGameEntity> entity)
 {	
 	CollisionComponent* collisionComponent = entity->GetComponent<CollisionComponent>();
 
@@ -110,7 +110,7 @@ void PhysicsSystem::CheckCollisionTerrain(IGameEntity* entity)
 	}
 }
 
-void PhysicsSystem::CheckCollisionEnergyWall(IGameEntity* entity)
+void PhysicsSystem::CheckCollisionEnergyWall(std::shared_ptr<IGameEntity> entity)
 {
 	EnergyWallCollisionComponent* collisionComponent = entity->GetComponent<EnergyWallCollisionComponent>();
 
@@ -121,7 +121,7 @@ void PhysicsSystem::CheckCollisionEnergyWall(IGameEntity* entity)
 	collisionComponent->SetCollisionPoint(collisionPoint);
 }
 
-void PhysicsSystem::SetTerrain(const Terrain* terrain)
+void PhysicsSystem::SetTerrain(const std::shared_ptr<Terrain> terrain)
 {
 	assert(terrain != nullptr);
 
@@ -134,16 +134,16 @@ void PhysicsSystem::SetEnergyWall(const glm::vec3& position, float radius)
 	mEnergyWallPosition = position;
 }
 
-void PhysicsSystem::AddEntity(IGameEntity* entity)
+void PhysicsSystem::AddEntity(std::shared_ptr<IGameEntity> entity)
 {
 	mEntities.push_back(entity);
 }
 
-void PhysicsSystem::RemoveEntity(IGameEntity* entity)
+void PhysicsSystem::RemoveEntity(std::shared_ptr<IGameEntity> entity)
 {
 	if (HasPhysicsComponents(entity))
 	{
-		std::vector<IGameEntity*>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](IGameEntity* a) { return a == entity; });
+		std::vector<std::shared_ptr<IGameEntity>>::iterator it = std::find_if(mEntities.begin(), mEntities.end(), [&](std::shared_ptr<IGameEntity> a) { return a == entity; });
 		if (it != mEntities.end())
 		{
 			mEntities.erase(it);
@@ -155,7 +155,7 @@ void PhysicsSystem::RemoveEntity(IGameEntity* entity)
 	}
 }
 
-bool PhysicsSystem::IsInsideTerrain(IGameEntity*entity)
+bool PhysicsSystem::IsInsideTerrain(std::shared_ptr<IGameEntity> entity)
 {
 	auto physicsComponent = entity->GetComponent<PhysicsComponent>();
 	if (physicsComponent != nullptr)
@@ -171,7 +171,7 @@ bool PhysicsSystem::IsInsideTerrain(IGameEntity*entity)
 	return true;
 }
 
-bool PhysicsSystem::HasPhysicsComponents(const IGameEntity* entity) const
+bool PhysicsSystem::HasPhysicsComponents(const std::shared_ptr<IGameEntity> entity) const
 {
 	return entity != nullptr && (	entity->HasComponent<CollisionComponent>() ||
 									entity->HasComponent<PhysicsComponent>() ||
@@ -179,7 +179,7 @@ bool PhysicsSystem::HasPhysicsComponents(const IGameEntity* entity) const
 								);
 }
 
-void PhysicsSystem::OnGameEntityAdded(IGameEntity* entity)
+void PhysicsSystem::OnGameEntityAdded(std::shared_ptr<IGameEntity> entity)
 {
 	if (HasPhysicsComponents(entity))
 	{
@@ -207,11 +207,11 @@ void PhysicsSystem::OnGameEntityAdded(IGameEntity* entity)
 	//TODO esto no funcionará así, pero por ahora sí. 
 	if (typeid(*entity) == typeid(Terrain))
 	{
-		SetTerrain(static_cast<Terrain*>(entity));
+		SetTerrain(std::static_pointer_cast<Terrain>(entity));
 	}
 }
 
-void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::Particle>& particle, IGameEntity* entity)
+void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::Particle>& particle, std::shared_ptr<IGameEntity> entity)
 {
 	GravityComponent* gravityComponent = entity->GetComponent<GravityComponent>();
 	if (gravityComponent != nullptr)
@@ -242,7 +242,7 @@ void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::Particle>& particle,
 	}
 }
 
-void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::RigidBody>& rigidBody, std::shared_ptr<NPhysics::IBoundingVolume>& volume, IGameEntity* entity)
+void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::RigidBody>& rigidBody, std::shared_ptr<NPhysics::IBoundingVolume>& volume, std::shared_ptr<IGameEntity> entity)
 {
 	GravityComponent* gravityComponent = entity->GetComponent<GravityComponent>();
 	if (gravityComponent != nullptr)
@@ -274,7 +274,7 @@ void PhysicsSystem::AddGenerators(std::shared_ptr<NPhysics::RigidBody>& rigidBod
 	}
 }
 
-void PhysicsSystem::OnGameEntityRemoved(IGameEntity* entity)
+void PhysicsSystem::OnGameEntityRemoved(std::shared_ptr<IGameEntity> entity)
 {
 	if (HasPhysicsComponents(entity))
 	{
@@ -282,7 +282,7 @@ void PhysicsSystem::OnGameEntityRemoved(IGameEntity* entity)
 	}
 }
 
-bool PhysicsSystem::ApplyCollisions(IGameEntity*entity, float *groundHeight)
+bool PhysicsSystem::ApplyCollisions(std::shared_ptr<IGameEntity> entity, float *groundHeight)
 {
 	PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
 	if (component != nullptr)
@@ -310,6 +310,7 @@ bool PhysicsSystem::ApplyCollisions(IGameEntity*entity, float *groundHeight)
 				physicsObject->SetInitialVelocity(velocity);
 			}
 			//case is on other physics object. Its y velocity will be 0, because other object is applying a vel equal on opposite side
+			//this doesn't work if its over a slope.
 			bool isOverOtherObject = NPhysics::NMath::IsNearlyEqual(physicsObject->GetVelocity().y, 0.0f, EPSILON1);
 
 			return isColliding || isOverOtherObject;
@@ -319,7 +320,7 @@ bool PhysicsSystem::ApplyCollisions(IGameEntity*entity, float *groundHeight)
 	return false;
 }
 
-bool PhysicsSystem::ApplyEnergyWallCollision(IGameEntity*entity, glm::vec3& collisionPoint)
+bool PhysicsSystem::ApplyEnergyWallCollision(std::shared_ptr<IGameEntity> entity, glm::vec3& collisionPoint)
 {
 	Transformation* transformation = entity->GetTransformation();
 
@@ -371,7 +372,7 @@ bool PhysicsSystem::ApplyEnergyWallCollision(IGameEntity*entity, glm::vec3& coll
 	return isColliding;
 }
 
-void PhysicsSystem::UpdatePhysicsObjectsData(IGameEntity* entity)
+void PhysicsSystem::UpdatePhysicsObjectsData(std::shared_ptr<IGameEntity> entity)
 {
 	PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
 	if (component != nullptr)
@@ -390,7 +391,7 @@ void PhysicsSystem::UpdatePhysicsObjectsData(IGameEntity* entity)
 	}
 }
 
-void PhysicsSystem::UpdateEntitiesData(IGameEntity* entity)
+void PhysicsSystem::UpdateEntitiesData(std::shared_ptr<IGameEntity> entity)
 {
 	PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
 	if (component != nullptr)

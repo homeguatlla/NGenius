@@ -22,7 +22,7 @@ IMaterialEffect* InstantiableObject::CreateMaterialEffect(const std::string& nam
 	}
 }
 
-IGameEntity* InstantiableObject::CreateEntity(const std::string& name)
+std::shared_ptr<IGameEntity> InstantiableObject::CreateEntity(const std::string& name)
 {
 	if (mGameEntitiesFactory.find(name) != mGameEntitiesFactory.end())
 	{
@@ -82,7 +82,7 @@ IShaderProgram* InstantiableObject::CreateShader(const std::string& name)
 	}
 }
 
-IComponent* InstantiableObject::CreateComponent(const std::string& name, IGameEntity* entity)
+IComponent* InstantiableObject::CreateComponent(const std::string& name, std::shared_ptr<IGameEntity> entity)
 {
 	if (mComponentsFactory.find(name) != mComponentsFactory.end())
 	{

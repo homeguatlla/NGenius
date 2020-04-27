@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 
 class IGameEntity;
 
@@ -8,7 +9,7 @@ public:
 	IGameSceneListener();
 	~IGameSceneListener();
 
-	virtual void OnGameEntityAdded(IGameEntity* entity) = 0;
-	virtual void OnGameEntityRemoved(IGameEntity* entity) = 0;
+	virtual void OnGameEntityAdded(std::shared_ptr<IGameEntity> entity) = 0;
+	virtual void OnGameEntityRemoved(std::shared_ptr<IGameEntity> entity) = 0;
 };
 

@@ -58,9 +58,9 @@ void Water::ReadFrom(core::utils::IDeserializer* source)
 	source->ReadParameter("length", &mLength);
 }
 
-IGameEntity* Water::DoCreate()
+std::shared_ptr<IGameEntity> Water::DoCreate()
 {
-	return DBG_NEW Water();
+	return std::make_shared<Water>();
 }
 
 void Water::CreateModel()

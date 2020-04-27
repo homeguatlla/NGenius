@@ -150,7 +150,7 @@ public:
 	VertexBuffersManager& GetVertexBufferManager();
 
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
-	void SetCastingShadowsTarget(const IGameEntity* target);
+	void SetCastingShadowsTarget(const std::shared_ptr<IGameEntity> target);
 	void SetCastingShadowsEnabled(bool enabled);
 
 	void SetFogEnabled(bool enabled);

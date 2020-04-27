@@ -1,11 +1,6 @@
 #include "stdafx.h"
 #include "ForwardEvent.h"
 #include "GLFW/glfw3.h"
-#include "../Memory.h"
-
-ForwardEvent::ForwardEvent() : mIsPressed(false)
-{
-}
 
 std::shared_ptr<GameEvent> ForwardEvent::DoClone(const void* data) const
 {
@@ -18,14 +13,4 @@ std::shared_ptr<GameEvent> ForwardEvent::DoClone(const void* data) const
 std::shared_ptr<GameEvent> ForwardEvent::Create()
 {
 	return std::make_shared<ForwardEvent>();
-}
-
-void ForwardEvent::SetPressed(bool pressed)
-{
-	mIsPressed = pressed;
-}
-
-bool ForwardEvent::IsPressed() const
-{
-	return mIsPressed;
 }

@@ -20,7 +20,7 @@ public:
 	glm::vec3 GetCollisionPoint() const;
 
 	static std::string GetClassName() { return std::string("EnergyWallCollisionComponent"); }
-	static IComponent* Create(IGameEntity* entity);
+	static IComponent* Create(std::shared_ptr<IGameEntity> entity);
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source) override;

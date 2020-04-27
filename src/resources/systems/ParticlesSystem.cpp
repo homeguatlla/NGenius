@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ParticlesSystem.h"
-#include "../entities/ParticlesEmitter.h"
-#include "../..//utils/serializer/XMLDeserializer.h"
+#include "src/resources/entities/ParticlesEmitter.h"
+#include "src/utils/serializer/XMLDeserializer.h"
 
 
 
@@ -23,7 +23,7 @@ void ParticlesSystem::Update(float deltaTime)
 	}*/
 }
 
-void ParticlesSystem::AddParticleEmitter(ParticlesEmitter* emitter)
+void ParticlesSystem::AddParticleEmitter(std::shared_ptr<ParticlesEmitter> emitter)
 {
 	bool found = std::find(mParticlesEmitters.begin(), mParticlesEmitters.end(), emitter) != mParticlesEmitters.end();
 	if (!found)

@@ -29,7 +29,7 @@ float OverWaterComponent::GetWaterHeight() const
 	return mWaterHeight;
 }
 
-IComponent* OverWaterComponent::Create(IGameEntity* entity)
+IComponent* OverWaterComponent::Create(std::shared_ptr<IGameEntity> entity)
 {
 	OverWaterComponent* component = DBG_NEW OverWaterComponent();
 	entity->AddComponent(component);

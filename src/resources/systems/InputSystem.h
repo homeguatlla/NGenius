@@ -8,8 +8,8 @@ class InputHandler;
 
 class InputSystem : public IInputListener, public IGameSceneListener
 {
-	std::vector<IGameEntity*> mEntities;
-	typedef std::vector<IGameEntity*>::iterator GameEntitiesIterator;
+	std::vector<std::shared_ptr<IGameEntity>> mEntities;
+	typedef std::vector<std::shared_ptr<IGameEntity>>::iterator GameEntitiesIterator;
 
 	InputHandler* mInputHandler;
 
@@ -43,13 +43,13 @@ public:
 	void OnMouseCursorPos(double x, double y) override;
 
 private:
-	bool HasInputComponents(const IGameEntity* entity) const;
-	void AddEntity(IGameEntity* entity);
-	void RemoveEntity(IGameEntity* entity);
+	bool HasInputComponents(const std::shared_ptr<IGameEntity> entity) const;
+	void AddEntity(std::shared_ptr<IGameEntity> entity);
+	void RemoveEntity(std::shared_ptr<IGameEntity> entity);
 	void DispatchEvent(MouseData& data);
 
-	void OnGameEntityAdded(IGameEntity* entity) override;
-	void OnGameEntityRemoved(IGameEntity* entity) override;
+	void OnGameEntityAdded(std::shared_ptr<IGameEntity> entity) override;
+	void OnGameEntityRemoved(std::shared_ptr<IGameEntity> entity) override;
 	void Release();
 };
 

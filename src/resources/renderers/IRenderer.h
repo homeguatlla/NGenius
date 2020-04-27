@@ -1,10 +1,11 @@
 #pragma once
 #include <vector>
+#include <memory>
 #include <glm/glm.hpp>
-#include "../../BitNumber.h"
-#include "../../VertexBuffersManager.h"
-#include "../../AABB.h"
-#include "../Transformation.h"
+#include "src/BitNumber.h"
+#include "src/VertexBuffersManager.h"
+#include "src/AABB.h"
+#include "src/resources/Transformation.h"
 
 class ICamera;
 class IGameEntity;
@@ -29,7 +30,7 @@ public:
 	};
 
 protected:
-	IGameEntity* mParent;
+	std::shared_ptr<IGameEntity> mParent;
 	Model* mModel;
 	std::vector<IRenderer*> mInstances;
 	IMaterial* mMaterial;
@@ -63,8 +64,8 @@ public:
 
 	//virtual const std::string GetName() const = 0;
 
-	void SetParent(IGameEntity* parent);
-	IGameEntity* GetParent();
+	void SetParent(std::shared_ptr<IGameEntity> parent);
+	std::shared_ptr<IGameEntity> GetParent();
 
 	IMaterial* GetMaterial();
 	const IMaterial* GetMaterial() const;

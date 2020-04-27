@@ -9,7 +9,7 @@ public:
 	explicit Light(const glm::vec3& position, const glm::vec3& color);
 	~Light();
 
-	Light* DoClone() const override { return nullptr; }
+	std::shared_ptr<IGameEntity> DoClone() const override { return nullptr; }
 
 	const glm::vec3 GetColor() const;
 	const glm::vec3 GetPosition() const;

@@ -56,12 +56,12 @@ bool IRenderer::IsPrerendered() const
 	return mIsPrerendered;
 }
 
-void IRenderer::SetParent(IGameEntity* parent)
+void IRenderer::SetParent(std::shared_ptr<IGameEntity> parent)
 {
 	mParent = parent;
 }
 
-IGameEntity* IRenderer::GetParent()
+std::shared_ptr<IGameEntity> IRenderer::GetParent()
 {
 	return mParent;
 }
@@ -141,7 +141,7 @@ void IRenderer::Render(const ICamera* camera, VertexBuffersManager& vertexBuffer
 			
 			matrices.push_back(modelMatrix);
 
-			Particle* particle = static_cast<Particle*>(renderer->GetParent());
+			std::shared_ptr<Particle> particle = std::static_pointer_cast<Particle>(renderer->GetParent());
 			const glm::vec4 color = particle->GetColor();
 			colors.push_back(color);
 		}

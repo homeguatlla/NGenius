@@ -2,11 +2,6 @@
 #include "ICommand.h"
 
 
-ICommand::ICommand(IGameEntity* entity) : mEntity(entity)
-{
-}
-
-
-ICommand::~ICommand()
+ICommand::ICommand(std::shared_ptr<IGameEntity> entity) : mEntity(entity)
 {
 }

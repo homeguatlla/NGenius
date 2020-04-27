@@ -94,7 +94,7 @@ public:
 	ICamera* GetCamera(const std::string& name) const;
 	ICamera* GetGameplayCamera() const;
 	ICamera* GetFreeCamera() const;
-	IGameEntity* GetGameEntity(const std::string& name) const;
+	std::shared_ptr<IGameEntity> GetGameEntity(const std::string& name) const;
 	GameScene* GetGameScene(const std::string& name) const;
 
 
@@ -106,11 +106,11 @@ public:
 	GLFWwindow* GetGLWindow() const;
 
 	GameScene* CreateGameScene(const std::string& name);
-	void AddParticleEmitter(ParticlesEmitter* emitter);
+	void AddParticleEmitter(std::shared_ptr<ParticlesEmitter> emitter);
 	void AddRenderPass(RenderPass* renderPass, bool addAfterPostProcessing);
-	void AddLight(Light* light);
+	void AddLight(std::shared_ptr<Light> light);
 	void AddCamera(ICamera* camera);
-	void AddEntity(IGameEntity* entity);
+	void AddEntity(std::shared_ptr<IGameEntity> entity);
 
 	IMaterial* CreateMaterial(const std::string& name, IShaderProgram* shader);
 
@@ -120,12 +120,12 @@ public:
 	void RegisterUpdateHandler(std::function<void(float elapsedTime)> callback);
 
 	void SetFullScreen(bool isFullScreen);
-	void SetTerrain(const Terrain* terrain);
+	void SetTerrain(const std::shared_ptr<Terrain> terrain);
 	void SetEnergyWall(const glm::vec3& position, float radius);
 
 	//shadows
 	void SetCastingShadowsParameters(const glm::vec3& lightDirection, int pfcCounter);
-	void SetCastingShadowsTarget(const IGameEntity* target);
+	void SetCastingShadowsTarget(const std::shared_ptr<IGameEntity> target);
 	void SetCastingShadowsEnabled(bool enabled);
 
 	//fog
@@ -143,7 +143,7 @@ public:
 	virtual BaseVisitable<>::ReturnType Accept(BaseVisitor& guest);
 
 	//spatial partition
-	void Query(const AABB& aabb, std::vector<IGameEntity*>& result);
+	void Query(const AABB& aabb, std::vector<std::shared_ptr<IGameEntity>>& result);
 	void SetIsSpacePartitionEnabled(bool enable);
 
 	//cameras
@@ -177,6 +177,7 @@ private:
 	void AcceptStatistics();
 	void AcceptGuiTool();
 
+	void Loaded();
 	void Render();
 
 	void AddListenersToGameScene();

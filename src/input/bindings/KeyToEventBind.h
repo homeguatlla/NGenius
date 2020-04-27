@@ -5,12 +5,12 @@
 class KeyToEventBind : public InputConverter
 {
 	int mKey;
-	std::shared_ptr<const GameEvent> mEvent;
+	std::shared_ptr<GameEvent> mEvent;
 
 public:
-	KeyToEventBind(int key, std::shared_ptr<const GameEvent> event);
+	KeyToEventBind(int key, std::shared_ptr<GameEvent> event);
 	~KeyToEventBind() = default;
 
-	std::shared_ptr<const GameEvent> Convert(int key, int action) const;
+	std::shared_ptr<GameEvent> Convert(int key, int action) const;
 };
 

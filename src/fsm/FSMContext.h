@@ -28,7 +28,7 @@ public:
 	NGeniusState GetNextState() const { return mNextState; }
 	void GoToState(NGeniusState state) { mNextState = state; }
 	void ResetFreeMode();	
-	Text* GetInformationText();
+	std::shared_ptr<Text> GetInformationText();
 
 	void SetFilename(const std::string& filename) { mFilename = filename; }
 	const std::string GetFilename() const { return mFilename; }
@@ -43,6 +43,6 @@ private:
 	bool mIsFreePlayerModeEnabled;
 	std::string mFilename;
 
-	Text* mInformationText;
+	std::shared_ptr<Text> mInformationText;
 };
 
