@@ -310,10 +310,11 @@ bool PhysicsSystem::ApplyCollisions(std::shared_ptr<IGameEntity> entity, float *
 				physicsObject->SetInitialVelocity(velocity);
 			}
 			//case is on other physics object. Its y velocity will be 0, because other object is applying a vel equal on opposite side
-			//this doesn't work if its over a slope.
+			//this doesn't work if its over a slope. But, although velocity = 0 must be some object below. If not, when jumping is also
+			//getting velocity = 0 on the top. Quizá sabiendo si ha colisionado y la normal podemos deducir si está encima de algo.
 			bool isOverOtherObject = NPhysics::NMath::IsNearlyEqual(physicsObject->GetVelocity().y, 0.0f, EPSILON1);
 
-			return isColliding || isOverOtherObject;
+			return isColliding;// || isOverOtherObject;
 		}
 	}
 	

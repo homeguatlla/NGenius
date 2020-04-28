@@ -1,20 +1,13 @@
 #include "stdafx.h"
 #include "JumpEvent.h"
-#include "../Memory.h"
-
-
-JumpEvent::JumpEvent()
-{
-}
-
-
-JumpEvent::~JumpEvent()
-{
-}
+#include "GLFW/glfw3.h"
 
 std::shared_ptr<GameEvent> JumpEvent::DoClone(const void* data) const
 {
-	return std::make_shared<JumpEvent>();
+	const int* action = reinterpret_cast<const int*>(data);
+	std::shared_ptr<JumpEvent> event = std::make_shared<JumpEvent>();
+	event->SetPressed(action != GLFW_RELEASE);
+	return event;
 }
 
 std::shared_ptr<GameEvent> JumpEvent::Create()

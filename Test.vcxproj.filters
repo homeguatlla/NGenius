@@ -963,6 +963,18 @@
     <ClInclude Include="src\resources\entities\Player\Player.h">
       <Filter>Header Files\resources\entities\player</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\states\Jump.h">
+      <Filter>Header Files\resources\entities\player\playerFsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\states\OnAir.h">
+      <Filter>Header Files\resources\entities\player\playerFsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\transitions\EnterJump.h">
+      <Filter>Header Files\resources\entities\player\playerFsm\transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\transitions\EnterOnAir.h">
+      <Filter>Header Files\resources\entities\player\playerFsm\transitions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1591,6 +1603,18 @@
     </ClCompile>
     <ClCompile Include="src\resources\entities\Player\Player.cpp">
       <Filter>Source Files\resources\entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\states\Jump.cpp">
+      <Filter>Source Files\resources\entities\Player\playerFsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\states\OnAir.cpp">
+      <Filter>Source Files\resources\entities\Player\playerFsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\transitions\EnterJump.cpp">
+      <Filter>Source Files\resources\entities\Player\playerFsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\transitions\EnterOnAir.cpp">
+      <Filter>Source Files\resources\entities\Player\playerFsm\transitions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -3,19 +3,19 @@
 #include "src/resources/entities/Player/PlayerFsm/PlayerContext.h"
 #include "src/resources/entities/Player/PlayerFsm/states/PlayerStates.h"
 
-class Player;
+class PhysicsComponent;
 class CollisionComponent;
 
-class EnterRun : public core::utils::FSM::BaseTransition<PlayerState, PlayerContext>
+class EnterOnAir : public core::utils::FSM::BaseTransition<PlayerState, PlayerContext>
 {
 public:
-	EnterRun(StatePtr origin, StatePtr destination);
-	virtual ~EnterRun() = default;
+	EnterOnAir(StatePtr origin, StatePtr destination);
+	virtual ~EnterOnAir() = default;
 
 	void OnInit() override;
 	bool CanPerformTransition() const override;
 
 private:
+	std::shared_ptr<PhysicsComponent> mPhysicsComponent;
 	std::shared_ptr<CollisionComponent> mCollisionComponent;
-	std::shared_ptr<Player> mPlayer;
 };

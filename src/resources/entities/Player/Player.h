@@ -4,6 +4,7 @@
 #include "src/resources/entities/Player/PlayerFsm/states/PlayerStates.h"
 #include "src/utils/fsm/StatesMachine.h"
 #include <memory>
+#include <map>
 
 class IRenderer;
 class Transformation;
@@ -12,6 +13,13 @@ class CollisionComponent;
 class PhysicsComponent;
 class CharacterComponent;
 class AnimationComponent;
+
+enum class PlayerAction
+{
+	Forward = 0,
+	Backward = 1, 
+	Jump = 2
+};
 
 class Player : public BaseGameEntity<Player>
 {
@@ -27,11 +35,13 @@ public:
 
 	void DoInit(GameScene* scene, RenderSystem* renderSystem) override;
 
+	bool IsActionActive(PlayerAction action) { return mActions[action]; }
+
+	void PerformMovement(float elapsedTime);
+	void PerformJump(float elapsedTime);
+
 	void PlayAnimation(const std::string& animationName);
 	void StopAnimations();
-
-	void TreatTurnEvent(float elapsedTime, std::shared_ptr<GameEvent> event);
-	void TreatMoveEvent(float elapsedTime, std::shared_ptr<GameEvent> event);
 
 	// Heredado vía ISerializable
 	void ReadFrom(core::utils::IDeserializer* source) override;
@@ -41,8 +51,14 @@ public:
 
 private:
 	void CreateStatesMachine();
+	void UpdateEvents(float deltaTime);
+
 	float CalculateTurnPosition(float elapsedTime, float turnSpeed);
 	glm::vec3 CalculateRunPosition(float elapsedTime, float rotY, float rotOffset, glm::vec3 velocity, float runSpeed);
+
+	void TreatTurnEvent(float elapsedTime, std::shared_ptr<GameEvent> event);
+	void TreatMoveEvent(float elapsedTime, std::shared_ptr<GameEvent> event);
+	void TreatJumpEvent(float elapsedTime, std::shared_ptr<GameEvent> event);
 
 	void UpdateVelocity(bool isMoving, bool isForward);
 
@@ -84,6 +100,8 @@ private:
 	std::shared_ptr<PhysicsComponent> mPhysicsComponent;
 	std::shared_ptr<CharacterComponent> mCharacterComponent;
 	std::shared_ptr<CollisionComponent> mCollisionComponent;
+
+	std::map<PlayerAction, bool> mActions;
 
 	/*
 	float mCurrentUpwardsSpeed;

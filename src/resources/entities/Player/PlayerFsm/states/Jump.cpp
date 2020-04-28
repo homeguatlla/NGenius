@@ -1,13 +1,15 @@
 #include "stdafx.h"
-#include "Idle.h"
+#include "Jump.h"
 #include "src/resources/entities/Player/Player.h"
 
-void Idle::OnInit()
+void Jump::OnInit()
 {
 	mPlayer = GetContext()->GetPlayer();
 }
 
-void Idle::OnEnter(float deltaTime)
-{	
+void Jump::OnEnter(float deltaTime)
+{
 	mPlayer->StopAnimations();
+	mPlayer->PerformJump(deltaTime);
 }
+

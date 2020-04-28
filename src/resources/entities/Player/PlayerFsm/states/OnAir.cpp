@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "Idle.h"
+#include "OnAir.h"
 #include "src/resources/entities/Player/Player.h"
 
-void Idle::OnInit()
+void OnAir::OnInit()
 {
 	mPlayer = GetContext()->GetPlayer();
 }
 
-void Idle::OnEnter(float deltaTime)
-{	
+void OnAir::OnEnter(float deltaTime)
+{
 	mPlayer->StopAnimations();
 }

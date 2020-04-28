@@ -4,6 +4,7 @@
 #include "src/resources/entities/Player/PlayerFsm/states/PlayerStates.h"
 
 class PhysicsComponent;
+class CollisionComponent;
 
 class EnterIdle : public core::utils::FSM::BaseTransition<PlayerState, PlayerContext>
 {
@@ -16,4 +17,5 @@ public:
 
 private:
 	std::shared_ptr<PhysicsComponent> mPhysicsComponent;
+	std::shared_ptr<CollisionComponent> mCollisionComponent;
 };

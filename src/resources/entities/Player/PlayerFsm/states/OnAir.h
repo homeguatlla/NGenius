@@ -3,15 +3,15 @@
 #include "src/resources/entities/Player/PlayerFsm/PlayerContext.h"
 #include "src/resources/entities/Player/PlayerFsm/states/PlayerStates.h"
 
-class Run : public core::utils::FSM::BaseState<PlayerState, PlayerContext>
+class OnAir : public core::utils::FSM::BaseState<PlayerState, PlayerContext>
 {
 public:
-	Run() = default;
-	virtual ~Run() = default;
-	PlayerState GetID() const override { return PlayerState::STATE_RUNNING; }
+	OnAir() = default;
+	virtual ~OnAir() = default;
+	PlayerState GetID() const override { return PlayerState::STATE_ON_AIR; }
 	void OnInit() override;
 	void OnEnter(float deltaTime) override;
-	void OnUpdate(float deltaTime) override;
+
 
 private:
 	std::shared_ptr<Player> mPlayer;

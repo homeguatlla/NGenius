@@ -248,9 +248,13 @@
     <ClInclude Include="src\resources\entities\Player\Player.h" />
     <ClInclude Include="src\resources\entities\Player\PlayerFsm\PlayerContext.h" />
     <ClInclude Include="src\resources\entities\Player\PlayerFsm\states\Idle.h" />
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\states\Jump.h" />
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\states\OnAir.h" />
     <ClInclude Include="src\resources\entities\Player\PlayerFsm\states\PlayerStates.h" />
     <ClInclude Include="src\resources\entities\Player\PlayerFsm\states\Run.h" />
     <ClInclude Include="src\resources\entities\Player\PlayerFsm\transitions\EnterIdle.h" />
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\transitions\EnterJump.h" />
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\transitions\EnterOnAir.h" />
     <ClInclude Include="src\resources\entities\Player\PlayerFsm\transitions\EnterRun.h" />
     <ClInclude Include="src\resources\entities\PointsPatch.h" />
     <ClInclude Include="src\resources\entities\Terrain.h" />
@@ -489,8 +493,12 @@
     <ClCompile Include="src\resources\entities\Player\Player.cpp" />
     <ClCompile Include="src\resources\entities\Player\PlayerFsm\PlayerContext.cpp" />
     <ClCompile Include="src\resources\entities\Player\PlayerFsm\states\Idle.cpp" />
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\states\Jump.cpp" />
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\states\OnAir.cpp" />
     <ClCompile Include="src\resources\entities\Player\PlayerFsm\states\Run.cpp" />
     <ClCompile Include="src\resources\entities\Player\PlayerFsm\transitions\EnterIdle.cpp" />
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\transitions\EnterJump.cpp" />
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\transitions\EnterOnAir.cpp" />
     <ClCompile Include="src\resources\entities\Player\PlayerFsm\transitions\EnterRun.cpp" />
     <ClCompile Include="src\resources\entities\PointsPatch.cpp" />
     <ClCompile Include="src\resources\entities\Terrain.cpp" />

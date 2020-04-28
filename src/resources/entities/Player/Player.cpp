@@ -2,10 +2,13 @@
 #include "Player.h"
 #include "src/resources/entities/Player/PlayerFsm/states/Idle.h"
 #include "src/resources/entities/Player/PlayerFsm/states/Run.h"
+#include "src/resources/entities/Player/PlayerFsm/states/Jump.h"
+#include "src/resources/entities/Player/PlayerFsm/states/OnAir.h"
 
 #include "src/resources/entities/Player/PlayerFsm/transitions/EnterIdle.h"
 #include "src/resources/entities/Player/PlayerFsm/transitions/EnterRun.h"
-
+#include "src/resources/entities/Player/PlayerFsm/transitions/EnterJump.h"
+#include "src/resources/entities/Player/PlayerFsm/transitions/EnterOnAir.h"
 
 #include "src/resources/components/InputComponent.h"
 #include "src/resources/components/CollisionComponent.h"
@@ -17,6 +20,7 @@
 #include "src/resources/events/characterControllerEvents/TurnEvent.h"
 #include "src/resources/events/characterControllerEvents/ForwardEvent.h"
 #include "src/resources/events/characterControllerEvents/BackwardEvent.h"
+#include "src/resources/events/characterControllerEvents/JumpEvent.h"
 
 /*
 #include "src/resources/renderers/IRenderer.h"
@@ -24,12 +28,9 @@
 #include "src/resources/models/animation/AnimatedModel.h"
 
 #include "src/resources/GameEvent.h"
-#include "src/resources/events/characterControllerEvents/BackwardEvent.h"
-#include "src/resources/events/characterControllerEvents/ForwardEvent.h"
 #include "src/resources/events/characterControllerEvents/LeftEvent.h"
 #include "src/resources/events/characterControllerEvents/RightEvent.h"
 #include "src/resources/events/characterControllerEvents/ShiftEvent.h"
-#include "src/resources/events/characterControllerEvents/JumpEvent.h"
 #include "src/resources/events/characterControllerEvents/ZoomEvent.h"
 #include "Memory.h"
 #include "src/utils/serializer/XMLDeserializer.h"
@@ -50,12 +51,6 @@ Player::Player() :
 	mCurrentTurnAngle{ 0.0f },
 	mRunSpeed {mMaxRunSpeed},
 	mCurrentRunSpeed {0.0f}
-	
-	
-	/*
-	mCurrentUpwardsSpeed(0.0f),
-	mRotOffsetForLateralMoving(0.0f),
-	mHasJumped(false)*/
 {
 }
 
@@ -71,12 +66,6 @@ Player::Player(	Transformation* transformation, IRenderer* renderer, InputCompon
 	mCurrentTurnAngle{ 0.0f },
 	mRunSpeed{ mMaxRunSpeed },
 	mCurrentRunSpeed{ 0.0f }
-
-/*,
-mCurrentUpwardsSpeed(0.0f),
-mRotOffsetForLateralMoving(0.0f),
-mHasJumped(false),
-mIsShiftPressed(false)*/
 {
 	AddComponent(inputComponent);
 	AddComponent(physicsComponent);
@@ -107,10 +96,51 @@ void Player::Update(float elapsedTime)
 {
 	BaseGameEntity::Update(elapsedTime);
 
+	UpdateEvents(elapsedTime);
 	mStatesMachine->Update(elapsedTime);
 
 	//std::cout << "velocity = " << mCurrentRunSpeed << " state = " << mState << "\n";
 	//std::cout << "state: " << static_cast<int>(mStatesMachine->GetCurrentState()->GetID()) << std::endl;
+}
+
+void Player::UpdateEvents(float deltaTime)
+{
+	while (mCharacterComponent->HasEvents())
+	{
+		if (mCharacterComponent->IsNextEventOfType<TurnEvent>())
+		{
+			TreatTurnEvent(deltaTime, mCharacterComponent->ConsumeEvent());
+		}
+		else if (mCharacterComponent->IsNextEventOfType<ForwardEvent>() || mCharacterComponent->IsNextEventOfType<BackwardEvent>())
+		{
+			TreatMoveEvent(deltaTime, mCharacterComponent->ConsumeEvent());
+		}
+		else if (mCharacterComponent->IsNextEventOfType<JumpEvent>())
+		{
+			TreatJumpEvent(deltaTime, mCharacterComponent->ConsumeEvent());
+		}
+		else
+		{
+			mCharacterComponent->ConsumeEvent();
+		}
+	}
+}
+
+void Player::PerformMovement(float elapsedTime)
+{
+	auto transformation = GetTransformation();
+	glm::vec3 rotation = transformation->GetRotation();
+	glm::vec3 newVelocity = CalculateRunPosition(elapsedTime, rotation.y, 0, mPhysicsComponent->GetVelocity(), mCurrentRunSpeed);
+	mPhysicsComponent->SetVelocity(newVelocity);
+}
+
+void Player::PerformJump(float elapsedTime)
+{
+	auto velocity = mPhysicsComponent->GetVelocity();
+
+	velocity.y += mMaxUpwardsSpeed;
+
+	mPhysicsComponent->SetVelocity(velocity);
 }
 
 
@@ -121,15 +151,30 @@ void Player::CreateStatesMachine()
 
 	auto idle = std::make_shared<Idle>();
 	auto run = std::make_shared<Run>();
+	auto jump = std::make_shared<Jump>();
+	auto onAir = std::make_shared<OnAir>();
 	
 	mStatesMachine->AddState(idle);
 	mStatesMachine->AddState(run);
+	mStatesMachine->AddState(jump);
+	mStatesMachine->AddState(onAir);
 	
 	//from Idle
 	mStatesMachine->AddTransition(std::make_unique<EnterRun>(idle, run));
+	mStatesMachine->AddTransition(std::make_unique<EnterJump>(idle, jump));
+	mStatesMachine->AddTransition(std::make_unique<EnterOnAir>(idle, onAir));
 
 	//from Run
 	mStatesMachine->AddTransition(std::make_unique<EnterIdle>(run, idle));
+	mStatesMachine->AddTransition(std::make_unique<EnterJump>(run, jump));
+	mStatesMachine->AddTransition(std::make_unique<EnterOnAir>(run, onAir));
+
+	//from Jump
+	mStatesMachine->AddTransition(std::make_unique<EnterOnAir>(jump, onAir));
+
+	//from OnAir
+	mStatesMachine->AddTransition(std::make_unique<EnterIdle>(onAir, idle));
+	mStatesMachine->AddTransition(std::make_unique<EnterRun>(onAir, run));
 
 	mStatesMachine->SetInitialState(idle->GetID());
 }
@@ -166,12 +211,17 @@ void Player::TreatMoveEvent(float elapsedTime, std::shared_ptr<GameEvent> event)
 	}
 
 	bool isPressed = characterEvent->IsPressed();
+
+	isForward ? mActions[PlayerAction::Forward] = isPressed : mActions[PlayerAction::Backward] = isPressed;
+
 	UpdateVelocity(isPressed, isForward);
+}
 
-	float rotationAngle = GetTransformation()->GetRotation().y;
+void Player::TreatJumpEvent(float elapsedTime, std::shared_ptr<GameEvent> event)
+{
+	std::shared_ptr<const JumpEvent> jumpEvent = std::static_pointer_cast<const JumpEvent>(event);
 
-	glm::vec3 newVelocity = CalculateRunPosition(elapsedTime, rotationAngle, 0, mPhysicsComponent->GetVelocity(), mCurrentRunSpeed);
-	mPhysicsComponent->SetVelocity(newVelocity);
+	mActions[PlayerAction::Jump] = jumpEvent->IsPressed();
 }
 
 float Player::CalculateTurnPosition(float elapsedTime, float turnSpeed)
@@ -279,41 +329,6 @@ void Player::UpdateGameEvents()
 	}
 }
 
-
-void Player::TreatJumpEvent(std::shared_ptr<const GameEvent> event)
-{
-	if (event->IsOfType<JumpEvent>())
-	{
-		mHasMoved = false;
-		mHasJumped = true;
-		mCurrentUpwardsSpeed = mUpwardsSpeed;
-	}
-}
-
-void Player::TreatForwardEvent(std::shared_ptr<const GameEvent> event)
-{
-	if (event->IsOfType<ForwardEvent>())
-	{
-		std::shared_ptr<const ForwardEvent> forwardEvent = std::static_pointer_cast<const ForwardEvent>(event);
-		bool isPressed = forwardEvent->IsPressed();
-
-		UpdateVelocity(isPressed, true);
-	}
-}
-
-void Player::TreatBackwardEvent(std::shared_ptr<const GameEvent> event)
-{
-	if (event->IsOfType<BackwardEvent>())
-	{
-		std::shared_ptr<const BackwardEvent> backwardEvent = std::static_pointer_cast<const BackwardEvent>(event);
-		bool isPressed = backwardEvent->IsPressed();
-
-		UpdateVelocity(isPressed, false);
-	}
-}
-
-
-
 void Player::UpdateSpeed(bool isAccelerating)
 {
 	if (isAccelerating && !mIsShiftPressed)
@@ -332,18 +347,6 @@ void Player::UpdateSpeed(bool isAccelerating)
 	}
 }
 
-void Player::UpdateVelocity(bool isMoving, bool isForward)
-{
-	if (isMoving)
-	{
-		float sign = isForward ? 1.0f : -1.0f;
-		mCurrentRunSpeed = sign * mRunSpeed;
-	}
-	else
-	{
-		mCurrentRunSpeed = 0.0f;
-	}
-}
 
 void Player::UpdateLateralAngle(bool isMoving, bool isLeft)
 {
@@ -359,36 +362,6 @@ void Player::UpdateLateralAngle(bool isMoving, bool isLeft)
 	mHasMoved = true;
 }
 
-void Player::UpdateIdle(float elapsedTime)
-{
-	CollisionComponent* collisionComponent = GetComponent<CollisionComponent>();
-	if (collisionComponent != nullptr)
-	{
-		bool isOnGround = collisionComponent->IsOnGround();
-		if (isOnGround)
-		{
-			if (mHasJumped)
-			{
-				mState = JUMPING;
-			}
-			else 
-			if (IsMoving())
-			{
-				mState = MOVING;
-			}
-			else
-			{
-				mCurrentRunSpeed = 0.0f;
-				mCurrentTurnSpeed = 0.0f;
-				mCurrentUpwardsSpeed = 0.0f;
-			}
-		}
-		else if (IsFalling())
-		{
-			mState = FALLING;
-		}
-	}
-}
 
 void Player::UpdateMoving(float elapsedTime)
 {
@@ -426,17 +399,6 @@ void Player::UpdateMoving(float elapsedTime)
 	}
 }
 
-void Player::UpdateJumping(float elapsedTime)
-{
-	PhysicsComponent* physicsComponent = GetComponent<PhysicsComponent>();
-			
-	glm::vec3 newVelocity = CalculateRunPosition(elapsedTime, mCurrentTurnAngle, mRotOffsetForLateralMoving, physicsComponent->GetVelocity(), mCurrentRunSpeed);
-	newVelocity = CalculateJumpPosition(elapsedTime, newVelocity, mCurrentUpwardsSpeed);
-	physicsComponent->SetVelocity(newVelocity);
-	mState = FALLING;
-	mHasJumped = false;
-	mCurrentUpwardsSpeed = 0.0f;
-}
 
 bool Player::IsFalling()
 {
@@ -454,34 +416,4 @@ bool Player::IsMoving()
 	auto physicsComponent = GetComponent<PhysicsComponent>();
 	return glm::length(physicsComponent->GetVelocity()) > 0;
 }
-
-void Player::UpdateFalling(float elapsedTime)
-{
-	Transformation* transformation = GetTransformation();
-	PhysicsComponent* physicsComponent = GetComponent<PhysicsComponent>();
-
-	float rotationAngle = CalculateTurnPosition(elapsedTime, mCurrentTurnSpeed);
-
-	glm::vec3 newVelocity = CalculateRunPosition(elapsedTime, rotationAngle, mRotOffsetForLateralMoving, physicsComponent->GetVelocity(), mCurrentRunSpeed);
-	newVelocity = CalculateJumpPosition(elapsedTime, newVelocity, mCurrentUpwardsSpeed);
-	physicsComponent->SetVelocity(newVelocity);
-
-	glm::vec3 rotation = transformation->GetRotation();
-	rotation.y = mCurrentTurnAngle;
-	transformation->SetRotation(rotation);
-
-	auto collisionComponent = GetComponent<CollisionComponent>();
-	if(collisionComponent->IsOnGround())
-	{
-		mState = IDLE;
-	}
-}
-
-glm::vec3 Player::CalculateJumpPosition(float elapsedTime, glm::vec3 velocity, float upwardsSpeed)
-{
-	if (upwardsSpeed != 0.0f)
-	{
-		velocity.y = upwardsSpeed;
-	}
-	return velocity;
-}*/
+*/

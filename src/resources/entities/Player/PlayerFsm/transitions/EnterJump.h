@@ -4,18 +4,16 @@
 #include "src/resources/entities/Player/PlayerFsm/states/PlayerStates.h"
 
 class Player;
-class CollisionComponent;
 
-class EnterRun : public core::utils::FSM::BaseTransition<PlayerState, PlayerContext>
+class EnterJump : public core::utils::FSM::BaseTransition<PlayerState, PlayerContext>
 {
 public:
-	EnterRun(StatePtr origin, StatePtr destination);
-	virtual ~EnterRun() = default;
+	EnterJump(StatePtr origin, StatePtr destination);
+	virtual ~EnterJump() = default;
 
 	void OnInit() override;
 	bool CanPerformTransition() const override;
 
 private:
-	std::shared_ptr<CollisionComponent> mCollisionComponent;
 	std::shared_ptr<Player> mPlayer;
 };

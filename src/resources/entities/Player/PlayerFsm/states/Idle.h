@@ -12,14 +12,8 @@ public:
 
 	void OnInit() override;
 	void OnEnter(float deltaTime) override;
-	void OnExit(float deltaTime) override;
-	void OnUpdate(float deltaTime) override;
-
-private:
-	void UpdateEvents(float deltaTime);
 
 private:
 	std::shared_ptr<Player> mPlayer;
-	std::shared_ptr<CharacterComponent> mCharacterComponent;
 };
 
