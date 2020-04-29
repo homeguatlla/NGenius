@@ -366,7 +366,7 @@
 				</transformation>
 				<components>
 					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="100.0">
-						<initialVelocity X="0.000000" Y="0.000000" Z="1.000000"/>
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 						<collider type="SphereBoundingVolume"/>
 					</component>
 					<component is_enabled="true" type="CollisionComponent"/>
@@ -452,7 +452,7 @@
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
 			</entity>
-			<terrain_entities_patch is_enabled="true" layer="8" min_height ="6.0" max_height="20" wide="100" lenght="100" density="30" allow_intersection="true">
+			<terrain_entities_patch is_enabled="true" layer="8" min_height ="6.0" max_height="20" wide="100" lenght="100" density="20" allow_intersection="true">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>
@@ -465,15 +465,18 @@
 					</pack>
 				</models>
 			</terrain_entities_patch>
-			<terrain_entities_patch is_enabled="true" layer="8" min_height ="3.0" max_height="20" wide="10" lenght="10" density="10" allow_intersection="true">
+			<terrain_entities_patch is_enabled="true" layer="8" min_height ="3.0" max_height="20" wide="15" lenght="15" density="80" allow_intersection="true">
 				<transformation>
 					<position X="0.0" Y="5.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>
 					<scale X="1.0" Y="1.0" Z="1.0"/>
 				</transformation>
 				<models>
-					<pack percentage="100">
+					<pack percentage="90">
 						<model name="sphere"/>
+					</pack>
+					<pack percentage="10">
+						<model name="barrel"/>
 					</pack>
 				</models>
 			</terrain_entities_patch>
