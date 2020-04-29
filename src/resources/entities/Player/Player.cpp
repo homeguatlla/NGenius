@@ -94,7 +94,8 @@ void Player::DoInit(GameScene* scene, RenderSystem* renderSystem)
 	mPhysicsComponent = std::shared_ptr<PhysicsComponent>(GetComponent<PhysicsComponent>());
 	mCharacterComponent = std::shared_ptr<CharacterComponent>(GetComponent<CharacterComponent>());
 	CreateStatesMachine();
-	//renderSystem->SetCastingShadowsTarget(this);
+	
+	renderSystem->SetCastingShadowsTarget(shared_from_this());
 }
 
 void Player::Update(float elapsedTime)
