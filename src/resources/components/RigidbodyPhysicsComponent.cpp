@@ -19,33 +19,18 @@ IComponent* RigidbodyPhysicsComponent::DoClone() const
 
 void RigidbodyPhysicsComponent::DoCreatePhysicsData()
 {
-	/* to be removed after 13/06/2020 (time enough to know if is needed or not after a lot of executions)
-	if (mBoundingVolume == nullptr || mBoundingVolume->GetVolume() == 0.0f)
-	{
-		//Create a bounding volume by default with a radius circumscribe the boundingbox
-		//TODO remove this code once we create a BoxBoundingVolume
-		const AABB box = mParent->GetRenderer()->GetAABB();
-		float largerSide = glm::distance(box.GetVertexMax(), box.GetVertexMin());
-		float radiusCircumscribe = largerSide * 0.5f;
-		if (mBoundingVolume == nullptr)
-		{
-			glm::mat4 transformation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
-			transformation = glm::scale(transformation, glm::vec3(radiusCircumscribe));
-			mBoundingVolume = std::make_shared<NPhysics::SphereBoundingVolume>(transformation);
-		}
-		else
-		{
-			auto sphereVolume = std::dynamic_pointer_cast<NPhysics::SphereBoundingVolume>(mBoundingVolume);
-			sphereVolume->SetRadius(radiusCircumscribe);
-		}
-	}*/
-
 	assert(mBoundingVolume);
 	assert(mBoundingVolume->GetVolume() > 0.0f);
 
-	glm::vec3 min = mParent->GetRenderer()->GetModelAABB().GetVertexMin();
-	glm::vec3 max = mParent->GetRenderer()->GetModelAABB().GetVertexMax();
-	glm::vec3 objectSize = max - min;
+	glm::vec3 objectSize = mSize;
+	
+	//if has renderer, the size is the renderer size
+	if (mParent->GetRenderer() != nullptr)
+	{
+		glm::vec3 min = mParent->GetRenderer()->GetModelAABB().GetVertexMin();
+		glm::vec3 max = mParent->GetRenderer()->GetModelAABB().GetVertexMax();
+		objectSize = max - min;
+	}
 
 	if (typeid(*mBoundingVolume.get()) == typeid(NPhysics::BoxBoundingVolume))
 	{

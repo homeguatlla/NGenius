@@ -240,7 +240,7 @@
 							<converter mouse="2" event="ZoomEvent"/>
 						</converters>
 					</component>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="1" restitution="0.2">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="900" restitution="0.2">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 						<translation X="0.000000" Y="0.4" Z="0.000000"/>
 						<scale X="0.500000" Y="0.500000" Z="0.500000"/>
@@ -265,12 +265,18 @@
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>
-					<scale X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="1.0" Y="1.0" Z="1.0"/>
 				</transformation>
 				<components>
-					<!--component is_enabled="true" type="CollisionComponent"/-->
+				<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="1.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="SphereBoundingVolume">
+							<size X="1.0" Y="1.0" Z="1.0"/>
+						</collider>
+					</component>
+					<component is_enabled="true" type="CollisionComponent"/>
 					<component is_enabled="true" type="CharacterComponent"/>
-					<!--component is_enabled="true" type="OverWaterComponent"/-->
+					<component is_enabled="true" type="OverWaterComponent"/>
 					<component is_enabled="true" type="InputComponent">
 						<converters>
 							<converter mouse="-1" event="PitchEvent"/>
@@ -310,18 +316,18 @@
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
 			</entity-->
-			<entity is_enabled="true" name="sphere" model="sphere" material="red_flat_material" layer="8" on_ground="true">
+			<entity is_enabled="true" name="sphere" model="sphere" material="red_flat_material" layer="8">
 				<transformation>
-					<position X="4" Y="2.000000" Z="0.000000"/>
+					<position X="4" Y="10.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
-					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
+					<scale X="0.200000" Y="0.200000" Z="0.200000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850.0">
-						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="200.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="1.000000"/>
 						<collider type="SphereBoundingVolume"/>
 					</component>
-					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="CollisionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 					<component is_enabled="true" type="GravityComponent">
@@ -403,9 +409,6 @@
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 						<collider type="BoxBoundingVolume"/>
 						<translation X="0.000000" Y="0.43" Z="0.000000"/>
-					</component>
-					<component is_enabled="true" type="GravityComponent">
-						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
 					</component>
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>

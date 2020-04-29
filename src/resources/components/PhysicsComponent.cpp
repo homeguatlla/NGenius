@@ -16,10 +16,11 @@
 PhysicsComponent::PhysicsComponent() :
 	mType(NPhysics::PhysicsType::kStatic),
 	mInitialVelocity(0.0f),
-	mTranslation(0.0f),
 	mScale(1.0f),
 	mDensity(1.0f),
 	mRestitution(1.0f),
+	mSize(0.0f),
+	mTranslation(0.0f),
 	mBoundingVolume{ nullptr }
 {
 }
@@ -27,10 +28,11 @@ PhysicsComponent::PhysicsComponent() :
 PhysicsComponent::PhysicsComponent(NPhysics::PhysicsType type, float density, const glm::vec3& initialVelocity) :
 	mType(type), 
 	mInitialVelocity(initialVelocity),
-	mTranslation(0.0f),
 	mScale(1.0f),
 	mDensity(density),
 	mRestitution(1.0f),
+	mSize(0.0f),
+	mTranslation(0.0f),
 	mBoundingVolume { nullptr }
 {
 }
@@ -134,6 +136,15 @@ void PhysicsComponent::ReadBoundingVolumeFrom(core::utils::IDeserializer* source
 			transformation->GetPosition(), 
 			transformation->GetScale(),
 			transformation->GetRotation());
+
+		if (source->HasAttribute("size"))
+		{
+			source->BeginAttribute("size");
+			source->ReadParameter("X", &mSize.x);
+			source->ReadParameter("Y", &mSize.y);
+			source->ReadParameter("Z", &mSize.z);
+			source->EndAttribute();
+		}
 		source->EndAttribute();
 	}
 }

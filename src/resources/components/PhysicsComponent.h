@@ -13,12 +13,16 @@ class IGameEntity;
 class PhysicsComponent : public IComponent
 {
 protected:
+	//parameters read from xml
 	NPhysics::PhysicsType mType;
 	glm::vec3 mInitialVelocity;
-	glm::vec3 mTranslation;
 	glm::vec3 mScale;
 	float mDensity;
 	float mRestitution;
+	glm::vec3 mSize;
+
+	//real parameters
+	glm::vec3 mTranslation;
 	std::shared_ptr<NPhysics::PhysicsObject> mObject;
 	std::shared_ptr<NPhysics::IBoundingVolume> mBoundingVolume;
 

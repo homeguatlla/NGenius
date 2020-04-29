@@ -2,20 +2,26 @@
 #include "ThirdPersonCameraComponent.h"
 
 #include <glm/glm.hpp>
-#include "../IGameEntity.h"
-#include "../camera/PerspectiveCamera.h"
-#include "../systems/renderSystem/RenderSystem.h"
-#include "../Transformation.h"
-#include "../GameEvent.h"
-#include "../scene/GameScene.h"
-#include "../events/characterControllerEvents/ZoomEvent.h"
-#include "../events/characterControllerEvents/PitchEvent.h"
+#include "src/resources/IGameEntity.h"
+#include "src/resources/camera/PerspectiveCamera.h"
+#include "src/resources/systems/renderSystem/RenderSystem.h"
+#include "src/resources/Transformation.h"
+#include "src/resources/GameEvent.h"
+#include "src/resources/scene/GameScene.h"
+#include "src/resources/events/characterControllerEvents/ZoomEvent.h"
+#include "src/resources/events/characterControllerEvents/PitchEvent.h"
 #include "CollisionComponent.h"
 #include "OverWaterComponent.h"
 #include "CharacterComponent.h"
+#include "PhysicsComponent.h"
+#include "RigidbodyPhysicsComponent.h"
 
-#include "../../utils/serializer/XMLSerializer.h"
-#include "../../utils/serializer/XMLDeserializer.h"
+#include "source/rigidbody/RigidBody.h"
+#include "source/collision/Contact.h"
+
+
+#include "src/utils/serializer/XMLSerializer.h"
+#include "src/utils/serializer/XMLDeserializer.h"
 #include <iostream>
 #include <memory>
 
@@ -35,25 +41,35 @@ const float MAX_ZOOM = 50.0f;
 const float MIN_ZOOM = 2.0f; // MIN_DISTANCE_TO_START_FOLLOW;
 
 ThirdPersonCameraComponent::ThirdPersonCameraComponent() : 
-	mAngleAroundTarget(0.0f), 
+	mCamera(nullptr),
+	mTarget(nullptr),
+	mTargetOffset(glm::vec3(0.0f)),
+	mDistanceFromTarget(0.0f),
+	mPitch(0.0f),
+	mPitchSpeed(0.0f),
+	mCurrentPitch(0.0f),
+	mLastPitch(0.0f), 
+	mAngleAroundTarget(0.0f),
 	mZoomSpeed(1.0f),
-	mIsCameraFollowingTarget(true)
+	mIsCameraFollowingTarget(true),
+	mLastCameraPosition(glm::vec3(0.0f))
 {
 }
 
 
 ThirdPersonCameraComponent::ThirdPersonCameraComponent(PerspectiveCamera* camera, std::shared_ptr<IGameEntity> target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed) :
-	mCamera(camera), 
-	mTarget(target), 
+	mCamera(camera),
+	mTarget(target),
 	mTargetOffset(targetOffset),
-	mDistanceFromTarget(distanceFromTarget), 
+	mDistanceFromTarget(distanceFromTarget),
 	mPitch(pitch),
 	mPitchSpeed(pitchSpeed),
 	mCurrentPitch(pitch),
 	mLastPitch(pitch),
-	mAngleAroundTarget(0.0f), 
+	mAngleAroundTarget(0.0f),
 	mZoomSpeed(zoomSpeed),
-	mIsCameraFollowingTarget(true)
+	mIsCameraFollowingTarget(true),
+	mLastCameraPosition(camera->GetPosition())
 {
 	assert(target != nullptr);
 }
@@ -74,13 +90,26 @@ void ThirdPersonCameraComponent::Init(GameScene* scene, RenderSystem* renderSyst
 		mCamera = renderSystem->GetCamera(mCameraName);
 		mTarget = scene->GetGameEntity(mTargetName);
 	}
+
+	if (mParent->HasComponent<PhysicsComponent>())
+	{
+		auto physicsComponent = mParent->GetComponent<PhysicsComponent>();
+		
+		auto rigidbody = std::static_pointer_cast<NPhysics::RigidBody>(physicsComponent->GetPhysicsObject());
+		if (rigidbody != nullptr)
+		{
+			rigidbody->RegisterCollisionEnterHandler([this](const NPhysics::Contact& contact) {
+				OnCollision();
+				});
+		}
+	}
 }
 
 void ThirdPersonCameraComponent::UpdateInternal(float elapsedTime)
 {
 	UpdateGameEvents(elapsedTime);
 
-	glm::vec3 currentPosition = mCamera->GetPosition();
+	mLastCameraPosition = mCamera->GetPosition();
 	glm::vec3 newPosition = GetCameraPosition();
 
 	CollisionComponent* collisionComponent = mParent->GetComponent<CollisionComponent>();
@@ -104,7 +133,7 @@ void ThirdPersonCameraComponent::UpdateInternal(float elapsedTime)
 		}
 	}
 
-	newPosition = currentPosition + (newPosition - currentPosition) * CAMERA_SMOOTH_MOVEMENT_VALUE;
+	newPosition = mLastCameraPosition + (newPosition - mLastCameraPosition) * CAMERA_SMOOTH_MOVEMENT_VALUE;
 
 	//la camara deja de seguir al target si está por debajo de la distancia target-camera y 
 	//vuelve a seguir al target si está por encima
@@ -228,6 +257,11 @@ void ThirdPersonCameraComponent::UpdatePitch(float pitch, float elapsedTime)
 	mCurrentPitch += pitchSpeed;
 	mCurrentPitch = glm::max(MIN_PITCH, glm::min(MAX_PITCH, mCurrentPitch));
 	mLastPitch = pitch;
+}
+
+void ThirdPersonCameraComponent::OnCollision()
+{
+	mCamera->SetPosition(mLastCameraPosition);
 }
 
 void ThirdPersonCameraComponent::DoReadFrom(core::utils::IDeserializer* source)

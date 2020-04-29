@@ -24,6 +24,8 @@ class ThirdPersonCameraComponent : public IComponent
 	std::string mCameraName;
 	std::string mTargetName;
 
+	glm::vec3 mLastCameraPosition;
+
 public:
 	explicit ThirdPersonCameraComponent(PerspectiveCamera* camera, std::shared_ptr<IGameEntity> target, const glm::vec3& targetOffset, float distanceFromTarget, float pitch, float pitchSpeed, float zoomSpeed);
 	~ThirdPersonCameraComponent();
@@ -45,6 +47,7 @@ private:
 	float CalculateHorizontalDistance() const;
 	float CalculateVerticalDistance() const;
 	glm::vec3 CalculateCameraPosition(float horizontalDistance, float verticalDistance) const;
+	void OnCollision();
 
 	void DoReadFrom(core::utils::IDeserializer* source) override;
 	void DoWriteTo(core::utils::ISerializer* destination) override;
