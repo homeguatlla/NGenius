@@ -975,6 +975,12 @@
     <ClInclude Include="src\resources\entities\Player\PlayerFsm\transitions\EnterOnAir.h">
       <Filter>Header Files\resources\entities\player\playerFsm\transitions</Filter>
     </ClInclude>
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\states\Walk.h">
+      <Filter>Header Files\resources\entities\player\playerFsm\states</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\entities\Player\PlayerFsm\transitions\EnterWalk.h">
+      <Filter>Header Files\resources\entities\player\playerFsm\transitions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1614,6 +1620,12 @@
       <Filter>Source Files\resources\entities\Player\playerFsm\transitions</Filter>
     </ClCompile>
     <ClCompile Include="src\resources\entities\Player\PlayerFsm\transitions\EnterOnAir.cpp">
+      <Filter>Source Files\resources\entities\Player\playerFsm\transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\states\Walk.cpp">
+      <Filter>Source Files\resources\entities\Player\playerFsm\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\entities\Player\PlayerFsm\transitions\EnterWalk.cpp">
       <Filter>Source Files\resources\entities\Player\playerFsm\transitions</Filter>
     </ClCompile>
   </ItemGroup>

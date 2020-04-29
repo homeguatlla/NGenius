@@ -4,11 +4,13 @@
 #include "src/resources/entities/Player/PlayerFsm/states/Run.h"
 #include "src/resources/entities/Player/PlayerFsm/states/Jump.h"
 #include "src/resources/entities/Player/PlayerFsm/states/OnAir.h"
+#include "src/resources/entities/Player/PlayerFsm/states/Walk.h"
 
 #include "src/resources/entities/Player/PlayerFsm/transitions/EnterIdle.h"
 #include "src/resources/entities/Player/PlayerFsm/transitions/EnterRun.h"
 #include "src/resources/entities/Player/PlayerFsm/transitions/EnterJump.h"
 #include "src/resources/entities/Player/PlayerFsm/transitions/EnterOnAir.h"
+#include "src/resources/entities/Player/PlayerFsm/transitions/EnterWalk.h"
 
 #include "src/resources/components/InputComponent.h"
 #include "src/resources/components/CollisionComponent.h"
@@ -21,6 +23,7 @@
 #include "src/resources/events/characterControllerEvents/ForwardEvent.h"
 #include "src/resources/events/characterControllerEvents/BackwardEvent.h"
 #include "src/resources/events/characterControllerEvents/JumpEvent.h"
+#include "src/resources/events/characterControllerEvents/ShiftEvent.h"
 
 /*
 #include "src/resources/renderers/IRenderer.h"
@@ -43,28 +46,30 @@
 
 Player::Player() : 
 	BaseGameEntity(),
+	mMaxWalkSpeed{ 0.0f },
 	mMaxRunSpeed{ 0.0f },
 	mMaxTurnSpeed{ 0.0f },
 	mMaxUpwardsSpeed{ 0.0f },
 	mCurrentTurnSpeed{ 0.0f },
 	mLastTurnX{ 0.0f },
 	mCurrentTurnAngle{ 0.0f },
-	mRunSpeed {mMaxRunSpeed},
+	mRunSpeed {mMaxWalkSpeed},
 	mCurrentRunSpeed {0.0f}
 {
 }
 
 Player::Player(	Transformation* transformation, IRenderer* renderer, InputComponent* inputComponent, 
 				CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, 
-				CollisionComponent* collisionComponent, float runSpeed, float turnSpeed, float upwardsSpeed) :
+				CollisionComponent* collisionComponent, float walkSpeed, float runSpeed, float turnSpeed, float upwardsSpeed) :
 	BaseGameEntity(transformation, renderer), 
-	mMaxRunSpeed{ runSpeed },
+	mMaxWalkSpeed{ walkSpeed },
+	mMaxRunSpeed {runSpeed },
 	mMaxTurnSpeed{ turnSpeed },
 	mMaxUpwardsSpeed{ upwardsSpeed },
 	mCurrentTurnSpeed{ 0.0f },
 	mLastTurnX{ 0.0f },
 	mCurrentTurnAngle{ 0.0f },
-	mRunSpeed{ mMaxRunSpeed },
+	mRunSpeed{ mMaxWalkSpeed },
 	mCurrentRunSpeed{ 0.0f }
 {
 	AddComponent(inputComponent);
@@ -119,6 +124,10 @@ void Player::UpdateEvents(float deltaTime)
 		{
 			TreatJumpEvent(deltaTime, mCharacterComponent->ConsumeEvent());
 		}
+		else if (mCharacterComponent->IsNextEventOfType<ShiftEvent>())
+		{
+			TreatRunEvent(deltaTime, mCharacterComponent->ConsumeEvent());
+		}
 		else
 		{
 			mCharacterComponent->ConsumeEvent();
@@ -143,6 +152,13 @@ void Player::PerformJump(float elapsedTime)
 	mPhysicsComponent->SetVelocity(velocity);
 }
 
+void Player::EnableRun(bool enable)
+{
+	mRunSpeed = enable ? mMaxRunSpeed : mMaxWalkSpeed;
+	bool isForward = mActions[PlayerAction::Forward];
+
+	UpdateVelocity(true, isForward);
+}
 
 void Player::CreateStatesMachine()
 {
@@ -153,27 +169,39 @@ void Player::CreateStatesMachine()
 	auto run = std::make_shared<Run>();
 	auto jump = std::make_shared<Jump>();
 	auto onAir = std::make_shared<OnAir>();
+	auto walk = std::make_shared<Walk>();
 	
 	mStatesMachine->AddState(idle);
+	mStatesMachine->AddState(walk);
 	mStatesMachine->AddState(run);
 	mStatesMachine->AddState(jump);
 	mStatesMachine->AddState(onAir);
 	
+	
 	//from Idle
+	mStatesMachine->AddTransition(std::make_unique<EnterWalk>(idle, walk));
 	mStatesMachine->AddTransition(std::make_unique<EnterRun>(idle, run));
 	mStatesMachine->AddTransition(std::make_unique<EnterJump>(idle, jump));
 	mStatesMachine->AddTransition(std::make_unique<EnterOnAir>(idle, onAir));
+
+	//from Walk
+	mStatesMachine->AddTransition(std::make_unique<EnterIdle>(walk, idle));
+	mStatesMachine->AddTransition(std::make_unique<EnterRun>(walk, run));
+	mStatesMachine->AddTransition(std::make_unique<EnterJump>(walk, jump));
+	mStatesMachine->AddTransition(std::make_unique<EnterOnAir>(walk, onAir));
 
 	//from Run
 	mStatesMachine->AddTransition(std::make_unique<EnterIdle>(run, idle));
 	mStatesMachine->AddTransition(std::make_unique<EnterJump>(run, jump));
 	mStatesMachine->AddTransition(std::make_unique<EnterOnAir>(run, onAir));
+	mStatesMachine->AddTransition(std::make_unique<EnterWalk>(run, walk));
 
 	//from Jump
 	mStatesMachine->AddTransition(std::make_unique<EnterOnAir>(jump, onAir));
 
 	//from OnAir
 	mStatesMachine->AddTransition(std::make_unique<EnterIdle>(onAir, idle));
+	mStatesMachine->AddTransition(std::make_unique<EnterWalk>(onAir, walk));
 	mStatesMachine->AddTransition(std::make_unique<EnterRun>(onAir, run));
 
 	mStatesMachine->SetInitialState(idle->GetID());
@@ -224,6 +252,13 @@ void Player::TreatJumpEvent(float elapsedTime, std::shared_ptr<GameEvent> event)
 	mActions[PlayerAction::Jump] = jumpEvent->IsPressed();
 }
 
+void Player::TreatRunEvent(float elapsedTime, std::shared_ptr<GameEvent> event)
+{
+	std::shared_ptr<const ShiftEvent> shiftEvent = std::static_pointer_cast<const ShiftEvent>(event);
+
+	mActions[PlayerAction::Run] = shiftEvent->IsPressed();
+}
+
 float Player::CalculateTurnPosition(float elapsedTime, float turnSpeed)
 {
 	if (turnSpeed != 0.0f)
@@ -267,8 +302,9 @@ void Player::StopAnimations()
 void Player::ReadFrom(core::utils::IDeserializer* source)
 {
 	BaseGameEntity::ReadFrom(source);
+	source->ReadParameter("walk_speed", &mMaxWalkSpeed);
 	source->ReadParameter("run_speed", &mMaxRunSpeed);
-	mRunSpeed = mMaxRunSpeed;
+	mRunSpeed = mMaxWalkSpeed;
 	source->ReadParameter("turn_speed", &mMaxTurnSpeed);
 	source->ReadParameter("upwards_speed", &mMaxUpwardsSpeed);
 }

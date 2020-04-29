@@ -1,24 +1,20 @@
 #include "stdafx.h"
-#include "Run.h"
+#include "Walk.h"
 #include "src/resources/entities/Player/Player.h"
 
-void Run::OnInit()
+void Walk::OnInit()
 {
 	mPlayer = GetContext()->GetPlayer();
 }
 
-void Run::OnEnter(float deltaTime)
+void Walk::OnEnter(float deltaTime)
 {
 	mPlayer->PlayAnimation("animation_0");
-	mPlayer->EnableRun(true);
+	mPlayer->EnableRun(false);
 }
 
-void Run::OnUpdate(float deltaTime)
+void Walk::OnUpdate(float deltaTime)
 {
 	mPlayer->PerformMovement(deltaTime);
 }
 
-void Run::OnExit(float deltaTime)
-{
-
-}

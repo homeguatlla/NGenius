@@ -18,7 +18,8 @@ enum class PlayerAction
 {
 	Forward = 0,
 	Backward = 1, 
-	Jump = 2
+	Jump = 2,
+	Run = 3
 };
 
 class Player : public BaseGameEntity<Player>
@@ -27,7 +28,7 @@ public:
 	Player();
 	explicit Player(Transformation* transformation, IRenderer* renderer, InputComponent* playerInputComponent, 
 					CharacterComponent* characterComponent, PhysicsComponent* physicsComponent, 
-					CollisionComponent* collisionComponent, float runSpeed, float turnSpeed, float upwardsSpeed);
+					CollisionComponent* collisionComponent, float walkSpeed, float runSpeed, float turnSpeed, float upwardsSpeed);
 	virtual ~Player() = default;
 
 	std::shared_ptr<IGameEntity> DoClone() const override { return nullptr; }
@@ -39,6 +40,7 @@ public:
 
 	void PerformMovement(float elapsedTime);
 	void PerformJump(float elapsedTime);
+	void EnableRun(bool enable);
 
 	void PlayAnimation(const std::string& animationName);
 	void StopAnimations();
@@ -59,6 +61,7 @@ private:
 	void TreatTurnEvent(float elapsedTime, std::shared_ptr<GameEvent> event);
 	void TreatMoveEvent(float elapsedTime, std::shared_ptr<GameEvent> event);
 	void TreatJumpEvent(float elapsedTime, std::shared_ptr<GameEvent> event);
+	void TreatRunEvent(float elapsedTime, std::shared_ptr<GameEvent> event);
 
 	void UpdateVelocity(bool isMoving, bool isForward);
 
@@ -84,6 +87,7 @@ private:
 	std::unique_ptr<core::utils::FSM::StatesMachine<PlayerState, PlayerContext>> mStatesMachine;
 	std::shared_ptr<PlayerContext> mPlayerContext;
 
+	float mMaxWalkSpeed;
 	float mMaxRunSpeed;
 	float mMaxTurnSpeed;
 	float mMaxUpwardsSpeed;
