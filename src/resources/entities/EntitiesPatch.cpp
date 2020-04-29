@@ -153,7 +153,7 @@ void EntitiesPatch::SpawnEntities(GameScene* scene, int numEntities)
 						std::shared_ptr<IGameEntity> newEntity = clone->Clone();
 						if (newEntity != nullptr)
 						{
-							newEntity->GetTransformation()->SetPosition(point);							
+							newEntity->GetTransformation()->SetPosition(point);
 							newEntity->GetTransformation()->SetRotation(glm::vec3(0.0f, glm::radians(rotationY), 0.0f));
 							scene->AddEntity(newEntity);
 						}

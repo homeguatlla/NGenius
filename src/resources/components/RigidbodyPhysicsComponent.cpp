@@ -13,6 +13,8 @@
 IComponent* RigidbodyPhysicsComponent::DoClone() const
 {
 	RigidbodyPhysicsComponent* newPhysicsComponent = DBG_NEW RigidbodyPhysicsComponent(*this);
+	newPhysicsComponent->SetBoundingVolume(GetPhysicsBoundingVolume()->Clone());
+	newPhysicsComponent->SetPhysicsObject(GetPhysicsObject()->Clone());
 
 	return newPhysicsComponent;
 }

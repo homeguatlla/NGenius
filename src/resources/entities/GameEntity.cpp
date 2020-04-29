@@ -16,14 +16,19 @@ GameEntity::GameEntity(Transformation* transformation) :
 
 std::shared_ptr<IGameEntity> GameEntity::DoClone() const
 {
+	std::shared_ptr<GameEntity> clone;
+
 	if (mRenderer != nullptr)
 	{
-		return std::make_shared<GameEntity>(new Transformation(*GetTransformation()), mRenderer->Clone());
+		clone = std::make_shared<GameEntity>(new Transformation(*GetTransformation()), mRenderer->Clone());
 	}
 	else
 	{
-		return std::make_shared<GameEntity>(new Transformation(*GetTransformation()));
+		clone = std::make_shared<GameEntity>(new Transformation(*GetTransformation()));
 	}
+	clone->SetEnabled(IsEnabled());
+	clone->SetShouldBeCreatedOnGround(ShouldBeCreatedOnGround());
+	return clone;
 }
 
 std::shared_ptr<IGameEntity> GameEntity::DoCreate()

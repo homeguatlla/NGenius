@@ -43,6 +43,7 @@ public:
 	bool IsEnabled() const override	{ return mIsEnabled; }
 	void SetEnabled(bool enable) override { mIsEnabled = enable; }
 
+	void SetShouldBeCreatedOnGround(bool onGround) { mShouldBeCreatedOnGround = onGround; }
 	bool ShouldBeCreatedOnGround() const override { return mShouldBeCreatedOnGround; }
 
 	void SetName(const std::string& name) { mName = name; }
@@ -115,10 +116,6 @@ BaseGameEntity<TD>::BaseGameEntity(Transformation* transformation, IRenderer* re
 	mRendererName(""),
 	mShouldBeCreatedOnGround(false)
 {
-	if (renderer != nullptr)
-	{
-		renderer->SetParent(shared_from_this());
-	}
 	mID = ++IDCounter;
 	mName = mID;
 }
@@ -151,6 +148,11 @@ BaseGameEntity<TD>::~BaseGameEntity()
 template<class TD>
 void BaseGameEntity<TD>::Init(GameScene* scene, RenderSystem* renderSystem)
 {
+	if (mRenderer != nullptr)
+	{
+		mRenderer->SetParent(shared_from_this());
+	}
+
 	this->DoInit(scene, renderSystem);
 
 	//if has LOD we must init first in order to assign a renderer to the entity and

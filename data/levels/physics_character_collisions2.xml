@@ -172,7 +172,7 @@
 	<renderer>
 		<water is_enabled = "false" camera="gameplay_camera" height="6.0"/>
 		<shadows is_enabled = "true"/>
-		<fog is_enabled = "false" />
+		<fog is_enabled = "true" />
 		<render_layers>
 			<layer name="GUI" value="1"/>
 			<layer name="PARTICLES" value="2"/>

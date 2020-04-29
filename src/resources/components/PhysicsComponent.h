@@ -46,6 +46,8 @@ public:
 
 protected:
 	PhysicsComponent();
+	void SetBoundingVolume(std::shared_ptr<NPhysics::IBoundingVolume> volume) { mBoundingVolume = volume; }
+	void SetPhysicsObject(std::shared_ptr<NPhysics::PhysicsObject> object) { mObject = object; }
 
 private:
 	void DoReadFrom(core::utils::IDeserializer* source) override;

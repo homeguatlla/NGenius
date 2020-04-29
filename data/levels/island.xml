@@ -21,6 +21,8 @@
 		<textures_library>
 			<texture name = "terrain_heightmap" filename = "data/textures/terrain_heightmap_1024.png" has_mippaing="true"/>
 			<texture name = "terrain_blendmap" filename = "data/textures/terrain_blendmap_1024.png" has_mippaing="true"/>
+			<texture name = "distorsion_water" filename = "data/textures/waterDUDV.png" has_wrapping="true"/>
+			<texture name = "normal_water" filename = "data/textures/normal_water.png" has_wrapping="true"/>
 			<texture name = "flat_white" filename = "data/textures/flat_white_64.png" has_mippaing="true"/>
 			<texture name = "grid" filename = "data/textures/grid_white_64.png" has_wrapping="true"/>
 			<texture_array name = "terrain_array">
@@ -50,6 +52,9 @@
 				<texture filename = "data/skybox/sky2/front.png" />
 			</texture_cubemap>
 			<texture name = "material_farmer_diffuse" filename = "data/models/farmer/farmer_texture.png"/>
+			<texture name = "grass" filename = "data/textures/grass2.png"/>
+			<texture name = "grass_flower" filename = "data/textures/grass_flower.png"/>
+			<texture name = "wind_texture" filename = "data/wind_map.png" has_wrapping="true"/>
 		</textures_library>
 		<models_library>
 			<model name = "farmer" filename = "data/models/farmer/farmer.dae" calculate_normals="true" calculate_tangents="true"/>
@@ -73,6 +78,17 @@
 				<effect name="MaterialEffectFloat" value="2"/>
 				<effect name="MaterialEffectHeightMapTexture" texture="terrain_heightmap" tile="1.0" />
 				<effect name="MaterialEffectTextureArray" texture="terrain_array"/>			
+			</material>
+			<material name="water" shader="WaterShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectWater" 
+						reflection_texture="reflection_water" 
+						refraction_texture="refraction_water"
+						distorsion_texture="distorsion_water" 
+						normal_texture="normal_water" 
+						depth_texture="refraction_depth_water" 
+						color="0.0 0.3 0.8" speed="0.02" />
 			</material>
 			<material name="player" shader="AnimatedModelShader">
 				<effect name="MaterialEffectFogProperties"/>
@@ -147,7 +163,41 @@
 				<effect name="MaterialEffectShadowProperties" pfc_counter = "1" />
 				<effect name="MaterialEffectClippingPlane" />
 			</material>
+			<material name="grass_material" shader="GrassShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectFloat2" values="4.0 4.0" />
+				<effect name="MaterialEffectShadowProperties" pfc_counter="0"/>
+				<effect name="MaterialEffectFloat" values="0.0"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectFloat3Array" />
+				<effect name="MaterialEffectParticle" texture="grass" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
+				<effect name="MaterialEffectNormalTexture" texture="wind_texture" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
+			<material name="grass_flower_material" shader="GrassShader">
+				<effect name="MaterialEffectFogProperties"/>
+				<effect name="MaterialEffectFloat2" values="4.0 6.0" />
+				<effect name="MaterialEffectShadowProperties" pfc_counter="0"/>
+				<effect name="MaterialEffectFloat" values="0.0"/>
+				<effect name="MaterialEffectDirectionalLightProperties" />
+				<effect name="MaterialEffectFloat3Array" />
+				<effect name="MaterialEffectParticle" texture="grass_flower" depth_texture="depth_texture" screen_size="1920 1080" tile="1.0"/>
+				<effect name="MaterialEffectNormalTexture" texture="wind_texture" tile="1.0"/>
+				<effect name="MaterialEffectClippingPlane" />				
+			</material>
 		</materials_library>
+		<lods_library>
+			<lods name = "tree_folliage">
+				<lod model_name="tree_folliage_0" distance = "500.0" />
+				<lod model_name="tree_folliage_1" distance = "800.0" />
+				<lod model_name="tree_folliage_2" distance = "1000.0" />
+			</lods>
+			<lods name = "tree_trunk">
+				<lod model_name="tree_trunk_0" distance = "500.0" />
+				<lod model_name="tree_trunk_1" distance = "800.0" />
+				<lod model_name="tree_trunk_2" distance = "1000.0" />
+			</lods>
+		</lods_library>
 		<cameras>
 			<camera name="gameplay_camera" fov="45" aspect_ratio="1.77777779" near_plane="0.1" far_plane="1000" is_gameplay_camera = "true">
 				<position X="25" Y="12" Z="25"/>
@@ -170,9 +220,9 @@
 		<debug is_enabled = "true" />
 	</engine>
 	<renderer>
-		<water is_enabled = "false" camera="gameplay_camera" height="6.0"/>
+		<water is_enabled = "true" camera="gameplay_camera" height="6.0"/>
 		<shadows is_enabled = "true"/>
-		<fog is_enabled = "false" />
+		<fog is_enabled = "true" />
 		<render_layers>
 			<layer name="GUI" value="1"/>
 			<layer name="PARTICLES" value="2"/>
@@ -220,7 +270,7 @@
 	</renderer>
 	<game_scene name="mainScene">
 		<entities>
-			<player is_enabled="true" name="player" model="farmer" material="player" renderer="IndicesRenderer" layer="8" run_speed="3.0" turn_speed="0.2" upwards_speed="5.0" on_ground="true">
+			<player is_enabled="true" name="player" model="farmer" material="player" renderer="IndicesRenderer" layer="8" walk_speed="3" run_speed="5.0" turn_speed="0.2" upwards_speed="5.0" on_ground="true">
 				<transformation> 
 					<position X="0" Y="0" Z="0"/>
 					<rotation X="-90" Y="0" Z="0.0"/>
@@ -236,11 +286,12 @@
 							<converter key="87" event="ForwardEvent"/>
 							<converter key="83" event="BackwardEvent"/>
 							<converter key="32" event="JumpEvent"/>
+							<converter key="340" event="ShiftEvent"/>
 							<converter mouse="-1" event="TurnEvent"/>
 							<converter mouse="2" event="ZoomEvent"/>
 						</converters>
 					</component>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="1">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="900" restitution="0.2">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 						<translation X="0.000000" Y="0.4" Z="0.000000"/>
 						<scale X="0.500000" Y="0.500000" Z="0.500000"/>
@@ -261,16 +312,29 @@
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 			</terrain>
+			<water is_enabled="true" name="water" material="water" wide="50" length="50">
+				<transformation>
+					<position X="4.000000" Y="0.000000" Z="4.500000"/>
+					<rotation X="-90.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+			</water>
 			<entity is_enabled="true" layer="8">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>
-					<scale X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="1.0" Y="1.0" Z="1.0"/>
 				</transformation>
 				<components>
+					<!--component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="1.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="SphereBoundingVolume">
+							<size X="1.0" Y="1.0" Z="1.0"/>
+						</collider>
+					</component-->
 					<component is_enabled="true" type="CollisionComponent"/>
 					<component is_enabled="true" type="CharacterComponent"/>
-					<!--component is_enabled="true" type="OverWaterComponent"/-->
+					<component is_enabled="true" type="OverWaterComponent"/>
 					<component is_enabled="true" type="InputComponent">
 						<converters>
 							<converter mouse="-1" event="PitchEvent"/>
@@ -294,49 +358,33 @@
 					</component>
 				</components>
 			</entity>
-			<!--entity is_enabled="true" name="ground" model="cube_default" material="green_flat_material" layer="8" on_ground="true">
+			<entity is_enabled="true" name="sphere" model="sphere" material="red_flat_material" layer="8" restitution="1.0">
 				<transformation>
-					<position X="6" Y="0" Z="-6"/>
-					<rotation X="0.000000" Y="0.0000" Z="90.000000"/>
-					<scale X="10.000000" Y="1.000000" Z="10.000000"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850">
-						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<collider type="BoxBoundingVolume"/>
-					</component>
-					<component is_enabled="true" type="SpacePartitionComponent"/>
-					<component is_enabled="true" type="DebugComponent"/>
-					<component is_enabled="true" type="ColliderDebugComponent"/>
-				</components>
-			</entity-->
-			<entity is_enabled="true" name="sphere" model="sphere" material="red_flat_material" layer="8" on_ground="true">
-				<transformation>
-					<position X="4" Y="1.000000" Z="0.000000"/>
+					<position X="4" Y="10.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
-					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
+					<scale X="0.200000" Y="0.200000" Z="0.200000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850.0">
-						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="100.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="1.000000"/>
 						<collider type="SphereBoundingVolume"/>
 					</component>
-					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="CollisionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 					<component is_enabled="true" type="GravityComponent">
-						<gravity X="0.0" Y="-2.8f" Z="0.0"/>
+						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
 					</component>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="box_middle" model="cube_default" material="grid_material" layer="8" on_ground="false">
+			<entity is_enabled="true" name="box_middle" model="cube_default" material="grid_material" layer="8" on_ground="true">
 				<transformation>
-					<position X="2.000000" Y="7.800000" Z="0.000000"/>
+					<position X="2.000000" Y="1.800000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="850" restitution="0.0">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 						<collider type="BoxBoundingVolume"/>
 					</component>
@@ -345,9 +393,9 @@
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="tree_trunk" model="tree_trunk_0" material="tree_trunk" layer="8" on_ground="true">
+			<entity is_enabled="true" name="tree_trunk" layer="8" on_ground="true" restitution="0.0">
 				<transformation>
-					<position X="-3.000000" Y="0.000000" Z="0.000000"/>
+					<position X="10.000000" Y="18.500000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
@@ -360,20 +408,34 @@
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
 					<component is_enabled="true" type="ColliderDebugComponent"/>
+					<component is_enabled="true" type="LODComponent">
+						<lods>
+							<lod model_name="tree_trunk_0" material="tree_trunk_normalmap" distance = "500.0" />
+							<lod model_name="tree_trunk_1" material="tree_trunk" distance = "800.0" />
+							<lod model_name="tree_trunk_2" material="tree_trunk" distance = "1000.0" />
+						</lods>
+					</component>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="tree_foliage" model="tree_foliage_0" material="tree_foliage" layer="8" on_ground="true">
+			<entity is_enabled="true" name="tree_foliage" layer="8" on_ground="true">
 				<transformation>
-					<position X="-3.000000" Y="0" Z="0.000000"/>
+					<position X="10.000000" Y="18.500000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 				<components>
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="LODComponent">
+						<lods>
+							<lod model_name="tree_foliage_0" material="tree_foliage" distance = "500.0" />
+							<lod model_name="tree_foliage_1" material="tree_foliage" distance = "800.0" />
+							<lod model_name="tree_foliage_2" material="tree_foliage" distance = "1000.0" />
+						</lods>
+					</component>
 				</components>
-			</entity>
-			<entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8" on_ground="true">
+			</entity>			
+			<entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8" on_ground="true"  restitution="0.0">
 				<transformation>
 					<position X="2.000000" Y="2" Z="2"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
@@ -385,15 +447,12 @@
 						<collider type="BoxBoundingVolume"/>
 						<translation X="0.000000" Y="0.43" Z="0.000000"/>
 					</component>
-					<component is_enabled="true" type="GravityComponent">
-						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
-					</component>
 					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
 			</entity>
-			<!--terrain_entities_patch is_enabled="true" layer="8" min_height ="6.0" max_height="20" wide="100" lenght="100" density="20" allow_intersection="true">
+			<terrain_entities_patch is_enabled="true" layer="8" min_height ="6.0" max_height="20" wide="100" lenght="100" density="30" allow_intersection="true">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>
@@ -405,7 +464,41 @@
 						<model name="tree_foliage"/>
 					</pack>
 				</models>
-			</terrain_entities_patch-->
+			</terrain_entities_patch>
+			<terrain_entities_patch is_enabled="true" layer="8" min_height ="3.0" max_height="20" wide="10" lenght="10" density="10" allow_intersection="true">
+				<transformation>
+					<position X="0.0" Y="5.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="1.0" Y="1.0" Z="1.0"/>
+				</transformation>
+				<models>
+					<pack percentage="100">
+						<model name="sphere"/>
+					</pack>
+				</models>
+			</terrain_entities_patch>
+			<terrain_points_patch is_enabled="true" material="grass_material" layer="4" min_height ="6.0" max_height="20" wide="50" lenght="50" density="30">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="1.0" Y="1.0" Z="1.0"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="EnvironmentAffectedComponent" affected_by_wind="true"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</terrain_points_patch>
+			<terrain_points_patch is_enabled="true" material="grass_flower_material" layer="4" min_height ="7.0" max_height="20" wide="50" lenght="50" density="2">
+				<transformation>
+					<position X="0.0" Y="0.0" Z="0.0"/>
+					<rotation X="0.0" Y="0.0" Z="0.0"/>
+					<scale X="1.0" Y="1.0" Z="1.0"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="EnvironmentAffectedComponent" affected_by_wind="true"/>
+					<component is_enabled="true" type="DebugComponent"/>
+				</components>
+			</terrain_points_patch>
 		</entities>
 	</game_scene>
 </ngenius>
