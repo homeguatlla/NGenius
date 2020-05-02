@@ -1,13 +1,14 @@
 #include "stdafx.h"
 #include "BuoyancyComponent.h"
-#include "../IGameEntity.h"
-#include "../systems/renderSystem/RenderSystem.h"
-#include "../renderers/IRenderer.h"
-#include "../../utils/serializer/XMLSerializer.h"
-#include "../../utils/serializer/XMLDeserializer.h"
-#include "../../AABB.h"
-#include "../Memory.h"
-#include "../../../../NPhysics/source/particle/forceGenerators/ParticleBuoyancy.h"
+#include "src/resources/IGameEntity.h"
+#include "src/resources/systems/renderSystem/RenderSystem.h"
+#include "src/resources/renderers/IRenderer.h"
+#include "src/utils/serializer/XMLSerializer.h"
+#include "src/utils/serializer/XMLDeserializer.h"
+#include "src/AABB.h"
+#include "Memory.h"
+#include "src/resources/components/RigidbodyPhysicsComponent.h"
+#include "source/particle/forceGenerators/ParticleBuoyancy.h"
 
 BuoyancyComponent::BuoyancyComponent(float liquidDensity) : 
 	mLiquidDensity(liquidDensity)
@@ -16,6 +17,20 @@ BuoyancyComponent::BuoyancyComponent(float liquidDensity) :
 
 void BuoyancyComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 {
+	if (mParent->HasComponent<PhysicsComponent>())
+	{
+		auto component = mParent->GetComponent<PhysicsComponent>();
+		if (component != nullptr && typeid(*component) == typeid(RigidbodyPhysicsComponent))
+		{
+			auto rigidBody = component->GetPhysicsObject();
+			mCenter = glm::vec3(0.0f);// rigidBody->GetPosition();
+			auto boundingVolume = component->GetPhysicsBoundingVolume();
+			mVolume = boundingVolume->GetVolume();
+			mMaxDepth = boundingVolume->GetSize().y * 0.5f;
+			mWaterHeight = renderSystem->GetWaterHeight();
+		}
+	}
+	/*
 	const AABB aabb = mParent->GetRenderer()->GetAABB();
 	//TODO the center should be the center of the rigidbody
 	mCenter = aabb.GetCenter();
@@ -32,7 +47,7 @@ void BuoyancyComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 	float sizeY = max.y > min.y ? max.y - min.y : min.y - max.y;
 	mMaxDepth = sizeY * 0.5f;
 	mWaterHeight = renderSystem->GetWaterHeight();
-
+	*/
 	//TODO is water enabled??
 }
 

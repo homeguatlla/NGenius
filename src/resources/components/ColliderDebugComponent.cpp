@@ -93,9 +93,7 @@ void ColliderDebugComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 	}
 
 	mBoundingVolumeRenderer->SetParent(mParent);
-	auto parentTransMatrix = mParent->GetTransformation()->GetModelMatrix();
-	auto parentInverseTransMatrix = glm::inverse(parentTransMatrix);
-
+	auto parentInverseTransMatrix = glm::inverse(mParent->GetTransformation()->GetModelMatrix());
 	auto colliderScale = defaultVolumeSize / mParent->GetTransformation()->GetScale();
 	auto colliderOffset = parentInverseTransMatrix * glm::vec4(defaultPosition, 1);
 

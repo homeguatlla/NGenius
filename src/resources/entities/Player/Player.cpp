@@ -105,7 +105,9 @@ void Player::Update(float elapsedTime)
 	UpdateEvents(elapsedTime);
 	mStatesMachine->Update(elapsedTime);
 
-	//std::cout << "velocity = " << mCurrentRunSpeed << " state = " << mState << "\n";
+	//std::cout << "on ground? = " << mCollisionComponent->IsOnGround() << 
+	//	" velocity = (" << mPhysicsComponent->GetVelocity().x << ", " << mPhysicsComponent->GetVelocity().y <<
+	//	", " << mPhysicsComponent->GetVelocity().z << ") " << "\n";
 	//std::cout << "state: " << static_cast<int>(mStatesMachine->GetCurrentState()->GetID()) << std::endl;
 }
 
