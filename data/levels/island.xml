@@ -127,11 +127,11 @@
 				<effect name="MaterialEffectDiffuseTexture" texture="flat_white" color="1.0 0.0 0.0" tile="1.0" />
 				<effect name="MaterialEffectClippingPlane" />				
 			</material>
-			<material name="green_flat_material" shader="ModelShader">
+			<material name="blue_flat_material" shader="ModelShader">
 				<effect name="MaterialEffectFogProperties"/>
 				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
 				<effect name="MaterialEffectDirectionalLightProperties" />
-				<effect name="MaterialEffectDiffuseTexture" texture="flat_white" color="0.0 1.0 0.0" tile="1.0" />
+				<effect name="MaterialEffectDiffuseTexture" texture="flat_white" color="0.18 0.9 0.14" tile="1.0" />
 				<effect name="MaterialEffectClippingPlane" />				
 			</material>
 			<material name="grid_material" shader="ModelShader">
@@ -358,7 +358,7 @@
 					</component>
 				</components>
 			</entity>
-			<entity is_enabled="true" name="sphere" model="sphere" material="red_flat_material" layer="8" restitution="1.0">
+			<entity is_enabled="true" name="red_sphere" model="sphere" material="red_flat_material" layer="8" restitution="1.0">
 				<transformation>
 					<position X="4" Y="10.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
@@ -369,6 +369,27 @@
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 						<collider type="SphereBoundingVolume"/>
 					</component>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
+					<component is_enabled="true" type="GravityComponent">
+						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
+					</component>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="blue_sphere" model="sphere" material="blue_flat_material" layer="8" restitution="1.0">
+				<transformation>
+					<position X="6" Y="10.000000" Z="4.000000"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<scale X="0.400000" Y="0.400000" Z="0.400000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="50.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="SphereBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="BuoyancyComponent" liquid_density="1000"/>
+					<component is_enabled="true" type="DragComponent" k1="12.5" k2="2.5"/>
 					<component is_enabled="true" type="CollisionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
 					<component is_enabled="true" type="ColliderDebugComponent"/>
@@ -465,22 +486,25 @@
 					</pack>
 				</models>
 			</terrain_entities_patch>
-			<terrain_entities_patch is_enabled="true" layer="8" min_height ="3.0" max_height="20" wide="15" lenght="15" density="80" allow_intersection="true">
+			<terrain_entities_patch is_enabled="true" layer="8" min_height ="3.0" max_height="20" wide="15" lenght="15" density="80" allow_intersection="false">
 				<transformation>
 					<position X="0.0" Y="5.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>
 					<scale X="1.0" Y="1.0" Z="1.0"/>
 				</transformation>
 				<models>
-					<pack percentage="90">
-						<model name="sphere"/>
+					<pack percentage="45">
+						<model name="red_sphere"/>
+					</pack>
+					<pack percentage="45">
+						<model name="blue_sphere"/>
 					</pack>
 					<pack percentage="10">
 						<model name="barrel"/>
 					</pack>
 				</models>
 			</terrain_entities_patch>
-			<terrain_points_patch is_enabled="true" material="grass_material" layer="4" min_height ="6.0" max_height="20" wide="50" lenght="50" density="30">
+			<!--terrain_points_patch is_enabled="true" material="grass_material" layer="4" min_height ="6.0" max_height="20" wide="50" lenght="50" density="30">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>
@@ -501,7 +525,7 @@
 					<component is_enabled="true" type="EnvironmentAffectedComponent" affected_by_wind="true"/>
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
-			</terrain_points_patch>
+			</terrain_points_patch-->
 		</entities>
 	</game_scene>
 </ngenius>
