@@ -16,11 +16,12 @@
 PhysicsComponent::PhysicsComponent() :
 	mType(NPhysics::PhysicsType::kStatic),
 	mInitialVelocity(0.0f),
-	mScale(1.0f),
+	mLocalTranslation(0.0f),
+	mLocalScale(1.0f),
+	mLocalRotation(0.0f),
 	mDensity(1.0f),
 	mRestitution(1.0f),
 	mSize(0.0f),
-	mTranslation(0.0f),
 	mBoundingVolume{ nullptr }
 {
 }
@@ -28,11 +29,12 @@ PhysicsComponent::PhysicsComponent() :
 PhysicsComponent::PhysicsComponent(NPhysics::PhysicsType type, float density, const glm::vec3& initialVelocity) :
 	mType(type), 
 	mInitialVelocity(initialVelocity),
-	mScale(1.0f),
+	mLocalTranslation(0.0f),
+	mLocalScale(1.0f),
+	mLocalRotation(0.0f),
 	mDensity(density),
 	mRestitution(1.0f),
 	mSize(0.0f),
-	mTranslation(0.0f),
 	mBoundingVolume { nullptr }
 {
 }
@@ -104,18 +106,27 @@ void PhysicsComponent::DoReadFrom(core::utils::IDeserializer* source)
 	if (source->HasAttribute("translation"))
 	{
 		source->BeginAttribute("translation");
-		source->ReadParameter("X", &mTranslation.x);
-		source->ReadParameter("Y", &mTranslation.y);
-		source->ReadParameter("Z", &mTranslation.z);
+		source->ReadParameter("X", &mLocalTranslation.x);
+		source->ReadParameter("Y", &mLocalTranslation.y);
+		source->ReadParameter("Z", &mLocalTranslation.z);
 		source->EndAttribute();
 	}
 	
 	if (source->HasAttribute("scale"))
 	{
 		source->BeginAttribute("scale");
-		source->ReadParameter("X", &mScale.x);
-		source->ReadParameter("Y", &mScale.y);
-		source->ReadParameter("Z", &mScale.z);
+		source->ReadParameter("X", &mLocalScale.x);
+		source->ReadParameter("Y", &mLocalScale.y);
+		source->ReadParameter("Z", &mLocalScale.z);
+		source->EndAttribute();
+	}
+
+	if (source->HasAttribute("rotation"))
+	{
+		source->BeginAttribute("rotation");
+		source->ReadParameter("X", &mLocalRotation.x);
+		source->ReadParameter("Y", &mLocalRotation.y);
+		source->ReadParameter("Z", &mLocalRotation.z);
 		source->EndAttribute();
 	}
 
@@ -130,12 +141,8 @@ void PhysicsComponent::ReadBoundingVolumeFrom(core::utils::IDeserializer* source
 
 		std::string boundingVolumeType;
 		source->ReadParameter("type", boundingVolumeType);
-		Transformation* transformation = mParent->GetTransformation();
 		mBoundingVolume = NPhysics::InstantiableObject::CreateBoundingVolume(
-			boundingVolumeType, 
-			transformation->GetPosition(), 
-			transformation->GetScale(),
-			transformation->GetRotation());
+			boundingVolumeType, mParent->GetTransformation()->GetModelMatrix());
 
 		if (source->HasAttribute("size"))
 		{

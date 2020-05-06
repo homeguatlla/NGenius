@@ -9,6 +9,8 @@
 #include "NPhysicsEngine.h"
 #include "source/bvh/boundingVolumes/SphereBoundingVolume.h"
 #include "source/bvh/boundingVolumes/BoxBoundingVolume.h"
+#include "source/utils/Math.h"
+#include <glm/gtx/transform.hpp>
 
 IComponent* RigidbodyPhysicsComponent::DoClone() const
 {
@@ -25,43 +27,39 @@ void RigidbodyPhysicsComponent::DoCreatePhysicsData()
 	assert(mBoundingVolume->GetVolume() > 0.0f);
 
 	glm::vec3 objectSize = mSize;
+	auto transformation = mParent->GetTransformation();
 	
 	//if has renderer, the size is the renderer size
 	if (mParent->GetRenderer() != nullptr)
 	{
 		glm::vec3 min = mParent->GetRenderer()->GetModelAABB().GetVertexMin();
 		glm::vec3 max = mParent->GetRenderer()->GetModelAABB().GetVertexMax();
-		objectSize = max - min;
+		objectSize = (max - min) * transformation->GetScale();
 	}
-
+	
 	if (typeid(*mBoundingVolume.get()) == typeid(NPhysics::BoxBoundingVolume))
 	{
 		auto box = std::dynamic_pointer_cast<NPhysics::BoxBoundingVolume>(mBoundingVolume);
-		auto transformation = mParent->GetTransformation();
-		box->SetPosition(transformation->GetPosition() + mTranslation);
-		box->SetSize(objectSize * transformation->GetScale() * mScale);
-		box->SetRotation(transformation->GetRotation());
+		box->SetLocalTransformation(mLocalTranslation, mLocalScale, mLocalRotation);
+		box->SetSize(objectSize);
 	}
 	else if (typeid(*mBoundingVolume.get()) == typeid(NPhysics::SphereBoundingVolume))
 	{
 		auto sphere = std::dynamic_pointer_cast<NPhysics::SphereBoundingVolume>(mBoundingVolume);
-		auto transformation = mParent->GetTransformation();
-		auto size = objectSize * transformation->GetScale() * mScale;
-		sphere->SetPosition(transformation->GetPosition() + mTranslation);
-		sphere->SetRadius(glm::max(size.x, glm::max(size.y, size.z)) * 0.5f );
+		sphere->SetLocalTransformation(mLocalTranslation, mLocalScale, mLocalRotation);
+		sphere->SetRadius(glm::max(objectSize.x, glm::max(objectSize.y, objectSize.z)) * 0.5f );
 	}
 	
-	glm::vec3 position = mParent->GetTransformation()->GetPosition();
-	glm::vec3 initialRotation = mParent->GetTransformation()->GetRotation();
 	glm::vec3 initialAngularVelocity(0.0f);
-
-	auto rigidBody = std::make_shared<NPhysics::RigidBody>(position + mTranslation, initialAngularVelocity, mInitialVelocity, mType);
-	rigidBody->SetRotation(initialRotation);
+	mBoundingVolume->SetParentTransformation(transformation->GetPosition(), transformation->GetScale(), transformation->GetRotation());
+	auto rigidBody = std::make_shared<NPhysics::RigidBody>(mBoundingVolume->GetPosition(), initialAngularVelocity, mInitialVelocity, mType);
+	rigidBody->SetRotation(mLocalRotation);
 	rigidBody->SetResitution(mRestitution);
 
 	mObject = rigidBody;
 
 	float volume = mBoundingVolume->GetVolume();
+	assert(volume > 0.0f);
 	float mass = mDensity * volume;
 
 	//Although is a static object and its mass is infinite the inertia tensor matrix needs to be calculated 

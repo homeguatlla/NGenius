@@ -62,6 +62,14 @@ void PhysicsSystem::Update(float deltaTime)
 	{
 		for (auto&& entity : mEntities)
 		{
+			/*std::cout << "before entity pos: (" << entity->GetTransformation()->GetPosition().x << ", " <<
+				entity->GetTransformation()->GetPosition().y << ", " <<
+				entity->GetTransformation()->GetPosition().z << ")\n";
+			auto physicsComponent = entity->GetComponent<PhysicsComponent>();
+			auto volume = physicsComponent->GetPhysicsBoundingVolume();
+			std::cout << "before volume pos: (" << volume->GetPosition().x << ", " <<
+				volume->GetPosition().y << ", " <<
+				volume->GetPosition().z << ")\n";*/
 			UpdatePhysicsObjectsData(entity);
 		}
 
@@ -71,6 +79,14 @@ void PhysicsSystem::Update(float deltaTime)
 		{
 			CheckCollisions(entity);
 			UpdateEntitiesData(entity);
+			/*std::cout << "after entity pos: (" << entity->GetTransformation()->GetPosition().x << ", " <<
+				entity->GetTransformation()->GetPosition().y << ", " <<
+				entity->GetTransformation()->GetPosition().z << ")\n";
+			auto physicsComponent = entity->GetComponent<PhysicsComponent>();
+			auto volume = physicsComponent->GetPhysicsBoundingVolume();
+			std::cout << "after volume pos: (" << volume->GetPosition().x << ", " <<
+				volume->GetPosition().y << ", " <<
+				volume->GetPosition().z << ")\n";*/
 		}
 	}
 }
@@ -294,17 +310,18 @@ bool PhysicsSystem::ApplyCollisions(std::shared_ptr<IGameEntity> entity, float *
 			auto position = boundingVolume->GetPosition();
 
 			*groundHeight = mTerrain->GetHeight(glm::vec2(position.x, position.z));
-			float minY = -boundingVolume->GetSize().y * 0.5f;
-			bool isColliding = position.y <= *groundHeight - minY;
+			float minY = boundingVolume->GetMinPoint().y;
+			bool isColliding = minY <= *groundHeight;
 			//std::cout << "vel " << physicsObject->GetVelocity().y << std::endl;
-
+			//std::cout << "min Y  " << minY << std::endl;
 			if (isColliding)
 			{
 				//std::cout << "Collision? " << isColliding << "\n";
 
-				position.y = *groundHeight - minY;
+				position.y += *groundHeight - minY;
+				//std::cout << "Collision! position Y: " << position.y << "\n";
 				boundingVolume->SetPosition(position);
-				physicsObject->SetPosition(position);
+				physicsObject->SetPosition(boundingVolume->GetPosition());
 				auto velocity = physicsObject->GetVelocity();
 				velocity.y = 0.0f;
 				physicsObject->SetInitialVelocity(velocity);
@@ -378,17 +395,11 @@ void PhysicsSystem::UpdatePhysicsObjectsData(std::shared_ptr<IGameEntity> entity
 	PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
 	if (component != nullptr)
 	{
-		auto object = component->GetPhysicsObject();
-		auto position = entity->GetTransformation()->GetPosition();
-		auto rotation = entity->GetTransformation()->GetRotation();
-		//as we are setting to the physicsObject the position of the gameEntity
-		//because if is the player, position could be changed, we have to set the game entity position
-		//adding the translation the physics object has related the game entity.
-		object->SetPosition(position + component->GetTranslation());
-		object->SetRotation(rotation);
-
 		auto boundingVolume = component->GetPhysicsBoundingVolume();
-		boundingVolume->SetPosition(position + component->GetTranslation());
+		boundingVolume->SetParentTranslation(entity->GetTransformation()->GetPosition());
+
+		auto object = component->GetPhysicsObject();
+		object->SetPosition(boundingVolume->GetPosition());
 	}
 }
 
@@ -397,12 +408,8 @@ void PhysicsSystem::UpdateEntitiesData(std::shared_ptr<IGameEntity> entity)
 	PhysicsComponent* component = entity->GetComponent<PhysicsComponent>();
 	if (component != nullptr)
 	{
-		auto object = component->GetPhysicsObject();
-		entity->GetTransformation()->SetPosition(object->GetPosition() - component->GetTranslation());
-		glm::vec3 rotation = object->GetRotation();
-		//std::cout << "euler angles: " << rotation.x << ", " << rotation.y << ", " << rotation.z << "\n";
-
-		entity->GetTransformation()->SetRotation(object->GetRotation());
+		auto boundingVolume = component->GetPhysicsBoundingVolume();
+		entity->GetTransformation()->SetPosition(boundingVolume->GetParentTranslation());
 	}
 }
 

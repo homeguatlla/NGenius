@@ -355,19 +355,22 @@ void GameScene::SetEntityOnGround(std::shared_ptr<IGameEntity> entity)
 	if (mGround != nullptr)
 	{
 		glm::vec3 position = entity->GetTransformation()->GetPosition();
-		float groundY = mGround->GetHeight(glm::vec2(position.x, position.z));
+		float groundY = 0.0f;
 		float minY = 0.0f;
+
 		if (entity->HasComponent<PhysicsComponent>())
 		{
 			auto physicsComponent = entity->GetComponent<PhysicsComponent>();
 			auto boundingVolume = physicsComponent->GetPhysicsBoundingVolume();
-			minY = - boundingVolume->GetSize().y * 0.5f + physicsComponent->GetTranslation().y;
+			groundY = mGround->GetHeight(glm::vec2(boundingVolume->GetPosition().x, boundingVolume->GetPosition().z));
+			minY = boundingVolume->GetMinPoint().y;
 		}
 		else
 		{
-			minY = entity->GetRenderer()->GetModel()->GetAABB().GetVertexMin().y;			
+			groundY = mGround->GetHeight(glm::vec2(position.x, position.z));
+			minY = entity->GetRenderer()->GetModel()->GetAABB().GetVertexMin().y;	
 		}
-		position.y = groundY - minY;
+		position.y += groundY - minY;
 		entity->GetTransformation()->SetPosition(position);
 	}
 }

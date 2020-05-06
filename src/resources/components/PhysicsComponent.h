@@ -16,13 +16,14 @@ protected:
 	//parameters read from xml
 	NPhysics::PhysicsType mType;
 	glm::vec3 mInitialVelocity;
-	glm::vec3 mScale;
+	glm::vec3 mLocalTranslation;
+	glm::vec3 mLocalScale;
+	glm::vec3 mLocalRotation;
 	float mDensity;
 	float mRestitution;
 	glm::vec3 mSize;
 
 	//real parameters
-	glm::vec3 mTranslation;
 	std::shared_ptr<NPhysics::PhysicsObject> mObject;
 	std::shared_ptr<NPhysics::IBoundingVolume> mBoundingVolume;
 
@@ -38,7 +39,7 @@ public:
 	//[[deprecated("Replaced by NPhysicsEngine, this both methods must be removed. Only physics engine will Set velocity")]]
 	const glm::vec3 GetVelocity() const;
 	//This translation, is an offset related the parent position
-	const glm::vec3 GetTranslation() const { return mTranslation; }
+	//const glm::vec3 GetTranslation() const { return mTranslation; }
 	void SetInitialVelocity(const glm::vec3& velocity);
 	void SetVelocity(const glm::vec3& velocity);
 	std::shared_ptr<NPhysics::PhysicsObject> GetPhysicsObject() const;

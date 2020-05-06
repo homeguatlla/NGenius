@@ -15,9 +15,11 @@
 #include "src/utils/serializer/XMLSerializer.h"
 #include "source/bvh/boundingVolumes/SphereBoundingVolume.h"
 #include "source/bvh/boundingVolumes/BoxBoundingVolume.h"
+#include "source/utils/Math.h"
 #include "Memory.h"
 
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 ColliderDebugComponent::ColliderDebugComponent(IRenderer* renderer) :
 mBoundingVolumeRenderer(renderer)
@@ -41,12 +43,14 @@ ColliderDebugComponent* ColliderDebugComponent::DoClone() const
 	return clone;
 }
 
-std::string ColliderDebugComponent::GetColliderModelNameAndSize(RenderSystem* renderSystem, glm::vec3& position, glm::vec3& size)
+std::string ColliderDebugComponent::GetColliderModelNameAndSize(RenderSystem* renderSystem, glm::vec3& localTranslation, glm::vec3& size, glm::vec3& localRotation)
 {
 	auto physicsComponent = mParent->GetComponent<PhysicsComponent>();
 	auto boundingVolume = physicsComponent->GetPhysicsBoundingVolume();
 	
-	position = boundingVolume->GetPosition();
+	localTranslation = boundingVolume->GetLocalTranslation();
+	localRotation = boundingVolume->GetLocalRotation();
+
 	auto modelName = ModelsLibrary::CUBE_WIREFRAME_NAME;
 	if (typeid(*boundingVolume) == typeid(NPhysics::SphereBoundingVolume))
 	{
@@ -80,11 +84,11 @@ void ColliderDebugComponent::CreateBoundingVolumeRenderer(const std::string& mod
 
 void ColliderDebugComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 {
-	glm::vec3 defaultPosition, defaultVolumeSize;
+	glm::vec3 localTranslation, localRotation, defaultVolumeSize;
 
 	if (mBoundingVolumeRenderer == nullptr)
 	{
-		auto modelName = GetColliderModelNameAndSize(renderSystem, defaultPosition, defaultVolumeSize);
+		auto modelName = GetColliderModelNameAndSize(renderSystem, localTranslation, defaultVolumeSize, localRotation);
 		CreateBoundingVolumeRenderer(modelName, renderSystem);
 		
 		//change volume color
@@ -93,12 +97,22 @@ void ColliderDebugComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 	}
 
 	mBoundingVolumeRenderer->SetParent(mParent);
-	auto parentInverseTransMatrix = glm::inverse(mParent->GetTransformation()->GetModelMatrix());
-	auto colliderScale = defaultVolumeSize / mParent->GetTransformation()->GetScale();
-	auto colliderOffset = parentInverseTransMatrix * glm::vec4(defaultPosition, 1);
+	Transformation transformation(localTranslation, localRotation, defaultVolumeSize);
+	auto parentRotation = glm::rotate(glm::mat4(1.0f), mParent->GetTransformation()->GetRotation().x, glm::vec3(1.0f, 0.0f, 0.0f));
+	parentRotation = glm::rotate(parentRotation, mParent->GetTransformation()->GetRotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
+	parentRotation = glm::rotate(parentRotation, mParent->GetTransformation()->GetRotation().z, glm::vec3(0.0f, 0.0f, 1.0f));
 
-	Transformation transformation(colliderOffset, glm::vec3(0.0f), colliderScale);
-	mBoundingVolumeRenderer->SetTransformation(transformation);
+	auto parentTranslation = glm::translate(glm::mat4(1.0f), mParent->GetTransformation()->GetPosition());
+
+	auto mat = glm::inverse(mParent->GetTransformation()->GetModelMatrix()) * parentTranslation * parentRotation * transformation.GetModelMatrix();
+	glm::vec3 finalScale;
+	glm::quat finalRotation;
+	glm::vec3 finalTranslation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+	glm::decompose(mat, finalScale, finalRotation, finalTranslation, skew, perspective);
+
+	mBoundingVolumeRenderer->SetTransformation(Transformation(finalTranslation, glm::eulerAngles(finalRotation), finalScale));
 
 	mBoundingVolumeRenderer->SetLayer(IRenderer::LAYER_DEBUG);
 	SetBoundingVolumeVisibility(false);
