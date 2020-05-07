@@ -504,7 +504,7 @@
 					</pack>
 				</models>
 			</terrain_entities_patch>
-			<!--terrain_points_patch is_enabled="true" material="grass_material" layer="4" min_height ="6.0" max_height="20" wide="50" lenght="50" density="30">
+			<terrain_points_patch is_enabled="true" material="grass_material" layer="4" min_height ="6.0" max_height="20" wide="50" lenght="50" density="30">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
 					<rotation X="0.0" Y="0.0" Z="0.0"/>
@@ -525,7 +525,7 @@
 					<component is_enabled="true" type="EnvironmentAffectedComponent" affected_by_wind="true"/>
 					<component is_enabled="true" type="DebugComponent"/>
 				</components>
-			</terrain_points_patch-->
+			</terrain_points_patch>
 		</entities>
 	</game_scene>
 </ngenius>

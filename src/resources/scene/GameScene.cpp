@@ -368,7 +368,7 @@ void GameScene::SetEntityOnGround(std::shared_ptr<IGameEntity> entity)
 		else
 		{
 			groundY = mGround->GetHeight(glm::vec2(position.x, position.z));
-			minY = entity->GetRenderer()->GetModel()->GetAABB().GetVertexMin().y;	
+			minY = position.y + entity->GetRenderer()->GetModel()->GetAABB().GetVertexMin().y;	
 		}
 		position.y += groundY - minY;
 		entity->GetTransformation()->SetPosition(position);
