@@ -154,7 +154,8 @@ void EntitiesPatch::SpawnEntities(GameScene* scene, int numEntities)
 						if (newEntity != nullptr)
 						{
 							newEntity->GetTransformation()->SetPosition(point);
-							newEntity->GetTransformation()->SetRotation(glm::vec3(0.0f, glm::radians(rotationY), 0.0f));
+							auto newRotation = newEntity->GetTransformation()->GetRotation() + glm::vec3(0.0f, glm::radians(rotationY), 0.0f);
+							newEntity->GetTransformation()->SetRotation(newRotation);
 							scene->AddEntity(newEntity);
 						}
 					}

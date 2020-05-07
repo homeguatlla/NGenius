@@ -21,8 +21,9 @@
 		<textures_library>
 			<texture name = "terrain_heightmap" filename = "data/textures/terrain_heightmap_1024.png" />
 			<texture name = "terrain_blendmap" filename = "data/textures/terrain_blendmap_1024.png" />
-			<texture name = "flat_white" filename = "data/textures/flat_white_64.png" />
-			<texture name = "grid" filename = "data/textures/grid_white_64.png" has_wrapping="true"/>
+			<texture name = "distorsion_water" filename = "data/textures/waterDUDV.png" has_wrapping="true"/>
+			<texture name = "normal_water" filename = "data/textures/normal_water.png" has_wrapping="true"/>
+			<texture name = "flat_white" filename = "data/textures/flat_white_64.png" has_mippaing="true"/>
 			<texture_array name = "terrain_array">
 				<texture filename = "data/textures/sand_256.png" />
 				<texture filename = "data/textures/grass_256.png" />
@@ -54,12 +55,8 @@
 		<models_library>
 			<model name = "farmer" filename = "data/models/farmer/farmer.dae" calculate_normals="true" calculate_tangents="true"/>
 			<model name = "barrel" filename = "data/models/props/barrel.obj" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "rock2" filename = "data/models/rocks/rock2.dae" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "rock3" filename = "data/models/rocks/rock3.dae" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "rock5" filename = "data/models/rocks/rock5.dae" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "crate" filename = "data/models/props/crate.obj" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "sphere" filename = "data/models/sphere/sphere.obj" calculate_normals="true" calculate_tangents="true"/>
-			<model name = "cube" filename = "data/models/cube/cube.obj" calculate_normals="true" calculate_tangents="true"/>
+			<model name = "crate" filename = "data/models/props/crate.obj" calculate_normals="true" calculate_tangents="true"/>		
+			<model name = "sphere" filename = "data/models/sphere/sphere.obj" calculate_normals="true" calculate_tangents="true"/>			
 		</models_library>
 		<materials_library>
 			<material name="terrain" shader="TerrainShader">
@@ -94,33 +91,22 @@
 				<effect name="MaterialEffectNormalTexture" texture="MedievalDungeonPropsAtlas02_normalmap" tile="1.0"/>
 				<effect name="MaterialEffectClippingPlane" />				
 			</material>
-			<material name="rock2_material" shader="NormalMapShader">
+			<material name="water" shader="WaterShader">
 				<effect name="MaterialEffectFogProperties"/>
-				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
 				<effect name="MaterialEffectDirectionalLightProperties" />
-				<effect name="MaterialEffectDiffuseTexture" texture="material_rock2_diffuse" color="1.0 1.0 1.0" tile="1.0" />
-				<effect name="MaterialEffectNormalTexture" texture="material_rock2_normalmap" tile="1.0"/>
-				<effect name="MaterialEffectClippingPlane" />				
-			</material>
-			<material name="red_flat_material" shader="ModelShader">
-				<effect name="MaterialEffectFogProperties"/>
-				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
-				<effect name="MaterialEffectDirectionalLightProperties" />
-				<effect name="MaterialEffectDiffuseTexture" texture="flat_white" color="1.0 0.0 0.0" tile="1.0" />
-				<effect name="MaterialEffectClippingPlane" />				
+				<effect name="MaterialEffectWater" 
+						reflection_texture="reflection_water" 
+						refraction_texture="refraction_water"
+						distorsion_texture="distorsion_water" 
+						normal_texture="normal_water" 
+						depth_texture="refraction_depth_water" 
+						color="0.0 0.3 0.8" speed="0.02" />
 			</material>
 			<material name="blue_flat_material" shader="ModelShader">
 				<effect name="MaterialEffectFogProperties"/>
 				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
 				<effect name="MaterialEffectDirectionalLightProperties" />
-				<effect name="MaterialEffectDiffuseTexture" texture="flat_white" color="0.0 0.0 1.0" tile="1.0" />
-				<effect name="MaterialEffectClippingPlane" />				
-			</material>
-			<material name="grid_material" shader="ModelShader">
-				<effect name="MaterialEffectFogProperties"/>
-				<effect name="MaterialEffectShadowProperties" pfc_counter="1"/>
-				<effect name="MaterialEffectDirectionalLightProperties" />
-				<effect name="MaterialEffectDiffuseTexture" texture="grid" color="0.0 0.0 1.0" tile="8.0" />
+				<effect name="MaterialEffectDiffuseTexture" texture="flat_white" color="0.18 0.9 0.14" tile="1.0" />
 				<effect name="MaterialEffectClippingPlane" />				
 			</material>
 		</materials_library>
@@ -146,9 +132,9 @@
 		<debug is_enabled = "true" />
 	</engine>
 	<renderer>
-		<water is_enabled = "false" camera="gameplay_camera" height="6.0"/>
+		<water is_enabled = "true" camera="gameplay_camera" height="18.0"/>
 		<shadows is_enabled = "true"/>
-		<fog is_enabled = "false" />
+		<fog is_enabled = "true" />
 		<render_layers>
 			<layer name="GUI" value="1"/>
 			<layer name="PARTICLES" value="2"/>
@@ -196,15 +182,15 @@
 	</renderer>
 	<game_scene name="mainScene">
 		<entities>
-			<player is_enabled="true" name="player" model="farmer" material="player" renderer="IndicesRenderer" layer="8" walk_speed="3" run_speed="3.0" turn_speed="0.2" upwards_speed="6.0" on_ground="true">
+			<player is_enabled="true" name="player" model="farmer" material="player" renderer="IndicesRenderer" layer="8" walk_speed="3" run_speed="5.0" turn_speed="0.2" upwards_speed="6.0" on_ground="true">
 				<transformation> 
-					<position X="10" Y="0" Z="0"/>
-					<rotation X="-90" Y="0" Z="0.0"/>
-					<scale X="0.18" Y="0.18" Z="0.18"/>
+					<position X="0" Y="10" Z="0"/>
+					<rotation X="-90" Y="0" Z="0.000000"/>
+					<scale X="0.180000" Y="0.180000" Z="0.180000"/>
 				</transformation>
 				<components>
 					<component is_enabled="true" type="AnimationComponent" animation="animation_0"/>
-					<component is_enabled="true" type="CharacterComponent"/>
+					<component is_enabled="true" type="CharacterComponent"/>					
 					<component is_enabled="true" type="EnergyWallCollisionComponent"/>
 					<component is_enabled="true" type="EnvironmentModificatorComponent"/>
 					<component is_enabled="true" type="InputComponent">
@@ -216,10 +202,10 @@
 							<converter mouse="2" event="ZoomEvent"/>
 						</converters>
 					</component>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="900" restitution="0.0">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="900" restitution="0.2">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 						<translation X="0.000000" Y="0.0" Z="0.400000"/>
-						<scale X="0.5" Y="0.5" Z="0.5"/>
+						<scale X="0.500000" Y="0.500000" Z="0.500000"/>
 						<collider type="SphereBoundingVolume"/>
 					</component>
 					<component is_enabled="true" type="GravityComponent">
@@ -230,13 +216,20 @@
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
 			</player>
-			<terrain is_enabled="true" name="terrain" material="terrain" scale="10" heighmap_texture="terrain_heightmap">
+			<terrain is_enabled="true" name="terrain" material="terrain" scale="30" heighmap_texture="terrain_heightmap">
 				<transformation>
 					<position X="0.000000" Y="0.000000" Z="0.000000"/>
 					<rotation X="0.000000" Y="0.000000" Z="0.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 			</terrain>
+			<water is_enabled="true" name="water" material="water" wide="50" length="50">
+				<transformation>
+					<position X="4.000000" Y="0.000000" Z="4.500000"/>
+					<rotation X="-90.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+			</water>
 			<entity is_enabled="true" layer="8">
 				<transformation>
 					<position X="0.0" Y="0.0" Z="0.0"/>
@@ -244,7 +237,9 @@
 					<scale X="0.0" Y="0.0" Z="0.0"/>
 				</transformation>
 				<components>
+					<component is_enabled="true" type="CollisionComponent"/>
 					<component is_enabled="true" type="CharacterComponent"/>
+					<!--component is_enabled="true" type="OverWaterComponent"/-->
 					<component is_enabled="true" type="InputComponent">
 						<converters>
 							<converter mouse="-1" event="PitchEvent"/>
@@ -256,194 +251,73 @@
 					</component>
 				</components>
 			</entity>
-			<entity is_enabled="true" model="skybox" material="skybox" renderer="SkyBoxRenderer" layer="32">
+			<entity is_enabled="true" name="crate" model="crate" material="props_material" layer="8">
 				<transformation>
-					<position X="0.0" Y="0.0" Z="0.0"/>
-					<rotation X="0.0" Y="0.0" Z="0.0"/>
-					<scale X="500.0" Y="500.0" Z="500.0"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="RotationComponent" rotation_speed="0.01">
-						<axis X="0.0" Y="1.0" Z="0.0"/>
-					</component>
-				</components>
-			</entity>
-			<entity is_enabled="true" name="box_centered" model="cube" material="red_flat_material" layer="8" on_ground="true">
-				<transformation>
-					<position X="-2.000000" Y="1.000000" Z="2.000000"/>
-					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
-					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="800.0" restitution="0.0">
-						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<collider type="BoxBoundingVolume"/>
-					</component>
-					<component is_enabled="true" type="DebugComponent"/>
-					<component is_enabled="true" type="ColliderDebugComponent"/>
-				</components>
-			</entity>
-			<entity is_enabled="true" name="box_centered_rotated_y" model="cube" material="red_flat_material" layer="8" on_ground="true">
-				<transformation>
-					<position X="0.000000" Y="1.000000" Z="2.000000"/>
-					<rotation X="0.000000" Y="45.0000" Z="0.000000"/>
-					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="800.0" restitution="0.0">
-						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<rotation X="0" Y="0" Z="0.0"/>
-						<collider type="BoxBoundingVolume"/>
-					</component>
-					<component is_enabled="true" type="DebugComponent"/>
-					<component is_enabled="true" type="ColliderDebugComponent"/>
-				</components>
-			</entity>
-			<entity is_enabled="true" name="box_centered_collider_displaced" model="cube" material="red_flat_material" layer="8" on_ground="true">
-				<transformation>
-					<position X="2.000000" Y="1.000000" Z="2.000000"/>
-					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
-					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="800.0" restitution="0.0">
-						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<translation X="0" Y="0" Z="1"/>
-						<collider type="BoxBoundingVolume"/>
-					</component>
-					<component is_enabled="true" type="DebugComponent"/>
-					<component is_enabled="true" type="ColliderDebugComponent"/>
-				</components>
-			</entity>
-			<entity is_enabled="true" name="box_centered_rotated_collider_displaced" model="cube" material="red_flat_material" layer="8" on_ground="true">
-				<transformation>
-					<position X="4.000000" Y="1.000000" Z="2.000000"/>
-					<rotation X="0.000000" Y="30.0000" Z="0.000000"/>
-					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="800.0">
-						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<translation X="0" Y="0" Z="1"/>
-						<collider type="BoxBoundingVolume"/>
-					</component>
-					<component is_enabled="true" type="DebugComponent"/>
-					<component is_enabled="true" type="ColliderDebugComponent"/>
-				</components>
-			</entity>
-			
-			<entity is_enabled="true" name="box_centered_collider_scaled" model="cube" material="red_flat_material" layer="8" on_ground="true">
-				<transformation>
-					<position X="6.000000" Y="1.000000" Z="2.000000"/>
-					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
-					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="800.0">
-						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<scale X="1.500000" Y="1.500000" Z="1.500000"/>
-						<collider type="BoxBoundingVolume"/>
-					</component>
-					<component is_enabled="true" type="DebugComponent"/>
-					<component is_enabled="true" type="ColliderDebugComponent"/>
-				</components>
-			</entity>
-			<entity is_enabled="true" name="box_centered_rotated_collider_translated_rotated" model="cube" material="red_flat_material" layer="8" on_ground="true">
-				<transformation>
-					<position X="8.000000" Y="1.000000" Z="2.000000"/>
-					<rotation X="0.000000" Y="45.0000" Z="0.000000"/>
-					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="800.0">
-						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<rotation X="45.000000" Y="0.0000" Z="0.000000"/>
-						<translation X="0" Y="0" Z="1"/>
-						<collider type="BoxBoundingVolume"/>
-					</component>
-					<component is_enabled="true" type="DebugComponent"/>
-					<component is_enabled="true" type="ColliderDebugComponent"/>
-				</components>
-			</entity>
-			<entity is_enabled="true" name="sphere_centered" model="sphere" material="red_flat_material" layer="8" on_ground="true">
-				<transformation>
-					<position X="-2.000000" Y="1.000000" Z="8.000000"/>
-					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
-					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="800.0">
-						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<collider type="SphereBoundingVolume"/>
-					</component>
-					<component is_enabled="true" type="DebugComponent"/>
-					<component is_enabled="true" type="ColliderDebugComponent"/>
-				</components>
-			</entity>
-			<entity is_enabled="true" name="sphere_centered_rotated_y" model="sphere" material="red_flat_material" layer="8" on_ground="true">
-				<transformation>
-					<position X="0.000000" Y="1.000000" Z="8.000000"/>
-					<rotation X="0.000000" Y="30.0000" Z="0.000000"/>
-					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="800.0">
-						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<collider type="SphereBoundingVolume"/>
-					</component>
-					<component is_enabled="true" type="DebugComponent"/>
-					<component is_enabled="true" type="ColliderDebugComponent"/>
-				</components>
-			</entity>
-			<entity is_enabled="true" name="sphere_centered_collider_displaced" model="sphere" material="red_flat_material" layer="8" on_ground="true">
-				<transformation>
-					<position X="2.000000" Y="1.000000" Z="8.000000"/>
-					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
-					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="800.0">
-						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<translation X="0" Y="0" Z="1"/>
-						<collider type="SphereBoundingVolume"/>
-					</component>
-					<component is_enabled="true" type="DebugComponent"/>
-					<component is_enabled="true" type="ColliderDebugComponent"/>
-				</components>
-			</entity>
-			<entity is_enabled="true" name="sphere_centered_rotated_collider_displaced" model="sphere" material="red_flat_material" layer="8" on_ground="true">
-				<transformation>
-					<position X="4.000000" Y="1.000000" Z="8.000000"/>
-					<rotation X="0.000000" Y="30.0000" Z="0.000000"/>
-					<scale X="0.500000" Y="0.500000" Z="0.500000"/>
-				</transformation>
-				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="800.0">
-						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
-						<translation X="0" Y="0" Z="1"/>
-						<collider type="SphereBoundingVolume"/>
-					</component>
-					<component is_enabled="true" type="DebugComponent"/>
-					<component is_enabled="true" type="ColliderDebugComponent"/>
-				</components>
-			</entity>
-			
-			<!--entity is_enabled="true" name="box_middle" model="crate" material="props_material" layer="8">
-				<transformation>
-					<position X="1.000000" Y="0.400000" Z="0.000000"/>
-					<rotation X="0.000000" Y="0.0000" Z="34.000000"/>
+					<position X="0.00000" Y="15.000000" Z="5.000000"/>
+					<rotation X="0.000000" Y="0.000000" Z="30.000000"/>
 					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
 				</transformation>
 				<components>
-					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="0" density="800.0">
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="50.0">
 						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
 						<translation X="0.000000" Y="0.400000" Z="0.000000"/>
 						<collider type="BoxBoundingVolume"/>
 					</component>
+					<component is_enabled="true" type="GravityComponent">
+						<gravity X="0.0" Y="-10.0f" Z="0.0"/>
+					</component>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="BuoyancyComponent" liquid_density="1000"/>
+					<component is_enabled="true" type="DragComponent" k1="12.5" k2="2.5"/>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
 					<component is_enabled="true" type="DebugComponent"/>
 					<component is_enabled="true" type="ColliderDebugComponent"/>
 				</components>
-			</entity-->
+			</entity>
+			<entity is_enabled="true" name="barrel" model="barrel" material="props_material" layer="8" on_ground = "true">
+				<transformation>
+					<position X="0.00000" Y="18.000000" Z="10.000000"/>
+					<rotation X="-90.000000" Y="0.000000" Z="0.000000"/>
+					<scale X="1.000000" Y="1.000000" Z="1.000000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="55.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<translation X="0.000000" Y="0.43" Z="0.000000"/>
+						<collider type="BoxBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="GravityComponent">
+						<gravity X="0.0" Y="-10.0f" Z="0.0"/>
+					</component>
+					<component is_enabled="true" type="BuoyancyComponent" liquid_density="1000"/>
+					<component is_enabled="true" type="DragComponent" k1="20.5" k2="1.65"/>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="SpacePartitionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
+				</components>
+			</entity>
+			<entity is_enabled="true" name="blue_sphere" model="sphere" material="blue_flat_material" layer="8" restitution="1.0" on_ground = "true">
+				<transformation>
+					<position X="6" Y="10.000000" Z="4.000000"/>
+					<rotation X="0.000000" Y="0.0000" Z="0.000000"/>
+					<scale X="0.400000" Y="0.400000" Z="0.400000"/>
+				</transformation>
+				<components>
+					<component is_enabled="true" type="RigidbodyPhysicsComponent" physics_type="2" density="50.0">
+						<initialVelocity X="0.000000" Y="0.000000" Z="0.000000"/>
+						<collider type="SphereBoundingVolume"/>
+					</component>
+					<component is_enabled="true" type="BuoyancyComponent" liquid_density="1000"/>
+					<component is_enabled="true" type="DragComponent" k1="12.5" k2="2.5"/>
+					<component is_enabled="true" type="CollisionComponent"/>
+					<component is_enabled="true" type="DebugComponent"/>
+					<component is_enabled="true" type="ColliderDebugComponent"/>
+					<component is_enabled="true" type="GravityComponent">
+						<gravity X="0.0" Y="-9.8f" Z="0.0"/>
+					</component>
+				</components>
+			</entity>
 		</entities>
 	</game_scene>
 </ngenius>

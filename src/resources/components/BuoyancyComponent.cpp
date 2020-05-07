@@ -17,38 +17,22 @@ BuoyancyComponent::BuoyancyComponent(float liquidDensity) :
 
 void BuoyancyComponent::Init(GameScene* scene, RenderSystem* renderSystem)
 {
+	//TODO Water is enabled???
 	if (mParent->HasComponent<PhysicsComponent>())
 	{
 		auto component = mParent->GetComponent<PhysicsComponent>();
 		if (component != nullptr && typeid(*component) == typeid(RigidbodyPhysicsComponent))
 		{
 			auto rigidBody = component->GetPhysicsObject();
-			mCenter = glm::vec3(0.0f);// rigidBody->GetPosition();
 			auto boundingVolume = component->GetPhysicsBoundingVolume();
+
+			//this is the center of the object in object coordinates
+			mCenter = glm::vec3(0.0f);
 			mVolume = boundingVolume->GetVolume();
 			mMaxDepth = boundingVolume->GetSize().y * 0.5f;
 			mWaterHeight = renderSystem->GetWaterHeight();
 		}
 	}
-	/*
-	const AABB aabb = mParent->GetRenderer()->GetAABB();
-	//TODO the center should be the center of the rigidbody
-	mCenter = aabb.GetCenter();
-	mVolume = aabb.GetVolume();
-	//glm::vec3 size = aabb.GetSize();
-
-	//because the object could be rotated and scaled
-	glm::vec3 max = aabb.GetVertexMax();
-	glm::vec3 min = aabb.GetVertexMin();
-	glm::mat3 matrix = glm::mat3(mParent->GetTransformation()->GetModelMatrix());
-	max = matrix * max;
-	min = matrix * min;
-
-	float sizeY = max.y > min.y ? max.y - min.y : min.y - max.y;
-	mMaxDepth = sizeY * 0.5f;
-	mWaterHeight = renderSystem->GetWaterHeight();
-	*/
-	//TODO is water enabled??
 }
 
 BuoyancyComponent* BuoyancyComponent::DoClone() const
