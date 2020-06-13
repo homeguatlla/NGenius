@@ -9,6 +9,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NPhysics", "..\NPhysics\NPh
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NPhysicsTest", "..\NPhysicsTest\NPhysicsTest.vcxproj", "{2E183EEE-14A4-4280-9B14-21381E2158B8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NAI", "..\NAI\NAI.vcxproj", "{DFF82E90-386F-47D0-8919-5B064AD2C1E7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NAITest", "..\NAITest\NAITest.vcxproj", "{6D75238E-9E97-48CC-AF8B-ACB051B8D97A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -41,6 +45,22 @@ Global
 		{2E183EEE-14A4-4280-9B14-21381E2158B8}.Release|Win32.Build.0 = Release|Win32
 		{2E183EEE-14A4-4280-9B14-21381E2158B8}.Release|x64.ActiveCfg = Release|x64
 		{2E183EEE-14A4-4280-9B14-21381E2158B8}.Release|x64.Build.0 = Release|x64
+		{DFF82E90-386F-47D0-8919-5B064AD2C1E7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DFF82E90-386F-47D0-8919-5B064AD2C1E7}.Debug|Win32.Build.0 = Debug|Win32
+		{DFF82E90-386F-47D0-8919-5B064AD2C1E7}.Debug|x64.ActiveCfg = Debug|x64
+		{DFF82E90-386F-47D0-8919-5B064AD2C1E7}.Debug|x64.Build.0 = Debug|x64
+		{DFF82E90-386F-47D0-8919-5B064AD2C1E7}.Release|Win32.ActiveCfg = Release|Win32
+		{DFF82E90-386F-47D0-8919-5B064AD2C1E7}.Release|Win32.Build.0 = Release|Win32
+		{DFF82E90-386F-47D0-8919-5B064AD2C1E7}.Release|x64.ActiveCfg = Release|x64
+		{DFF82E90-386F-47D0-8919-5B064AD2C1E7}.Release|x64.Build.0 = Release|x64
+		{6D75238E-9E97-48CC-AF8B-ACB051B8D97A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6D75238E-9E97-48CC-AF8B-ACB051B8D97A}.Debug|Win32.Build.0 = Debug|Win32
+		{6D75238E-9E97-48CC-AF8B-ACB051B8D97A}.Debug|x64.ActiveCfg = Debug|x64
+		{6D75238E-9E97-48CC-AF8B-ACB051B8D97A}.Debug|x64.Build.0 = Debug|x64
+		{6D75238E-9E97-48CC-AF8B-ACB051B8D97A}.Release|Win32.ActiveCfg = Release|Win32
+		{6D75238E-9E97-48CC-AF8B-ACB051B8D97A}.Release|Win32.Build.0 = Release|Win32
+		{6D75238E-9E97-48CC-AF8B-ACB051B8D97A}.Release|x64.ActiveCfg = Release|x64
+		{6D75238E-9E97-48CC-AF8B-ACB051B8D97A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
